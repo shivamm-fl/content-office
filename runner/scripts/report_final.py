@@ -61,7 +61,7 @@ def main() -> None:
     req = urllib.request.Request(f"{url}&audience=content-office", headers={"Authorization": f"Bearer {tok}"})
     oidc = json.load(urllib.request.urlopen(req, timeout=20))["value"]
     req = urllib.request.Request(f"{office}/api/runner/final", data=json.dumps(payload).encode(), method="POST",
-                                 headers={"Content-Type": "application/json", "Authorization": f"Bearer {oidc}"})
+                                 headers={"Content-Type": "application/json", "Authorization": f"Bearer {oidc}", "User-Agent": "content-office-runner/1.0"})  # Cloudflare blocks the default urllib agent (1010)
     print(urllib.request.urlopen(req, timeout=30).read().decode()[:200])
 
 

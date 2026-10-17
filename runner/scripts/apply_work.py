@@ -16,6 +16,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from save_work import MAX_FILE, classify  # noqa: E402
 
 
+REPO = Path(__file__).resolve().parents[2]   # bundle paths are relative to the repository root, whatever the cwd
+
+
 def unpack(bundle: Path, team: str, content_only: bool, allow_media: bool = False) -> int:
     prefix = f"teams/{team}/"
     n = 0
@@ -32,7 +35,7 @@ def unpack(bundle: Path, team: str, content_only: bool, allow_media: bool = Fals
                     continue
             elif content_only and classify(rel) != "content":
                 continue
-            out = Path(name)
+            out = REPO / name
             out.parent.mkdir(parents=True, exist_ok=True)
             f = tf.extractfile(m)
             if f is None:

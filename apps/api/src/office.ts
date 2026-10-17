@@ -890,8 +890,9 @@ export class Office extends DurableObject<Env> {
     if (blockedUntil && blockedUntil <= now) {
       this.setMeta("blocked_until", null);
       for (const r of this.rows("SELECT * FROM runs WHERE status = 'blocked_limit'")) this.finishRun(r.id as string, "failed", null, "the usage limit ended the run; send a message to continue");
-      await this.startQueued();
     }
+    // a queued run starts as soon as its kind (chat or studio) has a free slot, even when no run ended
+    await this.startQueued();
     if (this.one<{ n: number }>(`SELECT COUNT(*) AS n FROM runs WHERE status IN ${ACTIVE_SQL}`)!.n > 0) {
       await this.ctx.storage.setAlarm(now + 60_000);
     }
