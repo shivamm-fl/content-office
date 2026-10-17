@@ -1,3 +1,320 @@
 {
-  "items": []
+  "items": [
+    {
+      "id": "e101",
+      "track": "generic",
+      "title": "Prompt caching se AI ka jawab badal jata hai? Aur lambi chat idle chhodo to?",
+      "format": "myth-bust",
+      "one_idea": "Prompt caching only reuses the already-processed prompt prefix and never changes the answer; Claude Code now also compacts a very long idle chat before its one-hour cache expires so your next message does not reprocess everything.",
+      "spoken_hook": "Prompt caching se AI ka jawab badal jata hai?",
+      "hook_type": "misconception_question",
+      "hook_10s": "AI interview mein pucha: caching se AI ka jawab badal jata hai? Nahi, jawab bilkul same rehta hai. Isme teen baatein hain. [frame 0: two identical answer bubbles joined by an equals sign]",
+      "hook_formula": "Misconception / interview-framed belief",
+      "hook_source": "hook_candidates",
+      "visual_idea": "A prompt block is stamped 'processed' and kept in a box with a ticking clock; two answer bubbles with and without the box come out identical; near the end of the clock a long chat shrinks to a short card before the box closes.",
+      "everyday_anchor": "You wait for a lift and the same chai order is remembered by the cafe so it is made faster, but it tastes the same.",
+      "example": "Label example: a 200K token chat idle ~54 minutes gets compacted (release note); cache read 0.1x, 5-min write 1.25x (docs).",
+      "sources": [
+        "https://code.claude.com/docs/en/changelog",
+        "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
+      ],
+      "facts_to_verify": [
+        "v2.1.299 (14 Oct 2026): 200K+ token chat idle ~54 min is compacted before its one-hour cache expires",
+        "Caching has no effect on output generation; response is identical",
+        "cache read 0.1x, 5-minute write 1.25x, default 5-min lifetime",
+        "Idle compaction is stated for the terminal (Claude Code CLI) only"
+      ],
+      "length_target_s": 45,
+      "cover_headline": "Does prompt caching change the answer?",
+      "thumb_text": "Same Answer?",
+      "keywords": [
+        "prompt caching kya hai",
+        "claude code idle compaction",
+        "does caching change llm output"
+      ],
+      "notes": "Caveats: idle compaction is documented for the terminal only, do not generalize; release note says 54 min vs a one-hour cache while docs say default cache is 5 min (the 1-hour option is the one in play), explain or leave out; no savings percentage in sources, never claim one; do not say 'new' for caching itself. hook_type misconception_question is NOT yet allowed by validate_queue.py (see state/proposals/2026-10-17-misconception-question.md); validation fails on e101 until the owner approves.",
+      "status": "planned",
+      "qa_passed": false
+    },
+    {
+      "id": "e102",
+      "track": "generic",
+      "title": "Safety check crash hua, phir bhi AI ka kaam ho gaya: ab fail hone par block karo",
+      "format": "finding",
+      "one_idea": "A Claude Code hook is a small check that runs around an agent's action; with onFailure block, a check that crashes, times out or exits oddly now stops the action instead of letting it through (fail closed, not fail open).",
+      "spoken_hook": "Guard crash hua, aur agent ne phir bhi kaam kar diya.",
+      "hook_type": "surprising_fact",
+      "hook_10s": "Guard crash hua, aur agent ne phir bhi kaam kar diya. Ye fail-open hai. Ab ek setting se fail-closed ban jata hai. Teen steps. [frame 0: a red cross on the guard while the door stays open]",
+      "hook_formula": "Surprising fact",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "Before/after of a door: guard check crashes and the door swings open; with onFailure block the same crash keeps the door locked.",
+      "everyday_anchor": "A UPI app's fraud check is down: should payments go through anyway or wait?",
+      "example": "Label example: a check that times out. No real numbers needed.",
+      "sources": [
+        "https://code.claude.com/docs/en/hooks",
+        "https://code.claude.com/docs/en/changelog"
+      ],
+      "facts_to_verify": [
+        "v2.1.295 (8 Oct 2026) added onFailure: block for command and HTTP hooks",
+        "a hook that cannot start, times out or exits with an unexpected code blocks the action instead of letting it through"
+      ],
+      "length_target_s": 35,
+      "cover_headline": "When the safety check crashes, block",
+      "thumb_text": "Fail Closed",
+      "keywords": [
+        "claude code hooks",
+        "onFailure block",
+        "agent safety check fail closed"
+      ],
+      "notes": "Caveats: vendor release note and docs only; advanced for beginners, so define 'hook' in one plain sentence; read the single-release page https://github.com/anthropics/claude-code/releases/tag/v2.1.295 again before scripting.",
+      "status": "planned",
+      "qa_passed": false
+    },
+    {
+      "id": "e103",
+      "track": "generic",
+      "title": "Ek line likho, agent poori machine ka exploded drawing bana de: anatomy skill",
+      "format": "demo",
+      "one_idea": "The anatomy agent skill turns one sentence into an interactive exploded-view drawing of a system, showing how a skill extends what a coding agent can do.",
+      "spoken_hook": "Ek line likhi, agent ne poori machine kholkar dikha di.",
+      "hook_type": "surprising_fact",
+      "hook_10s": "Ek line likhi, agent ne poori machine kholkar dikha di. Ye ek agent skill hai. Isse system samajhna aasan hota hai. Teen steps. [frame 0: one line of text beside a rate limiter drawn in exploded parts]",
+      "hook_formula": "Surprising fact",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "A one-line prompt on the left; on the right a rate limiter pulls apart into labelled parts that float apart in an exploded view.",
+      "everyday_anchor": "A mechanic's exploded parts diagram that finally shows how a gearbox fits together.",
+      "example": "Label example: 'explain how a token bucket rate limiter works' (the repo's own example prompt).",
+      "sources": [
+        "https://github.com/wheresryan22/anatomy",
+        "https://api.github.com/repos/wheresryan22/anatomy"
+      ],
+      "facts_to_verify": [
+        "repo created 2026-10-08, MIT, last push 2026-10-15",
+        "install command npx skills add wheresryan22/anatomy -g",
+        "README claims are the author's own; 3D mode is beta"
+      ],
+      "length_target_s": 35,
+      "cover_headline": "One sentence makes an exploded diagram",
+      "thumb_text": "Agent Skill",
+      "keywords": [
+        "claude skills kya hain",
+        "agent skill github",
+        "ai diagram generator"
+      ],
+      "notes": "Caveats: HELD pick, owner approved but ~14.9k stars in 9 days cannot be checked: never show a star count, say 'the author says'; all claims are the author's own; slow by design, needs Node 20.10+ and Chrome for checks, Codex sandbox may block its browser checks; not a chart library. Backup if it falls: Anthropic RCT https://www.anthropic.com/research/AI-assistance-coding-skills (29 Jan 2026, not a 14-day item).",
+      "status": "planned",
+      "qa_passed": false
+    },
+    {
+      "id": "r101",
+      "track": "course",
+      "title": "Context mein kya-kya jata hai? Context ke 5 sources",
+      "format": "concept",
+      "one_idea": "The context is everything the model sees when it answers: system prompt, tools, examples, message history and external data, and each source should stay lean.",
+      "spoken_hook": "Model ko jawab dene se pehle kya-kya dikhta hai?",
+      "hook_type": "direct_question",
+      "hook_10s": "Model ko jawab dene se pehle kya-kya dikhta hai? Ek window mein paanch cheezein. Aaj paanchon samajhte hain. [frame 0: an empty window frame with five labelled boxes outside]",
+      "hook_formula": "Direct question",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "Five boxes (system prompt, tools, examples, history, outside data) slide into one window frame and fill it up.",
+      "everyday_anchor": "Packing a school bag: only five things go in and the bag has limited space.",
+      "example": "Label example: a support chatbot with a system prompt, a tool and a chat history.",
+      "sources": [
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+      ],
+      "facts_to_verify": [
+        "context sources: system prompts, tools, examples, message history, external data",
+        "bloated tool sets and long histories are common failures; context is a finite resource"
+      ],
+      "length_target_s": 40,
+      "cover_headline": "What goes into an AI's context?",
+      "thumb_text": "Five Sources",
+      "keywords": [
+        "context engineering kya hai",
+        "llm context sources",
+        "context window kya hota hai"
+      ],
+      "notes": "Caveat: Anthropic engineering post is guidance, not a measurement; q03 and q15 already cover the context window idea, keep this reel about the five sources.",
+      "status": "planned",
+      "qa_passed": false,
+      "unit": "D3"
+    },
+    {
+      "id": "r102",
+      "track": "course",
+      "title": "Context compaction kya hai? Lambi chat ko chhota kaise karte hain",
+      "format": "concept",
+      "one_idea": "Compaction summarises a conversation that is nearing the window limit and restarts a new window with the summary, while low-risk pruning drops redundant tool outputs.",
+      "spoken_hook": "Context compaction kya hota hai?",
+      "hook_type": "direct_question",
+      "hook_10s": "Context compaction kya hota hai? Lambi chat ko summary banakar chhota karna. Teen steps. [frame 0: a full window bar shrinking to a small summary card]",
+      "hook_formula": "Direct question",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "A filling window bar hits the limit, folds into a short summary card, and a fresh window opens holding only that card.",
+      "everyday_anchor": "Packing a long WhatsApp group chat into a three-line summary for someone who just joined.",
+      "example": "Label example: a 30-message chat compressed to a short summary.",
+      "sources": [
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+      ],
+      "facts_to_verify": [
+        "compaction: summarising contents and reinitiating a new context window with the summary",
+        "low-risk pruning: discarding redundant tool outputs or messages",
+        "as context grows recall decreases (context rot)"
+      ],
+      "length_target_s": 40,
+      "cover_headline": "How does an AI shrink a long chat?",
+      "thumb_text": "Compaction",
+      "keywords": [
+        "context compaction kya hai",
+        "llm summarization memory",
+        "long chat context kaise manage kare"
+      ],
+      "notes": "Caveat: angle differs from q16 (sliding window, vector DB); summary can lose details, say so.",
+      "status": "planned",
+      "qa_passed": false,
+      "unit": "D4"
+    },
+    {
+      "id": "r103",
+      "track": "course",
+      "title": "RAG kya hai? AI ko apni notebook dekhne do",
+      "format": "concept",
+      "one_idea": "RAG retrieves relevant information from a knowledge base and adds it to the user's prompt, so the model answers from your documents.",
+      "spoken_hook": "RAG kya hai?",
+      "hook_type": "direct_question",
+      "hook_10s": "RAG kya hai? AI jawab dene se pehle apni notebook se sahi pages nikalta hai. Teen steps. [frame 0: a question beside a shelf of notebook pages]",
+      "hook_formula": "Direct question",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "A question goes to a shelf of pages, the three closest pages light up, slide into the prompt box and then the answer appears.",
+      "everyday_anchor": "Looking up the right page in your notes before answering an exam question.",
+      "example": "Label example: a company handbook split into pages.",
+      "sources": [
+        "https://arxiv.org/abs/2005.11401",
+        "https://www.anthropic.com/news/contextual-retrieval"
+      ],
+      "facts_to_verify": [
+        "RAG pairs a pretrained language model with an external retrieval component (Lewis et al.)",
+        "RAG retrieves relevant information from a knowledge base and appends it to the user's prompt",
+        "chunks turned into embeddings; most similar retrieved at runtime"
+      ],
+      "length_target_s": 40,
+      "cover_headline": "What is RAG? Explained simply",
+      "thumb_text": "RAG Explained",
+      "keywords": [
+        "rag kya hai",
+        "retrieval augmented generation hindi",
+        "rag kaise kaam karta hai"
+      ],
+      "notes": "Caveat: q05/q17/q20 already cover RAG trade-offs and failures; this reel is the plain definition. The paper abstract does not measure provenance or knowledge updates, do not claim it did.",
+      "status": "planned",
+      "qa_passed": false,
+      "unit": "E1"
+    },
+    {
+      "id": "q101",
+      "track": "interview",
+      "title": "Interview: Poora PDF context mein daal doon ya RAG banaun?",
+      "format": "question",
+      "one_idea": "If a knowledge base is under about 200,000 tokens you can put all of it in the prompt (with prompt caching); above that you retrieve chunks with RAG.",
+      "spoken_hook": "40 page ka handbook tha, usne poora RAG stack bana diya.",
+      "hook_type": "relatable_stake",
+      "hook_10s": "40 page ka handbook tha, usne poora RAG stack bana diya. Wo sab prompt mein fit ho jata. Interview mein yahi poochte hain. Teen rules. [frame 0: a small handbook beside a huge machine]",
+      "hook_formula": "Relatable stake",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "A small stack of pages drops straight into the prompt box; a huge library will not fit and goes through a retrieval funnel instead.",
+      "everyday_anchor": "Carrying a thin notebook in your bag versus renting a whole library to read one chapter.",
+      "example": "Label example: a 40-page handbook (illustrative, not a measured number).",
+      "sources": [
+        "https://www.anthropic.com/news/contextual-retrieval"
+      ],
+      "facts_to_verify": [
+        "under 200,000 tokens you can include the whole knowledge base in the prompt, RAG not needed",
+        "prompt caching cuts latency by more than 2x and costs by up to 90% (Anthropic's own figures)"
+      ],
+      "length_target_s": 55,
+      "cover_headline": "Whole PDF in prompt or RAG?",
+      "thumb_text": "RAG or Prompt?",
+      "keywords": [
+        "rag vs long context",
+        "rag interview question",
+        "pdf prompt mein daalna ya rag"
+      ],
+      "notes": "Caveat: 200,000-token figure and caching savings are Anthropic's own; the 40-page handbook is an illustration, say 'maan lo'. Not a repeat of q03 (context rot) or q05 (RAG vs fine-tuning).",
+      "status": "planned",
+      "qa_passed": false,
+      "unit": "D1"
+    },
+    {
+      "id": "q102",
+      "track": "interview",
+      "title": "Interview: Agent loop mein fas gaya, ye kaise rokoge? (Onit job post)",
+      "format": "question",
+      "one_idea": "An agent needs stopping conditions such as a maximum number of iterations, ground truth from the environment at each step and human checkpoints.",
+      "spoken_hook": "Onit ke AI Engineer job post mein agent loops likha hai. Agent loop mein fas jaye, kaise rokoge?",
+      "hook_type": "company_specific",
+      "hook_10s": "Onit ke AI Engineer job post mein agent loops aur failure handling maanga hai. Agent loop mein fas jaye to kaise rokoge? Teen rules. [frame 0: a looping arrow with a counter and a stop sign]",
+      "hook_formula": "Company specific",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "An agent circle repeats with a step counter; at the max count a stop sign cuts the loop and a human-check gate opens.",
+      "everyday_anchor": "A phone app stuck on a spinner that never ends until you force-close it.",
+      "example": "Label example: max 10 steps.",
+      "sources": [
+        "https://jobs.lever.co/onit/983d3c5d-55d7-4802-9865-80bf58c68bd4",
+        "https://www.anthropic.com/engineering/building-effective-agents"
+      ],
+      "facts_to_verify": [
+        "Onit AI Engineer job post (Pune) asks for experience with agent loops, tool interfaces, planning/replanning, memory/state and failure handling",
+        "stopping conditions such as a maximum number of iterations; ground truth from the environment at each step; pause for human feedback at checkpoints"
+      ],
+      "length_target_s": 55,
+      "cover_headline": "How do you stop a looping AI agent?",
+      "thumb_text": "Stop the Loop",
+      "keywords": [
+        "ai agent infinite loop",
+        "agent stopping conditions",
+        "ai engineer interview question"
+      ],
+      "notes": "Caveats: Onit page is a JOB POST, not an interview question and has no posting date and no About section: say 'job post', never 'interview mein pucha'; confirm company name on the Lever page before showing it; page never mentions stop conditions, those come from Anthropic's building-effective-agents post (guidance, gives no specific limit).",
+      "status": "planned",
+      "qa_passed": false,
+      "unit": "F5",
+      "company": "Onit",
+      "company_source": "https://jobs.lever.co/onit/983d3c5d-55d7-4802-9865-80bf58c68bd4"
+    },
+    {
+      "id": "q103",
+      "track": "interview",
+      "title": "Interview: Chatbot ne galat jawab diya, pata kaise chalega kyun?",
+      "format": "question",
+      "one_idea": "A trace records one request as nested spans, each with a name, start and end time, so you can see which step (retrieval, prompt, tool) went wrong or slow.",
+      "spoken_hook": "Interviewer ने पूछा: Production chatbot ne galat jawab diya, tumhe kaise pata chalega kyun?",
+      "hook_type": "interviewer_asked",
+      "hook_10s": "Interviewer ne poocha: production chatbot ne galat jawab diya, tumhe kaise pata chalega kyun? Sirf final jawab dekhna kaafi nahi. Trace chahiye. Teen cheezein. [frame 0: a wrong answer bubble with a question mark]",
+      "hook_formula": "Interviewer asked",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "One request drawn as a row of nested bars (retrieve, prompt, tool, answer); the bad step lights red so you see exactly where it broke.",
+      "everyday_anchor": "A courier tracking page that shows every stop, so you know where the parcel got stuck.",
+      "example": "Label example: retrieve, prompt, tool, answer as four spans.",
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/"
+      ],
+      "facts_to_verify": [
+        "a trace shows the full path of a request",
+        "a span is one unit of work with name, start and end times and attributes",
+        "parent span IDs form a hierarchy"
+      ],
+      "length_target_s": 55,
+      "cover_headline": "How do you debug a wrong AI answer?",
+      "thumb_text": "Trace It",
+      "keywords": [
+        "llm observability",
+        "llm tracing kya hai",
+        "chatbot wrong answer debug interview"
+      ],
+      "notes": "Caveat: OpenTelemetry page defines tracing in general; the LLM-specific mapping (retrieval, prompt, tool as spans) is our illustration, label it as an example. Onit job post (https://jobs.lever.co/onit/5110cadf-965f-4597-ae95-7d4c000675d7) lists tracing but is not used as company hook here.",
+      "status": "planned",
+      "qa_passed": false,
+      "unit": "H2"
+    }
+  ]
 }
