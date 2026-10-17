@@ -492,11 +492,19 @@ export class Office extends DurableObject<Env> {
     return r ? this.toRun(r) : null;
   }
 
+  /** Chats (desk) and reel builds (studio) have their own limit, so three builds never block the owner's chats. */
+  private cap(_profile: Profile): number {
+    return Number(this.env.MAX_PARALLEL_RUNS ?? "3");
+  }
+  private busy(profile: Profile): number {
+    return this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE profile = ? AND status IN ('starting','live','idle','blocked_limit')", profile)!.n;
+  }
+
   private async startRun(thread: Thread, profile: Profile): Promise<Run> {
     const id = newId("run");
     const now = Date.now();
-    const cap = Number(this.env.MAX_PARALLEL_RUNS ?? "3");
-    const busy = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE status IN ('starting','live','idle','blocked_limit')")!.n;
+    const cap = this.cap(profile);
+    const busy = this.busy(profile);
     const blockedUntil = Number(this.meta("blocked_until") ?? 0);
     const wait = busy >= cap || blockedUntil > now;
     const item = profile === "studio" ? (this.one<{ item: string | null }>("SELECT item FROM threads WHERE id = ?", thread.id)?.item ?? null) : null;
@@ -507,7 +515,7 @@ export class Office extends DurableObject<Env> {
     if (wait) {
       this.system(thread.id, id, blockedUntil > now
         ? `Claude usage limit reached. ${agentName} starts when it resets (${new Date(blockedUntil).toISOString().slice(11, 16)} UTC).`
-        : `${busy} runs are busy; ${agentName} starts when one finishes.`);
+        : profile === "studio" ? `The studio is building ${busy} reels; this one starts when a slot frees.` : `${busy} chats are running; ${agentName} starts when one finishes.`);
       this.setDesk(thread.agent, "waiting", "In the queue", id);
     } else {
       this.system(thread.id, id, `Waking up ${agentName}'s desk on GitHub (about a minute)…`);
@@ -551,18 +559,17 @@ export class Office extends DurableObject<Env> {
   }
 
   private async startQueued() {
-    const cap = Number(this.env.MAX_PARALLEL_RUNS ?? "3");
     const blockedUntil = Number(this.meta("blocked_until") ?? 0);
     if (blockedUntil > Date.now()) return;
-    let busy = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE status IN ('starting','live','idle','blocked_limit')")!.n;
+    const busy: Record<Profile, number> = { desk: this.busy("desk"), studio: this.busy("studio") };
     for (const r of this.rows("SELECT * FROM runs WHERE status = 'queued' ORDER BY created_at")) {
-      if (busy >= cap) break;
       const run = this.toRun(r);
+      if (busy[run.profile] >= this.cap(run.profile)) continue;
       this.updateRun(run.id, { status: "starting" });
       this.setDesk(run.agent, "working", "Starting up", run.id);
       this.system(run.thread_id, run.id, "Starting now…");
       await this.dispatch(run);
-      busy++;
+      busy[run.profile]++;
     }
   }
 
