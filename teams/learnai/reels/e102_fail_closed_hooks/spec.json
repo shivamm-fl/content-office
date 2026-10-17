@@ -1,5 +1,5 @@
 {
-  "tts": "edge",
+  "tts": "owner",
   "voice": "hi-IN-SwaraNeural",
   "pace": 1.26,
   "audio": "v2",
@@ -74,5 +74,6 @@
       "C": "Anthropic की release note के मुताबिक, | onFailure block लगाओ, तो 3{three} हालात में action रुकता है। | पहला, hook start न हो। | दूसरा, time out हो। | तीसरा, unexpected exit code आए। || यानी fail-closed।",
       "D": "@emph Check टूटे, तो default रुकना होना चाहिए। || सोचो UPI का fraud check down है, | payment रुके या जाए? Comment में लिखो। | और agent tricks के लिए follow करो।"
     }
-  }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
 }

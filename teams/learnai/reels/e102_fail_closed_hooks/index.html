@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="40.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -32,7 +32,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,18 +41,61 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="40.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="40.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="40.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "WHAT'S NEW IN AI" });   // order = scene ids from spec.json
+      const M = Mo.init({ order: ["A","B","C","D"], tag: "WHAT'S NEW IN AI" });   // order = scene ids from spec.json
       Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
       const { tl, S, P, Ed, W } = M;
       // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
 
-      M.finish();   // LAST: captions
+
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD");
+      const { ACC, CYAN, HOT, GOOD } = M;
+      // A: hook. agent -> guard (crashed) -> action still goes through
+      M.hook(["Guard crash,", "agent ne kaam kiya"], { size: 90, top: 250 });
+      M.box(A, { x: 190, y: 480, w: 700, h: 230, label: "AGENT", icon: "robot", color: CYAN }).show(0.05);
+      M.arrow(A, { from: [540, 720], to: [540, 820], color: CYAN, w: 12 }).show(0.3, 0.3);
+      M.box(A, { x: 190, y: 830, w: 700, h: 250, label: "GUARD", icon: "shield", color: ACC }).show(0.1);
+      M.icon(A, "cross", 760, 800, 150, HOT).show(M.W("A", "crash"));
+      M.arrow(A, { from: [540, 1090], to: [540, 1190], color: HOT, w: 12 }).show(M.W("A", "kaam"), 0.3);
+      M.box(A, { x: 190, y: 1200, w: 700, h: 230, label: "ACTION DONE", icon: "bolt", color: HOT }).show(M.W("A", "kaam"));
+      M.fit(A, { y: 540, h: 760 });
+      // B: what a hook is, fail-open
+      M.box(B, { x: 130, y: 320, w: 560, h: 220, label: "AGENT", icon: "robot", color: CYAN }).show(0.05);
+      M.arrow(B, { from: [410, 550], to: [410, 650], color: CYAN, w: 12 }).show(M.W("B", "hook"), 0.3);
+      M.box(B, { x: 130, y: 660, w: 560, h: 260, label: "HOOK = CHECK", icon: "gear", color: ACC }).show(M.W("B", "hook"));
+      M.icon(B, "clock", 770, 680, 200, HOT).show(M.W("B", "time"));
+      M.pill(B, "TIMEOUT", M.W("B", "out"), { x: 700, y: 900, size: 48 });
+      M.arrow(B, { from: [410, 930], to: [410, 1040], color: HOT, w: 12, dash: true }).show(M.W("B", "nikal"), 0.3);
+      M.box(B, { x: 130, y: 1050, w: 560, h: 220, label: "ACTION", icon: "bolt", color: HOT }).show(M.W("B", "action", 2));
+      M.pill(B, "FAIL-OPEN", M.W("B", "fail-open"), { x: 230, y: 1320, size: 60 });
+      M.fit(B, { y: 300, h: 1100 });
+      // C: onFailure block, three cases, fail-closed
+      M.pill(C, "onFailure: block", 0.05, { x: 260, y: 230, size: 52 });
+      M.box(C, { x: 140, y: 440, w: 800, h: 190, label: "NO START", icon: "cross", color: HOT }).show(0.2);
+      M.box(C, { x: 140, y: 670, w: 800, h: 190, label: "TIMEOUT", icon: "clock", color: HOT }).show(0.4);
+      M.box(C, { x: 140, y: 900, w: 800, h: 190, label: "BAD EXIT", icon: "warn", color: HOT }).show(0.6);
+      [440, 670, 900].forEach((y, i) => M.icon(C, "lock", 820, y + 55, 80, GOOD).show(M.W("C", ["pahla", "doosra", "teesra"][i]) + 0.3));
+      M.box(C, { x: 240, y: 1140, w: 600, h: 190, label: "FAIL-CLOSED", icon: "lock", color: GOOD }).show(M.W("C", "fail-closed"));
+      M.fit(C, { y: 200, h: 1150 });
+      // D: rule + UPI example + comment / follow
+      M.box(D, { x: 190, y: 230, w: 700, h: 190, label: "DEFAULT: STOP", icon: "lock", color: GOOD }).show(0.05);
+      M.pill(D, "EXAMPLE", M.W("D", "UPI"), { x: 410, y: 470, size: 36 });
+      M.box(D, { x: 110, y: 560, w: 360, h: 210, label: "PAYMENT", icon: "coin", color: CYAN }).show(M.W("D", "UPI"));
+      M.arrow(D, { from: [480, 665], to: [600, 665], color: CYAN, w: 8 }).show(M.W("D", "fraud"), 0.3);
+      M.box(D, { x: 610, y: 560, w: 360, h: 210, label: "FRAUD CHECK", icon: "shield", color: ACC }).show(M.W("D", "fraud"));
+      M.icon(D, "cross", 840, 520, 100, HOT).show(M.W("D", "down"));
+      M.pill(D, "PAY?", M.W("D", "payment"), { x: 270, y: 850, size: 60 });
+      M.pill(D, "WAIT?", M.W("D", "ruke"), { x: 570, y: 850, size: 60 });
+      M.box(D, { x: 140, y: 1000, w: 800, h: 160, label: "COMMENT: PAY / WAIT", icon: "chat", color: CYAN }).show(M.W("D", "Comment"));
+      M.pill(D, "+ FOLLOW  @ig.learnai", M.W("D", "follow"), { x: 250, y: 1210, size: 48 });
+      M.fit(D, { y: 200, h: 1150 });
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D);
+      M.finish({ kw: { crash: "hot", "fail-open": "hot", "fail-closed": "good", rukta: "good", block: "gold", timeout: "hot", fraud: "cyan", rukna: "good" } });
       window.__timelines["main"] = tl;   // register (must stay literal for the linter)
     </script>
   </body>
