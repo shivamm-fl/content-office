@@ -33,7 +33,7 @@ FILES = [
 ]
 SCRIPTS = [
     "ci_review_round.py", "ci_sync_push.py", "ci_verify_reel.py", "edge_tts_hosts.py", "fact_review.py",
-    "frames.py", "gen_audio_assets.py", "hinglish_roman.py", "lint_script.py", "lint_visuals.py",
+    "frames.py", "gen_audio_assets.py", "hinglish_roman.py", "lint_script.py", "lint_visuals.py", "make_intro_audio.py",
     "make_reel_audio.py", "market_signals.py", "new_reel.py", "next_to_build.py", "prune_audio_cache.py",
     "qa.py", "render_cover.py", "render_job.py", "render_reel.py", "romanize_reel.py", "setup.py",
     "validate_queue.py", "visual_review.py",
