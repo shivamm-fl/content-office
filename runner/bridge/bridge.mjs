@@ -365,8 +365,20 @@ async function main() {
     log(`ending session: ${why}`);
     clearTimeout(idleTimer);
     try { child?.stdin.end(); } catch { /* */ }
-    setTimeout(() => child?.kill("SIGINT"), 60_000);
-    setTimeout(() => child?.kill("SIGKILL"), 90_000);
+    // Claude Code finishes background teammates itself after stdin closes (its own 10-minute ceiling).
+    setTimeout(() => child?.kill("SIGINT"), 12 * 60_000);
+    setTimeout(() => child?.kill("SIGKILL"), 13 * 60_000);
+  };
+  // Teammates working in the background (system/background_tasks_changed). The session never ends while one works:
+  // a lead's turn can finish while the scriptwriter is still writing.
+  let background = 0;
+  const scheduleEnd = () => {
+    clearTimeout(idleTimer);
+    if (busy || ctx.waiting || background > 0 || ending) return;
+    const wait = work.settings?.task_mode ? 45_000 : idleMs;
+    idleTimer = setTimeout(() => {
+      if (!busy && !ctx.waiting && background === 0) endSession(work.settings?.task_mode ? "the task is done" : `no message for ${idleMs / 60000} minutes`);
+    }, wait);
   };
 
   ctx.link = new OfficeLink(work.token, (cmd) => {
@@ -423,13 +435,21 @@ async function main() {
         if (ev.type === "system" && ev.subtype === "init") gotInit = true;
         if (process.env.OFFICE_DEBUG_EVENTS) appendFileSync(process.env.OFFICE_DEBUG_EVENTS, `${line}\n`);
         for (const out of mapClaudeEvent(state, ev, { teamDir: TEAM_DIR })) ctx.link.send(out);
+        if (ev.type === "assistant" || ev.type === "stream_event") {
+          // a turn is running (also one Claude starts by itself when a background teammate reports back)
+          busy = true;
+          clearTimeout(idleTimer);
+        }
+        if (ev.type === "system" && ev.subtype === "background_tasks_changed") {
+          background = (ev.tasks ?? []).length;
+          if (background === 0) scheduleEnd();
+          else clearTimeout(idleTimer);
+        }
         if (ev.type === "result") {
           busy = false;
-          log(`turn finished (${ev.num_turns ?? "?"} steps, session cost so far $${(ev.total_cost_usd ?? 0).toFixed(3)})`);
-          clearTimeout(idleTimer);
-          // Task mode (studio jobs, the work day): the work is done when the turn is; a quick grace period for a late note.
-          const wait = work.settings?.task_mode ? 20_000 : idleMs;
-          idleTimer = setTimeout(() => { if (!busy && !ctx.waiting) endSession(work.settings?.task_mode ? "the task is done" : `no message for ${idleMs / 60000} minutes`); }, wait);
+          log(`turn finished (${ev.num_turns ?? "?"} steps, session cost so far $${(ev.total_cost_usd ?? 0).toFixed(3)}${background ? `, ${background} teammate(s) still working` : ""})`);
+          // Task mode (studio jobs, the work day): done when the turn is done and no teammate works in the background.
+          scheduleEnd();
         }
       }
     });

@@ -3,7 +3,11 @@
 A content company you run from your phone. Each brand (handle) has a **team** of AI agents (Producer, Strategist, Researcher, Scriptwriter, Packager, Growth Analyst, Community Manager, and the studio desks) on its own **floor**. You talk to any agent, they hand work to each other, and you approve the plan, every script and every final video. Nothing runs on a schedule and nothing is posted from here.
 
 - **The office app** (PWA): https://content-office.learnai-ai.workers.dev, installable from the browser menu ("Add to Home Screen").
-- **Where agents run**: GitHub Actions in this repo (`.github/workflows/office-run.yml`), started by the office when you send a message. The runner closes after 15 minutes without a message; the next message reopens the conversation where it was.
+- **Where agents run**: GitHub Actions in this repo, started by the office, never on a schedule:
+  - `office-run.yml` (desk): chat, planning, scripts, the daily sync and the work day. The runner closes after 15 minutes without a message; the next message reopens the conversation where it was.
+  - `office-studio.yml` (studio): one reel per run: build (agent) → independent reviews → fix (agent, if needed) → final gate, video to the release `office-<team>-<item>`, the reel to the owner's inbox.
+- **A work day**: the owner taps "Start the day"; the Producer picks the day's reels (team pace), the team plans and writes, and each reel goes to the studio. The owner approves only finished reels (Approve, Changes, Reject).
+- **Voice**: the owner's own ElevenLabs voice by default, Swara (Edge TTS) when its monthly characters are used up (`ELEVENLABS_API_KEY`, used only by the bridge's `make_voice` step).
 - **Brains**: Claude Code with the owner's subscription (`CLAUDE_CODE_OAUTH_TOKEN`).
 
 ## How it fits together

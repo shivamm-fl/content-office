@@ -279,6 +279,12 @@ export class Office extends DurableObject<Env> {
     if (open) return { thread: this.toThread(open) };
     const day = new Date().toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" });
     const iso = new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10);
+    // A second tap on the same day continues that day's conversation (with its memory) instead of a new day.
+    const today = this.one("SELECT * FROM threads WHERE kind = 'workday' AND title = ? ORDER BY created_at DESC LIMIT 1", `Work day, ${day}`);
+    if (today) {
+      await this.postMessage(slug, { thread_id: today.id as string, text: "Continue today's work day where it stopped: check what is already in the studio (team_feed) and finish the rest. Follow prompts/work-day.md." });
+      return { thread: this.getThreadRow(today.id as string)! };
+    }
     const pace = team.pace ?? 6;
     const { thread } = await this.postMessage(slug, {
       agent: team.lead, kind: "workday", title: `Work day, ${day}`,
@@ -783,7 +789,8 @@ export class Office extends DurableObject<Env> {
     const now = Date.now();
     for (const r of this.rows(`SELECT * FROM runs WHERE status IN ${ACTIVE_SQL}`)) {
       const run = this.toRun(r);
-      if (run.status === "starting" && now - run.created_at > START_TIMEOUT_MS) {
+      // a studio job installs its tools (ffmpeg, Python, HyperFrames) before it reports in
+      if (run.status === "starting" && now - (run.claimed_at ?? run.created_at) > (run.profile === "studio" ? 2 : 1) * START_TIMEOUT_MS) {
         this.finishRun(run.id, "failed", null, "the GitHub runner did not start within 15 minutes (see the Runs tab)");
       } else if (run.profile === "studio" && run.status === "idle") {
         // Between studio jobs nobody is connected; the GitHub webhook ends the run if the workflow dies.
