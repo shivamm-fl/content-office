@@ -123,6 +123,8 @@ def main() -> None:
         with tarfile.open(bundle, "r:gz") as tf:
             for m in tf.getmembers():
                 name = m.name.lstrip("./")
+                if m.isdir():
+                    continue
                 if not m.isfile() or m.size > MAX_FILE:
                     dropped.append(name)
                     continue
