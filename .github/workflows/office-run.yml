@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions: { contents: write, id-token: write }
-    concurrency: { group: office-save, cancel-in-progress: false }
+    # no concurrency group: GitHub would cancel waiting saves; save_work.py retries on a fresh main instead
     env:
       OFFICE_URL: ${{ vars.OFFICE_URL }}
       RUN_ID: ${{ inputs.run_id }}

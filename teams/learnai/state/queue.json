@@ -315,6 +315,58 @@
       "status": "planned",
       "qa_passed": false,
       "unit": "H2"
+    },
+    {
+      "id": "q104",
+      "track": "interview",
+      "unit": "H2",
+      "title": "Interview: Chatbot ne galat jawab diya, par kal ka kuch record nahi. Debug kaise karoge?",
+      "one_idea": "When an LLM app gives a wrong answer, the final answer alone cannot tell you why; a trace, one record of the whole request with each step's input, output, time and tokens, shows which step went wrong.",
+      "spoken_hook": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई?",
+      "hook_type": "interviewer_asked",
+      "hook_10s": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई? ज़्यादातर लोग सिर्फ़ आख़िरी जवाब देखते हैं। Interview में यही पकड़ा जाता है। इसकी तीन बातें हैं. [chat bubble with a wrong answer and a red cross]",
+      "hook_candidates": [
+        {
+          "text": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई?",
+          "hook_type": "interviewer_asked",
+          "formula": "The Verbatim Question"
+        },
+        {
+          "text": "Chatbot ने गलत जवाब दिया, और log में सिर्फ़ वही जवाब है। अब गलती कहाँ ढूँढोगे?",
+          "hook_type": "relatable_stake",
+          "formula": "Stake"
+        },
+        {
+          "text": "Parcel टूटकर आया, तो tracking से पता चलता है कि कहाँ टूटा। AI app में ये कैसे करोगे?",
+          "hook_type": "relatable_stake",
+          "formula": "Everyday anchor"
+        }
+      ],
+      "hook_formula": "The Verbatim Question",
+      "hook_source": ".claude/skills/hook-writer",
+      "visual_idea": "A request travels as a line of boxes: question, search, tool call, model, answer. Each box shows a small timer and token count. The wrong answer is traced back, one box (the search) turns red while the others stay green.",
+      "everyday_anchor": "A courier parcel arrives damaged and the tracking page shows which hub dropped it, so you do not guess.",
+      "format": "question",
+      "example": "Labelled example: a refund chatbot answers 30 days, the trace shows the search step returned an old policy page.",
+      "sources": [
+        "https://langfuse.com/docs/observability/overview"
+      ],
+      "facts_to_verify": [
+        "A trace is a structured record of one request's lifecycle (LLM calls, retrieval steps, tool executions) with timing, inputs, outputs and metadata (Langfuse docs, a vendor definition; say 'tracing' as common practice, no numbers)."
+      ],
+      "length_target_s": 45,
+      "cover_headline": "Wrong AI answer? Trace every step",
+      "thumb_text": "TRACE IT",
+      "keywords": [
+        "llm observability interview",
+        "ai tracing kya hai",
+        "debug llm app",
+        "ai engineer interview questions",
+        "langfuse tracing"
+      ],
+      "status": "planned",
+      "qa_passed": false,
+      "office_note": "approved by the owner as q27 on 2026-10-17; renamed to q104 because office ids start at 101"
     }
   ]
 }

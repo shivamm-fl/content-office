@@ -192,6 +192,12 @@ app.get("/api/runner/transcript", async (c) => {
   return data ? new Response(data, { headers: { "Content-Type": "application/gzip" } }) : bad(c, 404, "transcript expired");
 });
 
+app.get("/api/runner/feed", async (c) => {
+  const id = await runToken(c);
+  if (!id) return bad(c, 403, "bad run token");
+  return c.text(await office(c.env, id.slug).feed(id.slug, id.runId, c.req.query("thread") ?? null));
+});
+
 app.get("/api/runner/ai-course", async (c) => {
   const id = await runToken(c);
   if (!id) return bad(c, 403, "bad run token");

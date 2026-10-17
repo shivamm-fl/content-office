@@ -133,6 +133,11 @@ const TOOLS = [
     inputSchema: { type: "object", properties: { to: { type: "string" }, message: { type: "string" } }, required: ["to", "message"] },
   },
   {
+    name: "team_feed",
+    description: "What the other desks did: the team's recent conversations (who, what, what the owner decided), open tasks between desks, or one conversation in full when you pass its thread_id. Use it before you say a teammate has done nothing, and whenever the owner refers to another desk's work.",
+    inputSchema: { type: "object", properties: { thread_id: { type: "string", description: "Optional: a conversation id from the feed, to read it in full." } } },
+  },
+  {
     name: "team_roster",
     description: "Who is on the team in this session and how to reach them: teammate slug -> the address for SendMessage (the lead is \"main\"). Use it to talk to a teammate directly with SendMessage(to=<address>, message=...); their answer comes back to you as a message. A teammate missing from the roster is not working yet: ask the lead (SendMessage to \"main\") to bring them in.",
     inputSchema: { type: "object", properties: {} },
@@ -164,6 +169,11 @@ function startMcp(ctx) {
       if (!ctx.team.agents.some((x) => x.slug === to)) return text(`Unknown teammate "${to}". Teammates: ${ctx.team.agents.map((x) => x.slug).join(", ")}`, true);
       ctx.link.send({ t: "task", id: rid("task"), from: agent, to, body: String(a.message || "").slice(0, 8000) });
       return text(`Task left for ${to}. The owner decides when it starts.`);
+    }
+    if (name === "team_feed") {
+      const q = a.thread_id ? `&thread=${encodeURIComponent(String(a.thread_id))}` : "";
+      const r = await fetch(`${OFFICE}/api/runner/feed?team=${TEAM}&run=${RUN_ID}${q}`, { headers: { "X-Run-Token": ctx.token } });
+      return text(await r.text(), !r.ok);
     }
     if (name === "team_roster") {
       const r = ctx.roster();
@@ -258,7 +268,10 @@ function systemPrompt(work) {
   const agentFile = join(TEAM_DIR, ".claude", "agents", `${work.agent.slug}.md`);
   const { body } = existsSync(agentFile) ? parseFrontmatter(readFileSync(agentFile, "utf8")) : { body: "" };
   const team = work.team.agents.map((a) => `${a.slug} (${a.name})`).join(", ");
-  return `${protocol}\n\n# Who you are\nYou are **${work.agent.name}** (${work.agent.title}) of the ${work.team.name} team. Teammates: ${team}.\nOffice run ${RUN_ID}. Today is ${new Date().toISOString().slice(0, 10)}.\n\n${body}`;
+  const recent = work.digest
+    ? `\n\n# What the other desks did recently\nOther conversations of the team (newest first). Read one in full with mcp__office__team_feed(thread_id). Their files reach the repo when their session closes.\n${work.digest}`
+    : "";
+  return `${protocol}\n\n# Who you are\nYou are **${work.agent.name}** (${work.agent.title}) of the ${work.team.name} team. Teammates: ${team}.\nOffice run ${RUN_ID}. Today is ${new Date().toISOString().slice(0, 10)}.\n\n${body}${recent}`;
 }
 
 function agentModel(work) {

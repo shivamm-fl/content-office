@@ -7,10 +7,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PREFIX = {"course": "r", "generic": "e", "interview": "q"}
 FORMATS = {"finding", "concept", "question", "demo", "myth-bust", "explainer"}
-HOOK_TYPES = {"direct_question", "relatable_stake", "interviewer_asked", "company_specific", "surprising_fact"}   # .claude/skills/hook-writer
+HOOK_TYPES = {"direct_question", "relatable_stake", "interviewer_asked", "company_specific", "surprising_fact", "misconception_question"}   # .claude/skills/hook-writer
 REQUIRED = ["id", "track", "title", "one_idea", "spoken_hook", "hook_formula", "hook_source", "example", "sources",
             "facts_to_verify", "length_target_s", "cover_headline", "thumb_text", "keywords"]
 
+config_file = ROOT / "state/config.json"
+ID_START = json.loads(config_file.read_text(encoding="utf-8")).get("id_start", {}) if config_file.exists() else {}   # office ids never collide with ai-course
 f = ROOT / "state/queue.json"
 if not f.exists():
     sys.exit("missing state/queue.json")
@@ -38,6 +40,8 @@ for it in items:
         problems.append(f"{rid}: unknown track {track!r}")
     elif not re.fullmatch(PREFIX[track] + r"\d+", rid):
         problems.append(f"{rid}: id prefix must match track {track} ({PREFIX[track]}##)")
+    elif int(rid[1:]) < ID_START.get(track, 0):
+        problems.append(f"{rid}: office ids start at {PREFIX[track]}{ID_START[track]} (state/config.json id_start); lower ids belong to ai-course")
     if rid in seen:
         problems.append(f"{rid}: duplicate id")
     seen.add(rid)

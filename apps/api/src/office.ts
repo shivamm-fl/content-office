@@ -432,8 +432,55 @@ export class Office extends DurableObject<Env> {
       messages: pending.map((m) => ({ id: m.id as string, text: String(JSON.parse(m.body as string).text) })),
       history,
       resume,
+      digest: this.digest(run.thread_id),
       settings: { idle_minutes: Number(this.env.IDLE_MINUTES ?? "15"), max_minutes: 340, max_turns: 400 },
     };
+  }
+
+  // ---------- the team feed: what the other desks did (other conversations) ----------
+  private lastWords(threadId: string, n: number): { author: string; kind: string; text: string; at: number }[] {
+    return this.rows(
+      "SELECT author, kind, body, created_at FROM messages WHERE thread_id = ? AND parent IS NULL AND kind IN ('text','approval','decision','answer','question','dm','handoff') ORDER BY created_at DESC LIMIT ?",
+      threadId, n,
+    ).reverse().map((m) => {
+      const b = JSON.parse(m.body as string) as Record<string, unknown>;
+      const text = String(b.text ?? b.title ?? "") + (b.notes ? ` (notes: ${b.notes})` : "") + (b.edited ? " (approved with the owner's edits)" : "");
+      return { author: m.author as string, kind: m.kind as string, text, at: m.created_at as number };
+    });
+  }
+
+  private label(author: string): string {
+    if (author === "owner") return "Owner";
+    return this.team().agents.find((a) => `agent:${a.slug}` === author)?.name ?? author.replace(/^agent:/, "");
+  }
+
+  /** A short digest of the other conversations, put into every agent's briefing. */
+  private digest(excludeThread: string | null): string {
+    const threads = this.rows("SELECT * FROM threads WHERE id IS NOT ? ORDER BY updated_at DESC LIMIT 6", excludeThread).map((r) => this.toThread(r));
+    if (!threads.length) return "";
+    const ago = (ms: number) => { const m = Math.round((Date.now() - ms) / 60000); return m < 60 ? `${m} min ago` : `${Math.round(m / 60)} h ago`; };
+    return threads.map((t) => {
+      const words = this.lastWords(t.id, 3).map((w) => `${this.label(w.author)}${w.kind === "decision" ? " decided" : ""}: ${w.text.replace(/\s+/g, " ").slice(0, 280)}`);
+      const head = `- [${t.id}] ${this.label(`agent:${t.agent}`)}, "${t.title}" (${ago(t.updated_at)})`;
+      return [head, ...words.map((w) => `  ${w}`)].join("\n");
+    }).join("\n");
+  }
+
+  /** What other desks did: the recent conversations, or one conversation in full. For the team_feed tool. */
+  async feed(slug: string, runId: string, threadId: string | null): Promise<string> {
+    this.ensureTeam(slug);
+    const run = this.getRun(runId);
+    if (threadId) {
+      const t = this.getThreadRow(threadId);
+      if (!t) return `No conversation ${threadId}.`;
+      const words = this.lastWords(threadId, 30).map((w) => `${this.label(w.author)} (${w.kind}): ${w.text}`);
+      return [`Conversation "${t.title}" with ${this.label(`agent:${t.agent}`)}:`, ...words].join("\n\n");
+    }
+    const tasks = this.rows("SELECT * FROM tasks WHERE status = 'proposed' ORDER BY created_at DESC LIMIT 10").map((r) => this.toTask(r));
+    const parts = [this.digest(run?.thread_id ?? null) || "No other conversations yet."];
+    if (tasks.length) parts.push(["Open tasks between desks:", ...tasks.map((t) => `- ${t.from_agent} for ${t.to_agent}: ${t.body.slice(0, 200)}`)].join("\n"));
+    parts.push("Files other desks write are saved to the repo when their session closes; read a full conversation with team_feed(thread_id).");
+    return parts.join("\n\n");
   }
 
   async verifyRunToken(runId: string, token: string): Promise<boolean> {

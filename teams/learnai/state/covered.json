@@ -791,6 +791,18 @@
       "status": "planned",
       "planned": "2026-10-17",
       "unit": "H2"
+    },
+    {
+      "id": "q104",
+      "track": "interview",
+      "unit": "H2",
+      "title": "Interview: Chatbot ne galat jawab diya, par kal ka kuch record nahi. Debug kaise karoge?",
+      "kind": "question",
+      "topic": "When an LLM app gives a wrong answer, the final answer alone cannot tell you why; a trace, one record of the whole request with each step's input, output, time and tokens, shows which step went wrong.",
+      "hook_formula": "The Verbatim Question",
+      "status": "planned",
+      "planned": "2026-10-17",
+      "office_note": "approved by the owner as q27 on 2026-10-17; renamed to q104 because office ids start at 101"
     }
   ]
 }
