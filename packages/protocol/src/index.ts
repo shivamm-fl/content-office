@@ -6,15 +6,19 @@ export type RunStatus =
   | "queued" | "starting" | "live" | "idle" | "blocked_limit" | "done" | "failed" | "cancelled" | "lost";
 export type Profile = "desk" | "studio";
 
-export interface TeamAgent { slug: string; name: string; title: string; color: string; desk: Profile }
+export interface TeamAgent { slug: string; name: string; title: string; color: string; desk: Profile; skills?: string[] }
+/** A room on the team's floor: desks for agents, the meeting room for the daily sync, or the reception (inbox). */
+export interface Room { id: string; name: string; kind?: "desks" | "meeting" | "reception"; agents?: string[] }
 export interface Team {
   slug: string; name: string; tagline: string; lead: string; model: string;
   handles: { platform: string; handle: string }[];
   tracks: { id: string; prefix: string; name: string }[];
   agents: TeamAgent[];
+  rooms?: Room[];
 }
 
-export interface Desk { agent: string; status: AgentStatus; activity: string | null; run_id: string | null; updated_at: number }
+/** `done` counts finished pieces of work (turns as lead, hand-offs as teammate): the agent's XP. */
+export interface Desk { agent: string; status: AgentStatus; activity: string | null; run_id: string | null; updated_at: number; done?: number }
 export interface Thread {
   id: string; agent: string; title: string; kind: string; created_at: number; updated_at: number;
   last_run: string | null; session_id: string | null; preview: string | null;

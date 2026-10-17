@@ -37,7 +37,7 @@ function Shell({ team, onAuthLost }: { team: string; onAuthLost: () => void }) {
         {inChat ? <ChatView key={thread ?? fresh} office={office} threadId={thread} newAgent={fresh} />
           : tab === "inbox" ? <InboxView office={office} />
           : tab === "runs" ? <RunsView office={office} />
-          : <OfficeView state={state} connected={office.connected} />}
+          : <OfficeView office={office} />}
       </main>
       {!inChat && (
         <nav className="safe-bottom grid grid-cols-3 border-t border-wall bg-ink pt-1.5 text-center text-[13px]">

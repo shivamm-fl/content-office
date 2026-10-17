@@ -118,10 +118,11 @@ export function useOffice(team: string, onAuthLost: () => void) {
     api<Ask>(`/api/teams/${team}/asks/${askId}`, { method: "POST", json: ans }), [team]);
   const stop = useCallback((runId: string, mode: "interrupt" | "end") =>
     api<Run>(`/api/teams/${team}/runs/${runId}/stop`, { method: "POST", json: { mode } }), [team]);
+  const startSync = useCallback(() => api<{ thread: Thread }>(`/api/teams/${team}/sync`, { method: "POST", json: {} }), [team]);
   const taskAction = useCallback((taskId: string, action: "start" | "dismiss") =>
     api<Task>(`/api/teams/${team}/tasks/${taskId}`, { method: "POST", json: { action } }), [team]);
 
-  return { ...s, loadThread, send, answer, stop, taskAction };
+  return { ...s, loadThread, send, answer, stop, taskAction, startSync };
 }
 
 export type Office = ReturnType<typeof useOffice>;

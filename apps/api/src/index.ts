@@ -76,6 +76,12 @@ app.post("/api/teams/:team/messages", async (c) => {
   return c.json(await office(c.env, slug).postMessage(slug, { thread_id: body.thread_id ?? null, agent: body.agent, text: body.text }));
 });
 
+app.post("/api/teams/:team/sync", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  return c.json(await office(c.env, slug).startSync(slug));
+});
+
 app.post("/api/teams/:team/asks/:id", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");

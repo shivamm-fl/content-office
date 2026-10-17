@@ -64,6 +64,7 @@ export class Office extends DurableObject<Env> {
       CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, from_agent TEXT NOT NULL, to_agent TEXT NOT NULL, body TEXT NOT NULL, status TEXT NOT NULL,
         thread_id TEXT, created_at INTEGER NOT NULL);
     `);
+    try { this.sql.exec("ALTER TABLE desks ADD COLUMN done INTEGER NOT NULL DEFAULT 0"); } catch { /* already there */ }
   }
 
   private rows<T = Row>(q: string, ...b: SqlStorageValue[]): T[] {
@@ -189,7 +190,10 @@ export class Office extends DurableObject<Env> {
       "INSERT INTO desks (agent, status, activity, run_id, updated_at) VALUES (?, ?, ?, ?, ?) ON CONFLICT(agent) DO UPDATE SET status = excluded.status, activity = excluded.activity, run_id = excluded.run_id, updated_at = excluded.updated_at",
       agent, status, activity, runId, now,
     );
-    this.broadcast({ t: "desk", desk: { agent, status, activity, run_id: runId, updated_at: now } });
+    this.broadcast({ t: "desk", desk: this.one<Desk>("SELECT agent, status, activity, run_id, updated_at, done FROM desks WHERE agent = ?", agent)! });
+  }
+  private bumpDone(agent: string) {
+    this.sql.exec("UPDATE desks SET done = done + 1 WHERE agent = ?", agent);
   }
   private updateRun(id: string, fields: Partial<Record<string, SqlStorageValue>>) {
     const keys = Object.keys(fields);
@@ -204,7 +208,7 @@ export class Office extends DurableObject<Env> {
     const team = this.ensureTeam(slug);
     return {
       team,
-      desks: this.rows<Desk>("SELECT agent, status, activity, run_id, updated_at FROM desks"),
+      desks: this.rows<Desk>("SELECT agent, status, activity, run_id, updated_at, done FROM desks"),
       runs: this.rows("SELECT * FROM runs ORDER BY created_at DESC LIMIT 25").map((r) => this.toRun(r)),
       asks: this.rows("SELECT * FROM asks WHERE status = 'pending' ORDER BY created_at").map((r) => this.toAsk(r)),
       tasks: this.rows("SELECT * FROM tasks WHERE status = 'proposed' ORDER BY created_at DESC").map((r) => this.toTask(r)),
@@ -223,7 +227,7 @@ export class Office extends DurableObject<Env> {
   }
 
   // ---------- owner actions ----------
-  async postMessage(slug: string, input: { thread_id?: string | null; agent?: string; text: string }): Promise<{ thread: Thread; message: Message }> {
+  async postMessage(slug: string, input: { thread_id?: string | null; agent?: string; text: string; kind?: string; title?: string }): Promise<{ thread: Thread; message: Message }> {
     const team = this.ensureTeam(slug);
     const text = input.text.trim();
     if (!text) throw new Error("empty message");
@@ -233,7 +237,7 @@ export class Office extends DurableObject<Env> {
       const agent = team.agents.some((a) => a.slug === input.agent) ? (input.agent as string) : team.lead;
       const now = Date.now();
       const id = newId("t");
-      this.sql.exec("INSERT INTO threads (id, agent, title, kind, created_at, updated_at) VALUES (?, ?, ?, 'chat', ?, ?)", id, agent, text.slice(0, 70), now, now);
+      this.sql.exec("INSERT INTO threads (id, agent, title, kind, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)", id, agent, (input.title ?? text).slice(0, 70), input.kind ?? "chat", now, now);
       thread = this.getThreadRow(id)!;
       this.broadcast({ t: "thread", thread });
     }
@@ -243,6 +247,20 @@ export class Office extends DurableObject<Env> {
     else await this.startRun(thread, "desk");
     this.broadcast({ t: "thread", thread: this.getThreadRow(thread.id)! });
     return { thread: this.getThreadRow(thread.id)!, message };
+  }
+
+  /** The team's standup, called by the owner (never on a schedule). One sync conversation per day. */
+  async startSync(slug: string): Promise<{ thread: Thread }> {
+    const team = this.ensureTeam(slug);
+    const day = new Date().toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" });
+    const iso = new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10);
+    const open = this.one("SELECT t.* FROM threads t JOIN runs r ON r.thread_id = t.id WHERE t.kind = 'sync' AND r.status IN " + ACTIVE_SQL + " LIMIT 1");
+    if (open) return { thread: this.toThread(open) };
+    const { thread } = await this.postMessage(slug, {
+      agent: team.lead, kind: "sync", title: `Daily sync, ${day}`,
+      text: `Daily sync for ${iso}. Follow prompts/daily-sync.md.`,
+    });
+    return { thread };
   }
 
   async answerAsk(slug: string, askId: string, answer: Record<string, unknown>): Promise<Ask> {
@@ -525,11 +543,13 @@ export class Office extends DurableObject<Env> {
           if (threadId) this.addMessage({ thread_id: threadId, run_id: run.id, author: `agent:${ev.parent_agent}`, kind: "handoff", body: { text: ev.task, from, to, agent: ev.agent, tool_id: ev.id }, parent: null });
           this.setDesk(ev.agent, "working", ev.task.slice(0, 90), run.id);
         } else {
+          this.bumpDone(ev.agent);
           this.setDesk(ev.agent, "idle", null, null);
         }
         return;
       case "turn_end":
         this.updateRun(run.id, { status: "idle", cost_usd: ev.cost_usd });
+        if (!ev.is_error) this.bumpDone(run.agent);
         // Teammates who helped in this turn are done; anyone still working in the background reports again.
         for (const d of this.rows<{ agent: string }>("SELECT agent FROM desks WHERE run_id = ? AND agent != ?", run.id, run.agent)) this.setDesk(d.agent, "idle", null, null);
         this.setDesk(run.agent, "idle", "In chat with you", run.id);
