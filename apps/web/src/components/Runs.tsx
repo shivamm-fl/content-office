@@ -17,13 +17,13 @@ export function RunsView({ office }: { office: Office }) {
           <ul className="space-y-2.5">
             {runs.map((r: Run) => {
               const a = agentOf(state.team, r.agent);
-              const gh = (r as Run & { gh_url?: string }).gh_url;
+              const gh = r.gh_url;
               return (
                 <li key={r.id} className="rounded-xl border border-wall bg-desk p-3.5">
                   <div className="flex items-center gap-2">
                     <AgentDot color={a.color} size={8} />
                     <span className="font-medium">{a.name}</span>
-                    <span className="text-xs text-dim">{r.profile}</span>
+                    <span className="text-xs text-dim">{r.profile === "studio" ? `studio ${r.item ?? ""}${isActive(r) && r.stage ? `, ${r.stage}` : ""}` : r.profile}</span>
                     <span className="ml-auto"><RunStatus run={r} /></span>
                   </div>
                   <p className="mt-1.5 text-xs text-dim">

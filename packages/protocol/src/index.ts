@@ -15,6 +15,8 @@ export interface Team {
   tracks: { id: string; prefix: string; name: string }[];
   agents: TeamAgent[];
   rooms?: Room[];
+  /** Reels the team aims to finish per work day (owner decision). */
+  pace?: number;
 }
 
 /** `done` counts finished pieces of work (turns as lead, hand-offs as teammate): the agent's XP. */
@@ -23,7 +25,7 @@ export interface Thread {
   id: string; agent: string; title: string; kind: string; created_at: number; updated_at: number;
   last_run: string | null; session_id: string | null; preview: string | null;
 }
-export type MessageKind = "text" | "tool" | "question" | "answer" | "approval" | "decision" | "system" | "handoff" | "dm";
+export type MessageKind = "text" | "tool" | "question" | "answer" | "approval" | "decision" | "system" | "handoff" | "dm" | "brief";
 export interface Message {
   id: string; thread_id: string; run_id: string | null; author: string; kind: MessageKind;
   body: Record<string, unknown>; parent: string | null; created_at: number;
@@ -32,11 +34,19 @@ export interface Run {
   id: string; thread_id: string | null; agent: string; profile: Profile; status: RunStatus;
   gh_run_id: string | null; created_at: number; claimed_at: number | null; last_seen: number | null;
   ended_at: number | null; cost_usd: number; summary: string | null; error: string | null;
+  /** Studio runs: the reel being built, and where the build is (build, review, fix, final). */
+  item?: string | null; stage?: string | null; gh_url?: string | null;
+}
+/** A finished reel waiting for the owner's decision. */
+export interface FinalReel {
+  type: "final"; item: string; title: string; video_url: string | null; cover_url: string | null; thumb_url: string | null;
+  caption: string; youtube: string; script: string; duration_s: number | null; checks: string[];
 }
 export interface Ask {
   id: string; run_id: string; thread_id: string; agent: string; kind: "question" | "approval";
   title: string; body: string; options: string[]; status: "pending" | "answered" | "expired";
   answer: Record<string, unknown> | null; created_at: number; answered_at: number | null;
+  meta?: FinalReel | null;
 }
 export interface Task { id: string; from_agent: string; to_agent: string; body: string; status: "proposed" | "started" | "done" | "dismissed"; thread_id: string | null; created_at: number }
 export interface Usage { five_hour: number | null; seven_day: number | null; five_hour_resets: number | null; seven_day_resets: number | null; status: string | null; updated_at: number }
@@ -62,7 +72,8 @@ export type RunnerEvent =
   /** One agent messaged another directly inside the session. */
   | { t: "dm"; from: string; to: string; text: string }
   | { t: "heartbeat" }
-  | { t: "done"; status: "done" | "failed"; summary: string; transcript_key: string | null; session_id: string | null };
+  /** keep_open: a studio session finished its part; the run goes on (reviews, fix, final gate) in later jobs. */
+  | { t: "done"; status: "done" | "failed"; summary: string; transcript_key: string | null; session_id: string | null; keep_open?: boolean };
 
 /** Office -> runner. */
 export type RunnerCommand =

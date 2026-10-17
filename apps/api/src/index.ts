@@ -1,7 +1,7 @@
 // The office Worker: serves the PWA, the owner's API, the runner endpoints and the GitHub webhook.
 import { Hono, type Context } from "hono";
 import { hmacHex, makeSession, readSession, sessionCookie, timingSafeEqual } from "./auth";
-import { readAiCourse } from "./github";
+import { readAiCourse, WORKFLOWS } from "./github";
 import { verifyGithubOidc } from "./oidc";
 import { Office, type Env } from "./office";
 import { TEAMS, team as getTeam } from "./teams";
@@ -84,6 +84,12 @@ app.post("/api/teams/:team/messages", async (c) => {
   return c.json(await office(c.env, slug).postMessage(slug, { thread_id: body.thread_id ?? null, agent: body.agent, text: body.text }));
 });
 
+app.post("/api/teams/:team/day", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  return c.json(await office(c.env, slug).startDay(slug));
+});
+
 app.post("/api/teams/:team/sync", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");
@@ -125,7 +131,7 @@ async function runnerIdentity(c: C, slug: string): Promise<{ ghRunId: string | n
   if (dev && c.env.DEV_RUNNER_KEY && timingSafeEqual(dev, c.env.DEV_RUNNER_KEY)) return { ghRunId: null };
   if (!auth.startsWith("Bearer ")) throw new Error("runner identity required");
   const claims = await verifyGithubOidc(auth.slice(7), {
-    audience: c.env.OIDC_AUDIENCE, repo: c.env.GITHUB_REPO, workflowFile: "office-run.yml", actor: c.env.OWNER_LOGIN,
+    audience: c.env.OIDC_AUDIENCE, repo: c.env.GITHUB_REPO, workflowFiles: Object.values(WORKFLOWS), actor: c.env.OWNER_LOGIN,
   });
   if (!getTeam(slug)) throw new Error("no such team");
   return { ghRunId: claims.run_id };
@@ -192,6 +198,30 @@ app.get("/api/runner/transcript", async (c) => {
   return data ? new Response(data, { headers: { "Content-Type": "application/gzip" } }) : bad(c, 404, "transcript expired");
 });
 
+// A desk hands a reel to the studio (office tool request_build).
+app.post("/api/runner/build", async (c) => {
+  const id = await runToken(c);
+  if (!id) return bad(c, 403, "bad run token");
+  const body = await c.req.json<{ item_id: string; item?: unknown; script?: string; notes?: string }>();
+  try {
+    return c.json(await office(c.env, id.slug).requestBuild(id.slug, id.runId, body));
+  } catch (e) {
+    return bad(c, 400, (e as Error).message);
+  }
+});
+
+// The studio's final job (GitHub OIDC): the gate result, the media and the texts of the reel.
+app.post("/api/runner/final", async (c) => {
+  const body = await c.req.json<{ team: string; run_id: string; ok: boolean; item: string }>();
+  try {
+    await runnerIdentity(c, body.team);
+  } catch (e) {
+    return bad(c, 403, (e as Error).message);
+  }
+  await office(c.env, body.team).finalReport(body.team, body.run_id, body);
+  return c.json({ ok: true });
+});
+
 app.get("/api/runner/feed", async (c) => {
   const id = await runToken(c);
   if (!id) return bad(c, 403, "bad run token");
@@ -215,7 +245,7 @@ app.post("/api/github/webhook", async (c) => {
   if (!c.env.WEBHOOK_SECRET || !timingSafeEqual(sig, `sha256=${await hmacHex(c.env.WEBHOOK_SECRET, raw)}`)) return bad(c, 401, "bad signature");
   const event = c.req.header("X-GitHub-Event");
   const payload = JSON.parse(new TextDecoder().decode(raw));
-  if (event === "workflow_run" && payload.action === "completed" && payload.workflow_run?.path?.endsWith("office-run.yml")) {
+  if (event === "workflow_run" && payload.action === "completed" && Object.values(WORKFLOWS).some((f) => payload.workflow_run?.path?.endsWith(f))) {
     // run-name is "office <team> <profile> <run_id>"
     const [, slug, , runId] = String(payload.workflow_run.display_title ?? "").split(" ");
     if (slug && runId && getTeam(slug)) {
@@ -223,6 +253,22 @@ app.post("/api/github/webhook", async (c) => {
     }
   }
   return c.json({ ok: true });
+});
+
+// Finished reels live as GitHub release assets (office-<team>-<item>) of this public repo. The office serves them with
+// proper types and range requests so the phone's video player (iOS included) can play and seek them.
+const MEDIA_TYPES: Record<string, string> = { mp4: "video/mp4", png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg" };
+app.get("/media/:team/:item/:file", async (c) => {
+  const { team: slug, item, file } = c.req.param();
+  const ext = file.split(".").pop()?.toLowerCase() ?? "";
+  if (!getTeam(slug) || !/^[a-z]\d{2,4}$/.test(item) || !/^[\w.-]{1,120}$/.test(file) || !MEDIA_TYPES[ext]) return bad(c, 404, "not found");
+  const url = `https://github.com/${c.env.GITHUB_REPO}/releases/download/office-${slug}-${item}/${encodeURIComponent(file)}`;
+  const range = c.req.header("Range");
+  const r = await fetch(url, { headers: range ? { Range: range } : {}, redirect: "follow" });
+  if (!r.ok && r.status !== 206) return bad(c, 404, "not found");
+  const h = new Headers({ "Content-Type": MEDIA_TYPES[ext], "Accept-Ranges": "bytes", "Cache-Control": "public, max-age=3600" });
+  for (const k of ["Content-Length", "Content-Range"]) { const v = r.headers.get(k); if (v) h.set(k, v); }
+  return new Response(r.body, { status: r.status, headers: h });
 });
 
 app.all("/api/*", (c) => bad(c, 404, "not found"));

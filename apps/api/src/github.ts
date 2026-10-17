@@ -11,14 +11,22 @@ function headers(env: GhEnv, accept = "application/vnd.github+json"): HeadersIni
   };
 }
 
-/** Start office-run.yml. Returns the GitHub run id when GitHub reports it. */
+/** Desk runs (chat, planning, scripts) and studio runs (build one reel) have their own workflow. */
+export const WORKFLOWS = { desk: "office-run.yml", studio: "office-studio.yml" } as const;
+
+/** Start a run on GitHub. Returns the GitHub run id when GitHub reports it. */
 export async function dispatchRun(
-  env: GhEnv, inputs: { run_id: string; team: string; profile: string },
+  env: GhEnv, inputs: { run_id: string; team: string; profile: string; item?: string },
 ): Promise<{ gh_run_id: string | null; url: string | null }> {
-  const r = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/workflows/office-run.yml/dispatches`, {
+  const studio = inputs.profile === "studio";
+  const workflow = studio ? WORKFLOWS.studio : WORKFLOWS.desk;
+  const body = studio
+    ? { run_id: inputs.run_id, team: inputs.team, item: inputs.item ?? "" }
+    : { run_id: inputs.run_id, team: inputs.team, profile: inputs.profile };
+  const r = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/workflows/${workflow}/dispatches`, {
     method: "POST",
     headers: { ...headers(env), "Content-Type": "application/json" },
-    body: JSON.stringify({ ref: "main", inputs, return_run_details: true }),
+    body: JSON.stringify({ ref: "main", inputs: body, return_run_details: true }),
   });
   if (r.status === 204) return { gh_run_id: null, url: null };
   if (!r.ok) throw new Error(`GitHub refused to start the run (${r.status}): ${(await r.text()).slice(0, 300)}`);

@@ -64,7 +64,15 @@ export class Office extends DurableObject<Env> {
       CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, from_agent TEXT NOT NULL, to_agent TEXT NOT NULL, body TEXT NOT NULL, status TEXT NOT NULL,
         thread_id TEXT, created_at INTEGER NOT NULL);
     `);
-    try { this.sql.exec("ALTER TABLE desks ADD COLUMN done INTEGER NOT NULL DEFAULT 0"); } catch { /* already there */ }
+    for (const ddl of [
+      "ALTER TABLE desks ADD COLUMN done INTEGER NOT NULL DEFAULT 0",
+      "ALTER TABLE runs ADD COLUMN item TEXT",     // studio runs: the reel being built
+      "ALTER TABLE runs ADD COLUMN stage TEXT",    // studio runs: build, review, fix, final
+      "ALTER TABLE threads ADD COLUMN item TEXT",  // build threads: one per reel
+      "ALTER TABLE asks ADD COLUMN meta TEXT",     // final reels: video, cover, texts
+    ]) {
+      try { this.sql.exec(ddl); } catch { /* already there */ }
+    }
   }
 
   private rows<T = Row>(q: string, ...b: SqlStorageValue[]): T[] {
@@ -117,8 +125,8 @@ export class Office extends DurableObject<Env> {
       status: r.status as RunStatus, gh_run_id: (r.gh_run_id as string) ?? null, created_at: r.created_at as number,
       claimed_at: (r.claimed_at as number) ?? null, last_seen: (r.last_seen as number) ?? null, ended_at: (r.ended_at as number) ?? null,
       cost_usd: (r.cost_usd as number) ?? 0, summary: (r.summary as string) ?? null, error: (r.error as string) ?? null,
-      ...(r.gh_url ? { gh_url: r.gh_url as string } : {}),
-    } as Run;
+      gh_url: (r.gh_url as string) ?? null, item: (r.item as string) ?? null, stage: (r.stage as string) ?? null,
+    };
   }
   private toAsk(r: Row): Ask {
     return {
@@ -126,6 +134,7 @@ export class Office extends DurableObject<Env> {
       kind: r.kind as Ask["kind"], title: r.title as string, body: r.body as string, options: JSON.parse(r.options as string),
       status: r.status as Ask["status"], answer: r.answer ? JSON.parse(r.answer as string) : null,
       created_at: r.created_at as number, answered_at: (r.answered_at as number) ?? null,
+      meta: r.meta ? JSON.parse(r.meta as string) : null,
     };
   }
   private toTask(r: Row): Task {
@@ -244,7 +253,7 @@ export class Office extends DurableObject<Env> {
     const message = this.addMessage({ thread_id: thread.id, run_id: null, author: "owner", kind: "text", body: { text }, delivered: false });
     const active = this.activeRunFor(thread.id);
     if (active) this.deliverPending(active);
-    else await this.startRun(thread, "desk");
+    else await this.startRun(thread, thread.kind === "build" ? "studio" : "desk");  // a note in a build thread revises the reel
     this.broadcast({ t: "thread", thread: this.getThreadRow(thread.id)! });
     return { thread: this.getThreadRow(thread.id)!, message };
   }
@@ -263,6 +272,81 @@ export class Office extends DurableObject<Env> {
     return { thread };
   }
 
+  /** "Start the day": the Producer gets today's reels planned, written and into the studio. One tap, never scheduled. */
+  async startDay(slug: string): Promise<{ thread: Thread }> {
+    const team = this.ensureTeam(slug);
+    const open = this.one("SELECT t.* FROM threads t JOIN runs r ON r.thread_id = t.id WHERE t.kind = 'workday' AND r.status IN " + ACTIVE_SQL + " LIMIT 1");
+    if (open) return { thread: this.toThread(open) };
+    const day = new Date().toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short" });
+    const iso = new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10);
+    const pace = team.pace ?? 6;
+    const { thread } = await this.postMessage(slug, {
+      agent: team.lead, kind: "workday", title: `Work day, ${day}`,
+      text: `Start the day (${iso}): ${pace} reels, ${Math.round(pace / Math.max(1, team.tracks.length))} per track. Follow prompts/work-day.md.`,
+    });
+    return { thread };
+  }
+
+  /** A desk hands one reel to the studio: a build thread per reel, its brief as the first message, a studio run. */
+  async requestBuild(slug: string, fromRunId: string, input: { item_id: string; item?: unknown; script?: string; notes?: string }): Promise<{ thread_id: string; run_id: string; reused: boolean }> {
+    const team = this.ensureTeam(slug);
+    const itemId = String(input.item_id ?? "").trim();
+    if (!/^[a-z]\d{2,4}$/.test(itemId)) throw new Error(`bad item id ${itemId}`);
+    const from = this.getRun(fromRunId);
+    const existing = this.one("SELECT * FROM threads WHERE kind = 'build' AND item = ? ORDER BY created_at DESC LIMIT 1", itemId);
+    if (existing) {
+      const active = this.activeRunFor(existing.id as string);
+      if (active) return { thread_id: existing.id as string, run_id: active.id, reused: true };
+    }
+    const item = (input.item && typeof input.item === "object" ? input.item : {}) as Record<string, unknown>;
+    const title = String(item.title ?? itemId);
+    const track = String(item.track ?? team.tracks.find((t) => t.prefix === itemId[0])?.id ?? "");
+    const studioLead = team.agents.find((a) => a.desk === "studio")?.slug ?? team.lead;
+    let threadId = existing?.id as string | undefined;
+    const now = Date.now();
+    if (!threadId) {
+      threadId = newId("t");
+      this.sql.exec("INSERT INTO threads (id, agent, title, kind, item, created_at, updated_at) VALUES (?, ?, ?, 'build', ?, ?, ?)",
+        threadId, studioLead, `Build ${itemId}: ${title}`.slice(0, 90), itemId, now, now);
+    }
+    const parts = [`REEL=${itemId} TRACK=${track}`, "Queue item:", "```json", JSON.stringify(item, null, 2), "```"];
+    if (input.script?.trim()) parts.push("Script (from the Scriptwriter, keep its wording):", input.script.trim());
+    if (input.notes?.trim()) parts.push(`Notes: ${input.notes.trim()}`);
+    this.addMessage({
+      thread_id: threadId, run_id: null, author: `agent:${from?.agent ?? team.lead}`, kind: "brief",
+      body: { text: parts.join("\n\n"), item_id: itemId, title, track }, delivered: false,
+    });
+    const thread = this.getThreadRow(threadId)!;
+    this.broadcast({ t: "thread", thread });
+    const run = await this.startRun(thread, "studio");
+    return { thread_id: threadId, run_id: run.id, reused: false };
+  }
+
+  /** The studio's final job reports: the reel passed the gate (an approval for the owner) or did not. */
+  async finalReport(slug: string, runId: string, r: { ok: boolean; item: string; title?: string; video_url?: string; cover_url?: string; thumb_url?: string; caption?: string; youtube?: string; script?: string; duration_s?: number; failed?: string[]; note?: string }) {
+    this.ensureTeam(slug);
+    const run = this.getRun(runId);
+    if (!run || !run.thread_id) throw new Error("unknown run");
+    const failed = (r.failed ?? []).slice(0, 12);
+    this.finishRun(runId, "done", r.ok ? `${r.item} passed the gate` : `${r.item} did not pass the gate`, null);
+    if (!r.ok) {
+      this.system(run.thread_id, runId, `The reel did not pass the final gate: ${failed.join("; ") || r.note || "see the GitHub log"}. Send a note here to have the studio fix it.`, { error: true });
+      return;
+    }
+    const meta = {
+      type: "final" as const, item: r.item, title: r.title ?? r.item, video_url: r.video_url ?? null, cover_url: r.cover_url ?? null,
+      thumb_url: r.thumb_url ?? null, caption: r.caption ?? "", youtube: r.youtube ?? "", script: r.script ?? "", duration_s: r.duration_s ?? null, checks: failed,
+    };
+    const askId = newId("ask");
+    const studio = run.agent;
+    this.sql.exec(
+      "INSERT INTO asks (id, run_id, thread_id, agent, kind, title, body, options, status, created_at, meta) VALUES (?, ?, ?, ?, 'approval', ?, ?, '[]', 'pending', ?, ?)",
+      askId, runId, run.thread_id, studio, `Final reel: ${r.item}, ${meta.title}`.slice(0, 200), "[final] The reel passed the automatic gate and the independent reviews.", Date.now(), JSON.stringify(meta),
+    );
+    this.addMessage({ thread_id: run.thread_id, run_id: runId, author: `agent:${studio}`, kind: "approval", body: { ask_id: askId, title: `Final reel: ${r.item}, ${meta.title}`, text: "The reel is ready for your decision." } });
+    this.broadcast({ t: "ask", ask: this.toAsk(this.one("SELECT * FROM asks WHERE id = ?", askId)!) });
+  }
+
   async answerAsk(slug: string, askId: string, answer: Record<string, unknown>): Promise<Ask> {
     this.ensureTeam(slug);
     const r = this.one("SELECT * FROM asks WHERE id = ?", askId);
@@ -272,6 +356,20 @@ export class Office extends DurableObject<Env> {
     const now = Date.now();
     this.sql.exec("UPDATE asks SET status = 'answered', answer = ?, answered_at = ? WHERE id = ?", JSON.stringify(answer), now, askId);
     this.addMessage({ thread_id: ask.thread_id, run_id: ask.run_id, author: "owner", kind: ask.kind === "approval" ? "decision" : "answer", body: { ask_id: askId, ...answer } });
+    if (ask.meta?.type === "final") {
+      const updated = this.toAsk(this.one("SELECT * FROM asks WHERE id = ?", askId)!);
+      this.broadcast({ t: "ask", ask: updated });
+      const decision = String(answer.decision ?? "");
+      if (decision === "changes_requested") {
+        // The studio rebuilds with the owner's notes (a revise run in the same build thread).
+        await this.postMessage(slug, { thread_id: ask.thread_id, text: `Changes to ${ask.meta.item}: ${String(answer.notes ?? answer.text ?? "")}` });
+      } else if (decision === "approved") {
+        this.system(ask.thread_id, ask.run_id, `${ask.meta.item} approved. It is ready to hand over for posting.`);
+      } else {
+        this.system(ask.thread_id, ask.run_id, `${ask.meta.item} rejected.`);
+      }
+      return updated;
+    }
     const sent = this.sendRunner(ask.run_id, { t: "answer", ask_id: askId, answer });
     if (!sent) this.system(ask.thread_id, ask.run_id, "The agent's session has ended; your answer is saved and goes into the next run of this chat.");
     this.setDesk(ask.agent, "working", "Got your answer", ask.run_id);
@@ -325,7 +423,9 @@ export class Office extends DurableObject<Env> {
     const busy = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE status IN ('starting','live','idle','blocked_limit')")!.n;
     const blockedUntil = Number(this.meta("blocked_until") ?? 0);
     const wait = busy >= cap || blockedUntil > now;
-    this.sql.exec("INSERT INTO runs (id, thread_id, agent, profile, status, created_at) VALUES (?, ?, ?, ?, ?, ?)", id, thread.id, thread.agent, profile, wait ? "queued" : "starting", now);
+    const item = profile === "studio" ? (this.one<{ item: string | null }>("SELECT item FROM threads WHERE id = ?", thread.id)?.item ?? null) : null;
+    this.sql.exec("INSERT INTO runs (id, thread_id, agent, profile, status, created_at, item, stage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      id, thread.id, thread.agent, profile, wait ? "queued" : "starting", now, item, profile === "studio" ? "build" : null);
     this.sql.exec("UPDATE threads SET last_run = ? WHERE id = ?", id, thread.id);
     const agentName = this.team().agents.find((a) => a.slug === thread.agent)?.name ?? thread.agent;
     if (wait) {
@@ -350,7 +450,7 @@ export class Office extends DurableObject<Env> {
       return;
     }
     try {
-      const { gh_run_id, url } = await dispatchRun(this.env, { run_id: run.id, team: this.team().slug, profile: run.profile });
+      const { gh_run_id, url } = await dispatchRun(this.env, { run_id: run.id, team: this.team().slug, profile: run.profile, item: run.item ?? "" });
       this.updateRun(run.id, { status: "starting", gh_run_id, gh_url: url });
     } catch (e) {
       this.finishRun(run.id, "failed", null, (e as Error).message);
@@ -402,15 +502,23 @@ export class Office extends DurableObject<Env> {
     const team = this.ensureTeam(slug);
     const run = this.getRun(runId);
     if (!run) throw new Error("unknown run");
-    if (run.status !== "starting" && run.status !== "queued") throw new Error(`run is ${run.status}`);
+    // A studio run is claimed once per agent job (build, then fix), always by the same GitHub run.
+    const nextStudioJob = run.profile === "studio" && run.status === "idle" && !!run.gh_run_id && run.gh_run_id === ghRunId;
+    if (run.status !== "starting" && run.status !== "queued" && !nextStudioJob) throw new Error(`run is ${run.status}`);
     if (run.gh_run_id && ghRunId && run.gh_run_id !== ghRunId) throw new Error("GitHub run id does not match");
     const token = randomToken(32);
     const now = Date.now();
     this.updateRun(runId, { status: "live", claimed_at: now, last_seen: now, gh_run_id: ghRunId ?? run.gh_run_id, token_hash: await sha256Hex(token) });
     const thread = run.thread_id ? this.getThreadRow(run.thread_id) : null;
     const pending = thread
-      ? this.rows("SELECT * FROM messages WHERE thread_id = ? AND author = 'owner' AND delivered = 0 ORDER BY created_at", thread.id)
+      ? this.rows("SELECT * FROM messages WHERE thread_id = ? AND (author = 'owner' OR kind = 'brief') AND delivered = 0 ORDER BY created_at", thread.id)
       : [];
+    // Studio: the first build of a reel, or a revision after the owner's notes (an earlier studio run exists).
+    const studioMode = run.profile !== "studio" ? null
+      : nextStudioJob ? "fix"
+      : this.one("SELECT id FROM runs WHERE thread_id = ? AND profile = 'studio' AND id != ? AND status = 'done' LIMIT 1", run.thread_id, runId) ? "revise" : "build";
+    if (run.profile === "studio") this.updateRun(runId, { stage: studioMode === "fix" ? "fix" : "build" });
+    const taskMode = run.profile === "studio" || thread?.kind === "workday";
     for (const m of pending) this.sql.exec("UPDATE messages SET delivered = 1, run_id = ? WHERE id = ?", runId, m.id);
     const saved = thread ? this.one<{ transcript_key: string | null; session_id: string | null }>("SELECT transcript_key, session_id FROM threads WHERE id = ?", thread.id) : null;
     const resume = saved?.transcript_key && saved.session_id ? { key: saved.transcript_key, session_id: saved.session_id } : null;
@@ -426,14 +534,15 @@ export class Office extends DurableObject<Env> {
     await this.ensureAlarm();
     return {
       token,
-      run: { id: runId, agent: agent.slug, profile: run.profile, thread_id: run.thread_id },
+      run: { id: runId, agent: agent.slug, profile: run.profile, thread_id: run.thread_id, item: run.item ?? null, mode: studioMode },
       team: { slug: team.slug, name: team.name, lead: team.lead, model: team.model, agents: team.agents.map((a) => ({ slug: a.slug, name: a.name })) },
       agent,
       messages: pending.map((m) => ({ id: m.id as string, text: String(JSON.parse(m.body as string).text) })),
       history,
       resume,
       digest: this.digest(run.thread_id),
-      settings: { idle_minutes: Number(this.env.IDLE_MINUTES ?? "15"), max_minutes: 340, max_turns: 400 },
+      // task_mode: the session ends when its work is done (studio jobs, the work day), no waiting for chat.
+      settings: { idle_minutes: taskMode ? 2 : Number(this.env.IDLE_MINUTES ?? "15"), max_minutes: run.profile === "studio" ? 110 : 340, max_turns: 500, task_mode: taskMode },
     };
   }
 
@@ -651,6 +760,14 @@ export class Office extends DurableObject<Env> {
         return;
       case "done": {
         if (threadId && ev.transcript_key) this.sql.exec("UPDATE threads SET transcript_key = ?, session_id = COALESCE(?, session_id) WHERE id = ?", ev.transcript_key, ev.session_id, threadId);
+        if (ev.keep_open && run.profile === "studio" && ev.status === "done") {
+          // The studio session is done; independent reviews, a possible fix and the final gate run in later jobs.
+          this.updateRun(run.id, { status: "idle", stage: "review", token_hash: null });
+          for (const d of this.rows<{ agent: string }>("SELECT agent FROM desks WHERE run_id = ?", run.id)) this.setDesk(d.agent, "idle", null, null);
+          this.system(threadId, run.id, "Studio session finished. The independent reviewers (mute test, fact check) and the final gate run next.");
+          for (const ws of this.ctx.getWebSockets(`run:${run.id}`)) { try { ws.close(1000, "session finished"); } catch { /* */ } }
+          return;
+        }
         this.finishRun(run.id, ev.status, ev.summary || null, ev.status === "failed" ? ev.summary || "the agent session failed" : null);
         return;
       }
@@ -668,6 +785,9 @@ export class Office extends DurableObject<Env> {
       const run = this.toRun(r);
       if (run.status === "starting" && now - run.created_at > START_TIMEOUT_MS) {
         this.finishRun(run.id, "failed", null, "the GitHub runner did not start within 15 minutes (see the Runs tab)");
+      } else if (run.profile === "studio" && run.status === "idle") {
+        // Between studio jobs nobody is connected; the GitHub webhook ends the run if the workflow dies.
+        if (run.last_seen && now - run.last_seen > 5 * 3600_000) this.finishRun(run.id, "lost", null, "the studio run did not report back");
       } else if ((run.status === "live" || run.status === "idle") && run.last_seen && now - run.last_seen > LOST_AFTER_MS && !this.runnerSocket(run.id)) {
         this.finishRun(run.id, "lost", null, "lost contact with the runner");
       }

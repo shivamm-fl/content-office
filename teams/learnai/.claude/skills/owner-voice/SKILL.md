@@ -3,13 +3,12 @@ name: owner-voice
 description: Voice a LearnAI reel with the OWNER'S OWN cloned ElevenLabs voice ("Shivam Trainer") using the recipe he approved on 2026-10-15 (multilingual_v2, voice defaults, one request per phrase, primed first line, exact word timings). OPT-IN ONLY — use it only when the owner explicitly says "meri voice use karo" / "my voice" / "ElevenLabs se bana" AND the ElevenLabs key is available; every other reel (including all CI builds) stays on the free Edge TTS default.
 ---
 
-# Owner's voice (opt-in, ElevenLabs)
+# Owner's voice (ElevenLabs)
 
-Default is Edge TTS (Swara, `"tts": "edge"`, clean-reel). This skill changes only the voice, nothing else of the pipeline.
+**In the office (owner decision 2026-10-17) this is the DEFAULT voice**: the studio's `make_voice` tool uses it whenever the ElevenLabs characters of the month cover the reel, and falls back to Swara (Edge TTS, `"tts": "edge"`) otherwise. The office keeps the key; agents never see or need it. The rest of this file is the recipe (in ai-course it stays opt-in). This skill changes only the voice, nothing else of the pipeline.
 
-## When
+## When (ai-course, local)
 - The owner asks for his own voice in this session and the key is present (`ELEVENLABS_API_KEY` in the environment or in `ai-course/.env`, which is git-ignored). Never put the key in a committed file, a spec, a log or a message.
-- Not in CI, not on your own initiative, not "because it sounds better".
 
 ## The recipe (why each point: the owner tested the alternatives)
 - Voice `Shivam Trainer` (`KgBloOsGmp6r57GIimqQ`), not the older `Shivam` clone. Model `eleven_multilingual_v2`.

@@ -21,7 +21,7 @@ export interface GithubClaims {
 
 export async function verifyGithubOidc(
   token: string,
-  opts: { audience: string; repo: string; workflowFile: string; actor: string },
+  opts: { audience: string; repo: string; workflowFiles: readonly string[]; actor: string },
 ): Promise<GithubClaims> {
   const [h, p, s] = token.split(".");
   if (!h || !p || !s) throw new Error("malformed token");
@@ -40,8 +40,8 @@ export async function verifyGithubOidc(
   if (c.aud !== opts.audience) throw new Error("bad audience");
   if (!c.exp || c.exp < now) throw new Error("expired");
   if (c.repository?.toLowerCase() !== repo) throw new Error("wrong repository");
-  if (!c.workflow_ref?.toLowerCase().startsWith(`${repo}/.github/workflows/${opts.workflowFile}@refs/heads/main`))
-    throw new Error("wrong workflow");
+  const ref = c.workflow_ref?.toLowerCase() ?? "";
+  if (!opts.workflowFiles.some((f) => ref.startsWith(`${repo}/.github/workflows/${f}@refs/heads/main`))) throw new Error("wrong workflow");
   if (c.event_name !== "workflow_dispatch") throw new Error("not a dispatch");
   if (c.actor?.toLowerCase() !== opts.actor.toLowerCase()) throw new Error("wrong actor");
   return c;

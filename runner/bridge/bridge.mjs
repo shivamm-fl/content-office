@@ -15,6 +15,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { mapClaudeEvent, newMapState, parseFrontmatter, roster } from "./events.mjs";
+import { makeStudio, STUDIO_TOOLS } from "./studio.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "../..");
@@ -23,9 +24,12 @@ const RUN_ID = process.env.RUN_ID || "";
 const TEAM = process.env.TEAM || "learnai";
 const TEAM_DIR = join(ROOT, "teams", TEAM);
 const CLAUDE_BIN = process.env.CLAUDE_BIN || "claude";
+// File edits only inside the team folder ("//" = an absolute path in permission rules); the shell is sandboxed to it.
+const TEAM_GLOB = `/${TEAM_DIR.replace(/\\/g, "/").replace(/^\/+/, "")}/**`;
 const ALLOWED_TOOLS = [
-  "Bash", "Read", "Write", "Edit", "MultiEdit", "Glob", "Grep", "WebSearch", "WebFetch",
-  "Agent", "Task", "SendMessage", "Skill", "TodoWrite", "NotebookEdit", "mcp__office",
+  "Bash", "Read", "Glob", "Grep", "WebSearch", "WebFetch",
+  `Write(/${TEAM_GLOB})`, `Edit(/${TEAM_GLOB})`, `MultiEdit(/${TEAM_GLOB})`, `NotebookEdit(/${TEAM_GLOB})`,
+  "Agent", "Task", "SendMessage", "Skill", "TodoWrite", "mcp__office",
 ].join(",");
 
 const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
@@ -133,6 +137,11 @@ const TOOLS = [
     inputSchema: { type: "object", properties: { to: { type: "string" }, message: { type: "string" } }, required: ["to", "message"] },
   },
   {
+    name: "request_build",
+    description: "Hand one reel to the studio: it builds the video (voice, animation, render, cover, captions), the independent reviewers check it, and the finished reel goes to the owner for approval. Give the item id, the full queue item (JSON object) and the script the scriptwriter wrote. One call per reel; the studio builds a few at a time.",
+    inputSchema: { type: "object", properties: { item_id: { type: "string" }, item: { type: "object" }, script: { type: "string" }, notes: { type: "string" } }, required: ["item_id", "item"] },
+  },
+  {
     name: "team_feed",
     description: "What the other desks did: the team's recent conversations (who, what, what the owner decided), open tasks between desks, or one conversation in full when you pass its thread_id. Use it before you say a teammate has done nothing, and whenever the owner refers to another desk's work.",
     inputSchema: { type: "object", properties: { thread_id: { type: "string", description: "Optional: a conversation id from the feed, to read it in full." } } },
@@ -170,6 +179,15 @@ function startMcp(ctx) {
       ctx.link.send({ t: "task", id: rid("task"), from: agent, to, body: String(a.message || "").slice(0, 8000) });
       return text(`Task left for ${to}. The owner decides when it starts.`);
     }
+    if (name === "request_build") {
+      const r = await fetch(`${OFFICE}/api/runner/build?team=${TEAM}&run=${RUN_ID}`, {
+        method: "POST", headers: { "X-Run-Token": ctx.token, "Content-Type": "application/json" },
+        body: JSON.stringify({ item_id: a.item_id, item: a.item, script: a.script, notes: a.notes }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) return text(`The studio refused: ${j.error ?? r.status}`, true);
+      return text(j.reused ? `${a.item_id} is already in the studio (run ${j.run_id}).` : `${a.item_id} is in the studio queue (run ${j.run_id}). The finished reel goes to the owner's inbox.`);
+    }
     if (name === "team_feed") {
       const q = a.thread_id ? `&thread=${encodeURIComponent(String(a.thread_id))}` : "";
       const r = await fetch(`${OFFICE}/api/runner/feed?team=${TEAM}&run=${RUN_ID}${q}`, { headers: { "X-Run-Token": ctx.token } });
@@ -204,6 +222,9 @@ function startMcp(ctx) {
       if (ans.edited) parts.push(`Owner's edited version (use this wording exactly):\n${ans.edited}`);
       return text(parts.join("\n\n"));
     }
+    if (ctx.studio && STUDIO_TOOLS.some((t) => t.name === name)) {
+      try { return await ctx.studio.call(name, a); } catch (e) { return text(e.message, true); }
+    }
     return text(`unknown tool ${name}`, true);
   }
 
@@ -219,7 +240,7 @@ function startMcp(ctx) {
         return { jsonrpc: "2.0", id: m.id, result: { protocolVersion: m.params?.protocolVersion || "2025-06-18", capabilities: { tools: {} }, serverInfo: { name: "office", version: "1.0.0" } } };
       }
       if (m.method === "ping") return { jsonrpc: "2.0", id: m.id, result: {} };
-      if (m.method === "tools/list") return { jsonrpc: "2.0", id: m.id, result: { tools: TOOLS } };
+      if (m.method === "tools/list") return { jsonrpc: "2.0", id: m.id, result: { tools: ctx.studio ? [...TOOLS, ...STUDIO_TOOLS] : TOOLS } };
       if (m.method === "tools/call") {
         try { return { jsonrpc: "2.0", id: m.id, result: await call(m.params?.name, m.params?.arguments || {}) }; }
         catch (e) { return { jsonrpc: "2.0", id: m.id, result: text(`office tool failed: ${e.message}`, true) }; }
@@ -282,6 +303,12 @@ function agentModel(work) {
 
 function firstMessage(work, resumed) {
   const name = (author) => author === "owner" ? "Owner" : work.team.agents.find((a) => `agent:${a.slug}` === author)?.name || author.replace(/^agent:/, "");
+  const notes = work.messages.map((m) => m.text).join("\n\n");
+  const item = work.run.item;
+  // Studio sessions: one reel, one job of the studio workflow (prompts/studio.md has the three modes).
+  if (work.run.mode === "build") return `Studio BUILD. Follow prompts/studio.md (BUILD) for this brief.\n\n${notes}`;
+  if (work.run.mode === "fix") return `Studio FIX for REEL=${item}. The independent reviewers found problems (qa/visual_${item}.json, qa/facts_${item}.json). Follow prompts/studio.md (FIX).`;
+  if (work.run.mode === "revise") return `Studio REVISE for REEL=${item}. The owner watched the reel and asked for changes:\n\n${notes}\n\nFollow prompts/studio.md (REVISE).`;
   const parts = [];
   if (!resumed && work.history?.length) {
     parts.push("Earlier in this chat (for context):\n\n" + work.history.map((h) => `${name(h.author)}: ${h.text}`).join("\n\n") + "\n\n---\nThe owner's new message:");
@@ -314,6 +341,10 @@ async function main() {
   const ctx = { token: work.token, team: work.team, waiting: 0, link: null, resolveAsk: () => undefined, currentAgent: () => work.agent.slug };
   const state = newMapState(work.agent.slug);
   ctx.roster = () => roster(state);
+  if (work.run.profile === "studio") {
+    const python = process.env.OFFICE_PY || join(TEAM_DIR, ".venv", process.platform === "win32" ? "Scripts/python.exe" : "bin/python");
+    ctx.studio = makeStudio({ teamDir: TEAM_DIR, python, onProgress: (t) => ctx.link?.send({ t: "progress", agent: ctx.currentAgent(), text: t }) });
+  }
   let child = null;
   let ending = false;
   let busy = true;
@@ -370,6 +401,8 @@ async function main() {
       "--allowedTools", ALLOWED_TOOLS,
       "--mcp-config", mcpFile, "--strict-mcp-config",
       "--append-system-prompt-file", promptFile,
+      // no unsandboxed retries: a command that needs the network or a key is a studio tool, run by the bridge
+      "--settings", JSON.stringify({ sandbox: { allowUnsandboxedCommands: false } }),
     ];
     if (useResume && resumePath) args.push("--resume", resumePath);
     const win = process.platform === "win32";
@@ -394,7 +427,9 @@ async function main() {
           busy = false;
           log(`turn finished (${ev.num_turns ?? "?"} steps, session cost so far $${(ev.total_cost_usd ?? 0).toFixed(3)})`);
           clearTimeout(idleTimer);
-          idleTimer = setTimeout(() => { if (!busy && !ctx.waiting) endSession(`no message for ${idleMs / 60000} minutes`); }, idleMs);
+          // Task mode (studio jobs, the work day): the work is done when the turn is; a quick grace period for a late note.
+          const wait = work.settings?.task_mode ? 20_000 : idleMs;
+          idleTimer = setTimeout(() => { if (!busy && !ctx.waiting) endSession(work.settings?.task_mode ? "the task is done" : `no message for ${idleMs / 60000} minutes`); }, wait);
         }
       }
     });
@@ -439,7 +474,9 @@ async function main() {
   } else if (failed) {
     summary = `Claude Code stopped with exit code ${code}.`;
   }
-  ctx.link.send({ t: "done", status: failed ? "failed" : "done", summary, transcript_key: key, session_id: state.sessionId });
+  // A studio session is one job of the studio workflow: the run stays open for the reviews and the final gate.
+  const keepOpen = Boolean(work.run.mode) && !failed;
+  ctx.link.send({ t: "done", status: failed ? "failed" : "done", summary, transcript_key: key, session_id: state.sessionId, keep_open: keepOpen });
   await ctx.link.drain();
   ctx.link.close();
   mcp.server.close();

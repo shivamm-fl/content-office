@@ -57,6 +57,22 @@ function Handoff({ m, team, children, live }: { m: Message; team: Team; children
   );
 }
 
+/** A desk handed a reel to the studio: the brief the studio works from. */
+function Brief({ m, team }: { m: Message; team: Team }) {
+  const [open, setOpen] = useState(false);
+  const b = m.body as { text: string; item_id?: string; title?: string };
+  const from = agentOf(team, m.author);
+  return (
+    <div className="rounded-xl border border-wall bg-desk/70" style={{ borderLeft: `3px solid ${from.color}` }}>
+      <button onClick={() => setOpen(!open)} className="w-full px-3 py-2.5 text-left" aria-expanded={open}>
+        <div className="flex items-center gap-2 text-xs text-dim"><AgentDot color={from.color} size={7} />{from.name} handed this reel to the studio<span className="ml-auto">{open ? "Hide" : "Brief"}</span></div>
+        <p className="mt-1 text-[14px] font-medium">{b.item_id}: {b.title}</p>
+      </button>
+      {open && <pre className="max-h-96 overflow-auto whitespace-pre-wrap border-t border-wall px-3 py-2 font-sans text-[13px] leading-relaxed">{b.text}</pre>}
+    </div>
+  );
+}
+
 function AnsweredAsk({ m, team, answer }: { m: Message; team: Team; answer: Message | undefined }) {
   const [open, setOpen] = useState(false);
   const b = m.body as { title: string; text: string };
@@ -156,6 +172,7 @@ export function ChatView({ office, threadId, newAgent }: { office: Office; threa
               return <p key={m.id} className={`text-center text-xs leading-relaxed ${b.error ? "text-coral" : "text-dim"}`}>{b.text} <span className="opacity-60">{clock(m.created_at)}</span></p>;
             }
             if (m.kind === "tool") return <ToolLine key={m.id} m={m} />;
+            if (m.kind === "brief") return <Brief key={m.id} m={m} team={team} />;
             if (m.kind === "dm") {
               const b = m.body as { from: string; to: string; text: string };
               const from = agentOf(team, b.from);

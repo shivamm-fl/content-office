@@ -37,6 +37,23 @@ export function OfficeView({ office }: { office: Office }) {
   const syncThreads = new Set(state.threads.filter((t) => t.kind === "sync").map((t) => t.id));
   const syncRun = state.runs.find((r) => r.thread_id && syncThreads.has(r.thread_id) && isActive(r));
   const working = state.desks.filter((d) => d.status !== "idle" && d.activity);
+  const dayThreads = new Set(state.threads.filter((t) => t.kind === "workday").map((t) => t.id));
+  const dayRun = state.runs.find((r) => r.thread_id && dayThreads.has(r.thread_id) && isActive(r));
+  const inStudio = state.runs.filter((r) => r.profile === "studio" && isActive(r));
+  const [starting, setStarting] = useState(false);
+
+  const startDay = async () => {
+    if (dayRun?.thread_id) return go(`#/t/${dayRun.thread_id}`);
+    setStarting(true);
+    try {
+      const r = await office.startDay();
+      go(`#/t/${r.thread.id}`);
+    } catch (e) {
+      setNote((e as Error).message);
+    } finally {
+      setStarting(false);
+    }
+  };
 
   const callSync = async () => {
     setSyncing(true);
@@ -63,6 +80,19 @@ export function OfficeView({ office }: { office: Office }) {
         </div>
         <UsageMeter usage={state.usage} />
       </header>
+
+      <button onClick={startDay} disabled={starting} className={`mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left ${dayRun ? "border border-gold/70 bg-desk" : "bg-gold text-ink"}`}>
+        <span>
+          <span className="block text-[16px] font-semibold">{dayRun ? "The work day is running" : starting ? "Starting the day…" : "Start the day"}</span>
+          <span className={`block text-[12.5px] ${dayRun ? "text-dim" : "text-ink/75"}`}>
+            {dayRun ? "Tap to watch the team plan, write and hand reels to the studio" : `${team.pace ?? 6} reels: the team plans, writes and builds; you approve the finished reels`}
+          </span>
+        </span>
+        <span className="text-sm">{dayRun ? "Open" : ""}</span>
+      </button>
+      {inStudio.length > 0 && (
+        <p className="mt-2 text-[12.5px] text-dim">In the studio now: {inStudio.map((r) => `${r.item ?? "reel"} (${r.status === "queued" ? "waiting" : r.stage ?? "build"})`).join(", ")}</p>
+      )}
 
       <div className="mt-4">
         <Floor state={state} onOpenAgent={setSheet} onSync={callSync} syncRun={syncRun} syncing={syncing} />
