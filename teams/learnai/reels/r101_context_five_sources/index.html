@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="50.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -32,7 +32,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,18 +41,70 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="50.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="50.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="50.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "AI ENGINEER ROADMAP" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
-      const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const M = Mo.init({ order: ["A","B","C","D"], tag: "AI ENGINEER ROADMAP" });
+      Viz.install(M);
+      const { tl, S, P } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD");
+      const { ACC, CYAN, HOT, GOOD, VIOLET, MUTED } = M; const ca = M.ca; const at = (sc, w, n) => M.W(sc, w, n);
+      const SKY = "#7FB6FF";
+      const SRC = [["SYSTEM PROMPT", ACC, "gear"], ["TOOLS", CYAN, "code"], ["EXAMPLES", VIOLET, "star"], ["HISTORY", GOOD, "chat"], ["OUTSIDE DATA", SKY, "db"]];
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const frame = (host, x, y, w, h, col, label, t, dashed) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:26px;border:4px ${dashed ? "dashed" : "solid"} ${ca(col, 0.8)};background:${ca(col, 0.05)}`);
+        const l = el(host, `left:${x}px;width:${w}px;top:${y - 62}px;text-align:center;font:700 40px var(--code);color:${col};white-space:nowrap`, label); show(d, t, { opacity: 0 }); show(l, t, { opacity: 0 }); return d; };
+      const block = (host, x, y, w, h, k, size) => { const [lab, col, ic] = SRC[k];
+        const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;background:${ca(col, 0.2)};border:3px solid ${col};display:flex;align-items:center;justify-content:center;gap:16px;font:700 ${size}px var(--code);color:${col};white-space:nowrap;padding-left:${ic ? 76 : 0}px;box-sizing:border-box`, lab);
+        if (ic) M.icon(d, ic, 14, (h - 56) / 2, 56, col); return d; };
 
-      M.finish();   // LAST: captions
+      // ===== A: empty window, five blocks waiting outside =====
+      M.hook(["Model ko kya", "dikhta hai?"], { size: 96, top: 250 });
+      frame(A, 190, 440, 700, 340, MUTED, "CONTEXT WINDOW", 0.05, true);
+      show(el(A, `left:190px;width:700px;top:510px;text-align:center;font:700 160px var(--code);color:${ca(MUTED, 0.5)}`, "?"), 0.2, { opacity: 0 });
+      const posA = [[60, 850], [395, 850], [730, 850], [227, 1000], [562, 1000]];
+      SRC.forEach((s, k) => { const d = el(A, `left:${posA[k][0]}px;top:${posA[k][1]}px;width:290px;height:120px;border-radius:16px;background:${ca(s[1], 0.2)};border:3px solid ${s[1]};display:flex;align-items:center;justify-content:center;font:700 36px var(--code);color:${s[1]};text-align:center;line-height:1.1`, s[0].replace(" ", "<br>")); show(d, at("A", "paanch") + k * 0.12, { opacity: 0, y: 20 }); });
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: five blocks pack into the window ===== // diagram: B
+      const BX = 170, BW = 740, BH = 140, BG = 18, BY = 1170;
+      const winB = frame(B, BX - 30, 320, BW + 60, 900, ACC, "CONTEXT", P("B", 0));
+      const T = [at("B", "system"), at("B", "tools"), at("B", "examples"), at("B", "message"), at("B", "external")];
+      SRC.forEach((s, k) => { const b = block(B, BX, BY - (k + 1) * BH - k * BG, BW, BH, k, 44); show(b, T[k], { opacity: 0, x: k % 2 ? 120 : -120 }); });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ===== C: the window is finite; a bloated TOOLS block overflows; lean fixes it =====
+      const CX = 170, CW = 740, CH = 150, CG = 16, CY = 390;
+      frame(C, CX - 30, 330, CW + 60, 920, MUTED, "FINITE", at("C", "limited"));
+      const topC = (k) => CY + k * (CH + CG);
+      const rowsC = SRC.map((s, k) => { const b = block(C, CX, topC(k), CW, CH, k, 46); return b; });
+      tl.set(rowsC, { opacity: 0 }, 0); tl.to(rowsC, { opacity: 1, duration: 0.4, stagger: 0.06, immediateRender: false }, P("C", 0));
+      const lim = el(C, `left:${CX - 50}px;width:${CW + 100}px;top:1250px;height:0;border-top:6px dashed ${HOT}`); show(lim, at("C", "limited"), { opacity: 0 });
+      // bloated: tools grows by 200 and pushes the rest down past the limit
+      const tools = rowsC[1];
+      tl.to(tools, { height: 370, borderColor: HOT, backgroundColor: ca(HOT, 0.2), color: HOT, duration: 0.6, ease: "power3.out", immediateRender: false }, at("C", "bloated"));
+      [2, 3, 4].forEach((k) => tl.to(rowsC[k], { y: 220, duration: 0.6, ease: "power3.out", immediateRender: false }, at("C", "bloated")));
+      M.pill(C, "TOO BIG", at("C", "bloated") + 0.3, { x: 700, y: 205, size: 40, kind: "out", out: at("C", "lean") });
+      // lean: tools shrinks, everything fits again
+      tl.to(tools, { height: 90, borderColor: GOOD, backgroundColor: ca(GOOD, 0.2), color: GOOD, duration: 0.6, ease: "power3.out", immediateRender: false }, at("C", "lean"));
+      [2, 3, 4].forEach((k) => tl.to(rowsC[k], { y: -60, duration: 0.6, ease: "power3.out", immediateRender: false }, at("C", "lean")));
+      M.icon(C, "check", 490, 1290, 100, GOOD).show(at("C", "lean") + 0.5);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ===== D: comment 1-5, follow ===== // diagram: D
+      const cc = frame(D, 110, 330, 860, 960, CYAN, "COMMENT KARO", P("D", 0));
+      SRC.forEach((s, k) => { const r = el(D, `left:150px;top:${375 + k * 175}px;width:780px;height:150px;border-radius:16px;background:${ca(s[1], 0.18)};border:3px solid ${s[1]};display:flex;align-items:center;gap:24px;padding-left:28px;box-sizing:border-box;font:700 44px var(--code);color:${s[1]}`, `<span style="font-size:64px;color:#E8EDF6;width:50px">${k + 1}</span>${s[0]}`); show(r, at("D", "paanch") + 0.1 + k * 0.1, { opacity: 0, y: 16 }); });
+      show(el(D, `left:0;width:1080px;top:1340px;text-align:center;font:700 56px var(--code);color:#E8EDF6`, "@ig.learnai"), at("D", "follow") - 0.7, { opacity: 0 });
+      const fb = M.pill(D, "+  FOLLOW", at("D", "follow") - 0.4, { x: 370, y: 1430, size: 44, kind: "acc" });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("D", "follow"));
+      M.fit(D, { y: 200, h: 1100 });
+
+      ["B", "C", "D"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { window: "cyan", context: "gold", system: "gold", tools: "cyan", examples: "violet", history: "good", external: "cyan", finite: "gold", bloated: "hot", lean: "good", paanch: "gold", follow: "gold" } });
       window.__timelines["main"] = tl;   // register (must stay literal for the linter)
     </script>
   </body>

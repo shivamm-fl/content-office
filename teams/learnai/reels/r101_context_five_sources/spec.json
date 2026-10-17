@@ -1,5 +1,5 @@
 {
-  "tts": "edge",
+  "tts": "owner",
   "voice": "hi-IN-SwaraNeural",
   "pace": 1.26,
   "audio": "v2",
@@ -25,15 +25,15 @@
       0.05
     ],
     [
-      "click",
-      "B",
+      "pop",
+      "A",
       1,
       0
     ],
     [
       "click",
       "B",
-      2,
+      1,
       0
     ],
     [
@@ -45,7 +45,19 @@
     [
       "click",
       "B",
-      4,
+      5,
+      0
+    ],
+    [
+      "click",
+      "B",
+      7,
+      0
+    ],
+    [
+      "click",
+      "B",
+      9,
       0
     ],
     [
@@ -57,19 +69,19 @@
     [
       "warn",
       "C",
-      1,
-      0.3
+      4,
+      0
     ],
     [
       "ok",
       "C",
-      2,
-      0.2
+      5,
+      1
     ],
     [
       "pop",
       "D",
-      1,
+      2,
       0
     ]
   ],
@@ -81,5 +93,6 @@
       "D": "तुम्हारे chatbot में, | सबसे ज़्यादा जगह कौन लेता है? || एक से पाँच, comment करो। || ऐसे और AI engineer concepts के लिए, | follow करो।"
     }
   },
-  "hook_type": "direct_question"
+  "hook_type": "direct_question",
+  "prime": "सुनो, ये बहुत interesting है!"
 }
