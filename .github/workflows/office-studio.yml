@@ -207,7 +207,7 @@ jobs:
 
   final:
     needs: [build, review, fix, review2, fix2]
-    if: ${{ always() && needs.build.result != 'skipped' }}
+    if: ${{ !cancelled() && needs.build.result != 'skipped' }}   # a cancelled run is reported as cancelled (webhook), not as a failed gate
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions: { contents: write, id-token: write }
