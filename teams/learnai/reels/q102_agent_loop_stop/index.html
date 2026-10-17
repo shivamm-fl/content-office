@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="52" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="52.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="52" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="52" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="52" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="52.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="52.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="52.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -69,13 +69,22 @@
         return show(g, t, { opacity: 0, scale: 1.25 }); };
 
       // ===== A: hook, a loop that never ends =====
-      M.hook(["Agent loop mein", "phans gaya?"], { size: 96, top: 230, until: 5.3 });
+      const T2 = 4.05;   // the question starts: part 1 (job post proof) leaves, part 2 (the loop) arrives
+      M.hook(["Onit job post:", "agent loops required"], { size: 84, top: 215, until: T2 });
       // diagram: A
-      const lp = M.loop(A, { cx: 540, cy: 800, r: 250, nodes: [{ label: "THINK", color: CYAN, w: 320 }, { label: "TOOL", color: ACC, w: 320 }, { label: "RESULT", color: GOOD, w: 320 }] });
-      lp.show(0.05, 0.1); lp.spin(0.9, 3, 0.9);
-      M.count(A, 99, 0.5, { x: 290, y: 1030, w: 500, size: 96, prefix: "STEP ", dur: 5.5, color: HOT });
-      chip(A, "JOB POST", at("A", "post"), 540, 1170, { col: CYAN, size: 40 });
-      [1, 2, 3].forEach((k) => chip(A, `${k} ?`, at("A", "rules") + (k - 1) * 0.14, 300 + (k - 1) * 240, 1240, { size: 54 }));
+      const p1 = [];
+      p1.push(show(el(A, "left:290px;top:400px;width:500px;height:190px;border-radius:24px;background:#fff;display:flex;align-items:center;justify-content:center", '<img src="assets/onit-logo.png" style="width:460px;display:block">'), 0.05));
+      p1.push(show(el(A, "left:60px;top:640px;width:960px;height:158px;border-radius:14px;overflow:hidden;background:#f7f7f7;border:3px solid #cfd6e4", '<img src="assets/onit-req.png" style="position:absolute;width:2790px;max-width:none;left:-1488px;top:-347px"><div style="position:absolute;left:215px;top:34px;width:330px;height:76px;border:5px solid #F2B544;border-radius:10px"></div>'), 0.3));
+      p1.push(chip(A, "SOURCE: JOBS.LEVER.CO", 0.4, 540, 830, { col: "#8592AD", size: 28 }));
+      p1.push(chip(A, "AGENT LOOPS", at("A", "agent"), 540, 960, { col: ACC, size: 84, solid: true }));
+      p1.push(chip(A, "JOB REQUIREMENT", at("A", "requirements"), 540, 1120, { col: CYAN, size: 60 }));
+      tl.to(p1, { opacity: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, T2 - 0.1);
+      // part 2: the loop and the question
+      const q2 = show(el(A, "left:40px;top:215px;width:1000px;text-align:center;font:700 92px/1.1 var(--lat);color:#E8EDF6", 'Agent loop mein<br><span style="color:#F2B544">phans gaya?</span>'), T2 + 0.1);
+      const lp = M.loop(A, { cx: 540, cy: 780, r: 250, nodes: [{ label: "THINK", color: CYAN, w: 320 }, { label: "TOOL", color: ACC, w: 320 }, { label: "RESULT", color: GOOD, w: 320 }] });
+      lp.show(T2 + 0.1, 0.1); lp.spin(T2 + 0.9, 3, 0.9);
+      M.count(A, 99, T2 + 0.4, { x: 290, y: 1090, w: 500, size: 110, prefix: "STEP ", dur: 4.2, color: HOT });
+      [1, 2, 3].forEach((k) => chip(A, `${k} ?`, at("A", "rules") + (k - 1) * 0.14, 300 + (k - 1) * 240, 1250, { size: 64 }));
 
       // ===== B: no limit, tokens burn =====
       chip(B, "NO LIMIT", at("B", "galti"), 540, 200, { solid: true, size: 46 });
@@ -92,51 +101,60 @@
       // ===== C: rule 1, max steps =====
       header(C, "1 · STOP CONDITION", M.P("C", 0));
       // diagram: C
-      const dots = []; for (let i = 0; i < 10; i++) { const x = 70 + (i % 5) * 190, y = 460 + Math.floor(i / 5) * 175;
-        const d = el(C, `left:${x}px;top:${y}px;width:150px;height:150px;border-radius:50%;border:4px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .12)};display:flex;align-items:center;justify-content:center;font:700 60px var(--code);color:#E8EDF6`, String(i + 1)); show(d, M.P("C", 0) + 0.5 + i * 0.05, { opacity: 0, scale: 0.7 }); dots.push(d); }
+      const dots = []; for (let i = 0; i < 10; i++) { const x = 60 + (i % 5) * 192, y = 440 + Math.floor(i / 5) * 200;
+        const d = el(C, `left:${x}px;top:${y}px;width:160px;height:160px;border-radius:50%;border:4px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .12)};display:flex;align-items:center;justify-content:center;font:700 60px var(--code);color:#E8EDF6`, String(i + 1)); show(d, 0.1 + i * 0.03, { opacity: 0, scale: 0.7 }); dots.push(d); }
       const t10 = at("C", "10"); dots.forEach((d, i) => tl.to(d, { backgroundColor: M.ca(ACC, .55), borderColor: ACC, duration: 0.2, immediateRender: false }, t10 + i * 0.11));
-      chip(C, "MAX 10", t10 - 0.1, 360, 330, { size: 52 });
-      chip(C, "EXAMPLE", t10, 740, 340, { col: CYAN, size: 36 });
+      chip(C, "MAX 10", t10 - 0.1, 360, 320, { size: 56 });
+      chip(C, "EXAMPLE", t10, 760, 330, { col: CYAN, size: 40 });
       const cutl = el(C, `left:50px;top:631px;width:980px;height:8px;background:${HOT};transform-origin:0 50%`); tl.set(cutl, { opacity: 0, scaleX: 0 }, 0);
-      tl.to(cutl, { opacity: 1, scaleX: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, at("C", "kat") - 0.1);
-      sign(C, 540, 960, 170, at("C", "kat") + 0.1);
-      chip(C, "ANTHROPIC", at("C", "Anthropic"), 290, 1220, { col: CYAN, size: 40 });
-      chip(C, "PICK BY TASK", at("C", "task"), 730, 1220, { size: 40 });
+      tl.to(cutl, { opacity: 0, scaleX: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, at("C", "kat") - 0.1);
+      sign(C, 540, 1010, 190, at("C", "kat") + 0.1);
+      chip(C, "ANTHROPIC", at("C", "Anthropic"), 290, 1260, { col: CYAN, size: 48 });
+      chip(C, "PICK BY TASK", at("C", "task"), 730, 1260, { size: 48 });
 
       // ===== D: rule 2, ground truth =====
       header(D, "2 · GROUND TRUTH", M.P("D", 0));
       // diagram: D
-      const ag = M.box(D, { x: 240, y: 320, w: 600, h: 290, label: "AGENT", icon: "robot", color: CYAN }); ag.show(M.P("D", 0) + 0.3);
-      const pg = el(D, `left:290px;top:570px;width:500px;height:20px;border-radius:10px;background:${M.ca(GOOD, .2)}`); show(pg, at("D", "step"));
-      const pgf = el(D, `left:290px;top:570px;width:500px;height:20px;border-radius:10px;background:${GOOD};transform-origin:0 50%`); tl.set(pgf, { opacity: 0, scaleX: 0.05 }, 0);
-      tl.to(pgf, { opacity: 1, scaleX: 0.45, duration: 0.8, ease: "power3.out", immediateRender: false }, at("D", "aage"));
-      M.arrow(D, { from: [400, 630], to: [400, 800], color: ACC, w: 12 }).show(at("D", "step"), 0.3);
-      M.arrow(D, { from: [680, 800], to: [680, 630], color: GOOD, w: 12 }).show(at("D", "asli"), 0.3);
-      const env = panel(D, 120, 820, 840, 400, CYAN, "ENVIRONMENT"); show(env, at("D", "environment"));
+      const ag = M.box(D, { x: 190, y: 330, w: 700, h: 330, label: "AGENT", icon: "robot", color: CYAN }); ag.show(M.P("D", 0) + 0.3);
+      const pg = el(D, `left:250px;top:615px;width:580px;height:22px;border-radius:10px;background:${M.ca(GOOD, .2)}`); show(pg, at("D", "step"));
+      const pgf = el(D, `left:250px;top:615px;width:580px;height:22px;border-radius:10px;background:${GOOD};transform-origin:0 50%`); tl.set(pgf, { opacity: 0, scaleX: 0.05 }, 0);
+      tl.to(pgf, { opacity: 1, scaleX: 0.6, duration: 0.6, ease: "power3.out", immediateRender: false }, at("D", "natija"));
+      chip(D, "PROGRESS", at("D", "natija"), 540, 690, { col: GOOD, size: 40 });
+      stamp(D, "REAL PROGRESS ✓", 540, 1330, GOOD, at("D", "sach"), 46);
+      M.arrow(D, { from: [400, 680], to: [400, 880], color: ACC, w: 12 }).show(at("D", "step"), 0.3);
+      M.arrow(D, { from: [680, 880], to: [680, 680], color: GOOD, w: 12 }).show(at("D", "asli"), 0.3);
+      const env = panel(D, 100, 900, 880, 400, CYAN, "ENVIRONMENT"); show(env, at("D", "environment"));
       el(env, "left:50px;top:110px;font:600 50px var(--code);white-space:nowrap;color:#8592AD", "$ run tests");
       const r1 = el(env, `left:50px;top:200px;font:700 58px var(--code);white-space:nowrap;color:${GOOD}`, "3 passed"); show(r1, at("D", "natija"));
       const r2 = el(env, `left:50px;top:290px;font:700 58px var(--code);white-space:nowrap;color:${HOT}`, "2 failed"); show(r2, at("D", "result"));
-      chip(D, "TRUTH", at("D", "asli"), 850, 690, { col: GOOD, size: 40 });
+      chip(D, "TRUTH", at("D", "asli"), 850, 760, { col: GOOD, size: 48 });
 
       // ===== E: rule 3, human checkpoint =====
       header(E, "3 · HUMAN CHECKPOINT", M.P("E", 0));
       // diagram: E
-      const rb2 = M.box(E, { x: 70, y: 340, w: 400, h: 270, label: "AGENT", icon: "robot", color: CYAN }); rb2.show(M.P("E", 0) + 0.3);
-      const nx = M.box(E, { x: 610, y: 340, w: 400, h: 270, label: "NEXT STEP", icon: "arrow", color: GOOD }); nx.show(M.P("E", 0) + 0.5);
-      M.arrow(E, { from: [480, 475], to: [600, 475], color: ACC, w: 12 }).show(M.P("E", 0) + 0.6, 0.3);
-      const bar2 = el(E, `left:511px;top:330px;width:58px;height:290px;background:repeating-linear-gradient(0deg,${HOT} 0 30px,#fff 30px 60px);border-radius:8px;transform-origin:50% 0`); tl.set(bar2, { opacity: 0, scaleY: 0 }, 0);
+      const rb2 = M.box(E, { x: 60, y: 340, w: 410, h: 330, label: "AGENT", icon: "robot", color: CYAN }); rb2.show(M.P("E", 0) + 0.3);
+      const nx = M.box(E, { x: 610, y: 340, w: 410, h: 330, label: "NEXT STEP", icon: "arrow", color: GOOD }); nx.show(M.P("E", 0) + 0.5);
+      M.arrow(E, { from: [475, 505], to: [605, 505], color: ACC, w: 12 }).show(M.P("E", 0) + 0.6, 0.3);
+      const bar2 = el(E, `left:511px;top:340px;width:58px;height:330px;background:repeating-linear-gradient(0deg,${HOT} 0 30px,#fff 30px 60px);border-radius:8px;transform-origin:50% 0`); tl.set(bar2, { opacity: 0, scaleY: 0 }, 0);
       tl.to(bar2, { opacity: 1, scaleY: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, at("E", "checkpoint") + 0.2);
-      chip(E, "STUCK", at("E", "atakne"), 270, 650, { col: HOT, size: 44 });
-      const hu = M.icon(E, "user", 390, 740, 300, ACC); hu.show(at("E", "human", 0) + 0.3);
-      chip(E, "APPROVE ✓", at("E", "feedback"), 300, 1090, { col: GOOD, size: 46 });
-      chip(E, "STOP ✗", at("E", "feedback") + 0.2, 780, 1090, { col: HOT, size: 46 });
+      chip(E, "STUCK", at("E", "atakne"), 640, 720, { col: HOT, size: 52 });
+      const hu = M.icon(E, "user", 330, 780, 340, ACC); hu.show(at("E", "human", 0) + 0.3);
+      M.arrow(E, { from: [540, 790], to: [540, 690], color: ACC, w: 12 }).show(at("E", "human", 1), 0.3);
+      chip(E, "APPROVE ✓", at("E", "feedback"), 300, 1170, { col: GOOD, size: 54 });
+      tl.to(bar2, { rotation: -80, duration: 0.4, ease: "power3.out", immediateRender: false }, at("E", "kare") - 0.1);
+      chip(E, "STOP ✗", at("E", "feedback") + 0.2, 790, 1170, { col: HOT, size: 54 });
 
       // ===== F: close =====
       // diagram: F
-      sign(F, 540, 500, 150, M.P("F", 0)); M.icon(F, "robot", 450, 690, 180, CYAN).show(M.P("F", 0) + 0.3);
-      const cc = panel(F, 100, 910, 880, 250, CYAN, "COMMENT KARO"); show(cc, at("F", "kitne") - 0.2);
-      ["5", "10", "20"].forEach((lab, i) => { const w = el(cc, `left:${100 + i * 270}px;top:110px;width:140px;text-align:center`); const c = el(w, `position:relative;display:inline-block;padding:10px 34px;border:3px solid ${ACC};border-radius:999px;font:700 64px var(--code);color:${ACC}`, lab); c.style.position = "relative"; show(w, at("F", lab)); });
-      const fb = chip(F, "+  FOLLOW", at("F", "follow") - 0.3, 540, 1200, { col: ACC, size: 44, solid: true });
+      const rf = M.icon(F, "robot", 420, 590, 240, CYAN); rf.show(0.1);
+      const ghost = (kind, x, lab, col, w) => { M.icon(F, kind, x, 330, 170, col).show(w); chip(F, lab, w, x + 85, 520, { col, size: 34 }); };
+      ghost("clock", 90, "MAX STEPS", HOT, at("F", "Agent"));
+      ghost("check", 455, "REAL RESULT", GOOD, at("F", "rukna"));
+      ghost("user", 820, "HUMAN", ACC, at("F", "sikhana"));
+      sign(F, 540, 985, 120, at("F", "padta"));
+      const cc = panel(F, 100, 1130, 880, 190, CYAN, "COMMENT KARO"); show(cc, at("F", "kitne") - 0.2);
+      ["5", "10", "20"].forEach((lab, i) => { const w = el(cc, `left:${100 + i * 270}px;top:80px;width:140px;text-align:center`); const c = el(w, `position:relative;display:inline-block;padding:10px 34px;border:3px solid ${ACC};border-radius:999px;font:700 64px var(--code);color:${ACC}`, lab); c.style.position = "relative"; show(w, at("F", lab)); });
+      const fb = chip(F, "+  FOLLOW", at("F", "follow") - 0.3, 540, 1340, { col: ACC, size: 44, solid: true });
       tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("F", "follow"));
 
       M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F);

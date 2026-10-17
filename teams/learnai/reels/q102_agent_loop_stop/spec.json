@@ -85,7 +85,7 @@
   ],
   "copy": {
     "hi": {
-      "A": "@hook Onit के AI Engineer job post में agent loops हैं। | Loop में फँस जाए, तो कैसे रोकोगे? || जवाब 3{three} rules में है।",
+      "A": "@hook Onit के AI Engineer job post की requirements में, agent loops हैं। | Agent loop में फँस जाए, तो क्या करोगे? || जवाब 3{three} rules में है।",
       "B": "गलती ये है कि model पर छोड़ दो, वो खुद तय करे कब रुकना है। | तब tokens जलते रहेंगे।",
       "C": "पहला rule, stopping condition। | Anthropic कहता है, maximum number of iterations जैसी conditions आम हैं। | मान लो max 10{ten} steps, उसके बाद loop कट जाए। | कोई fixed number वो नहीं देता, task देखकर चुनो।",
       "D": "दूसरा rule, ground truth। | हर step पर environment से असली नतीजा लो, जैसे tool result, | ताकि agent जाने कि वो सच में आगे बढ़ रहा है।",
