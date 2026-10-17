@@ -1,0 +1,85 @@
+{
+  "tts": "edge",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "min": {
+    "A": 5,
+    "B": 14,
+    "C": 8,
+    "D": 6
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "click",
+      "B",
+      2,
+      0
+    ],
+    [
+      "click",
+      "B",
+      3,
+      0
+    ],
+    [
+      "click",
+      "B",
+      4,
+      0
+    ],
+    [
+      "dip",
+      "C",
+      0,
+      -0.1
+    ],
+    [
+      "warn",
+      "C",
+      1,
+      0.3
+    ],
+    [
+      "ok",
+      "C",
+      2,
+      0.2
+    ],
+    [
+      "pop",
+      "D",
+      1,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Model को जवाब देने से पहले, | क्या-क्या दिखता है? || एक window में, पाँच चीज़ें। | आज पाँचों समझते हैं।",
+      "B": "इसे कहते हैं context। || पहला, system prompt: | model के rules। || दूसरा, tools: | जो functions वो call कर सकता है। || तीसरा, examples: | कुछ सही जवाबों के नमूने। || चौथा, message history: | अब तक की chat। || पाँचवाँ, external data: | documents या search results।",
+      "C": "@emph लेकिन window की जगह limited है। || Anthropic के मुताबिक, | context एक finite resource है। | और सबसे common failure में से एक है, | bloated tool set। || इसलिए हर source को lean रखो।",
+      "D": "तुम्हारे chatbot में, | सबसे ज़्यादा जगह कौन लेता है? || एक से पाँच, comment करो। || ऐसे और AI engineer concepts के लिए, | follow करो।"
+    }
+  },
+  "hook_type": "direct_question"
+}
