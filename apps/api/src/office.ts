@@ -70,6 +70,8 @@ export class Office extends DurableObject<Env> {
       "ALTER TABLE runs ADD COLUMN stage TEXT",    // studio runs: build, review, fix, final
       "ALTER TABLE threads ADD COLUMN item TEXT",  // build threads: one per reel
       "ALTER TABLE asks ADD COLUMN meta TEXT",     // final reels: video, cover, texts
+      "ALTER TABLE threads ADD COLUMN day TEXT",   // build threads: the work day that sent the reel to the studio
+      "ALTER TABLE threads ADD COLUMN done_at INTEGER", // work days: when the last reel of the day finished
     ]) {
       try { this.sql.exec(ddl); } catch { /* already there */ }
     }
@@ -111,6 +113,7 @@ export class Office extends DurableObject<Env> {
       id: r.id as string, agent: r.agent as string, title: r.title as string, kind: r.kind as string,
       created_at: r.created_at as number, updated_at: r.updated_at as number, last_run: (r.last_run as string) ?? null,
       session_id: (r.session_id as string) ?? null, preview: (r.preview as string) ?? null,
+      item: (r.item as string) ?? null, day: (r.day as string) ?? null, done_at: (r.done_at as number) ?? null,
     };
   }
   private toMessage(r: Row): Message {
@@ -299,10 +302,20 @@ export class Office extends DurableObject<Env> {
     const itemId = String(input.item_id ?? "").trim();
     if (!/^[a-z]\d{2,4}$/.test(itemId)) throw new Error(`bad item id ${itemId}`);
     const from = this.getRun(fromRunId);
+    // The work day this reel belongs to: the studio reports back to it, and the day ends when all its reels are done.
+    const fromThread = from?.thread_id ? this.one<{ id: string; kind: string; day: string | null }>("SELECT id, kind, day FROM threads WHERE id = ?", from.thread_id) : null;
+    const dayId = fromThread?.kind === "workday" ? fromThread.id : fromThread?.day ?? null;
     const existing = this.one("SELECT * FROM threads WHERE kind = 'build' AND item = ? ORDER BY created_at DESC LIMIT 1", itemId);
     if (existing) {
       const active = this.activeRunFor(existing.id as string);
-      if (active) return { thread_id: existing.id as string, run_id: active.id, reused: true };
+      if (active) {
+        // already in the studio: only link it to the work day that asked
+        if (dayId) {
+          this.sql.exec("UPDATE threads SET day = ? WHERE id = ?", dayId, existing.id);
+          this.broadcast({ t: "thread", thread: this.getThreadRow(existing.id as string)! });
+        }
+        return { thread_id: existing.id as string, run_id: active.id, reused: true };
+      }
     }
     const item = (input.item && typeof input.item === "object" ? input.item : {}) as Record<string, unknown>;
     const title = String(item.title ?? itemId);
@@ -312,9 +325,12 @@ export class Office extends DurableObject<Env> {
     const now = Date.now();
     if (!threadId) {
       threadId = newId("t");
-      this.sql.exec("INSERT INTO threads (id, agent, title, kind, item, created_at, updated_at) VALUES (?, ?, ?, 'build', ?, ?, ?)",
-        threadId, studioLead, `Build ${itemId}: ${title}`.slice(0, 90), itemId, now, now);
+      this.sql.exec("INSERT INTO threads (id, agent, title, kind, item, day, created_at, updated_at) VALUES (?, ?, ?, 'build', ?, ?, ?, ?)",
+        threadId, studioLead, `Build ${itemId}: ${title}`.slice(0, 90), itemId, dayId, now, now);
+    } else if (dayId) {
+      this.sql.exec("UPDATE threads SET day = ? WHERE id = ?", dayId, threadId);
     }
+    if (dayId) this.sql.exec("UPDATE threads SET done_at = NULL WHERE id = ?", dayId);
     const parts = [`REEL=${itemId} TRACK=${track}`, "Queue item:", "```json", JSON.stringify(item, null, 2), "```"];
     if (input.script?.trim()) parts.push("Script (from the Scriptwriter, keep its wording):", input.script.trim());
     if (input.notes?.trim()) parts.push(`Notes: ${input.notes.trim()}`);
@@ -336,7 +352,9 @@ export class Office extends DurableObject<Env> {
     const failed = (r.failed ?? []).slice(0, 12);
     this.finishRun(runId, "done", r.ok ? `${r.item} passed the gate` : `${r.item} did not pass the gate`, null);
     if (!r.ok) {
-      this.system(run.thread_id, runId, `The reel did not pass the final gate: ${failed.join("; ") || r.note || "see the GitHub log"}. Send a note here to have the studio fix it.`, { error: true });
+      const why = failed.join("; ") || r.note || "see the GitHub log";
+      this.system(run.thread_id, runId, `The reel did not pass the final gate: ${why}. Send a note here to have the studio fix it.`, { error: true });
+      await this.dayReport(run, "failed", why);
       return;
     }
     const meta = {
@@ -351,6 +369,58 @@ export class Office extends DurableObject<Env> {
     );
     this.addMessage({ thread_id: run.thread_id, run_id: runId, author: `agent:${studio}`, kind: "approval", body: { ask_id: askId, title: `Final reel: ${r.item}, ${meta.title}`, text: "The reel is ready for your decision." } });
     this.broadcast({ t: "ask", ask: this.toAsk(this.one("SELECT * FROM asks WHERE id = ?", askId)!) });
+    await this.dayReport(run, "ready", null);
+  }
+
+  // ---------- the work day: it stays open until every reel it sent to the studio has finished ----------
+  /** The studio tells the reel's work day how it went; on a failure the Producer wakes up to retry or drop it. */
+  private async dayReport(run: Run, outcome: "ready" | "failed" | "lost" | "cancelled", detail: string | null) {
+    if (!run.thread_id) return;
+    const t = this.one<{ day: string | null; item: string | null }>("SELECT day, item FROM threads WHERE id = ?", run.thread_id);
+    const day = t?.day ? this.getThreadRow(t.day) : null;
+    if (!day || day.kind !== "workday") return;
+    const item = t?.item ?? run.item ?? "reel";
+    const attempts = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE thread_id = ? AND profile = 'studio'", run.thread_id)!.n;
+    if (outcome === "ready") {
+      this.system(day.id, null, `${item} is ready for your approval (Inbox).`, { item, outcome });
+    } else if (outcome === "cancelled") {
+      this.system(day.id, null, `${item}: the studio run was cancelled.`, { item, outcome });
+    } else {
+      this.system(day.id, null, `${item} did not finish in the studio${detail ? `: ${detail.slice(0, 300)}` : ""}.`, { item, outcome, error: true });
+      if (attempts < 2) {
+        await this.wakeDay(day, `Studio report: ${item} ${outcome === "failed" ? "did not pass" : "was lost"}${detail ? ` (${detail.slice(0, 800)})` : ""}. This was studio attempt ${attempts} of 2. Read its build conversation (mcp__office__team_feed with thread_id ${run.thread_id}), then either send it to the studio again with mcp__office__request_build and notes on what to fix, or drop it and say why. Report in two lines and finish.`);
+      } else {
+        this.system(day.id, null, `${item} failed twice. It needs your decision: open its build chat and send a note to try again.`, { item, error: true });
+      }
+    }
+    this.checkDayDone(day.id);
+  }
+
+  /** Put a message from the office into the work day and wake the Producer for it (resumes the day's conversation). */
+  private async wakeDay(day: Thread, text: string) {
+    this.addMessage({ thread_id: day.id, run_id: null, author: "office", kind: "text", body: { text }, delivered: false });
+    const active = this.activeRunFor(day.id);
+    if (active) this.deliverPending(active);
+    else await this.startRun(day, "desk");
+  }
+
+  /** When no reel of the day is in the studio and the Producer is done, the day is over. */
+  private checkDayDone(dayId: string) {
+    const day = this.one<{ done_at: number | null }>("SELECT done_at FROM threads WHERE id = ? AND kind = 'workday'", dayId);
+    if (!day || day.done_at || this.activeRunFor(dayId)) return;
+    const builds = this.rows<{ id: string; item: string }>("SELECT id, item FROM threads WHERE kind = 'build' AND day = ?", dayId);
+    if (!builds.length) return;
+    const ready: string[] = [];
+    const notReady: string[] = [];
+    for (const b of builds) {
+      const last = this.one("SELECT * FROM runs WHERE thread_id = ? ORDER BY created_at DESC LIMIT 1", b.id);
+      if (!last || ACTIVE.includes(last.status as RunStatus)) return;  // still in the studio
+      const final = this.one("SELECT id FROM asks WHERE run_id = ? AND meta IS NOT NULL", last.id as string);
+      (final ? ready : notReady).push(b.item);
+    }
+    this.sql.exec("UPDATE threads SET done_at = ? WHERE id = ?", Date.now(), dayId);
+    this.system(dayId, null, `Work day finished: ${ready.length} reel(s) ready for your approval${ready.length ? ` (${ready.join(", ")})` : ""}${notReady.length ? `; ${notReady.length} did not finish (${notReady.join(", ")})` : ""}.`, { day_done: true });
+    this.broadcast({ t: "thread", thread: this.getThreadRow(dayId)! });
   }
 
   async answerAsk(slug: string, askId: string, answer: Record<string, unknown>): Promise<Ask> {
@@ -472,6 +542,9 @@ export class Office extends DurableObject<Env> {
     for (const r of this.rows("SELECT * FROM asks WHERE run_id = ? AND status = 'expired'", id)) this.broadcast({ t: "ask", ask: this.toAsk(r) });
     if (status === "failed" || status === "lost") this.system(run.thread_id, id, `The run stopped: ${error ?? status}.`, { error: true });
     if (status === "cancelled") this.system(run.thread_id, id, "Run cancelled.");
+    // The work day hears about studio runs that end without a final report, and closes when its last reel is done.
+    if (run.profile === "studio" && status !== "done") this.ctx.waitUntil(this.dayReport(run, status === "cancelled" ? "cancelled" : status === "lost" ? "lost" : "failed", error));
+    if (run.profile === "desk" && run.thread_id) this.checkDayDone(run.thread_id);
     for (const ws of this.ctx.getWebSockets(`run:${id}`)) { try { ws.close(1000, "run finished"); } catch { /* */ } }
     this.ctx.waitUntil(this.startQueued());
     return updated;
@@ -495,7 +568,7 @@ export class Office extends DurableObject<Env> {
 
   private deliverPending(run: Run) {
     if (!run.thread_id || !this.runnerSocket(run.id)) return;
-    for (const m of this.rows("SELECT * FROM messages WHERE thread_id = ? AND author = 'owner' AND delivered = 0 ORDER BY created_at", run.thread_id)) {
+    for (const m of this.rows("SELECT * FROM messages WHERE thread_id = ? AND author IN ('owner', 'office') AND delivered = 0 ORDER BY created_at", run.thread_id)) {
       const body = JSON.parse(m.body as string);
       if (this.sendRunner(run.id, { t: "user_message", id: m.id as string, text: body.text })) {
         this.sql.exec("UPDATE messages SET delivered = 1, run_id = ? WHERE id = ?", run.id, m.id);
@@ -517,13 +590,20 @@ export class Office extends DurableObject<Env> {
     this.updateRun(runId, { status: "live", claimed_at: now, last_seen: now, gh_run_id: ghRunId ?? run.gh_run_id, token_hash: await sha256Hex(token) });
     const thread = run.thread_id ? this.getThreadRow(run.thread_id) : null;
     const pending = thread
-      ? this.rows("SELECT * FROM messages WHERE thread_id = ? AND (author = 'owner' OR kind = 'brief') AND delivered = 0 ORDER BY created_at", thread.id)
+      ? this.rows("SELECT * FROM messages WHERE thread_id = ? AND (author IN ('owner', 'office') OR kind = 'brief') AND delivered = 0 ORDER BY created_at", thread.id)
       : [];
-    // Studio: the first build of a reel, or a revision after the owner's notes (an earlier studio run exists).
+    // Studio: a revision when a finished reel exists and the owner sent notes; otherwise a (re)build from the brief.
+    const reelExists = run.profile === "studio" && !!this.one("SELECT id FROM asks WHERE thread_id = ? AND meta IS NOT NULL LIMIT 1", run.thread_id);
+    const ownerNotes = pending.some((m) => m.author === "owner");
     const studioMode = run.profile !== "studio" ? null
       : nextStudioJob ? "fix"
-      : this.one("SELECT id FROM runs WHERE thread_id = ? AND profile = 'studio' AND id != ? AND status = 'done' LIMIT 1", run.thread_id, runId) ? "revise" : "build";
+      : reelExists && ownerNotes ? "revise" : "build";
     if (run.profile === "studio") this.updateRun(runId, { stage: studioMode === "fix" ? "fix" : "build" });
+    // A rebuild (a retry after a failure) always gets the reel's latest brief, even when an earlier run had it.
+    if (studioMode === "build" && thread && !pending.some((m) => m.kind === "brief")) {
+      const brief = this.one("SELECT * FROM messages WHERE thread_id = ? AND kind = 'brief' ORDER BY created_at DESC LIMIT 1", thread.id);
+      if (brief) pending.unshift(brief);
+    }
     const taskMode = run.profile === "studio" || thread?.kind === "workday";
     for (const m of pending) this.sql.exec("UPDATE messages SET delivered = 1, run_id = ? WHERE id = ?", runId, m.id);
     const saved = thread ? this.one<{ transcript_key: string | null; session_id: string | null }>("SELECT transcript_key, session_id FROM threads WHERE id = ?", thread.id) : null;

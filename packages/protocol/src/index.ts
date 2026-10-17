@@ -24,6 +24,8 @@ export interface Desk { agent: string; status: AgentStatus; activity: string | n
 export interface Thread {
   id: string; agent: string; title: string; kind: string; created_at: number; updated_at: number;
   last_run: string | null; session_id: string | null; preview: string | null;
+  /** build threads: the reel and the work day it belongs to; work days: when the last reel finished */
+  item?: string | null; day?: string | null; done_at?: number | null;
 }
 export type MessageKind = "text" | "tool" | "question" | "answer" | "approval" | "decision" | "system" | "handoff" | "dm" | "brief";
 export interface Message {

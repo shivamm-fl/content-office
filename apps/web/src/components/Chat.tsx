@@ -1,6 +1,6 @@
 // A conversation with an agent, Claude Code style: streaming text, tool steps, teammate hand-offs,
 // questions and approvals inline, Stop while it works.
-import type { Ask, Message, Team } from "@office/protocol";
+import type { Ask, Message, OfficeState, Team } from "@office/protocol";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { Delta, Office } from "../store";
 import { AskCard } from "./AskCard";
@@ -53,6 +53,49 @@ function Handoff({ m, team, children, live }: { m: Message; team: Team; children
           {children.map((c) => c.kind === "tool" ? <ToolLine key={c.id} m={c} /> : c.kind === "text" ? <AgentText key={c.id} team={team} author={c.author} text={String((c.body as { text?: string }).text ?? "")} /> : null)}
         </div>
       )}
+    </div>
+  );
+}
+
+/** Where each reel of a work day is: waiting, building, reviewing, fixing, ready for you, or not finished. */
+export function dayReels(state: OfficeState, dayId: string) {
+  return state.threads.filter((t) => t.kind === "build" && t.day === dayId).map((t) => {
+    const run = state.runs.find((r) => r.thread_id === t.id);
+    const ready = state.asks.some((a) => a.thread_id === t.id && a.meta?.type === "final");
+    let label = "Not started";
+    let tone = "text-dim";
+    if (ready) { label = "Ready for you"; tone = "text-gold"; }
+    else if (run && isActive(run)) {
+      label = run.status === "queued" ? "Waiting for a studio slot" : run.status === "starting" ? "Starting the studio"
+        : run.stage === "review" ? "Independent review" : run.stage === "fix" ? "Fixing" : "Building";
+      tone = "text-paper";
+    } else if (run?.status === "done") label = run.summary?.includes("passed") ? "Decided" : "Did not pass the gate";
+    else if (run?.status === "cancelled") label = "Cancelled";
+    else if (run) { label = "Did not finish"; tone = "text-coral"; }
+    return { thread: t, label, tone, ready, active: !!run && isActive(run) };
+  });
+}
+
+function DayBoard({ state, dayId }: { state: OfficeState; dayId: string }) {
+  const reels = dayReels(state, dayId);
+  if (!reels.length) return null;
+  const ready = reels.filter((r) => r.ready).length;
+  return (
+    <div className="rounded-xl border border-wall bg-desk">
+      <div className="flex items-baseline justify-between px-3.5 pt-3 text-xs text-dim">
+        <span>Today's reels</span><span>{ready} of {reels.length} ready</span>
+      </div>
+      <ul className="divide-y divide-wall">
+        {reels.map((r) => (
+          <li key={r.thread.id}>
+            <button onClick={() => go(`#/t/${r.thread.id}`)} className="flex w-full items-baseline gap-3 px-3.5 py-2.5 text-left">
+              <span className="w-11 shrink-0 font-mono text-[12px] text-dim">{r.thread.item}</span>
+              <span className="min-w-0 flex-1 truncate text-[14px]">{r.thread.title.replace(/^Build \w+:\s*/, "")}</span>
+              <span className={`shrink-0 text-[12px] ${r.tone}`}>{r.label}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -157,6 +200,8 @@ export function ChatView({ office, threadId, newAgent }: { office: Office; threa
     >
       <div className="flex h-full flex-col">
         <div ref={scroller} onScroll={(e) => { const el = e.currentTarget; stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
+          {data?.thread.kind === "workday" && threadId && <DayBoard state={state} dayId={threadId} />}
+          {data?.thread.kind === "workday" && data.thread.done_at && <p className="text-center text-xs text-gold">This work day is finished.</p>}
           {!threadId && (
             <div className="rounded-xl border border-wall bg-desk p-4 text-[14px] leading-relaxed text-dim">
               <p className="font-semibold text-paper">{agent.name}</p>

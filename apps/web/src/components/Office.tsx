@@ -5,6 +5,7 @@ import type { Office } from "../store";
 import { AgentSheet } from "./AgentSheet";
 import { Avatar } from "./Avatar";
 import { EmptyFloor, Floor } from "./Floor";
+import { dayReels } from "./Chat";
 import { Empty, agentOf, go, isActive, timeAgo } from "./ui";
 
 function UsageMeter({ usage }: { usage: Usage | null }) {
@@ -38,7 +39,10 @@ export function OfficeView({ office }: { office: Office }) {
   const syncRun = state.runs.find((r) => r.thread_id && syncThreads.has(r.thread_id) && isActive(r));
   const working = state.desks.filter((d) => d.status !== "idle" && d.activity);
   const dayThreads = new Set(state.threads.filter((t) => t.kind === "workday").map((t) => t.id));
-  const dayRun = state.runs.find((r) => r.thread_id && dayThreads.has(r.thread_id) && isActive(r));
+  // the newest work day that has not finished: its Producer or one of its reels is still working
+  const openDay = state.threads.find((t) => t.kind === "workday" && !t.done_at && (state.runs.some((r) => r.thread_id === t.id && isActive(r)) || dayReels(state, t.id).some((x) => x.active)));
+  const dayRun = openDay ? { thread_id: openDay.id } : undefined;
+  const dayProgress = openDay ? dayReels(state, openDay.id) : [];
   const inStudio = state.runs.filter((r) => r.profile === "studio" && isActive(r));
   const [starting, setStarting] = useState(false);
 
@@ -85,7 +89,7 @@ export function OfficeView({ office }: { office: Office }) {
         <span>
           <span className="block text-[16px] font-semibold">{dayRun ? "The work day is running" : starting ? "Starting the day…" : "Start the day"}</span>
           <span className={`block text-[12.5px] ${dayRun ? "text-dim" : "text-ink/75"}`}>
-            {dayRun ? "Tap to watch the team plan, write and hand reels to the studio" : `${team.pace ?? 6} reels: the team plans, writes and builds; you approve the finished reels`}
+            {dayRun ? (dayProgress.length ? `${dayProgress.filter((x) => x.ready).length} of ${dayProgress.length} reels ready, tap to see where each one is` : "Tap to watch the team plan, write and hand reels to the studio") : `${team.pace ?? 6} reels: the team plans, writes and builds; you approve the finished reels`}
           </span>
         </span>
         <span className="text-sm">{dayRun ? "Open" : ""}</span>
