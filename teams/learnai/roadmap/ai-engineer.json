@@ -1,0 +1,882 @@
+{
+  "about": "Curriculum for the r-track (course). Units follow the topic titles of roadmap.sh/ai-engineer (snapshot 2026-10-12). Only the topic TITLES are used as a checklist. roadmap.sh text is copyrighted and must never be copied into reels, captions or this repo. Facts come from primary sources.",
+  "rules": [
+    "One unit can need more than one reel (reels_target). Each reel is stand-alone: one idea, terms defined inside it, no Part N.",
+    "Teach the concept, not the vendor. Tool-specific topics (skipped_as_tool_specific) appear only when the concept needs a real example, checked against the official docs of that vendor.",
+    "The planner picks the next unit in order whose status is todo or in_progress, skipping anything already in state/covered.json.",
+    "A unit is done when its reels_target reels are built and published (status done)."
+  ],
+  "phases": [
+    {
+      "id": "A",
+      "title": "AI engineer ki shuruaat",
+      "units": [
+        {
+          "id": "A1",
+          "title": "AI Engineer kya karta hai?",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Introduction",
+            "What is an AI Engineer?",
+            "AI Engineer vs ML Engineer",
+            "Roles and Responsibilities",
+            "Impact on Product Development"
+          ],
+          "status": "done",
+          "reels": [
+            "r01"
+          ]
+        },
+        {
+          "id": "A2",
+          "title": "AI aur AGI mein fark",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "AI vs AGI",
+            "Purpose and Functionality"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r02"
+          ]
+        },
+        {
+          "id": "A3",
+          "title": "LLM kaise kaam karta hai",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "How LLMs Work",
+            "LLMs",
+            "Generation",
+            "Training",
+            "Pre-trained Models"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r03",
+            "r04"
+          ]
+        },
+        {
+          "id": "A4",
+          "title": "Token kya hote hain",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Tokens in Large Language Models",
+            "Input Format"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "A5",
+          "title": "AI models ke types",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Types of AI Models",
+            "Multimodal AI"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r05"
+          ]
+        },
+        {
+          "id": "A6",
+          "title": "Open source vs closed model: kab kaunsa",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Open vs Closed Source Models",
+            "Choosing the Right Model",
+            "Self-Hosted AI Models",
+            "Know your Customers / Usecases"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r06"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Embeddings aur search",
+      "units": [
+        {
+          "id": "B1",
+          "title": "Embeddings kya hain",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "What are Embeddings",
+            "Embedding",
+            "Embeddings"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "B2",
+          "title": "Similarity kaise napi jaati hai",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "Embedding Models",
+            "Sentence Transformers",
+            "Performing Similarity Search"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r07"
+          ]
+        },
+        {
+          "id": "B3",
+          "title": "Semantic search: keyword se meaning tak",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Semantic Search",
+            "Retrieval Process"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r08"
+          ]
+        },
+        {
+          "id": "B4",
+          "title": "Vector database kyun chahiye",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Vector Database",
+            "Vector Databases",
+            "Indexing Embeddings"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r09"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Prompt likhna",
+      "units": [
+        {
+          "id": "C1",
+          "title": "Achha prompt kaise likhein",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "Prompt Engineering",
+            "Robust prompt engineering",
+            "Contextual prompting",
+            "Constraining Prompts"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r10"
+          ]
+        },
+        {
+          "id": "C2",
+          "title": "System prompt aur role",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "System Prompting",
+            "Role & Behavior"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r11"
+          ]
+        },
+        {
+          "id": "C3",
+          "title": "Zero-shot aur few-shot",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Zero Shot Prompting",
+            "Few-Shot Prompting"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r12"
+          ]
+        },
+        {
+          "id": "C4",
+          "title": "Chain-of-thought: model ko step-by-step sochne do",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Chain-of-Thought Prompting"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r13"
+          ]
+        },
+        {
+          "id": "C5",
+          "title": "Temperature kya karta hai",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Temperature",
+            "Sampling Parameters"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "q04"
+          ]
+        },
+        {
+          "id": "C6",
+          "title": "Top-k aur top-p",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Top-K Sampling",
+            "Top-P Sampling"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "C7",
+          "title": "Repetition penalty",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Repetition Penalties"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "C8",
+          "title": "Structured output: JSON kaise lein",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Structured Outputs",
+            "Constraining outputs and inputs"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "C9",
+          "title": "Streaming: jawab dheere kyun aata hai",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Streaming Responses"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "r14"
+          ]
+        },
+        {
+          "id": "C10",
+          "title": "Prompt caching aur cost",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Prompt Caching"
+          ],
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Context engineering",
+      "units": [
+        {
+          "id": "D1",
+          "title": "Context window kya hai",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "Context Window",
+            "Long-Context Processing",
+            "Context"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "D2",
+          "title": "Prompt engineering vs context engineering",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Context vs Prompt Eng.",
+            "Prompt vs. Context Engineering",
+            "Context Engineering",
+            "What is a Context Layer?"
+          ],
+          "status": "in_progress",
+          "reels": []
+        },
+        {
+          "id": "D3",
+          "title": "Context ke sources",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Context Sources"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "D4",
+          "title": "Context compaction",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Context Compaction"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "D5",
+          "title": "Context failure: model beech ka kyon bhoolta hai",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "Context Failure Modes",
+            "Context Evaluation"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "q07"
+          ]
+        },
+        {
+          "id": "D6",
+          "title": "Memory: external memory aur memory systems",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "External Memory",
+            "Memory Systems",
+            "State & Historical Context"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "D7",
+          "title": "Context isolation aur multi-agent sharing",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Context Isolation",
+            "Multi-agent Context Sharing"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "D8",
+          "title": "Context security aur prompt injection",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Context Security",
+            "Prompt Injection Attacks"
+          ],
+          "status": "in_progress",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "title": "RAG",
+      "units": [
+        {
+          "id": "E1",
+          "title": "RAG kya hai",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "RAG",
+            "RAG Usecases"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "E2",
+          "title": "RAG vs fine-tuning",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "RAG vs Fine-tuning",
+            "Fine-tuning"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "q05"
+          ]
+        },
+        {
+          "id": "E3",
+          "title": "Chunking",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Chunking"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "E4",
+          "title": "Retrieval aur dynamic filters",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "RAG and Dynamic Filters"
+          ],
+          "status": "in_progress",
+          "reels": []
+        },
+        {
+          "id": "E5",
+          "title": "RAG pipeline ek saath",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "RAG & Implementation",
+            "Langchain",
+            "Llama Index"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "E6",
+          "title": "RAG check kaise karein",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "RAGAS"
+          ],
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "title": "Tools aur agents",
+      "units": [
+        {
+          "id": "F1",
+          "title": "Function calling",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Function Calling",
+            "Tools & Function Calling in AI Agents"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "q08"
+          ]
+        },
+        {
+          "id": "F2",
+          "title": "AI agent: think, act, observe",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "AI Agents",
+            "ReAct",
+            "ReAct Prompting"
+          ],
+          "status": "in_progress",
+          "reels": []
+        },
+        {
+          "id": "F3",
+          "title": "Agent ke asli use cases",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Agents Use Cases"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "F4",
+          "title": "Multi-agent systems",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Multi-Agent Systems"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "F5",
+          "title": "Bina framework ke agent",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Manual Implementation of AI Agents",
+            "Using SDKs Directly"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "F6",
+          "title": "MCP kya hai",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "MCP",
+            "Model Context Protocol (MCP)",
+            "MCP Host",
+            "MCP Client",
+            "MCP Server"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "F7",
+          "title": "MCP ke layers: transport aur data",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Transport Layer in Model Context Protocol (MCP)",
+            "Data Layer in Model Context Protocol",
+            "Connect to Local Server",
+            "Connect to Remote Server"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "F8",
+          "title": "MCP server banana (concept)",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Building an MCP Server"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "F9",
+          "title": "MCP client banana (concept)",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Building an MCP Client"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "F10",
+          "title": "Coding agents kaise kaam karte hain",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Development Tools",
+            "Claude Code",
+            "Claude Agent SDK",
+            "Cursor",
+            "Codex",
+            "Devin",
+            "Replit"
+          ],
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "G",
+      "title": "Evaluation aur safety",
+      "units": [
+        {
+          "id": "G1",
+          "title": "LLM ko kaise napein: evals",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "LLM Evaluations",
+            "Evaluation MetricsEvaluation Metrics",
+            "Deterministic Evals"
+          ],
+          "status": "in_progress",
+          "reels": [
+            "q09"
+          ]
+        },
+        {
+          "id": "G2",
+          "title": "LLM as judge aur human eval",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Model-Based Evals",
+            "Human Evals"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "G3",
+          "title": "Regression testing",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Regression Testing"
+          ],
+          "status": "in_progress",
+          "reels": []
+        },
+        {
+          "id": "G4",
+          "title": "Adversarial testing",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Conducting adversarial testing"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "G5",
+          "title": "Bias aur fairness",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Bias and Fairness"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "G6",
+          "title": "AI safety aur ethics",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "AI Safety and Ethics",
+            "Content Moderation APIs"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "G7",
+          "title": "Privacy aur data classification",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Security and Privacy Concerns",
+            "Data Classification",
+            "Adding end-user IDs in prompts"
+          ],
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "H",
+      "title": "Production",
+      "units": [
+        {
+          "id": "H1",
+          "title": "Production monitoring",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Production Monitoring"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "H2",
+          "title": "Tracing aur LLM observability",
+          "reels_target": 2,
+          "roadmap_topics": [
+            "Tracing & Logging",
+            "LLM Observability"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "H3",
+          "title": "Cost aur latency",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Cost & Latency Monitoring"
+          ],
+          "status": "in_progress",
+          "reels": []
+        },
+        {
+          "id": "H4",
+          "title": "Inference",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Inference",
+            "Inference SDK"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "H5",
+          "title": "OpenAI-compatible APIs",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "OpenAI-compatible APIs",
+            "OpenAI Response API"
+          ],
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "I",
+      "title": "Multimodal",
+      "units": [
+        {
+          "id": "I1",
+          "title": "Multimodal AI",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Multimodal AI Usecases",
+            "LlamaIndex for Multi-modal Apps",
+            "LangChain for Multimodal Apps"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "I2",
+          "title": "Image understanding",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Image Understanding",
+            "OpenAI Vision API"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "I3",
+          "title": "Image generation",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Image Generation",
+            "DALL-E API",
+            "NanoBanana API"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "I4",
+          "title": "Speech-to-text",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Speech-to-Text",
+            "Whisper API"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "I5",
+          "title": "Text-to-speech aur audio",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Text-to-Speech",
+            "Audio Processing"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "I6",
+          "title": "Video understanding",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Video Understanding"
+          ],
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "J",
+      "title": "Applied aur baaki",
+      "units": [
+        {
+          "id": "J1",
+          "title": "Recommendation systems",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Recommendation Systems"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "J2",
+          "title": "Anomaly detection",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Anomaly Detection"
+          ],
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "id": "J3",
+          "title": "Models kahan milte hain",
+          "reels_target": 1,
+          "roadmap_topics": [
+            "Hugging Face Hub",
+            "Hugging Face Models",
+            "Hugging Face Tasks",
+            "Models on Hugging Face",
+            "Hugging Face"
+          ],
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    }
+  ],
+  "skipped_as_tool_specific": [
+    "Anthropic's Claude",
+    "Arize AI",
+    "Atlan",
+    "Chroma",
+    "Claude Messages API",
+    "Cohere",
+    "Cohere Embeddings",
+    "DataHub",
+    "DeepEval",
+    "DeepSeek",
+    "FAISS",
+    "Gemini",
+    "Gemini Embedding",
+    "Gemma",
+    "Google ADK",
+    "Google Gemini API",
+    "Google's Gemini",
+    "Haystack",
+    "Helicone",
+    "Jina AI",
+    "LM Studio",
+    "LanceDB",
+    "LangFuse",
+    "LangSmith",
+    "Meta Llama",
+    "Mistral AI",
+    "MongoDB Atlas",
+    "Ollama",
+    "OpenAI AgentKit",
+    "OpenAI Embeddings API",
+    "OpenAI Models (GPT, o-series)",
+    "OpenRouter",
+    "Pinecone",
+    "PostHog",
+    "Qdrant",
+    "Qwen",
+    "RAGFlow",
+    "Supabase",
+    "Transformers.js",
+    "Vertex AI",
+    "Weaviate",
+    "modus"
+  ]
+}

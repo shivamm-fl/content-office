@@ -1,0 +1,99 @@
+# The only way agents run. The office (Cloudflare Worker) starts this with workflow_dispatch when the owner
+# sends a message from the phone; nothing here runs on a schedule.
+#
+# Job "work": the agent session. It can read the repo but not write to it (contents: read, no git credentials),
+#   sudo is switched off before the session starts, and the session's subprocesses never see the Claude token
+#   (CLAUDE_CODE_SUBPROCESS_ENV_SCRUB). The conversation goes to the office only; this public log gets coarse lines.
+# Job "save": a fresh checkout of main applies the team's changed files after a path check
+#   (runner/scripts/save_work.py): content (state, reels, social, covers) goes to main; rules, prompts, agents and
+#   scripts go to a proposal/<run> branch for the owner; anything else is dropped.
+name: office-run
+run-name: "office ${{ inputs.team }} ${{ inputs.profile }} ${{ inputs.run_id }}"
+on:
+  workflow_dispatch:
+    inputs:
+      run_id: { description: "office run id", required: true, type: string }
+      team: { description: "team folder", required: true, type: string, default: learnai }
+      profile: { description: "desk (chat, plan, scripts) or studio (render toolchain)", required: true, type: choice, options: [desk, studio], default: desk }
+permissions: {}
+jobs:
+  work:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    permissions: { contents: read, id-token: write }
+    env:
+      OFFICE_URL: ${{ vars.OFFICE_URL }}
+      RUN_ID: ${{ inputs.run_id }}
+      TEAM: ${{ inputs.team }}
+      PROFILE: ${{ inputs.profile }}
+    steps:
+      - name: Check inputs
+        run: |
+          [[ "$RUN_ID" =~ ^run_[A-Za-z0-9]{6,40}$ ]] || { echo "bad run id"; exit 1; }
+          [[ "$TEAM" =~ ^[a-z0-9-]{2,40}$ ]] || { echo "bad team"; exit 1; }
+          [ -n "$OFFICE_URL" ] || { echo "repository variable OFFICE_URL is not set"; exit 1; }
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Claude Code
+        run: |
+          npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
+          claude --version
+      - name: Studio tools
+        if: ${{ inputs.profile == 'studio' }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+          python3 -m venv "teams/$TEAM/.venv" && "teams/$TEAM/.venv/bin/pip" install -q -r "teams/$TEAM/requirements.txt" || true
+          (cd "teams/$TEAM" && npx --yes skills add heygen-com/hyperframes --yes >/dev/null 2>&1) || echo "::warning::HyperFrames skills install failed"
+      - name: Lock the machine
+        run: |
+          git rev-parse HEAD > "$RUNNER_TEMP/base_sha"
+          sudo rm -f /etc/sudoers.d/runner /etc/sudoers.d/90-cloud-init-users
+          if sudo -n true 2>/dev/null; then echo "sudo is still available"; exit 1; fi
+          echo "sudo is off for the agent session"
+      - name: Agent session
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          OIDC_AUDIENCE: content-office
+        run: node runner/bridge/bridge.mjs
+      - name: Pack the team's changes
+        if: ${{ always() }}
+        run: |
+          # system binaries only, git without hooks or fsmonitor: the session could have changed PATH dirs or .git/config
+          export PATH=/usr/bin:/bin
+          G="/usr/bin/git -c core.hooksPath=/dev/null -c core.fsmonitor=false"
+          base=$(cat "$RUNNER_TEMP/base_sha")
+          $G ls-files -m -o --exclude-standard -z -- "teams/$TEAM" > "$RUNNER_TEMP/changed"
+          $G ls-files -d -z -- "teams/$TEAM" > "$RUNNER_TEMP/deleted"
+          mkdir -p "$RUNNER_TEMP/work"
+          if [ -s "$RUNNER_TEMP/changed" ]; then /usr/bin/tar --null -T "$RUNNER_TEMP/changed" -czf "$RUNNER_TEMP/work/files.tgz"; fi
+          /usr/bin/python3 -I -c "import json,sys; d=open(sys.argv[1],'rb').read().split(b'\0'); json.dump({'base': sys.argv[2], 'deleted': [x.decode() for x in d if x]}, open(sys.argv[3],'w'))" "$RUNNER_TEMP/deleted" "$base" "$RUNNER_TEMP/work/manifest.json"
+          echo "changed: $(tr -cd '\0' < "$RUNNER_TEMP/changed" | wc -c) file(s), deleted: $(tr -cd '\0' < "$RUNNER_TEMP/deleted" | wc -c)"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with: { name: "work-${{ inputs.run_id }}", path: "${{ runner.temp }}/work/", retention-days: 3, if-no-files-found: ignore }
+
+  save:
+    needs: work
+    if: ${{ always() && needs.work.result != 'skipped' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions: { contents: write, id-token: write }
+    concurrency: { group: office-save, cancel-in-progress: false }
+    env:
+      OFFICE_URL: ${{ vars.OFFICE_URL }}
+      RUN_ID: ${{ inputs.run_id }}
+      TEAM: ${{ inputs.team }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with: { name: "work-${{ inputs.run_id }}", path: "${{ runner.temp }}/work" }
+      - name: Check paths and save
+        run: |
+          [[ "$RUN_ID" =~ ^run_[A-Za-z0-9]{6,40}$ ]] && [[ "$TEAM" =~ ^[a-z0-9-]{2,40}$ ]] || exit 1
+          git config user.name "office-bot"
+          git config user.email "office-bot@users.noreply.github.com"
+          python3 -I runner/scripts/save_work.py --work "$RUNNER_TEMP/work" --team "$TEAM" --run "$RUN_ID"

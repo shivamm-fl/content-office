@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "content-office",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "../web/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "OFFICE", "class_name": "Office" }]
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Office"] }],
+  "kv_namespaces": [{ "binding": "TRANSCRIPTS", "id": "99c28111858b4e5fbbeae1b6b663211a" }],
+  "vars": {
+    "GITHUB_REPO": "shivamm-fl/content-office",
+    "AI_COURSE_REPO": "shivamm-fl/ai-course",
+    "OWNER_LOGIN": "shivamm-fl",
+    "OIDC_AUDIENCE": "content-office",
+    "MAX_PARALLEL_RUNS": "3",
+    "IDLE_MINUTES": "15"
+  }
+  // Secrets (wrangler secret put): OWNER_KEY, SESSION_SECRET, GITHUB_TOKEN, WEBHOOK_SECRET. Local dev: .dev.vars (+ DEV_RUNNER_KEY).
+}

@@ -1,0 +1,21 @@
+{
+  "name": "content-office",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.18.0",
+  "scripts": {
+    "build": "pnpm --filter @office/web build",
+    "deploy": "pnpm build && pnpm --filter @office/api deploy",
+    "dev:api": "pnpm --filter @office/api dev",
+    "dev:web": "pnpm --filter @office/web dev",
+    "typecheck": "pnpm -r typecheck",
+    "test": "node --test runner/bridge/events.test.mjs"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd",
+      "sharp"
+    ]
+  }
+}

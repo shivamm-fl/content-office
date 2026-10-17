@@ -1,0 +1,9 @@
+{
+  "mode": "office",
+  "mode_note": "Office mode (owner, 2026-10-17): nothing runs on a schedule; every run is started from the office app. Plan slate, script and final video wait for the owner's approval. The office never posts.",
+  "id_start": { "generic": 101, "course": 101, "interview": 101 },
+  "id_note": "Office ids start at 101 per track so they never collide with ai-course during the test phase.",
+  "per_track": 3,
+  "youtube_tracks": ["course", "interview"],
+  "release_mode": "approval"
+}

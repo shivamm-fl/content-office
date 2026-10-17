@@ -1,0 +1,211 @@
+// The office Worker: serves the PWA, the owner's API, the runner endpoints and the GitHub webhook.
+import { Hono, type Context } from "hono";
+import { hmacHex, makeSession, readSession, sessionCookie, timingSafeEqual } from "./auth";
+import { readAiCourse } from "./github";
+import { verifyGithubOidc } from "./oidc";
+import { Office, type Env } from "./office";
+import { TEAMS, team as getTeam } from "./teams";
+
+export { Office };
+
+type C = Context<{ Bindings: Env; Variables: { owner: string } }>;
+const app = new Hono<{ Bindings: Env; Variables: { owner: string } }>();
+
+const office = (env: Env, slug: string) => env.OFFICE.get(env.OFFICE.idFromName(slug));
+const bad = (c: C, status: 400 | 401 | 403 | 404 | 409 | 500, error: string) => c.json({ error }, status);
+
+app.onError((err, c) => {
+  console.error(err);
+  return c.json({ error: err.message || "server error" }, 500);
+});
+
+// ---------- owner login ----------
+app.post("/api/login", async (c) => {
+  const { key } = await c.req.json<{ key?: string }>().catch(() => ({ key: undefined }));
+  if (!key || !c.env.OWNER_KEY || !timingSafeEqual(key.trim(), c.env.OWNER_KEY)) {
+    await new Promise((r) => setTimeout(r, 800));
+    return bad(c, 401, "wrong key");
+  }
+  c.header("Set-Cookie", sessionCookie(await makeSession(c.env.SESSION_SECRET, c.env.OWNER_LOGIN)));
+  return c.json({ ok: true, owner: c.env.OWNER_LOGIN });
+});
+
+app.post("/api/logout", (c) => {
+  c.header("Set-Cookie", sessionCookie("", true));
+  return c.json({ ok: true });
+});
+
+// Every owner route below needs the session cookie; state-changing requests must come from this origin.
+app.use("/api/teams/*", async (c, next) => {
+  const owner = await readSession(c.env.SESSION_SECRET, c.req.header("Cookie") ?? null);
+  if (!owner) return bad(c, 401, "login required");
+  if (c.req.method !== "GET") {
+    const origin = c.req.header("Origin");
+    if (origin && origin !== new URL(c.req.url).origin) return bad(c, 403, "bad origin");
+  }
+  c.set("owner", owner);
+  await next();
+});
+app.get("/api/me", async (c) => {
+  const owner = await readSession(c.env.SESSION_SECRET, c.req.header("Cookie") ?? null);
+  return owner ? c.json({ owner, teams: Object.values(TEAMS).map((t) => ({ slug: t.slug, name: t.name })) }) : bad(c, 401, "login required");
+});
+
+// ---------- owner API ----------
+const teamOr404 = (c: C) => (getTeam(c.req.param("team") ?? "") ? (c.req.param("team") as string) : null);
+
+app.get("/api/teams/:team/state", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  return c.json(await office(c.env, slug).getState(slug));
+});
+
+app.get("/api/teams/:team/threads/:id", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  const t = await office(c.env, slug).getThread(slug, c.req.param("id"));
+  return t ? c.json(t) : bad(c, 404, "no such thread");
+});
+
+app.post("/api/teams/:team/messages", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  const body = await c.req.json<{ thread_id?: string; agent?: string; text?: string }>();
+  if (!body.text?.trim()) return bad(c, 400, "empty message");
+  if (body.text.length > 20_000) return bad(c, 400, "message too long");
+  return c.json(await office(c.env, slug).postMessage(slug, { thread_id: body.thread_id ?? null, agent: body.agent, text: body.text }));
+});
+
+app.post("/api/teams/:team/asks/:id", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  const answer = await c.req.json<Record<string, unknown>>();
+  return c.json(await office(c.env, slug).answerAsk(slug, c.req.param("id"), answer));
+});
+
+app.post("/api/teams/:team/runs/:id/stop", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  const { mode } = await c.req.json<{ mode?: "interrupt" | "end" }>().catch(() => ({ mode: undefined }));
+  return c.json(await office(c.env, slug).stopRun(slug, c.req.param("id"), mode === "end" ? "end" : "interrupt"));
+});
+
+app.post("/api/teams/:team/tasks/:id", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  const { action } = await c.req.json<{ action?: "start" | "dismiss" }>();
+  return c.json(await office(c.env, slug).taskAction(slug, c.req.param("id"), action === "start" ? "start" : "dismiss"));
+});
+
+app.get("/api/teams/:team/ws", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  if (c.req.header("Upgrade") !== "websocket") return bad(c, 400, "websocket expected");
+  return office(c.env, slug).fetch(new Request(`https://office/client?team=${slug}`, c.req.raw));
+});
+
+// ---------- runner ----------
+async function runnerIdentity(c: C, slug: string): Promise<{ ghRunId: string | null }> {
+  const auth = c.req.header("Authorization") ?? "";
+  const dev = c.req.header("X-Dev-Runner-Key");
+  if (dev && c.env.DEV_RUNNER_KEY && timingSafeEqual(dev, c.env.DEV_RUNNER_KEY)) return { ghRunId: null };
+  if (!auth.startsWith("Bearer ")) throw new Error("runner identity required");
+  const claims = await verifyGithubOidc(auth.slice(7), {
+    audience: c.env.OIDC_AUDIENCE, repo: c.env.GITHUB_REPO, workflowFile: "office-run.yml", actor: c.env.OWNER_LOGIN,
+  });
+  if (!getTeam(slug)) throw new Error("no such team");
+  return { ghRunId: claims.run_id };
+}
+
+async function runToken(c: C): Promise<{ slug: string; runId: string } | null> {
+  const slug = c.req.query("team") ?? "";
+  const runId = c.req.query("run") ?? "";
+  const token = c.req.query("token") ?? c.req.header("X-Run-Token") ?? "";
+  if (!getTeam(slug) || !runId || !token) return null;
+  return (await office(c.env, slug).verifyRunToken(runId, token)) ? { slug, runId } : null;
+}
+
+app.post("/api/runner/claim", async (c) => {
+  const { team, run_id } = await c.req.json<{ team: string; run_id: string }>();
+  let ghRunId: string | null;
+  try {
+    ({ ghRunId } = await runnerIdentity(c, team));
+  } catch (e) {
+    return bad(c, 403, (e as Error).message);
+  }
+  try {
+    return c.json(await office(c.env, team).claim(team, run_id, ghRunId));
+  } catch (e) {
+    return bad(c, 409, (e as Error).message);
+  }
+});
+
+app.post("/api/runner/saved", async (c) => {
+  const body = await c.req.json<{ team: string; run_id: string; commit?: string; files?: number; proposal_branch?: string; note?: string }>();
+  try {
+    await runnerIdentity(c, body.team);
+  } catch (e) {
+    return bad(c, 403, (e as Error).message);
+  }
+  await office(c.env, body.team).runnerSaved(body.team, body.run_id, body);
+  return c.json({ ok: true });
+});
+
+app.get("/api/runner/ws", async (c) => {
+  const slug = c.req.query("team") ?? "";
+  if (!getTeam(slug)) return bad(c, 404, "no such team");
+  if (c.req.header("Upgrade") !== "websocket") return bad(c, 400, "websocket expected");
+  const u = new URL(c.req.url);
+  return office(c.env, slug).fetch(new Request(`https://office/runner${u.search}`, c.req.raw));
+});
+
+app.put("/api/runner/transcript", async (c) => {
+  const id = await runToken(c);
+  if (!id) return bad(c, 403, "bad run token");
+  const body = await c.req.arrayBuffer();
+  if (body.byteLength > 24 * 1024 * 1024) return bad(c, 400, "transcript too large");
+  const key = `transcript/${id.slug}/${id.runId}.jsonl.gz`;
+  await c.env.TRANSCRIPTS.put(key, body, { expirationTtl: 60 * 60 * 24 * 30 });
+  return c.json({ key });
+});
+
+app.get("/api/runner/transcript", async (c) => {
+  const id = await runToken(c);
+  if (!id) return bad(c, 403, "bad run token");
+  const key = c.req.query("key") ?? "";
+  if (!key.startsWith(`transcript/${id.slug}/`)) return bad(c, 403, "not this team's transcript");
+  const data = await c.env.TRANSCRIPTS.get(key, "arrayBuffer");
+  return data ? new Response(data, { headers: { "Content-Type": "application/gzip" } }) : bad(c, 404, "transcript expired");
+});
+
+app.get("/api/runner/ai-course", async (c) => {
+  const id = await runToken(c);
+  if (!id) return bad(c, 403, "bad run token");
+  try {
+    return c.text(await readAiCourse(c.env, c.req.query("path") ?? ""));
+  } catch (e) {
+    return bad(c, 404, (e as Error).message);
+  }
+});
+
+// ---------- GitHub webhook (workflow_run): catches runs that end without reporting ----------
+app.post("/api/github/webhook", async (c) => {
+  const raw = new Uint8Array(await c.req.arrayBuffer());
+  const sig = c.req.header("X-Hub-Signature-256") ?? "";
+  if (!c.env.WEBHOOK_SECRET || !timingSafeEqual(sig, `sha256=${await hmacHex(c.env.WEBHOOK_SECRET, raw)}`)) return bad(c, 401, "bad signature");
+  const event = c.req.header("X-GitHub-Event");
+  const payload = JSON.parse(new TextDecoder().decode(raw));
+  if (event === "workflow_run" && payload.action === "completed" && payload.workflow_run?.path?.endsWith("office-run.yml")) {
+    // run-name is "office <team> <profile> <run_id>"
+    const [, slug, , runId] = String(payload.workflow_run.display_title ?? "").split(" ");
+    if (slug && runId && getTeam(slug)) {
+      await office(c.env, slug).ghRunCompleted(slug, runId, String(payload.workflow_run.id), payload.workflow_run.conclusion ?? "unknown", payload.workflow_run.html_url ?? null);
+    }
+  }
+  return c.json({ ok: true });
+});
+
+app.all("/api/*", (c) => bad(c, 404, "not found"));
+app.all("*", (c) => c.env.ASSETS.fetch(c.req.raw));
+
+export default app;

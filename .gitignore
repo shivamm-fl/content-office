@@ -1,0 +1,37 @@
+# secrets
+.env
+.env.*
+.dev.vars
+!.env.example
+
+# dependencies and builds
+node_modules/
+dist/
+.wrangler/
+*.tsbuildinfo
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# team build outputs (media lives in GitHub releases, never in git)
+teams/*/qa/
+teams/*/reels/*_hi.mp4
+teams/*/reels/*/audio/
+teams/*/reels/*/voice_samples/
+teams/*/reels/.*hf-transaction*/
+teams/*/**/snapshots/
+teams/*/.agents/
+teams/*/.claude/skills/embedded-captions
+teams/*/.claude/skills/faceless-explainer
+teams/*/.claude/skills/figma
+teams/*/.claude/skills/general-video
+teams/*/.claude/skills/hyperframes*
+teams/*/.claude/skills/media-use
+teams/*/.claude/skills/motion-graphics
+teams/*/.claude/skills/music-to-video
+teams/*/.claude/skills/pr-to-video
+teams/*/.claude/skills/product-launch-video
+teams/*/.claude/skills/remotion-to-hyperframes
+teams/*/.claude/skills/slideshow
+teams/*/.claude/skills/talking-head-recut

@@ -1,0 +1,23 @@
+# CI mode: BUILD and FIX sessions on GitHub Actions
+
+You run inside a GitHub Actions job (`.github/workflows/build-reel.yml`). Where this file and `.github/prompts/build-reel.md` differ, this file wins. Three things are different from a local build:
+- The Claude login token is not available to you. You cannot run `scripts/visual_review.py` or `scripts/fact_review.py` (they start the `claude` CLI), and you never look for, print or use any token. The workflow runs both independent reviews after your session, as a step of its own, and starts a FIX session when a review fails (at most two FIX sessions). Nothing is released unless both reviews pass: nobody approves a reel by hand.
+- The workflow commits, uploads the media to the GitHub release and pushes. You never commit, push, post, reply, follow or message anyone, and you write only the files of this one item (see the Rules of `build-reel.md`).
+- A tool call must stay under 10 minutes: render with `scripts/render_job.py start` and `scripts/render_job.py wait` exactly as `build-reel.md` step 6 says.
+
+## BUILD session (the message gives REEL and TRACK)
+Follow `.github/prompts/build-reel.md` for this REEL and TRACK with these changes:
+- Step 7 (review): run `scripts/frames.py` and read every sheet as written and judge it yourself with the mute test, but do NOT run `scripts/visual_review.py`. Fix what you see wrong (tiny labels, overlaps, an empty band, a text-only beat) and re-render once if needed. Design for the portrait frame: stack the picture top to bottom so it fills at least 60 percent of the band between the top bar and the captions, with labels of at least 40 px; a wide picture parked in the middle fails the review.
+- Facts: the independent fact check reads your narration, caption and YouTube text against the sources listed under `Sources:` in the YouTube text. Say only what a source says: "decided" is not "done", "some" is not "all", a number needs its source, a cause is not a fact unless the source says so, no product or person that no source mentions. List every source URL you fetched under `Sources:` (PDF sources cannot be read by the checker: also give the web page that reports the same number, or leave the number out).
+- Step 12 (gate): run `.venv/bin/python scripts/ci_verify_reel.py <id> --skip-review`. It must print ok. The workflow runs the full gate, including both reviews, afterwards.
+- Stop after step 12.
+
+## FIX session (the message says FIX and gives REEL, TRACK and FOLDER)
+The reel is built and independent reviewers judged it. Read both reports:
+- `qa/facts_<id>.json` (the fact check): `problems` lists every claim with a HIGH finding (what the reel says, the verdict OVERSTATED / NOT_FOUND / WRONG and what the source really says); `notes` are low findings, ignore them.
+- `qa/visual_<id>.json` (the mute test): `problems`, `major_layout` and, per scene, `idea_taught` and `layout_issues`.
+Fix what is listed, facts first:
+1. **Facts.** For every HIGH finding change the claim so that it says only what its source says: weaker, narrower, or remove it (for example "Anthropic decided to turn off internet access for all internal tests" instead of "all internal tests are offline"). WebFetch the listed sources when you need the exact wording; never add a fact you did not fetch. Edit the narration in `<FOLDER>/spec.json` (Hindi words in Devanagari as before, keep the scene count, the cue words that `index.html` uses with `M.W(...)` and the length between 20 and 45 seconds), the Instagram caption `social/<FOLDER-NAME>.hi.caption.txt` and the YouTube text `social/<FOLDER-NAME>.youtube.txt` (Roman Hinglish, the same correction everywhere, keep the `Sources:` list). Then run `.venv/bin/python scripts/make_reel_audio.py <FOLDER>` to make the audio and `data.json` again, check that every `M.W` cue word still exists in the new narration, and render again.
+2. **Pictures.** Read `docs-notes/diagram-first-visuals.md`. Copy `reels/_kit/viz.js`, `reels/_kit/motion.js` and `reels/_kit/motion.css` into `<FOLDER>/kit/`. Edit `<FOLDER>/index.html` and `<FOLDER>/visual_plan.md`: redraw weak scenes as pictures that teach (not more words); make the pictures big and centred (end every scene with `M.fit`; stack the elements vertically to use the height of the portrait frame); draw comparisons to true scale; no label under 40 px; no two scenes with the same picture; no dead empty first second in a scene. When a fact fix changed the narration, the pictures of that scene must still show what is said now.
+3. Render with `scripts/render_job.py` at most twice in this session and read the frames (`scripts/frames.py`).
+4. Finish when `.venv/bin/python scripts/ci_verify_reel.py <id> --skip-review` prints ok. Nothing else.

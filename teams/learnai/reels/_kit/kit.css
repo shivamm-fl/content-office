@@ -1,0 +1,39 @@
+/* Shared look for all Hindi reels (theme v2: navy + ivory + gold). Copied into each reel folder as kit/kit.css by scripts/new_reel.py */
+:root { --bg:#0B1220; --panel:#131C2E; --text:#F3EFE6; --muted:#8FA0B8; --accent:#F2B544; --bad:#E5735F; --blue:108,140,213; --good:#7BD389;
+  --head:"Noto Sans Devanagari","Space Grotesk",sans-serif; --code:"JetBrains Mono",monospace; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:1080px; height:1920px; overflow:hidden; background:var(--bg); }
+#root { position:relative; width:100%; height:100%; overflow:hidden; font-family:var(--head); color:var(--text); }
+#grid { position:absolute; left:0; top:-160px; width:1080px; height:2240px; background-image:linear-gradient(rgba(242,181,68,.05) 2px, transparent 2px), linear-gradient(90deg, rgba(242,181,68,.05) 2px, transparent 2px); background-size:120px 160px; }
+.orb { position:absolute; border-radius:50%; filter:blur(110px); }
+#orb1 { width:640px; height:640px; left:-200px; top:200px; background:rgba(242,181,68,.12); }
+#orb2 { width:560px; height:560px; right:-220px; top:1100px; background:rgba(108,140,213,.16); }
+#prog { position:absolute; left:60px; top:52px; width:960px; height:8px; border-radius:4px; background:rgba(255,255,255,.1); overflow:hidden; }
+#progfill { width:100%; height:100%; background:var(--accent); transform-origin:left center; }
+#chip { position:absolute; left:60px; top:96px; width:960px; height:72px; display:flex; align-items:center; gap:18px; font-weight:700; letter-spacing:.14em; font-size:30px; color:var(--muted); }
+#chipdot { width:18px; height:18px; border-radius:50%; background:var(--accent); }
+#wipe { position:absolute; left:0; top:0; width:120px; height:1920px; background:var(--accent); opacity:.95; }
+/* STAGE: 960x740 at (60,230). Captions at y=1010, mascot at y=1440. Keep scene content inside the stage. */
+.scene { position:absolute; left:60px; top:230px; width:960px; height:740px; opacity:0; }
+.abs { position:absolute; }
+.panel { position:absolute; background:var(--panel); border:3px solid rgba(255,255,255,.09); border-radius:28px; overflow:hidden; }
+.pill { display:inline-block; padding:10px 26px; border-radius:999px; font-weight:700; letter-spacing:.06em; font-size:30px; background:rgba(255,255,255,.1); color:var(--muted); white-space:nowrap; }
+.pill.acc { background:var(--accent); color:var(--bg); } .pill.bad { background:rgba(229,115,95,.18); color:var(--bad); } .pill.good { background:rgba(123,211,137,.16); color:var(--good); }
+.chipw { position:absolute; height:84px; border-radius:20px; background:var(--panel); border:3px solid rgba(255,255,255,.22); font-family:var(--code); font-weight:700; font-size:44px; display:flex; align-items:center; justify-content:center; opacity:0; }
+.chipw.acc { background:var(--accent); border-color:var(--accent); color:var(--bg); }
+.cid { position:absolute; text-align:center; font-family:var(--code); font-size:30px; color:var(--muted); opacity:0; }
+.mono { font-family:var(--code); }
+/* analogy legend: pairs like "किताब = token" */
+.legend { position:absolute; display:flex; flex-direction:column; gap:12px; }
+.legend .row { display:flex; align-items:center; gap:14px; font-size:36px; font-weight:700; opacity:0; }
+.legend .a { color:var(--accent); } .legend .eq { color:var(--muted); }
+/* captions (zone y=1010..1390) */
+#caps { position:absolute; left:60px; top:1010px; width:960px; height:380px; }
+.capline { position:absolute; left:0; top:0; width:960px; height:380px; display:flex; align-items:center; justify-content:center; opacity:0; white-space:nowrap; font-weight:700; font-size:80px; line-height:1.45; text-shadow:0 5px 0 rgba(0,0,0,.55), 0 0 26px rgba(0,0,0,.6); }
+.cw { display:inline-block; margin:0 .2em; color:var(--text); }
+/* mascot "Bit" */
+#mascot { position:absolute; left:390px; top:1440px; width:300px; height:300px; }
+#mascot svg { width:300px; height:300px; overflow:visible; }
+/* hook headline: the viewer's question, huge, visible from frame 0 (K.hook in kit.js) */
+.hookline { position:absolute; left:60px; top:330px; width:960px; text-align:center; font-weight:800; font-size:116px; line-height:1.14; opacity:0; z-index:5; }
+.hookline .w { color:var(--text); } .hookline .g { color:var(--accent); }
