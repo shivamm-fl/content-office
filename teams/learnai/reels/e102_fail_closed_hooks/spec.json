@@ -1,0 +1,78 @@
+{
+  "tts": "edge",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "min": {
+    "A": 4,
+    "B": 8,
+    "C": 9,
+    "D": 8
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "err",
+      "B",
+      2,
+      0.2
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "click",
+      "C",
+      2,
+      0
+    ],
+    [
+      "click",
+      "C",
+      3,
+      0
+    ],
+    [
+      "lock",
+      "C",
+      4,
+      0.1
+    ],
+    [
+      "dip",
+      "D",
+      0,
+      -0.1
+    ],
+    [
+      "ok",
+      "D",
+      1,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Guard crash हुआ, फिर भी agent ने काम कर दिया। || ऐसा क्यों होता है?",
+      "B": "Claude Code में hook एक छोटा check है, | जो agent के action के आसपास चलता है। || मान लो वो check time out हो गया, | और action फिर भी निकल गया, | ये fail-open है।",
+      "C": "Anthropic की release note के मुताबिक, | onFailure block लगाओ, तो 3{three} हालात में action रुकता है। | पहला, hook start न हो। | दूसरा, time out हो। | तीसरा, unexpected exit code आए। || यानी fail-closed।",
+      "D": "@emph Check टूटे, तो default रुकना होना चाहिए। || सोचो UPI का fraud check down है, | payment रुके या जाए? Comment में लिखो। | और agent tricks के लिए follow करो।"
+    }
+  }
+}
