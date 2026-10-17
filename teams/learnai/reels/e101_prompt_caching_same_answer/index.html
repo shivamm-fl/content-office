@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="45" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -32,7 +32,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,19 +41,118 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="45" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="45" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="45" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "WHAT'S NEW IN AI" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
-      const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const M = Mo.init({ order: ["A","B","C","D","E","F"], tag: "WHAT'S NEW IN AI" });
+      Viz.install(M);
+      const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n);
+      const { ACC, CYAN, HOT, GOOD } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF");
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:20px;font-size:32px;color:${col};text-align:left`; } return d; };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const chip = (host, txt, t, cx, y, o) => { o = o || {}; const col = o.col || ACC, size = o.size || 44;
+        const w = el(host, `left:${cx - 450}px;top:${y}px;width:900px;text-align:center;pointer-events:none`);
+        const c = el(w, `position:relative;display:inline-block;padding:12px 32px;border:3px solid ${col};border-radius:999px;font:700 ${size}px var(--code);white-space:nowrap;letter-spacing:.04em;` + (o.solid ? `background:${col};color:#0E121E` : `background:rgba(14,18,30,.9);color:${col}`), txt);
+        c.style.position = "relative"; return show(w, t); };
+      const header = (host, txt, t) => chip(host, txt, t, 540, 190, { solid: true, size: 46 });
+      const bubble = (host, x, y, w, txt, col) => el(host, `left:${x}px;top:${y}px;width:${w}px;padding:26px 0;text-align:center;border-radius:36px 36px 36px 8px;background:${M.ca(col, .14)};border:2.5px solid ${M.ca(col, .6)};font:700 66px var(--lat);color:#E8EDF6`, txt);
 
-      M.finish();   // LAST: captions
-      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+      // ===== A: hook, two identical answers =====
+      M.hook(["Caching se", "jawab badle?"], { size: 96, top: 230, until: 3.7 });
+      // diagram: A
+      const pa = panel(A, 140, 460, 800, 320, CYAN, "NO CACHE"); show(pa, 0.05);
+      show(bubble(pa, 190, 130, 420, "Paris.", CYAN), 0.2);
+      const eq = el(A, "left:300px;top:800px;width:200px;text-align:center;font:800 130px var(--code);color:#E8EDF6", "=");
+      show(eq, 0.35, { opacity: 0, scale: 0.8 });
+      const pb = panel(A, 140, 960, 800, 320, ACC, "WITH CACHE"); show(pb, 0.5);
+      show(bubble(pb, 190, 130, 420, "Paris.", ACC), 0.65);
+      chip(A, "EXAMPLE", 0.7, 740, 478, { col: CYAN, size: 36 });
+      chip(A, "SAME ✓", at("A", "nahi"), 700, 805, { col: GOOD, size: 56, solid: true });
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: docs say no effect; cache reuses processed prompt =====
+      header(B, "DOCS SAY", M.P("B", 0));
+      // diagram: B
+      const bP = M.box(B, { x: 100, y: 270, w: 520, h: 230, label: "PROMPT", icon: "doc", color: CYAN });
+      const bC = M.box(B, { x: 100, y: 650, w: 520, h: 230, label: "CACHE", icon: "db", color: ACC });
+      const bO = M.box(B, { x: 100, y: 1030, w: 520, h: 230, label: "OUTPUT", icon: "chat", color: GOOD });
+      bP.show(M.P("B", 0) + 0.1); bC.show(M.P("B", 0) + 0.25); bO.show(M.P("B", 0) + 0.4);
+      M.arrow(B, { from: [360, 880], to: [360, 1025], color: HOT, w: 14, dash: true }).show(at("B", "effect") - 0.2, 0.3);
+      chip(B, "NO EFFECT", at("B", "effect"), 830, 925, { col: HOT, size: 40 });
+      chip(B, "IDENTICAL", at("B", "identical"), 830, 1110, { col: GOOD, size: 44, solid: true });
+      const aPC = M.arrow(B, { from: [360, 505], to: [360, 645], color: ACC, w: 14 }); aPC.show(at("B", "dobara") - 0.4, 0.3); aPC.travel(at("B", "dobara"), 0.8, ACC);
+      chip(B, "PROCESSED ✓", at("B", "chuka"), 830, 545, { col: ACC, size: 40 });
+      M.fit(B);
+
+      // ===== C: price bars to true scale =====
+      header(C, "PRICE", M.P("C", 0));
+      // diagram: C
+      const rows = [["BASE INPUT", "1x", 1, CYAN, 430, "price"], ["CACHE READ", "0.1x", 0.1, GOOD, 760, "01"], ["5-MIN WRITE", "1.25x", 1.25, HOT, 1090, "125"]];
+      rows.forEach(([lab, num, v, col, y, w], i) => { const t = i === 0 ? M.P("C", 0) + 0.2 : at("C", w);
+        show(el(C, `left:100px;top:${y - 85}px;font:700 54px var(--lat);color:#E8EDF6;white-space:nowrap`, lab), t - 0.1);
+        const bw = Math.round(400 * v);
+        const bar = el(C, `left:100px;top:${y}px;width:${bw}px;height:150px;border-radius:14px;background:${M.ca(col, .55)};border:3px solid ${col};transform-origin:0 50%`);
+        tl.set(bar, { opacity: 0, scaleX: 0 }, 0); tl.to(bar, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, t);
+        show(el(C, `left:${100 + bw + 24}px;top:${y + 32}px;font:800 80px var(--code);color:${col};white-space:nowrap`, num), t + 0.2); });
+      chip(C, "MOST MODELS", at("C", "aam"), 710, 805, { col: CYAN, size: 36 });
+      M.fit(C);
+
+      // ===== D: idle chat compacted before the 1-hour cache ends =====
+      header(D, "TERMINAL", M.P("D", 0));
+      // diagram: D
+      const cl = M.box(D, { x: 240, y: 290, w: 600, h: 180, label: "CLAUDE CODE", icon: "code", color: CYAN, size: 44 }); cl.show(M.P("D", 0) + 0.15);
+      const chat = panel(D, 70, 560, 440, 580, CYAN, "CHAT"); chat.style.transformOrigin = "50% 0"; show(chat, M.P("D", 0) + 0.3);
+      for (let i = 0; i < 7; i++) el(chat, `left:30px;top:${95 + i * 66}px;width:${i % 3 === 2 ? 240 : 380}px;height:30px;border-radius:15px;background:${M.ca(CYAN, .4)}`);
+      chip(D, "200K TOKENS", at("D", "200K"), 290, 1170, { col: CYAN, size: 40 });
+      const sum = panel(D, 70, 560, 440, 260, GOOD, "SUMMARY"); tl.set(sum, { opacity: 0 }, 0);
+      [380, 300, 340].forEach((w, i) => el(sum, `left:30px;top:${95 + i * 52}px;width:${w}px;height:28px;border-radius:14px;background:${M.ca(GOOD, .45)}`));
+      tl.to(chat, { opacity: 0, scaleY: 0.25, duration: 0.5, ease: "power3.out", immediateRender: false }, at("D", "compact"));
+      tl.fromTo(sum, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, at("D", "compact") + 0.15);
+      chip(D, "COMPACT", at("D", "compact") + 0.3, 290, 860, { col: GOOD, size: 48, solid: true });
+      // clock ring: 54 of 60 minutes, then the last 6 in red
+      const R = 150, CIR = 2 * Math.PI * R;
+      const clk = el(D, "left:560px;top:560px;width:400px;height:400px", `<svg viewBox="-200 -200 400 400" width="400" height="400" style="transform:rotate(-90deg)"><circle r="${R}" fill="none" stroke="${M.ca(CYAN, .3)}" stroke-width="30"/><circle id="arc54" r="${R}" fill="none" stroke="${ACC}" stroke-width="30" stroke-dasharray="${CIR}" stroke-dashoffset="${CIR}"/><circle id="arc6" r="${R}" fill="none" stroke="${HOT}" stroke-width="30" stroke-dasharray="${CIR * 0.1} ${CIR}" stroke-dashoffset="${-CIR * 0.9}" opacity="0"/></svg>`);
+      show(clk, M.P("D", 0) + 0.45);
+      const num = el(D, "left:560px;top:735px;width:400px;text-align:center;font:800 60px var(--code);color:#E8EDF6", "54 MIN"); show(num, at("D", "54"));
+      const a54 = clk.querySelector("#arc54"), a6 = clk.querySelector("#arc6");
+      const ob = { u: 0 }; tl.set(a54, { attr: { "stroke-dashoffset": CIR } }, 0);
+      tl.fromTo(ob, { u: 0 }, { u: 1, duration: 1.4, ease: "power2.inOut", immediateRender: false, onUpdate: () => a54.setAttribute("stroke-dashoffset", String(CIR * (1 - 0.9 * ob.u))) }, at("D", "54"));
+      tl.set(a6, { opacity: 0 }, 0); tl.to(a6, { opacity: 1, duration: 0.3, immediateRender: false }, at("D", "expire"));
+      chip(D, "1 HOUR CACHE", at("D", "one-hour"), 760, 1030, { col: ACC, size: 40 });
+      chip(D, "EXPIRES", at("D", "expire"), 760, 1130, { col: HOT, size: 40 });
+      M.fit(D);
+
+      // ===== E: cost changes, answer does not =====
+      header(E, "SAME ANSWER", M.P("E", 0));
+      // diagram: E
+      const eC = M.box(E, { x: 80, y: 360, w: 440, h: 380, label: "COST", icon: "coin", color: ACC }); eC.show(M.P("E", 0) + 0.1);
+      const eA = M.box(E, { x: 560, y: 360, w: 440, h: 380, label: "ANSWER", icon: "chat", color: GOOD }); eA.show(M.P("E", 0) + 0.2);
+      M.arrow(E, { from: [300, 770], to: [300, 920], color: ACC, w: 16 }).show(at("E", "badalti"), 0.3);
+      chip(E, "CHANGES", at("E", "badalti"), 300, 950, { col: ACC, size: 48 });
+      chip(E, "SAME ✓", at("E", "nahi"), 780, 800, { col: GOOD, size: 56, solid: true });
+      M.fit(E);
+
+      // ===== F: close =====
+      // diagram: F
+      const cc = panel(F, 90, 330, 900, 640, CYAN, "COMMENT KARO"); show(cc, M.P("F", 0));
+      show(el(cc, "left:40px;right:40px;bottom:36px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.35);font:500 36px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 34px", "Add a comment..."), M.P("F", 0) + 0.3, { opacity: 0 });
+      [["5 MIN", "1.25x WRITE", "5", 50], ["1 HOUR", "2x WRITE", "1", 470]].forEach(([lab, sub, w, x]) => { const card = el(cc, `left:${x}px;top:110px;width:380px;text-align:center`);
+        el(card, `position:relative;display:inline-block;padding:16px 44px;border:3px solid ${ACC};border-radius:999px;font:700 64px var(--code);color:${ACC}`, lab).style.position = "relative";
+        el(card, "position:relative;margin-top:26px;font:700 44px var(--code);color:#E8EDF6", sub).style.position = "relative";
+        show(card, at("F", w)); });
+      const fb = chip(F, "+  FOLLOW", at("F", "follow") - 0.3, 540, 1120, { col: ACC, size: 56, solid: true });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("F", "follow"));
+      M.fit(F);
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F);
+      M.finish({ kw: { caching: "cyan", jawab: "good", nahi: "good", identical: "good", price: "gold", cost: "gold", idle: "hot", compact: "good", follow: "gold" } });
+      window.__timelines["main"] = tl;
     </script>
   </body>
 </html>
