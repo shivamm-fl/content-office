@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="49" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="50" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="49" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="49" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="49" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="50" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="50" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="50" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -73,7 +73,7 @@
       const limT = el(A, `left:100px;top:574px;width:380px;text-align:center;font:700 34px var(--code);color:${HOT}`, "LIMIT"); show(limT, at("A", "limit"), { opacity: 0 });
       rowsA.forEach((r, i) => tl.to(r, { opacity: 0, duration: 0.3, immediateRender: false }, at("A", "summary") + i * 0.02));
       tl.to(lim, { opacity: 0, duration: 0.3, immediateRender: false }, at("A", "summary")); tl.to(limT, { opacity: 0, duration: 0.3, immediateRender: false }, at("A", "summary"));
-      const card = el(A, `left:120px;top:920px;width:340px;height:260px;border-radius:20px;background:${ca(ACC, 0.18)};border:3px solid ${ACC}`,
+      const card = el(A, `z-index:5;left:120px;top:920px;width:340px;height:260px;border-radius:20px;background:${ca(ACC, 0.18)};border:3px solid ${ACC}`,
         `<div style="font:700 34px var(--code);color:${ACC};text-align:center;margin-top:20px">SUMMARY</div><div style="margin:22px 30px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)}"></div><div style="margin:18px 30px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)};width:70%"></div><div style="margin:18px 30px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)};width:85%"></div>`);
       show(card, at("A", "summary") + 0.15, { opacity: 0, scale: 0.9 });
       const wr = panel(A, 590, 520, 400, 760, GOOD, "NEW WINDOW", 0.05);
@@ -104,10 +104,9 @@
       show(el(C, `left:800px;top:340px;width:90px;font:700 70px var(--code);color:${HOT};text-align:center`, "✗"), at("C", "restart"), { opacity: 0, scale: 1.3 });
       M.arrow(C, { from: [540, 610], to: [540, 710], color: ACC, w: 8 }).show(S.C + 0.5, 0.3);
       panel(C, 160, 725, 760, 570, GOOD, "NEW WINDOW", S.C + 0.5);
-      const cardC = el(C, `left:210px;top:600px;width:660px;height:230px;border-radius:20px;background:${ca(ACC, 0.18)};border:3px solid ${ACC}`,
+      const cardC = el(C, `z-index:5;left:210px;top:600px;width:660px;height:230px;border-radius:20px;background:${ca(ACC, 0.18)};border:3px solid ${ACC}`,
         `<div style="font:700 40px var(--code);color:${ACC};text-align:center;margin-top:18px">SUMMARY</div><div style="margin:18px 40px 0;height:16px;border-radius:8px;background:${ca(ACC, 0.7)}"></div><div style="margin:18px 40px 0;height:16px;border-radius:8px;background:${ca(ACC, 0.7)};width:70%"></div><div style="margin:18px 40px 0;height:16px;border-radius:8px;background:${ca(ACC, 0.7)};width:85%"></div>`);
-      show(cardC, at("C", "summary") - 0.3, { opacity: 0, y: 0, scale: 0.9 }); tl.set(cardC, { y: 0 }, 0);
-      tl.fromTo(cardC, { top: 600 }, { top: 800, duration: 0.6, ease: "power3.out", immediateRender: false }, at("C", "summary") - 0.3);
+      show(cardC, at("C", "summary") - 0.3, { opacity: 0, y: 30 }); tl.set(cardC, { top: 800 }, 0);
       show(el(C, `left:160px;width:760px;top:1120px;text-align:center;font:700 48px var(--code);color:${GOOD}`, "FREE SPACE"), at("C", "sirf") + 0.4, { opacity: 0 });
       M.fit(C, { y: 200, h: 1100 });
 
