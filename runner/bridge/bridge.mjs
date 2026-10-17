@@ -371,7 +371,12 @@ async function main() {
         }
       }
     });
-    c.stderr.on("data", (d) => { const s = d.toString().trim(); if (s) log("claude:", s.slice(0, 300)); });
+    c.stderrTail = "";
+    c.stderr.on("data", (d) => {
+      const s = d.toString();
+      c.stderrTail = (c.stderrTail + s).slice(-4000);
+      if (s.trim()) log("claude:", s.trim().slice(0, 300));
+    });
     c.gotInit = () => gotInit;
     return c;
   };
@@ -395,7 +400,19 @@ async function main() {
 
   const key = await uploadTranscript(work.token, state.sessionId).catch(() => null);
   const failed = code !== 0 && !ending;
-  ctx.link.send({ t: "done", status: failed ? "failed" : "done", summary: failed ? `Claude Code exited with code ${code}` : "", transcript_key: key, session_id: state.sessionId });
+  let summary = "";
+  if (failed && !child.gotInit()) {
+    // A start-up crash carries no conversation; print the end of it so the public log shows the cause.
+    const lines = child.stderrTail.split("\n").filter((l) => !/^\s*\d+ \| /.test(l));
+    log(`claude start-up error:\n${lines.join("\n").replace(/sk-ant-[\w-]+/g, "***").slice(-1500)}`);
+    const auth = /auth|login|token|401|403|credential/i.test(child.stderrTail);
+    summary = auth
+      ? "Claude Code could not sign in. Check the CLAUDE_CODE_OAUTH_TOKEN secret of the office repo (claude setup-token makes a new one)."
+      : "Claude Code could not start on the runner (see the GitHub log).";
+  } else if (failed) {
+    summary = `Claude Code stopped with exit code ${code}.`;
+  }
+  ctx.link.send({ t: "done", status: failed ? "failed" : "done", summary, transcript_key: key, session_id: state.sessionId });
   await ctx.link.drain();
   ctx.link.close();
   mcp.server.close();

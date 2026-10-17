@@ -49,6 +49,8 @@ jobs:
       - name: Lock the machine
         run: |
           git rev-parse HEAD > "$RUNNER_TEMP/base_sha"
+          # Ubuntu 24.04 blocks unprivileged user namespaces; Claude Code's subprocess isolation and Chrome need them
+          sudo sysctl -q -w kernel.apparmor_restrict_unprivileged_userns=0 || true
           sudo rm -f /etc/sudoers.d/runner /etc/sudoers.d/90-cloud-init-users
           if sudo -n true 2>/dev/null; then echo "sudo is still available"; exit 1; fi
           echo "sudo is off for the agent session"
