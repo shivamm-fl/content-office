@@ -1,0 +1,97 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "min": {
+    "A": 6,
+    "B": 5,
+    "C": 8,
+    "D": 6,
+    "E": 5,
+    "F": 8
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "err",
+      "B",
+      1,
+      0.1
+    ],
+    [
+      "dip",
+      "C",
+      0,
+      -0.1
+    ],
+    [
+      "click",
+      "C",
+      2,
+      0
+    ],
+    [
+      "slice",
+      "C",
+      2,
+      0.9
+    ],
+    [
+      "tick",
+      "D",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      1,
+      0.6
+    ],
+    [
+      "unlock",
+      "E",
+      0,
+      0.6
+    ],
+    [
+      "dip",
+      "F",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "F",
+      1,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Onit के AI Engineer job post में agent loops हैं। | Loop में फँस जाए, तो कैसे रोकोगे? || जवाब 3{three} rules में है।",
+      "B": "गलती ये है कि model पर छोड़ दो, वो खुद तय करे कब रुकना है। | तब tokens जलते रहेंगे।",
+      "C": "पहला rule, stopping condition। | Anthropic कहता है, maximum number of iterations जैसी conditions आम हैं। | मान लो max 10{ten} steps, उसके बाद loop कट जाए। | कोई fixed number वो नहीं देता, task देखकर चुनो।",
+      "D": "दूसरा rule, ground truth। | हर step पर environment से असली नतीजा लो, जैसे tool result, | ताकि agent जाने कि वो सच में आगे बढ़ रहा है।",
+      "E": "तीसरा rule, human checkpoint। | Checkpoints पर या अटकने पर, | agent human feedback के लिए pause करे।",
+      "F": "@emph Agent को रुकना भी सिखाना पड़ता है। || तुम max steps कितने रखोगे? 5{five}, 10{ten} या 20{twenty}? Comment में लिखो। | और interview सवालों के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

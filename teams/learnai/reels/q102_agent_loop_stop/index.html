@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Agent loop mein fas gaya, ye kaise rokoge?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="51" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="51" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="51" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="51" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n);
+      const { ACC, CYAN, HOT, GOOD } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF");
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:20px;font-size:32px;color:${col};text-align:left`; } return d; };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      // centred label chip: cx = centre x, y = top
+      const chip = (host, txt, t, cx, y, o) => { o = o || {}; const col = o.col || ACC, size = o.size || 44;
+        const w = el(host, `left:${cx - 450}px;top:${y}px;width:900px;text-align:center;pointer-events:none`);
+        const c = el(w, `position:relative;display:inline-block;padding:12px 32px;border:3px solid ${col};border-radius:999px;font:700 ${size}px var(--code);white-space:nowrap;letter-spacing:.04em;` + (o.solid ? `background:${col};color:#0E121E` : `background:rgba(14,18,30,.9);color:${col}`), txt);
+        c.style.position = "relative"; return show(w, t); };
+      const stamp = (host, txt, cx, y, col, t, size) => { const w = el(host, `left:${cx - 450}px;top:${y}px;width:900px;text-align:center`);
+        el(w, `position:relative;display:inline-block;padding:14px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap`, txt).style.position = "relative"; return show(w, t, { opacity: 0, scale: 1.08 }); };
+      const header = (host, txt, t) => chip(host, txt, t, 540, 190, { solid: true, size: 46 });
+      const sign = (host, cx, cy, r, t) => { const g = el(host, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px`,
+        `<svg viewBox="-100 -100 200 200" width="${2 * r}" height="${2 * r}"><polygon points="-42,-100 42,-100 100,-42 100,42 42,100 -42,100 -100,42 -100,-42" fill="${HOT}" stroke="#fff" stroke-width="6"/><text x="0" y="14" text-anchor="middle" font-family="Space Grotesk" font-weight="800" font-size="46" fill="#fff">STOP</text></svg>`);
+        return show(g, t, { opacity: 0, scale: 1.25 }); };
+
+      // ===== A: hook, a loop that never ends =====
+      M.hook(["Agent loop mein", "phans gaya?"], { size: 96, top: 230, until: 5.3 });
+      // diagram: A
+      const lp = M.loop(A, { cx: 540, cy: 800, r: 250, nodes: [{ label: "THINK", color: CYAN, w: 320 }, { label: "TOOL", color: ACC, w: 320 }, { label: "RESULT", color: GOOD, w: 320 }] });
+      lp.show(0.05, 0.1); lp.spin(0.9, 3, 0.9);
+      M.count(A, 99, 0.5, { x: 290, y: 1030, w: 500, size: 96, prefix: "STEP ", dur: 5.5, color: HOT });
+      chip(A, "JOB POST", at("A", "post"), 540, 1170, { col: CYAN, size: 40 });
+      [1, 2, 3].forEach((k) => chip(A, `${k} ?`, at("A", "rules") + (k - 1) * 0.14, 300 + (k - 1) * 240, 1240, { size: 54 }));
+
+      // ===== B: no limit, tokens burn =====
+      chip(B, "NO LIMIT", at("B", "galti"), 540, 200, { solid: true, size: 46 });
+      // diagram: B
+      const rb = M.icon(B, "robot", 300, 370, 480, CYAN); rb.show(0.1);
+      const ring2 = el(B, "left:200px;top:320px;width:680px;height:580px", `<svg viewBox="0 0 680 580" width="680" height="580"><ellipse cx="340" cy="290" rx="310" ry="260" fill="none" stroke="${M.ca(HOT, .8)}" stroke-width="12" stroke-dasharray="34 22"/><polygon points="340,26 384,46 340,66" fill="${HOT}"/></svg>`);
+      show(ring2, at("B", "khud"), { opacity: 0, scale: 0.9 });
+      const rot = { a: 0 }; tl.fromTo(rot, { a: 0 }, { a: 720, duration: 5, ease: "none", immediateRender: false, onUpdate: () => { ring2.style.transform = `rotate(${rot.a}deg)`; } }, at("B", "khud"));
+      const meter = panel(B, 100, 960, 880, 220, HOT, "TOKENS"); show(meter, at("B", "tokens") - 0.5);
+      const bar = el(meter, `left:30px;top:110px;width:820px;height:60px;border-radius:30px;background:${M.ca(HOT, .6)};transform-origin:0 50%`); tl.set(bar, { opacity: 0, scaleX: 0 }, 0);
+      tl.to(bar, { opacity: 1, scaleX: 1, duration: 2.6, ease: "none", immediateRender: false }, at("B", "tokens") - 0.3);
+      M.count(B, 480000, at("B", "tokens"), { x: 290, y: 1195, w: 500, size: 70, dur: 1.8, color: HOT });
+
+      // ===== C: rule 1, max steps =====
+      header(C, "1 · STOP CONDITION", M.P("C", 0));
+      // diagram: C
+      const dots = []; for (let i = 0; i < 10; i++) { const x = 70 + (i % 5) * 190, y = 460 + Math.floor(i / 5) * 175;
+        const d = el(C, `left:${x}px;top:${y}px;width:150px;height:150px;border-radius:50%;border:4px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .12)};display:flex;align-items:center;justify-content:center;font:700 60px var(--code);color:#E8EDF6`, String(i + 1)); show(d, M.P("C", 1) + i * 0.04, { opacity: 0, scale: 0.7 }); dots.push(d); }
+      const t10 = at("C", "10"); dots.forEach((d, i) => tl.to(d, { backgroundColor: M.ca(ACC, .55), borderColor: ACC, duration: 0.2, immediateRender: false }, t10 + i * 0.11));
+      chip(C, "MAX 10", t10 - 0.1, 360, 330, { size: 52 });
+      chip(C, "EXAMPLE", t10, 740, 340, { col: CYAN, size: 36 });
+      const cutl = el(C, `left:50px;top:631px;width:980px;height:8px;background:${HOT};transform-origin:0 50%`); tl.set(cutl, { opacity: 0, scaleX: 0 }, 0);
+      tl.to(cutl, { opacity: 1, scaleX: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, at("C", "kat") - 0.1);
+      sign(C, 540, 960, 170, at("C", "kat") + 0.1);
+      chip(C, "ANTHROPIC", at("C", "Anthropic"), 290, 1220, { col: CYAN, size: 40 });
+      chip(C, "PICK BY TASK", at("C", "task"), 730, 1220, { size: 40 });
+
+      // ===== D: rule 2, ground truth =====
+      header(D, "2 · GROUND TRUTH", M.P("D", 0));
+      // diagram: D
+      const ag = M.box(D, { x: 240, y: 320, w: 600, h: 290, label: "AGENT", icon: "robot", color: CYAN }); ag.show(M.P("D", 0) + 0.3);
+      const pg = el(D, `left:290px;top:570px;width:500px;height:20px;border-radius:10px;background:${M.ca(GOOD, .2)}`); show(pg, at("D", "step"));
+      const pgf = el(D, `left:290px;top:570px;width:500px;height:20px;border-radius:10px;background:${GOOD};transform-origin:0 50%`); tl.set(pgf, { opacity: 0, scaleX: 0.05 }, 0);
+      tl.to(pgf, { opacity: 1, scaleX: 0.45, duration: 0.8, ease: "power3.out", immediateRender: false }, at("D", "aage"));
+      M.arrow(D, { from: [400, 630], to: [400, 800], color: ACC, w: 12 }).show(at("D", "step"), 0.3);
+      M.arrow(D, { from: [680, 800], to: [680, 630], color: GOOD, w: 12 }).show(at("D", "asli"), 0.3);
+      const env = panel(D, 120, 820, 840, 400, CYAN, "ENVIRONMENT"); show(env, at("D", "environment"));
+      el(env, "left:50px;top:110px;font:600 50px var(--code);white-space:nowrap;color:#8592AD", "$ run tests");
+      const r1 = el(env, `left:50px;top:200px;font:700 58px var(--code);white-space:nowrap;color:${GOOD}`, "3 passed"); show(r1, at("D", "natija"));
+      const r2 = el(env, `left:50px;top:290px;font:700 58px var(--code);white-space:nowrap;color:${HOT}`, "2 failed"); show(r2, at("D", "result"));
+      chip(D, "TRUTH", at("D", "asli"), 850, 690, { col: GOOD, size: 40 });
+
+      // ===== E: rule 3, human checkpoint =====
+      header(E, "3 · HUMAN CHECKPOINT", M.P("E", 0));
+      // diagram: E
+      const rb2 = M.box(E, { x: 70, y: 340, w: 400, h: 270, label: "AGENT", icon: "robot", color: CYAN }); rb2.show(M.P("E", 0) + 0.3);
+      const nx = M.box(E, { x: 610, y: 340, w: 400, h: 270, label: "NEXT STEP", icon: "arrow", color: GOOD }); nx.show(M.P("E", 0) + 0.5);
+      M.arrow(E, { from: [480, 475], to: [600, 475], color: ACC, w: 12 }).show(M.P("E", 0) + 0.6, 0.3);
+      const bar2 = el(E, `left:511px;top:330px;width:58px;height:290px;background:repeating-linear-gradient(0deg,${HOT} 0 30px,#fff 30px 60px);border-radius:8px;transform-origin:50% 0`); tl.set(bar2, { opacity: 0, scaleY: 0 }, 0);
+      tl.to(bar2, { opacity: 1, scaleY: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, at("E", "pause") - 0.3);
+      chip(E, "STUCK", at("E", "atakne"), 270, 650, { col: HOT, size: 44 });
+      const hu = M.icon(E, "user", 390, 740, 300, ACC); hu.show(at("E", "human", 1));
+      chip(E, "APPROVE ✓", at("E", "feedback"), 300, 1090, { col: GOOD, size: 46 });
+      chip(E, "STOP ✗", at("E", "feedback") + 0.2, 780, 1090, { col: HOT, size: 46 });
+
+      // ===== F: close =====
+      // diagram: F
+      sign(F, 540, 500, 150, M.P("F", 0)); M.icon(F, "robot", 450, 690, 180, CYAN).show(M.P("F", 0) + 0.3);
+      const cc = panel(F, 100, 910, 880, 250, CYAN, "COMMENT KARO"); show(cc, at("F", "kitne") - 0.2);
+      ["5", "10", "20"].forEach((lab, i) => { const w = el(cc, `left:${100 + i * 270}px;top:110px;width:140px;text-align:center`); const c = el(w, `position:relative;display:inline-block;padding:10px 34px;border:3px solid ${ACC};border-radius:999px;font:700 64px var(--code);color:${ACC}`, lab); c.style.position = "relative"; show(w, at("F", lab)); });
+      const fb = chip(F, "+  FOLLOW", at("F", "follow") - 0.3, 540, 1200, { col: ACC, size: 44, solid: true });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("F", "follow"));
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F);
+      M.finish({ kw: { loop: "hot", rules: "gold", tokens: "hot", stopping: "gold", max: "gold", ground: "cyan", truth: "cyan", human: "gold", checkpoint: "gold", rukna: "hot", follow: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
