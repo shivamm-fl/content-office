@@ -1,0 +1,102 @@
+{
+  "tts": "edge",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "min": {
+    "A": 4,
+    "B": 7,
+    "C": 8,
+    "D": 9,
+    "E": 3,
+    "F": 6
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "tick",
+      "A",
+      0,
+      0.3
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0.2
+    ],
+    [
+      "ok",
+      "B",
+      1,
+      0
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "C",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      0,
+      0.2
+    ],
+    [
+      "save",
+      "D",
+      0,
+      0.5
+    ],
+    [
+      "dip",
+      "E",
+      0,
+      -0.1
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0.3
+    ],
+    [
+      "pop",
+      "F",
+      0,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Prompt caching से AI का जवाब बदल जाता है? || नहीं।",
+      "B": "Anthropic के docs के मुताबिक, | output पर caching का कोई effect नहीं, | जवाब identical आता है। || Caching बस process हो चुका prompt दोबारा इस्तेमाल करती है।",
+      "C": "दो बातें याद रखो। || पहली, price। | Cache read आम तौर पर 0.1{point-one} गुना, | और 5{five} minute का write 1.25{one-point-two-five} गुना।",
+      "D": "दूसरी, Claude Code के terminal में, | 200K{two-hundred-K} token की chat करीब 54{fifty-four} minute idle रहे, | तो one-hour cache expire होने से पहले उसे compact कर दिया जाता है।",
+      "E": "@emph Caching से cost बदलती है, जवाब नहीं।",
+      "F": "तुम 5{five} minute वाला cache चुनोगे या 1{one} hour वाला? Comment में बताओ। | और AI concepts के लिए follow करो।"
+    }
+  }
+}
