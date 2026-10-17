@@ -24,11 +24,11 @@ const RUN_ID = process.env.RUN_ID || "";
 const TEAM = process.env.TEAM || "learnai";
 const TEAM_DIR = join(ROOT, "teams", TEAM);
 const CLAUDE_BIN = process.env.CLAUDE_BIN || "claude";
-// File edits only inside the team folder ("//" = an absolute path in permission rules); the shell is sandboxed to it.
-const TEAM_GLOB = `/${TEAM_DIR.replace(/\\/g, "/").replace(/^\/+/, "")}/**`;
+// File edits only inside the team folder (the session's working directory; "./**" is relative to it, tested: a write
+// outside is refused); the shell is sandboxed to it as well.
 const ALLOWED_TOOLS = [
   "Bash", "Read", "Glob", "Grep", "WebSearch", "WebFetch",
-  `Write(/${TEAM_GLOB})`, `Edit(/${TEAM_GLOB})`, `MultiEdit(/${TEAM_GLOB})`, `NotebookEdit(/${TEAM_GLOB})`,
+  "Write(./**)", "Edit(./**)", "MultiEdit(./**)", "NotebookEdit(./**)",
   "Agent", "Task", "SendMessage", "Skill", "TodoWrite", "mcp__office",
 ].join(",");
 
