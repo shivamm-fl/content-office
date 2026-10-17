@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="40.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="39.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="40.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="40.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="40.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="39.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="39.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="39.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -57,13 +57,13 @@
       const { ACC, CYAN, HOT, GOOD } = M;
       // A: hook. agent -> guard (crashed) -> action still goes through
       M.hook(["Guard crash,", "agent ne kaam kiya"], { size: 90, top: 250 });
-      M.box(A, { x: 190, y: 480, w: 700, h: 230, label: "AGENT", icon: "robot", color: CYAN }).show(0.05);
-      M.arrow(A, { from: [540, 720], to: [540, 820], color: CYAN, w: 12 }).show(0.3, 0.3);
-      M.box(A, { x: 190, y: 830, w: 700, h: 250, label: "GUARD", icon: "shield", color: ACC }).show(0.1);
-      M.icon(A, "cross", 760, 800, 150, HOT).show(M.W("A", "crash"));
-      M.arrow(A, { from: [540, 1090], to: [540, 1190], color: HOT, w: 12 }).show(M.W("A", "kaam"), 0.3);
-      M.box(A, { x: 190, y: 1200, w: 700, h: 230, label: "ACTION DONE", icon: "bolt", color: HOT }).show(M.W("A", "kaam"));
-      M.fit(A, { y: 540, h: 760 });
+      M.box(A, { x: 110, y: 470, w: 860, h: 220, label: "AGENT", icon: "robot", color: CYAN, size: 54 }).show(0.05);
+      M.arrow(A, { from: [540, 700], to: [540, 770], color: CYAN, w: 12 }).show(0.05, 0.3);
+      M.box(A, { x: 110, y: 780, w: 860, h: 220, label: "GUARD", icon: "shield", color: HOT, size: 54 }).show(0.05);
+      M.icon(A, "cross", 800, 790, 160, HOT).show(0.05);
+      M.arrow(A, { from: [540, 1010], to: [540, 1080], color: HOT, w: 12 }).show(M.W("A", "kaam"), 0.3);
+      M.box(A, { x: 110, y: 1090, w: 860, h: 220, label: "ACTION DONE", icon: "bolt", color: HOT, size: 54 }).show(M.W("A", "kaam"));
+      M.fit(A, { y: 460, h: 860 });
       // B: what a hook is, fail-open
       M.box(B, { x: 130, y: 320, w: 560, h: 220, label: "AGENT", icon: "robot", color: CYAN }).show(0.05);
       M.arrow(B, { from: [410, 550], to: [410, 650], color: CYAN, w: 12 }).show(M.W("B", "hook"), 0.3);
