@@ -38,10 +38,10 @@ jobs:
         with: { node-version: 22 }
       - name: Claude Code
         run: |
-          # bubblewrap: Claude Code isolates the session's commands with it (CLAUDE_CODE_SUBPROCESS_ENV_SCRUB)
-          sudo apt-get install -y -qq bubblewrap >/dev/null 2>&1 || { sudo apt-get update -qq && sudo apt-get install -y -qq bubblewrap >/dev/null; }
+          # bubblewrap + socat: Claude Code sandboxes the session's commands with them (CLAUDE_CODE_SUBPROCESS_ENV_SCRUB)
+          sudo apt-get install -y -qq bubblewrap socat >/dev/null 2>&1 || { sudo apt-get update -qq && sudo apt-get install -y -qq bubblewrap socat >/dev/null; }
           npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
-          claude --version && bwrap --version
+          claude --version && bwrap --version && socat -V | head -1
       - name: Studio tools
         if: ${{ inputs.profile == 'studio' }}
         run: |
