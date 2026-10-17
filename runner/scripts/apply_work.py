@@ -8,6 +8,7 @@ Without it (agent jobs: the fix session) every file of the team folder comes bac
 Links, absolute paths and paths outside teams/<team>/ are always skipped. Deleted files are not replayed.
 """
 import argparse
+import re
 import sys
 import tarfile
 from pathlib import Path
@@ -31,7 +32,8 @@ def unpack(bundle: Path, team: str, content_only: bool, allow_media: bool = Fals
                 continue
             rel = name[len(prefix):]
             if allow_media:
-                if not (rel.startswith("reels/") and rel.endswith("_hi.mp4") and rel.count("/") == 1):
+                # the video, the mix the composition plays, the owner's-voice phrase cache
+                if not re.fullmatch(r"reels/[\w.-]+_hi\.mp4|reels/[\w.-]+/audio/hi/(voice|bed|sfx)\.wav|reels/[\w.-]+/audio/hi/el_[\w.-]+\.(mp3|json)", rel):
                     continue
             elif content_only and classify(rel) != "content":
                 continue

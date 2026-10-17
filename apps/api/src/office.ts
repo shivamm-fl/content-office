@@ -380,7 +380,8 @@ export class Office extends DurableObject<Env> {
     const day = t?.day ? this.getThreadRow(t.day) : null;
     if (!day || day.kind !== "workday") return;
     const item = t?.item ?? run.item ?? "reel";
-    const attempts = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE thread_id = ? AND profile = 'studio'", run.thread_id)!.n;
+    // cancelled runs (a setup problem, the owner stopping one) are not attempts
+    const attempts = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE thread_id = ? AND profile = 'studio' AND status != 'cancelled'", run.thread_id)!.n;
     if (outcome === "ready") {
       this.system(day.id, null, `${item} is ready for your approval (Inbox).`, { item, outcome });
     } else if (outcome === "cancelled") {
