@@ -56,3 +56,26 @@ test("frontmatter and summaries", () => {
   assert.equal(body, "Hello");
   assert.equal(summarizeTool("Bash", { command: "ls", description: "List files" }), "List files");
 });
+
+test("teammates talk to each other: roster, direct messages, resumed agents stay in their card", async () => {
+  const { roster } = await import("./events.mjs");
+  const s = newMapState("producer");
+  // the lead spawns the researcher in the background
+  mapClaudeEvent(s, { type: "assistant", message: { content: [{ type: "tool_use", id: "tuR", name: "Agent", input: { subagent_type: "researcher", run_in_background: true, description: "Wait for questions" } }] } });
+  const launched = mapClaudeEvent(s, { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "tuR", content: [{ type: "text", text: "Async agent launched successfully.\nagentId: a63f827200a8e4b5d" }] }] } });
+  assert.equal(launched.length, 0, "a background launch is not the end of the teammate's work");
+  // the strategist is spawned and messages the researcher by id
+  mapClaudeEvent(s, { type: "assistant", message: { content: [{ type: "tool_use", id: "tuS", name: "Agent", input: { subagent_type: "strategist", description: "Ask the researcher" } }] } });
+  assert.deepEqual(roster(s), { producer: "main", researcher: "a63f827200a8e4b5d" });
+  const dm = mapClaudeEvent(s, { type: "assistant", parent_tool_use_id: "tuS", message: { content: [{ type: "tool_use", id: "x1", name: "SendMessage", input: { to: "a63f827200a8e4b5d", message: "Which tool is worth a reel?" } }] } });
+  assert.deepEqual(dm, [{ t: "dm", from: "strategist", to: "researcher", text: "Which tool is worth a reel?" }]);
+  // the researcher wakes up under a new tool_use id; its words land in its first card
+  mapClaudeEvent(s, { type: "system", subtype: "task_started", task_id: "a63f827200a8e4b5d", tool_use_id: "tuR2" });
+  const words = mapClaudeEvent(s, { type: "assistant", parent_tool_use_id: "tuR2", message: { content: [{ type: "text", text: "EXAMPLE: some tool" }] } });
+  assert.deepEqual(words, [{ t: "message", agent: "researcher", parent: "tuR", text: "EXAMPLE: some tool" }]);
+  const back = mapClaudeEvent(s, { type: "assistant", parent_tool_use_id: "tuR2", message: { content: [{ type: "tool_use", id: "x2", name: "SendMessage", input: { to: "main", message: "done" } }] } });
+  assert.equal(back[0].to, "producer");
+  const end = mapClaudeEvent(s, { type: "system", subtype: "task_updated", task_id: "a63f827200a8e4b5d", patch: { status: "completed" } });
+  assert.equal(end[0].state, "end");
+  assert.equal(end[0].agent, "researcher");
+});

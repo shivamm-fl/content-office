@@ -156,6 +156,19 @@ export function ChatView({ office, threadId, newAgent }: { office: Office; threa
               return <p key={m.id} className={`text-center text-xs leading-relaxed ${b.error ? "text-coral" : "text-dim"}`}>{b.text} <span className="opacity-60">{clock(m.created_at)}</span></p>;
             }
             if (m.kind === "tool") return <ToolLine key={m.id} m={m} />;
+            if (m.kind === "dm") {
+              const b = m.body as { from: string; to: string; text: string };
+              const from = agentOf(team, b.from);
+              const to = agentOf(team, b.to);
+              return (
+                <div key={m.id} className="ml-3 rounded-xl border border-wall bg-desk/60 px-3 py-2" style={{ borderLeft: `3px solid ${from.color}` }}>
+                  <div className="flex items-center gap-1.5 text-xs text-dim">
+                    <AgentDot color={from.color} size={7} />{from.name}<span aria-hidden>→</span><AgentDot color={to.color} size={7} />{to.name}
+                  </div>
+                  <p className="mt-1 whitespace-pre-wrap text-[14px] leading-relaxed">{b.text}</p>
+                </div>
+              );
+            }
             if (m.kind === "handoff") {
               const id = String((m.body as { tool_id?: string }).tool_id);
               return <Handoff key={m.id} m={m} team={team} children={children.get(id) ?? []} live={activeSubagents.has(id) || (!!active && !(children.get(id) ?? []).length)} />;

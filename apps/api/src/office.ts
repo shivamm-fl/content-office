@@ -591,6 +591,15 @@ export class Office extends DurableObject<Env> {
         this.broadcast({ t: "task", task: this.toTask(this.one("SELECT * FROM tasks WHERE id = ?", ev.id)!) });
         return;
       }
+      case "dm": {
+        const name = (slug: string) => this.team().agents.find((a) => a.slug === slug)?.name ?? slug;
+        if (threadId && ev.text.trim()) {
+          this.addMessage({ thread_id: threadId, run_id: run.id, author: `agent:${ev.from}`, kind: "dm", body: { from: ev.from, to: ev.to, text: ev.text } });
+        }
+        this.setDesk(ev.from, "working", `Talking to ${name(ev.to)}`, run.id);
+        if (ev.to !== run.agent) this.setDesk(ev.to, "working", `Reading a message from ${name(ev.from)}`, run.id);
+        return;
+      }
       case "heartbeat":
         return;
       case "done": {

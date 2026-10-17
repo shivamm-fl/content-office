@@ -23,7 +23,7 @@ export interface Thread {
   id: string; agent: string; title: string; kind: string; created_at: number; updated_at: number;
   last_run: string | null; session_id: string | null; preview: string | null;
 }
-export type MessageKind = "text" | "tool" | "question" | "answer" | "approval" | "decision" | "system" | "handoff";
+export type MessageKind = "text" | "tool" | "question" | "answer" | "approval" | "decision" | "system" | "handoff" | "dm";
 export interface Message {
   id: string; thread_id: string; run_id: string | null; author: string; kind: MessageKind;
   body: Record<string, unknown>; parent: string | null; created_at: number;
@@ -59,6 +59,8 @@ export type RunnerEvent =
   | { t: "limit"; text: string; resets_at: number | null }
   | { t: "ask"; id: string; agent: string; kind: "question" | "approval"; title: string; body: string; options: string[] }
   | { t: "task"; id: string; from: string; to: string; body: string }
+  /** One agent messaged another directly inside the session. */
+  | { t: "dm"; from: string; to: string; text: string }
   | { t: "heartbeat" }
   | { t: "done"; status: "done" | "failed"; summary: string; transcript_key: string | null; session_id: string | null };
 

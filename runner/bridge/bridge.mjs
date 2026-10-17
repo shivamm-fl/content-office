@@ -14,7 +14,7 @@ import os from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync, gzipSync } from "node:zlib";
-import { mapClaudeEvent, newMapState, parseFrontmatter } from "./events.mjs";
+import { mapClaudeEvent, newMapState, parseFrontmatter, roster } from "./events.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "../..");
@@ -25,7 +25,7 @@ const TEAM_DIR = join(ROOT, "teams", TEAM);
 const CLAUDE_BIN = process.env.CLAUDE_BIN || "claude";
 const ALLOWED_TOOLS = [
   "Bash", "Read", "Write", "Edit", "MultiEdit", "Glob", "Grep", "WebSearch", "WebFetch",
-  "Agent", "Task", "Skill", "TodoWrite", "NotebookEdit", "mcp__office",
+  "Agent", "Task", "SendMessage", "Skill", "TodoWrite", "NotebookEdit", "mcp__office",
 ].join(",");
 
 const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
@@ -133,6 +133,11 @@ const TOOLS = [
     inputSchema: { type: "object", properties: { to: { type: "string" }, message: { type: "string" } }, required: ["to", "message"] },
   },
   {
+    name: "team_roster",
+    description: "Who is on the team in this session and how to reach them: teammate slug -> the address for SendMessage (the lead is \"main\"). Use it to talk to a teammate directly with SendMessage(to=<address>, message=...); their answer comes back to you as a message. A teammate missing from the roster is not working yet: ask the lead (SendMessage to \"main\") to bring them in.",
+    inputSchema: { type: "object", properties: {} },
+  },
+  {
     name: "read_ai_course",
     description: "Read a file of the private publishing repo ai-course (read-only), e.g. state/covered.json, state/phase5_status.json, state/insights.json, state/yt_insights.json, state/learnings.md, roadmap/ai-engineer.json, reels/<folder>/script.txt, social/<folder>.hi.caption.txt.",
     inputSchema: { type: "object", properties: { path: { type: "string" } }, required: ["path"] },
@@ -159,6 +164,14 @@ function startMcp(ctx) {
       if (!ctx.team.agents.some((x) => x.slug === to)) return text(`Unknown teammate "${to}". Teammates: ${ctx.team.agents.map((x) => x.slug).join(", ")}`, true);
       ctx.link.send({ t: "task", id: rid("task"), from: agent, to, body: String(a.message || "").slice(0, 8000) });
       return text(`Task left for ${to}. The owner decides when it starts.`);
+    }
+    if (name === "team_roster") {
+      const r = ctx.roster();
+      const names = Object.fromEntries(ctx.team.agents.map((x) => [x.slug, x.name]));
+      const lines = Object.entries(r).map(([slug, addr]) => `${slug} (${names[slug] ?? slug}): ${addr}`);
+      const absent = ctx.team.agents.filter((x) => !(x.slug in r)).map((x) => x.slug);
+      const missing = absent.length ? [`Not working yet: ${absent.join(", ")} (ask main to bring one in)`] : [];
+      return text(["On the team now (slug: SendMessage address):", ...lines, ...missing].join("\n"));
     }
     if (name === "read_ai_course") {
       const r = await fetch(`${OFFICE}/api/runner/ai-course?team=${TEAM}&run=${RUN_ID}&path=${encodeURIComponent(a.path || "")}`, { headers: { "X-Run-Token": ctx.token } });
@@ -287,6 +300,7 @@ async function main() {
   log(`claimed: agent ${work.agent.slug}, ${work.messages.length} message(s)`);
   const ctx = { token: work.token, team: work.team, waiting: 0, link: null, resolveAsk: () => undefined, currentAgent: () => work.agent.slug };
   const state = newMapState(work.agent.slug);
+  ctx.roster = () => roster(state);
   let child = null;
   let ending = false;
   let busy = true;
