@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Context compaction kya hai</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="48.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="48.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="48.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="48.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F"], tag: "AI ENGINEER ROADMAP" });
+      Viz.install(M);
+      const { tl, S, P, Ed, W } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF");
+      const { ACC, CYAN, HOT, GOOD, MUTED } = M; const ca = M.ca; const at = (sc, w, n) => M.W(sc, w, n);
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label, t) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${ca(col, 0.55)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;right:0;top:14px;font-size:36px;color:${col};text-align:center`; } return show(d, t, { opacity: 0 }); };
+      const row = (host, x, y, w, h, col, txt) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:12px;background:${ca(col, 0.28)};border:2px solid ${ca(col, 0.75)};font:700 34px var(--code);color:${col};display:flex;align-items:center;justify-content:center`, txt || "");
+      const stamp = (host, txt, x, y, col, t) => { const d = el(host, `left:${x}px;top:${y}px;padding:14px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 48px var(--code);color:${col};white-space:nowrap`, txt); gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const tabs = (host, active, tShow, tAct) => ["1 SUMMARIZE", "2 RESTART", "3 PRUNE"].forEach((lab, i) => {
+        const d = el(host, `left:${60 + i * 320}px;top:205px;width:300px;height:76px;border-radius:38px;border:2px solid ${ca(ACC, 0.6)};background:${ca(ACC, 0)};font:700 34px var(--code);color:${ACC};display:flex;align-items:center;justify-content:center;white-space:nowrap`, lab);
+        show(d, tShow, { opacity: 0 });
+        if (i === active) tl.to(d, { backgroundColor: ca(ACC, 1), color: "#0B1220", duration: 0.25, immediateRender: false }, tAct);
+        else if (tAct <= tShow) tl.set(d, { opacity: 0.45 }, tShow + 0.5); });
+
+      // ===== A: window fills, hits LIMIT, folds into a summary card, new window opens =====
+      M.hook(["Context", "compaction?"], { size: 96, top: 250 });
+      // diagram: A
+      const wl = panel(A, 90, 520, 400, 760, CYAN, "WINDOW", 0.05);
+      const rowsA = []; for (let i = 0; i < 11; i++) { const r = row(A, 120, 1210 - (i + 1) * 58, 340, 44, CYAN); rowsA.push(r); show(r, 0.4 + i * 0.32, { opacity: 0, y: 16 }); }
+      const lim = el(A, `left:100px;top:612px;width:380px;height:0;border-top:4px dashed ${HOT}`); show(lim, at("A", "limit"), { opacity: 0 });
+      const limT = el(A, `left:100px;top:566px;width:380px;text-align:center;font:700 34px var(--code);color:${HOT}`, "LIMIT"); show(limT, at("A", "limit"), { opacity: 0 });
+      rowsA.forEach((r, i) => tl.to(r, { opacity: 0, duration: 0.3, immediateRender: false }, at("A", "summary") + i * 0.02));
+      tl.to(lim, { opacity: 0, duration: 0.3, immediateRender: false }, at("A", "summary")); tl.to(limT, { opacity: 0, duration: 0.3, immediateRender: false }, at("A", "summary"));
+      const card = el(A, `left:120px;top:920px;width:340px;height:260px;border-radius:20px;background:${ca(ACC, 0.18)};border:3px solid ${ACC}`,
+        `<div style="font:700 34px var(--code);color:${ACC};text-align:center;margin-top:20px">SUMMARY</div><div style="margin:22px 30px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)}"></div><div style="margin:18px 30px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)};width:70%"></div><div style="margin:18px 30px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)};width:85%"></div>`);
+      show(card, at("A", "summary") + 0.15, { opacity: 0, scale: 0.9 });
+      const wr = panel(A, 590, 520, 400, 760, GOOD, "NEW WINDOW", at("A", "nayi"));
+      M.arrow(A, { from: [492, 900], to: [586, 900], color: ACC, w: 8 }).show(at("A", "nayi") + 0.1, 0.3);
+      tl.to(card, { x: 500, y: -110, duration: 0.7, ease: "power3.inOut", immediateRender: false }, at("A", "usi"));
+      tl.to(wl, { opacity: 0.3, duration: 0.4, immediateRender: false }, at("A", "usi") + 0.3);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: summarize 30 messages =====
+      tabs(B, 0, at("B", "steps"), at("B", "pahla"));
+      // diagram: B
+      const cells = []; for (let i = 0; i < 30; i++) { const c = row(B, 252 + (i % 6) * 100, 330 + Math.floor(i / 6) * 84, 84, 66, CYAN); cells.push(c); show(c, at("B", "30") + i * 0.012, { opacity: 0, scale: 0.7 }); }
+      show(el(B, `left:0;width:1080px;top:760px;text-align:center;font:700 40px var(--code);color:${CYAN}`, "30 MESSAGES"), at("B", "30"), { opacity: 0 });
+      M.pill(B, "EXAMPLE", at("B", "30") + 0.3, { x: 400, y: 825, size: 30, kind: "out" });
+      cells.forEach((c, i) => tl.to(c, { opacity: 0.18, scale: 0.8, duration: 0.4, immediateRender: false }, at("B", "summarize") + i * 0.008));
+      M.arrow(B, { from: [540, 880], to: [540, 960], color: ACC, w: 8 }).show(at("B", "summarize"), 0.3);
+      const sc = panel(B, 160, 975, 760, 320, ACC, "SUMMARY", at("B", "summarize") + 0.15);
+      const c1 = el(B, `left:200px;top:1050px;width:680px;height:92px;border-radius:14px;border:2px solid ${GOOD};background:${ca(GOOD, 0.15)};font:700 40px var(--code);color:${GOOD};display:flex;align-items:center;justify-content:center`, "✓ DECISIONS"); show(c1, at("B", "Decisions"), { opacity: 0, y: 16 });
+      const c2 = el(B, `left:200px;top:1165px;width:680px;height:92px;border-radius:14px;border:2px solid ${HOT};background:${ca(HOT, 0.15)};font:700 40px var(--code);color:${HOT};display:flex;align-items:center;justify-content:center`, "! OPEN BUGS"); show(c2, at("B", "unresolved"), { opacity: 0, y: 16 });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ===== C: restart with only the summary =====
+      tabs(C, 1, P("C", 0) - 0.3, P("C", 0));
+      // diagram: C
+      const old = panel(C, 190, 330, 700, 250, MUTED, "OLD WINDOW · FULL", P("C", 0) - 0.3);
+      [0, 1, 2].forEach((i) => show(row(C, 220, 400 + i * 54, 640, 38, MUTED), P("C", 0) - 0.3, { opacity: 0 }));
+      show(el(C, `left:790px;top:318px;width:90px;font:700 70px var(--code);color:${HOT};text-align:center`, "✗"), at("C", "restart"), { opacity: 0, scale: 1.3 });
+      M.arrow(C, { from: [540, 600], to: [540, 700], color: ACC, w: 8 }).show(at("C", "nayi"), 0.3);
+      const nw = panel(C, 190, 720, 700, 560, GOOD, "NEW WINDOW", at("C", "nayi"));
+      const cardC = el(C, `left:240px;top:600px;width:600px;height:220px;border-radius:20px;background:${ca(ACC, 0.18)};border:3px solid ${ACC}`,
+        `<div style="font:700 36px var(--code);color:${ACC};text-align:center;margin-top:18px">SUMMARY</div><div style="margin:18px 40px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)}"></div><div style="margin:16px 40px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)};width:70%"></div><div style="margin:16px 40px 0;height:14px;border-radius:7px;background:${ca(ACC, 0.7)};width:85%"></div>`);
+      show(cardC, at("C", "summary"), { opacity: 0, y: 0, scale: 0.9 }); tl.set(cardC, { y: 0 }, 0);
+      tl.fromTo(cardC, { top: 600 }, { top: 790, duration: 0.6, ease: "power3.out", immediateRender: false }, at("C", "summary"));
+      show(el(C, `left:190px;width:700px;top:1090px;text-align:center;font:700 40px var(--code);color:${GOOD}`, "FREE SPACE"), at("C", "sirf") + 0.4, { opacity: 0 });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ===== D: prune tool outputs; recall falls as tokens grow =====
+      tabs(D, 2, P("D", 0) - 0.3, at("D", "prune"));
+      // diagram: D
+      panel(D, 60, 340, 480, 830, CYAN, "WINDOW", P("D", 0));
+      const kinds = ["c", "t", "c", "t", "c", "t", "c"], rowsD = [];
+      kinds.forEach((k, i) => { const r = k === "c" ? row(D, 90, 410 + i * 105, 420, 76, CYAN) : row(D, 90, 410 + i * 105, 420, 76, MUTED, "TOOL OUTPUT"); rowsD.push(r); show(r, P("D", 0) + 0.15 + i * 0.1, { opacity: 0, y: 16 }); });
+      rowsD.forEach((r, i) => { if (kinds[i] === "t") { tl.to(r, { borderColor: HOT, color: HOT, duration: 0.3, immediateRender: false }, at("D", "Redundant")); tl.to(r, { opacity: 0, x: -60, duration: 0.4, ease: "power2.in", immediateRender: false }, at("D", "hatao")); }
+        else { const n = kinds.slice(0, i).filter((q) => q === "t").length; tl.to(r, { y: -n * 105, duration: 0.5, ease: "power3.inOut", immediateRender: false }, at("D", "hatao") + 0.3); } });
+      show(el(D, `left:90px;top:1100px;width:420px;text-align:center;font:700 34px var(--code);color:${HOT}`, "REDUNDANT"), at("D", "outputs"), { opacity: 0 });
+      const pl = M.plot(D, { x: 580, y: 340, w: 440, h: 700, xlabel: "TOKENS", ylabel: "RECALL", series: [{ pts: [[0, 0.92], [0.35, 0.8], [0.7, 0.5], [1, 0.18]], color: HOT }] });
+      pl.show(at("D", "tokens") - 0.2); pl.draw(at("D", "tokens"), 1.4); pl.dot(at("D", "ghatta"), 0, 3, { color: HOT });
+      M.pill(D, "ILLUSTRATION", at("D", "tokens"), { x: 590, y: 1070, size: 34, kind: "out" });
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ===== E: summary can lose a detail =====
+      M.icon(E, "warn", 440, 200, 200, HOT).show(at("E", "chetata") - 0.5);
+      M.pill(E, "TOO TIGHT", at("E", "aggressive"), { x: 370, y: 430, size: 40, kind: "out" });
+      // diagram: E
+      panel(E, 120, 560, 840, 640, ACC, "SUMMARY", P("E", 0));
+      const lines = [["DB: Postgres", GOOD], ["Bug: login fails", GOOD], ["Retry limit = 3", MUTED]];
+      const rE = lines.map(([t, c], i) => { const r = row(E, 170, 650 + i * 130, 740, 100, c, t); show(r, P("E", 0) + 0.5 + i * 0.35, { opacity: 0, y: 16 }); return r; });
+      tl.to(rE[2], { borderColor: HOT, color: HOT, backgroundColor: ca(HOT, 0.15), duration: 0.3, immediateRender: false }, at("E", "kho"));
+      tl.set(rE[2], { textDecoration: "line-through" }, at("E", "kho"));
+      stamp(E, "LOST", 540, 1090, HOT, at("E", "sakta"));
+      M.pill(E, "EXAMPLE", P("E", 0) + 0.3, { x: 410, y: 1250, size: 30, kind: "out" });
+      M.fit(E, { y: 190, h: 1110 });
+
+      // ===== F: memory kept, not every detail; comment + follow =====
+      // diagram: F
+      const keep = panel(F, 70, 230, 450, 330, GOOD, "MEMORY", at("F", "memory"));
+      M.icon(F, "check", 235, 340, 120, GOOD).show(at("F", "memory") + 0.2);
+      const all = panel(F, 560, 230, 450, 330, HOT, "EVERY DETAIL", at("F", "har"));
+      M.icon(F, "cross", 725, 340, 120, HOT).show(at("F", "nahi"));
+      const cc = panel(F, 120, 660, 840, 420, CYAN, "COMMENT KARO", at("F", "tumhari"));
+      M.pill(cc, "MESSAGES = ?", at("F", "kitne"), { x: 230, y: 120, size: 40, kind: "out" });
+      show(el(cc, "left:40px;right:40px;bottom:40px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 30px var(--code);color:#B5C0D6;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("F", "Comment"), { opacity: 0 });
+      show(el(F, `left:0;width:1080px;top:1130px;text-align:center;font:700 48px var(--code);color:#E8EDF6`, "@ig.learnai"), at("F", "follow") - 0.7, { opacity: 0 });
+      const fb = M.pill(F, "+  FOLLOW", at("F", "follow") - 0.4, { x: 380, y: 1210, size: 38, kind: "acc" });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("F", "follow"));
+      M.fit(F, { y: 200, h: 1100 });
+
+      ["B", "C", "D", "E", "F"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { context: "cyan", window: "cyan", compaction: "gold", summary: "gold", summarize: "gold", restart: "good", prune: "hot", recall: "hot", memory: "good", aggressive: "hot", kho: "hot" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+      </script>
+  </body>
+</html>

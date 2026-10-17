@@ -1,0 +1,14 @@
+Context compaction kya hota hai? Lambi chat ki summary banakar nayi window shuru karna.
+
+Jab chat window ki limit ke paas pahunche, to teen steps chalte hain:
+1. Summarize: decisions aur unresolved bugs rakhkar chhoti summary
+2. Restart: nayi window mein sirf wahi summary
+3. Prune: redundant tool outputs hatao, kyunki tokens badhne par model ka recall ghatta hai
+
+Anthropic ki engineering post ke hisaab se zyada aggressive compaction mein zaroori context kho sakta hai. Compaction memory bachati hai, har detail nahi.
+
+Tumhari sabse lambi AI chat kitne messages ki rahi? Comment mein likho.
+
+Aise AI engineer concepts ke liye follow karo.
+
+#aiengineer #llm #contextwindow

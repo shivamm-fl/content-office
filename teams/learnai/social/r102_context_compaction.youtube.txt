@@ -1,0 +1,8 @@
+Lambi AI chat ko summary mein kaise badalte hain?
+
+Context compaction kya hota hai? Jab chat context window ki limit ke paas pahunchti hai, to uski summary banakar nayi window usi summary se shuru ki jaati hai. Saath mein redundant tool outputs hata kar (pruning) tokens bachaye jaate hain, kyunki context badhne par model ka recall ghatta hai. Anthropic ki engineering post ke hisaab se zyada aggressive compaction mein zaroori context kho sakta hai.
+
+Is video mein: summarize, restart, prune, aur compaction ka risk.
+
+Sources:
+https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents

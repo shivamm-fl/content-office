@@ -1,0 +1,97 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "min": {
+    "A": 9,
+    "B": 8,
+    "C": 5,
+    "D": 8,
+    "E": 6,
+    "F": 8
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "tick",
+      "B",
+      0,
+      0.3
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "save",
+      "B",
+      2,
+      0.2
+    ],
+    [
+      "click",
+      "C",
+      0,
+      0.2
+    ],
+    [
+      "pop",
+      "D",
+      0,
+      0.3
+    ],
+    [
+      "slice",
+      "D",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "E",
+      0,
+      -0.1
+    ],
+    [
+      "err",
+      "E",
+      0,
+      0.4
+    ],
+    [
+      "ok",
+      "F",
+      0,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Context compaction क्या होता है? || सीधा जवाब: | chat जब window की limit के पास पहुँचे, | तो उसकी summary बनाओ, | और नई window उसी से शुरू करो।",
+      "B": "तीन steps हैं। || मान लो 30{thirty} messages की chat है। || पहला, summarize। | Decisions और unresolved bugs रखकर छोटी summary बनती है।",
+      "C": "दूसरा, restart। | नई window में सिर्फ़ वही summary जाती है।",
+      "D": "तीसरा, prune। | Redundant tool outputs हटाओ, | क्योंकि tokens बढ़ने पर model का recall घटता है।",
+      "E": "लेकिन Anthropic चेताता है: | ज़्यादा aggressive compaction में जरूरी context खो सकता है।",
+      "F": "@emph Compaction memory बचाती है, हर detail नहीं। || तुम्हारी सबसे लंबी AI chat कितने messages की रही? Comment में लिखो। | और AI engineer concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
