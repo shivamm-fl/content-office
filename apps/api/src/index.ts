@@ -12,7 +12,9 @@ type C = Context<{ Bindings: Env; Variables: { owner: string } }>;
 const app = new Hono<{ Bindings: Env; Variables: { owner: string } }>();
 
 const office = (env: Env, slug: string) => env.OFFICE.get(env.OFFICE.idFromName(slug));
-const bad = (c: C, status: 400 | 401 | 403 | 404 | 409 | 500, error: string) => c.json({ error }, status);
+const bad = (c: C, status: 400 | 401 | 403 | 404 | 409 | 429 | 500, error: string) => c.json({ error }, status);
+const MAX_LOGIN_FAILS = 5;
+const LOGIN_LOCK_SECONDS = 15 * 60;
 
 app.onError((err, c) => {
   console.error(err);
@@ -21,11 +23,17 @@ app.onError((err, c) => {
 
 // ---------- owner login ----------
 app.post("/api/login", async (c) => {
+  // Wrong keys are counted per network (KV, 15 minutes); after 5 the network waits.
+  const failKey = `login-fail:${c.req.header("CF-Connecting-IP") ?? "unknown"}`;
+  const fails = Number((await c.env.TRANSCRIPTS.get(failKey)) ?? "0");
+  if (fails >= MAX_LOGIN_FAILS) return bad(c, 429, "Too many wrong tries. Wait 15 minutes and try again.");
   const { key } = await c.req.json<{ key?: string }>().catch(() => ({ key: undefined }));
   if (!key || !c.env.OWNER_KEY || !timingSafeEqual(key.trim(), c.env.OWNER_KEY)) {
+    await c.env.TRANSCRIPTS.put(failKey, String(fails + 1), { expirationTtl: LOGIN_LOCK_SECONDS });
     await new Promise((r) => setTimeout(r, 800));
     return bad(c, 401, "wrong key");
   }
+  if (fails) await c.env.TRANSCRIPTS.delete(failKey);
   c.header("Set-Cookie", sessionCookie(await makeSession(c.env.SESSION_SECRET, c.env.OWNER_LOGIN)));
   return c.json({ ok: true, owner: c.env.OWNER_LOGIN });
 });
