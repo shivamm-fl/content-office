@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="53" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="52" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="53" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="53" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="53" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="52" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="52" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="52" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -93,7 +93,7 @@
       header(C, "1 · STOP CONDITION", M.P("C", 0));
       // diagram: C
       const dots = []; for (let i = 0; i < 10; i++) { const x = 70 + (i % 5) * 190, y = 460 + Math.floor(i / 5) * 175;
-        const d = el(C, `left:${x}px;top:${y}px;width:150px;height:150px;border-radius:50%;border:4px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .12)};display:flex;align-items:center;justify-content:center;font:700 60px var(--code);color:#E8EDF6`, String(i + 1)); show(d, M.P("C", 1) + i * 0.04, { opacity: 0, scale: 0.7 }); dots.push(d); }
+        const d = el(C, `left:${x}px;top:${y}px;width:150px;height:150px;border-radius:50%;border:4px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .12)};display:flex;align-items:center;justify-content:center;font:700 60px var(--code);color:#E8EDF6`, String(i + 1)); show(d, M.P("C", 0) + 0.5 + i * 0.05, { opacity: 0, scale: 0.7 }); dots.push(d); }
       const t10 = at("C", "10"); dots.forEach((d, i) => tl.to(d, { backgroundColor: M.ca(ACC, .55), borderColor: ACC, duration: 0.2, immediateRender: false }, t10 + i * 0.11));
       chip(C, "MAX 10", t10 - 0.1, 360, 330, { size: 52 });
       chip(C, "EXAMPLE", t10, 740, 340, { col: CYAN, size: 36 });
@@ -125,9 +125,9 @@
       const nx = M.box(E, { x: 610, y: 340, w: 400, h: 270, label: "NEXT STEP", icon: "arrow", color: GOOD }); nx.show(M.P("E", 0) + 0.5);
       M.arrow(E, { from: [480, 475], to: [600, 475], color: ACC, w: 12 }).show(M.P("E", 0) + 0.6, 0.3);
       const bar2 = el(E, `left:511px;top:330px;width:58px;height:290px;background:repeating-linear-gradient(0deg,${HOT} 0 30px,#fff 30px 60px);border-radius:8px;transform-origin:50% 0`); tl.set(bar2, { opacity: 0, scaleY: 0 }, 0);
-      tl.to(bar2, { opacity: 1, scaleY: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, at("E", "pause") - 0.3);
+      tl.to(bar2, { opacity: 1, scaleY: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, at("E", "checkpoint") + 0.2);
       chip(E, "STUCK", at("E", "atakne"), 270, 650, { col: HOT, size: 44 });
-      const hu = M.icon(E, "user", 390, 740, 300, ACC); hu.show(at("E", "human", 1));
+      const hu = M.icon(E, "user", 390, 740, 300, ACC); hu.show(at("E", "human", 0) + 0.3);
       chip(E, "APPROVE ✓", at("E", "feedback"), 300, 1090, { col: GOOD, size: 46 });
       chip(E, "STOP ✗", at("E", "feedback") + 0.2, 780, 1090, { col: HOT, size: 46 });
 
