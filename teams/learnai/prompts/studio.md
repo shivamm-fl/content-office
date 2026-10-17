@@ -12,6 +12,8 @@ You run a studio session on GitHub Actions: one reel, start to finish. The owner
   | `render_job.py start` / `wait` (step 6) | `mcp__office__render_video(folder="reels/<folder>")` (about 10 minutes, it waits) |
   | `render_cover.py` (step 8) | `mcp__office__render_cover(folder="<folder>", pill="<CATEGORY>", headline="... <em>key words</em>")` |
   | `ci_verify_reel.py <id> --skip-review` (step 12) | `mcp__office__studio_gate(item="<id>")` |
+  | a logo, product image or other picture from the web | `mcp__office__fetch_image(url=..., folder="reels/<folder>", name="onit-logo")` -> `reels/<folder>/assets/<name>.<ext>` |
+  | a real screenshot of a page (job post, release note, repo, app) | `mcp__office__capture_page(url=..., folder="reels/<folder>", name="onit-job-post")` -> a PNG in `assets/`, then Read it |
   Everything else runs in your shell as written (`new_reel.py`, `lint_script.py`, `lint_visuals.py`, `hookscore.py`, `beats.py`, `frames.py`, `caption.py`, `title.py`, `validate_queue.py`) with `.venv/bin/python`.
 - **Do not run** `visual_review.py` or `fact_review.py`: independent reviewers run after your session, in a separate job, and a FIX session follows when they find problems.
 - **The owner's voice** reads English sentences slowly: keep the script tight (owner target about 60 seconds, 130 to 140 spoken words for interview reels). Phrases are short and punchy (owner-voice skill: "Writing for this voice").

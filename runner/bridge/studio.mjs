@@ -4,7 +4,7 @@
 // a script, skill or template the session changed is refused, so nothing the session wrote runs with a key.
 import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
 
 const PROTECTED = ["scripts", ".claude/skills", "reels/_template", "reels/_kit", "brand/covers/_template", "brand/fonts"];
@@ -113,6 +113,16 @@ export const STUDIO_TOOLS = [
     inputSchema: { type: "object", properties: { folder: { type: "string", description: "the reel folder name, e.g. q101_slug" }, pill: { type: "string" }, headline: { type: "string" } }, required: ["folder", "pill", "headline"] },
   },
   {
+    name: "fetch_image",
+    description: "Download a picture from the web into the reel: a company or product logo, a product image, a chart from a source page (team rule 11: credit the source on screen). Saved as <folder>/assets/<name>.<ext>. PNG, JPEG, WebP, GIF or SVG, at most 8 MB. Find the image URL first with WebSearch / WebFetch (the company's site, press kit, Wikimedia Commons).",
+    inputSchema: { type: "object", properties: { url: { type: "string" }, folder: { type: "string", description: "reels/<folder> or brand/covers/<folder>" }, name: { type: "string", description: "file name without extension, e.g. onit-logo" } }, required: ["url", "folder", "name"] },
+  },
+  {
+    name: "capture_page",
+    description: "Take a real screenshot of a web page (a job post, a release note, a GitHub repo, an app page) with headless Chrome: <folder>/assets/<name>.png. Default 1080x1350 (portrait); give width/height for another size. Read the PNG afterwards to check it, and crop it with ffmpeg in your shell if needed. Blur private people's names, emails and faces before you use it (team rule 11).",
+    inputSchema: { type: "object", properties: { url: { type: "string" }, folder: { type: "string" }, name: { type: "string" }, width: { type: "number" }, height: { type: "number" } }, required: ["url", "folder", "name"] },
+  },
+  {
     name: "studio_gate",
     description: "Run the automatic gate for the item (scripts/ci_verify_reel.py <id> --skip-review): files, video format, length, loudness, HyperFrames check, caption lint, cover, hook, visuals lint. Your work is done when it prints ok; the independent reviews run after your session.",
     inputSchema: { type: "object", properties: { item: { type: "string" } }, required: ["item"] },
@@ -200,6 +210,41 @@ export function makeStudio({ teamDir, python, onProgress }) {
       onProgress(`Rendering the cover of ${a.folder}`);
       const r = await py(["scripts/render_cover.py", String(a.folder), String(a.pill), String(a.headline)], { timeoutMs: 10 * 60_000 });
       return text(r.out.slice(-2500) || "done", r.code !== 0);
+    }
+    if (name === "fetch_image" || name === "capture_page") {
+      const { rel, abs } = teamFolder(teamDir, a.folder);
+      const base = String(a.name ?? "").replace(/[^\w-]/g, "").slice(0, 60);
+      if (!base) return text("give a file name, e.g. onit-logo", true);
+      let url;
+      try { url = new URL(String(a.url)); } catch { return text("not a valid URL", true); }
+      if (url.protocol !== "https:" && url.protocol !== "http:") return text("only http(s) URLs", true);
+      if (/^(localhost|127\.|10\.|192\.168\.|169\.254\.|0\.|\[)/.test(url.hostname)) return text("not a public address", true);
+      mkdirSync(join(abs, "assets"), { recursive: true });
+      if (name === "fetch_image") {
+        onProgress(`Downloading ${url.hostname} image for ${rel}`);
+        const r = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (content-office studio)" }, redirect: "follow", signal: AbortSignal.timeout(60_000) }).catch((e) => ({ ok: false, status: String(e) }));
+        if (!r.ok) return text(`download failed (${r.status})`, true);
+        const type = (r.headers.get("content-type") ?? "").split(";")[0].trim();
+        const ext = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif", "image/svg+xml": "svg" }[type];
+        if (!ext) return text(`not an image (${type || "unknown type"}); find the direct image URL`, true);
+        const buf = Buffer.from(await r.arrayBuffer());
+        if (buf.length > 8 * 1024 * 1024) return text("image larger than 8 MB", true);
+        const out = join(abs, "assets", `${base}.${ext}`);
+        writeFileSync(out, buf);
+        return text(`Saved ${rel}/assets/${base}.${ext} (${(buf.length / 1024).toFixed(0)} KB, from ${url.hostname}). Credit "Source: ${url.hostname.replace(/^www\./, "")}" on screen.`);
+      }
+      const w = Math.min(2160, Math.max(320, Number(a.width) || 1080));
+      const h = Math.min(3840, Math.max(320, Number(a.height) || 1350));
+      const out = join(abs, "assets", `${base}.png`);
+      onProgress(`Screenshot of ${url.hostname} for ${rel}`);
+      let r = { code: 1, out: "" };
+      for (const bin of ["google-chrome", "chromium", "chromium-browser"]) {
+        r = await run(bin, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--mute-audio", `--window-size=${w},${h}`, `--screenshot=${out}`, "--virtual-time-budget=8000", url.href],
+          { cwd: abs, env: stepEnv(), timeoutMs: 90_000 });
+        if (r.code === 0 && existsSync(out)) break;
+      }
+      if (!existsSync(out)) return text(`screenshot failed:\n${r.out.slice(-1200)}`, true);
+      return text(`Saved ${rel}/assets/${base}.png (${w}x${h}) from ${url.hostname}. Read it to check what it shows; credit "Source: ${url.hostname.replace(/^www\./, "")}" on screen.`);
     }
     if (name === "studio_gate") {
       if (!/^[a-z]\d{2,4}$/.test(String(a.item))) return text("bad item id", true);

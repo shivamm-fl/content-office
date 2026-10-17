@@ -8,7 +8,19 @@ import { EmptyFloor, Floor } from "./Floor";
 import { dayReels } from "./Chat";
 import { Empty, agentOf, go, isActive, timeAgo } from "./ui";
 
-function UsageMeter({ usage }: { usage: Usage | null }) {
+function UsageMeter({ usage, onResume }: { usage: Usage | null; onResume: () => Promise<unknown> }) {
+  const [busy, setBusy] = useState(false);
+  if (usage?.status === "rejected") {
+    return (
+      <div className="mt-3 rounded-xl border border-coral/60 bg-desk px-3.5 py-3">
+        <p className="text-[13.5px] leading-snug">
+          Claude usage limit reached{usage.five_hour_resets ? `, resets ${new Date(usage.five_hour_resets).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}` : ""}. New work waits until then.
+        </p>
+        <button disabled={busy} onClick={async () => { setBusy(true); try { await onResume(); } finally { setBusy(false); } }}
+          className="mt-2 rounded-lg border border-wall px-3 py-1.5 text-[13px]">{busy ? "Resuming…" : "I switched accounts: resume now"}</button>
+      </div>
+    );
+  }
   if (!usage || (usage.five_hour == null && usage.seven_day == null)) return null;
   const bar = (label: string, v: number | null, resets: number | null) => v == null ? null : (
     <div className="flex-1">
@@ -82,7 +94,7 @@ export function OfficeView({ office }: { office: Office }) {
           </div>
           <span className={`text-xs ${office.connected ? "text-dim" : "text-coral"}`}>{office.connected ? "Live" : "Reconnecting"}</span>
         </div>
-        <UsageMeter usage={state.usage} />
+        <UsageMeter usage={state.usage} onResume={office.resume} />
       </header>
 
       <button onClick={startDay} disabled={starting} className={`mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left ${dayRun ? "border border-gold/70 bg-desk" : "bg-gold text-ink"}`}>

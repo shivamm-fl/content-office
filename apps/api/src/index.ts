@@ -90,6 +90,12 @@ app.post("/api/teams/:team/day", async (c) => {
   return c.json(await office(c.env, slug).startDay(slug));
 });
 
+app.post("/api/teams/:team/resume", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  return c.json(await office(c.env, slug).resume(slug));
+});
+
 app.post("/api/teams/:team/sync", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");

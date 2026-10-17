@@ -261,6 +261,22 @@ export class Office extends DurableObject<Env> {
     return { thread: this.getThreadRow(thread.id)!, message };
   }
 
+  /** The owner switched Claude accounts or tokens: stop waiting for the usage limit to reset and start the queue now. */
+  async resume(slug: string): Promise<{ started: number }> {
+    this.ensureTeam(slug);
+    this.setMeta("blocked_until", null);
+    const u = this.usage();
+    if (u) {
+      const fresh: Usage = { ...u, status: "allowed", five_hour: null, updated_at: Date.now() };
+      this.setMeta("usage", JSON.stringify(fresh));
+      this.broadcast({ t: "usage", usage: fresh });
+    }
+    const before = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE status = 'queued'")!.n;
+    await this.startQueued();
+    const after = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE status = 'queued'")!.n;
+    return { started: before - after };
+  }
+
   /** The team's standup, called by the owner (never on a schedule). One sync conversation per day. */
   async startSync(slug: string): Promise<{ thread: Thread }> {
     const team = this.ensureTeam(slug);

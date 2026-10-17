@@ -60,7 +60,7 @@ Ask: where does a normal Indian person, student or developer FEEL this concept b
 - Money: a refund promised wrongly, UPI charged twice, an EMI or bill miscalculated, a free plan that is not free, a coding assistant that ate the usage.
 - Time / queues: Tatkal booking in the first second, a delivery ETA, an OTP that never came, a waiting-list number.
 - Job: interview rejection for the obvious answer, a production bug at 2 AM, a manager asking "kaam hua?" when it did not.
-- Daily apps (no logos; say a brand only as a fetched fact): gallery search that finds "beach" without tags, the keyboard guessing the next word, maps rerouting, a chatbot that sounds sure and is wrong, an AI that opened your calendar.
+- Daily apps (a brand, and its logo on screen, only as a fetched fact): gallery search that finds "beach" without tags, the keyboard guessing the next word, maps rerouting, a chatbot that sounds sure and is wrong, an AI that opened your calendar.
 - Study: a 100-page PDF given to ChatGPT, notes before an exam, a coding test.
 Use the queue's `everyday_anchor`. A real incident (a court case, an outage) is allowed only with a fetched source; otherwise say it as an example ("maan lo") with the EXAMPLE pill.
 
