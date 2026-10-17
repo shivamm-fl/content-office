@@ -57,22 +57,22 @@
       const { ACC, CYAN, HOT, GOOD } = M;
       // A: hook. agent -> guard (crashed) -> action still goes through
       M.hook(["Guard crash,", "agent ne kaam kiya"], { size: 90, top: 250 });
-      M.box(A, { x: 110, y: 470, w: 860, h: 220, label: "AGENT", icon: "robot", color: CYAN, size: 54 }).show(0.05);
-      M.arrow(A, { from: [540, 700], to: [540, 770], color: CYAN, w: 12 }).show(0.05, 0.3);
-      M.box(A, { x: 110, y: 780, w: 860, h: 220, label: "GUARD", icon: "shield", color: HOT, size: 54 }).show(0.05);
-      M.icon(A, "cross", 800, 790, 160, HOT).show(0.05);
-      M.arrow(A, { from: [540, 1010], to: [540, 1080], color: HOT, w: 12 }).show(M.W("A", "kaam"), 0.3);
-      M.box(A, { x: 110, y: 1090, w: 860, h: 220, label: "ACTION DONE", icon: "bolt", color: HOT, size: 54 }).show(M.W("A", "kaam"));
-      M.fit(A, { y: 460, h: 860 });
+      M.box(A, { x: 110, y: 470, w: 860, h: 260, label: "AGENT", icon: "robot", color: CYAN, size: 54 }).show(0.05);
+      M.arrow(A, { from: [540, 740], to: [540, 810], color: CYAN, w: 12 }).show(0.05, 0.3);
+      M.box(A, { x: 110, y: 820, w: 860, h: 260, label: "GUARD", icon: "shield", color: HOT, size: 54 }).show(0.05);
+      M.icon(A, "cross", 800, 830, 160, HOT).show(0.05);
+      M.arrow(A, { from: [540, 1090], to: [540, 1160], color: HOT, w: 12 }).show(M.W("A", "kaam"), 0.3);
+      M.box(A, { x: 110, y: 1170, w: 860, h: 260, label: "ACTION DONE", icon: "bolt", color: HOT, size: 54 }).show(0.6);
+      M.fit(A, { y: 460, h: 980 });
       // B: what a hook is, fail-open
-      M.box(B, { x: 130, y: 320, w: 560, h: 220, label: "AGENT", icon: "robot", color: CYAN }).show(0.05);
-      M.arrow(B, { from: [410, 550], to: [410, 650], color: CYAN, w: 12 }).show(M.W("B", "hook"), 0.3);
-      M.box(B, { x: 130, y: 660, w: 560, h: 260, label: "HOOK = CHECK", icon: "gear", color: ACC }).show(M.W("B", "hook"));
+      M.box(B, { x: 110, y: 300, w: 860, h: 240, label: "AGENT", icon: "robot", color: CYAN, size: 54 }).show(0.05);
+      M.arrow(B, { from: [540, 550], to: [540, 650], color: CYAN, w: 12 }).show(M.W("B", "hook"), 0.3);
+      M.box(B, { x: 110, y: 660, w: 600, h: 300, label: "HOOK = CHECK", icon: "gear", color: ACC, size: 54 }).show(M.W("B", "hook"));
       M.icon(B, "clock", 770, 680, 200, HOT).show(M.W("B", "time"));
-      M.pill(B, "TIMEOUT", M.W("B", "out"), { x: 700, y: 900, size: 48 });
-      M.arrow(B, { from: [410, 930], to: [410, 1040], color: HOT, w: 12, dash: true }).show(M.W("B", "nikal"), 0.3);
-      M.box(B, { x: 130, y: 1050, w: 560, h: 220, label: "ACTION", icon: "bolt", color: HOT }).show(M.W("B", "action", 2));
-      M.pill(B, "FAIL-OPEN", M.W("B", "fail-open"), { x: 230, y: 1320, size: 60 });
+      M.pill(B, "TIMEOUT", M.W("B", "out"), { x: 730, y: 900, size: 44 });
+      M.arrow(B, { from: [540, 970], to: [540, 1090], color: HOT, w: 12, dash: true }).show(M.W("B", "nikal"), 0.3);
+      M.box(B, { x: 110, y: 1100, w: 860, h: 240, label: "ACTION", icon: "bolt", color: HOT, size: 54 }).show(M.W("B", "action", 2));
+      M.pill(B, "FAIL-OPEN", M.W("B", "fail-open"), { x: 300, y: 1390, size: 64 });
       M.fit(B, { y: 300, h: 1100 });
       // C: onFailure block, three cases, fail-closed
       M.pill(C, "onFailure: block", 0.05, { x: 260, y: 230, size: 52 });
@@ -83,17 +83,17 @@
       M.box(C, { x: 240, y: 1140, w: 600, h: 190, label: "FAIL-CLOSED", icon: "lock", color: GOOD }).show(M.W("C", "fail-closed"));
       M.fit(C, { y: 200, h: 1150 });
       // D: rule + UPI example + comment / follow
-      M.box(D, { x: 190, y: 230, w: 700, h: 190, label: "DEFAULT: STOP", icon: "lock", color: GOOD }).show(0.05);
-      M.pill(D, "EXAMPLE", M.W("D", "UPI"), { x: 410, y: 470, size: 36 });
-      M.box(D, { x: 110, y: 560, w: 360, h: 210, label: "PAYMENT", icon: "coin", color: CYAN }).show(M.W("D", "UPI"));
-      M.arrow(D, { from: [480, 665], to: [600, 665], color: CYAN, w: 8 }).show(M.W("D", "fraud"), 0.3);
-      M.box(D, { x: 610, y: 560, w: 360, h: 210, label: "FRAUD CHECK", icon: "shield", color: ACC }).show(M.W("D", "fraud"));
-      M.icon(D, "cross", 840, 520, 100, HOT).show(M.W("D", "down"));
-      M.pill(D, "PAY?", M.W("D", "payment"), { x: 270, y: 850, size: 60 });
-      M.pill(D, "WAIT?", M.W("D", "ruke"), { x: 570, y: 850, size: 60 });
-      M.box(D, { x: 140, y: 1000, w: 800, h: 160, label: "COMMENT: PAY / WAIT", icon: "chat", color: CYAN }).show(M.W("D", "Comment"));
-      M.pill(D, "+ FOLLOW  @ig.learnai", M.W("D", "follow"), { x: 250, y: 1210, size: 48 });
-      M.fit(D, { y: 200, h: 1150 });
+      M.box(D, { x: 110, y: 230, w: 860, h: 230, label: "DEFAULT: STOP", icon: "lock", color: GOOD, size: 54 }).show(0.05);
+      M.pill(D, "EXAMPLE", 0.5, { x: 410, y: 520, size: 40 });
+      M.box(D, { x: 110, y: 620, w: 370, h: 280, label: "PAYMENT", icon: "coin", color: CYAN, size: 44 }).show(0.5);
+      M.arrow(D, { from: [485, 760], to: [595, 760], color: CYAN, w: 8 }).show(M.W("D", "fraud"), 0.3);
+      M.box(D, { x: 600, y: 620, w: 370, h: 280, label: "FRAUD CHECK", icon: "shield", color: ACC, size: 40 }).show(M.W("D", "fraud"));
+      M.icon(D, "cross", 860, 590, 100, HOT).show(M.W("D", "down"));
+      M.pill(D, "PAY?", M.W("D", "payment"), { x: 220, y: 960, size: 72 });
+      M.pill(D, "WAIT?", M.W("D", "ruke"), { x: 580, y: 960, size: 72 });
+      M.box(D, { x: 110, y: 1090, w: 860, h: 180, label: "COMMENT: PAY / WAIT", icon: "chat", color: CYAN, size: 48 }).show(M.W("D", "Comment"));
+      M.pill(D, "+ FOLLOW  @ig.learnai", M.W("D", "follow"), { x: 110, y: 1310, size: 52 });
+      M.fit(D, { y: 200, h: 1200 });
       M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D);
       M.finish({ kw: { crash: "hot", "fail-open": "hot", "fail-closed": "good", rukta: "good", block: "gold", timeout: "hot", fraud: "cyan", rukna: "good" } });
       window.__timelines["main"] = tl;   // register (must stay literal for the linter)
