@@ -38,14 +38,15 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - name: Studio tools
+        timeout-minutes: 20
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg bubblewrap socat >/dev/null
           # a root-owned Python for the trusted steps: the session cannot change what they run
           sudo "$(command -v python3)" -m venv /opt/office/venv && sudo /opt/office/venv/bin/pip install -q $PIP_PACKAGES
           ln -sfn /opt/office/venv "teams/$TEAM/.venv"
           npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
-          (cd "teams/$TEAM" && npx --yes skills add heygen-com/hyperframes --yes >/dev/null 2>&1) || echo "::warning::HyperFrames skills install failed"
-          npx --yes hyperframes@0.8.149 --help >/dev/null 2>&1 || true
+          (cd "teams/$TEAM" && timeout 240 npx --yes skills add heygen-com/hyperframes --yes </dev/null >/dev/null 2>&1) || echo "::warning::HyperFrames skills install failed"
+          timeout 180 npx --yes hyperframes@0.8.149 --version </dev/null >/dev/null 2>&1 || true   # fills the npx cache; never interactive
           claude --version && ffmpeg -version | head -1
       - name: Lock the machine
         run: |
@@ -119,13 +120,14 @@ jobs:
       - uses: actions/download-artifact@v4
         with: { name: "qa-${{ inputs.run_id }}-1", path: "teams/${{ inputs.team }}/qa" }
       - name: Studio tools
+        timeout-minutes: 20
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg bubblewrap socat >/dev/null
           sudo "$(command -v python3)" -m venv /opt/office/venv && sudo /opt/office/venv/bin/pip install -q $PIP_PACKAGES
           ln -sfn /opt/office/venv "teams/$TEAM/.venv"
           npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
-          (cd "teams/$TEAM" && npx --yes skills add heygen-com/hyperframes --yes >/dev/null 2>&1) || true
-          npx --yes hyperframes@0.8.149 --help >/dev/null 2>&1 || true
+          (cd "teams/$TEAM" && timeout 240 npx --yes skills add heygen-com/hyperframes --yes </dev/null >/dev/null 2>&1) || true
+          timeout 180 npx --yes hyperframes@0.8.149 --version </dev/null >/dev/null 2>&1 || true   # fills the npx cache; never interactive
           # the session continues where the build left off: all of its files, the video and the reviewers' reports
           python3 -I runner/scripts/apply_work.py --work "$RUNNER_TEMP/work" --team "$TEAM" --media "$RUNNER_TEMP/media"
       - name: Lock the machine
