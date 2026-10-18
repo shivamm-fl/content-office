@@ -1,0 +1,43 @@
+{
+  "tts": "edge",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "min": {
+    "A": 6,
+    "B": 6,
+    "C": 7,
+    "D": 7,
+    "E": 7,
+    "F": 7
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: AI app ने गलत जवाब दिया, | तो आप कैसे पता लगाओगे कि गलती कहाँ हुई? || ज़्यादातर लोग सिर्फ़ आख़िरी जवाब देखते हैं। | असली जवाब 3{three} steps में है।",
+      "B": "मान लो refund chatbot ने बोला, 30{thirty} दिन। | Log में सिर्फ़ वही जवाब है, | कल क्या हुआ, पता नहीं। | तो आप अंदाज़े से prompt बदलते रहोगे।",
+      "C": "पहला step, हर request का एक trace बनाओ। | Langfuse के docs के मुताबिक, उसमें LLM calls, retrieval और tool executions, सब आते हैं।",
+      "D": "दूसरा step, हर step का input, output, timing और token usage रखो, | Courier tracking जैसा।",
+      "E": "तीसरा step, गलत जवाब का trace खोलो, | पहला गलत step ढूँढो। | Example में search पुराना policy page लाया था, | इसलिए prompt बदलना बेकार था।",
+      "F": "@emph सिर्फ़ जवाब नहीं, पूरा रास्ता record करो। || तुम पहले क्या देखोगे, search, prompt या tool? Comment में एक word लिखो। | Interview सवालों के लिए follow करो।"
+    }
+  },
+  "hook_type": "interviewer_asked"
+}

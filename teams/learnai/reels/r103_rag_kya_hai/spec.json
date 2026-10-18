@@ -1,0 +1,61 @@
+{
+ "tts": "owner",
+ "voice": "hi-IN-SwaraNeural",
+ "pace": 1.26,
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D"
+ ],
+ "min": {
+  "A": 6,
+  "B": 14,
+  "C": 16,
+  "D": 8
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   1,
+   0
+  ],
+  [
+   "click",
+   "C",
+   1,
+   0
+  ],
+  [
+   "click",
+   "C",
+   3,
+   0
+  ],
+  [
+   "click",
+   "C",
+   5,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "@hook RAG क्या है? || सीधा जवाब: | AI जवाब देने से पहले, | तुम्हारे documents से सही pages निकालता है। || तीन steps में।",
+   "B": "मान लो, 200{two-hundred} pages का handbook है। || तुमने ChatGPT से पूछा, | refund policy क्या है? | model ने handbook देखा ही नहीं, | इसलिए अंदाज़ा लगाएगा। || RAG यही ठीक करता है: | knowledge base से relevant information निकालो, | और user के prompt में जोड़ दो।",
+   "C": "पहला, chunking और embeddings: | handbook को chunks में तोड़ो, | हर chunk को vector बनाओ। || दूसरा, retrieval: | सवाल आए, | तो सबसे similar chunks ढूँढो, | मान लो top-3{top-three}। || तीसरा, generation: | वो तीनों chunks prompt में जोड़ो, | और model उन्हीं pages से जवाब लिखता है।",
+   "D": "@emph लेकिन अगर गलत chunks मिले, | तो जवाब गलत। || याद रखो: | retrieve, add, generate। || तुमने RAG कहाँ देखा, | chatbot, PDF या search? | एक word में comment करो। || ऐसे और AI engineer concepts के लिए, | follow करो।"
+  }
+ },
+ "hook_type": "direct_question"
+}

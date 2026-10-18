@@ -803,6 +803,27 @@
       "status": "planned",
       "planned": "2026-10-17",
       "office_note": "approved by the owner as q27 on 2026-10-17; renamed to q104 because office ids start at 101"
+    },
+    {
+      "id": "e104",
+      "track": "generic",
+      "title": "Chhota jawab padhne se bill kam hota hai? cc-stretch: click karo, jawab khulta hai",
+      "kind": "demo",
+      "topic": "cc-stretch is a Claude Code plugin that shows short replies where each linked phrase expands in place when clicked; you read less, but by the author's own statement you do not pay less, because each reply costs about the same tokens.",
+      "hook_formula": "Misconception question",
+      "status": "planned",
+      "planned": "2026-10-18"
+    },
+    {
+      "id": "r104",
+      "track": "course",
+      "unit": "D6",
+      "title": "Model pichli chat kyun bhool jata hai? AI ki memory notebook",
+      "kind": "concept",
+      "topic": "The context window is a small, limited desk that gets cluttered as it fills; agent memory means writing notes to storage outside the window and reading them back when needed, and the memory tool is that notebook: a /memories folder your own app manages.",
+      "hook_formula": "Direct question",
+      "status": "planned",
+      "planned": "2026-10-18"
     }
   ]
 }

@@ -367,6 +367,81 @@
       "status": "planned",
       "qa_passed": false,
       "office_note": "approved by the owner as q27 on 2026-10-17; renamed to q104 because office ids start at 101"
+    },
+    {
+      "id": "e104",
+      "track": "generic",
+      "title": "Chhota jawab padhne se bill kam hota hai? cc-stretch: click karo, jawab khulta hai",
+      "format": "myth-bust",
+      "one_idea": "cc-stretch is a Claude Code plugin that shows short replies where each linked phrase expands in place when clicked; you read less, but by the author's own statement you do not pay less, because each reply costs about the same tokens.",
+      "spoken_hook": "Jawab chhota padho, to kya bill bhi kam hoga?",
+      "hook_type": "misconception_question",
+      "hook_10s": "Jawab chhota padho, to kya bill bhi kam hoga? Nahi, bill wahi rehta hai. Par padhna bahut kam. Ek plugin, teen baatein. [frame 0: a long reply collapsing into a short card, a price tag staying the same]",
+      "hook_formula": "Misconception question",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "A long wall of reply text folds into one short card with a few underlined phrases; a click on a phrase opens a small box in place and a click on the arrow closes it, while a price tag beside it stays the same.",
+      "everyday_anchor": "A newspaper front page shows headlines and you open only the story you care about, though the whole paper was still printed.",
+      "example": "Label example: a long answer about a bug shown as three short lines with two clickable phrases. The author's own measure: default view was 17% of the words over 69 replies from four projects.",
+      "sources": [
+        "https://github.com/pro-vi/cc-stretch",
+        "https://api.github.com/repos/pro-vi/cc-stretch"
+      ],
+      "facts_to_verify": [
+        "repo created 2026-10-14, MIT license, not affiliated with Anthropic",
+        "install: /plugin install cc-stretch --marketplace pro-vi/cc-stretch, then /tui fullscreen (clicks need fullscreen terminal)",
+        "author claim: default view was 17% of the words over 69 replies from 4 projects; about two of three key points visible (author's own numbers)",
+        "author states: you read less, you do not pay less (similar token cost)",
+        "uses an early-access plugin API that changes between releases; Windows clicks reportedly not working yet"
+      ],
+      "length_target_s": 35,
+      "cover_headline": "Short replies that open when you click",
+      "thumb_text": "Read Less",
+      "keywords": [
+        "claude code plugin",
+        "cc-stretch",
+        "ai ka jawab chhota kaise padhein"
+      ],
+      "notes": "Caveats: all numbers are the author's own measure on his own replies, say 'author says'; never show a star count; plugin is early access and Claude Code only; do not claim savings in tokens or money (the page says none). Chosen over AirsupHQ/machine-skill (https://github.com/AirsupHQ/machine-skill, 296 stars, one-line to 3D simulation) because e103 anatomy skill is the same picture (one line to exploded diagram); machine-skill is the backup. Researcher-verified; facts re-fetched by the strategist 2026-10-18.",
+      "status": "planned",
+      "qa_passed": false
+    },
+    {
+      "id": "r104",
+      "track": "course",
+      "title": "Model pichli chat kyun bhool jata hai? AI ki memory notebook",
+      "format": "concept",
+      "one_idea": "The context window is a small, limited desk that gets cluttered as it fills; agent memory means writing notes to storage outside the window and reading them back when needed, and the memory tool is that notebook: a /memories folder your own app manages.",
+      "spoken_hook": "Model pichli chat kyun bhool jata hai?",
+      "hook_type": "direct_question",
+      "hook_10s": "Model pichli chat kyun bhool jata hai? Kyunki uski desk chhoti hai. Notebook se yaad rakhta hai. Teen steps. [frame 0: a small desk crowded with papers beside an empty notebook]",
+      "hook_formula": "Direct question",
+      "hook_source": "hook-writer skill",
+      "visual_idea": "A small desk fills with papers until it overflows; the model writes a note into a notebook shelf outside the desk, the desk is cleared, and a later question pulls the same note back onto the clean desk.",
+      "everyday_anchor": "You note an exam formula in your copy so you can clear your desk and find it again tomorrow.",
+      "example": "Label example: a coding agent writes 'user prefers Python, project uses pytest' to a notes file and reads it next session.",
+      "sources": [
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://arxiv.org/abs/2310.08560"
+      ],
+      "facts_to_verify": [
+        "context is a finite resource; Anthropic names context rot as tokens grow (engineering post)",
+        "structured note-taking: the agent writes notes persisted outside the context window and pulls them back later (engineering post)",
+        "memory tool: client-side, a /memories directory your application manages; the model issues file commands, your app executes them (docs)",
+        "MemGPT abstract: manages memory tiers to give the appearance of extended context"
+      ],
+      "length_target_s": 40,
+      "cover_headline": "Why AI forgets and how memory fixes it",
+      "thumb_text": "AI Memory",
+      "keywords": [
+        "ai memory kya hai",
+        "llm memory notebook",
+        "agent memory tool"
+      ],
+      "notes": "Caveats: r101/r102 and q15/q16 cover the context window and compaction; this reel is only about notes kept outside the window. Memory tool is Anthropic-specific and client-side: say 'for example'; do not say the model stores it itself. Do not claim MemGPT numbers. Unit D6.",
+      "status": "planned",
+      "qa_passed": false,
+      "unit": "D6"
     }
   ]
 }
