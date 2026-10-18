@@ -124,6 +124,12 @@ function FinalReelCard({ ask, team, onAnswer }: { ask: Ask; team: Team; onAnswer
       {m.video_url ? (
         <video src={m.video_url} poster={m.cover_url ?? undefined} controls playsInline preload="metadata" className="mx-auto block max-h-[70vh] w-full bg-black" />
       ) : <p className="px-4 pb-3 text-sm text-coral">The video file is missing.</p>}
+      {m.checks.length > 0 && (
+        <details className="mx-4 mt-3 rounded-lg border border-coral/40 px-3 py-2 text-[13px]">
+          <summary className="cursor-pointer text-coral">Automatic review notes ({m.checks.length}): advice only, your call</summary>
+          <ul className="mt-2 list-disc space-y-1 pl-4 text-dim">{m.checks.map((c) => <li key={c}>{c}</li>)}</ul>
+        </details>
+      )}
       {m.cover_url && (
         <div className="flex gap-3 px-4 py-3">
           <img src={m.cover_url} alt="Instagram cover" className="h-28 rounded-md border border-wall" loading="lazy" />

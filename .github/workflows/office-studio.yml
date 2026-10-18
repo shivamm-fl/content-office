@@ -6,7 +6,10 @@
 #   review / review2  trusted: the independent mute test and fact check (scripts/ci_review_round.py) on the content
 #   fix / fix2        agent session again when a review asks for it -> versions 2 and 3
 #   final             trusted: a fresh review of version 3, the full gate, the video to the release
-#                     office-<team>-<item>, the item's files saved, and the result to the office (owner's inbox)
+#                     office-<team>-<item>, the item's files saved, and the result to the office (owner's inbox).
+#                     The owner reviews every reel, so only a broken one is held back (runner/scripts/delivery.py);
+#                     the other checks of the gate go to the owner as notes on the reel.
+# from_run: deliver the finished work of an earlier run (its GitHub run id, the same run_id) instead of building.
 name: office-studio
 run-name: "office ${{ inputs.team }} studio ${{ inputs.run_id }}"
 on:
@@ -15,6 +18,7 @@ on:
       run_id: { description: "office run id", required: true, type: string }
       team: { description: "team folder", required: true, type: string, default: learnai }
       item: { description: "the reel, e.g. q101", required: true, type: string }
+      from_run: { description: "deliver the finished work of an earlier run of this workflow (its GitHub run id; same run_id) instead of building", required: false, type: string, default: "" }
 permissions: {}
 env:
   OFFICE_URL: ${{ vars.OFFICE_URL }}
@@ -24,6 +28,7 @@ env:
   PIP_PACKAGES: "edge-tts==7.2.8 numpy soundfile tiktoken"
 jobs:
   build:
+    if: ${{ inputs.from_run == '' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     permissions: { contents: read, id-token: write }
@@ -207,54 +212,61 @@ jobs:
 
   final:
     needs: [build, review, fix, review2, fix2]
-    if: ${{ !cancelled() && needs.build.result != 'skipped' }}   # a cancelled run is reported as cancelled (webhook), not as a failed gate
+    if: ${{ !cancelled() && (needs.build.result != 'skipped' || inputs.from_run != '') }}   # a cancelled run is reported as cancelled (webhook), not as a failed gate
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    permissions: { contents: write, id-token: write }
+    permissions: { contents: write, id-token: write, actions: read }
     steps:
       - uses: actions/checkout@v4
         with: { ref: main, fetch-depth: 0 }
       - name: Which version
         id: v
+        env: { GH_TOKEN: "${{ github.token }}", FROM_RUN: "${{ inputs.from_run }}" }
         run: |
-          if [ "${{ needs.fix2.result }}" = "success" ]; then echo "n=3" >> "$GITHUB_OUTPUT"
+          if [ -n "$FROM_RUN" ]; then
+            # delivering an earlier run's work: its newest version
+            [[ "$FROM_RUN" =~ ^[0-9]+$ ]] || { echo "bad from_run"; exit 1; }
+            n=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$FROM_RUN/artifacts?per_page=100" --jq '.artifacts[].name' | sed -n "s/^work-${RUN_ID}-\([0-9]*\)$/\1/p" | sort -n | tail -1)
+            [ -n "$n" ] || { echo "run $FROM_RUN has no work artifact for $RUN_ID"; exit 1; }
+            echo "n=$n" >> "$GITHUB_OUTPUT"
+          elif [ "${{ needs.fix2.result }}" = "success" ]; then echo "n=3" >> "$GITHUB_OUTPUT"
           elif [ "${{ needs.fix.result }}" = "success" ]; then echo "n=2" >> "$GITHUB_OUTPUT"
           else echo "n=1" >> "$GITHUB_OUTPUT"; fi
       - uses: actions/download-artifact@v4
         continue-on-error: true
-        with: { name: "work-${{ inputs.run_id }}-${{ steps.v.outputs.n }}", path: "${{ runner.temp }}/work" }
+        with: { name: "work-${{ inputs.run_id }}-${{ steps.v.outputs.n }}", path: "${{ runner.temp }}/work", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/download-artifact@v4
         continue-on-error: true
-        with: { name: "media-${{ inputs.run_id }}-${{ steps.v.outputs.n }}", path: "${{ runner.temp }}/media" }
+        with: { name: "media-${{ inputs.run_id }}-${{ steps.v.outputs.n }}", path: "${{ runner.temp }}/media", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/download-artifact@v4
         if: ${{ steps.v.outputs.n != '3' }}
         continue-on-error: true
-        with: { name: "qa-${{ inputs.run_id }}-${{ steps.v.outputs.n }}", path: "teams/${{ inputs.team }}/qa" }
+        with: { name: "qa-${{ inputs.run_id }}-${{ steps.v.outputs.n }}", path: "teams/${{ inputs.team }}/qa", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       # the earlier versions and their reviews, for the best-of choice below (a later FIX session can make a passing reel worse)
       - uses: actions/download-artifact@v4
         if: ${{ steps.v.outputs.n != '1' }}
         continue-on-error: true
-        with: { name: "work-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/work" }
+        with: { name: "work-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/work", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/download-artifact@v4
         if: ${{ steps.v.outputs.n != '1' }}
         continue-on-error: true
-        with: { name: "media-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/media" }
+        with: { name: "media-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/media", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/download-artifact@v4
         if: ${{ steps.v.outputs.n != '1' }}
         continue-on-error: true
-        with: { name: "qa-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/qa" }
+        with: { name: "qa-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/qa", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/download-artifact@v4
         if: ${{ steps.v.outputs.n == '3' }}
         continue-on-error: true
-        with: { name: "work-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/work" }
+        with: { name: "work-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/work", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/download-artifact@v4
         if: ${{ steps.v.outputs.n == '3' }}
         continue-on-error: true
-        with: { name: "media-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/media" }
+        with: { name: "media-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/media", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/download-artifact@v4
         if: ${{ steps.v.outputs.n == '3' }}
         continue-on-error: true
-        with: { name: "qa-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/qa" }
+        with: { name: "qa-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/qa", run-id: "${{ inputs.from_run || github.run_id }}", github-token: "${{ github.token }}" }
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: Gate tools
@@ -264,12 +276,13 @@ jobs:
           npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
       - name: Review of the last fix
         working-directory: teams/${{ inputs.team }}
-        env: { CLAUDE_CODE_OAUTH_TOKEN: "${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}" }
+        env: { CLAUDE_CODE_OAUTH_TOKEN: "${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}", FROM_RUN: "${{ inputs.from_run }}" }
         run: |
           python3 -I ../../runner/scripts/apply_work.py --work "$RUNNER_TEMP/work" --team "$TEAM" --content-only --media "$RUNNER_TEMP/media"
-          if [ "${{ steps.v.outputs.n }}" = "3" ]; then python3 scripts/ci_review_round.py "$ITEM" 3 || true; fi
+          if [ "${{ steps.v.outputs.n }}" = "3" ] && [ -z "$FROM_RUN" ]; then python3 scripts/ci_review_round.py "$ITEM" 3 || true; fi
       - name: Best version (put an earlier, better-reviewed version back when the last fix made the reel worse)
         id: best
+        if: ${{ inputs.from_run == '' }}
         continue-on-error: true
         run: python3 -I runner/scripts/pick_best.py --team "$TEAM" --item "$ITEM" --last "${{ steps.v.outputs.n }}" --versions "$RUNNER_TEMP/versions" --current-work "$RUNNER_TEMP/work"
       - name: Full gate
@@ -279,8 +292,10 @@ jobs:
           mkdir -p "$RUNNER_TEMP/out"
           if .venv/bin/python scripts/ci_verify_reel.py "$ITEM" > "$RUNNER_TEMP/out/verify.json"; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "ok=false" >> "$GITHUB_OUTPUT"; fi
           python3 -c "import json,sys; v=json.load(open(sys.argv[1])); print('gate:', 'ok' if v.get('ok') else 'FAILED', [c['name'] for c in v.get('checks', []) if not c.get('ok')])" "$RUNNER_TEMP/out/verify.json" || true
+          # the owner reviews every reel: only a broken one (missing files, wrong format, no audio, bad length, frozen frames) is held back; the other checks become notes on the reel
+          python3 -I ../../runner/scripts/delivery.py "$RUNNER_TEMP/out/verify.json"
       - name: Video to the release
-        if: ${{ steps.gate.outputs.ok == 'true' }}
+        if: ${{ steps.gate.outputs.deliver == 'true' }}
         env: { GH_TOKEN: "${{ github.token }}" }
         run: |
           python3 - <<'PY' > "$RUNNER_TEMP/out/assets.txt"
@@ -304,5 +319,5 @@ jobs:
       - name: Report to the office
         if: ${{ always() }}
         run: |
-          rel=""; [ "${{ steps.gate.outputs.ok }}" = "true" ] && rel="--release office-$TEAM-$ITEM"
+          rel=""; [ "${{ steps.gate.outputs.deliver }}" = "true" ] && rel="--release office-$TEAM-$ITEM"
           python3 -I runner/scripts/report_final.py --team "$TEAM" --run "$RUN_ID" --item "$ITEM" --verify "$RUNNER_TEMP/out/verify.json" $rel

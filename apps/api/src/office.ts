@@ -370,10 +370,11 @@ export class Office extends DurableObject<Env> {
     const run = this.getRun(runId);
     if (!run || !run.thread_id) throw new Error("unknown run");
     const failed = (r.failed ?? []).slice(0, 12);
-    this.finishRun(runId, "done", r.ok ? `${r.item} passed the gate` : `${r.item} did not pass the gate`, null);
+    // ok = the reel can be watched: only a broken one (files, format, audio, length) is held back; the other checks of the gate are notes for the owner
+    this.finishRun(runId, "done", !r.ok ? `${r.item} is broken` : failed.length ? `${r.item} is ready for your review (with notes)` : `${r.item} passed the gate`, null);
     if (!r.ok) {
       const why = failed.join("; ") || r.note || "see the GitHub log";
-      this.system(run.thread_id, runId, `The reel did not pass the final gate: ${why}. Send a note here to have the studio fix it.`, { error: true });
+      this.system(run.thread_id, runId, `The reel is broken and cannot be shown yet: ${why}. Send a note here to have the studio fix it.`, { error: true });
       await this.dayReport(run, "failed", why);
       return;
     }
@@ -385,7 +386,9 @@ export class Office extends DurableObject<Env> {
     const studio = run.agent;
     this.sql.exec(
       "INSERT INTO asks (id, run_id, thread_id, agent, kind, title, body, options, status, created_at, meta) VALUES (?, ?, ?, ?, 'approval', ?, ?, '[]', 'pending', ?, ?)",
-      askId, runId, run.thread_id, studio, `Final reel: ${r.item}, ${meta.title}`.slice(0, 200), "[final] The reel passed the automatic gate and the independent reviews.", Date.now(), JSON.stringify(meta),
+      askId, runId, run.thread_id, studio, `Final reel: ${r.item}, ${meta.title}`.slice(0, 200),
+      failed.length ? "[final] The reel is ready for your review. The automatic checks have notes (advice only, shown on the card)." : "[final] The reel passed the automatic gate and the independent reviews.",
+      Date.now(), JSON.stringify(meta),
     );
     this.addMessage({ thread_id: run.thread_id, run_id: runId, author: `agent:${studio}`, kind: "approval", body: { ask_id: askId, title: `Final reel: ${r.item}, ${meta.title}`, text: "The reel is ready for your decision." } });
     this.broadcast({ t: "ask", ask: this.toAsk(this.one("SELECT * FROM asks WHERE id = ?", askId)!) });

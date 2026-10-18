@@ -3,13 +3,18 @@
     python3 -I runner/scripts/report_final.py --team <team> --run <run_id> --item <id> --verify <verify.json> [--release <tag>]
 
 Reads the gate report and the item's files (phase5 status, caption, YouTube text, script) and posts them with the
-GitHub OIDC identity of this job. The office turns a passed gate into the owner's final approval with the video.
+GitHub OIDC identity of this job. The office turns a delivered reel into the owner's final approval with the video; the failed
+checks of the gate go along as notes (runner/scripts/delivery.py: only a broken reel is held back).
 """
 import argparse
 import json
 import os
+import sys
 import urllib.request
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import delivery  # noqa: E402  (which failed checks keep a reel from the owner: only the broken ones)
 
 
 def read(p: Path, limit: int = 20000) -> str:
@@ -43,14 +48,14 @@ def main() -> None:
     cover = Path(entry.get("cover") or "").name
     thumb = f"{name}.jpg" if (root / "brand/yt_thumbs" / f"{name}.jpg").exists() else ""
     payload = {
-        "team": a.team, "run_id": a.run, "item": a.item, "ok": bool(verify.get("ok")),
+        "team": a.team, "run_id": a.run, "item": a.item, "ok": delivery.deliver(verify),
         "title": entry.get("title") or a.item,
         "video_url": media(Path(entry.get("mp4") or "").name), "cover_url": media(cover), "thumb_url": media(thumb),
         "caption": read(root / (entry.get("caption") or "missing")),
         "youtube": read(root / "social" / f"{name}.youtube.txt"),
         "script": read(root / folder / "script.txt") if name else "",
         "duration_s": verify.get("duration_s") or entry.get("duration_s"),
-        "failed": [f"{c.get('name')}: {str(c.get('detail', ''))[:160]}" for c in verify.get("checks", []) if not c.get("ok")],
+        "failed": delivery.notes(verify),   # advice for the owner when the reel is delivered, the reason when it is not
         "note": verify.get("why"),
     }
     print(json.dumps({k: v for k, v in payload.items() if k not in ("caption", "youtube", "script")}, indent=2))
