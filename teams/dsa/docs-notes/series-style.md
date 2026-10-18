@@ -7,18 +7,18 @@ The owner runs a 150-day series on each Learnvora handle: one idea per day, Day 
 - **Id = day.** Day N is `d` + N in three digits. The roadmap is the plan; skipping a day needs the owner.
 - **One idea, a picture first.** Visuals are diagrams that move (`docs-notes/diagram-first-visuals.md`); on-screen text is a label of one to three words. Code, when shown, is large (mono, at least 40 px), at most 8 lines, with the line being discussed highlighted.
 - **Hinglish voice, English screen.** Narration in natural spoken Hinglish, English technical terms untouched; cover and labels in clean English.
-- **Length** 30 to 90 seconds; the day type sets the shape.
+- **Length** 30 to 120 seconds; teaching days (every day that explains a mechanism) run 90 to 120 (owner, 2026-10-18), clarity beats brevity, and the day type sets the shape. How a teaching day is built (beat sheet, detail checklist, pacing, when to split a day): `docs-notes/teaching-flow.md`.
 - **Reference accounts teach format only** (CLAUDE.md rule 15). Never copy another account's slide copy, wording, mascot, colours or layout. The standard teaching order of the subject is not theirs; follow it.
 - Problems are paraphrased from the original problem page (named in `sources`), never copied; solutions are written fresh. Every snippet shown is run first and the screen shows its real output. Python is the default language; the cost is always stated (time and space).
 
 ## The day types (`format` in the roadmap and the queue item)
-| format | what the day is | arc (seconds are a guide) |
+| format | what the day is | arc of a teaching day, 90 to 120 s (seconds are a guide; every arc ends on a check-yourself question) |
 |---|---|---|
-| `concept` | an idea that every later day uses (Big-O, recursion, binary search) | question 3 s, one-line answer, one picture of the mechanism 20 s, one number that makes it concrete 10 s, the line to remember 6 s |
-| `structure` | how a data structure really works inside (array memory, hash map, heap) | the surprise about the structure 4 s, the picture of its memory 20 s, the cost table (access, search, insert) 12 s, when not to use it 8 s |
-| `pattern` | a technique that solves a family of problems (two pointers, sliding window) | the problem it kills 4 s, the signal that tells you to use it 10 s, one tiny example 20 s, the template in 4 lines 12 s |
-| `problem` | one interview problem | the problem in one breath (paraphrased) 6 s, the naive way and its cost 12 s, the insight 12 s, the clean code 15 s with the run's real output, complexity and one edge case 10 s |
-| `recap` | a map of the last phase: which pattern for which signal | the confusion 4 s, the one-screen map 30 s, two examples 15 s |
+| `concept` | an idea that every later day uses (Big-O, recursion, binary search) | hook and promise 10 s, the naive way crossed out, with its number 14 s, answer, definition and analogy 12 s, the mechanism in 3 to 5 steps on one running example 44 s, the catch or misconception 12 s, what it changes for you 6 s, recap, check and follow 12 s (110 s) |
+| `structure` | how a data structure really works inside (array memory, hash map, heap) | the surprise and the promise 10 s, the naive container crossed out, with its cost 12 s, the picture of its memory built box by box 20 s, how it works in 3 to 5 steps 30 s, the cost table (access, search, insert) with real counts 14 s, when not to use it or the misconception 12 s, recap and check 8 s (106 s) |
+| `pattern` | a technique that solves a family of problems (two pointers, sliding window) | the problem it kills, with its brute-force count 12 s, the signal that tells you to use it 10 s, one tiny example in 3 to 5 steps 40 s, the template in 4 lines, run, with its real output 22 s, the trap 12 s, recap and check 10 s (106 s) |
+| `problem` | one interview problem | the problem in one breath (paraphrased), as the stake 10 s, the naive way crossed out, with its number 14 s, the pattern, its signal and the insight 18 s, the clean code in 3 to 5 sub-steps 36 s with the run's real output, complexity, the trap or one edge case 16 s, check and follow 10 s (104 s) |
+| `recap` | a map of the last phase: which pattern for which signal | the confusion 6 s, the one-screen map 50 s, two examples 28 s, check 12 s (96 s) |
 
 ## Caption
 First line survives the "... more" cut: `Day N/150: <the question or payoff>`. One ask (comment a one-word answer), three hashtags (see packager), no Devanagari.
@@ -37,15 +37,15 @@ Source: `docs-notes/benchmark-2026-10-18.md`, a read-only study of other account
 - **What we deliberately do differently.** Reels first and on the grid (not carousels with hidden reels); Hinglish voice (not English only); a hook and one idea (not the day number as the headline); the clean navy and gold look (not another account's colours or mascot); one language, Python, with the cost stated (not five); three hashtags and no markdown symbols in the caption; no "Next: Day N+1" in the script. The roadmap's first block order (arrays and hashing, two pointers, sliding window, stack) is also the block order of the series reference's first 23 days, and a widely used one (the study's own knowledge, not a fetched page). Rule 15 forbids copying a topic order, so the owner decides whether to keep it; `roadmap/PROPOSAL-rebalance.md` lists the choice.
 - **Stand-alone stays: no "Next: Day N+1" teaser.** The benchmark account ends carousels and reels with one, and its median reel views are still about a third of its followers (0.33x), so the study does not show the teaser helps. Owner decision, optional test: a "Next: Day N+1" line on the LAST SLIDE of the carousel only (the reel script stays stand-alone), logged as an experiment in `state/experiments.md`.
 
-### Problem day arc, adjusted (replaces the `problem` row above once the owner agrees)
-The study did not observe any reel length (the videos did not render), so it gives no evidence for a shorter reel and we do not shorten on its authority. The old arc already totals 55 s, inside a 35 to 60 s band, so the total stays about 55 s (the limits of Guardrail 5 stay). What changes is the order and the content of the beats, to put the stake first and the pattern before the idea:
+### Problem day arc: the order of the beats (seconds as in the `problem` row above, owner 2026-10-18)
+The study did not observe any reel length (the videos did not render), so it gives no evidence for a shorter reel and we do not shorten on its authority. The owner's decision of 2026-10-18 (teaching days 90 to 120 s, `docs-notes/teaching-flow.md`) replaces the old 55 s total. The order and the content of the beats put the stake first and the pattern before the idea:
 
 | beat | seconds | content |
 |---|---|---|
-| stake or interviewer's question, which also states the problem | 6 | the hook is the problem in one breath, paraphrased |
-| the naive way and its cost as ONE number | 10 | the number is computed or run |
-| the pattern and its signal in one line, then the insight | 14 | pattern-first |
-| the clean code with the run's real output | 14 | at most 8 lines, the discussed line highlighted |
-| complexity, the one trap, the interviewer's follow-up, then the one ask | 11 | the ask sits in the last 3 s |
+| stake or interviewer's question, which also states the problem | 10 | the hook is the problem in one breath, paraphrased |
+| the naive way, crossed out, and its cost as ONE number | 14 | the number is computed or run |
+| the pattern and its signal in one line, then the insight | 18 | pattern-first |
+| the clean code with the run's real output | 36 | at most 8 lines, the discussed line highlighted, one sub-step per 3 to 4 lines, a new object every 4 s |
+| complexity with its number, the one trap, the interviewer's follow-up, then the check-yourself question and the one ask | 26 | the ask sits in the last 3 s; the answer to the check is in the caption |
 
-Reason: the stake and the question have to arrive inside the first 2 to 3 seconds, so the old "problem in one breath" beat becomes the hook rather than a separate step; the code and the trap are what a viewer learns from, so they keep their time. Test it: after 10 problem reels, compare a cut near 40 s with the 55 s version on our own skip rate and watch time (an experiment the owner approves). The `pattern` arc (46 s) is already pattern-first; keep it, and open it with the problem the pattern kills as a stake.
+Reason: the stake and the question have to arrive inside the first 2 to 3 seconds, so the old "problem in one breath" beat becomes the hook rather than a separate step; the code and the trap are what a viewer learns from, so they keep their time. Test it: after 10 problem reels, compare the teaching cut (about 104 s) with a cut near 55 s of the same problem on our own skip rate and watch time (an experiment the owner approves). The `pattern` arc (106 s) is already pattern-first; keep it, and open it with the problem the pattern kills as a stake.

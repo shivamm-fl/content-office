@@ -7,19 +7,19 @@ The owner runs a 150-day series on each Learnvora handle: one idea per day, Day 
 - **Id = day.** Day N is `s` + N in three digits. The roadmap is the plan; skipping a day needs the owner.
 - **One idea, a picture first.** Visuals are diagrams that move (`docs-notes/diagram-first-visuals.md`); on-screen text is a label of one to three words. Code, when shown, is large (mono, at least 40 px), at most 8 lines, with the line being discussed highlighted.
 - **Hinglish voice, English screen.** Narration in natural spoken Hinglish, English technical terms untouched; cover and labels in clean English.
-- **Length** 30 to 90 seconds; the day type sets the shape.
+- **Length** 30 to 120 seconds; teaching days (every day that explains a mechanism) run 90 to 120 (owner, 2026-10-18), clarity beats brevity, and the day type sets the shape. How a teaching day is built (beat sheet, detail checklist, pacing, when to split a day): `docs-notes/teaching-flow.md`.
 - **Reference accounts teach format only** (CLAUDE.md rule 15). Never copy another account's slide copy, wording, mascot, colours or layout. The standard teaching order of the subject is not theirs; follow it.
 - A real company's design is told only as far as its own engineering post says (named on screen as `Source: <site>`). Anything else is "a typical design", labelled. Numbers (QPS, storage, latency) are either from a fetched page or marked EXAMPLE with the arithmetic shown.
 
 ## The day types (`format` in the roadmap and the queue item)
-| format | what the day is | arc (seconds are a guide) |
+| format | what the day is | arc of a teaching day, 90 to 120 s (seconds are a guide; every arc ends on a check-yourself question) |
 |---|---|---|
-| `concept` | an idea every design uses (latency vs throughput, CAP, consistency) | the question or the failure 4 s, one-line answer, a picture of the mechanism 20 s, one number that makes it concrete 10 s, the line to remember 6 s |
-| `component` | one building block (load balancer, cache, queue, CDN, database index) | what breaks without it 5 s, how it sits between the boxes 20 s, the knob that matters 12 s, when it hurts 8 s |
-| `pattern` | a recurring design move (sharding, replication, fan-out, rate limiting) | the problem at scale 5 s, the move 20 s, what it costs 12 s, the one failure to watch 8 s |
-| `trade-off` | two options and when each wins (SQL vs NoSQL, push vs pull) | the tempting wrong answer 5 s, the axis that decides 15 s, the rule of thumb 12 s, the example 10 s |
-| `case-study` | a known system, designed in steps (URL shortener, chat, news feed) | requirements 8 s, the first naive design 10 s, the bottleneck 12 s, the fix 15 s, the trade-off you accept 8 s |
-| `recap` | a map of the last phase | the confusion 4 s, the one-screen map 30 s, two examples 15 s |
+| `concept` | an idea every design uses (latency vs throughput, CAP, consistency) | hook and promise 10 s, the naive way crossed out, with its number 14 s, answer, definition and analogy 12 s, the mechanism in 3 to 5 steps on one running example 44 s, the catch or misconception 12 s, what it changes for you 6 s, recap, check and follow 12 s (110 s) |
+| `component` | one building block (load balancer, cache, queue, CDN, database index) | what breaks without it, with a number 12 s, where it sits between the boxes (diagram built box by box) 20 s, how it works, one request traced in 3 to 5 steps 40 s, the knob that matters 10 s, the catch: when it hurts 14 s, recap and check 10 s (106 s) |
+| `pattern` | a recurring design move (sharding, replication, fan-out, rate limiting) | the problem at scale, with a number 12 s, the naive move crossed out 12 s, the move in 3 to 5 steps 44 s, what it costs 10 s, the one failure to watch (the catch) 14 s, recap and check 12 s (104 s) |
+| `trade-off` | two options and when each wins (SQL vs NoSQL, push vs pull) | the tempting wrong answer, crossed out 10 s, option A on the running numbers 24 s, option B on the same numbers 24 s, the axis that decides 16 s, the rule of thumb and when each wins 14 s, check and follow 12 s (100 s) |
+| `case-study` | a known system, designed in steps (URL shortener, chat, news feed) | requirements with numbers 14 s, the first naive design crossed out, where it breaks 14 s, the bottleneck proved by arithmetic 14 s, the fixes in 3 to 5 steps 40 s, the trade-off you accept 14 s, recap and check 12 s (108 s) |
+| `recap` | a map of the last phase | the confusion 6 s, the one-screen map 50 s, two examples 28 s, check 12 s (96 s) |
 
 ## Caption
 First line survives the "... more" cut: `Day N/150: <the question or payoff>`. One ask (comment a one-word answer), three hashtags (see packager), no Devanagari.

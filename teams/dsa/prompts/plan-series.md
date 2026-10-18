@@ -28,7 +28,7 @@ Day N is item id `d` + N in three digits, `day` = N, `unit` = the phase id.
 - `format`: one of `state/config.json` `formats`.
 - `example`: a labelled example; invented numbers say EXAMPLE.
 - `sources`: URLs you fetched this session, one per claim (problem page, official docs, engineering post). `facts_to_verify`: what the builder must check again, including "run the code and show its real output".
-- `length_target_s`: 30 to 90.
+- `length_target_s`: 30 to 120 (teaching days 90 to 120 are fine; `docs-notes/teaching-flow.md`).
 - `cover_headline`: clean English, at most 8 words. `thumb_text`: at most 3 words. `keywords`: at least three search phrases a person would type.
 - `status`: `"planned"`. `qa_passed`: `false`.
 

@@ -63,7 +63,7 @@ digits = [m for m in re.findall(r"(?<![\w{-])\d[\d.,]*(?![\w}]*\})", re.sub(r"\S
 chk("FAIL", "numbers are spoken in English (digits without a {spoken} brace)", not digits, ", ".join(digits[:6]))
 words = len(spoken.split())
 secs = words / 2.3
-chk("WARN", "length 60 to 100 s (about 2.3 words per second)", 55 <= secs <= 100, f"{words} words, about {secs:.0f} s")
+chk("WARN", "length 60 to 120 s (about 2.3 words per second)", 55 <= secs <= 120, f"{words} words, about {secs:.0f} s")
 bad = re.findall(r"(\w+\{[^}\s-]+ [^}]*\})", text)
 chk("FAIL", "no multi-word braces (said twice)", not bad, "; ".join(bad[:3]))
 
