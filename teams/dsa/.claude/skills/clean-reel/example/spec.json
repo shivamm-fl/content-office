@@ -1,0 +1,8 @@
+{"tts": "edge", "voice": "hi-IN-SwaraNeural", "pace": 1.26, "audio": "v2", "tone": "calm",
+ "scenes": ["A", "B", "C", "D"], "min": {"A": 4.0, "B": 6.0, "C": 5.0, "D": 4.0}, "tail": {},
+ "cues": [["impact", null, null, 0.05], ["click", "B", 1, 0.0], ["dip", "C", 1, -0.1], ["err", "C", 1, 0.3], ["save", "D", 2, 0.4]],
+ "copy": {"hi": {
+  "A": "@hook Interviewer ने पूछा: | Binary search की complexity क्या है?",
+  "B": "@emph Context window, | model की working memory है। || Prompt, chat history और answer, | सब tokens में गिने जाते हैं।",
+  "C": "Limit से ज़्यादा text हो, | तो कुछ हिस्सा छोड़ना पड़ता है।",
+  "D": "@emph Save कर लो: | prompt, history, answer, | सब एक ही window में।"}}}

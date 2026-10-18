@@ -73,7 +73,7 @@ function PreviewSheet({ office, item, title, reel, onClose, onPost }: { office: 
 }
 
 function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: CalendarData; reel: ReadyReel; office: Office; onClose: () => void; onDone: (p: PostRecord) => void; onPreview: () => void }) {
-  const [mode, setMode] = useState<"now" | "slot">(cal.can_post_now || !reel.can_schedule ? "now" : "slot");
+  const [mode, setMode] = useState<"now" | "slot">("now");
   const [slot, setSlot] = useState<string | null>(null);
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -118,12 +118,11 @@ function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: Cal
 
         {mode === "now" ? (
           <div className="mt-4 space-y-2">
-            {!cal.can_post_now && <p className="text-sm text-coral">Posting is allowed between {cal.window.join(" and ")} IST only. It is {cal.clock} IST now.{reel.can_schedule ? " Put it on a slot instead." : ""}</p>}
-            <p className="text-[13px] leading-relaxed text-dim">The reel goes out on Instagram right away, then Facebook, then YouTube where the track is set up for it. It is public as soon as it is up.</p>
+            <p className="text-[13px] leading-relaxed text-dim">The reel goes out on Instagram right away, then Facebook, then YouTube where the track is set up for it. It is public as soon as it is up.{!cal.can_post_now ? ` It is ${cal.clock} IST, outside the usual posting hours (${cal.window.join(" to ")}); it posts anyway.` : ""}</p>
             {confirm ? (
               <button disabled={busy} onClick={submit} className="w-full rounded-lg bg-coral py-3 text-sm font-semibold text-ink">{busy ? "Starting…" : "Yes, post it now"}</button>
             ) : (
-              <button disabled={!cal.can_post_now} onClick={() => setConfirm(true)} className="w-full rounded-lg bg-gold py-3 text-sm font-semibold text-ink">Post now</button>
+              <button onClick={() => setConfirm(true)} className="w-full rounded-lg bg-gold py-3 text-sm font-semibold text-ink">Post now</button>
             )}
           </div>
         ) : (

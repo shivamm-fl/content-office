@@ -1,0 +1,118 @@
+<!doctype html>
+<!-- Worked example of the diagram kit (reels/_kit/viz.js). One scene per template. Read it for the calling pattern; it is NOT a reel.
+     To render it, copy it over index.html of a scratch reel folder together with a data.js that has scenes A-G (see the smoke-test notes in docs-notes/diagram-first-visuals.md). -->
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Diagram kit example</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div>
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "VIZ KIT EXAMPLE" });
+      Viz.install(M);   // adds M.map, M.vecs, M.flow, M.chips, M.search, M.versus, M.loop, M.stack, M.dist, M.code, M.plot, M.heat, M.box, M.arrow, M.icon
+      const { tl, S, ACC, CYAN, HOT, GOOD, VIOLET, MUTED } = M;
+      const [A, B, C, D, E, F, G] = ["A", "B", "C", "D", "E", "F", "G"].map((s) => M.$("#s" + s));
+
+      // A: meaning map (similar things land close together)
+      const mp = M.map(A, { x: 60, y: 260, w: 960, h: 800, title: "MEANING MAP", pts: [
+        { id: "cat", label: "cat", x: 0.16, y: 0.30, color: ACC, side: "t" }, { id: "kit", label: "kitten", x: 0.34, y: 0.20, color: ACC, side: "r" },
+        { id: "car", label: "car", x: 0.70, y: 0.78, color: CYAN, side: "b" }, { id: "truck", label: "truck", x: 0.86, y: 0.62, color: CYAN, side: "t" } ] });
+      mp.enter(S.A + 0.2); mp.show(S.A + 0.7, ["cat", "kit"], 0.25); mp.show(S.A + 1.4, ["car", "truck"], 0.25);
+      mp.link(S.A + 2.2, "cat", "kit", { label: "close", color: GOOD }); mp.link(S.A + 3.0, "kit", "car", { label: "far", color: HOT, dash: true });
+      mp.ring(S.A + 3.8, "kit", { color: GOOD }); mp.glow(S.A + 3.8, ["cat", "kit"], GOOD); mp.move(S.A + 4.4, "truck", { x: 0.84, y: 0.74 }, 0.8);
+
+      // B: pipeline + vectors
+      const fl = M.flow(B, { x: 60, y: 250, w: 960, h: 280, dir: "h", gap: 70, nh: 270, nodes: [
+        { label: "text", sub: "cat", icon: "text", color: ACC }, { label: "model", icon: "model", color: VIOLET }, { label: "numbers", icon: "numbers", color: CYAN } ] });
+      fl.show(S.B + 0.2, 0.45); fl.run(S.B + 1.8, 0.55);
+      const vc = M.vecs(B, { x: 90, y: 640, cell: 150, labelW: 220, rows: [
+        { label: "cat", nums: [0.12, -0.80, 0.33, 0.57], color: ACC }, { label: "kitten", nums: [0.10, -0.78, 0.35, 0.55], color: ACC }, { label: "car", nums: [-0.62, 0.21, 0.90, -0.14], color: CYAN } ] });
+      vc.show(S.B + 3.4, 0.35); vc.col(S.B + 5.0, 1, GOOD);
+
+      // C: search bar, word chips, two-panel comparison
+      const sb = M.search(C, { x: 90, y: 250, w: 900, text: "When is Apple's call?" }); sb.show(S.C + 0.2); sb.type(S.C + 0.5, 1.2);
+      const ch = M.chips(C, { x: 90, y: 430, w: 900, words: ["Apple", "earnings", "meeting", "schedule"], color: CYAN }); ch.show(S.C + 1.9, 0.12); ch.hot(S.C + 2.8, [0, 1], ACC);
+      const vs = M.versus(C, { x: 60, y: 640, w: 960, h: 560, left: { title: "KEYWORD", color: HOT }, right: { title: "MEANING", color: GOOD } });
+      vs.show(S.C + 3.3); vs.mark(S.C + 4.6, "left", "no"); vs.mark(S.C + 5.1, "right", "yes");
+
+      // D: loop, then a filling window that forgets the oldest items
+      const lp = M.loop(D, { cx: 540, cy: 560, r: 270, nodes: [{ label: "Think", color: VIOLET }, { label: "Act", color: ACC }, { label: "Observe", color: CYAN }] });
+      lp.show(S.D + 0.2, 0.3); lp.spin(S.D + 1.4, 1, 0.7); lp.hide(S.D + 3.6);
+      const st = M.stack(D, { x: 240, y: 360, w: 600, h: 720, title: "CONTEXT WINDOW", forget: "forgotten", items: [
+        { label: "system prompt", color: VIOLET }, { label: "user: question 1", color: ACC }, { label: "model: answer 1", color: CYAN },
+        { label: "user: question 2", color: ACC }, { label: "model: answer 2", color: CYAN }, { label: "user: question 3", color: ACC } ] });
+      st.show(S.D + 3.9); st.fill(S.D + 4.2, 0.18); st.overflow(S.D + 5.4, 2);
+
+      // E: probability bars, then a line chart
+      const ds = M.dist(E, { x: 130, y: 300, w: 820, h: 460, bars: [
+        { label: "sunny", p: 0.55, color: ACC }, { label: "hot", p: 0.25, color: CYAN }, { label: "rainy", p: 0.12, color: VIOLET }, { label: "cold", p: 0.05, color: HOT }, { label: "banana", p: 0.03, color: MUTED } ] });
+      ds.show(S.E + 0.2); ds.set(S.E + 1.6, [0.38, 0.30, 0.2, 0.08, 0.04], 0.8); ds.cut(S.E + 2.8, 3); ds.mark(S.E + 3.2, 0, GOOD);
+      const pl = M.plot(E, { x: 60, y: 900, w: 960, h: 400, xlabel: "TIME", ylabel: "COST", series: [
+        { pts: [[0, 0.9], [0.25, 0.6], [0.5, 0.35], [0.75, 0.2], [1, 0.1]], color: GOOD }, { pts: [[0, 0.3], [0.25, 0.45], [0.5, 0.6], [0.75, 0.8], [1, 0.95]], color: HOT } ] });
+      pl.show(S.E + 3.0); pl.draw(S.E + 3.3, 1.4); pl.dot(S.E + 4.9, 0, 4, { label: "cheaper", color: GOOD });
+
+      // F: heat-map grid + code block
+      const hm = M.heat(F, { x: 120, y: 250, cell: 150, rows: ["I", "love", "AI"], cols: ["I", "love", "AI"], values: [[0.9, 0.2, 0.1], [0.3, 0.8, 0.55], [0.1, 0.6, 0.95]], color: CYAN });
+      hm.show(S.F + 0.2, 0.15); hm.pick(S.F + 1.6, 2, 1, ACC); hm.row(S.F + 2.2, 1, GOOD);
+      const cd = M.code(F, { x: 90, y: 800, w: 900, size: 38, lines: ["resp = client.messages.create(", "    model=MODEL,", "    max_tokens=200,", ")"] });
+      cd.show(S.F + 2.8, 0.2); cd.hl(S.F + 4.0, 2, ACC);
+
+      // G: compose your own diagram from boxes, arrows and icons (a tiny retrieval pipeline)
+      // leave >= 150 px between boxes when an arrow carries a label; short arrows carry none
+      const bq = M.box(G, { x: 60, y: 260, w: 270, h: 230, label: "Question", icon: "user", color: ACC });
+      const br = M.box(G, { x: 405, y: 260, w: 270, h: 230, label: "Search", icon: "search", color: CYAN });
+      const bl = M.box(G, { x: 750, y: 260, w: 270, h: 230, label: "LLM", icon: "model", color: VIOLET });
+      const bd = M.box(G, { x: 405, y: 660, w: 270, h: 230, label: "Docs", sub: "vector DB", icon: "db", color: GOOD });
+      const ba = M.box(G, { x: 750, y: 660, w: 270, h: 230, label: "Answer", icon: "check", color: ACC, fill: true });
+      [bq, br, bl, bd, ba].forEach((b, i) => b.show(S.G + 0.2 + i * 0.25));
+      M.arrow(G, { from: bq.edge("r"), to: br.edge("l"), color: ACC }).show(S.G + 1.6);
+      M.arrow(G, { from: br.edge("r"), to: bl.edge("l"), color: CYAN }).show(S.G + 2.0);
+      M.arrow(G, { from: br.edge("b"), to: bd.edge("t"), color: GOOD, label: "top 3" }).show(S.G + 2.4);
+      M.arrow(G, { from: bd.edge("r"), to: ba.edge("l"), color: GOOD }).show(S.G + 2.8);
+      const a5 = M.arrow(G, { from: bl.edge("b"), to: ba.edge("t"), color: VIOLET }); a5.show(S.G + 3.2); a5.travel(S.G + 3.9, 0.8, "#fff");
+      ["bolt", "lock", "cloud", "clock", "coin", "warn", "mic", "speaker"].forEach((k, i) => M.icon(G, k, 80 + i * 120, 1020, 90, [ACC, CYAN, GOOD, VIOLET, HOT][i % 5]).show(S.G + 3.6 + i * 0.1));
+      bd.glow(S.G + 4.6, GOOD);
+
+      [A, B, C, D, E, F, G].forEach((h) => M.fit(h));   // last in each scene: scale the finished scene up into the safe area and centre it
+      [M.S.B, M.S.C, M.S.D, M.S.E, M.S.F, M.S.G].forEach((x, i) => (i % 2 ? M.glitchCut(x) : M.wipe(x)));
+      M.finish();
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

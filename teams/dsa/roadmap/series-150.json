@@ -1,0 +1,1261 @@
+{
+ "about": "Plan of 150 Days of DSA on @dsa.learnvora: one idea per day, in this order. Titles are the public names of classic problems and ideas, used only as a checklist: scripts, code and examples are written fresh from fetched sources (problems are paraphrased, never copied from a problem page or editorial). The owner decides changes to this file (2026-10-18: first draft, for approval).",
+ "rules": [
+  "Day N is item id d + N in three digits (Day 7 = d007). Days are made in order; none is skipped without the owner.",
+  "Each reel is stand-alone: one idea, terms defined inside it, the day is only a label on the cover and in the caption.",
+  "A day is done when its reel is published (status done); in_progress when planned or built.",
+  "formats: concept, structure, pattern, problem, recap. level (easy, medium, hard) only for problems."
+ ],
+ "phases": [
+  {
+   "id": "P1",
+   "title": "Foundations",
+   "days": [
+    {
+     "day": 1,
+     "title": "What DSA is and how interviews use it",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 2,
+     "title": "Big-O: time complexity in plain words",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 3,
+     "title": "Space complexity and the time-space trade-off",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 4,
+     "title": "Arrays: how memory really stores them",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 5,
+     "title": "Strings are arrays, and why they are immutable",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 6,
+     "title": "Hash map: how lookup becomes O(1)",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 7,
+     "title": "Hash collisions: when two keys clash",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 8,
+     "title": "Two Sum",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 9,
+     "title": "Contains Duplicate and Valid Anagram",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 10,
+     "title": "Recursion and the call stack",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P2",
+   "title": "Arrays and hashing",
+   "days": [
+    {
+     "day": 11,
+     "title": "Prefix sum: range queries in O(1)",
+     "format": "pattern",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 12,
+     "title": "Pivot index and running sums",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 13,
+     "title": "Product of Array Except Self",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 14,
+     "title": "Maximum Subarray (Kadane)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 15,
+     "title": "Group Anagrams",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 16,
+     "title": "Top K Frequent Elements",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 17,
+     "title": "Longest Consecutive Sequence",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 18,
+     "title": "Subarray Sum Equals K",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 19,
+     "title": "Majority Element (voting)",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 20,
+     "title": "Rotate Array",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 21,
+     "title": "Set Matrix Zeroes",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 22,
+     "title": "Merge Sorted Array",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P3",
+   "title": "Two pointers",
+   "days": [
+    {
+     "day": 23,
+     "title": "Two pointers: the idea",
+     "format": "pattern",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 24,
+     "title": "Valid Palindrome",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 25,
+     "title": "Two Sum II (sorted input)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 26,
+     "title": "3Sum",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 27,
+     "title": "Container With Most Water",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 28,
+     "title": "Trapping Rain Water",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 29,
+     "title": "Move Zeroes and Remove Duplicates",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P4",
+   "title": "Sliding window",
+   "days": [
+    {
+     "day": 30,
+     "title": "Sliding window: the idea",
+     "format": "pattern",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 31,
+     "title": "Best Time to Buy and Sell Stock",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 32,
+     "title": "Longest Substring Without Repeating Characters",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 33,
+     "title": "Longest Repeating Character Replacement",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 34,
+     "title": "Permutation in String",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 35,
+     "title": "Minimum Window Substring",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 36,
+     "title": "Sliding Window Maximum",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 37,
+     "title": "Maximum Average Subarray (fixed window)",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P5",
+   "title": "Stack, queue and monotonic stack",
+   "days": [
+    {
+     "day": 38,
+     "title": "Stack: LIFO and where it hides",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 39,
+     "title": "Valid Parentheses",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 40,
+     "title": "Min Stack",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 41,
+     "title": "Evaluate Reverse Polish Notation",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 42,
+     "title": "Daily Temperatures (monotonic stack)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 43,
+     "title": "Next Greater Element",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 44,
+     "title": "Largest Rectangle in Histogram",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 45,
+     "title": "Queue and deque: FIFO, and the sliding structures",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 46,
+     "title": "Implement Queue using Stacks",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P6",
+   "title": "Binary search",
+   "days": [
+    {
+     "day": 47,
+     "title": "Binary search: why log n is so fast",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 48,
+     "title": "Binary Search: the clean template",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 49,
+     "title": "First and Last Position of an Element",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 50,
+     "title": "Search in Rotated Sorted Array",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 51,
+     "title": "Find Minimum in Rotated Sorted Array",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 52,
+     "title": "Koko Eating Bananas (search on the answer)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 53,
+     "title": "Capacity to Ship Packages (search on the answer)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 54,
+     "title": "Median of Two Sorted Arrays",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 55,
+     "title": "Time Based Key-Value Store",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P7",
+   "title": "Linked list",
+   "days": [
+    {
+     "day": 56,
+     "title": "Linked list: nodes, pointers, memory",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 57,
+     "title": "Reverse Linked List",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 58,
+     "title": "Merge Two Sorted Lists",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 59,
+     "title": "Linked List Cycle (Floyd)",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 60,
+     "title": "Middle of the Linked List (slow and fast)",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 61,
+     "title": "Remove Nth Node From End",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 62,
+     "title": "Reorder List",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 63,
+     "title": "Add Two Numbers",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 64,
+     "title": "Copy List with Random Pointer",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 65,
+     "title": "LRU Cache",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 66,
+     "title": "Merge k Sorted Lists",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P8",
+   "title": "Trees",
+   "days": [
+    {
+     "day": 67,
+     "title": "Trees: root, leaf, height, depth",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 68,
+     "title": "Tree traversals: inorder, preorder, postorder",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 69,
+     "title": "Maximum Depth of a Binary Tree",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 70,
+     "title": "Invert Binary Tree",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 71,
+     "title": "Same Tree and Subtree",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 72,
+     "title": "Diameter of a Binary Tree",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 73,
+     "title": "Balanced Binary Tree",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 74,
+     "title": "Level Order Traversal (BFS on a tree)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 75,
+     "title": "Binary Tree Right Side View",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 76,
+     "title": "Binary Search Tree: why it is fast, and when it is not",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 77,
+     "title": "Validate Binary Search Tree",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 78,
+     "title": "Kth Smallest Element in a BST",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 79,
+     "title": "Lowest Common Ancestor",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 80,
+     "title": "Construct Tree from Preorder and Inorder",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 81,
+     "title": "Binary Tree Maximum Path Sum",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 82,
+     "title": "Serialize and Deserialize a Binary Tree",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P9",
+   "title": "Heap and priority queue",
+   "days": [
+    {
+     "day": 83,
+     "title": "Heap: the priority queue inside",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 84,
+     "title": "Kth Largest Element in a Stream",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 85,
+     "title": "Last Stone Weight",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 86,
+     "title": "K Closest Points to Origin",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 87,
+     "title": "Task Scheduler",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 88,
+     "title": "Find Median from a Data Stream (two heaps)",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 89,
+     "title": "Top K: heap vs sort vs quickselect",
+     "format": "pattern",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 90,
+     "title": "Reorganize String",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P10",
+   "title": "Backtracking",
+   "days": [
+    {
+     "day": 91,
+     "title": "Backtracking: choose, explore, undo",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 92,
+     "title": "Subsets",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 93,
+     "title": "Permutations",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 94,
+     "title": "Combination Sum",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 95,
+     "title": "Subsets with duplicates (dedupe pattern)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 96,
+     "title": "Word Search",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 97,
+     "title": "Palindrome Partitioning",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 98,
+     "title": "Letter Combinations of a Phone Number",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 99,
+     "title": "N-Queens",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 100,
+     "title": "Day 100: which pattern for which signal",
+     "format": "recap",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P11",
+   "title": "Tries and intervals",
+   "days": [
+    {
+     "day": 101,
+     "title": "Trie: the prefix tree behind autocomplete",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 102,
+     "title": "Implement Trie",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 103,
+     "title": "Design Add and Search Words",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 104,
+     "title": "Word Search II",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 105,
+     "title": "Intervals: sort first, then sweep",
+     "format": "pattern",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 106,
+     "title": "Merge Intervals",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 107,
+     "title": "Insert Interval and Non-overlapping Intervals",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 108,
+     "title": "Meeting Rooms II",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P12",
+   "title": "Graphs",
+   "days": [
+    {
+     "day": 109,
+     "title": "Graphs: nodes, edges, adjacency list vs matrix",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 110,
+     "title": "BFS vs DFS: which one when",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 111,
+     "title": "Number of Islands",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 112,
+     "title": "Max Area of Island and Flood Fill",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 113,
+     "title": "Clone Graph",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 114,
+     "title": "Rotting Oranges (multi-source BFS)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 115,
+     "title": "Pacific Atlantic Water Flow",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 116,
+     "title": "Surrounded Regions",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 117,
+     "title": "Course Schedule (cycle detection)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 118,
+     "title": "Course Schedule II (topological sort)",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 119,
+     "title": "Union-Find: the idea",
+     "format": "structure",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 120,
+     "title": "Connected Components and Redundant Connection",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 121,
+     "title": "Word Ladder",
+     "format": "problem",
+     "level": "hard",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 122,
+     "title": "Dijkstra: shortest path with weights",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 123,
+     "title": "Network Delay Time",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 124,
+     "title": "Cheapest Flights Within K Stops",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P13",
+   "title": "Dynamic programming",
+   "days": [
+    {
+     "day": 125,
+     "title": "Dynamic programming: remember sub-answers",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 126,
+     "title": "Climbing Stairs",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 127,
+     "title": "House Robber",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 128,
+     "title": "House Robber II",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 129,
+     "title": "Memoization vs tabulation (Fibonacci)",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 130,
+     "title": "Coin Change",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 131,
+     "title": "Longest Increasing Subsequence",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 132,
+     "title": "Longest Common Subsequence",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 133,
+     "title": "Edit Distance",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 134,
+     "title": "0/1 Knapsack: the pattern",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 135,
+     "title": "Partition Equal Subset Sum",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 136,
+     "title": "Target Sum",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 137,
+     "title": "Unique Paths",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 138,
+     "title": "Minimum Path Sum",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 139,
+     "title": "Word Break",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 140,
+     "title": "Decode Ways",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 141,
+     "title": "Longest Palindromic Substring",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 142,
+     "title": "Palindromic Substrings",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 143,
+     "title": "Maximum Product Subarray",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 144,
+     "title": "Best Time to Buy and Sell Stock with Cooldown",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 145,
+     "title": "How to spot a DP problem",
+     "format": "recap",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  },
+  {
+   "id": "P14",
+   "title": "Greedy, bits and wrap-up",
+   "days": [
+    {
+     "day": 146,
+     "title": "Greedy: when the local choice is enough",
+     "format": "concept",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 147,
+     "title": "Jump Game",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 148,
+     "title": "Gas Station",
+     "format": "problem",
+     "level": "medium",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 149,
+     "title": "Bit tricks: XOR and Single Number",
+     "format": "problem",
+     "level": "easy",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 150,
+     "title": "The interview playbook: pattern cheat-sheet",
+     "format": "recap",
+     "status": "todo",
+     "reels": []
+    }
+   ]
+  }
+ ]
+}

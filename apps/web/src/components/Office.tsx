@@ -41,7 +41,7 @@ function UsageMeter({ usage, onResume }: { usage: Usage | null; onResume: () => 
   );
 }
 
-export function OfficeView({ office }: { office: Office }) {
+export function OfficeView({ office, teams, onSwitch }: { office: Office; teams: { slug: string; name: string }[]; onSwitch: (slug: string) => void }) {
   const state = office.state!;
   const { team } = state;
   const [sheet, setSheet] = useState<string | null>(null);
@@ -94,6 +94,16 @@ export function OfficeView({ office }: { office: Office }) {
           </div>
           <span className={`text-xs ${office.connected ? "text-dim" : "text-coral"}`}>{office.connected ? "Live" : "Reconnecting"}</span>
         </div>
+        {teams.length > 1 && (
+          <nav aria-label="Floors" className="mt-3 flex gap-2 overflow-x-auto pb-0.5">
+            {teams.map((t) => (
+              <button key={t.slug} onClick={() => onSwitch(t.slug)} aria-current={t.slug === team.slug ? "true" : undefined}
+                className={`shrink-0 rounded-full border px-3 py-1 text-[12.5px] ${t.slug === team.slug ? "border-gold bg-desk font-medium text-paper" : "border-wall text-dim"}`}>
+                {t.name}
+              </button>
+            ))}
+          </nav>
+        )}
         <UsageMeter usage={state.usage} onResume={office.resume} />
       </header>
 

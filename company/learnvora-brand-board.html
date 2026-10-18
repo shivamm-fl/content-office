@@ -1,0 +1,211 @@
+<title>Learnvora Brand Board</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow reading column that opens into grids. The three handles share one navy base and differ only by accent. */
+:root {
+  --bg: #0B1220; --surface: #131C2E; --line: #25314A; --text: #F3EFE6; --muted: #8FA0B8;
+  --navy: #0B1220; --panel: #131C2E; --ivory: #F3EFE6; --slate: #8FA0B8;
+  --gold: #F2B544; --violet: #A78BFA; --cyan: #4CC9F0; --good: #6FD3A6; --bad: #E5735F;
+  --head: "Space Grotesk", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, monospace;
+  --bm: var(--gold); /* disc and v of the wordmark: gold on dark, navy on light (accent is too weak on light) */
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #F4F6FB; --surface: #FFFFFF; --line: #D5DBE8; --text: #0B1220; --muted: #4F5F7A; --bm: var(--text); color-scheme: light; } }
+:root[data-theme="light"] { --bg: #F4F6FB; --surface: #FFFFFF; --line: #D5DBE8; --text: #0B1220; --muted: #4F5F7A; --bm: var(--text); color-scheme: light; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--head); font-size: 15px; line-height: 1.55; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h2 { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.01em; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.sec { display: flex; flex-direction: column; gap: 18px; }
+.sec > p.lead { color: var(--muted); max-width: 62ch; }
+.mono { font-family: var(--mono); }
+
+/* masthead */
+.mast { display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+.word { margin: 0; line-height: 0; }
+.wordmark { width: min(100%, 620px); height: auto; }
+.wordmark .disc, .wordmark .vv { fill: var(--bm); }
+.wordmark .ltr { fill: var(--text); }
+.mast .tag { font-size: 1.15rem; color: var(--muted); }
+.mast .tag b { color: var(--text); font-weight: 600; }
+
+/* handle cards */
+.handles { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+.hcard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.hhead { display: flex; gap: 14px; align-items: center; }
+.hhead svg { width: 72px; height: 72px; flex: none; border-radius: 50%; }
+.hhead h3 { font-size: 1.05rem; font-weight: 600; overflow-wrap: anywhere; }
+.hhead .mono { font-size: 12px; color: var(--muted); }
+.swatch { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.swatch i { width: 14px; height: 14px; border-radius: 4px; background: var(--c); display: inline-block; }
+dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; font-size: 13.5px; }
+dt { color: var(--muted); font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 3px; }
+dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.bio { white-space: pre-line; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 13.5px; }
+.copy { align-self: flex-start; font: 500 12.5px var(--head); color: var(--text); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+.copy:hover { border-color: var(--muted); }
+.copy:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.stat { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
+
+/* cover: everything is measured in 1080-wide reel pixels, scaled to whatever width the box has */
+.cover { --acc: var(--gold); --u: calc(100cqw / 1080); container-type: inline-size; position: relative; aspect-ratio: 9 / 16; width: 100%;
+  background: radial-gradient(circle at 50% 70%, color-mix(in srgb, var(--acc) 22%, transparent) 0%, color-mix(in srgb, var(--acc) 6%, transparent) 36%, transparent 62%),
+              radial-gradient(circle at 92% 96%, rgba(108,140,213,.18) 0%, transparent 42%), var(--navy);
+  color: var(--ivory); overflow: hidden; border-radius: 10px; font-family: var(--head); }
+.cover > * { position: absolute; }
+.c-pill { left: 0; right: 0; top: calc(var(--u) * 330); display: flex; justify-content: center; }
+.c-pill span { background: var(--acc); color: var(--navy); font-weight: 700; text-transform: uppercase; white-space: nowrap; letter-spacing: calc(var(--u) * 4);
+  font-size: calc(var(--u) * 40); padding: calc(var(--u) * 20) calc(var(--u) * 44); border-radius: 999px; }
+.c-head { left: calc(var(--u) * 70); right: calc(var(--u) * 70); top: calc(var(--u) * 440); height: calc(var(--u) * 560); display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: calc(var(--u) * 128); line-height: 1.06; font-weight: 700; letter-spacing: calc(var(--u) * -1); }
+.c-head div { max-width: 87%; }
+.c-head em { font-style: normal; color: var(--acc); }
+.c-day { left: 0; right: 0; top: calc(var(--u) * 1060); text-align: center; }
+.c-day .l { font-size: calc(var(--u) * 40); font-weight: 600; letter-spacing: calc(var(--u) * 14); color: var(--slate); }
+.c-day .r { display: flex; justify-content: center; align-items: baseline; gap: calc(var(--u) * 22); margin-top: calc(var(--u) * 6); }
+.c-day .n { font-size: calc(var(--u) * 250); line-height: 1; font-weight: 700; letter-spacing: calc(var(--u) * -4); color: var(--acc); }
+.c-day .o { font-size: calc(var(--u) * 72); font-weight: 500; color: var(--slate); }
+.c-track { left: calc(var(--u) * 150); right: calc(var(--u) * 150); top: calc(var(--u) * 1440); height: calc(var(--u) * 20); border-radius: 999px; background: var(--panel); overflow: hidden; }
+.c-track i { display: block; height: 100%; background: var(--acc); border-radius: 999px; }
+.c-handle { left: 0; right: 0; bottom: calc(var(--u) * 120); text-align: center; color: var(--slate); font-size: calc(var(--u) * 46); font-weight: 500; letter-spacing: calc(var(--u) * 1); }
+.covers { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; align-items: start; }
+.covers figure { margin: 0; display: flex; flex-direction: column; gap: 10px; max-width: 320px; }
+figcaption { font-size: 12.5px; color: var(--muted); }
+
+/* profile grid: the grid shows the centre 3:4 of each 9:16 cover */
+.grids { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; }
+.pgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.tile { aspect-ratio: 3 / 4; overflow: hidden; position: relative; }
+.tile .cover { margin-top: -22.222%; border-radius: 0; }
+.pcap { display: flex; flex-direction: column; gap: 1px; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; overflow-wrap: anywhere; }
+
+/* palette + type */
+.sw { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.chip { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.chip .f { height: 64px; background: var(--c); }
+.chip .t { padding: 9px 11px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
+.chip .t b { font-family: var(--head); font-size: 13px; font-weight: 600; color: var(--text); }
+.type { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.type > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 8px; }
+.type .big { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+.type .code { font-family: var(--mono); font-size: 14px; line-height: 1.6; }
+.type .code span { color: var(--violet); }
+.todo { display: flex; flex-direction: column; gap: 10px; padding: 0; margin: 0; list-style: none; }
+.todo li { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; gap: 12px; }
+.todo b { font-weight: 600; }
+.todo span { color: var(--muted); }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 1080 1080">
+    <rect width="1080" height="1080" fill="#0B1220"/>
+    <path d="M524.105 545.231A17.143 17.143 0 0 0 555.895 545.231L677.6 243.999A13.714 13.714 0 0 1 697.046 237.187A320 320 0 1 1 382.954 237.187A13.714 13.714 0 0 1 402.4 243.999Z" style="fill:var(--acc)"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="mast">
+    <p class="eyebrow">Brand board &middot;18 Oct 2026 &middot;for approval</p>
+    <h1 class="word"><svg class="wordmark" viewBox="0 0 533.50 76.40" role="img" aria-label="learnvora"><path class="disc" d="M36.212 41.288A1.929 1.929 0 0 0 39.788 41.288L53.48 7.4A1.543 1.543 0 0 1 55.668 6.634A36 36 0 1 1 20.332 6.634A1.543 1.543 0 0 1 22.52 7.4Z"/><path class="ltr" d="M96 73V3H108.6V73Z M144.2 74.4Q136.8 74.4 131.15 71.25Q125.5 68.1 122.35 62.35Q119.2 56.6 119.2 48.8V47.6Q119.2 39.8 122.3 34.05Q125.4 28.3 131 25.15Q136.6 22 144 22Q151.3 22 156.7 25.25Q162.1 28.5 165.1 34.25Q168.1 40 168.1 47.6V51.9H132Q132.2 57 135.8 60.2Q139.4 63.4 144.6 63.4Q149.9 63.4 152.4 61.1Q154.9 58.8 156.2 56L166.5 61.4Q165.1 64 162.45 67.05Q159.8 70.1 155.4 72.25Q151 74.4 144.2 74.4ZM132.1 42.5H155.3Q154.9 38.2 151.85 35.6Q148.8 33 143.9 33Q138.8 33 135.8 35.6Q132.8 38.2 132.1 42.5Z M193.7 74.4Q188.4 74.4 184.2 72.55Q180 70.7 177.55 67.15Q175.1 63.6 175.1 58.5Q175.1 53.4 177.55 49.95Q180 46.5 184.35 44.75Q188.7 43 194.3 43H207.9V40.2Q207.9 36.7 205.7 34.45Q203.5 32.2 198.7 32.2Q194 32.2 191.7 34.35Q189.4 36.5 188.7 39.9L177.1 36Q178.3 32.2 180.95 29.05Q183.6 25.9 188.05 23.95Q192.5 22 198.9 22Q208.7 22 214.4 26.9Q220.1 31.8 220.1 41.1V59.6Q220.1 62.6 222.9 62.6H226.9V73H218.5Q214.8 73 212.4 71.2Q210 69.4 210 66.4V66.3H208.1Q207.7 67.5 206.3 69.45Q204.9 71.4 201.9 72.9Q198.9 74.4 193.7 74.4ZM195.9 64.2Q201.2 64.2 204.55 61.25Q207.9 58.3 207.9 53.4V52.4H195.2Q191.7 52.4 189.7 53.9Q187.7 55.4 187.7 58.1Q187.7 60.8 189.8 62.5Q191.9 64.2 195.9 64.2Z M235.1 73V23.4H247.5V29H249.3Q250.4 26 252.95 24.6Q255.5 23.2 258.9 23.2H264.9V34.4H258.7Q253.9 34.4 250.8 36.95Q247.7 39.5 247.7 44.8V73Z M273.7 73V23.4H286.1V29.9H287.9Q289.1 27.3 292.4 24.95Q295.7 22.6 302.4 22.6Q308.2 22.6 312.55 25.25Q316.9 27.9 319.3 32.55Q321.7 37.2 321.7 43.4V73H309.1V44.4Q309.1 38.8 306.35 36Q303.6 33.2 298.5 33.2Q292.7 33.2 289.5 37.05Q286.3 40.9 286.3 47.8V73Z M408.9 74.4Q401.5 74.4 395.6 71.4Q389.7 68.4 386.3 62.7Q382.9 57 382.9 49V47.4Q382.9 39.4 386.3 33.7Q389.7 28 395.6 25Q401.5 22 408.9 22Q416.3 22 422.2 25Q428.1 28 431.5 33.7Q434.9 39.4 434.9 47.4V49Q434.9 57 431.5 62.7Q428.1 68.4 422.2 71.4Q416.3 74.4 408.9 74.4ZM408.9 63.2Q414.7 63.2 418.5 59.45Q422.3 55.7 422.3 48.7V47.7Q422.3 40.7 418.55 36.95Q414.8 33.2 408.9 33.2Q403.1 33.2 399.3 36.95Q395.5 40.7 395.5 47.7V48.7Q395.5 55.7 399.3 59.45Q403.1 63.2 408.9 63.2Z M445.5 73V23.4H457.9V29H459.7Q460.8 26 463.35 24.6Q465.9 23.2 469.3 23.2H475.3V34.4H469.1Q464.3 34.4 461.2 36.95Q458.1 39.5 458.1 44.8V73Z M498.3 74.4Q493 74.4 488.8 72.55Q484.6 70.7 482.15 67.15Q479.7 63.6 479.7 58.5Q479.7 53.4 482.15 49.95Q484.6 46.5 488.95 44.75Q493.3 43 498.9 43H512.5V40.2Q512.5 36.7 510.3 34.45Q508.1 32.2 503.3 32.2Q498.6 32.2 496.3 34.35Q494 36.5 493.3 39.9L481.7 36Q482.9 32.2 485.55 29.05Q488.2 25.9 492.65 23.95Q497.1 22 503.5 22Q513.3 22 519 26.9Q524.7 31.8 524.7 41.1V59.6Q524.7 62.6 527.5 62.6H531.5V73H523.1Q519.4 73 517 71.2Q514.6 69.4 514.6 66.4V66.3H512.7Q512.3 67.5 510.9 69.45Q509.5 71.4 506.5 72.9Q503.5 74.4 498.3 74.4ZM500.5 64.2Q505.8 64.2 509.15 61.25Q512.5 58.3 512.5 53.4V52.4H499.8Q496.3 52.4 494.3 53.9Q492.3 55.4 492.3 58.1Q492.3 60.8 494.4 62.5Q496.5 64.2 500.5 64.2Z"/><path class="vv" d="M343.3 73 327.5 23.4H340.9L352.4 63.8H354.2L365.7 23.4H379.1L363.3 73Z"/></svg></h1>
+    <p class="tag"><b>Learn voraciously.</b> Three handles, one family, 150 days each. Same navy and type everywhere; each handle owns one accent.</p>
+  </header>
+
+  <section class="sec" id="handles">
+    <h2>The three handles</h2>
+    <p class="lead">Copy and profile fields are ready to paste. The profile photo has to be uploaded from your phone, because the browser tool I use cannot pick files.</p>
+    <div class="handles" id="hcards"></div>
+  </section>
+
+  <section class="sec">
+    <h2>The cover, Day 47</h2>
+    <p class="lead">Pill, a large headline, a smaller day counter and a progress bar. The viewer's question comes first, the counter is the label. No mascot. Everything that matters sits in the centre, because the profile grid crops each cover to 3:4.</p>
+    <div class="covers" id="covers"></div>
+  </section>
+
+  <section class="sec">
+    <h2>What the profile grid looks like</h2>
+    <p class="lead">Days 1 to 6 of each series, cropped the way Instagram shows them, newest first. A visitor sees a counter that climbs. Headlines are illustrative; the DSA ones follow the draft roadmap.</p>
+    <div class="grids" id="grids"></div>
+  </section>
+
+  <section class="sec">
+    <h2>Colour</h2>
+    <p class="lead">60% navy, 30% ivory and slate, 10% accent. Navy text on any accent fill. Contrast is measured against the navy.</p>
+    <div class="sw" id="sw"></div>
+  </section>
+
+  <section class="sec">
+    <h2>Type</h2>
+    <div class="type">
+      <div><span class="eyebrow">Headlines &middot;Space Grotesk 700</span><span class="big">Why is binary search so fast?</span><span style="color:var(--muted)">Covers, labels, captions on screen.</span></div>
+      <div><span class="eyebrow">Code and counters &middot;JetBrains Mono</span><div class="code"><span>def</span> search(a, x):<br>&nbsp;&nbsp;lo, hi = 0, len(a) - 1<br>&nbsp;&nbsp;<span>while</span> lo &lt;= hi: ...</div><span style="color:var(--muted)">Code on screen is run first and shows its real output.</span></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>What is still open</h2>
+    <ul class="todo">
+      <li><b>1</b><span><b>Profile photos.</b> The three Bite avatars (1080 px) are in the brand folders: <span class="mono">teams/dsa/brand/avatar.png</span>, <span class="mono">teams/systemdesign/brand/avatar.png</span> and, for ai.learnvora, <span class="mono">teams/learnai/brand/avatar-learnvora.png</span> (gold). Upload them from your phone.</span></li>
+      <li><b>2</b><span><b>ai.learnvora.</b> Done: you renamed ig.learnai to ai.learnvora on Instagram on 2026-10-18. The office keeps the internal name learnai, so nothing in the pipeline broke. Check that the blue verified tick survived the rename.</span></li>
+      <li><b>3</b><span><b>Website link.</b> Left out of the bios until learnvora.com or learnvora.in is yours.</span></li>
+      <li><b>4</b><span><b>Cyan and gold.</b> If you want the AI handle to move off gold, say so before covers are posted. Changing it later breaks the family look on the grid.</span></li>
+    </ul>
+  </section>
+</div>
+
+<script>
+const H = [
+  { key: 'ai', handle: 'ai.learnvora', acc: 'var(--gold)', hex: '#F2B544', contrast: '10.2', pill: 'AI', headline: 'What Is a <em>Context Window?</em>',
+    name: 'AI | Learnvora', cat: 'Education', series: '150 Days of AI',
+    bio: 'AI engineer banne ka roadmap, Hinglish me.\n150 days of AI: roz ek concept.\nFollow karo, aaj se shuru.',
+    tiles: ['What Does an <em>AI Engineer</em> Do?', 'How Does an <em>LLM Work?</em>', 'What Is a <em>Token?</em>', 'What Are <em>Embeddings?</em>', 'What Is a <em>Prompt?</em>', 'What Is <em>Context?</em>'],
+    status: 'Renamed from ig.learnai to ai.learnvora by the owner on 2026-10-18. Check that the blue tick survived.' },
+  { key: 'dsa', handle: 'dsa.learnvora', acc: 'var(--violet)', hex: '#A78BFA', contrast: '6.9', pill: 'DSA', headline: 'Why Is <em>Binary Search</em> So Fast?',
+    name: 'DSA | Learnvora', cat: 'Education', series: '150 Days of DSA',
+    bio: 'DSA ko samjho, ratto mat. Hinglish me.\n150 days of DSA: roz ek concept ya problem.\nCoding interview ki taiyari, aaj se.',
+    tiles: ['What Is <em>DSA?</em>', 'Big-O in <em>Plain Words</em>', 'Time vs <em>Space</em>', 'How Arrays <em>Sit in Memory</em>', 'Why Strings <em>Never Change</em>', 'How Hash Maps <em>Find Fast</em>'],
+    status: 'Logged in. Empty profile: no photo, no bio, 0 posts.' },
+  { key: 'sd', handle: 'systemdesign.learnvora', acc: 'var(--cyan)', hex: '#4CC9F0', contrast: '9.7', pill: 'SYSTEM DESIGN', headline: 'What Does a <em>Load Balancer</em> Do?',
+    name: 'System Design | Learnvora', cat: 'Education', series: '150 Days of System Design',
+    bio: 'System design, simple Hinglish me.\n150 days of System Design: roz ek concept.\nBackend aur interview, dono ke liye.',
+    tiles: ['Why Do Systems <em>Need Design?</em>', 'Latency vs <em>Throughput</em>', 'What Is <em>Scalability?</em>', 'What Is a <em>Server?</em>', 'How Does <em>DNS Work?</em>', 'What Is an <em>API?</em>'],
+    status: 'Exists with 0 posts. Not logged in yet.' },
+];
+const $ = (id) => document.getElementById(id);
+const cover = (h, day) => `<div class="cover" style="--acc:${h.acc}">
+  <div class="c-pill"><span>${h.pill}</span></div>
+  <div class="c-head"><div>${h.headline}</div></div>
+  <div class="c-day"><div class="l">DAY</div><div class="r"><span class="n">${String(day).padStart(3, '0')}</span><span class="o">/ 150</span></div></div>
+  <div class="c-track"><i style="width:${(day / 150 * 100).toFixed(2)}%"></i></div>
+  <div class="c-handle">@${h.handle}</div></div>`;
+
+$('hcards').innerHTML = H.map((h) => `<article class="hcard" style="--acc:${h.acc}">
+  <div class="hhead"><svg viewBox="0 0 1080 1080" role="img" aria-label="${h.handle} profile photo"><use href="#mark"/></svg>
+    <div><h3>@${h.handle}</h3><span class="swatch" style="--c:${h.acc}"><i></i>${h.hex}</span></div></div>
+  <dl><dt>Name</dt><dd>${h.name}</dd><dt>Type</dt><dd>Professional, ${h.cat}</dd><dt>Series</dt><dd>${h.series}</dd></dl>
+  <div class="bio" id="bio-${h.key}">${h.bio}</div>
+  <button class="copy" type="button" data-key="${h.key}">Copy bio</button>
+  <p class="stat">${h.status}</p></article>`).join('');
+
+$('covers').innerHTML = H.map((h) => `<figure>${cover(h, 47)}<figcaption>@${h.handle}</figcaption></figure>`).join('');
+$('grids').innerHTML = H.map((h) => `<div><div class="pcap"><span>@${h.handle}</span><span class="mono">${h.series}</span></div>
+  <div class="pgrid">${[6, 5, 4, 3, 2, 1].map((d) => `<div class="tile">${cover({ ...h, headline: h.tiles[d - 1] }, d)}</div>`).join('')}</div></div>`).join('');
+
+const base = [['Navy', '#0B1220', '16.3 with ivory text'], ['Panel', '#131C2E', 'cards, code'], ['Ivory', '#F3EFE6', 'main text'], ['Slate', '#8FA0B8', '7.0 on navy'], ['Good', '#6FD3A6', 'right only'], ['Bad', '#E5735F', 'wrong only']];
+const sw = base.map(([n, hx, t]) => [n, hx, t]).concat(H.map((h) => [h.key === 'ai' ? 'Gold &middot;AI' : h.key === 'dsa' ? 'Violet &middot;DSA' : 'Cyan &middot;System Design', h.hex, h.contrast + ' on navy']));
+$('sw').innerHTML = sw.map(([n, hx, t]) => `<div class="chip"><div class="f" style="--c:${hx}"></div><div class="t"><b>${n}</b>${hx}<span>${t}</span></div></div>`).join('');
+
+document.addEventListener('click', async (e) => {
+  const b = e.target.closest('.copy'); if (!b) return;
+  const el = $('bio-' + b.dataset.key);
+  try { await navigator.clipboard.writeText(el.textContent); b.textContent = 'Copied'; }
+  catch { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected, press copy'; }
+  setTimeout(() => { b.textContent = 'Copy bio'; }, 1800);
+});
+</script>

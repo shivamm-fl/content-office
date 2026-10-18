@@ -97,7 +97,9 @@ test("empty slots are counted and paused is reported", () => {
 test("refusePublish: window, slots, capacity, ids", () => {
   const now = IST("2026-10-18", "10:00");
   assert.equal(refusePublish({ item: "e101", mode: "now" }, cfg, base(), now), null);
-  assert.match(refusePublish({ item: "e101", mode: "now" }, cfg, base(), IST("2026-10-18", "22:00")), /between 07:00 and 21:00/);
+  for (const t of ["00:30", "06:59", "21:00", "22:00", "23:59"]) {   // the owner's own tap works at any hour; only the automatic slots keep the window
+    assert.equal(refusePublish({ item: "e101", mode: "now" }, cfg, base(), IST("2026-10-18", t)), null, t);
+  }
   assert.match(refusePublish({ item: "q24", mode: "now" }, cfg, base(), now), /already posted/);
   assert.match(refusePublish({ item: "../x", mode: "now" }, cfg, base(), now), /bad item/);
   assert.equal(refusePublish({ item: "e101", mode: "slot", date: "2026-10-18", time: "13:00" }, cfg, base(), now), null);

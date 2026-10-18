@@ -1,0 +1,185 @@
+{
+  "slug": "dsa",
+  "name": "Learnvora DSA",
+  "tagline": "DSA for Hindi and Hinglish speakers who want to crack coding interviews: 150 days, one idea a day",
+  "handles": [
+    {
+      "platform": "instagram",
+      "handle": "@dsa.learnvora"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "series",
+      "prefix": "d",
+      "name": "150 Days of DSA"
+    }
+  ],
+  "lead": "producer",
+  "model": "claude-sonnet-5-5",
+  "agents": [
+    {
+      "slug": "producer",
+      "name": "Producer",
+      "title": "Runs the team. Talk to me first.",
+      "color": "#F2B544",
+      "desk": "desk",
+      "skills": [
+        "Runs work orders",
+        "Delegates",
+        "Approvals"
+      ]
+    },
+    {
+      "slug": "strategist",
+      "name": "Strategist",
+      "title": "Plans the slate and the roadmap",
+      "color": "#7CC4FA",
+      "desk": "desk",
+      "skills": [
+        "ig-plan",
+        "yt-plan",
+        "hook-writer",
+        "Roadmap"
+      ]
+    },
+    {
+      "slug": "researcher",
+      "name": "Researcher",
+      "title": "Sources, facts, new tools and repos",
+      "color": "#9AE6B4",
+      "desk": "desk",
+      "skills": [
+        "WebSearch",
+        "WebFetch",
+        "Fact checks"
+      ]
+    },
+    {
+      "slug": "scriptwriter",
+      "name": "Scriptwriter",
+      "title": "Hooks and Hinglish scripts",
+      "color": "#F6AD8F",
+      "desk": "desk",
+      "skills": [
+        "hinglish-script",
+        "hook-writer",
+        "hookscore"
+      ]
+    },
+    {
+      "slug": "packager",
+      "name": "Packager",
+      "title": "Captions, titles, descriptions",
+      "color": "#D6BCFA",
+      "desk": "desk",
+      "skills": [
+        "ig-caption",
+        "ig-human",
+        "yt-package",
+        "yt-seo"
+      ]
+    },
+    {
+      "slug": "growth-analyst",
+      "name": "Growth Analyst",
+      "title": "Reads the numbers, proposes learnings",
+      "color": "#FBD38D",
+      "desk": "desk",
+      "skills": [
+        "ig-audit",
+        "yt-audit",
+        "yt-retention",
+        "ig-viral"
+      ]
+    },
+    {
+      "slug": "community-manager",
+      "name": "Community Manager",
+      "title": "Drafts replies (never sends)",
+      "color": "#90CDF4",
+      "desk": "desk",
+      "skills": [
+        "ig-reply",
+        "yt-comment"
+      ]
+    },
+    {
+      "slug": "motion-designer",
+      "name": "Motion Designer",
+      "title": "Visual plan and animated scenes",
+      "color": "#F687B3",
+      "desk": "studio",
+      "skills": [
+        "clean-reel",
+        "Diagram kit",
+        "HyperFrames"
+      ]
+    },
+    {
+      "slug": "post-production",
+      "name": "Post-production",
+      "title": "Voice, render, cover, thumbnail",
+      "color": "#B2F5EA",
+      "desk": "studio",
+      "skills": [
+        "Edge TTS",
+        "Render",
+        "Cover",
+        "Thumbnail"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "cabin",
+      "name": "Producer cabin",
+      "agents": [
+        "producer"
+      ]
+    },
+    {
+      "id": "sync",
+      "name": "Sync room",
+      "kind": "meeting"
+    },
+    {
+      "id": "plan",
+      "name": "Planning pod",
+      "agents": [
+        "strategist",
+        "researcher"
+      ]
+    },
+    {
+      "id": "write",
+      "name": "Writing pod",
+      "agents": [
+        "scriptwriter",
+        "packager"
+      ]
+    },
+    {
+      "id": "growth",
+      "name": "Growth pod",
+      "agents": [
+        "growth-analyst",
+        "community-manager"
+      ]
+    },
+    {
+      "id": "studio",
+      "name": "Studio",
+      "agents": [
+        "motion-designer",
+        "post-production"
+      ]
+    },
+    {
+      "id": "reception",
+      "name": "Reception",
+      "kind": "reception"
+    }
+  ],
+  "pace": 3
+}

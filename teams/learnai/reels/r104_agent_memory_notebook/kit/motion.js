@@ -23,7 +23,7 @@ window.Mo = (function () {
   function init(opts) {
     const R = window.REEL, DL = R.hi, S = DL.starts, PH = DL.ph, TOT = DL.total, order = opts.order;
     document.documentElement.setAttribute("data-lang", "hi");
-    $("#tagtxt").textContent = opts.tag || "AI SAMJHO · HINDI"; $("#handle").textContent = opts.handle || "@ig.learnai";
+    $("#tagtxt").textContent = opts.tag || "AI SAMJHO · HINDI"; $("#handle").textContent = opts.handle || "@ai.learnvora";
     const tl = gsap.timeline({ paused: true });
     const rnd = lcg(11);
     // ---------- ambient world: static in the clean style (only the progress bar moves) ----------

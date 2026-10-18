@@ -100,7 +100,7 @@
       // ===== D: comment 1-5, follow ===== // diagram: D
       const cc = frame(D, 100, 330, 880, 880, CYAN, "COMMENT KARO", P("D", 0));
       SRC.forEach((s, k) => { const r = el(D, `left:140px;top:${370 + k * 150}px;width:800px;height:128px;border-radius:18px;background:${ca(s[1], 0.18)};border:3px solid ${s[1]};display:flex;align-items:center;gap:28px;padding-left:32px;box-sizing:border-box;font:700 46px var(--code);color:${s[1]}`, `<span style="font-size:64px;color:#E8EDF6;width:60px">${k + 1}</span>${s[0]}`); show(r, at("D", "paanch") + 0.1 + k * 0.1, { opacity: 0, y: 16 }); });
-      show(el(D, `left:0;width:1080px;top:1250px;text-align:center;font:700 56px var(--code);color:#E8EDF6`, "@ig.learnai"), at("D", "follow") - 0.7, { opacity: 0 });
+      show(el(D, `left:0;width:1080px;top:1250px;text-align:center;font:700 56px var(--code);color:#E8EDF6`, "@ai.learnvora"), at("D", "follow") - 0.7, { opacity: 0 });
       const fb = M.pill(D, "+  FOLLOW", at("D", "follow") - 0.4, { x: 370, y: 1340, size: 44, kind: "acc" });
       tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("D", "follow"));
       M.fit(D, { y: 200, h: 1250 });

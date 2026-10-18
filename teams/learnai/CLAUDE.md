@@ -1,6 +1,6 @@
 # LearnAI team
 
-LearnAI teaches AI to Hindi and Hinglish speakers who want to become AI engineers, on Instagram (@ig.learnai), Facebook (Learnai.ai) and YouTube (LearnAI). This folder is the team's workspace in the content office: the owner starts the work day from the office app, approves the finished reels (and any script they ask to see), and posts from the Calendar tab. Agents never post.
+LearnAI teaches AI to Hindi and Hinglish speakers who want to become AI engineers, on Instagram (@ai.learnvora, renamed by the owner from ig.learnai on 2026-10-18; every new video, caption and cover uses the new handle), Facebook (Learnai.ai) and YouTube (LearnAI). This folder is the team's workspace in the content office: the owner starts the work day from the office app, approves the finished reels (and any script they ask to see), and posts from the Calendar tab. Agents never post.
 
 ## The goal
 **Grow the handle**: more people who watch a reel to the end, save it, share it and follow, week after week. That is the team's single goal and the measure of every choice. You are a small reel team that owns this result, not stations of a pipeline: talk to each other, ask each other early, challenge each other's work, try things, keep what works and write down what you learned (`state/learnings.md`, `state/team_playbook.md`, `state/experiments.md`). Every day the team should be a little better than the day before.

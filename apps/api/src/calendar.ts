@@ -181,9 +181,8 @@ export function refusePublish(
 ): string | null {
   if (!/^[a-z]\d{2,4}$/.test(req.item)) return "bad item id";
   if (status[req.item]?.published) return `${req.item} is already posted`;
-  if (req.mode === "now") {
-    return canPostNow(cfg, now) ? null : `Posting is allowed between ${postingWindow(cfg).join(" and ")} IST only. Put it on a slot instead.`;
-  }
+  // The owner's own tap works at any hour (owner decision 2026-10-18: "post now kabhi bhi"); the posting window only limits the automatic slots.
+  if (req.mode === "now") return null;
   if (req.mode !== "slot") return "bad mode";
   if (!TRACKS.some((t) => t.prefix === req.item[0])) return "Only e, r and q reels can be put on a slot. Post this one now.";
   const slots = cfg.slots_ist?.length ? cfg.slots_ist : DEFAULT_SLOTS;

@@ -19,7 +19,9 @@ function useHash() {
   return hash;
 }
 
-function Shell({ team, onAuthLost }: { team: string; onAuthLost: () => void }) {
+type TeamInfo = { slug: string; name: string };
+
+function Shell({ team, teams, onSwitch, onAuthLost }: { team: string; teams: TeamInfo[]; onSwitch: (slug: string) => void; onAuthLost: () => void }) {
   const office = useOffice(team, onAuthLost);
   const hash = useHash();
   const state = office.state;
@@ -40,7 +42,7 @@ function Shell({ team, onAuthLost }: { team: string; onAuthLost: () => void }) {
           : tab === "inbox" ? <InboxView office={office} />
           : tab === "calendar" ? <CalendarView office={office} focus={calendar?.[1] ?? null} />
           : tab === "runs" ? <RunsView office={office} />
-          : <OfficeView office={office} />}
+          : <OfficeView office={office} teams={teams} onSwitch={onSwitch} />}
       </main>
       {!inChat && (
         <nav className="safe-bottom grid grid-cols-4 border-t border-wall bg-ink pt-1.5 text-center text-[13px]">
@@ -55,16 +57,29 @@ function Shell({ team, onAuthLost }: { team: string; onAuthLost: () => void }) {
   );
 }
 
+// the floor the owner picked last (a per-device convenience: storage can be blocked, the office then opens on the first team)
+const TEAM_KEY = "office.team";
+const savedTeam = () => { try { return localStorage.getItem(TEAM_KEY); } catch { return null; } };
+
 export function App() {
-  const [auth, setAuth] = useState<"checking" | "out" | { team: string }>("checking");
+  const [auth, setAuth] = useState<"checking" | "out" | { team: string; teams: TeamInfo[] }>("checking");
   const check = useCallback(() => {
-    api<{ owner: string; teams: { slug: string }[] }>("/api/me")
-      .then((r) => setAuth({ team: r.teams[0]?.slug ?? "learnai" }))
+    api<{ owner: string; teams: TeamInfo[] }>("/api/me")
+      .then((r) => {
+        const saved = savedTeam();
+        setAuth({ team: r.teams.find((t) => t.slug === saved)?.slug ?? r.teams[0]?.slug ?? "learnai", teams: r.teams });
+      })
       .catch((e) => setAuth(e instanceof AuthError ? "out" : "out"));
   }, []);
   useEffect(check, [check]);
   const lost = useCallback(() => setAuth("out"), []);
+  const switchTeam = useCallback((slug: string) => {
+    try { localStorage.setItem(TEAM_KEY, slug); } catch { /* storage blocked: the pick lasts until reload */ }
+    go("#/");   // a thread or calendar hash belongs to the floor we are leaving
+    setAuth((a) => (typeof a === "object" ? { ...a, team: slug } : a));
+  }, []);
   if (auth === "checking") return null;
   if (auth === "out") return <Login onDone={check} />;
-  return <Shell team={auth.team} onAuthLost={lost} />;
+  // key: a floor change remounts the shell, so no state of the old floor shows on the new one
+  return <Shell key={auth.team} team={auth.team} teams={auth.teams} onSwitch={switchTeam} onAuthLost={lost} />;
 }
