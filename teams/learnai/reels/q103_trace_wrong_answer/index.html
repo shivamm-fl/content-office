@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Debug a wrong AI answer</title>
+    <title>Interview: Chatbot ne galat jawab diya, pata kaise chalega kyun?</title>
     <script src="assets/gsap.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="kit/motion.css" />
@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="55" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -32,7 +32,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,19 +41,127 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="55" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="55" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="55" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "AI ENGINEER INTERVIEW" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
-      const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const M = Mo.init({ order: ["A","B","C","D","E","F"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n);
+      const { ACC, CYAN, HOT, GOOD } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF");
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:20px;font-size:32px;color:${col};text-align:left`; } return d; };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const chip = (host, txt, t, cx, y, o) => { o = o || {}; const col = o.col || ACC, size = o.size || 44;
+        const w = el(host, `left:${cx - 450}px;top:${y}px;width:900px;text-align:center;pointer-events:none`);
+        const c = el(w, `position:relative;display:inline-block;padding:12px 32px;border:3px solid ${col};border-radius:999px;font:700 ${size}px var(--code);white-space:nowrap;letter-spacing:.04em;` + (o.solid ? `background:${col};color:#0E121E` : `background:rgba(14,18,30,.9);color:${col}`), txt);
+        c.style.position = "relative"; return show(w, t); };
+      const stamp = (host, txt, cx, y, col, t, size) => { const w = el(host, `left:${cx - 450}px;top:${y}px;width:900px;text-align:center`);
+        el(w, `position:relative;display:inline-block;padding:14px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap`, txt).style.position = "relative"; return show(w, t, { opacity: 0, scale: 1.08 }); };
+      const header = (host, txt, t) => chip(host, txt, t, 540, 190, { solid: true, size: 46 });
 
-      M.finish();   // LAST: captions
-      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+      // ===== A: hook, a chat that answers wrong =====
+      M.hook(["Chatbot gave a", "wrong answer?"], { size: 88, top: 215, until: 8.4 });
+      // diagram: A
+      const chat = panel(A, 100, 470, 880, 640, CYAN, "SUPPORT CHAT"); show(chat, 0.02, { opacity: 0 });
+      el(chat, "right:36px;top:130px;padding:26px 34px;border-radius:28px 28px 6px 28px;background:#26324A;font:600 54px var(--lat);white-space:nowrap", "refund kab milega?");
+      const bot = show(el(chat, `left:36px;top:330px;padding:26px 34px;border-radius:28px 28px 28px 6px;background:${M.ca(CYAN, .14)};border:2px solid ${M.ca(CYAN, .6)};font:600 56px var(--lat);white-space:nowrap`,
+        'Refund <b style="color:#5BC0EB">30 din</b> mein <span class="ok" style="color:#4CC38A">✓</span><span class="no" style="color:#E8596B;margin-left:-.62em;opacity:0">✗</span>'), 0.05, { opacity: 1 });
+      const flip = at("A", "galat"); tl.set(bot.querySelector(".ok"), { opacity: 0 }, flip); tl.set(bot.querySelector(".no"), { opacity: 1 }, flip);
+      tl.to(bot, { borderColor: M.ca(HOT, .9), backgroundColor: M.ca(HOT, .12), duration: 0.2, immediateRender: false }, flip);
+      chip(A, "WHY?", at("A", "kyun"), 540, 1150, { col: HOT, size: 72, solid: true });
+      [1, 2, 3].forEach((k) => chip(A, `${k} ?`, at("A", "steps") + (k - 1) * 0.14, 300 + (k - 1) * 240, 1290, { size: 64 }));
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: only the final answer is visible =====
+      header(B, "ONLY THE END", M.P("B", 0));
+      // diagram: B
+      const seen = panel(B, 100, 310, 880, 300, HOT, "WHAT YOU SEE"); show(seen, M.P("B", 0) + 0.2);
+      el(seen, `left:40px;top:130px;padding:20px 30px;border-radius:20px;background:${M.ca(HOT, .14)};border:2px solid ${M.ca(HOT, .8)};font:600 50px var(--lat);white-space:nowrap`, 'Refund 30 din mein <span style="color:#E8596B">✗</span>');
+      M.icon(B, "eye", 770, 400, 150, HOT).show(M.P("B", 0) + 0.3);
+      M.arrow(B, { from: [540, 630], to: [540, 740], color: ACC, w: 12 }).show(M.P("B", 0) + 0.5, 0.3);
+      chip(B, "HIDDEN", M.P("B", 0) + 0.4, 760, 650, { col: "#8592AD", size: 44 });
+      [["RETRIEVE", "retrieval", "search", 760], ["PROMPT", "prompt", "chat", 970], ["TOOL", "tool", "gear", 1180]].forEach(([lab, w, ic, y]) => {
+        const c = el(B, `left:100px;top:${y}px;width:880px;height:180px;border-radius:24px;border:3px dashed ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .08)}`);
+        el(c, `left:220px;top:48px;font:800 64px var(--lat);color:#E8EDF6;white-space:nowrap`, lab);
+        el(c, `right:50px;top:30px;font:800 100px var(--code);color:${HOT}`, "?");
+        const k = (y - 760) / 210; show(c, M.P("B", 0) + 0.6 + k * 0.2); M.icon(B, ic, 120, y + 40, 100, CYAN).show(M.P("B", 0) + 0.7 + k * 0.2);
+        tl.to(c, { borderColor: HOT, backgroundColor: M.ca(HOT, .12), duration: 0.25, immediateRender: false }, at("B", w)); });
+      M.fit(B);
+
+      // ===== C: trace = whole path =====
+      header(C, "1 · TRACE", M.P("C", 0));
+      // diagram: C
+      const stops = [["REQUEST", "in"], ["RETRIEVE", "search"], ["PROMPT", "chat"], ["TOOL", "gear"], ["ANSWER", "check"]];
+      const rail = el(C, `left:197px;top:395px;width:10px;height:720px;background:${M.ca(CYAN, .35)};border-radius:5px;transform-origin:50% 0`); tl.set(rail, { opacity: 0, scaleY: 0 }, 0);
+      tl.to(rail, { opacity: 1, scaleY: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, M.P("C", 0) + 0.3);
+      const tR = at("C", "raasta");
+      stops.forEach(([lab], i) => { const y = 340 + i * 180;
+        const d = el(C, `left:150px;top:${y}px;width:104px;height:104px;border-radius:50%;border:5px solid ${M.ca(CYAN, .6)};background:#0E121E;display:flex;align-items:center;justify-content:center;font:800 50px var(--code);color:#E8EDF6`, String(i + 1));
+        show(d, M.P("C", 0) + 0.3 + i * 0.1, { opacity: 0, scale: 0.7 });
+        el(C, `left:300px;top:${y + 20}px;font:800 58px var(--lat);color:#E8EDF6;white-space:nowrap`, lab);
+        tl.to(d, { backgroundColor: M.ca(GOOD, .5), borderColor: GOOD, duration: 0.25, immediateRender: false }, tR + i * 0.35); });
+      chip(C, "EXAMPLE", M.P("C", 0) + 0.3, 850, 290, { col: CYAN, size: 36 });
+      chip(C, "OPENTELEMETRY", at("C", "OpenTelemetry"), 540, 1240, { col: CYAN, size: 46 });
+      M.fit(C);
+
+      // ===== D: span = one unit of work =====
+      header(D, "2 · SPAN", M.P("D", 0));
+      // diagram: D
+      const sb = el(D, `left:60px;top:330px;width:960px;height:150px;border-radius:24px;border:4px solid ${CYAN};background:${M.ca(CYAN, .2)};display:flex;align-items:center;justify-content:center;font:800 64px var(--lat);color:#E8EDF6`, "retrieve");
+      show(sb, M.P("D", 0) + 0.3, { opacity: 0, x: -40 });
+      chip(D, "START", M.P("D", 0) + 0.6, 190, 500, { col: GOOD, size: 40 }); chip(D, "END", M.P("D", 0) + 0.7, 880, 500, { col: HOT, size: 40 });
+      const card = panel(D, 100, 620, 880, 470, CYAN, "ONE SPAN"); show(card, M.P("D", 0) + 0.8);
+      const rows = [["name", "retrieve", "name"], ["start", "0.00 s", "start"], ["end", "0.42 s", "end"], ["attrs", "doc=old_policy", "attributes"]];
+      const rowEls = rows.map(([k, v, w], i) => { const r = el(card, `left:44px;top:${95 + i * 85}px;font:700 50px var(--code);white-space:nowrap`, `<span style="color:#8592AD;display:inline-block;width:190px">${k}</span><span class="v" style="color:#E8EDF6">${v}</span>`); show(r, at("D", w)); return r; });
+      const tl2 = at("D", "laal");
+      tl.to(sb, { borderColor: HOT, backgroundColor: M.ca(HOT, .22), duration: 0.25, immediateRender: false }, tl2);
+      tl.to(rowEls[3].querySelector(".v"), { color: HOT, duration: 0.25, immediateRender: false }, tl2);
+      stamp(D, "WRONG DOC", 540, 1120, HOT, tl2 + 0.1, 56);
+      chip(D, "EXAMPLE", at("D", "maan"), 540, 1260, { col: CYAN, size: 36 });
+      M.fit(D);
+
+      // ===== E: hierarchy, parent span ID =====
+      header(E, "3 · HIERARCHY", M.P("E", 0));
+      // diagram: E
+      const bar = (host, x, y, w, lab, col, t, fill) => { const b = el(host, `left:${x}px;top:${y}px;width:${w}px;height:120px;border-radius:20px;border:4px solid ${col};background:${M.ca(col, fill || .2)};display:flex;align-items:center;justify-content:center;font:800 40px var(--lat);color:#E8EDF6;white-space:nowrap`, lab); show(b, t, { opacity: 0, x: -30 }); return b; };
+      const root = bar(E, 60, 330, 960, "REQUEST (root)", ACC, M.P("E", 0) + 0.25, .16);
+      const kids = [["retrieve", 70, 330, HOT, "Spans"], ["prompt", 400, 270, CYAN, "nested"], ["tool", 670, 180, CYAN, "parent"], ["answer", 840, 170, GOOD, "child"]];
+      const rail2 = el(E, `left:38px;top:450px;width:6px;height:${4 * 150 - 30}px;background:${M.ca(ACC, .6)};border-radius:3px;transform-origin:50% 0`); tl.set(rail2, { opacity: 0, scaleY: 0 }, 0);
+      tl.to(rail2, { opacity: 1, scaleY: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, at("E", "parent"));
+      kids.forEach(([lab, x, w, col, wd], i) => { const y = 500 + i * 150;
+        bar(E, x, y, w, lab, col, at("E", wd) + (wd === "Spans" ? 0 : 0), col === HOT ? .28 : .2);
+        const tick = el(E, `left:44px;top:${y + 58}px;width:${x - 44}px;height:0;border-top:4px dashed ${M.ca(ACC, .7)}`); show(tick, at("E", "parent") + 0.2 + i * 0.12, { opacity: 0 }); });
+      chip(E, "PARENT SPAN ID", at("E", "ID"), 540, 1130, { col: ACC, size: 46 });
+      tl.to(root, { borderColor: "#fff", duration: 0.3, immediateRender: false }, at("E", "hierarchy", 1));
+      M.fit(E);
+
+      // ===== F: close =====
+      header(F, "FULL PATH", M.P("F", 0));
+      // diagram: F
+      [["RETRIEVE", "search", 60], ["PROMPT", "chat", 400], ["TOOL", "gear", 740]].forEach(([lab, ic, x]) => {
+        const c = el(F, `left:${x}px;top:330px;width:280px;height:260px;border-radius:24px;border:3px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .08)}`); show(c, M.P("F", 0) + 0.3);
+        M.icon(F, ic, x + 70, 350, 130, CYAN).show(M.P("F", 0) + 0.4);
+        el(F, `left:${x}px;top:495px;width:280px;text-align:center;font:800 42px var(--lat);color:#E8EDF6`, lab); });
+      const strip = el(F, "left:80px;top:650px;width:920px;height:130px");
+      [["retrieve", 0, 270, CYAN], ["prompt", 270, 230, CYAN], ["tool", 500, 200, CYAN], ["answer", 700, 220, GOOD]].forEach(([lab, x, w, col]) => {
+        el(strip, `left:${x}px;top:0;width:${w - 6}px;height:130px;border-radius:16px;border:4px solid ${col};background:${M.ca(col, .2)};display:flex;align-items:center;justify-content:center;font:800 38px var(--lat);color:#E8EDF6`, lab); });
+      show(strip, M.P("F", 0) + 0.6, { opacity: 0, x: -30 });
+      const ring = el(F, `left:66px;top:636px;width:948px;height:158px;border-radius:22px;border:5px solid ${ACC}`); show(ring, at("F", "poora"), { opacity: 0 });
+      const cc = panel(F, 100, 850, 880, 300, CYAN, "COMMENT KARO"); show(cc, at("F", "Comment") - 0.2);
+      [["RETRIEVE", "retrieve", 30], ["PROMPT", "prompt", 330], ["TOOL", "tool", 600]].forEach(([lab, w, x]) => { const wr = el(cc, `left:${x}px;top:150px;width:260px`); const c = el(wr, `position:relative;display:inline-block;padding:10px 26px;border:3px solid ${ACC};border-radius:999px;font:700 40px var(--code);color:${ACC}`, lab); c.style.position = "relative"; show(wr, at("F", w, w === "retrieve" ? 1 : 0)); });
+      const fb = chip(F, "+  FOLLOW", at("F", "follow") - 0.3, 540, 1200, { col: ACC, size: 46, solid: true });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("F", "follow"));
+      M.fit(F);
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F);
+      M.finish({ kw: { galat: "hot", wrong: "hot", trace: "cyan", span: "cyan", spans: "cyan", hierarchy: "gold", raasta: "gold", laal: "hot", retrieval: "gold", parent: "gold" } });
+      window.__timelines["main"] = tl;
+
     </script>
   </body>
 </html>
