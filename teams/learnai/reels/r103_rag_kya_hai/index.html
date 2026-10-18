@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="59.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -32,7 +32,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,18 +41,128 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="59.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="59.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="59.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "AI ENGINEER ROADMAP" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER ROADMAP" });
+      Viz.install(M);
       const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const { ACC, CYAN, HOT, GOOD, MUTED } = M; const ca = M.ca; const at = (sc, w, n) => M.W(sc, w, n);
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label, t) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${ca(col, 0.55)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;right:0;top:14px;font-size:36px;color:${col};text-align:center`; } return show(d, t, { opacity: 0 }); };
+      const row = (host, x, y, w, h, col, txt, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:12px;background:${ca(col, 0.28)};border:2px solid ${ca(col, 0.75)};font:700 ${fs || 40}px var(--code);color:${col};display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt || "");
+      const stamp = (host, txt, x, y, col, t) => { const d = el(host, `left:${x}px;top:${y}px;padding:14px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 46px var(--code);color:${col};white-space:nowrap`, txt); gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const page = (host, x, y, w, h, col, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:10px;background:${ca(col, 0.14)};border:2px solid ${ca(col, 0.6)}`,
+        `<div style="margin:${h * 0.2}px ${w * 0.16}px 0;height:${Math.max(4, h * 0.07)}px;border-radius:4px;background:${ca(col, 0.7)}"></div><div style="margin:${h * 0.12}px ${w * 0.16}px 0;height:${Math.max(4, h * 0.07)}px;border-radius:4px;background:${ca(col, 0.7)};width:60%"></div><div style="margin:${h * 0.12}px ${w * 0.16}px 0;height:${Math.max(4, h * 0.07)}px;border-radius:4px;background:${ca(col, 0.7)};width:75%"></div>`);
+      return t == null ? d : show(d, t, { opacity: 0, y: 14 }); };
 
-      M.finish();   // LAST: captions
+      // ===== A: shelf of pages, three light up and go to the AI =====
+      M.hook(["RAG", "kya hai?"], { size: 110, top: 250 });
+      // diagram: A
+      panel(A, 90, 500, 900, 440, CYAN, "HANDBOOK PAGES", 0.05);
+      const pgA = []; for (let i = 0; i < 18; i++) { const p = page(A, 130 + (i % 6) * 142, 575 + Math.floor(i / 6) * 118, 110, 100, CYAN, 0.2 + i * 0.05); pgA.push(p); }
+      const pick = [3, 8, 16];
+      pick.forEach((i, k) => { tl.to(pgA[i], { backgroundColor: ca(ACC, 0.4), borderColor: ACC, duration: 0.25, immediateRender: false }, at("A", "sahi"));
+        tl.to(pgA[i], { x: 305 - (130 + (i % 6) * 142) + k * 120 - 40, y: 1020 - (575 + Math.floor(i / 6) * 118), duration: 0.7, ease: "power3.inOut", immediateRender: false }, at("A", "nikalta")); });
+      M.arrow(A, { from: [540, 960], to: [540, 1010], color: MUTED, w: 6 }).show(at("A", "documents"), 0.3);
+      M.box(A, { x: 290, y: 1110, w: 500, h: 190, label: "AI", icon: "robot", color: GOOD }).show(at("A", "jawab", 0));
+      [0, 1, 2].forEach((k) => M.pill(A, `${k + 1}`, at("A", "steps") + k * 0.2, { x: 410 + k * 120, y: 1320, kind: "out", size: 40 }));
+      M.fit(A, { y: 540, h: 760 });
+
+      // ===== B: handbook never seen, model guesses =====
+      // diagram: B
+      const hb = el(B, "left:200px;top:230px;width:480px;height:260px");
+      page(hb, 20, 40, 150, 200, CYAN); page(hb, 40, 28, 150, 200, CYAN); page(hb, 60, 16, 150, 200, CYAN);
+      show(hb, S.B + 0.1, { opacity: 0 });
+      show(el(B, `left:540px;top:240px;width:300px;font:800 80px var(--code);color:${ACC};text-align:center;white-space:nowrap`, "200"), at("B", "200"), { opacity: 0, scale: 0.8 });
+      show(el(B, `left:540px;top:335px;width:300px;font:700 44px var(--code);color:${ACC};text-align:center;white-space:nowrap`, "PAGES"), at("B", "pages"), { opacity: 0 });
+      M.pill(B, "EXAMPLE", at("B", "200") + 0.1, { x: 580, y: 420, size: 34, kind: "out" });
+      const chat = panel(B, 90, 560, 900, 700, CYAN, "CHAT", S.B + 0.2);
+      show(el(chat, `right:36px;top:110px;padding:22px 30px;border-radius:28px 28px 6px 28px;background:#26324A;font:600 46px var(--lat);white-space:nowrap`, "Refund policy?"), at("B", "refund") - 0.1);
+      const guess = show(el(chat, `left:36px;top:300px;padding:22px 30px;border-radius:28px 28px 28px 6px;border:3px dashed ${HOT};background:${ca(HOT, 0.1)};font:700 46px var(--lat);color:${HOT};white-space:nowrap`, "Maybe 30 days?"), at("B", "andaza") - 0.2);
+      stamp(B, "HANDBOOK NOT SEEN", 540, 1160, HOT, at("B", "nahi"));
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ===== C: knowledge base -> relevant cards -> prompt =====
+      // diagram: C
+      M.box(C, { x: 290, y: 230, w: 500, h: 200, label: "KNOWLEDGE BASE", icon: "db", color: CYAN, size: 40 }).show(S.C + 0.1);
+      M.arrow(C, { from: [540, 440], to: [540, 520], color: ACC, w: 8 }).show(S.C + 0.4, 0.3);
+      const pr = panel(C, 100, 760, 880, 520, ACC, "PROMPT", S.C + 0.3);
+      show(row(C, 150, 850, 780, 110, CYAN, "QUESTION"), S.C + 0.5, { opacity: 0 });
+      [0, 1, 2].forEach((k) => { const cd = page(C, 150 + k * 270, 540, 240, 160, ACC); gsap.set(cd, { opacity: 0 });
+        tl.to(cd, { opacity: 1, duration: 0.4, immediateRender: false }, S.C + 0.7 + k * 0.2);
+        tl.to(cd, { y: 475, duration: 0.7, ease: "power3.inOut", immediateRender: false }, at("C", "jod")); });
+      M.pill(C, "+ ADD", at("C", "jod") + 0.3, { x: 400, y: 1235, kind: "acc", size: 40 });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ===== D: chunks -> vectors =====
+      // diagram: D
+      M.pill(D, "1 CHUNK", S.D + 0.1, { x: 90, y: 230, kind: "acc", size: 40 });
+      M.pill(D, "2 VECTOR", at("D", "vector") - 0.5, { x: 600, y: 230, kind: "out", size: 40 });
+      const nums = ["0.2  0.9  0.1", "0.7  0.1  0.4", "0.3  0.8  0.2", "0.9  0.2  0.6"];
+      [0, 1, 2, 3].forEach((i) => { const y = 340 + i * 220;
+        const ck = page(D, 90, y, 300, 170, CYAN); show(ck, S.D + 0.3 + i * 0.2, { opacity: 0, y: 16 });
+        show(el(ck, "left:0;right:0;bottom:12px;text-align:center;font:700 36px var(--code);color:#E8EDF6", `CHUNK ${i + 1}`), S.D + 0.3 + i * 0.2, { opacity: 0 });
+        M.arrow(D, { from: [400, y + 85], to: [470, y + 85], color: MUTED, w: 6 }).show(at("D", "vector") + i * 0.2 - 0.3, 0.25);
+        show(row(D, 490, y + 25, 500, 120, GOOD, nums[i], 40), at("D", "vector") + i * 0.2 - 0.2, { opacity: 0, x: -20 }); });
+      M.pill(D, "EXAMPLE", at("D", "vector") + 0.5, { x: 700, y: 1235, kind: "out", size: 34 });
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ===== E: retrieval on a meaning map =====
+      // diagram: E
+      const mp = M.map(E, { x: 60, y: 280, w: 960, h: 900, title: "MEANING MAP", pts: [
+        { id: "q", label: "QUESTION", x: 0.55, y: 0.5, color: ACC, r: 26, side: "l", size: 44 },
+        { id: "c1", label: "", x: 0.36, y: 0.36, color: CYAN, r: 22 }, { id: "c2", label: "", x: 0.64, y: 0.4, color: CYAN, r: 22 }, { id: "c3", label: "", x: 0.46, y: 0.68, color: CYAN, r: 22 },
+        { id: "f1", label: "", x: 0.12, y: 0.2, color: MUTED, r: 22 }, { id: "f2", label: "", x: 0.88, y: 0.82, color: MUTED, r: 22 }, { id: "f3", label: "", x: 0.14, y: 0.8, color: MUTED, r: 22 }, { id: "f4", label: "", x: 0.86, y: 0.16, color: MUTED, r: 22 }, { id: "f5", label: "", x: 0.78, y: 0.55, color: MUTED, r: 22 }] });
+      mp.enter(S.E + 0.05); mp.show(S.E + 0.2, ["f1", "f2", "f3", "f4", "f5", "c1", "c2", "c3"], 0.08); mp.show(at("E", "sawal"), ["q"]);
+      ["c1", "c2", "c3"].forEach((id, k) => mp.link(at("E", "similar") + k * 0.2, "q", id, { color: ACC, w: 8 }));
+      ["c1", "c2", "c3"].forEach((id, k) => mp.ring(at("E", "top-3") - 0.1 + k * 0.1, id, { r: 40, color: ACC }));
+      M.pill(E, "TOP-3", at("E", "top-3"), { x: 400, y: 1215, kind: "acc", size: 44 });
+      M.pill(E, "EXAMPLE", S.E + 0.5, { x: 740, y: 215, kind: "out", size: 32 });
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ===== F: prompt + 3 pages -> model -> answer =====
+      // diagram: F
+      panel(F, 120, 230, 840, 440, ACC, "PROMPT", S.F + 0.1);
+      show(row(F, 170, 310, 740, 90, CYAN, "QUESTION", 38), S.F + 0.2, { opacity: 0 });
+      [0, 1, 2].forEach((k) => show(page(F, 170 + k * 250, 430, 230, 200, ACC), S.F + 0.4 + k * 0.15, { opacity: 0, y: -30 }));
+      M.arrow(F, { from: [540, 685], to: [540, 760], color: ACC, w: 8 }).show(S.F + 0.9, 0.3);
+      M.box(F, { x: 290, y: 780, w: 500, h: 200, label: "MODEL", icon: "robot", color: CYAN }).show(S.F + 1.1);
+      M.arrow(F, { from: [540, 990], to: [540, 1060], color: GOOD, w: 8 }).show(S.F + 1.4, 0.3);
+      panel(F, 200, 1070, 680, 230, GOOD, "ANSWER", S.F + 1.5);
+      [0.85, 0.65].forEach((w, i) => show(el(F, `left:250px;top:${1160 + i * 45}px;width:${580 * w}px;height:18px;border-radius:9px;background:${ca(GOOD, 0.75)}`), at("F", "jawab") + 0.25 + i * 0.15, { opacity: 0 }));
+      M.pill(F, "FROM PAGES", at("F", "pages") + 0.1, { x: 340, y: 1330, kind: "acc", size: 40 });
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ===== G: wrong pages -> wrong answer; the 3-word rule =====
+      // diagram: G
+      panel(G, 100, 230, 880, 300, HOT, "WRONG PAGES", S.G + 0.1);
+      [0, 1, 2].forEach((k) => show(page(G, 150 + k * 270, 310, 240, 190, HOT), S.G + 0.3 + k * 0.1, { opacity: 0, y: -20 }));
+      M.arrow(G, { from: [540, 540], to: [540, 610], color: HOT, w: 8 }).show(S.G + 0.7, 0.3);
+      panel(G, 240, 620, 600, 190, HOT, "ANSWER", S.G + 0.8);
+      M.icon(G, "cross", 700, 690, 110, HOT).show(at("G", "galat", 1));
+      [["RETRIEVE", "retrieve,"], ["ADD", "add,"], ["GENERATE", "generate."]].forEach(([lab, w], i) => {
+        const b = M.box(G, { x: 90 + i * 330, y: 950, w: 250, h: 190, label: lab, color: [CYAN, ACC, GOOD][i], size: 38 }); b.show(S.G + 1.0 + i * 0.2); if (i < 2) M.arrow(G, { from: [345 + i * 330, 1045], to: [415 + i * 330, 1045], color: MUTED, w: 6 }).show(at("G", w.replace(/[.,]/g, "")) + 0.2, 0.25); });
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ===== H: comment + follow =====
+      // diagram: H
+      const cc = panel(H, 120, 330, 840, 600, CYAN, "COMMENT KARO", S.H + 0.1);
+      [["CHATBOT", "chatbot"], ["PDF", "PDF"], ["SEARCH", "search"]].forEach(([lab, w], i) => M.pill(cc, lab, S.H + 0.4 + i * 0.15, { x: 270, y: 100 + i * 105, kind: "acc", size: 50 }));
+      show(el(cc, "left:40px;right:40px;bottom:36px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 38px var(--code);color:#E8EDF6;display:flex;align-items:center;padding:0 30px", "Add a comment..."), S.H + 0.9, { opacity: 0 });
+      show(el(H, `left:0;width:1080px;top:1000px;text-align:center;font:700 52px var(--code);color:#E8EDF6`, "@ig.learnai"), at("H", "follow") - 0.8, { opacity: 0 });
+      const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 380, y: 1100, kind: "acc", size: 44 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow", 1));
+      M.fit(H, { y: 200, h: 1100 });
+
+      ["B", "C", "D", "E", "F", "G", "H"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { RAG: "gold", pages: "cyan", handbook: "cyan", andaza: "hot", chunking: "cyan", embeddings: "cyan", retrieval: "gold", generation: "good", galat: "hot", retrieve: "cyan", add: "gold", generate: "good", comment: "gold", follow: "gold" } });
       window.__timelines["main"] = tl;   // register (must stay literal for the linter)
     </script>
   </body>
