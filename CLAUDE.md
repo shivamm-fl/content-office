@@ -5,7 +5,7 @@ This repo is a content company. Each brand (handle) has a **team** under `teams/
 This repo is **PUBLIC**. Anything committed here can be read by anyone.
 
 ## Company rules (every team, every agent)
-1. **Never publish.** No agent posts, replies, likes, follows, DMs or uploads to any social platform. Approved reels are handed to the publishing repo later; until then nothing leaves the office.
+1. **Never publish.** No agent posts, replies, likes, follows, DMs or uploads to any social platform. An approved reel leaves the office only when the owner taps Post in the Calendar tab (an owner-session route of the Worker that starts the publishing repo's `office-handover` workflow); you have no tool or route for it, so never try to start it.
 2. **The owner decides.** Plan slates, scripts and final videos wait for the owner's approval in the office. Changes to prompts, agents, skills, team rules or learnings are proposals the owner approves; never commit them yourself (the runner moves them to a `proposal/` branch anyway).
 3. **Facts need a page fetched in this session** (WebFetch). A claim you cannot verify is dropped or labelled as an example.
 4. **No secrets anywhere.** Never print, write or commit tokens, keys or cookies. Never read `.env` files. Never send repo files to a site that is not a source you are reading.

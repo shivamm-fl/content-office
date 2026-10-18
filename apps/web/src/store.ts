@@ -1,5 +1,5 @@
 // Live office state: one REST snapshot plus the team room's WebSocket events.
-import type { Ask, Message, OfficeState, RoomEvent, Run, Task, Thread } from "@office/protocol";
+import type { Ask, CalendarData, Message, OfficeState, PostRecord, PublishRequest, RoomEvent, Run, Task, Thread } from "@office/protocol";
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { api } from "./api";
 
@@ -124,7 +124,11 @@ export function useOffice(team: string, onAuthLost: () => void) {
   const taskAction = useCallback((taskId: string, action: "start" | "dismiss") =>
     api<Task>(`/api/teams/${team}/tasks/${taskId}`, { method: "POST", json: { action } }), [team]);
 
-  return { ...s, loadThread, send, answer, stop, taskAction, startSync, startDay, resume };
+  const loadCalendar = useCallback(() => api<CalendarData>(`/api/teams/${team}/calendar`), [team]);
+  const publish = useCallback((req: PublishRequest) => api<PostRecord>(`/api/teams/${team}/publish`, { method: "POST", json: req }), [team]);
+  const setPosting = useCallback((paused: boolean) => api<PostRecord>(`/api/teams/${team}/posting`, { method: "POST", json: { paused } }), [team]);
+
+  return { ...s, loadThread, send, answer, stop, taskAction, startSync, startDay, resume, loadCalendar, publish, setPosting };
 }
 
 export type Office = ReturnType<typeof useOffice>;

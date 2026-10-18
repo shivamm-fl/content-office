@@ -1,7 +1,7 @@
 // A question or an approval from an agent. Answered right here; the agent is waiting for it.
 import type { Ask, Team } from "@office/protocol";
 import { useState } from "react";
-import { AgentDot, Markdown, agentOf } from "./ui";
+import { AgentDot, Markdown, agentOf, go } from "./ui";
 
 type Mode = null | "edit" | "changes" | "reject";
 
@@ -157,8 +157,8 @@ function FinalReelCard({ ask, team, onAnswer }: { ask: Ask; team: Team; onAnswer
           {error && <p className="text-sm text-coral">{error}</p>}
         </div>
       ) : (
-        <p className="border-t border-wall px-4 py-3 text-sm">
-          {decided?.decision === "approved" ? <span className="text-gold">Approved</span> : decided?.decision === "changes_requested" ? <>Sent back: <span className="text-dim">{decided.notes}</span></> : decided?.decision === "rejected" ? <span className="text-coral">Rejected</span> : <span className="text-dim">No longer pending</span>}
+        <p className="flex items-center border-t border-wall px-4 py-3 text-sm">
+          {decided?.decision === "approved" ? <><span className="text-gold">Approved</span><button onClick={() => go(`#/calendar/${m.item}`)} className="ml-auto rounded-lg bg-gold px-3.5 py-1.5 text-xs font-semibold text-ink">Post it</button></> : decided?.decision === "changes_requested" ? <>Sent back: <span className="text-dim">{decided.notes}</span></> : decided?.decision === "rejected" ? <span className="text-coral">Rejected</span> : <span className="text-dim">No longer pending</span>}
         </p>
       )}
     </div>

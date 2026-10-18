@@ -57,6 +57,39 @@ export interface OfficeState {
   team: Team; desks: Desk[]; runs: Run[]; asks: Ask[]; tasks: Task[]; threads: Thread[]; usage: Usage | null;
 }
 
+// ---------- content calendar and posting (the owner posts from the office) ----------
+/** One reel waiting for the owner to post it: approved in the office, or already released in the publishing repo. */
+export interface ReadyReel {
+  item: string; track: string; title: string; duration_s: number | null; cover_url: string | null;
+  /** office: approved here, still to be handed to the publishing repo; released: already there, waiting for its slot */
+  source: "office" | "released";
+  /** only e, r and q reels can be put on a slot (the slot poster takes no other ids); every reel can be posted now */
+  can_schedule: boolean;
+}
+export interface CalendarCell {
+  track: string; item: string | null; title: string | null; link: string | null; at: string | null;
+  /** posted: out on Instagram; scheduled: named by the owner for this slot; auto: next in line by the slot rules; empty: no reel for this track */
+  state: "posted" | "scheduled" | "auto" | "empty";
+}
+export interface CalendarSlot { date: string; time: string; /** the slot has started */ started: boolean; /** it can still take a reel */ open: boolean; cells: CalendarCell[]; scheduled: number }
+export interface CalendarDay { date: string; label: string; slots: CalendarSlot[]; extras: CalendarCell[] }
+export interface PipelineItem { item: string; track: string; title: string; stage: "studio" | "approval" | "failed" | "changes" | "rejected"; detail: string | null; thread_id: string | null }
+export interface PostedReel { item: string; track: string; title: string; at: string | null; link: string | null; facebook: boolean; youtube: boolean }
+/** A hand-over of one reel to the publishing repo (and, for "now", its posting), or a change of the posting pause. */
+export interface PostRecord {
+  id: string; item: string; mode: "now" | "slot" | "pause" | "resume"; date: string | null; time: string | null;
+  status: "handing_over" | "done" | "failed"; gh_url: string | null; error: string | null; created_at: number; updated_at: number;
+}
+export interface CalendarData {
+  team: string; publishing: boolean; now: number; today: string; clock: string;
+  paused: boolean; window: [string, string]; slot_times: string[]; posts_per_slot: number; can_post_now: boolean; last_post_hours: number | null;
+  ready: ReadyReel[]; days: CalendarDay[]; pipeline: PipelineItem[]; recent: PostedReel[]; posts: PostRecord[];
+  /** open slots in the next days that have no reel at all */
+  empty_slots: number;
+  note: string | null;
+}
+export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string }
+
 /** Runner -> office (batched over the runner WebSocket). */
 export type RunnerEvent =
   | { t: "session"; session_id: string; model: string }

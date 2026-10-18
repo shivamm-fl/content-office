@@ -34,6 +34,34 @@ export async function dispatchRun(
   return { gh_run_id: j.workflow_run_id ? String(j.workflow_run_id) : null, url: j.html_url ?? null };
 }
 
+/** The publishing repo of a team's floor (null: the floor has no publisher yet, so its calendar shows the pipeline only). */
+export function publishRepo(env: GhEnv, team: string): string | null {
+  return team === "learnai" && env.AI_COURSE_REPO ? env.AI_COURSE_REPO : null;
+}
+
+/** Start a workflow of the publishing repo. Only the owner's buttons call this (owner session routes), never an agent. */
+export async function dispatchPublisher(
+  env: GhEnv, repo: string, workflow: string, inputs: Record<string, string>,
+): Promise<{ gh_run_id: string | null; url: string | null }> {
+  const r = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`, {
+    method: "POST",
+    headers: { ...headers(env), "Content-Type": "application/json" },
+    body: JSON.stringify({ ref: "main", inputs, return_run_details: true }),
+  });
+  if (r.status === 204) return { gh_run_id: null, url: null };
+  if (!r.ok) throw new Error(`GitHub refused to start ${workflow} (${r.status}): ${(await r.text()).slice(0, 300)}`);
+  const j = (await r.json().catch(() => ({}))) as { workflow_run_id?: number; html_url?: string };
+  return { gh_run_id: j.workflow_run_id ? String(j.workflow_run_id) : null, url: j.html_url ?? null };
+}
+
+/** State of one GitHub run of a repo: null when it cannot be read. */
+export async function runOutcome(env: GhEnv, repo: string, ghRunId: string): Promise<{ done: boolean; ok: boolean; url: string | null } | null> {
+  const r = await fetch(`https://api.github.com/repos/${repo}/actions/runs/${ghRunId}`, { headers: headers(env) });
+  if (!r.ok) return null;
+  const j = (await r.json()) as { status?: string; conclusion?: string | null; html_url?: string };
+  return { done: j.status === "completed", ok: j.conclusion === "success", url: j.html_url ?? null };
+}
+
 export async function cancelRun(env: GhEnv, ghRunId: string): Promise<void> {
   await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/runs/${ghRunId}/cancel`, { method: "POST", headers: headers(env) });
 }

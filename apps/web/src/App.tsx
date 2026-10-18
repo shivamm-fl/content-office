@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, AuthError } from "./api";
+import { CalendarView } from "./components/Calendar";
 import { ChatView } from "./components/Chat";
 import { InboxView } from "./components/Inbox";
 import { Login } from "./components/Login";
@@ -26,7 +27,8 @@ function Shell({ team, onAuthLost }: { team: string; onAuthLost: () => void }) {
 
   const thread = /^#\/t\/([\w-]+)/.exec(hash)?.[1] ?? null;
   const fresh = /^#\/new\/([\w-]+)/.exec(hash)?.[1] ?? null;
-  const tab = hash.startsWith("#/inbox") ? "inbox" : hash.startsWith("#/runs") ? "runs" : "office";
+  const calendar = /^#\/calendar(?:\/([\w-]+))?/.exec(hash);
+  const tab = calendar ? "calendar" : hash.startsWith("#/inbox") ? "inbox" : hash.startsWith("#/runs") ? "runs" : "office";
   const inChat = Boolean(thread || fresh);
   const waiting = state.asks.length + state.tasks.length;
   const running = state.runs.filter(isActive).length;
@@ -36,12 +38,13 @@ function Shell({ team, onAuthLost }: { team: string; onAuthLost: () => void }) {
       <main className="min-h-0 flex-1 overflow-y-auto">
         {inChat ? <ChatView key={thread ?? fresh} office={office} threadId={thread} newAgent={fresh} />
           : tab === "inbox" ? <InboxView office={office} />
+          : tab === "calendar" ? <CalendarView office={office} focus={calendar?.[1] ?? null} />
           : tab === "runs" ? <RunsView office={office} />
           : <OfficeView office={office} />}
       </main>
       {!inChat && (
-        <nav className="safe-bottom grid grid-cols-3 border-t border-wall bg-ink pt-1.5 text-center text-[13px]">
-          {([["office", "#/", "Office", 0], ["inbox", "#/inbox", "Inbox", waiting], ["runs", "#/runs", "Runs", running]] as const).map(([id, href, label, n]) => (
+        <nav className="safe-bottom grid grid-cols-4 border-t border-wall bg-ink pt-1.5 text-center text-[13px]">
+          {([["office", "#/", "Office", 0], ["calendar", "#/calendar", "Calendar", 0], ["inbox", "#/inbox", "Inbox", waiting], ["runs", "#/runs", "Runs", running]] as const).map(([id, href, label, n]) => (
             <button key={id} onClick={() => go(href)} className={`py-2 ${tab === id ? "font-semibold text-paper" : "text-dim"}`} aria-current={tab === id ? "page" : undefined}>
               {label}{n > 0 && <span className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${id === "inbox" ? "bg-gold text-ink" : "bg-wall text-paper"}`}>{n}</span>}
             </button>

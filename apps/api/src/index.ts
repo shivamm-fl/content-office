@@ -102,6 +102,38 @@ app.post("/api/teams/:team/sync", async (c) => {
   return c.json(await office(c.env, slug).startSync(slug));
 });
 
+// The content calendar of a floor, and the owner's posting buttons (post now, put on a slot, pause or resume the slot posting).
+// These routes need the owner's session cookie and this origin; no runner or agent identity reaches them.
+app.get("/api/teams/:team/calendar", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  return c.json(await office(c.env, slug).calendar(slug));
+});
+
+app.post("/api/teams/:team/publish", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  const body = await c.req.json<{ item?: string; mode?: string; date?: string; time?: string }>().catch(() => ({} as Record<string, string | undefined>));
+  if (typeof body.item !== "string" || (body.mode !== "now" && body.mode !== "slot")) return bad(c, 400, "item and mode (now or slot) are required");
+  try {
+    return c.json(await office(c.env, slug).publish(slug, { item: body.item, mode: body.mode, date: body.date, time: body.time }));
+  } catch (e) {
+    return bad(c, 400, (e as Error).message);
+  }
+});
+
+app.post("/api/teams/:team/posting", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  const { paused } = await c.req.json<{ paused?: boolean }>().catch(() => ({ paused: undefined }));
+  if (typeof paused !== "boolean") return bad(c, 400, "paused (true or false) is required");
+  try {
+    return c.json(await office(c.env, slug).setPosting(slug, paused));
+  } catch (e) {
+    return bad(c, 400, (e as Error).message);
+  }
+});
+
 app.post("/api/teams/:team/asks/:id", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");

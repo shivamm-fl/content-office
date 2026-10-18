@@ -2,11 +2,12 @@
 // (SQLite), and the live room that the phone (client sockets) and the runners (runner sockets) join.
 import { DurableObject } from "cloudflare:workers";
 import type {
-  Ask, Desk, Message, MessageKind, OfficeState, Profile, RoomEvent, Run, RunStatus, RunnerCommand, RunnerEvent,
+  Ask, CalendarData, Desk, Message, MessageKind, OfficeState, PostRecord, Profile, PublishRequest, RoomEvent, Run, RunStatus, RunnerCommand, RunnerEvent,
   Task, Team, Thread, Usage,
 } from "@office/protocol";
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
-import { cancelRun, dispatchRun } from "./github";
+import { buildCalendar, refusePublish, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
+import { cancelRun, dispatchPublisher, dispatchRun, publishRepo, readAiCourse, runOutcome } from "./github";
 import { team as getTeam } from "./teams";
 
 export interface Env {
@@ -63,6 +64,8 @@ export class Office extends DurableObject<Env> {
         title TEXT NOT NULL, body TEXT NOT NULL, options TEXT NOT NULL, status TEXT NOT NULL, answer TEXT, created_at INTEGER NOT NULL, answered_at INTEGER);
       CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY, from_agent TEXT NOT NULL, to_agent TEXT NOT NULL, body TEXT NOT NULL, status TEXT NOT NULL,
         thread_id TEXT, created_at INTEGER NOT NULL);
+      CREATE TABLE IF NOT EXISTS posts (id TEXT PRIMARY KEY, item TEXT NOT NULL, mode TEXT NOT NULL, date TEXT, time TEXT, status TEXT NOT NULL,
+        gh_run_id TEXT, gh_url TEXT, error TEXT, created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL);
     `);
     for (const ddl of [
       "ALTER TABLE desks ADD COLUMN done INTEGER NOT NULL DEFAULT 0",
@@ -457,7 +460,7 @@ export class Office extends DurableObject<Env> {
         // The studio rebuilds with the owner's notes (a revise run in the same build thread).
         await this.postMessage(slug, { thread_id: ask.thread_id, text: `Changes to ${ask.meta.item}: ${String(answer.notes ?? answer.text ?? "")}` });
       } else if (decision === "approved") {
-        this.system(ask.thread_id, ask.run_id, `${ask.meta.item} approved. It is ready to hand over for posting.`);
+        this.system(ask.thread_id, ask.run_id, `${ask.meta.item} approved. Post it or put it on a slot from the Calendar tab.`);
       } else {
         this.system(ask.thread_id, ask.run_id, `${ask.meta.item} rejected.`);
       }
@@ -469,6 +472,133 @@ export class Office extends DurableObject<Env> {
     const updated = this.toAsk(this.one("SELECT * FROM asks WHERE id = ?", askId)!);
     this.broadcast({ t: "ask", ask: updated });
     return updated;
+  }
+
+  // ---------- calendar and posting: the owner posts from the office ----------
+  // Only owner-session routes reach these methods. An agent has no route to them, and the publishing repo's own workflow does the posting.
+  private pub: { at: number; cfg: PostingConfig; status: Record<string, Phase5Entry> } | null = null;
+
+  /** The publishing repo's slot settings and the status of every reel it knows (cached for 20 s; `fresh` skips the cache). */
+  private async publisherState(fresh = false): Promise<{ cfg: PostingConfig; status: Record<string, Phase5Entry> }> {
+    if (!fresh && this.pub && Date.now() - this.pub.at < 20_000) return this.pub;
+    const [cfg, status] = await Promise.all([
+      readAiCourse(this.env, "state/config.json").then((t) => JSON.parse(t) as PostingConfig),
+      readAiCourse(this.env, "state/phase5_status.json").then((t) => JSON.parse(t) as Record<string, Phase5Entry>),
+    ]);
+    this.pub = { at: Date.now(), cfg, status };
+    return this.pub;
+  }
+
+  private toPost(r: Row): PostRecord {
+    return {
+      id: r.id as string, item: r.item as string, mode: r.mode as PostRecord["mode"], date: (r.date as string) ?? null, time: (r.time as string) ?? null,
+      status: r.status as PostRecord["status"], gh_url: (r.gh_url as string) ?? null, error: (r.error as string) ?? null,
+      created_at: r.created_at as number, updated_at: r.updated_at as number,
+    };
+  }
+
+  /** What the office knows about each reel its studio built: where it stands now (build threads, studio runs, final approvals). */
+  private officeReels(): OfficeReel[] {
+    const out: OfficeReel[] = [];
+    for (const t of this.rows<{ id: string; item: string; title: string }>("SELECT id, item, title FROM threads WHERE kind = 'build' AND item IS NOT NULL")) {
+      const runRow = this.one("SELECT * FROM runs WHERE thread_id = ? AND profile = 'studio' ORDER BY created_at DESC LIMIT 1", t.id);
+      const askRow = this.one("SELECT * FROM asks WHERE thread_id = ? AND meta IS NOT NULL ORDER BY created_at DESC LIMIT 1", t.id);
+      const run = runRow ? this.toRun(runRow) : null;
+      const ask = askRow ? this.toAsk(askRow) : null;
+      const m = ask?.meta ?? null;
+      const base = {
+        item: t.item, title: m?.title ?? t.title.replace(/^Build [a-z]\d+:\s*/, ""), track: trackOfItem(t.item), thread_id: t.id,
+        duration_s: m?.duration_s ?? null, cover_url: m?.cover_url ?? null,
+      };
+      if (run && ACTIVE.includes(run.status)) {
+        out.push({ ...base, stage: "studio", detail: run.status === "queued" ? "waiting for a free studio slot" : run.stage ?? "build" });
+      } else if (ask && !(run && run.created_at > ask.created_at)) {   // a final approval belongs to the newest studio work only
+        const a = ask.answer as { decision?: string; notes?: string } | null;
+        if (ask.status === "pending") out.push({ ...base, stage: "approval", detail: "waiting for your approval" });
+        else if (a?.decision === "approved") out.push({ ...base, stage: "approved", detail: null });
+        else if (a?.decision === "changes_requested") out.push({ ...base, stage: "changes", detail: a.notes?.slice(0, 160) ?? null });
+        else out.push({ ...base, stage: "rejected", detail: null });
+      } else {
+        out.push({ ...base, stage: "failed", detail: (run?.summary ?? run?.error ?? "did not pass the gate").slice(0, 160) });
+      }
+    }
+    return out;
+  }
+
+  /** Follow the hand-over runs that are still going: done or failed as soon as GitHub says so. */
+  private async refreshPosts(repo: string | null) {
+    const now = Date.now();
+    for (const p of this.rows("SELECT * FROM posts WHERE status = 'handing_over'")) {
+      const age = now - (p.created_at as number);
+      let status: PostRecord["status"] | null = null;
+      let error: string | null = null;
+      let url = (p.gh_url as string) ?? null;
+      if (!p.gh_run_id) {
+        if (age > 5 * 60_000) { status = "failed"; error = "GitHub did not say which run it started. Look at the Actions tab of the publishing repo."; }
+      } else {
+        const o = repo ? await runOutcome(this.env, repo, p.gh_run_id as string).catch(() => null) : null;
+        if (o?.done) { status = o.ok ? "done" : "failed"; error = o.ok ? null : "The run failed. Open it on GitHub for the reason."; url = o.url ?? url; }
+        else if (age > 90 * 60_000) { status = "failed"; error = "The run did not finish in 90 minutes."; }
+      }
+      if (status) this.sql.exec("UPDATE posts SET status = ?, error = ?, gh_url = ?, updated_at = ? WHERE id = ?", status, error, url, now, p.id as string);
+    }
+    this.sql.exec("DELETE FROM posts WHERE created_at < ?", now - 14 * 86_400_000);
+  }
+
+  async calendar(slug: string): Promise<CalendarData> {
+    this.ensureTeam(slug);
+    const repo = publishRepo(this.env, slug);
+    await this.refreshPosts(repo);
+    const posts = this.rows("SELECT * FROM posts ORDER BY created_at DESC LIMIT 8").map((r) => this.toPost(r));
+    let cfg: PostingConfig = {};
+    let status: Record<string, Phase5Entry> = {};
+    let note: string | null = null;
+    if (repo) {
+      try { ({ cfg, status } = await this.publisherState()); } catch (e) { note = `Could not read the publishing repo: ${(e as Error).message}`; }
+    }
+    return buildCalendar({ team: slug, publishing: Boolean(repo) && !note, now: Date.now(), cfg, status, office: this.officeReels(), posts, note });
+  }
+
+  /** Post one reel now, or put it on a slot. Starts the publishing repo's hand-over workflow (the owner's explicit tap, confirmed in the app). */
+  async publish(slug: string, req: PublishRequest): Promise<PostRecord> {
+    this.ensureTeam(slug);
+    const repo = publishRepo(this.env, slug);
+    if (!repo) throw new Error("This floor has no publishing repo yet.");
+    const { cfg, status } = await this.publisherState(true);
+    const why = refusePublish(req, cfg, status, Date.now());
+    if (why) throw new Error(why);
+    const open = this.one("SELECT * FROM posts WHERE item = ? AND status = 'handing_over'", req.item);
+    if (open) return this.toPost(open);   // a second tap is the same hand-over
+    const released = status[req.item]?.qa_passed === true && status[req.item]?.release_assets === true;
+    if (!released) {
+      const reel = this.officeReels().find((r) => r.item === req.item);
+      if (reel?.stage !== "approved") throw new Error(`${req.item} is not approved yet. Approve the finished reel in the Inbox first.`);
+    }
+    const run = await dispatchPublisher(this.env, repo, "office-handover.yml", {
+      team: slug, item: req.item, action: req.mode, date: req.date ?? "", time: req.time ?? "", source: released ? "released" : "office",
+    });
+    return this.recordPost(req.item, req.mode, req.date ?? null, req.time ?? null, run);
+  }
+
+  /** Pause or resume the publishing repo's automatic slot posting (state/config.json posting_paused). */
+  async setPosting(slug: string, paused: boolean): Promise<PostRecord> {
+    this.ensureTeam(slug);
+    const repo = publishRepo(this.env, slug);
+    if (!repo) throw new Error("This floor has no publishing repo yet.");
+    const { cfg } = await this.publisherState(true);
+    if (Boolean(cfg.posting_paused) === paused) throw new Error(paused ? "Automatic posting is already paused." : "Automatic posting is already on.");
+    if (this.one("SELECT id FROM posts WHERE item = 'posting' AND status = 'handing_over'")) throw new Error("A change of the posting switch is already on its way.");
+    const mode = paused ? "pause" : "resume";
+    const run = await dispatchPublisher(this.env, repo, "office-handover.yml", { team: slug, item: "posting", action: mode, date: "", time: "", source: "released" });
+    return this.recordPost("posting", mode, null, null, run);
+  }
+
+  private recordPost(item: string, mode: PostRecord["mode"], date: string | null, time: string | null, run: { gh_run_id: string | null; url: string | null }): PostRecord {
+    const id = newId("p");
+    const now = Date.now();
+    this.sql.exec("INSERT INTO posts (id, item, mode, date, time, status, gh_run_id, gh_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 'handing_over', ?, ?, ?, ?)", id, item, mode, date, time, run.gh_run_id, run.url, now, now);
+    this.pub = null;
+    return this.toPost(this.one("SELECT * FROM posts WHERE id = ?", id)!);
   }
 
   async stopRun(slug: string, runId: string, mode: "interrupt" | "end"): Promise<Run | null> {
