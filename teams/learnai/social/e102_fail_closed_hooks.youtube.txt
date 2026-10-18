@@ -1,0 +1,9 @@
+Safety check crash ho to AI agent ko kya karna chahiye?
+
+Claude Code mein hook ek chhota check hai, jo agent ke action ke aaspaas chalta hai. Pehle agar hook start na ho, time out ho ya unexpected exit code de, to action phir bhi aage badh sakta tha (fail-open). Anthropic ki release note ke mutabik v2.1.295 mein command aur HTTP hooks ke liye onFailure block aaya: in teen halaat mein action ab rukta hai (fail-closed).
+
+Is video mein: hook kya hai, fail-open vs fail-closed, aur teen failure cases.
+
+Sources:
+https://github.com/anthropics/claude-code/releases/tag/v2.1.295
+https://code.claude.com/docs/en/hooks

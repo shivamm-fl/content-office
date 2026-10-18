@@ -1,0 +1,14 @@
+Safety check crash ho jaye, to AI agent ka action rukna chahiye ya nikal jana?
+
+Claude Code mein hook ek chhota check hai, jo agent ke action ke aaspaas chalta hai. Anthropic ki release note ke mutabik onFailure block lagane par teen halaat mein action rukta hai:
+1. Hook start na ho
+2. Time out ho
+3. Unexpected exit code aaye
+
+Yaani fail-closed: check toote, to default stop.
+
+UPI ka fraud check down ho, to payment ruke ya jaye? Comment mein likho.
+
+Aise agent tricks ke liye follow karo.
+
+#claudecode #aiagents #aiengineer
