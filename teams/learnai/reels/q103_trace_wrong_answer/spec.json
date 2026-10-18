@@ -1,91 +1,98 @@
 {
- "tts": "owner",
- "voice": "hi-IN-SwaraNeural",
- "pace": 1.26,
- "audio": "v2",
- "tone": "calm",
- "scenes": [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F"
- ],
- "min": {
-  "A": 6,
-  "B": 6,
-  "C": 7,
-  "D": 9,
-  "E": 7,
-  "F": 8
- },
- "tail": {},
- "cues": [
-  [
-   "impact",
-   null,
-   null,
-   0.05
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
   ],
-  [
-   "err",
-   "B",
-   1,
-   0.1
+  "min": {
+    "A": 6,
+    "B": 6,
+    "C": 7,
+    "D": 9,
+    "E": 7,
+    "F": 8
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "err",
+      "B",
+      0,
+      3
+    ],
+    [
+      "dip",
+      "C",
+      0,
+      -0.1
+    ],
+    [
+      "click",
+      "C",
+      0,
+      1.6
+    ],
+    [
+      "tick",
+      "D",
+      0,
+      3.3
+    ],
+    [
+      "err",
+      "D",
+      0,
+      8.8
+    ],
+    [
+      "click",
+      "E",
+      0,
+      2.8
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      5.8
+    ],
+    [
+      "dip",
+      "F",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "F",
+      1,
+      0.3
+    ]
   ],
-  [
-   "dip",
-   "C",
-   0,
-   -0.1
-  ],
-  [
-   "click",
-   "C",
-   1,
-   0
-  ],
-  [
-   "tick",
-   "D",
-   1,
-   0
-  ],
-  [
-   "err",
-   "D",
-   2,
-   0.4
-  ],
-  [
-   "unlock",
-   "E",
-   0,
-   0.6
-  ],
-  [
-   "dip",
-   "F",
-   0,
-   -0.1
-  ],
-  [
-   "pop",
-   "F",
-   1,
-   0.3
-  ]
- ],
- "copy": {
-  "hi": {
-   "A": "@hook Interviewer ने पूछा: | Production chatbot ने गलत जवाब दिया, | तुम्हें कैसे पता चलेगा क्यों? || जवाब 3{three} steps में है।",
-   "B": "गलती ये है, कि सिर्फ़ final answer देखते हैं। | पर गलती retrieval में हुई, prompt में या tool में, ये नहीं दिखता।",
-   "C": "पहला step, trace। | OpenTelemetry के docs के मुताबिक, | trace एक request का पूरा रास्ता दिखाता है, कि उसके साथ क्या-क्या हुआ।",
-   "D": "दूसरा, span। | हर काम एक span है, | उसका name, start और end time, और attributes होते हैं। | मान लो retrieve ने गलत document उठाया, | तो वही span लाल दिखेगा।",
-   "E": "तीसरा, hierarchy। | Spans nested होते हैं, | parent span ID से child जुड़ता है, | इसलिए पूरी request एक tree बनती है।",
-   "F": "@emph Final answer नहीं, पूरा रास्ता देखो। || तुम सबसे पहले कौन सा span देखोगे, retrieve, prompt या tool? Comment में लिखो। | और interview सवालों के लिए follow करो।"
-  }
- },
- "hook_type": "interviewer_asked"
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: Production chatbot ने गलत जवाब दिया, तुम्हें कैसे पता चलेगा क्यों? जवाब 3{three} steps में है।",
+      "B": "गलती ये है, कि सिर्फ़ final answer देखते हैं। पर गलती retrieval में हुई, prompt में या tool में, ये नहीं दिखता।",
+      "C": "पहला step, trace। OpenTelemetry के docs के मुताबिक, trace एक request का पूरा रास्ता दिखाता है, कि उसके साथ क्या-क्या हुआ।",
+      "D": "दूसरा, span। हर काम एक span है, उसका name, start और end time, और attributes होते हैं। मान लो retrieve ने गलत document उठाया, तो वही span लाल दिखेगा।",
+      "E": "तीसरा, hierarchy। Spans nested होते हैं, parent span ID से child जुड़ता है, इसलिए पूरी request एक hierarchy बनती है।",
+      "F": "@emph Final answer नहीं, पूरा रास्ता देखो। | तुम सबसे पहले कौन सा span देखोगे, retrieve, prompt या tool? Comment में लिखो। और interview सवालों के लिए follow करो।"
+    }
+  },
+  "hook_type": "interviewer_asked",
+  "prime": "सुनो, ये बहुत interesting है!"
 }
