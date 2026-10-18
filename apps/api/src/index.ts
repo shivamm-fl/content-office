@@ -1,7 +1,7 @@
 // The office Worker: serves the PWA, the owner's API, the runner endpoints and the GitHub webhook.
 import { Hono, type Context } from "hono";
 import { hmacHex, makeSession, readSession, sessionCookie, timingSafeEqual } from "./auth";
-import { readAiCourse, WORKFLOWS } from "./github";
+import { readAiCourse, releaseAssetResponse, WORKFLOWS } from "./github";
 import { verifyGithubOidc } from "./oidc";
 import { Office, type Env } from "./office";
 import { TEAMS, team as getTeam } from "./teams";
@@ -108,6 +108,27 @@ app.get("/api/teams/:team/calendar", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");
   return c.json(await office(c.env, slug).calendar(slug));
+});
+
+// Watch a reel before it is posted: its video, cover and the texts that would go out. For a reel released in the private publishing repo the
+// video and cover are streamed from its release through the owner's session (the file is not public).
+app.get("/api/teams/:team/preview/:item", async (c) => {
+  const slug = teamOr404(c);
+  if (!slug) return bad(c, 404, "no such team");
+  try {
+    return c.json(await office(c.env, slug).previewInfo(slug, c.req.param("item")));
+  } catch (e) {
+    return bad(c, 404, (e as Error).message);
+  }
+});
+
+app.get("/api/teams/:team/preview/:item/:kind", async (c) => {
+  const slug = teamOr404(c);
+  const kind = c.req.param("kind");
+  if (!slug || (kind !== "video" && kind !== "cover")) return bad(c, 404, "not found");
+  const a = await office(c.env, slug).previewAsset(slug, c.req.param("item"), kind);
+  if (!a) return bad(c, 404, "not found");
+  return releaseAssetResponse(c.env, a.repo, a.tag, a.name, a.type, c.req.header("Range") ?? null);
 });
 
 app.post("/api/teams/:team/publish", async (c) => {
@@ -234,6 +255,15 @@ app.get("/api/runner/transcript", async (c) => {
   if (!key.startsWith(`transcript/${id.slug}/`)) return bad(c, 403, "not this team's transcript");
   const data = await c.env.TRANSCRIPTS.get(key, "arrayBuffer");
   return data ? new Response(data, { headers: { "Content-Type": "application/gzip" } }) : bad(c, 404, "transcript expired");
+});
+
+// An agent teaches the team what the owner just corrected (office tool record_learning). Accepted only for a quote that is the owner's own.
+app.post("/api/runner/learning", async (c) => {
+  const id = await runToken(c);
+  if (!id) return bad(c, 403, "bad run token");
+  const body = await c.req.json<{ rule?: string; owner_said?: string }>().catch(() => ({} as { rule?: string; owner_said?: string }));
+  const r = await office(c.env, id.slug).recordLearning(id.slug, id.runId, body);
+  return c.json(r, r.ok ? 200 : 400);
 });
 
 // A desk hands a reel to the studio (office tool request_build).

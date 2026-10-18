@@ -50,6 +50,21 @@ def unpack(bundle: Path, team: str, content_only: bool, allow_media: bool = Fals
     return n
 
 
+def restore_template_assets(team: str) -> int:
+    """reels/<x>/assets/*.wav (music bed and effects, identical for every reel) are never committed; give each reel folder the ones it lacks."""
+    import shutil
+    reels = REPO / "teams" / team / "reels"
+    n = 0
+    for assets in reels.glob("*/assets"):
+        if assets.parent.name in ("_template", "_kit"):
+            continue
+        for wav in (reels / "_template" / "assets").glob("*.wav"):
+            if not (assets / wav.name).exists():
+                shutil.copy2(wav, assets / wav.name)
+                n += 1
+    return n
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--work", required=True)
@@ -59,6 +74,8 @@ def main() -> None:
     a = ap.parse_args()
     work = Path(a.work) / "files.tgz"
     n = unpack(work, a.team, a.content_only) if work.exists() else 0
+    if not a.content_only:   # an agent job (fix): the reel's sound assets are not in the bundle
+        n += restore_template_assets(a.team)
     m = 0
     if a.media and (Path(a.media) / "media.tgz").exists():
         m = unpack(Path(a.media) / "media.tgz", a.team, True, allow_media=True)

@@ -181,21 +181,21 @@ def main() -> None:
         return content, proposal, merged
 
     def apply(changes: dict[str, bytes | None]) -> int:
-        n = 0
+        """Stage every change and return how many files differ from HEAD. A file the job already wrote to disk with exactly the bundle's content
+        (the studio's final job applies the bundle before it saves) is staged too: skipping it left the reel's own files out of the commit."""
         for path, data in changes.items():
             p = Path(path)
             if data is None:
                 if p.exists():
                     git("rm", "-q", "--", path)
-                    n += 1
                 continue
-            if p.exists() and p.read_bytes() == data:
-                continue
-            p.parent.mkdir(parents=True, exist_ok=True)
-            p.write_bytes(data)
-            git("add", "--", path)
-            n += 1
-        return n
+            if not (p.exists() and p.read_bytes() == data):
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.write_bytes(data)
+            r = subprocess.run(["git", "-c", "core.hooksPath=/dev/null", "add", "--", path], capture_output=True, text=True)
+            if r.returncode != 0 and "ignored" not in r.stderr:   # a path .gitignore keeps out of git (big regenerable media) is simply not saved
+                raise SystemExit(f"git add {path} failed: {r.stderr.strip()[:300]}")
+        return len(git("diff", "--cached", "--name-only").splitlines())
 
     result: dict = {"team": a.team, "run_id": a.run, "commit": None, "files": 0, "proposal_branch": None, "note": None}
     proposal: dict[str, bytes | None] = {}

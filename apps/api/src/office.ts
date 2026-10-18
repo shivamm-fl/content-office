@@ -2,13 +2,13 @@
 // (SQLite), and the live room that the phone (client sockets) and the runners (runner sockets) join.
 import { DurableObject } from "cloudflare:workers";
 import type {
-  Ask, CalendarData, Desk, Message, MessageKind, OfficeState, PostRecord, Profile, PublishRequest, RoomEvent, Run, RunStatus, RunnerCommand, RunnerEvent,
+  Ask, CalendarData, Desk, Message, MessageKind, OfficeState, PostRecord, PreviewInfo, Profile, PublishRequest, RoomEvent, Run, RunStatus, RunnerCommand, RunnerEvent,
   Task, Team, Thread, Usage,
 } from "@office/protocol";
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
 import { buildCalendar, refusePublish, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
 import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, publishRepo, readAiCourse, runOutcome } from "./github";
-import { appendLearning, learningText } from "./learnings";
+import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners } from "./learnings";
 import { team as getTeam } from "./teams";
 
 export interface Env {
@@ -641,6 +641,86 @@ export class Office extends DurableObject<Env> {
       : `The office added the learning to state/learnings.md (${saved.join(", ")}). Every agent reads it from its next run; there is nothing for you to save.`;
     this.system(ask.thread_id, ask.run_id, note, { error: failed.length > 0 });
     return note;
+  }
+
+  /**
+   * An agent was corrected by the owner and teaches the whole team (tool record_learning): the lesson goes straight into state/learnings.md
+   * ("Owner corrections"), no approval card, because the owner's correction is the authority. It is accepted only when the quoted words really
+   * are the owner's (checked against the owner's messages of the last week), so nothing an agent read on a web page can become a rule.
+   */
+  async recordLearning(slug: string, runId: string, input: { rule?: string; owner_said?: string }): Promise<{ ok: boolean; message: string }> {
+    this.ensureTeam(slug);
+    const run = this.getRun(runId);
+    if (!run) return { ok: false, message: "unknown run" };
+    const day = new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10);
+    const counter = JSON.parse(this.meta("learn_day") ?? "{}") as { day?: string; n?: number };
+    const today = counter.day === day ? counter.n ?? 0 : 0;
+    if (today >= 20) return { ok: false, message: "Twenty lessons were recorded today already. Tell the owner and put the rest into your report." };
+    const fromRun = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM messages WHERE run_id = ? AND body LIKE '%\"learning\":true%'", runId)!.n;
+    if (fromRun >= 5) return { ok: false, message: "Five lessons were recorded in this session already. Put the rest into your report." };
+    const since = Date.now() - 7 * 86_400_000;
+    const owner = this.rows<{ body: string }>("SELECT body FROM messages WHERE author = 'owner' AND created_at > ? ORDER BY created_at DESC LIMIT 400", since)
+      .map((m) => JSON.parse(m.body) as Record<string, unknown>)
+      .flatMap((b) => [b.text, b.notes, b.edited].filter((x): x is string => typeof x === "string"));
+    if (!quoteIsOwners(String(input.owner_said ?? ""), owner)) {
+      return { ok: false, message: "owner_said must be copied exactly from something the owner wrote (at least 12 characters). Copy the words from their message and call again." };
+    }
+    const thread = run.thread_id ? this.getThreadRow(run.thread_id) : null;
+    let bullet: string;
+    try { bullet = correctionBullet(String(input.rule ?? ""), day, run.item ?? thread?.item ?? null); } catch (e) { return { ok: false, message: (e as Error).message }; }
+    const places = [{ repo: this.env.GITHUB_REPO, path: `teams/${slug}/state/learnings.md` }];
+    const pub = publishRepo(this.env, slug);
+    if (pub) places.push({ repo: pub, path: "state/learnings.md" });
+    const saved: string[] = [];
+    const failed: string[] = [];
+    for (const p of places) {
+      try {
+        const sha = await editRepoFile(this.env, p.repo, p.path, (t) => addOwnerCorrection(t, bullet), `learnings: owner correction recorded by ${run.agent}`);
+        saved.push(sha ? `${p.repo} (commit ${sha.slice(0, 7)})` : `${p.repo} (already had it)`);
+      } catch (e) {
+        failed.push(`${p.repo}: ${(e as Error).message}`);
+      }
+    }
+    if (!saved.length) return { ok: false, message: `Could not save the lesson: ${failed.join("; ")}` };
+    this.setMeta("learn_day", JSON.stringify({ day, n: today + 1 }));
+    const rule = bullet.replace(/^- \S+( \([^)]*\))?:\s*/, "");
+    this.system(run.thread_id, runId, `Learned for the whole team: ${rule}`, { learning: true, saved, failed });
+    return { ok: true, message: `Recorded for every agent from their next run (${saved.join(", ")}).${failed.length ? ` It failed on ${failed.join("; ")}.` : ""}` };
+  }
+
+  /** What the owner sees before posting: the office's own finished reel (public release media) or a reel released in the publishing repo (private release). */
+  async previewInfo(slug: string, item: string): Promise<PreviewInfo> {
+    this.ensureTeam(slug);
+    if (!/^[a-z]\d{2,4}$/.test(item)) throw new Error("bad item id");
+    const thread = this.one<{ id: string }>("SELECT id FROM threads WHERE kind = 'build' AND item = ? ORDER BY created_at DESC LIMIT 1", item);
+    const askRow = thread ? this.one("SELECT * FROM asks WHERE thread_id = ? AND meta IS NOT NULL ORDER BY created_at DESC LIMIT 1", thread.id) : null;
+    const meta = askRow ? this.toAsk(askRow).meta : null;
+    if (meta?.video_url) {
+      return { item, title: meta.title, video_url: meta.video_url, cover_url: meta.cover_url, caption: meta.caption, youtube: meta.youtube, duration_s: meta.duration_s, source: "office" };
+    }
+    if (!publishRepo(this.env, slug)) throw new Error(`no preview for ${item}`);
+    const { status } = await this.publisherState();
+    const e = status[item] as (Phase5Entry & { folder?: string; caption?: string }) | undefined;
+    if (!e?.release_assets || !e.mp4) throw new Error(`${item} has no finished video to preview`);
+    const name = (e.folder ?? e.mp4).split("/").pop()!.replace(/_hi\.mp4$/, "");
+    const read = (p: string) => readAiCourse(this.env, p).catch(() => "");
+    const [caption, youtube] = await Promise.all([e.caption ? read(e.caption) : Promise.resolve(""), read(`social/${name}.youtube.txt`)]);
+    return {
+      item, title: e.title ?? item, video_url: `/api/teams/${slug}/preview/${item}/video`, cover_url: `/api/teams/${slug}/preview/${item}/cover`,
+      caption, youtube, duration_s: e.duration_s ?? null, source: "released",
+    };
+  }
+
+  /** The release asset behind a "released" preview: which repo, tag and file name, and its content type. */
+  async previewAsset(slug: string, item: string, kind: "video" | "cover"): Promise<{ repo: string; tag: string; name: string; type: string } | null> {
+    this.ensureTeam(slug);
+    const repo = publishRepo(this.env, slug);
+    if (!repo || !/^[a-z]\d{2,4}$/.test(item)) return null;
+    const e = (await this.publisherState()).status[item] as (Phase5Entry & { cover?: string }) | undefined;
+    if (!e?.release_assets) return null;
+    const file = kind === "video" ? e.mp4 : e.cover;
+    if (!file) return null;
+    return { repo, tag: `ig-${item}`, name: file.split("/").pop()!, type: kind === "video" ? "video/mp4" : "image/png" };
   }
 
   async stopRun(slug: string, runId: string, mode: "interrupt" | "end"): Promise<Run | null> {

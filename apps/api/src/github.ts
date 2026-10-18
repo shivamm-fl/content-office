@@ -93,6 +93,24 @@ export async function editRepoFile(env: GhEnv, repo: string, path: string, build
   throw new Error(`${repo}/${path} kept changing; try again`);
 }
 
+/**
+ * One asset of a (private) release as a response the phone's video player can play and seek: GitHub answers the asset request with a signed
+ * redirect, which is then fetched with the Range header (iOS needs ranges). Only owner-session routes use it.
+ */
+export async function releaseAssetResponse(env: GhEnv, repo: string, tag: string, name: string, type: string, range: string | null): Promise<Response> {
+  const rel = await fetch(`https://api.github.com/repos/${repo}/releases/tags/${encodeURIComponent(tag)}`, { headers: headers(env) });
+  if (!rel.ok) return new Response("not found", { status: 404 });
+  const asset = ((await rel.json()) as { assets?: { id: number; name: string }[] }).assets?.find((a) => a.name === name);
+  if (!asset) return new Response("not found", { status: 404 });
+  const first = await fetch(`https://api.github.com/repos/${repo}/releases/assets/${asset.id}`, { headers: headers(env, "application/octet-stream"), redirect: "manual" });
+  const signed = first.headers.get("Location");
+  const src = signed ? await fetch(signed, { headers: range ? { Range: range } : {} }) : first;
+  if (!src.ok && src.status !== 206) return new Response("not found", { status: 404 });
+  const h = new Headers({ "Content-Type": type, "Accept-Ranges": "bytes", "Cache-Control": "private, max-age=300" });
+  for (const k of ["Content-Length", "Content-Range"]) { const v = src.headers.get(k); if (v) h.set(k, v); }
+  return new Response(src.body, { status: src.status, headers: h });
+}
+
 export async function cancelRun(env: GhEnv, ghRunId: string): Promise<void> {
   await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/runs/${ghRunId}/cancel`, { method: "POST", headers: headers(env) });
 }

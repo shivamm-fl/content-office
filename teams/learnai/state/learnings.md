@@ -15,3 +15,9 @@ No rules yet. The first two weeks are a baseline.
 - Rule: the first line is a complete concrete question or a concrete scenario ("Interviewer ne poocha: <full sentence>" or "<thing went wrong>, kyun?"), not a short claim. Interviewer-asked (n=8, median skip ~58 %) and relatable_stake (n=8, ~61 %) are within 3 points: keep both.
 - Hint, not a rule (n=3): first lines in Devanagari had 84 to 89 % skip (q01, r01, e02). Keep first lines in Roman Hinglish.
 - Open: generic track has only 1 reel after 2026-10-15; keep testing before judging. Length (38 to 90 s) is confounded with the hook change.
+
+## Owner corrections (recorded automatically)
+- 2026-10-18 (r104): When a reel asks a question, it answers it in the first lines in plain words, and the script is clear enough that the viewer understands it and leaves with something of real value.
+- 2026-10-18 (e103): Reels about a skill, a repo or a tool end with the ask: follow karo, comment karo <KEYWORD>, and the skill or link comes straight to your DM.
+- 2026-10-18 (e103, q103): Keep pauses short: no long gap between parts or scenes, and never hold a scene after its line has ended.
+- 2026-10-18 (e104): The script comes first: research how reels like this are scripted and write a good one, show it to the owner when they ask to see it, and do not let fact-checking crowd out the quality of the writing (claims are still verified).

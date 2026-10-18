@@ -127,6 +127,11 @@ const TOOLS = [
     inputSchema: { type: "object", properties: { kind: { type: "string", enum: ["plan", "script", "final", "learning", "other"] }, title: { type: "string" }, content: { type: "string" }, item_ids: { type: "array", items: { type: "string" } } }, required: ["kind", "title", "content"] },
   },
   {
+    name: "record_learning",
+    description: "Teach the whole team something the owner just corrected or taught you (a script, a hook, the pictures, an ending, a way of working). Call it right after you applied the fix, once per lesson; there is no approval card, the owner's correction is the authority and they see the lesson in the chat. `rule`: the lesson in general form, one or two full sentences in plain English without slang, so any agent can follow it on the next reel. `owner_said`: a stretch of the owner's message copied EXACTLY (at least 12 characters); the office checks it against what the owner really wrote and refuses it otherwise. The lesson goes into state/learnings.md (Owner corrections) and every agent reads it from its next run.",
+    inputSchema: { type: "object", properties: { rule: { type: "string" }, owner_said: { type: "string" } }, required: ["rule", "owner_said"] },
+  },
+  {
     name: "report_progress",
     description: "Show one short status line on your desk in the office (what you are doing now).",
     inputSchema: { type: "object", properties: { text: { type: "string" } }, required: ["text"] },
@@ -187,6 +192,14 @@ function startMcp(ctx) {
       const j = await r.json().catch(() => ({}));
       if (!r.ok) return text(`The studio refused: ${j.error ?? r.status}`, true);
       return text(j.reused ? `${a.item_id} is already in the studio (run ${j.run_id}).` : `${a.item_id} is in the studio queue (run ${j.run_id}). The finished reel goes to the owner's inbox.`);
+    }
+    if (name === "record_learning") {
+      const r = await fetch(`${OFFICE}/api/runner/learning?team=${TEAM}&run=${RUN_ID}`, {
+        method: "POST", headers: { "X-Run-Token": ctx.token, "Content-Type": "application/json" },
+        body: JSON.stringify({ rule: a.rule, owner_said: a.owner_said }),
+      });
+      const j = await r.json().catch(() => ({}));
+      return text(j.message ?? `the office answered ${r.status}`, !r.ok);
     }
     if (name === "team_feed") {
       const q = a.thread_id ? `&thread=${encodeURIComponent(String(a.thread_id))}` : "";

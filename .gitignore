@@ -18,6 +18,8 @@ __pycache__/
 teams/*/qa/
 teams/*/reels/*_hi.mp4
 teams/*/reels/*/audio/
+# the music bed and effects every reel gets from reels/_template/assets (16 MB each, identical): copy them again on a revision, never commit them
+teams/*/reels/*/assets/*.wav
 teams/*/reels/*/voice_samples/
 teams/*/reels/.*hf-transaction*/
 teams/*/**/snapshots/

@@ -89,6 +89,11 @@ export interface CalendarData {
   note: string | null;
 }
 export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string }
+/** What the owner sees when previewing a reel before it is posted: the video, the cover and the texts that would go out. */
+export interface PreviewInfo {
+  item: string; title: string; video_url: string; cover_url: string | null; caption: string; youtube: string; duration_s: number | null;
+  source: "office" | "released";
+}
 
 /** Runner -> office (batched over the runner WebSocket). */
 export type RunnerEvent =

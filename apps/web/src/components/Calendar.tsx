@@ -1,6 +1,6 @@
 // The content calendar of a floor: what is ready to post, what goes out in which slot, what is still being made,
 // and the owner's buttons to post a reel now or put it on a slot (the publishing repo does the posting).
-import type { CalendarCell, CalendarData, CalendarSlot, PostRecord, ReadyReel, Team } from "@office/protocol";
+import type { CalendarCell, CalendarData, CalendarSlot, PostRecord, PreviewInfo, ReadyReel, Team } from "@office/protocol";
 import { useCallback, useEffect, useState } from "react";
 import type { Office } from "../store";
 import { Empty, Screen, go, timeAgo } from "./ui";
@@ -16,19 +16,63 @@ function Pill({ children, className = "" }: { children: React.ReactNode; classNa
   return <span className={`whitespace-nowrap rounded-full border border-wall px-2 py-0.5 text-[11px] ${className}`}>{children}</span>;
 }
 
-function CellRow({ c, team, paused }: { c: CalendarCell; team: Team; paused: boolean }) {
+function CellRow({ c, team, paused, onPreview }: { c: CalendarCell; team: Team; paused: boolean; onPreview?: (item: string, title: string) => void }) {
   const word = c.state === "posted" ? `Posted ${c.at ?? ""}` : c.state === "scheduled" ? (paused ? "Scheduled, paused" : "Scheduled") : c.state === "auto" ? (paused ? "Paused" : "Next in line") : "No reel yet";
   const tone = c.state === "scheduled" ? "text-gold" : c.state === "posted" ? "text-paper" : "text-dim";
+  const title = `min-w-0 flex-1 truncate text-left ${c.state === "auto" ? "text-dim" : ""}`;
   return (
     <li className="flex items-center gap-2 py-1.5 text-[13.5px]">
       <span className="w-[72px] shrink-0 text-[11px] text-dim">{trackName(team, c.track)}</span>
-      <span className={`min-w-0 flex-1 truncate ${c.state === "auto" ? "text-dim" : ""}`}>{c.title ?? ""}</span>
+      {c.item && c.title && c.state !== "posted" && onPreview
+        ? <button onClick={() => onPreview(c.item!, c.title!)} className={title} aria-label={`Preview ${c.title}`}>{c.title}</button>
+        : <span className={title}>{c.title ?? ""}</span>}
       {c.link ? <a href={c.link} target="_blank" rel="noreferrer" className={`shrink-0 text-[11px] underline decoration-wall ${tone}`}>{word}</a> : <span className={`shrink-0 text-[11px] ${tone}`}>{word}</span>}
     </li>
   );
 }
 
-function PostSheet({ cal, reel, office, onClose, onDone }: { cal: CalendarData; reel: ReadyReel; office: Office; onClose: () => void; onDone: (p: PostRecord) => void }) {
+/** Watch a reel (and read the texts that would go out) before it is posted. */
+function PreviewSheet({ office, item, title, reel, onClose, onPost }: { office: Office; item: string; title: string; reel: ReadyReel | null; onClose: () => void; onPost: (r: ReadyReel) => void }) {
+  const { loadPreview } = office;
+  const [info, setInfo] = useState<PreviewInfo | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [broken, setBroken] = useState(false);
+  useEffect(() => {
+    let live = true;
+    loadPreview(item).then((i) => { if (live) setInfo(i); }).catch((e: Error) => { if (live) setError(e.message); });
+    return () => { live = false; };
+  }, [loadPreview, item]);
+  return (
+    <div className="fixed inset-0 z-30 flex items-end bg-black/60" onClick={onClose}>
+      <div className="safe-bottom mx-auto max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-2xl border border-wall bg-desk" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={`Preview ${title}`}>
+        <div className="px-4 pt-4">
+          <p className="text-xs text-dim">{item}{info?.duration_s ? `, ${Math.round(info.duration_s)} s` : ""}</p>
+          <p className="text-[15px] font-semibold leading-snug">{info?.title ?? title}</p>
+        </div>
+        {info ? (
+          <video src={info.video_url} poster={info.cover_url ?? undefined} controls playsInline preload="metadata" onError={() => setBroken(true)} className="mx-auto mt-3 block h-[58vh] w-full bg-black object-contain" />
+        ) : error ? <p className="px-4 py-6 text-sm text-coral">{error}</p> : <p className="px-4 py-10 text-center text-sm text-dim">Loading the reel…</p>}
+        {broken && <p className="px-4 pt-2 text-sm text-coral">The video could not be played. Try again in a minute.</p>}
+        {info && (
+          <div className="mt-2 border-t border-wall">
+            {([["Instagram caption", info.caption], ["YouTube title and description", info.youtube]] as const).filter(([, t]) => t.trim()).map(([label, t]) => (
+              <details key={label} className="border-b border-wall px-4 py-2.5">
+                <summary className="cursor-pointer text-sm">{label}</summary>
+                <pre className="mt-2 whitespace-pre-wrap font-sans text-[13.5px] leading-relaxed text-paper/90">{t}</pre>
+              </details>
+            ))}
+          </div>
+        )}
+        <div className="flex gap-2 px-4 py-3">
+          {reel && <button onClick={() => onPost(reel)} className="flex-1 rounded-lg bg-gold py-2.5 text-sm font-semibold text-ink">Post this…</button>}
+          <button onClick={onClose} className={`rounded-lg border border-wall py-2.5 text-sm ${reel ? "px-5" : "flex-1"}`}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: CalendarData; reel: ReadyReel; office: Office; onClose: () => void; onDone: (p: PostRecord) => void; onPreview: () => void }) {
   const [mode, setMode] = useState<"now" | "slot">(cal.can_post_now || !reel.can_schedule ? "now" : "slot");
   const [slot, setSlot] = useState<string | null>(null);
   const [confirm, setConfirm] = useState(false);
@@ -59,6 +103,7 @@ function PostSheet({ cal, reel, office, onClose, onDone }: { cal: CalendarData; 
             <p className="text-xs text-dim">{reel.item}{reel.duration_s ? `, ${Math.round(reel.duration_s)} s` : ""}</p>
             <p className="text-[15px] font-semibold leading-snug">{reel.title}</p>
             <p className="mt-1 text-[12px] text-dim">{cal.last_post_hours != null ? `The last post went out ${cal.last_post_hours} h ago.` : "Nothing posted yet."}</p>
+            <button onClick={onPreview} className="mt-1.5 text-[13px] text-gold">Watch it first</button>
           </div>
         </div>
 
@@ -126,6 +171,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
   const [cal, setCal] = useState<CalendarData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sheet, setSheet] = useState<ReadyReel | null>(null);
+  const [preview, setPreview] = useState<{ item: string; title: string } | null>(null);
   const [opened, setOpened] = useState<string | null>(null);
   const [switching, setSwitching] = useState<"pause" | "resume" | null>(null);
   const [busy, setBusy] = useState(false);
@@ -209,7 +255,10 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
                         <p className="line-clamp-2 text-[14px] font-medium leading-snug">{r.title}</p>
                         <p className="mt-0.5 text-[11.5px] text-dim">{r.item}, {trackName(team, r.track)}{r.duration_s ? `, ${Math.round(r.duration_s)} s` : ""}{r.source === "office" ? ", from the office" : ", already released"}</p>
                       </div>
-                      <button onClick={() => setSheet(r)} className="shrink-0 rounded-lg bg-gold px-3.5 py-2 text-sm font-semibold text-ink">Post</button>
+                      <div className="flex shrink-0 flex-col gap-1.5">
+                        <button onClick={() => setSheet(r)} className="rounded-lg bg-gold px-3.5 py-2 text-sm font-semibold text-ink">Post</button>
+                        <button onClick={() => setPreview({ item: r.item, title: r.title })} className="rounded-lg border border-wall px-3.5 py-1.5 text-xs">Preview</button>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -234,7 +283,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
                       {withReels.map((s) => (
                         <div key={s.time} className="px-4 py-2">
                           <p className="text-[12px] text-dim">{s.time} IST{s.started && s.open ? ", slot is open now" : s.started ? ", over" : ""}</p>
-                          <ul>{s.cells.map((c, i) => <CellRow key={`${c.item ?? c.track}-${i}`} c={c} team={team} paused={cal.paused} />)}</ul>
+                          <ul>{s.cells.map((c, i) => <CellRow key={`${c.item ?? c.track}-${i}`} c={c} team={team} paused={cal.paused} onPreview={(item, title) => setPreview({ item, title })} />)}</ul>
                         </div>
                       ))}
                       {bareTimes.length > 0 && (
@@ -293,7 +342,11 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
           </section>
         )}
       </div>
-      {sheet && cal && <PostSheet cal={cal} reel={sheet} office={office} onClose={() => setSheet(null)} onDone={() => { setSheet(null); void load(); }} />}
+      {sheet && cal && <PostSheet cal={cal} reel={sheet} office={office} onClose={() => setSheet(null)} onDone={() => { setSheet(null); void load(); }} onPreview={() => { setPreview({ item: sheet.item, title: sheet.title }); setSheet(null); }} />}
+      {preview && cal && (
+        <PreviewSheet office={office} item={preview.item} title={preview.title} reel={cal.ready.find((r) => r.item === preview.item) ?? null}
+          onClose={() => setPreview(null)} onPost={(r) => { setPreview(null); setSheet(r); }} />
+      )}
     </Screen>
   );
 }

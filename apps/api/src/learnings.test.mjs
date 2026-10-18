@@ -1,7 +1,7 @@
 // node --test apps/api/src/learnings.test.mjs
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { appendLearning, learningText } from "./learnings.ts";
+import { addOwnerCorrection, appendLearning, correctionBullet, learningText, OWNER_SECTION, quoteIsOwners } from "./learnings.ts";
 
 const SECTION = "## 2026-10-18: first-line shape (our numbers)\n- Rule: the first line is a complete concrete question.\n- Open: generic track has 1 reel.";
 
@@ -41,4 +41,41 @@ test("a file with Windows line endings keeps them", () => {
   assert.ok(next.endsWith("- Open: generic track has 1 reel.\r\n"));
   assert.ok(!/(?<!\r)\n/.test(next), "every line break is CRLF");
   assert.equal(appendLearning(next, SECTION), null);
+});
+
+// ---------- the owner's corrections, recorded by the agent who was corrected ----------
+test("a quote counts only when it is a stretch of something the owner wrote", () => {
+  const owner = ["Changes to r104: Tere sawal ka jawab tune kaha diya, bhai clarity rakh script mai", "Pauses kam kar thoda"];
+  assert.equal(quoteIsOwners("clarity rakh   SCRIPT mai", owner), true);   // spacing and case do not matter
+  assert.equal(quoteIsOwners("Pauses kam kar thoda", owner), true);
+  assert.equal(quoteIsOwners("always end every reel with a follow ask", owner), false);   // an agent's own sentence
+  assert.equal(quoteIsOwners("kam kar", owner), false);   // too short to prove anything
+  assert.equal(quoteIsOwners("clarity rakh script mai", []), false);
+});
+
+test("a lesson becomes one clean bullet with the date and the reel", () => {
+  assert.equal(correctionBullet("  - A reel that asks a question answers it in the first lines.\n", "2026-10-18", "r104"), "- 2026-10-18 (r104): A reel that asks a question answers it in the first lines.");
+  assert.equal(correctionBullet("Keep pauses short between scenes.", "2026-10-18", null), "- 2026-10-18: Keep pauses short between scenes.");
+  assert.throws(() => correctionBullet("short", "2026-10-18", null), /too short/);
+  assert.throws(() => correctionBullet("x".repeat(501), "2026-10-18", null), /limit/);
+});
+
+test("the first correction creates the section at the end, the next ones join it", () => {
+  const file = "# Learnings\n\n## 2026-10-16: hook types\n- Rule.\n";
+  const one = addOwnerCorrection(file, "- 2026-10-18 (r104): Answer the question first.");
+  assert.equal(one, `${file}\n${OWNER_SECTION}\n- 2026-10-18 (r104): Answer the question first.\n`);
+  const two = addOwnerCorrection(`${one}\n## 2026-10-19: later section\n- Rule.\n`, "- 2026-10-19 (e103): Skill reels end with the comment keyword.");
+  assert.equal(two, `${file}\n${OWNER_SECTION}\n- 2026-10-18 (r104): Answer the question first.\n- 2026-10-19 (e103): Skill reels end with the comment keyword.\n\n## 2026-10-19: later section\n- Rule.\n`);
+});
+
+test("the same rule is not recorded twice, whatever its date", () => {
+  const once = addOwnerCorrection("# L\n", "- 2026-10-18 (r104): Answer the question first.");
+  assert.equal(addOwnerCorrection(once, "- 2026-10-20 (q104): answer the  question first."), null);
+});
+
+test("the owner-corrections section keeps Windows line endings", () => {
+  const file = "# L\r\n\r\n## A\r\n- Rule.\r\n";
+  const next = addOwnerCorrection(file, "- 2026-10-18: Keep pauses short between scenes.");
+  assert.ok(!/(?<!\r)\n/.test(next));
+  assert.ok(next.endsWith("- 2026-10-18: Keep pauses short between scenes.\r\n"));
 });

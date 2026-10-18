@@ -11,4 +11,9 @@ npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
 # the skills install rewrites the lock file's hashes; that is not a change the team made
 git checkout -q -- "teams/$TEAM/skills-lock.json" 2>/dev/null || true
 timeout 180 npx --yes hyperframes@0.8.149 --version </dev/null >/dev/null 2>&1 || true
+# reels/<x>/assets/*.wav (the music bed and effects, 16 MB, identical for every reel) are never committed: give each reel folder the ones it lacks
+for d in "teams/$TEAM"/reels/*/assets; do
+  case "$d" in */_template/*|*/_kit/*) continue;; esac
+  for w in "teams/$TEAM"/reels/_template/assets/*.wav; do [ -e "$d/$(basename "$w")" ] || cp "$w" "$d/"; done
+done
 claude --version && ffmpeg -version | head -1
