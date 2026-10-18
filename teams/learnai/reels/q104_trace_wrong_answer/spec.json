@@ -1,5 +1,5 @@
 {
-  "tts": "edge",
+  "tts": "owner",
   "voice": "hi-IN-SwaraNeural",
   "pace": 1.26,
   "audio": "v2",
@@ -27,6 +27,48 @@
       null,
       null,
       0.05
+    ],
+    [
+      "click",
+      "A",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "B",
+      2,
+      -0.1
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0.6
+    ],
+    [
+      "click",
+      "C",
+      0,
+      1.9
+    ],
+    [
+      "tick",
+      "D",
+      0,
+      1.5
+    ],
+    [
+      "err",
+      "E",
+      2,
+      0.85
+    ],
+    [
+      "pop",
+      "F",
+      1,
+      0
     ]
   ],
   "copy": {
@@ -39,5 +81,6 @@
       "F": "@emph सिर्फ़ जवाब नहीं, पूरा रास्ता record करो। || तुम पहले क्या देखोगे, search, prompt या tool? Comment में एक word लिखो। | Interview सवालों के लिए follow करो।"
     }
   },
-  "hook_type": "interviewer_asked"
+  "hook_type": "interviewer_asked",
+  "prime": "सुनो, ये बहुत interesting है!"
 }
