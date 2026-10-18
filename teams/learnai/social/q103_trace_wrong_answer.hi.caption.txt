@@ -1,0 +1,14 @@
+Interviewer ne poocha: production chatbot ne galat jawab diya, tumhe kaise pata chalega kyun?
+
+Galti: sirf final answer dekhna. Galti retrieval, prompt ya tool, kahin bhi ho sakti hai. Solution: traceability. Ek achha AI system traceable hona chahiye: usne kya kiya, kab kiya, kyun kiya, ye sab pata chale.
+1. Traceability: har step ka record
+2. Tool: Langfuse ek open source tool hai, uske docs ke hisaab se trace mein LLM calls, retrieval steps aur tool executions aate hain, timing, inputs aur outputs ke saath
+3. Trace aur span: OpenTelemetry ke docs ke hisaab se trace ek request ka poora raasta hai, span ek kaam (name, start aur end time, attributes), aur parent span ID se spans nested hierarchy banate hain
+
+Retrieve, prompt, tool ko spans maanna aur wrong document wala case hamara example hai.
+
+Tum sabse pehle kaun sa span dekhoge? Retrieve, prompt ya tool? Comment mein likho.
+
+Follow karo aise aur AI engineer interview sawalon ke liye.
+
+#llmobservability #aiengineer #interviewprep

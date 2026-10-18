@@ -1,13 +1,14 @@
-# Visual plan: q103 trace a wrong answer
+# Visual plan: q103 trace a wrong answer (FIX round)
 
 Idea in one line:
-A trace is the whole path of one request; each step is a span with a name, start and end, nested under a parent, so the bad step shows red.
+A traceable AI system records what, when and why; a tool such as Langfuse stores each step as a trace; spans nest by parent ID so the bad step shows red.
 
 | Scene | Spoken (short) | The picture: what is drawn, what moves, what changes (at least six words) | On-screen labels (1-3 words each) | Built with (helper names or custom) |
 |---|---|---|---|---|
-| A | Interviewer asked: chatbot gave a wrong answer, how will you know why? Answer is 3 steps | A support chat on screen from frame 0: user asks about a refund, the bot reply flips from a tick to a red cross; a WHY? chip lands, then 1? 2? 3? pills | WHY?, 1 ?, 2 ?, 3 ? | custom chat panel (recipe 1) |
-| B | Mistake: only the final answer is seen; the fault could be retrieval, prompt or tool | The red wrong reply card on top with an eye icon (SEEN), an arrow down to three dashed cards RETRIEVE, PROMPT, TOOL each with a red question mark that you cannot see inside | WHAT YOU SEE, HIDDEN, RETRIEVE, PROMPT, TOOL | custom panels, M.icon |
-| C | Step 1, trace: the whole path of one request (OpenTelemetry) | A courier tracking page: a vertical rail with five stops (request, retrieve, prompt, tool, answer) that light one by one down the rail; EXAMPLE pill; source chip | 1 TRACE, EXAMPLE, OPENTELEMETRY, five stop names | custom DOM rail |
-| D | Step 2, span: name, start, end, attributes; the retrieve span turns red | One wide bar named retrieve with START and END ticks, below it a span card whose four rows (name, start, end, attrs) fill on their words; the bar, the attrs row go red and a WRONG DOC stamp lands | 2 SPAN, START, END, ONE SPAN, EXAMPLE, WRONG DOC | custom panel, stamp |
-| E | Step 3, hierarchy: parent span ID links child to parent | A waterfall: a full-width REQUEST root bar, four child bars (retrieve red, prompt, tool, answer) staggered in time on separate rows, joined to the root by a dashed rail; PARENT SPAN ID chip | 3 HIERARCHY, REQUEST, PARENT SPAN ID, retrieve, prompt, tool, answer | custom DOM waterfall |
-| F | Look at the whole path; comment which span first; follow | Three big icon tiles (search, chat, gear) labelled RETRIEVE, PROMPT, TOOL with a question mark, then the COMMENT card with the three pills popping on their words, then the FOLLOW pill pressing | FULL PATH, RETRIEVE, PROMPT, TOOL, COMMENT KARO, FOLLOW | custom DOM, M.icon, M.pill |
+| A | Interviewer asked why a chatbot answered wrong; answer is 3 things | A support chat from frame 0, reply flips from tick to red cross, WHY? chip, then 1? 2? 3? pills | INTERVIEW QUESTION, WHY?, 1 ?, 2 ?, 3 ? | custom chat panel |
+| B | Only the final answer is seen; retrieval, prompt, tool hide the cause | Wrong reply card with an eye, arrow down to three dashed hidden cards with red question marks, each turning gold on its word | WHAT YOU SEE, HIDDEN, RETRIEVE, PROMPT, TOOL | custom panels, M.icon |
+| C | Solution, traceability: what, when, why | Robot AI SYSTEM box on top, three cards WHAT, WHEN, WHY present from the start whose example lines fill on their words and all turn green with a TRACEABLE stamp | 1 SOLUTION, TRACEABILITY, WHAT, WHEN, WHY, EXAMPLE | M.box, custom cards |
+| D | Tool: Langfuse open source records LLM calls, retrieval, tools, timing, inputs, outputs | Langfuse logo, a ONE TRACE panel of three rows (LLM CALL, RETRIEVAL, TOOL) that light on their words and whose timing bars grow, then INPUTS and OUTPUTS chips | 2 TOOL, OPEN SOURCE, LLM CALL, RETRIEVAL, TOOL, INPUTS, OUTPUTS | custom rows, bars |
+| E | Trace is the whole path; a span is one unit of work with name, start, end, attributes | A five-stop tracking rail lights down the path, then one wide retrieve bar and a span card whose rows brighten on their words; the bar and attrs go red with WRONG DOC | 3 TRACE & SPAN, OPENTELEMETRY, START, END, WRONG DOC, EXAMPLE | custom rail, card, stamp |
+| F | Spans nest by parent span ID, so the hierarchy shows | A full-width REQUEST root bar, four child bars on staggered rows joined by a dashed parent rail, PARENT SPAN ID chip | HIERARCHY, PARENT SPAN ID | custom waterfall |
+| G | Look at the whole path; comment; follow | Three icon tiles RETRIEVE, PROMPT, TOOL with question marks, then COMMENT card with pills, then FOLLOW | FULL PATH, COMMENT KARO, FOLLOW | custom DOM |

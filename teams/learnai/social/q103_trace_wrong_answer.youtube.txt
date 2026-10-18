@@ -1,0 +1,6 @@
+Chatbot ka galat jawab: traceability se kaise debug karoge? | AI Engineer Interview
+Interviewer poochta hai: production chatbot ne galat jawab diya, kaise pata chalega kyun? Solution traceability hai: AI system ne kya kiya, kab kiya aur kyun kiya, ye pata chalna chahiye. Langfuse ek open source tracing tool hai; uske docs ke hisaab se trace mein LLM calls, retrieval steps aur tool executions timing, inputs aur outputs ke saath aate hain. OpenTelemetry ke docs ke hisaab se trace ek request ka poora raasta dikhata hai, span ek unit of work hai (name, start aur end time, attributes), aur parent span ID se spans nested hierarchy banate hain. Retrieve, prompt aur tool ko spans ki tarah dikhana hamara example hai.
+
+Sources:
+https://opentelemetry.io/docs/concepts/signals/traces/
+https://langfuse.com/docs/observability/overview
