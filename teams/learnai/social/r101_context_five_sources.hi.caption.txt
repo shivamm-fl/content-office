@@ -1,0 +1,16 @@
+Model ko jawab dene se pehle kya-kya dikhta hai? Ek window mein paanch cheezein.
+
+Isi ko context kehte hain:
+1. System prompt: model ke rules
+2. Tools: jo functions wo call kar sakta hai
+3. Examples: kuch sahi jawabon ke namune
+4. Message history: ab tak ki chat
+5. External data: documents ya search results
+
+Window ki jagah limited hai. Anthropic ki engineering post ke hisaab se context ek finite resource hai, aur bloated tool set sabse common failures mein se ek hai. Isliye har source ko lean rakho.
+
+Tumhare chatbot mein sabse zyada jagah kaun leta hai? 1 se 5 comment karo.
+
+Aise AI engineer concepts ke liye follow karo.
+
+#aiengineer #llm #contextwindow

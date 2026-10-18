@@ -1,0 +1,8 @@
+Context mein kya-kya jata hai? Context ke 5 sources
+
+Model ko jawab dene se pehle kya-kya dikhta hai? Context mein paanch sources hote hain: system prompt, tools, examples, message history aur external data. Context window ki jagah limited hoti hai, aur Anthropic ki engineering post ke hisaab se context ek finite resource hai. Isliye har source ko lean rakhna chahiye.
+
+Is video mein: context ke paanch sources, finite window, aur bloated tool set ka risk.
+
+Sources:
+https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
