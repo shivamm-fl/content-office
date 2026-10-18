@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="60.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="40" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -32,7 +32,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,16 +41,16 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="60.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="60.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="60.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="40" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="40" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="40" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "WHAT'S NEW IN AI" });
+      const M = Mo.init({ order: ["A","B","C","D","E","F"], tag: "WHAT'S NEW IN AI" });
       Viz.install(M);
       const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n);
-      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF");
       const { ACC, CYAN, HOT, GOOD } = M;
       const GREY = "#8592AD";
       const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
@@ -79,9 +79,9 @@
           if (i === 1) extra = `<polygon points="${cx},${cy - 22 * s} ${cx + 60 * s},${cy} ${cx},${cy + 22 * s} ${cx - 60 * s},${cy}" fill="#0b1020" stroke="${col}" stroke-width="${3 * s}"/>`;
           d.innerHTML = `<svg viewBox="0 0 ${W} ${H + T}" width="${W}" height="${H + T}" style="overflow:visible"><g stroke-linejoin="round"><polygon points="${left}" fill="#101828" stroke="${col}" stroke-width="${3 * s}"/><polygon points="${left}" fill="${M.ca(col, 0.2)}"/><polygon points="${right}" fill="#101828" stroke="${col}" stroke-width="${3 * s}"/><polygon points="${right}" fill="${M.ca(col, 0.1)}"/><polygon points="${top}" fill="#141d33" stroke="${col}" stroke-width="${3 * s}"/><polygon points="${top}" fill="${M.ca(col, 0.28)}"/>${extra}</g></svg>`;
           els[i] = d;
-          if (o.labels) { labs[i] = labEl(host, PARTS[i][0], o.x + W + 24, o.y + i * o.gapB + (H + T) / 2 - 30, col, 46); tl.set(labs[i], { opacity: 0 }, 0); }
+          if (o.labels) { labs[i] = labEl(host, PARTS[i][0], o.x + W + 24, o.y + (o.yShift || 0) + i * o.gapB + (H + T) / 2 - 30, col, 46); tl.set(labs[i], { opacity: 0 }, 0); }
         }
-        return { els, labs, explode: (t, dur) => { els.forEach((d, i) => tl.to(d, { y: i * (o.gapB - o.gapA), x: o.dx || 0, duration: dur || 0.7, ease: "power3.inOut", immediateRender: false }, t));
+        return { els, labs, explode: (t, dur) => { els.forEach((d, i) => tl.to(d, { y: i * (o.gapB - o.gapA) + (o.yShift || 0), x: o.dx || 0, duration: dur || 0.7, ease: "power3.inOut", immediateRender: false }, t));
           labs.forEach((l, i) => tl.fromTo(l, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, t + 0.45 + i * 0.12)); } };
       };
 
@@ -92,7 +92,7 @@
       file(A, "ARCHITECTURE.md", 120, 720, 840, 190, 0.1, 3);
       file(A, "DATA_FLOW.md", 120, 930, 840, 190, 0.2, 3);
       file(A, "NOTES.md", 120, 1140, 840, 190, 0.3, 3);
-      const qa = el(A, `left:740px;top:880px;font:800 260px var(--code);color:${HOT}`, "?"); show(qa, at("A", "pareshan"), { opacity: 0, scale: 0.6 });
+      const qa = el(A, `left:850px;top:830px;font:800 280px var(--code);color:${HOT}`, "?"); show(qa, at("A", "pareshan"), { opacity: 0, scale: 0.6 });
       M.fit(A, { y: 470, h: 860, maxScale: 1.8 });
 
       // diagram: B  the agent writes many files; too much text
@@ -102,19 +102,21 @@
       const fb1 = file(B, "ARCHITECTURE.md", 150, 500, 780, 150, at("B", "architecture"), 2);
       const fb2 = file(B, "DATA_FLOW.md", 150, 670, 780, 150, at("B", "data"), 2);
       const fb3 = file(B, "NOTES.md", 150, 840, 780, 150, at("B", "kai"), 2);
-      const rd2 = show(panel(B, 250, 1030, 580, 190, HOT, "YOU READ"), at("B", "padhna")); M.icon(rd2, "eye", 40, 80, 90, HOT).show(at("B", "padhna"));
+      [500, 670, 840].forEach((y, k) => M.pill(B, "WRITES", [at("B", "architecture"), at("B", "data"), at("B", "kai")][k] + 0.1, { x: 720, y: y - 28, kind: "out", size: 36 }));
+      M.box(B, { x: 250, y: 1030, w: 580, h: 200, label: "YOU READ", icon: "eye", color: HOT, size: 54 }).show(at("B", "padhna"));
       [fb1, fb2, fb3].forEach((f) => tl.to(f, { opacity: 0.75, duration: 0.3, immediateRender: false }, at("B", "boring")));
       stamp(B, "TOO MUCH TEXT", 540, 1270, HOT, at("B", "boring"));
       M.fit(B, { y: 220, h: 1100, maxScale: 1.8 });
 
       // diagram: C  anatomy skill = a folder of instructions that teaches the agent
-      M.pill(C, "ANATOMY SKILL", M.P("C", 0) + 0.1, { x: 250, y: 230, size: 56 });
-      const fold = show(panel(C, 190, 360, 700, 330, ACC, "SKILL"), 0.15); bars(fold, 50, 110, 600, 4, ACC, 50);
+      M.pill(C, "ANATOMY SKILL", M.P("C", 0) + 0.1, { x: 250, y: 200, size: 56 });
+      const fold = show(panel(C, 190, 360, 700, 330, ACC), 0.15);
+      el(fold, `left:40px;top:60px;font:700 46px var(--code);color:#E6ECF8;line-height:1.7;white-space:nowrap`, `SKILL.md<br>references/<br>README.md`); M.icon(fold, "doc", 520, 90, 130, ACC).show(0.2);
       const tab = el(C, `left:190px;top:322px;width:260px;height:40px;border-radius:14px 14px 0 0;border:1.5px solid ${M.ca(ACC, 0.6)};border-bottom:none;background:${M.ca(ACC, 0.25)}`); show(tab, 0.15);
       M.box(C, { x: 110, y: 830, w: 860, h: 280, label: "CODING AGENT", icon: "robot", color: CYAN, size: 54 }).show(0.2);
       M.arrow(C, { from: [540, 700], to: [540, 820], color: ACC, w: 12 }).show(at("C", "agent"), 0.3);
-      M.icon(C, "gear", 790, 850, 130, ACC).show(at("C", "naya"));
-      M.pill(C, "NEW", at("C", "kaam"), { x: 765, y: 985, size: 40 });
+      M.icon(C, "gear", 780, 880, 120, ACC).show(at("C", "naya"));
+      M.pill(C, "NEW", at("C", "kaam"), { x: 765, y: 1010, size: 40 });
       M.fit(C, { y: 220, h: 1080, maxScale: 1.8 });
 
       // diagram: D  the example prompt typed word by word, from the README, and the part it draws
@@ -123,58 +125,38 @@
       const wrap = el(pc, "left:44px;top:170px;width:850px;font:600 54px var(--code);line-height:1.35");
       ["explain", "how", "a", "token", "bucket", "rate", "limiter", "works,", "interactive"].forEach((w) => { const sp = document.createElement("span"); sp.textContent = w + " "; wrap.appendChild(sp);
         tl.set(sp, { opacity: 0 }, 0); tl.to(sp, { opacity: 1, duration: 0.15, immediateRender: false }, at("D", w.replace(",", ""))); });
-      const rd = show(panel(D, 70, 840, 500, 340, ACC, "README"), at("D", "README")); M.icon(rd, "doc", 40, 110, 140, ACC).show(at("D", "README"));
-      el(rd, "left:200px;top:120px;font:700 44px var(--lat);line-height:1.2", "OWN<br>EXAMPLE"); el(rd, `left:40px;top:270px;font:600 42px var(--code);color:#B8C4DC`, "Source: GitHub");
-      const pk = plates(D, { x: 620, y: 870, s: 0.9, gapA: 40, gapB: 40 });
-      pk.els.forEach((d) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, at("D", "bucket")); });
-      M.pill(D, "EXAMPLE", at("D", "example"), { x: 70, y: 745, size: 44 });
+      M.arrow(D, { from: [540, 710], to: [540, 790], color: ACC, w: 12 }).show(M.P("D", 0) + 0.4, 0.3);
+      const pk = plates(D, { x: 372, y: 810, s: 0.8, gapA: 36, gapB: 36 });
+      pk.els.forEach((d) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, y: -30 }, { opacity: 0.35, y: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, M.P("D", 0) + 0.5);
+        tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, at("D", "interactive") + 0.5); });
+      const rd = show(panel(D, 70, 1110, 940, 190, ACC), M.P("D", 0) + 0.6); M.icon(rd, "doc", 40, 25, 130, ACC).show(M.P("D", 0) + 0.6);
+      el(rd, "left:200px;top:30px;font:700 52px var(--lat)", "README: OWN EXAMPLE"); el(rd, `left:200px;top:110px;font:600 40px var(--code);color:#B8C4DC`, "Source: GitHub");
+      M.pill(D, "EXAMPLE", at("D", "example"), { x: 690, y: 255, size: 44 });
       M.fit(D, { y: 280, h: 1000 });
 
       // diagram: E  not text, an isometric drawing whose parts pull apart
-      const dt = show(panel(E, 110, 330, 860, 330, GREY, "TEXT"), 0.1); bars(dt, 50, 100, 760, 5, GREY, 46);
-      const dx = M.icon(E, "cross", 410, 380, 260, HOT); dx.show(at("E", "nahi"));
+      const dt = show(panel(E, 110, 520, 860, 400, GREY, "TEXT"), 0.1); bars(dt, 50, 110, 760, 6, GREY, 52);
+      const dx = M.icon(E, "cross", 410, 570, 300, HOT); dx.show(at("E", "nahi"));
       M.out(dt, at("E", "ek") - 0.2); dx.hide(at("E", "ek") - 0.2);
-      const pD = plates(E, { x: 330, y: 340, gapA: 40, gapB: 205, labels: true, dx: -140 });
+      const pD = plates(E, { x: 330, y: 587, gapA: 40, gapB: 205, labels: true, dx: -140, yShift: -247 });
       pD.els.forEach((d, i) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, y: -50 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, at("E", "isometric") + (3 - i) * 0.13); });
       pD.explode(at("E", "alag") - 0.1, 0.8);
       M.pill(E, "ILLUSTRATION", at("E", "illustration"), { x: 300, y: 250, size: 44 });
       M.fit(E, { y: 230, h: 1070 });
 
-      // diagram: F  three steps: install, ask, open
-      const rows = [["pahla", 270, "INSTALL", CYAN], ["doosra", 600, "ASK", ACC], ["teesra", 930, "OPEN", GOOD]];
-      rows.forEach(([w, y, lab, col], i) => { const p = panel(F, 70, y, 940, 300, col); tl.set(p, { opacity: 0 }, 0); tl.fromTo(p, { opacity: 0, y: 24 }, { opacity: 0.4, y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, 0.1 + i * 0.1); tl.to(p, { opacity: 1, duration: 0.3, immediateRender: false }, at("F", w));
-        el(p, `left:26px;top:24px;width:90px;height:90px;border-radius:45px;border:3px solid ${col};font:800 52px var(--code);color:${col};display:flex;align-items:center;justify-content:center`, String(i + 1));
-        el(p, `left:150px;top:30px;font:700 52px var(--lat);color:${col}`, lab);
-        if (i === 0) el(p, "left:40px;top:150px;font:600 38px var(--code);line-height:1.5;white-space:nowrap", `npx skills add wheresryan22/anatomy<br>-g -a claude-code`);
-        if (i === 1) { el(p, "left:40px;top:140px;width:860px;height:120px;border-radius:60px;border:1.5px solid rgba(150,175,215,.4);display:flex;align-items:center;padding:0 40px;font:600 56px var(--code);white-space:nowrap", `<span style="color:${ACC}">/anatomy</span>&nbsp;<span style="color:${GREY}">your line</span>`); }
-        if (i === 2) { el(p, "left:40px;top:120px;width:860px;height:160px;border-radius:14px;border:1.5px solid rgba(150,175,215,.4);background:rgba(10,14,26,.6)"); el(p, `left:40px;top:120px;width:860px;height:34px;border-radius:14px 14px 0 0;background:${M.ca(GOOD, 0.25)}`);
-          plates(p, { x: 360, y: 150, s: 0.42, gapA: 16, gapB: 16 }); } });
-      el(F, `left:70px;top:1260px;font:600 38px var(--code);color:${GREY}`, "Source: GitHub");
-      M.fit(F, { y: 260, h: 1060 });
+      // diagram: F  follow, comment the keyword, the skill arrives in your DM
+      const flw = M.pill(F, "+  FOLLOW", M.P("F", 0) + 0.05, { x: 345, y: 230, kind: "acc", size: 56 });
+      tl.fromTo(flw, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("F", "follow"));
+      const cmF = show(panel(F, 110, 420, 860, 300, CYAN, "COMMENT"), M.P("F", 0) + 0.25);
+      const inp = el(cmF, "left:40px;top:120px;width:780px;height:110px;border-radius:55px;border:1.5px solid rgba(150,175,215,.4);display:flex;align-items:center;padding:0 40px;font:600 60px var(--code);white-space:nowrap");
+      const kwd = document.createElement("span"); kwd.style.color = ACC; kwd.textContent = "skill"; inp.appendChild(kwd);
+      tl.set(kwd, { opacity: 0 }, 0); tl.to(kwd, { opacity: 1, duration: 0.2, immediateRender: false }, at("F", "skill", 1));
+      M.arrow(F, { from: [540, 740], to: [540, 850], color: ACC, w: 12 }).show(M.P("F", 0) + 0.45, 0.3);
+      const dmb = M.box(F, { x: 110, y: 860, w: 860, h: 260, label: "DM: SKILL", icon: "chat", color: GOOD, size: 56 }); dmb.show(M.P("F", 0) + 0.55); dmb.glow(at("F", "DM"), GOOD);
+      M.fit(F, { y: 200, h: 1100, maxScale: 1.8 });
 
-      // diagram: G  the author's claim, 3D is beta
-      const fu = M.icon(G, "user", 90, 280, 190, CYAN); fu.show(M.P("G", 0) + 0.05);
-      const fbb = show(panel(G, 320, 280, 660, 230, CYAN, "AUTHOR'S CLAIM"), M.P("G", 0) + 0.15); el(fbb, `left:36px;top:100px;font:700 54px var(--lat);color:#E6ECF8;white-space:nowrap`, "“Interactive figures”"); el(fbb, `left:36px;top:170px;font:600 40px var(--code);color:#B8C4DC`, "README, author's words");
-      const cw = 440, ch = 200, cxx = 320, cyy = 640;
-      const cube = el(G, `left:${cxx}px;top:${cyy}px;width:${cw}px;height:${ch + 250}px`, `<svg viewBox="0 0 ${cw} ${ch + 250}" width="${cw}" height="${ch + 250}" style="overflow:visible"><g stroke-linejoin="round" stroke="${ACC}" stroke-width="4"><polygon points="${cw / 2},0 ${cw},${ch / 2} ${cw / 2},${ch} 0,${ch / 2}" fill="${M.ca(ACC, 0.28)}"/><polygon points="0,${ch / 2} ${cw / 2},${ch} ${cw / 2},${ch + 250} 0,${ch / 2 + 250}" fill="${M.ca(ACC, 0.12)}"/><polygon points="${cw},${ch / 2} ${cw / 2},${ch} ${cw / 2},${ch + 250} ${cw},${ch / 2 + 250}" fill="${M.ca(ACC, 0.2)}"/></g></svg>`);
-      show(cube, 0.2);
-      const t3 = el(G, `left:540px;top:${cyy + 175}px;font:800 96px var(--code);color:${ACC}`, "3D"); t3.style.transform = "translateX(-50%)"; tl.set(t3, { opacity: 0 }, 0); tl.to(t3, { opacity: 1, duration: 0.4, immediateRender: false }, at("G", "3D"));
-      stamp(G, "BETA", 540, 1170, HOT, at("G", "beta"));
-      M.fit(G, { y: 260, h: 1040, maxScale: 1.8 });
-
-      // diagram: H  a skill is a new hand for the agent; comment which system + follow
-      M.box(H, { x: 110, y: 200, w: 860, h: 200, label: "AGENT", icon: "robot", color: CYAN, size: 54 }).show(M.P("H", 0) + 0.05);
-      M.box(H, { x: 240, y: 520, w: 600, h: 180, label: "+ SKILL", icon: "gear", color: ACC, size: 54 }).show(0.3);
-      M.arrow(H, { from: [540, 510], to: [540, 410], color: ACC, w: 12 }).show(at("H", "haath"), 0.3);
-      const cm = show(panel(H, 110, 800, 860, 330, CYAN, "COMMENT"), at("H", "tum"));
-      el(cm, "left:40px;top:90px;width:780px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 34px var(--code);color:#C5D0E6;display:flex;align-items:center;padding:0 30px", "Which system?").style.fontSize = "44px";
-      ["CACHE", "QUEUE", "DNS"].forEach((c, k) => M.pill(cm, c, at("H", "system") + k * 0.15, { x: 40 + k * 250, y: 210, kind: "out", size: 44 }));
-      const fl = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.3, { x: 345, y: 1190, kind: "acc", size: 52 });
-      tl.fromTo(fl, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
-      M.fit(H, { y: 200, h: 1100, maxScale: 1.8 });
-
-      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
-      M.finish({ kw: { files: "gold", pareshan: "hot", boring: "hot", anatomy: "gold", skill: "cyan", text: "hot", illustration: "gold", part: "cyan", npx: "gold", install: "gold", "/anatomy": "gold", daava: "hot", beta: "hot", haath: "good", comment: "cyan", follow: "gold" } });
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F);
+      M.finish({ kw: { files: "gold", pareshan: "hot", boring: "hot", anatomy: "gold", skill: "cyan", text: "hot", illustration: "gold", part: "cyan", npx: "gold", install: "gold", "/anatomy": "gold", comment: "cyan", follow: "gold", dm: "good" } });
       window.__timelines["main"] = tl;   // register (must stay literal for the linter)
     </script>
   </body>
