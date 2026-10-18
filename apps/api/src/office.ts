@@ -583,10 +583,21 @@ export class Office extends DurableObject<Env> {
       const reel = this.officeReels().find((r) => r.item === req.item);
       if (reel?.stage !== "approved") throw new Error(`${req.item} is not approved yet. Approve the finished reel in the Inbox first.`);
     }
+    // A reel from the office is posted with exactly the texts of the final card the owner approved (a reel built before the studio saved its
+    // texts has no files in the repo, and the card is what the owner actually read).
+    const meta = released ? null : this.finalMeta(req.item);
     const run = await dispatchPublisher(this.env, repo, "office-handover.yml", {
       team: slug, item: req.item, action: req.mode, date: req.date ?? "", time: req.time ?? "", source: released ? "released" : "office",
+      caption: (meta?.caption ?? "").slice(0, 8000), youtube: (meta?.youtube ?? "").slice(0, 8000),
     });
     return this.recordPost(req.item, req.mode, req.date ?? null, req.time ?? null, run);
+  }
+
+  /** The newest final card (video, cover, caption, YouTube text) of a reel the office built. */
+  private finalMeta(item: string): Ask["meta"] {
+    const thread = this.one<{ id: string }>("SELECT id FROM threads WHERE kind = 'build' AND item = ? ORDER BY created_at DESC LIMIT 1", item);
+    const row = thread ? this.one("SELECT * FROM asks WHERE thread_id = ? AND meta IS NOT NULL ORDER BY created_at DESC LIMIT 1", thread.id) : null;
+    return row ? this.toAsk(row).meta : null;
   }
 
   /** Pause or resume the publishing repo's automatic slot posting (state/config.json posting_paused). */
