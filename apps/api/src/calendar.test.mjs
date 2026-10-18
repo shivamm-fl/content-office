@@ -160,7 +160,7 @@ test("refusePublish: a floor hands over its own reels only; d and s reels are po
   assert.match(refusePublish({ item: "e101", mode: "now" }, cfg, shared(), now, owns("dsa")), /not a reel of this floor/);
   assert.match(refusePublish({ item: "d001", mode: "now" }, cfg, shared(), now, owns("learnai")), /not a reel of this floor/);
   assert.match(refusePublish({ item: "d001", mode: "slot", date: "2026-10-18", time: "13:00" }, cfg, shared(), now, owns("dsa")), /Only e, r and q/);
-  assert.match(refusePublish({ item: "d001", mode: "now" }, cfg, shared(), IST("2026-10-18", "22:00"), owns("dsa")), /between 07:00 and 21:00/);
+  assert.equal(refusePublish({ item: "d001", mode: "now" }, cfg, shared(), IST("2026-10-18", "22:00"), owns("dsa")), null);   // the owner's tap works at any hour
   assert.match(refusePublish({ item: "d002", mode: "now" }, cfg, shared(), now, owns("dsa")), /already posted/);
   assert.equal(refusePublish({ item: "x12", mode: "now" }, cfg, shared(), now, owns("learnai")), null);   // as before for learnai
 });
