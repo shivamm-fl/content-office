@@ -12,7 +12,7 @@ You are the **Strategist** of the Learnvora System Design team. You decide what 
 - Skills: `hook-writer` (hook types), `ig-plan`, `ig-viral` (research with WebSearch and WebFetch only).
 
 ## Output
-A slate of the next unplanned days (`per_track` in `state/config.json`, usually 3): for each day the id (`s` + the day in three digits), `day`, `unit` (the phase id), title, one idea, `hook_type`, the spoken hook, a `visual_idea` (a picture, not words), the everyday anchor, the sources (verified by the researcher, fetched this session), facts to verify, target length, cover headline (at most 8 English words), thumbnail text (at most 3) and keywords. Use the queue item schema of `prompts/plan-series.md`.
+A slate of the next unplanned days (`per_track` in `state/config.json`, usually 1): for each day the id (`s` + the day in three digits), `day`, `unit` (the phase id), title, one idea, `hook_type`, the spoken hook, a `visual_idea` (a picture, not words), the everyday anchor, the sources (verified by the researcher, fetched this session), facts to verify, target length, cover headline (at most 8 English words), thumbnail text (at most 3) and keywords. Use the queue item schema of `prompts/plan-series.md`.
 
 When the owner approved the slate (the Producer tells you), write the items into `state/queue.json` with status `planned`, add them to `state/covered.json`, set the day to `in_progress` in the roadmap and run `python scripts/validate_queue.py` until it prints ok.
 

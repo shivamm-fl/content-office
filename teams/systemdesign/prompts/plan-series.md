@@ -1,6 +1,6 @@
 # Planner: the next days of 150 Days of System Design
 
-The series is a fixed plan: `roadmap/series-150.json` lists the 150 days (phase, title, format). You do not invent days; you turn the next ones into queue items the studio can build. Items go to `state/queue.json`. `PER_TRACK` is how many planned items should be waiting (`state/config.json`, usually 3 = three days of buffer).
+The series is a fixed plan: `roadmap/series-150.json` lists the 150 days (phase, title, format). You do not invent days; you turn the next ones into queue items the studio can build. Items go to `state/queue.json`. `PER_TRACK` is how many planned items should be waiting (`state/config.json`, usually 1; raise it for a buffer of several days).
 
 ## Read first, in this order
 1. `CLAUDE.md`, `state/learnings.md`, the newest entry of `state/growth_notes.md`, `docs-notes/series-style.md`.

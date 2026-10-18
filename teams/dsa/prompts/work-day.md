@@ -1,6 +1,6 @@
 # Work day (the owner tapped "Start the day")
 
-Goal: the next three days of 150 Days of DSA (the message gives the number, usually 3) built by the studio and waiting in the owner's inbox. The owner approves only finished reels: no plan or script approvals today. Ask the owner (`mcp__office__ask_owner`) only for a real blocker.
+Goal: the next day of 150 Days of DSA (the message gives the number, usually 1) built by the studio and waiting in the owner's inbox. The owner approves only finished reels: no plan or script approvals today. Ask the owner (`mcp__office__ask_owner`) only for a real blocker.
 
 1. **Read the room.** `state/learnings.md` (including the owner's recent corrections), `state/team_playbook.md`, `state/experiments.md`, `state/queue.json`, `state/phase5_status.json`, `state/covered.json` (last 15 items), `roadmap/series-150.json` (which day is next), the newest entry of `state/growth_notes.md`, and `mcp__office__team_feed` (what the desks did and what the owner decided).
 1b. **Standup (two minutes, in parallel, one short message each).** Ask the growth-analyst what moved since yesterday and what we should do differently today, and the strategist what is the one thing worth testing today. Decide one experiment for the day (a hook type, an ending, a way of opening) and add it as a line to `state/experiments.md` with the days it applies to and how we will know it worked. Close yesterday's experiment line if its numbers are in. Skip this only when there is nothing new since the last day.
