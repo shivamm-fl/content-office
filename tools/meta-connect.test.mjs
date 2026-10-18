@@ -25,11 +25,19 @@ const LONG = "EAATESTlongTOKEN0123456789abcdefghij";
 const GH_TOKEN = "ghp_TESTfakeGhTokenValue0123456789ab";
 const PAGE_TOKEN = { 1111: "EAATESTpageAI0123456789abcdefghijkl", 2222: "EAATESTpageDSA0123456789abcdefghijk", 3333: "EAATESTpageSD0123456789abcdefghijkl", 4444: "EAATESTpageOTHER0123456789abcdefghi" };
 const PAGE_TOKENS = Object.values(PAGE_TOKEN);
-const ALL_SECRETS = [APP_SECRET, CODE, SHORT, LONG, GH_TOKEN, `${APP_ID}|${APP_SECRET}`, ...PAGE_TOKENS];
+// Instagram-Login tokens (one per Instagram account) and the accounts they resolve to
+const IG_TOKEN = { AI: "IGAATESTtokenAI0123456789abcdefghijk", DSA: "IGAATESTtokenDSA0123456789abcdefghij", SYSTEMDESIGN: "IGAATESTtokenSD0123456789abcdefghijk" };
+const IG_ACCOUNTS = {
+  [IG_TOKEN.AI]: { user_id: "17841400001", username: "learnvora_ai", account_type: "Business" },
+  [IG_TOKEN.DSA]: { user_id: "17841400002", username: "learnvora_dsa", account_type: "Business" },
+  [IG_TOKEN.SYSTEMDESIGN]: { user_id: "17841400003", username: "learnvora_sd", account_type: "Media_Creator" },
+};
+const ALL_SECRETS = [APP_SECRET, CODE, SHORT, LONG, GH_TOKEN, `${APP_ID}|${APP_SECRET}`, ...PAGE_TOKENS, ...Object.values(IG_TOKEN)];
 
 function assertNoSecrets(text, label) {
   for (const s of ALL_SECRETS) assert.ok(!text.includes(s), `${label} contains a secret`);
   assert.ok(!/EAA[A-Za-z0-9]{8}/.test(text), `${label} contains a token-shaped string`);
+  assert.ok(!/IG[A-Z]{2}[A-Za-z0-9]{8}/.test(text), `${label} contains an Instagram-token-shaped string`);
   assert.ok(!/ghp_[A-Za-z0-9]{8}/.test(text), `${label} contains a GitHub-token-shaped string`);
 }
 
@@ -51,6 +59,13 @@ function startGraph(o = {}) {
     const send = (status, body) => { res.writeHead(status, { "content-type": "application/json" }); res.end(JSON.stringify(body)); };
     const fail = (message, code = 190) => send(400, { error: { message, type: "OAuthException", code, error_subcode: 460, fbtrace_id: "t" } });
     const leak = `client_secret=${APP_SECRET}&code=${CODE}&access_token=${LONG} ${SHORT} ${PAGE_TOKEN[1111]} ${APP_ID}|${APP_SECRET}`;
+    if (u.pathname.startsWith("/v25.0/")) { // the Instagram host (graph.instagram.com): documented GET /me?fields=user_id,username
+      const bad = (message) => send(400, { error: { message, type: "IGApiException", code: 190, fbtrace_id: "t" } });
+      if (u.pathname !== "/v25.0/me" || q.fields !== "user_id,username,account_type") return bad("unexpected Instagram request");
+      const acct = (o.igAccounts ?? IG_ACCOUNTS)[q.access_token];
+      if (!acct) return bad(`Invalid OAuth access token ${q.access_token}; ${leak}`);
+      return send(200, o.flatMe ? acct : { data: [acct] });
+    }
     if (!u.pathname.startsWith("/v26.0/")) return fail("unknown version", 2500);
     const route = u.pathname.slice("/v26.0".length);
     if (route === "/oauth/access_token") {
@@ -75,9 +90,12 @@ function startGraph(o = {}) {
       return send(200, body);
     }
     if (route === "/debug_token") {
-      if (q.access_token !== `${APP_ID}|${APP_SECRET}`) return fail("debug_token needs the app token");
+      // Meta: "an app access token or an app developer's user access token". The mock plays an app Admin's own token.
+      const appToken = q.access_token === `${APP_ID}|${APP_SECRET}`;
+      const ownToken = q.access_token === LONG && !o.refuseUserDebug;
+      if (!appToken && !ownToken) return fail(`(#100) debug_token needs an app token or a developer's user token: ${leak}`, 100);
       const now = Math.floor(Date.now() / 1000);
-      if (q.input_token === LONG) return send(200, { data: { app_id: APP_ID, type: "USER", is_valid: true, expires_at: now + 5184000, data_access_expires_at: now + 7776000, scopes: o.userScopes ?? SCOPES } });
+      if (q.input_token === LONG) return send(200, { data: { app_id: APP_ID, type: "USER", is_valid: true, expires_at: now + (o.userExpiresIn ?? 5184000), data_access_expires_at: now + 7776000, scopes: o.userScopes ?? SCOPES } });
       const page = Object.entries(PAGE_TOKEN).find(([, t]) => t === q.input_token);
       if (!page) return send(200, { data: { is_valid: false, error: { code: 190, subcode: 460, message: "invalid" } } });
       const bad = q.input_token === o.invalidPageToken;
@@ -137,9 +155,12 @@ function asker(o = {}) {
   const map = o.map ?? { AI: "1", DSA: "2", SYSTEMDESIGN: "3" };
   const ask = async (q, { hidden = false } = {}) => {
     asked.push({ q, hidden });
+    const ig = q.match(/Instagram-Login token for (\w+)/);
+    if (ig) { assert.ok(hidden, "Instagram-Login tokens are asked hidden"); return (o.ig ?? IG_TOKEN)[ig[1]] ?? ""; }
     if (/App ID/.test(q)) return APP_ID;
     if (/App Secret/.test(q)) return APP_SECRET;
     if (/User access token/.test(q)) return o.pasted ?? SHORT;
+    if (/Long-lived user token/.test(q)) return o.longPasted ?? LONG;
     if (/configuration ID/.test(q)) return o.configId ?? "";
     const m = q.match(/Page number for (\w+)/);
     if (m) return map[m[1]] ?? "";
@@ -163,7 +184,7 @@ async function scenario({ graph: go, gh: gho, ask: aso, queries, timeout, extraA
   const port = await freePort();
   try {
     const code = await run([...(noPort ? [] : ["--port", String(port)]), ...extraArgs], {
-      stdout, stderr, stdin: { isTTY: false }, outputIsFile: () => false, graphBase: graph.base,
+      stdout, stderr, stdin: { isTTY: false }, outputIsFile: () => false, graphBase: graph.base, igBase: graph.base,
       runGh: gh.runGh, openBrowser: browser.openBrowser, ask: ap.ask, oauthTimeoutMs: timeout ?? 5000, ...deps,
     });
     return { code, out: stdout.text, err: stderr.text, port, graph: graph.requests, gh: gh.calls, store: gh.store, browser, asked: ap.asked };
@@ -303,6 +324,202 @@ test("Facebook Login for Business: an optional configuration id goes into the lo
   assert.equal(url.searchParams.get("scope"), null);
 });
 
+// ---------- --long-token: no App ID, no App Secret ----------
+const noBrowser = () => assert.fail("--long-token must not open a browser or start a login");
+
+test("--long-token: no App ID or Secret asked, no code or exchange request, Page tokens still go only to gh stdin", async () => {
+  const r = await scenario({ extraArgs: ["--long-token", "--gh-user", "shivamm-fl"], deps: { openBrowser: noBrowser } });
+  assert.equal(r.code, 0, r.err);
+  // prompts: only the hidden long-lived token (and the non-secret choices); never the id, the secret, or a config id
+  const tokenAsk = r.asked.find((a) => /Long-lived user token/.test(a.q));
+  assert.ok(tokenAsk.hidden);
+  assert.ok(!r.asked.some((a) => /App ID|App Secret|configuration ID|User access token/.test(a.q)));
+  // Graph: no oauth/access_token at all, no client_id / client_secret / code anywhere, the app secret never in play
+  assert.equal(r.graph.filter((x) => x.path === "/v26.0/oauth/access_token").length, 0);
+  for (const x of r.graph) for (const k of ["client_id", "client_secret", "code", "fb_exchange_token", "redirect_uri"]) assert.equal(x.q[k], undefined, `${x.path} sent ${k}`);
+  assert.ok(!JSON.stringify(r.graph).includes(APP_SECRET));
+  // everything else unchanged: accounts (paged), per-Page Instagram lookup, debug_token with the user's own token
+  const acc = r.graph.filter((x) => x.path === "/v26.0/me/accounts");
+  assert.equal(acc.length, 2);
+  assert.ok(acc.every((x) => x.q.access_token === LONG));
+  assert.ok(r.graph.some((x) => x.path === "/v26.0/2222" && /instagram_business_account/.test(x.q.fields)));
+  const dbg = r.graph.filter((x) => x.path === "/v26.0/debug_token");
+  assert.equal(dbg.length, 4, "the user token and three Page tokens");
+  assert.ok(dbg.every((x) => x.q.access_token === LONG), "the owner's own token is the caller");
+  assert.match(r.out, /Learnvora AI\s+1111\s+@learnvora_ai\s+17841400001/);
+  assert.match(r.out, /user token: type USER, valid true/);
+  assert.match(r.out, /AI Page token: type PAGE, valid true/);
+  // gh
+  assert.deepEqual(secretSets(r.gh).map((c) => c.args[2]), ["META_PAGE_TOKEN_AI", "META_PAGE_TOKEN_DSA", "META_PAGE_TOKEN_SYSTEMDESIGN"]);
+  assert.deepEqual(secretSets(r.gh).map((c) => c.input), [PAGE_TOKEN[1111], PAGE_TOKEN[2222], PAGE_TOKEN[3333]]);
+  assert.equal(varSets(r.gh).length, 6);
+  assertNoSecrets(JSON.stringify(r.gh.map((c) => c.args)), "gh argv");
+  for (const c of r.gh) if (!(c.args[0] === "secret" && c.args[1] === "set")) assertNoSecrets(c.input, "gh stdin of a non-secret call");
+  assertNoSecrets(r.out, "stdout");
+  assertNoSecrets(r.err, "stderr");
+  assert.match(r.out, /META_PAGE_TOKEN_SYSTEMDESIGN\s+present/);
+});
+
+test("--long-token: when Meta refuses /debug_token for the user's own token the report is skipped, never a failure", async () => {
+  const r = await scenario({ extraArgs: ["--long-token"], graph: { refuseUserDebug: true }, deps: { openBrowser: noBrowser } });
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.err, /debug report skipped \(no App Secret in this mode\)/);
+  assert.match(r.err, /Extend Access Token/);
+  assert.match(r.out, /AI: Page token check skipped/);
+  assert.equal(r.graph.filter((x) => x.path === "/v26.0/debug_token").length, 1, "asked once, then not again for the Page tokens");
+  assert.equal(secretSets(r.gh).length, 3);
+  assert.match(r.err, /\[hidden\]/, "the error text Meta sent back echoed tokens and was masked");
+  assertNoSecrets(r.out, "stdout");
+  assertNoSecrets(r.err, "stderr");
+});
+
+test("--long-token: a short-lived token (the owner forgot Extend Access Token) is stopped before anything is set", async () => {
+  const r = await scenario({ extraArgs: ["--long-token"], graph: { userExpiresIn: 3600 }, deps: { openBrowser: noBrowser } });
+  assert.equal(r.code, 1);
+  assert.match(r.err, /not long-lived\. Press Extend Access Token/);
+  assert.equal(secretSets(r.gh).length + varSets(r.gh).length, 0);
+  assertNoSecrets(r.out + r.err, "output");
+});
+
+test("--long-token: missing permissions are reported from the debug report", async () => {
+  const r = await scenario({ extraArgs: ["--long-token"], graph: { userScopes: ["pages_show_list"] }, deps: { openBrowser: noBrowser } });
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.err, /did not grant: instagram_basic, instagram_content_publish, pages_read_engagement, pages_manage_posts/);
+});
+
+test("--long-token: a Graph error that echoes tokens is masked, and a badly shaped paste is refused unseen", async () => {
+  const r = await scenario({ extraArgs: ["--long-token"], graph: { leakOn: "accounts" }, deps: { openBrowser: noBrowser } });
+  assert.equal(r.code, 1);
+  assert.match(r.err, /\[hidden\]/);
+  assertNoSecrets(r.out, "stdout");
+  assertNoSecrets(r.err, "stderr");
+  const bad = `${LONG} extra words`;
+  const r2 = await scenario({ extraArgs: ["--long-token"], ask: { longPasted: bad }, deps: { openBrowser: noBrowser } });
+  assert.equal(r2.code, 2);
+  assert.match(r2.err, /the token does not look right \(not shown\)/);
+  assert.equal(r2.graph.length, 0);
+  assert.ok(!(r2.out + r2.err).includes(LONG));
+});
+
+// ---------- --ig-login: one Instagram-Login token per Instagram account ----------
+const igRequests = (r) => r.graph.filter((x) => x.path.startsWith("/v25.0/"));
+const fbRequests = (r) => r.graph.filter((x) => x.path.startsWith("/v26.0/"));
+
+test("--ig-login alone: three hidden prompts, accounts resolved on the Instagram host, secrets only through stdin", async () => {
+  const r = await scenario({ extraArgs: ["--ig-login", "--gh-user", "shivamm-fl"], deps: { openBrowser: noBrowser } });
+  assert.equal(r.code, 0, r.err);
+  const igAsks = r.asked.filter((a) => /Instagram-Login token for/.test(a.q));
+  assert.deepEqual(igAsks.map((a) => a.q.match(/for (\w+)/)[1]), ["AI", "DSA", "SYSTEMDESIGN"]);
+  assert.ok(igAsks.every((a) => a.hidden));
+  assert.ok(!r.asked.some((a) => /App ID|App Secret|configuration ID|User access token|Long-lived/.test(a.q)), "Instagram only: no Facebook prompts");
+  // the Instagram host only: documented GET /me?fields=user_id,username (+account_type) with the Instagram token
+  assert.equal(fbRequests(r).length, 0, "no Facebook Graph call at all");
+  const me = igRequests(r);
+  assert.deepEqual(me.map((x) => x.q.access_token), [IG_TOKEN.AI, IG_TOKEN.DSA, IG_TOKEN.SYSTEMDESIGN]);
+  assert.ok(me.every((x) => x.path === "/v25.0/me" && x.q.fields === "user_id,username,account_type" && !x.headers.authorization));
+  // table: non-secret only
+  assert.match(r.out, /AI\s+@learnvora_ai\s+17841400001\s+Business/);
+  assert.match(r.out, /SYSTEMDESIGN\s+@learnvora_sd\s+17841400003\s+Media_Creator\s+not readable/);
+  // gh: META_IG_TOKEN_<X> on stdin, META_IG_USER_ID_<X> from user_id
+  const ss = secretSets(r.gh);
+  assert.deepEqual(ss.map((c) => c.args[2]), ["META_IG_TOKEN_AI", "META_IG_TOKEN_DSA", "META_IG_TOKEN_SYSTEMDESIGN"]);
+  assert.deepEqual(ss.map((c) => c.input), [IG_TOKEN.AI, IG_TOKEN.DSA, IG_TOKEN.SYSTEMDESIGN]);
+  for (const c of ss) assert.deepEqual(c.args.slice(3), ["--repo", "shivamm-fl/ai-course", "--app", "actions"]);
+  assert.deepEqual(Object.fromEntries(varSets(r.gh).map((c) => [c.args[2], c.input])), {
+    META_IG_USER_ID_AI: "17841400001", META_IG_USER_ID_DSA: "17841400002", META_IG_USER_ID_SYSTEMDESIGN: "17841400003",
+  });
+  assertNoSecrets(JSON.stringify(r.gh.map((c) => c.args)), "gh argv");
+  for (const c of r.gh) if (!(c.args[0] === "secret" && c.args[1] === "set")) assertNoSecrets(c.input, "gh stdin of a non-secret call");
+  assertNoSecrets(r.out, "stdout");
+  assertNoSecrets(r.err, "stderr");
+  for (const n of ["META_IG_TOKEN_AI", "META_IG_TOKEN_DSA", "META_IG_TOKEN_SYSTEMDESIGN", "META_IG_USER_ID_DSA"]) assert.match(r.out, new RegExp(`${n}\\s+present`));
+  assert.ok(!r.gh.some((c) => /META_PAGE_TOKEN|META_FB_PAGE_ID/.test(c.args.join(" "))), "no Page secrets in Instagram-only mode");
+});
+
+test("--ig-login with --long-token: both token kinds, each only to its own host, one META_IG_USER_ID per handle", async () => {
+  const r = await scenario({ extraArgs: ["--ig-login", "--long-token", "--gh-user", "shivamm-fl"], deps: { openBrowser: noBrowser } });
+  assert.equal(r.code, 0, r.err);
+  // the Facebook tokens never reach the Instagram host and the Instagram tokens never reach the Facebook host
+  const igText = JSON.stringify(igRequests(r).map((x) => x.q));
+  const fbText = JSON.stringify(fbRequests(r).map((x) => ({ path: x.path, q: x.q })));
+  for (const t of [LONG, SHORT, ...PAGE_TOKENS]) assert.ok(!igText.includes(t), "a Facebook token was sent to the Instagram host");
+  for (const t of Object.values(IG_TOKEN)) assert.ok(!fbText.includes(t), "an Instagram token was sent to the Facebook host");
+  assert.equal(igRequests(r).length, 3);
+  assert.equal(fbRequests(r).filter((x) => x.path === "/v26.0/oauth/access_token").length, 0);
+  // gh: both secrets per handle, the Instagram id variable once, the Page id variable once
+  const ss = secretSets(r.gh);
+  assert.deepEqual(ss.map((c) => c.args[2]), ["META_PAGE_TOKEN_AI", "META_IG_TOKEN_AI", "META_PAGE_TOKEN_DSA", "META_IG_TOKEN_DSA", "META_PAGE_TOKEN_SYSTEMDESIGN", "META_IG_TOKEN_SYSTEMDESIGN"]);
+  assert.deepEqual(ss.map((c) => c.input), [PAGE_TOKEN[1111], IG_TOKEN.AI, PAGE_TOKEN[2222], IG_TOKEN.DSA, PAGE_TOKEN[3333], IG_TOKEN.SYSTEMDESIGN]);
+  const vsCalls = varSets(r.gh).map((c) => c.args[2]);
+  assert.equal(new Set(vsCalls).size, vsCalls.length, "no variable is set twice");
+  assert.deepEqual(Object.fromEntries(varSets(r.gh).map((c) => [c.args[2], c.input])), {
+    META_IG_USER_ID_AI: "17841400001", META_FB_PAGE_ID_AI: "1111", META_IG_USER_ID_DSA: "17841400002", META_FB_PAGE_ID_DSA: "2222",
+    META_IG_USER_ID_SYSTEMDESIGN: "17841400003", META_FB_PAGE_ID_SYSTEMDESIGN: "3333",
+  });
+  assert.equal(r.err, "", "the Page's Instagram account equals the token's account: no warning");
+  assertNoSecrets(JSON.stringify(r.gh.map((c) => c.args)), "gh argv");
+  assertNoSecrets(r.out, "stdout");
+  assertNoSecrets(r.err, "stderr");
+  assert.match(r.out, /META_IG_TOKEN_SYSTEMDESIGN\s+present/);
+  assert.match(r.out, /META_PAGE_TOKEN_SYSTEMDESIGN\s+present/);
+});
+
+test("--ig-login: Enter skips a handle", async () => {
+  const r = await scenario({ extraArgs: ["--ig-login"], ask: { ig: { AI: IG_TOKEN.AI, DSA: "", SYSTEMDESIGN: IG_TOKEN.SYSTEMDESIGN } } });
+  assert.equal(r.code, 0, r.err);
+  assert.deepEqual(secretSets(r.gh).map((c) => c.args[2]), ["META_IG_TOKEN_AI", "META_IG_TOKEN_SYSTEMDESIGN"]);
+  assert.equal(igRequests(r).length, 2);
+  const none = await scenario({ extraArgs: ["--ig-login"], ask: { ig: { AI: "", DSA: "", SYSTEMDESIGN: "" } } });
+  assert.equal(none.code, 2);
+  assert.match(none.err, /no Instagram-Login token given/);
+  assert.equal(secretSets(none.gh).length, 0);
+});
+
+test("--ig-login: the same Instagram account for two handles is refused", async () => {
+  const r = await scenario({ extraArgs: ["--ig-login"], ask: { ig: { AI: IG_TOKEN.AI, DSA: IG_TOKEN.AI, SYSTEMDESIGN: "" } } });
+  assert.equal(r.code, 2);
+  assert.match(r.err, /AI and DSA gave the same Instagram account \(@learnvora_ai\)/);
+  assert.equal(secretSets(r.gh).length + varSets(r.gh).length, 0);
+  assertNoSecrets(r.out + r.err, "output");
+});
+
+test("--ig-login with --long-token: a Page whose Instagram account differs from the token's account raises a warning", async () => {
+  const other = { ...IG_ACCOUNTS, [IG_TOKEN.AI]: { user_id: "17841499999", username: "someone_else", account_type: "Business" } };
+  const r = await scenario({ extraArgs: ["--ig-login", "--long-token"], graph: { igAccounts: other } });
+  assert.equal(r.code, 0, r.err);
+  assert.match(r.err, /AI: the Instagram account linked to the Page \(@learnvora_ai, 17841400001\) is not the account of the Instagram-Login token \(@someone_else, 17841499999\)/);
+  assert.equal(Object.fromEntries(varSets(r.gh).map((c) => [c.args[2], c.input])).META_IG_USER_ID_AI, "17841499999");
+});
+
+test("--ig-login: an Instagram API error that echoes tokens is masked and nothing is set", async () => {
+  const r = await scenario({ extraArgs: ["--ig-login"], ask: { ig: { AI: "IGAATESTunknownToken0123456789abcdef", DSA: "", SYSTEMDESIGN: "" } } });
+  assert.equal(r.code, 1);
+  assert.match(r.err, /Instagram check failed for AI: Graph API error \(HTTP 400, code 190, IGApiException\)/);
+  assert.match(r.err, /\[hidden\]/);
+  assert.ok(!(r.out + r.err).includes("IGAATESTunknownToken"));
+  assertNoSecrets(r.out, "stdout");
+  assertNoSecrets(r.err, "stderr");
+  assert.equal(secretSets(r.gh).length + varSets(r.gh).length, 0);
+});
+
+test("--ig-login: the flat /me answer is accepted too; a badly shaped paste is refused unseen", async () => {
+  const r = await scenario({ extraArgs: ["--ig-login"], graph: { flatMe: true } });
+  assert.equal(r.code, 0, r.err);
+  assert.equal(secretSets(r.gh).length, 3);
+  const bad = await scenario({ extraArgs: ["--ig-login"], ask: { ig: { AI: "IGAA short token", DSA: "", SYSTEMDESIGN: "" } } });
+  assert.equal(bad.code, 2);
+  assert.match(bad.err, /the Instagram-Login token for AI does not look right \(not shown\)/);
+  assert.equal(bad.graph.length, 0);
+  assert.ok(!(bad.out + bad.err).includes("short token"));
+});
+
+test("--ig-login: an Instagram-Login token that is not a usable account (no user_id) is refused", async () => {
+  const r = await scenario({ extraArgs: ["--ig-login"], graph: { igAccounts: { [IG_TOKEN.AI]: { username: "x" } } }, ask: { ig: { AI: IG_TOKEN.AI, DSA: "", SYSTEMDESIGN: "" } } });
+  assert.equal(r.code, 1);
+  assert.match(r.err, /no usable user_id/);
+  assert.equal(secretSets(r.gh).length, 0);
+});
+
 test("--no-open does not call the browser opener", async () => {
   const r = await scenario({ extraArgs: ["--no-open"], timeout: 300 });
   assert.equal(r.browser.opened.length, 0);
@@ -415,6 +632,14 @@ test("tokens as arguments are refused and never echoed", async () => {
     ["--app-secret", APP_SECRET],
     [PAGE_TOKEN[2222]],
     ["--paste", `--user-token=${SHORT}`],
+    [`--long-token=${LONG}`],
+    ["--long-token", LONG],
+    ["--paste", "--long-token"],
+    [`--ig-login=${IG_TOKEN.AI}`],
+    ["--ig-login", IG_TOKEN.AI],
+    ["--ig-login", "--paste"],
+    ["--ig-token", IG_TOKEN.AI],
+    ["--ig-api-version", IG_TOKEN.AI],
     ["--repo", `${LONG}`],
     ["--gh-user", `${GH_TOKEN}`],
     ["--port", "abc"],
@@ -428,7 +653,10 @@ test("tokens as arguments are refused and never echoed", async () => {
   }
   assert.throws(() => parseArgs(["--bogus"]), /unknown option/);
   assert.deepEqual(parseArgs(["--repo", "a/b", "--gh-user", "x-y", "--port", "9000", "--paste", "--dry-run", "--no-open", "--api-version", "v25.0"]),
-    { paste: true, dryRun: true, help: false, noOpen: true, repo: "a/b", ghUser: "x-y", port: 9000, apiVersion: "v25.0" });
+    { paste: true, longToken: false, igLogin: false, dryRun: true, help: false, noOpen: true, repo: "a/b", ghUser: "x-y", port: 9000, apiVersion: "v25.0", igApiVersion: "v25.0" });
+  assert.equal(parseArgs(["--long-token", "--gh-user", "shivamm-fl"]).longToken, true);
+  assert.equal(parseArgs(["--ig-login", "--long-token", "--ig-api-version", "v26.0"]).igApiVersion, "v26.0");
+  assert.equal(parseArgs(["--ig-login"]).igLogin, true);
 });
 
 // ---------- refuse to write to a file ----------
@@ -453,31 +681,52 @@ test("refuses when the injected check says stdout is a file", async () => {
 });
 
 // ---------- dry run ----------
-test("--dry-run touches no network, no gh, no browser and still shows the whole flow", async () => {
-  const stdout = sink();
-  const stderr = sink();
-  const boom = () => { throw new Error("a real call was made in dry-run mode"); };
-  const code = await run(["--dry-run", "--gh-user", "shivamm-fl"], { stdout, stderr, stdin: { isTTY: false }, outputIsFile: () => false, fetch: boom, runGh: boom, openBrowser: boom, graphBase: "http://127.0.0.1:1" });
-  assert.equal(code, 0, stderr.text);
-  assert.match(stdout.text, /DRY RUN/);
-  assert.match(stdout.text, /Learnvora AI \(demo\)\s+110000000000001\s+@learnvora_ai_demo\s+17841400000000001/);
-  assert.match(stdout.text, /META_PAGE_TOKEN_SYSTEMDESIGN\s+present/);
-  assertNoSecrets(stdout.text + stderr.text, "dry-run output");
-  assert.ok(!/EAADRYRUN|ghp_DRYRUN|0123456789abcdef0123456789abcdef/.test(stdout.text + stderr.text));
-});
+// every combination of token kinds: Facebook default OAuth, --long-token, --ig-login alone, --ig-login with --long-token
+const MODES = [
+  { args: [], fb: true, ig: false },
+  { args: ["--long-token"], fb: true, ig: false },
+  { args: ["--ig-login"], fb: false, ig: true },
+  { args: ["--ig-login", "--long-token"], fb: true, ig: true },
+];
 
-test("--dry-run as a real process in empty directories writes no file anywhere", () => {
-  const cwd = mkdtempSync(join(tmpdir(), "mc-cwd-"));
-  const tmp = mkdtempSync(join(tmpdir(), "mc-tmp-"));
-  try {
-    const r = spawnSync(process.execPath, [SCRIPT, "--dry-run"], { cwd, env: { ...process.env, TEMP: tmp, TMP: tmp, TMPDIR: tmp }, stdio: ["ignore", "pipe", "pipe"], encoding: "utf8", timeout: 20000 });
-    assert.equal(r.status, 0, r.stderr);
-    assert.match(r.stdout, /Done for AI, DSA, SYSTEMDESIGN \(dry run/);
-    assertNoSecrets(r.stdout + r.stderr, "dry-run process output");
-    assert.deepEqual(readdirSync(cwd), []);
-    assert.deepEqual(readdirSync(tmp), []);
-  } finally { rmSync(cwd, { recursive: true, force: true }); rmSync(tmp, { recursive: true, force: true }); }
-});
+for (const { args: mode, fb, ig } of MODES) {
+  const label = ["--dry-run", ...mode].join(" ");
+  test(`${label} touches no network, no gh, no browser and still shows the whole flow`, async () => {
+    const stdout = sink();
+    const stderr = sink();
+    const boom = () => { throw new Error("a real call was made in dry-run mode"); };
+    const code = await run(["--dry-run", ...mode, "--gh-user", "shivamm-fl"], { stdout, stderr, stdin: { isTTY: false }, outputIsFile: () => false, fetch: boom, runGh: boom, openBrowser: boom, graphBase: "http://127.0.0.1:1", igBase: "http://127.0.0.1:1" });
+    assert.equal(code, 0, stderr.text);
+    assert.match(stdout.text, /DRY RUN/);
+    if (fb) {
+      assert.match(stdout.text, /Learnvora AI \(demo\)\s+110000000000001\s+@learnvora_ai_demo\s+17841400000000001/);
+      assert.match(stdout.text, /META_PAGE_TOKEN_SYSTEMDESIGN\s+present/);
+    }
+    if (ig) {
+      assert.match(stdout.text, /AI\s+@learnvora_ai_demo\s+17841400000000001\s+Business\s+not readable/);
+      assert.match(stdout.text, /META_IG_TOKEN_SYSTEMDESIGN\s+present/);
+      assert.match(stdout.text, /META_IG_USER_ID_DSA\s+present/);
+    }
+    assert.equal(/META_PAGE_TOKEN/.test(stdout.text), fb);
+    assert.equal(/META_IG_TOKEN/.test(stdout.text), ig);
+    assert.equal(/dialog\/oauth/.test(stdout.text), mode.length === 0, "only the default mode has a login link");
+    assertNoSecrets(stdout.text + stderr.text, "dry-run output");
+    assert.ok(!/EAADRYRUN|IGAADRYRUN|ghp_DRYRUN|0123456789abcdef0123456789abcdef/.test(stdout.text + stderr.text));
+  });
+
+  test(`${label} as a real process in empty directories writes no file anywhere`, () => {
+    const cwd = mkdtempSync(join(tmpdir(), "mc-cwd-"));
+    const tmp = mkdtempSync(join(tmpdir(), "mc-tmp-"));
+    try {
+      const r = spawnSync(process.execPath, [SCRIPT, "--dry-run", ...mode], { cwd, env: { ...process.env, TEMP: tmp, TMP: tmp, TMPDIR: tmp }, stdio: ["ignore", "pipe", "pipe"], encoding: "utf8", timeout: 20000 });
+      assert.equal(r.status, 0, r.stderr);
+      assert.match(r.stdout, /Done for AI, DSA, SYSTEMDESIGN \(dry run/);
+      assertNoSecrets(r.stdout + r.stderr, "dry-run process output");
+      assert.deepEqual(readdirSync(cwd), []);
+      assert.deepEqual(readdirSync(tmp), []);
+    } finally { rmSync(cwd, { recursive: true, force: true }); rmSync(tmp, { recursive: true, force: true }); }
+  });
+}
 
 // ---------- the real spawn path: a fake gh executable ----------
 const STUB_GH = `
@@ -505,20 +754,21 @@ else if ((a === "secret" || a === "variable") && b === "list") process.stdout.wr
 else { process.stderr.write("stub: unexpected"); process.exit(1); }
 `;
 
-test("fake gh executable: argv has no secret, the token is only in the stdin of gh secret set, no file holds a token", async () => {
+for (const { args: mode, fb, ig } of MODES) test(`fake gh executable (${mode.join(" ") || "default"}): argv has no secret, the token is only in the stdin of gh secret set, no file holds a token`, async () => {
   const dir = mkdtempSync(join(tmpdir(), "mc-gh-"));
   try {
     const stubPath = join(dir, "gh-stub.mjs");
     writeFileSync(stubPath, STUB_GH);
     const rec = join(dir, "rec");
     mkdirSync(rec);
-    const r = await scenario({ extraArgs: ["--gh-user", "shivamm-fl"], deps: { runGh: undefined, ghCmd: [process.execPath, stubPath], env: { ...process.env, STUB_DIR: rec, STUB_GH_TOKEN: GH_TOKEN } } });
+    const r = await scenario({ extraArgs: [...mode, "--gh-user", "shivamm-fl"], deps: { runGh: undefined, ghCmd: [process.execPath, stubPath], env: { ...process.env, STUB_DIR: rec, STUB_GH_TOKEN: GH_TOKEN } } });
     assert.equal(r.code, 0, r.err);
     assertNoSecrets(r.out, "stdout");
     assertNoSecrets(r.err, "stderr");
     const files = readdirSync(rec);
     const argvFiles = files.filter((f) => f.startsWith("argv-"));
-    assert.ok(argvFiles.length >= 14, "gh was really spawned for every step");
+    const perHandle = fb && ig ? 4 : fb ? 3 : 2; // gh set calls per handle
+    assert.ok(argvFiles.length >= 5 + 3 * perHandle, "gh was really spawned for every step");
     const ghSha = createHash("sha256").update(GH_TOKEN).digest("hex");
     let secretCalls = 0;
     for (const f of argvFiles) {
@@ -530,12 +780,15 @@ test("fake gh executable: argv has no secret, the token is only in the stdin of 
       assert.ok(!args.some((a) => a === "--body" || a === "-b"), "no value argument");
       if (args[0] === "secret" && args[1] === "set") {
         secretCalls++;
-        const want = { META_PAGE_TOKEN_AI: PAGE_TOKEN[1111], META_PAGE_TOKEN_DSA: PAGE_TOKEN[2222], META_PAGE_TOKEN_SYSTEMDESIGN: PAGE_TOKEN[3333] }[args[2]];
+        const want = {
+          META_PAGE_TOKEN_AI: PAGE_TOKEN[1111], META_PAGE_TOKEN_DSA: PAGE_TOKEN[2222], META_PAGE_TOKEN_SYSTEMDESIGN: PAGE_TOKEN[3333],
+          META_IG_TOKEN_AI: IG_TOKEN.AI, META_IG_TOKEN_DSA: IG_TOKEN.DSA, META_IG_TOKEN_SYSTEMDESIGN: IG_TOKEN.SYSTEMDESIGN,
+        }[args[2]];
         assert.equal(stdin, want, "exactly the token, on stdin, no newline");
       } else assertNoSecrets(stdin, "stdin of a non-secret call");
       if (!(args[0] === "auth" && args[1] === "token")) assert.equal(env.ghTokenSha, ghSha, "GH_TOKEN reaches the child through the environment");
     }
-    assert.equal(secretCalls, 3);
+    assert.equal(secretCalls, (fb ? 3 : 0) + (ig ? 3 : 0));
     // no file anywhere holds a token except the stdin captures of `gh secret set` (the stub's own recording)
     for (const f of files) {
       if (!f.startsWith("stdin-")) assertNoSecrets(readFileSync(join(rec, f), "utf8"), f);
