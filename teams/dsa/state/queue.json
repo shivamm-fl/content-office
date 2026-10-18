@@ -7,50 +7,25 @@
       "unit": "P1",
       "format": "concept",
       "title": "DSA kya hai aur interview mein kaise use hota hai",
-      "one_idea": "DSA is two things, a data structure (how data is organised) and an algorithm (the steps that use it), and an interview checks whether your steps still work when the data is huge: 10 lakh sorted names take up to 1,000,000 checks one by one but about 20 with a smarter method.",
+      "one_idea": "DSA is two things, a data structure (how data is organised) and an algorithm (the steps that use it), and an interview checks whether your steps still work when the data is huge: 10 lakh sorted names take up to 1,000,000 checks one by one but about 20 with halving.",
       "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: 10 लाख names में एक name सबसे कम steps में कैसे ढूँढोगे?",
+      "spoken_hook": "Interviewer ने पूछा: 10 लाख names में एक name, 20 steps में कैसे ढूँढोगे?",
       "hook_formula": "stopwatch_question",
-      "hook_source": ".claude/skills/hook-writer (stopwatch_question formula, interviewer_asked type); carried-over LearnAI hypothesis in state/learnings.md, tested here for the first time. hookscore of the Roman form: 42.2 WEAK (stakes 20, address 35), no DEALBREAKER; the tum variant scored 39.9, so the first was kept.",
-      "hook_10s": "Interviewer ने पूछा: 10 लाख names में एक name सबसे कम steps में कैसे ढूँढोगे? अगर एक-एक name देखा, तो 10 लाख steps तक लग सकते हैं। एक smart तरीके से सिर्फ़ 20। इसी तरह की सोच का नाम है DSA, और आज मैं तीन steps में समझाता हूँ। [frame 0: a question card with a stopwatch, a long row of 10 lakh tiny name tiles; a magnifier sliding along the row one tile at a time]",
-      "hook_candidates": [
-        {
-          "formula": "stopwatch_question",
-          "hook_type": "interviewer_asked",
-          "text": "Interviewer ने पूछा: 10 लाख names में एक name सबसे कम steps में कैसे ढूँढोगे?"
-        },
-        {
-          "formula": "cost_shock",
-          "hook_type": "surprising_fact",
-          "text": "10 लाख names में एक name: 10 लाख steps या सिर्फ़ 20?"
-        },
-        {
-          "formula": "what_is_x",
-          "hook_type": "direct_question",
-          "text": "DSA असल में क्या है, और interview में क्यों पूछते हैं?"
-        }
-      ],
-      "visual_idea": "A long row of name tiles with a magnifier moving one tile at a time and a step counter climbing toward 1,000,000, crossed out in red; then the same row split in half again and again, the counter stopping at 20; two labelled chips, DATA STRUCTURE (the row) and ALGORITHM (the halving moves), sit on the objects when first named.",
-      "everyday_anchor": "Finding one contact in a phone with 10 lakh saved numbers: scrolling one by one is hopeless, but opening the sorted list in the middle and halving works like a dictionary.",
-      "example": "EXAMPLE (run by the researcher): 10 lakh (1,000,000) sorted numbers, target is the last one. One-by-one scan: 1,000,000 comparisons (worst case). Halving search: 20 comparisons. Printed output: 1000000 20 True. Counted comparisons, not seconds. The reel says 'up to 10 lakh' and 'about 20'.",
+      "hook_source": "carried-over LearnAI hypothesis, first DSA test; hookscore 46.5 WEAK, no DEALBREAKER",
+      "visual_idea": "A long row of name tiles with a magnifier moving one tile at a time and a step counter climbing toward 1,000,000, crossed out in red; then the same row halved again and again, the counter stopping at 20; chips DATA STRUCTURE (the row) and ALGORITHM (the halving moves) land on the objects when named.",
+      "everyday_anchor": "Finding one contact among 10 lakh saved numbers: sorted list opened in the middle like a dictionary.",
+      "example": "EXAMPLE (researcher ran it): 10 lakh sorted ints, target last: one-by-one 1000000 comparisons (worst case), halving 20. Printed: 1000000 20 True. Counts, not seconds.",
       "sources": [
         "https://xlinux.nist.gov/dads/HTML/algorithm.html",
         "https://en.wikipedia.org/wiki/Data_structure",
         "https://amazon.jobs/content/en/how-we-hire/sde-iii-interview-prep",
         "https://wiki.python.org/moin/TimeComplexity"
       ],
-      "source_claims": {
-        "https://xlinux.nist.gov/dads/HTML/algorithm.html": "algorithm: a computable set of steps to achieve a desired result (NIST DADS)",
-        "https://en.wikipedia.org/wiki/Data_structure": "a data structure is a way to organize and store data, usually chosen for efficient access (Wikipedia; the NIST page for this term returned 404)",
-        "https://amazon.jobs/content/en/how-we-hire/sde-iii-interview-prep": "Amazon's own interview prep page says: Learn how to approach data structures and algorithms in your interview. Say 'Amazon', never 'all companies'. The page does not say WHY; the why is our reading and must be labelled so.",
-        "https://wiki.python.org/moin/TimeComplexity": "x in list is O(n) on average; x in set is O(1) on average (worst case O(n)); say 'on average'"
-      },
       "facts_to_verify": [
-        "Run the one-by-one scan and the halving search on 1,000,000 sorted ints and show the real printed counts (1000000 and 20 expected); the screen says 'up to' for the scan because the target here is the last one.",
-        "Say 'Amazon ki apni interview-prep page' only for the data-structures-and-algorithms line; no claim that every company asks DSA.",
-        "Any 'why interviewers ask' line is labelled as an opinion or reasoning, not a fact (no page supports it).",
-        "Halving search needs a SORTED list: say it on screen in the catch beat.",
-        "Python membership: say 'on average O(1)' for set, never 'always'."
+        "Run both searches on 1,000,000 sorted ints and show real printed counts (1000000 and 20).",
+        "Amazon claim only: its page says learn how to approach data structures and algorithms in your interview; no claim about all companies, no claim about why.",
+        "The why-interviews-ask line is labelled as our own reasoning.",
+        "Halving needs a SORTED list; said on screen."
       ],
       "length_target_s": 105,
       "cover_headline": "What is DSA and why interviews ask it",
@@ -62,8 +37,7 @@
         "data structures and algorithms in hinglish",
         "why dsa is asked in interviews"
       ],
-      "beat_plan": "hook and promise 10 s (question, 10 lakh row, 1,000,000 vs 20); naive one-by-one crossed out with its number 14 s; answer, definition of data structure and algorithm, phone-contacts analogy 12 s; mechanism in 3 steps on the same row (1 organise: sorted row = data structure; 2 pick the middle and throw away half = algorithm; 3 repeat, count 20) 44 s; catch: needs a sorted row, and the interview checks HOW you think at scale (labelled our reading; Amazon's page tells candidates to learn DSA) 12 s; what it changes for you 6 s; recap and check (list becomes 40 lakh names: how many halving steps? answer 22, in caption) 12 s. Two terms only: data structure, algorithm.",
-      "why_it_should_work": "No own numbers yet (first reel); a concrete interviewer question plus a number the viewer can feel (10 lakh vs 20) in the first 3 seconds, and it tests the carried-over interviewer_asked hypothesis on the DSA audience.",
+      "caption_note": "Answer to the check question: 22 steps (40 lakh names), put it in the caption.",
       "status": "planned",
       "qa_passed": false
     }
