@@ -1,6 +1,6 @@
 // The content calendar of a floor: what is ready to post, what goes out in which slot, what is still being made,
 // and the owner's buttons to post a reel now or put it on a slot (the publishing repo does the posting).
-import type { CalendarCell, CalendarData, PostRecord, ReadyReel, Team } from "@office/protocol";
+import type { CalendarCell, CalendarData, CalendarSlot, PostRecord, ReadyReel, Team } from "@office/protocol";
 import { useCallback, useEffect, useState } from "react";
 import type { Office } from "../store";
 import { Empty, Screen, go, timeAgo } from "./ui";
@@ -13,7 +13,7 @@ const STAGE: Record<string, [string, string]> = {
 };
 
 function Pill({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <span className={`rounded-full border border-wall px-2 py-0.5 text-[11px] ${className}`}>{children}</span>;
+  return <span className={`whitespace-nowrap rounded-full border border-wall px-2 py-0.5 text-[11px] ${className}`}>{children}</span>;
 }
 
 function CellRow({ c, team, paused }: { c: CalendarCell; team: Team; paused: boolean }) {
@@ -22,7 +22,7 @@ function CellRow({ c, team, paused }: { c: CalendarCell; team: Team; paused: boo
   return (
     <li className="flex items-center gap-2 py-1.5 text-[13.5px]">
       <span className="w-[72px] shrink-0 text-[11px] text-dim">{trackName(team, c.track)}</span>
-      <span className={`min-w-0 flex-1 truncate ${c.state === "empty" || c.state === "auto" ? "text-dim" : ""}`}>{c.title ?? "Empty"}</span>
+      <span className={`min-w-0 flex-1 truncate ${c.state === "auto" ? "text-dim" : ""}`}>{c.title ?? ""}</span>
       {c.link ? <a href={c.link} target="_blank" rel="noreferrer" className={`shrink-0 text-[11px] underline decoration-wall ${tone}`}>{word}</a> : <span className={`shrink-0 text-[11px] ${tone}`}>{word}</span>}
     </li>
   );
@@ -224,16 +224,22 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
               {cal.days.map((d) => {
                 const shown = d.slots.filter((s) => s.open || s.cells.length > 0);
                 if (shown.length === 0 && d.extras.length === 0) return null;
+                const bare = (s: CalendarSlot) => s.cells.every((c) => c.state === "empty");   // no reel for any track
+                const bareTimes = shown.filter(bare).map((s) => s.time);
+                const withReels = shown.filter((s) => !bare(s));
                 return (
                   <div key={d.date} className="overflow-hidden rounded-xl border border-wall bg-desk">
                     <p className="border-b border-wall px-4 py-2 text-[13px] font-semibold">{d.label}</p>
                     <div className="divide-y divide-wall">
-                      {shown.map((s) => (
+                      {withReels.map((s) => (
                         <div key={s.time} className="px-4 py-2">
                           <p className="text-[12px] text-dim">{s.time} IST{s.started && s.open ? ", slot is open now" : s.started ? ", over" : ""}</p>
                           <ul>{s.cells.map((c, i) => <CellRow key={`${c.item ?? c.track}-${i}`} c={c} team={team} paused={cal.paused} />)}</ul>
                         </div>
                       ))}
+                      {bareTimes.length > 0 && (
+                        <p className="px-4 py-2 text-[12.5px] text-dim">No reel yet for {bareTimes.join(", ")} IST</p>
+                      )}
                       {d.extras.length > 0 && (
                         <div className="px-4 py-2">
                           <p className="text-[12px] text-dim">Posted outside a slot</p>
