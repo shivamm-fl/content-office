@@ -35,6 +35,13 @@ for hard in ["files exist", "video 1080x1920 h264 (vertical)", "audio aac presen
     check(f"a broken reel is not delivered: {hard}", not D.deliver(rep(fail=[hard])))
 check("no gate report is not delivered", not D.deliver({}) and not D.deliver({"ok": False, "why": "no gate report"}))
 check("a length that only differs from data.json is a note", D.deliver(rep(fail=["length equals data.json total"])))
+never = rep(fail=["visual review passed (mute test by a fresh reviewer)", "facts checked against the sources (no high finding)", "cover 1080x1920"])
+for c in never["checks"]:
+    if c["name"].startswith("visual review"):
+        c["detail"] = "no review yet: run python scripts/visual_review.py r101"
+    if c["name"].startswith("facts checked"):
+        c["detail"] = "no fact check yet: run python scripts/fact_review.py r101"
+check("a review that never ran is not a note", D.notes(never) == ["cover 1080x1920: x"], D.notes(never))
 
 print("\nall passed" if not failures else f"\n{len(failures)} FAILED: {failures}")
 sys.exit(1 if failures else 0)

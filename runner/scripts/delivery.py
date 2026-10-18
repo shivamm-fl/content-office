@@ -28,8 +28,9 @@ def broken(verify: dict) -> list[dict]:
 
 
 def notes(verify: dict) -> list[str]:
-    """Every failed check, as a line for the owner (they are advice, not a verdict)."""
-    return [f"{c.get('name')}: {str(c.get('detail', ''))[:160]}" for c in checks(verify) if not c.get("ok")]
+    """Every failed check, as a line for the owner (they are advice, not a verdict). A review that never ran is not a finding, so it is left out."""
+    return [f"{c.get('name')}: {str(c.get('detail', ''))[:160]}" for c in checks(verify)
+            if not c.get("ok") and not str(c.get("detail", "")).startswith(("no review yet", "no fact check yet"))]
 
 
 def deliver(verify: dict) -> bool:
