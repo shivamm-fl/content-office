@@ -21,3 +21,5 @@ No rules yet. The first two weeks are a baseline.
 - 2026-10-18 (e103): Reels about a skill, a repo or a tool end with the ask: follow karo, comment karo <KEYWORD>, and the skill or link comes straight to your DM.
 - 2026-10-18 (e103, q103): Keep pauses short: no long gap between parts or scenes, and never hold a scene after its line has ended.
 - 2026-10-18 (e104): The script comes first: research how reels like this are scripted and write a good one, show it to the owner when they ask to see it, and do not let fact-checking crowd out the quality of the writing (claims are still verified).
+
+2026-10-17: Generic track (n=9, median skip 75.3%, avg watch 6.0 s) trails interview (n=18, 63.4%, 10 s). Generic reels now test two hook types side by side: surprising_fact and misconception_question (an interview-framed common belief, as in e09: 1536 views, 13 shares). Retire one only by the 3-reel, 10-point rule.
