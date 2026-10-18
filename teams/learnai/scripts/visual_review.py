@@ -5,6 +5,7 @@ How: one image strip per scene (three frames in time order) is cut from the rend
      and which layout problems it sees.
   2. A second pass compares that blind reading with the narration of the scene and rates 0-2 how well the pictures alone teach the narrated idea.
 Pass rule: no scene except the first is text only; every scene rates at least 1; the average is at least 1.4 and at least half of the scenes rate 2.
+A closing call-to-action scene (the narration of the LAST scene asks to comment, follow or subscribe) is shown but not rated: nothing in it can be drawn as an idea.
 The gate (scripts/ci_verify_reel.py) requires a passing, fresh report."""
 import json
 import re
@@ -16,6 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MODEL = "claude-sonnet-5-5"
 FRAME_W = 540
+CTA = re.compile(r"\b(comment|follow|subscribe)\b|कमेंट|कमेन्ट|फॉलो|फ़ॉलो|सब्सक्राइब", re.IGNORECASE)
 
 
 def run(cmd, **kw):
@@ -133,14 +135,19 @@ def main(rid, out_dir):
     jb = {s.get("scene"): s for s in judge["scenes"]}
     problems, scores = [], []
     rows = []
+    # A closing "comment and follow" scene has no idea to draw, so the pictures cannot teach it: it is shown in the report but not rated
+    # (the reviewer itself writes "a 0 here is expected"; rating it made q101 fail the gate again and again).
+    cta = len(scenes) > 1 and bool(CTA.search(spoken(spec, scenes[-1])))
     for k, sc in enumerate(scenes):
         b, j = by.get(sc, {}), jb.get(sc, {})
         m = int(j.get("match", 0))
-        scores.append(m)
-        rows.append({"scene": sc, "sees": b.get("sees"), "idea_taught": b.get("idea_taught"), "text_only": bool(b.get("text_only")), "layout_issues": b.get("layout_issues", []), "match": m, "note": j.get("note")})
+        is_cta = cta and k == len(scenes) - 1
+        if not is_cta:
+            scores.append(m)
+        rows.append({"scene": sc, "sees": b.get("sees"), "idea_taught": b.get("idea_taught"), "text_only": bool(b.get("text_only")), "layout_issues": b.get("layout_issues", []), "match": m, "note": j.get("note"), **({"cta": True} if is_cta else {})})
         if b.get("text_only") and k > 0:
             problems.append(f"scene {sc} is text only: {j.get('note') or b.get('idea_taught')}")
-        elif m == 0 or (k > 0 and m < 1):
+        elif not is_cta and (m == 0 or (k > 0 and m < 1)):
             problems.append(f"scene {sc} teaches nothing the narration says: {j.get('note')}")
     avg = sum(scores) / len(scores) if scores else 0
     if avg < 1.4:

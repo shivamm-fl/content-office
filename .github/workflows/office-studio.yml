@@ -230,6 +230,31 @@ jobs:
         if: ${{ steps.v.outputs.n != '3' }}
         continue-on-error: true
         with: { name: "qa-${{ inputs.run_id }}-${{ steps.v.outputs.n }}", path: "teams/${{ inputs.team }}/qa" }
+      # the earlier versions and their reviews, for the best-of choice below (a later FIX session can make a passing reel worse)
+      - uses: actions/download-artifact@v4
+        if: ${{ steps.v.outputs.n != '1' }}
+        continue-on-error: true
+        with: { name: "work-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/work" }
+      - uses: actions/download-artifact@v4
+        if: ${{ steps.v.outputs.n != '1' }}
+        continue-on-error: true
+        with: { name: "media-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/media" }
+      - uses: actions/download-artifact@v4
+        if: ${{ steps.v.outputs.n != '1' }}
+        continue-on-error: true
+        with: { name: "qa-${{ inputs.run_id }}-1", path: "${{ runner.temp }}/versions/1/qa" }
+      - uses: actions/download-artifact@v4
+        if: ${{ steps.v.outputs.n == '3' }}
+        continue-on-error: true
+        with: { name: "work-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/work" }
+      - uses: actions/download-artifact@v4
+        if: ${{ steps.v.outputs.n == '3' }}
+        continue-on-error: true
+        with: { name: "media-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/media" }
+      - uses: actions/download-artifact@v4
+        if: ${{ steps.v.outputs.n == '3' }}
+        continue-on-error: true
+        with: { name: "qa-${{ inputs.run_id }}-2", path: "${{ runner.temp }}/versions/2/qa" }
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: Gate tools
@@ -237,13 +262,20 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
           python3 -m venv "teams/$TEAM/.venv" && "teams/$TEAM/.venv/bin/pip" install -q $PIP_PACKAGES
           npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
-      - name: Review of the last fix, then the full gate
-        id: gate
+      - name: Review of the last fix
         working-directory: teams/${{ inputs.team }}
         env: { CLAUDE_CODE_OAUTH_TOKEN: "${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}" }
         run: |
           python3 -I ../../runner/scripts/apply_work.py --work "$RUNNER_TEMP/work" --team "$TEAM" --content-only --media "$RUNNER_TEMP/media"
           if [ "${{ steps.v.outputs.n }}" = "3" ]; then python3 scripts/ci_review_round.py "$ITEM" 3 || true; fi
+      - name: Best version (put an earlier, better-reviewed version back when the last fix made the reel worse)
+        id: best
+        continue-on-error: true
+        run: python3 -I runner/scripts/pick_best.py --team "$TEAM" --item "$ITEM" --last "${{ steps.v.outputs.n }}" --versions "$RUNNER_TEMP/versions" --current-work "$RUNNER_TEMP/work"
+      - name: Full gate
+        id: gate
+        working-directory: teams/${{ inputs.team }}
+        run: |
           mkdir -p "$RUNNER_TEMP/out"
           if .venv/bin/python scripts/ci_verify_reel.py "$ITEM" > "$RUNNER_TEMP/out/verify.json"; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "ok=false" >> "$GITHUB_OUTPUT"; fi
           python3 -c "import json,sys; v=json.load(open(sys.argv[1])); print('gate:', 'ok' if v.get('ok') else 'FAILED', [c['name'] for c in v.get('checks', []) if not c.get('ok')])" "$RUNNER_TEMP/out/verify.json" || true
@@ -264,10 +296,11 @@ jobs:
           xargs -a "$RUNNER_TEMP/out/assets.txt" gh release upload "$tag" --clobber
       - name: Save the item's files
         if: ${{ always() && steps.v.outputs.n != '' }}
+        env: { BEST_WORK: "${{ steps.best.outputs.work }}" }
         run: |
           git config user.name "office-bot"
           git config user.email "office-bot@users.noreply.github.com"
-          python3 -I runner/scripts/save_work.py --work "$RUNNER_TEMP/work" --team "$TEAM" --run "$RUN_ID" || echo "::warning::save failed"
+          python3 -I runner/scripts/save_work.py --work "${BEST_WORK:-$RUNNER_TEMP/work}" --team "$TEAM" --run "$RUN_ID" || echo "::warning::save failed"
       - name: Report to the office
         if: ${{ always() }}
         run: |
