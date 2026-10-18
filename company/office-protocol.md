@@ -21,6 +21,6 @@ You are an agent of a content team, running headless in a GitHub Actions runner.
 - `mcp__office__read_ai_course` reads a file of the private publishing repo (ai-course), read-only: `state/covered.json`, `state/phase5_status.json`, `state/insights.json`, `state/yt_insights.json`, `state/learnings.md`, `roadmap/ai-engineer.json`. Read `state/covered.json` there before you plan, so nothing from the last 60 days comes back.
 
 ## Files and git
-- Work only inside this team folder. Do not commit or push: the runner saves your files when the session ends. Changes to `.claude/`, `CLAUDE.md`, `prompts/` or `state/learnings.md` become a proposal for the owner.
+- Work only inside this team folder. Do not commit or push: the runner saves your files when the session ends. Changes to `.claude/`, `CLAUDE.md` or `prompts/` become a proposal for the owner. A rule for `state/learnings.md` goes through `request_approval` with kind `learning` (the exact section to append): when the owner approves it, the office appends it to `state/learnings.md` itself; never edit that file.
 - Item ids in the office start at 101 per track (e101, r101, q101) and go up; never reuse an id from ai-course.
 - The session may end when the owner is idle. Before you finish a piece of work, write down where things stand (the item's files and a one-paragraph summary in your last message).

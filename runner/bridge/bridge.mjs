@@ -123,8 +123,8 @@ const TOOLS = [
   },
   {
     name: "request_approval",
-    description: "Send a plan slate, a script or another deliverable to the owner for approval and wait for the decision (up to 60 minutes). The owner can approve, approve with edits (use their wording exactly), ask for changes with notes, or reject. Put the complete content in `content` (markdown).",
-    inputSchema: { type: "object", properties: { kind: { type: "string", enum: ["plan", "script", "final", "other"] }, title: { type: "string" }, content: { type: "string" }, item_ids: { type: "array", items: { type: "string" } } }, required: ["kind", "title", "content"] },
+    description: "Send a plan slate, a script or another deliverable to the owner for approval and wait for the decision (up to 60 minutes). The owner can approve, approve with edits (use their wording exactly), ask for changes with notes, or reject. Put the complete content in `content` (markdown). kind \"learning\": a rule for state/learnings.md; `content` is exactly the section to append (a `## date: title` heading and bullets with the numbers, no lead-in sentence); when the owner approves it the office appends it to learnings.md itself, so never edit that file.",
+    inputSchema: { type: "object", properties: { kind: { type: "string", enum: ["plan", "script", "final", "learning", "other"] }, title: { type: "string" }, content: { type: "string" }, item_ids: { type: "array", items: { type: "string" } } }, required: ["kind", "title", "content"] },
   },
   {
     name: "report_progress",
@@ -220,6 +220,7 @@ function startMcp(ctx) {
       const parts = [`Decision: ${ans.decision}`];
       if (ans.notes) parts.push(`Owner's notes: ${ans.notes}`);
       if (ans.edited) parts.push(`Owner's edited version (use this wording exactly):\n${ans.edited}`);
+      if (ans.office_note) parts.push(String(ans.office_note));
       return text(parts.join("\n\n"));
     }
     if (ctx.studio && STUDIO_TOOLS.some((t) => t.name === name)) {

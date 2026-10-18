@@ -13,7 +13,7 @@ Every reel is stand-alone: reels are shown at random, so each one makes its own 
 ## Where things live (paths are relative to this folder)
 - `roadmap/ai-engineer.json`: course units, built from the topic titles of roadmap.sh/ai-engineer. Only the titles are used. roadmap.sh text is copyrighted and must never be copied into reels, captions or this repo.
 - `state/queue.json`: planned items. `state/covered.json`: memory of every planned or published concept, question, news item and hook formula (a snapshot; the live one is ai-course's, read it with `mcp__office__read_ai_course`). `state/phase5_status.json`: build status per item, written by the scripts.
-- `state/learnings.md`: rules proven on our own numbers. They beat generic advice and the skills. Changes are proposals for the owner.
+- `state/learnings.md`: rules proven on our own numbers. They beat generic advice and the skills. Changes are proposals for the owner: an agent sends the exact section with `request_approval` kind `learning`, and when the owner approves it the office appends it to this file itself (agents never edit it).
 - `reels/_template`, `reels/_kit`, `brand/covers/_template`: starting points; `scripts/new_reel.py` creates a reel project from them. The design rules for diagrams are in `docs-notes/diagram-first-visuals.md`.
 - `prompts/`: the ai-course planner and builder prompts, kept as the reference for how planning and building are done.
 

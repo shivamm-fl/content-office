@@ -62,6 +62,37 @@ export async function runOutcome(env: GhEnv, repo: string, ghRunId: string): Pro
   return { done: j.status === "completed", ok: j.conclusion === "success", url: j.html_url ?? null };
 }
 
+const utf8ToB64 = (s: string) => {
+  const bytes = new TextEncoder().encode(s);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
+  return btoa(bin);
+};
+const b64ToUtf8 = (b64: string) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, "")), (c) => c.charCodeAt(0)));
+
+/**
+ * Change one text file of a repo on main with a commit: `build` gets the current text and returns the new text, or null for "nothing to change".
+ * Retries when someone else committed in between. Returns the commit sha, or null when nothing changed.
+ */
+export async function editRepoFile(env: GhEnv, repo: string, path: string, build: (existing: string) => string | null, message: string): Promise<string | null> {
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const g = await fetch(`${url}?ref=main`, { headers: headers(env) });
+    if (!g.ok) throw new Error(`could not read ${repo}/${path} (${g.status})`);
+    const cur = (await g.json()) as { sha: string; content: string };
+    const next = build(b64ToUtf8(cur.content));
+    if (next === null) return null;
+    const p = await fetch(url, {
+      method: "PUT",
+      headers: { ...headers(env), "Content-Type": "application/json" },
+      body: JSON.stringify({ message, content: utf8ToB64(next), sha: cur.sha, branch: "main" }),
+    });
+    if (p.ok) return ((await p.json()) as { commit: { sha: string } }).commit.sha;
+    if (p.status !== 409 && p.status !== 422) throw new Error(`could not write ${repo}/${path} (${p.status}): ${(await p.text()).slice(0, 200)}`);
+  }
+  throw new Error(`${repo}/${path} kept changing; try again`);
+}
+
 export async function cancelRun(env: GhEnv, ghRunId: string): Promise<void> {
   await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/runs/${ghRunId}/cancel`, { method: "POST", headers: headers(env) });
 }

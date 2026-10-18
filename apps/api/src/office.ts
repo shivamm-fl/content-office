@@ -7,7 +7,8 @@ import type {
 } from "@office/protocol";
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
 import { buildCalendar, refusePublish, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
-import { cancelRun, dispatchPublisher, dispatchRun, publishRepo, readAiCourse, runOutcome } from "./github";
+import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, publishRepo, readAiCourse, runOutcome } from "./github";
+import { appendLearning, learningText } from "./learnings";
 import { team as getTeam } from "./teams";
 
 export interface Env {
@@ -466,7 +467,12 @@ export class Office extends DurableObject<Env> {
       }
       return updated;
     }
-    const sent = this.sendRunner(ask.run_id, { t: "answer", ask_id: askId, answer });
+    let toAgent = answer;
+    if (ask.kind === "approval" && ask.body.startsWith("[learning]")) {
+      const note = await this.saveLearning(slug, ask, answer);
+      if (note) toAgent = { ...answer, office_note: note };
+    }
+    const sent = this.sendRunner(ask.run_id, { t: "answer", ask_id: askId, answer: toAgent });
     if (!sent) this.system(ask.thread_id, ask.run_id, "The agent's session has ended; your answer is saved and goes into the next run of this chat.");
     this.setDesk(ask.agent, "working", "Got your answer", ask.run_id);
     const updated = this.toAsk(this.one("SELECT * FROM asks WHERE id = ?", askId)!);
@@ -599,6 +605,42 @@ export class Office extends DurableObject<Env> {
     this.sql.exec("INSERT INTO posts (id, item, mode, date, time, status, gh_run_id, gh_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 'handing_over', ?, ?, ?, ?)", id, item, mode, date, time, run.gh_run_id, run.url, now, now);
     this.pub = null;
     return this.toPost(this.one("SELECT * FROM posts WHERE id = ?", id)!);
+  }
+
+  /**
+   * A learning card the owner approved (or approved with edits): append exactly that text to state/learnings.md, in the team's copy here and in
+   * the publishing repo's copy (read_ai_course reads that one). The agent never edits the file; the owner's approval is the authority.
+   * Returns a note for the agent (what was saved, or why not), or null when the card was not approved.
+   */
+  private async saveLearning(slug: string, ask: Ask, answer: Record<string, unknown>): Promise<string | null> {
+    let section: string | null;
+    try {
+      section = learningText(ask.body, answer);
+    } catch (e) {
+      const why = `The office could not save this learning: ${(e as Error).message}`;
+      this.system(ask.thread_id, ask.run_id, why, { error: true });
+      return why;
+    }
+    if (!section) return null;
+    const message = `learnings: ${ask.title.replace(/\s+/g, " ").slice(0, 80)} (approved by the owner in the office)`;
+    const places = [{ repo: this.env.GITHUB_REPO, path: `teams/${slug}/state/learnings.md` }];
+    const pub = publishRepo(this.env, slug);
+    if (pub) places.push({ repo: pub, path: "state/learnings.md" });
+    const saved: string[] = [];
+    const failed: string[] = [];
+    for (const p of places) {
+      try {
+        const sha = await editRepoFile(this.env, p.repo, p.path, (t) => appendLearning(t, section), message);
+        saved.push(sha ? `${p.repo} (commit ${sha.slice(0, 7)})` : `${p.repo} (already had it)`);
+      } catch (e) {
+        failed.push(`${p.repo}: ${(e as Error).message}`);
+      }
+    }
+    const note = failed.length
+      ? `The office saved the learning to ${saved.join(", ") || "nowhere"} but failed on ${failed.join("; ")}. The approved text is in the approval card.`
+      : `The office added the learning to state/learnings.md (${saved.join(", ")}). Every agent reads it from its next run; there is nothing for you to save.`;
+    this.system(ask.thread_id, ask.run_id, note, { error: failed.length > 0 });
+    return note;
   }
 
   async stopRun(slug: string, runId: string, mode: "interrupt" | "end"): Promise<Run | null> {
