@@ -1,7 +1,7 @@
 // node --test apps/api/src/learnings.test.mjs
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { addOwnerCorrection, appendLearning, correctionBullet, learningText, OWNER_SECTION, quoteIsOwners } from "./learnings.ts";
+import { addOwnerCorrection, appendLearning, correctionBullet, learningText, OWNER_SECTION, quoteIsOwners, withHeading } from "./learnings.ts";
 
 const SECTION = "## 2026-10-18: first-line shape (our numbers)\n- Rule: the first line is a complete concrete question.\n- Open: generic track has 1 reel.";
 
@@ -78,4 +78,10 @@ test("the owner-corrections section keeps Windows line endings", () => {
   const next = addOwnerCorrection(file, "- 2026-10-18: Keep pauses short between scenes.");
   assert.ok(!/(?<!\r)\n/.test(next));
   assert.ok(next.endsWith("- 2026-10-18: Keep pauses short between scenes.\r\n"));
+});
+
+test("a card without a heading gets one from its title and the date, plain text becomes a bullet", () => {
+  assert.equal(withHeading("Generic track trails interview (n=9).", "Learnings: Generic track hooks", "2026-10-18"), "## 2026-10-18: Generic track hooks\n- Generic track trails interview (n=9).");
+  assert.equal(withHeading("- one\n- two", "Learning: Pauses", "2026-10-18"), "## 2026-10-18: Pauses\n- one\n- two");
+  assert.equal(withHeading("## my own heading\n- x", "Learnings: ignored", "2026-10-18"), "## my own heading\n- x");
 });

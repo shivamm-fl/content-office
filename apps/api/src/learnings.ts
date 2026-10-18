@@ -16,6 +16,13 @@ export function learningText(body: string, answer: { decision?: unknown; edited?
   return text;
 }
 
+/** A card's text without a `## ` heading would land inside the section above it: give it a heading from the card's title and the date (and a bullet when it is plain text). */
+export function withHeading(section: string, title: string, date: string): string {
+  if (/^## /m.test(section)) return section;
+  const clean = title.replace(/\s+/g, " ").replace(/^Learnings?:\s*/i, "").trim() || "learning";
+  return `## ${date}: ${clean}\n${/^[-*] /.test(section) ? section : `- ${section}`}`;
+}
+
 /** learnings.md with the section appended, in the file's own line ending; null when a section with that heading is already there. */
 export function appendLearning(existing: string, section: string): string | null {
   const heading = section.split("\n").find((l) => l.startsWith("## "));

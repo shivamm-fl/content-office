@@ -8,7 +8,7 @@ import type {
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
 import { buildCalendar, refusePublish, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
 import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, publishRepo, readAiCourse, runOutcome } from "./github";
-import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners } from "./learnings";
+import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners, withHeading } from "./learnings";
 import { team as getTeam } from "./teams";
 
 export interface Env {
@@ -625,6 +625,7 @@ export class Office extends DurableObject<Env> {
       return why;
     }
     if (!section) return null;
+    const text = withHeading(section, ask.title, new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10));
     const message = `learnings: ${ask.title.replace(/\s+/g, " ").slice(0, 80)} (approved by the owner in the office)`;
     const places = [{ repo: this.env.GITHUB_REPO, path: `teams/${slug}/state/learnings.md` }];
     const pub = publishRepo(this.env, slug);
@@ -633,7 +634,7 @@ export class Office extends DurableObject<Env> {
     const failed: string[] = [];
     for (const p of places) {
       try {
-        const sha = await editRepoFile(this.env, p.repo, p.path, (t) => appendLearning(t, section), message);
+        const sha = await editRepoFile(this.env, p.repo, p.path, (t) => appendLearning(t, text), message);
         saved.push(sha ? `${p.repo} (commit ${sha.slice(0, 7)})` : `${p.repo} (already had it)`);
       } catch (e) {
         failed.push(`${p.repo}: ${(e as Error).message}`);

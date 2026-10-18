@@ -16,12 +16,13 @@ No rules yet. The first two weeks are a baseline.
 - Hint, not a rule (n=3): first lines in Devanagari had 84 to 89 % skip (q01, r01, e02). Keep first lines in Roman Hinglish.
 - Open: generic track has only 1 reel after 2026-10-15; keep testing before judging. Length (38 to 90 s) is confounded with the hook change.
 
+## 2026-10-17: generic track hook types (our numbers, approved by the owner)
+- 2026-10-17: Generic track (n=9, median skip 75.3%, avg watch 6.0 s) trails interview (n=18, 63.4%, 10 s). Generic reels now test two hook types side by side: surprising_fact and misconception_question (an interview-framed common belief, as in e09: 1536 views, 13 shares). Retire one only by the 3-reel, 10-point rule.
+
 ## Owner corrections (recorded automatically)
 - 2026-10-18 (e103): Reels about a skill, a repo or a tool end with the ask: follow karo, comment karo <KEYWORD>, and the skill or link comes straight to your DM.
 - 2026-10-18 (e103, q103): Keep pauses short: no long gap between parts or scenes, and never hold a scene after its line has ended.
 - 2026-10-18 (e104): The script comes first: research how reels like this are scripted and write a good one, show it to the owner when they ask to see it, and do not let fact-checking crowd out the quality of the writing (claims are still verified).
-
-2026-10-17: Generic track (n=9, median skip 75.3%, avg watch 6.0 s) trails interview (n=18, 63.4%, 10 s). Generic reels now test two hook types side by side: surprising_fact and misconception_question (an interview-framed common belief, as in e09: 1536 views, 13 shares). Retire one only by the 3-reel, 10-point rule.
 - 2026-10-18 (r104, e103): The reel must answer the question it asks by its end (the first line need not). A script that asks one thing and explains another is wrong. Owner: "pura reel toh at the end wo sawal ka jawab de hi deni chahiye" and "Tere sawal ka jawab tune kaha diya, bhai clarity rakh script mai, viewer ko samajh toh aaye, kuch value toh de".
 - 2026-10-18 (r104, e103): Always assume the viewer has no context around the topic: say clearly what the reel is about and explain everything inside it. Owner: "jab bhi reel banao, ye samajh ke banao ki user ko uske aaspass ka koi context nhi, sab clearly batana hoga".
 - 2026-10-18 (r104, e103): A reel of up to about 90 seconds is fine when clarity needs it. Owner: "reel 90s hogi chalega".
