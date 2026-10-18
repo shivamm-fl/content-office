@@ -6,10 +6,13 @@ import type {
   Task, Team, Thread, Usage,
 } from "@office/protocol";
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
-import { buildCalendar, refusePublish, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
-import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, publishRepo, readAiCourse, runOutcome } from "./github";
+import { buildCalendar, floorOfItem, floorStatus, refusePublish, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
+import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, learningsRepo, publishRepo, readAiCourse, runOutcome, SLOT_TEAM } from "./github";
 import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners, withHeading } from "./learnings";
-import { team as getTeam } from "./teams";
+import { TEAMS, team as getTeam } from "./teams";
+
+/** Id prefix of every floor's tracks to the floor (e r q learnai, d dsa, s systemdesign): the publishing repo's state holds the reels of all floors. */
+const claims = (): Record<string, string> => Object.fromEntries(Object.entries(TEAMS).flatMap(([slug, t]) => t.tracks.map((tr) => [tr.prefix, slug])));
 
 export interface Env {
   OFFICE: DurableObjectNamespace<Office>;
@@ -565,7 +568,8 @@ export class Office extends DurableObject<Env> {
     if (repo) {
       try { ({ cfg, status } = await this.publisherState()); } catch (e) { note = `Could not read the publishing repo: ${(e as Error).message}`; }
     }
-    return buildCalendar({ team: slug, publishing: Boolean(repo) && !note, now: Date.now(), cfg, status, office: this.officeReels(), posts, note });
+    // The publishing repo's status and settings are shared by every floor: this floor sees its own reels only, and only learnai has slots.
+    return buildCalendar({ team: slug, publishing: Boolean(repo) && !note, now: Date.now(), cfg, status: floorStatus(status, slug, claims()), office: this.officeReels(), posts, note, slots: slug === SLOT_TEAM });
   }
 
   /** Post one reel now, or put it on a slot. Starts the publishing repo's hand-over workflow (the owner's explicit tap, confirmed in the app). */
@@ -574,7 +578,8 @@ export class Office extends DurableObject<Env> {
     const repo = publishRepo(this.env, slug);
     if (!repo) throw new Error("This floor has no publishing repo yet.");
     const { cfg, status } = await this.publisherState(true);
-    const why = refusePublish(req, cfg, status, Date.now());
+    const floors = claims();
+    const why = refusePublish(req, cfg, status, Date.now(), (item) => floorOfItem(item, floors) === slug);
     if (why) throw new Error(why);
     const open = this.one("SELECT * FROM posts WHERE item = ? AND status = 'handing_over'", req.item);
     if (open) return this.toPost(open);   // a second tap is the same hand-over
@@ -605,6 +610,8 @@ export class Office extends DurableObject<Env> {
     this.ensureTeam(slug);
     const repo = publishRepo(this.env, slug);
     if (!repo) throw new Error("This floor has no publishing repo yet.");
+    // posting_paused is the one switch of the slot poster, shared by the whole publishing repo: only the floor with slots may flip it
+    if (slug !== SLOT_TEAM) throw new Error("This floor has no automatic slot posting. Its reels are posted with Post now.");
     const { cfg } = await this.publisherState(true);
     if (Boolean(cfg.posting_paused) === paused) throw new Error(paused ? "Automatic posting is already paused." : "Automatic posting is already on.");
     if (this.one("SELECT id FROM posts WHERE item = 'posting' AND status = 'handing_over'")) throw new Error("A change of the posting switch is already on its way.");
@@ -639,7 +646,7 @@ export class Office extends DurableObject<Env> {
     const text = withHeading(section, ask.title, new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10));
     const message = `learnings: ${ask.title.replace(/\s+/g, " ").slice(0, 80)} (approved by the owner in the office)`;
     const places = [{ repo: this.env.GITHUB_REPO, path: `teams/${slug}/state/learnings.md` }];
-    const pub = publishRepo(this.env, slug);
+    const pub = learningsRepo(this.env, slug);   // the publishing repo's copy is learnai's: lessons of the other floors stay in their own folder
     if (pub) places.push({ repo: pub, path: "state/learnings.md" });
     const saved: string[] = [];
     const failed: string[] = [];
@@ -684,7 +691,7 @@ export class Office extends DurableObject<Env> {
     let bullet: string;
     try { bullet = correctionBullet(String(input.rule ?? ""), day, run.item ?? thread?.item ?? null); } catch (e) { return { ok: false, message: (e as Error).message }; }
     const places = [{ repo: this.env.GITHUB_REPO, path: `teams/${slug}/state/learnings.md` }];
-    const pub = publishRepo(this.env, slug);
+    const pub = learningsRepo(this.env, slug);   // the publishing repo's copy is learnai's: lessons of the other floors stay in their own folder
     if (pub) places.push({ repo: pub, path: "state/learnings.md" });
     const saved: string[] = [];
     const failed: string[] = [];
@@ -713,7 +720,7 @@ export class Office extends DurableObject<Env> {
     if (meta?.video_url) {
       return { item, title: meta.title, video_url: meta.video_url, cover_url: meta.cover_url, caption: meta.caption, youtube: meta.youtube, duration_s: meta.duration_s, source: "office" };
     }
-    if (!publishRepo(this.env, slug)) throw new Error(`no preview for ${item}`);
+    if (!publishRepo(this.env, slug) || floorOfItem(item, claims()) !== slug) throw new Error(`no preview for ${item}`);
     const { status } = await this.publisherState();
     const e = status[item] as (Phase5Entry & { folder?: string; caption?: string }) | undefined;
     if (!e?.release_assets || !e.mp4) throw new Error(`${item} has no finished video to preview`);
@@ -730,7 +737,7 @@ export class Office extends DurableObject<Env> {
   async previewAsset(slug: string, item: string, kind: "video" | "cover"): Promise<{ repo: string; tag: string; name: string; type: string } | null> {
     this.ensureTeam(slug);
     const repo = publishRepo(this.env, slug);
-    if (!repo || !/^[a-z]\d{2,4}$/.test(item)) return null;
+    if (!repo || !/^[a-z]\d{2,4}$/.test(item) || floorOfItem(item, claims()) !== slug) return null;
     const e = (await this.publisherState()).status[item] as (Phase5Entry & { cover?: string }) | undefined;
     if (!e?.release_assets) return null;
     const file = kind === "video" ? e.mp4 : e.cover;

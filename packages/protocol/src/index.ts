@@ -87,6 +87,8 @@ export interface CalendarData {
   /** open slots in the next days that have no reel at all */
   empty_slots: number;
   note: string | null;
+  /** the floor has slot posting (learnai: slots, automatic posting and its pause switch); false: its reels are posted with Post now only (dsa, systemdesign) */
+  slots: boolean;
 }
 export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string }
 /** What the owner sees when previewing a reel before it is posted: the video, the cover and the texts that would go out. */

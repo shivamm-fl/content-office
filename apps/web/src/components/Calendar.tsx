@@ -119,6 +119,7 @@ function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: Cal
         {mode === "now" ? (
           <div className="mt-4 space-y-2">
             <p className="text-[13px] leading-relaxed text-dim">The reel goes out on Instagram right away, then Facebook, then YouTube where the track is set up for it. It is public as soon as it is up.{!cal.can_post_now ? ` It is ${cal.clock} IST, outside the usual posting hours (${cal.window.join(" to ")}); it posts anyway.` : ""}</p>
+            {reel.duration_s != null && reel.duration_s > 90 && <p className="text-[12.5px] leading-relaxed text-gold">This reel runs {Math.round(reel.duration_s)} s and Facebook Reels take 3 to 90 s, so it goes out on Instagram only.</p>}
             {confirm ? (
               <button disabled={busy} onClick={submit} className="w-full rounded-lg bg-coral py-3 text-sm font-semibold text-ink">{busy ? "Starting…" : "Yes, post it now"}</button>
             ) : (
@@ -214,7 +215,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
 
         {cal?.publishing && (
           <>
-            <section className={`rounded-xl border px-4 py-3 ${cal.paused ? "border-coral/60" : "border-wall"} bg-desk`}>
+            {cal.slots !== false && <section className={`rounded-xl border px-4 py-3 ${cal.paused ? "border-coral/60" : "border-wall"} bg-desk`}>
               <div className="flex items-center gap-2">
                 <span className="text-[14px] font-semibold">Automatic posting: {cal.paused ? "paused" : "on"}</span>
                 {switching ? null : <button onClick={() => setSwitching(cal.paused ? "resume" : "pause")} className="ml-auto rounded-lg border border-wall px-3 py-1.5 text-xs">{cal.paused ? "Turn on" : "Pause"}</button>}
@@ -230,7 +231,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
                   <button onClick={() => setSwitching(null)} className="rounded-lg border border-wall px-4 py-2 text-sm">Cancel</button>
                 </div>
               )}
-            </section>
+            </section>}
 
             {recentPosts.length > 0 && (
               <section className="space-y-2 rounded-xl border border-wall bg-desk px-4 py-3">
@@ -264,7 +265,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
               )}
             </section>
 
-            <section className="space-y-4">
+            {cal.slots !== false && <section className="space-y-4">
               <div className="flex items-baseline justify-between">
                 <h2 className="text-sm text-dim">Next days</h2>
                 {cal.empty_slots > 0 && <span className="text-[11.5px] text-dim">{cal.empty_slots} open slot{cal.empty_slots === 1 ? "" : "s"} without a reel</span>}
@@ -298,7 +299,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
                   </div>
                 );
               })}
-            </section>
+            </section>}
           </>
         )}
 

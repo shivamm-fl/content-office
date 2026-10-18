@@ -21,6 +21,8 @@ export interface OfficeReel {
 export interface CalendarInput {
   team: string; publishing: boolean; now: number; cfg: PostingConfig; status: Record<string, Phase5Entry>;
   office: OfficeReel[]; posts: PostRecord[]; days?: number; note?: string | null;
+  /** the floor has slot posting (learnai); false: reels are posted with Post now only, so there is no slot grid and no pause switch (default true) */
+  slots?: boolean;
 }
 
 export const TRACKS = [
@@ -44,7 +46,17 @@ export function publishedMs(e: Phase5Entry): number | null {
   return Number.isFinite(ms) ? ms : null;
 }
 
-export const trackOfItem = (item: string) => TRACKS.find((t) => t.prefix === item[0])?.id ?? (item[0] === "x" ? "experiment" : "other");
+/** The series floors (dsa: d, systemdesign: s) have one track, "series" (their team.json). */
+const SERIES_PREFIXES = ["d", "s"];
+export const trackOfItem = (item: string) =>
+  TRACKS.find((t) => t.prefix === item[0])?.id ?? (SERIES_PREFIXES.includes(item[0]) ? "series" : item[0] === "x" ? "experiment" : "other");
+
+/** The floor a reel belongs to: the floor whose track has its id prefix (`claims`: prefix to team slug). An id no floor claims (old x experiments) is learnai's. */
+export const floorOfItem = (item: string, claims: Record<string, string>): string => claims[item[0]] ?? "learnai";
+/** The publishing repo's status holds the reels of every floor: only the ones of this floor go into its calendar. */
+export function floorStatus<T>(status: Record<string, T>, team: string, claims: Record<string, string>): Record<string, T> {
+  return Object.fromEntries(Object.entries(status).filter(([k]) => floorOfItem(k, claims) === team));
+}
 const idNum = (id: string) => Number(id.slice(1));
 const isItem = (k: string) => /^[a-z]\d{1,4}$/.test(k);
 
@@ -75,7 +87,8 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
   const perSlot = Math.max(1, Number(cfg.posts_per_slot ?? 3));
   const late = Number(cfg.slot_late_min ?? 150);
   const [, windowEnd] = postingWindow(cfg);
-  const paused = Boolean(cfg.posting_paused);
+  const slotsOn = inp.slots !== false;
+  const paused = slotsOn && Boolean(cfg.posting_paused);   // the pause switch is the slot poster's: a floor without slots shows none
   const titleOf = (k: string) => status[k]?.title ?? inp.office.find((o) => o.item === k)?.title ?? k;
 
   // released and waiting: what the slot poster can take (qa_passed, media in the release, not yet published)
@@ -91,7 +104,7 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
   const postedCell = (k: string, ms: number) => cell(trackOfItem(k), k, titleOf(k), "posted", status[k]?.permalink ?? null, istClock(ms));
 
   // explicit plans of the owner: these ids are removed from the pools before the automatic fill
-  const horizon = inp.days ?? 7;
+  const horizon = inp.days ?? (slotsOn ? 7 : 0);
   const dates = Array.from({ length: horizon }, (_, i) => istDate(now + i * DAY_MS));
   const plans = new Map<string, string[]>();
   const named = new Set<string>();
@@ -171,15 +184,20 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
   return {
     team: inp.team, publishing: inp.publishing, now, today, clock: istClock(now), paused, window: postingWindow(cfg), slot_times: slotTimes, posts_per_slot: perSlot,
     can_post_now: canPostNow(cfg, now), last_post_hours: posted.length ? Math.round(((now - posted[0].ms) / 3_600_000) * 10) / 10 : null,
-    ready, days, pipeline, recent, posts: inp.posts, empty_slots: emptySlots, note: inp.note ?? null,
+    ready, days, pipeline, recent, posts: inp.posts, empty_slots: emptySlots, note: inp.note ?? null, slots: slotsOn,
   };
 }
 
-/** The rules a hand-over must pass before the office starts it; returns the reason it is refused, or null. */
+/**
+ * The rules a hand-over must pass before the office starts it; returns the reason it is refused, or null.
+ * `ownsItem`: whether the reel belongs to this floor (the publishing repo posts a reel to the handle of its id's team, so a floor must never hand over another floor's reel).
+ */
 export function refusePublish(
   req: { item: string; mode: "now" | "slot"; date?: string; time?: string }, cfg: PostingConfig, status: Record<string, Phase5Entry>, now: number,
+  ownsItem?: (item: string) => boolean,
 ): string | null {
   if (!/^[a-z]\d{2,4}$/.test(req.item)) return "bad item id";
+  if (ownsItem && !ownsItem(req.item)) return `${req.item} is not a reel of this floor`;
   if (status[req.item]?.published) return `${req.item} is already posted`;
   // The owner's own tap works at any hour (owner decision 2026-10-18: "post now kabhi bhi"); the posting window only limits the automatic slots.
   if (req.mode === "now") return null;
