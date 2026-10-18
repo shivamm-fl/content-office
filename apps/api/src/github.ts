@@ -34,9 +34,19 @@ export async function dispatchRun(
   return { gh_run_id: j.workflow_run_id ? String(j.workflow_run_id) : null, url: j.html_url ?? null };
 }
 
+/** Floors whose reels the publishing repo can post: ai-course's scripts/publish_teams.py knows each of them (handle, secrets, Facebook and YouTube switches). */
+export const PUBLISHING_TEAMS: readonly string[] = ["learnai", "dsa", "systemdesign"];
+/** The one floor with slot posting (the slot poster, post_schedule and its pause switch) and with the shared copy of state/learnings.md in the publishing repo. */
+export const SLOT_TEAM = "learnai";
+
 /** The publishing repo of a team's floor (null: the floor has no publisher yet, so its calendar shows the pipeline only). */
 export function publishRepo(env: GhEnv, team: string): string | null {
-  return team === "learnai" && env.AI_COURSE_REPO ? env.AI_COURSE_REPO : null;
+  return PUBLISHING_TEAMS.includes(team) && env.AI_COURSE_REPO ? env.AI_COURSE_REPO : null;
+}
+
+/** The publishing repo that keeps a copy of the team's state/learnings.md: learnai's only (the other floors' lessons must not reach learnai's agents). */
+export function learningsRepo(env: GhEnv, team: string): string | null {
+  return team === SLOT_TEAM && env.AI_COURSE_REPO ? env.AI_COURSE_REPO : null;
 }
 
 /** Start a workflow of the publishing repo. Only the owner's buttons call this (owner session routes), never an agent. */

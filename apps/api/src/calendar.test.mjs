@@ -1,7 +1,7 @@
 // node --test apps/api/src/calendar.test.mjs   (Node 24 runs the TypeScript module directly)
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildCalendar, canPostNow, refusePublish, slotStartMs } from "./calendar.ts";
+import { buildCalendar, canPostNow, floorOfItem, floorStatus, refusePublish, slotStartMs, trackOfItem } from "./calendar.ts";
 
 const IST = (date, time) => slotStartMs(date, time);
 const cfg = { slots_ist: ["09:00", "13:00", "17:00"], posts_per_slot: 3, slot_late_min: 150, posting_window_ist: ["07:00", "21:00"], posting_paused: false, post_schedule: [] };
@@ -109,4 +109,58 @@ test("refusePublish: window, slots, capacity, ids", () => {
   const full = { ...cfg, post_schedule: [{ date: "2026-10-18", time: "13:00", ids: ["e101", "r101", "q101"] }] };
   assert.match(refusePublish({ item: "q102", mode: "slot", date: "2026-10-18", time: "13:00" }, full, base(), now), /full/);
   assert.equal(refusePublish({ item: "q101", mode: "slot", date: "2026-10-18", time: "13:00" }, full, base(), now), null);   // already in it: idempotent
+});
+
+// ---- floors that only post now (dsa: d, systemdesign: s): the publishing repo's status and settings are shared by every floor
+const CLAIMS = { e: "learnai", r: "learnai", q: "learnai", d: "dsa", s: "systemdesign" };
+const shared = () => ({ ...base(), x12: rel("Old experiment"), d001: rel("DSA one", { mp4: "reels/d001_hi.mp4", duration_s: 70 }), d002: rel("DSA posted", { published: true, published_at: "2026-10-18T03:35" }), s001: rel("SD one") });
+
+test("floors: a reel belongs to the floor whose track has its prefix; an unclaimed id is learnai's", () => {
+  assert.deepEqual(["e1", "r1", "q1", "d1", "s1", "x12"].map((i) => floorOfItem(i, CLAIMS)), ["learnai", "learnai", "learnai", "dsa", "systemdesign", "learnai"]);
+  assert.equal(floorOfItem("d001", { e: "learnai" }), "learnai");   // a floor that is not registered claims nothing
+  assert.equal(trackOfItem("d001"), "series");
+  assert.equal(trackOfItem("s150"), "series");
+  assert.equal(trackOfItem("x12"), "experiment");
+});
+
+test("floors: each floor sees its own reels of the shared status", () => {
+  const keys = (team) => Object.keys(floorStatus(shared(), team, CLAIMS)).sort();
+  assert.deepEqual(keys("dsa"), ["d001", "d002"]);
+  assert.deepEqual(keys("systemdesign"), ["s001"]);
+  assert.deepEqual(keys("learnai"), ["e101", "e102", "q101", "q102", "q24", "r101", "x12"]);   // learnai keeps what it had, minus the new floors' reels
+});
+
+test("a floor without slots: no slot grid, no pause switch, its released reel is ready to post now", () => {
+  const status = floorStatus(shared(), "dsa", CLAIMS);
+  const office = [{ item: "d003", title: "DSA approved", track: trackOfItem("d003"), thread_id: "t1", duration_s: 104, cover_url: null, stage: "approved", detail: null }];
+  const cal = buildCalendar({ ...input(IST("2026-10-18", "10:00"), { status, office, cfg: { ...cfg, posting_paused: true } }), team: "dsa", slots: false });
+  assert.equal(cal.slots, false);
+  assert.deepEqual(cal.days, []);
+  assert.equal(cal.empty_slots, 0);
+  assert.equal(cal.paused, false);   // learnai's pause is not this floor's
+  assert.deepEqual(cal.ready.map((r) => [r.item, r.track, r.source, r.can_schedule]), [["d003", "series", "office", false], ["d001", "series", "released", false]]);
+  assert.deepEqual(cal.recent.map((r) => [r.item, r.track]), [["d002", "series"]]);
+  assert.equal(cal.ready[0].duration_s, 104);
+});
+
+test("learnai keeps its slots, its pause switch and its old experiment reels", () => {
+  const cal = buildCalendar(input(IST("2026-10-18", "10:00"), { status: floorStatus(shared(), "learnai", CLAIMS), cfg: { ...cfg, posting_paused: true } }));
+  assert.equal(cal.slots, true);
+  assert.equal(cal.paused, true);
+  assert.equal(cal.days.length, 7);
+  assert.ok(cal.ready.some((r) => r.item === "x12"));
+  assert.ok(!cal.ready.some((r) => r.item[0] === "d" || r.item[0] === "s"));
+});
+
+test("refusePublish: a floor hands over its own reels only; d and s reels are posted now, never on a slot", () => {
+  const now = IST("2026-10-18", "10:00");
+  const owns = (floor) => (item) => floorOfItem(item, CLAIMS) === floor;
+  assert.equal(refusePublish({ item: "d001", mode: "now" }, cfg, shared(), now, owns("dsa")), null);
+  assert.equal(refusePublish({ item: "s001", mode: "now" }, cfg, shared(), now, owns("systemdesign")), null);
+  assert.match(refusePublish({ item: "e101", mode: "now" }, cfg, shared(), now, owns("dsa")), /not a reel of this floor/);
+  assert.match(refusePublish({ item: "d001", mode: "now" }, cfg, shared(), now, owns("learnai")), /not a reel of this floor/);
+  assert.match(refusePublish({ item: "d001", mode: "slot", date: "2026-10-18", time: "13:00" }, cfg, shared(), now, owns("dsa")), /Only e, r and q/);
+  assert.match(refusePublish({ item: "d001", mode: "now" }, cfg, shared(), IST("2026-10-18", "22:00"), owns("dsa")), /between 07:00 and 21:00/);
+  assert.match(refusePublish({ item: "d002", mode: "now" }, cfg, shared(), now, owns("dsa")), /already posted/);
+  assert.equal(refusePublish({ item: "x12", mode: "now" }, cfg, shared(), now, owns("learnai")), null);   // as before for learnai
 });
