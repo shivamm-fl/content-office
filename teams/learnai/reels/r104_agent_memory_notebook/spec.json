@@ -1,0 +1,122 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "min": {
+    "A": 10,
+    "B": 12,
+    "C": 12,
+    "D": 10,
+    "E": 9,
+    "F": 8
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      "A",
+      1,
+      0
+    ],
+    [
+      "err",
+      "A",
+      3,
+      0.2
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "err",
+      "B",
+      3,
+      0.3
+    ],
+    [
+      "click",
+      "C",
+      0,
+      0
+    ],
+    [
+      "click",
+      "C",
+      2,
+      0
+    ],
+    [
+      "ok",
+      "C",
+      3,
+      0.2
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "click",
+      "E",
+      2,
+      0
+    ],
+    [
+      "click",
+      "E",
+      3,
+      0
+    ],
+    [
+      "dip",
+      "F",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "F",
+      1,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Model पिछली chat क्यों भूल जाता है? || सीधा जवाब: | उसे सिर्फ़ वही दिखता है, | जो उसकी window में है। | नई chat में पुरानी बात window में होती ही नहीं। || इसका fix है memory: | notes window के बाहर रखो। || तीन steps में समझाता हूँ, | एक example के साथ।",
+      "B": "Context window यानी वो text, | जो model एक बार में देख सकता है। || मान लो coding agent ने सीखा: | user को Python पसंद है, | project में pytest चलता है। | नई session में ये सब गायब।",
+      "C": "पहला step, agent ये बात notes file में लिखता है, | window के बाहर। | दूसरा, काम से पहले वो अपना memory folder देखता है। | तीसरा, ज़रूरी notes वापस window में खींच लेता है।",
+      "D": "Anthropic का memory tool यही करता है: | /memories नाम का folder। | Model बस file commands माँगता है, | और उन्हें तुम्हारी अपनी app चलाती है, | यानी client-side।",
+      "E": "काम की चीज़ें लिखो: | user की preferences, | लिए हुए decisions, | और progress। || notes साफ़ और organized रखो, | हर बात नहीं।",
+      "F": "@emph Window desk है, | memory notebook है। || तुम अपने agent को क्या याद रखवाओगे? Comment में लिखो। | और ऐसे concepts के लिए follow करो।"
+    }
+  },
+  "hook_type": "direct_question",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

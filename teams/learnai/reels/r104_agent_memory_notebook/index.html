@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Model pichli chat kyun bhool jata hai? AI ki memory notebook</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="70" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="70" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="70" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="70" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F"], tag: "AI ENGINEER ROADMAP" });
+      Viz.install(M);
+      const { tl, S, P, Ed, W } = M;
+      const { ACC, CYAN, HOT, GOOD, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:20px;font-size:36px;color:${col};text-align:left`; } return d; };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const stamp = (host, txt, x, y, col, t) => { const d = el(host, `left:${x}px;top:${y}px;padding:14px 30px;border:2.5px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 48px var(--code);color:${col};white-space:nowrap;box-shadow:0 20px 50px rgba(0,0,0,.5)`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const slip = (host, x, y, w, col) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:46px;border-radius:8px;background:${M.ca(col, .18)};border:2px solid ${M.ca(col, .7)}`);
+
+      // diagram: A  (the model sees only the desk; a new chat = empty desk; notes live outside)
+      M.hook(["Why AI forgets", "old chats?"], { size: 96, top: 230 });
+      show(panel(A, 190, 500, 700, 400, CYAN, "DESK = WINDOW"), 0.05);
+      const slips = [[230, 590, 300, CYAN], [570, 610, 280, VIOLET], [250, 690, 340, ACC], [570, 720, 280, CYAN], [240, 800, 320, VIOLET]].map(([x, y, w, c]) => slip(A, x, y, w, c));
+      slips.forEach((s, i) => show(s, [0.2, 0.4, 0.6, 0.8, 1.0][i], { opacity: 0, y: -30 }));
+      M.pill(A, "NEW CHAT", at("A", "nayi"), { x: 380, y: 410, kind: "out", size: 40 });
+      slips.forEach((s) => tl.to(s, { opacity: 0, duration: 0.35 }, at("A", "purani")));
+      const ghost = el(A, `left:240px;top:770px;width:600px;height:90px;border-radius:14px;border:2.5px dashed ${M.ca(HOT, .8)};font:700 44px var(--lat);display:flex;align-items:center;justify-content:center;color:${HOT};white-space:nowrap`, "OLD CHAT  ✗"); show(ghost, at("A", "purani") + 0.1);
+      stamp(A, "EMPTY", 540, 640, HOT, at("A", "nahi"));
+      M.arrow(A, { from: [540, 920], to: [540, 1030], color: GOOD, w: 10 }).show(at("A", "notes"), 0.3);
+      M.box(A, { x: 190, y: 1040, w: 700, h: 240, label: "NOTEBOOK", icon: "doc", color: GOOD, size: 56 }).show(0.4);
+      M.pill(A, "3 STEPS", at("A", "teen"), { x: 400, y: 1310, kind: "out", size: 48 });
+      M.fit(A, { y: 400, h: 920 });
+
+      // diagram: B  (session 1 learns, session 2 is empty)
+      M.pill(B, "EXAMPLE", 0.1, { x: 420, y: 200, kind: "acc", size: 40 });
+      const s1 = show(panel(B, 130, 290, 820, 440, CYAN, "SESSION 1 · WINDOW"), 0.05);
+      const bars = [0, 1].map((i) => show(el(s1, `left:50px;top:${120 + i * 140}px;width:${i ? 520 : 680}px;height:36px;border-radius:10px;background:rgba(150,175,215,.22)`), 0.15 + i * 0.1));
+      bars.forEach((b) => tl.to(b, { opacity: 0, duration: 0.3 }, at("B", "Python")));
+      show(el(s1, `left:50px;top:110px;width:720px;height:100px;border-radius:14px;border:2px solid ${M.ca(GOOD, .7)};background:${M.ca(GOOD, .12)};font:700 52px var(--code);display:flex;align-items:center;padding-left:30px`, "likes: Python"), at("B", "Python"));
+      show(el(s1, `left:50px;top:240px;width:720px;height:100px;border-radius:14px;border:2px solid ${M.ca(GOOD, .7)};background:${M.ca(GOOD, .12)};font:700 52px var(--code);display:flex;align-items:center;padding-left:30px`, "tests: pytest"), at("B", "pytest"));
+      M.arrow(B, { from: [540, 745], to: [540, 850], color: HOT, w: 10 }).show(at("B", "nayi"), 0.3);
+      const s2 = show(panel(B, 130, 860, 820, 460, HOT, "SESSION 2 · WINDOW"), at("B", "nayi"));
+      [0, 1].forEach((i) => show(el(s2, `left:50px;top:${110 + i * 130}px;width:720px;height:100px;border-radius:14px;border:2px dashed ${M.ca(HOT, .6)};font:700 52px var(--code);display:flex;align-items:center;padding-left:30px;color:${M.ca(HOT, .8)}`, "— — —"), at("B", "session") + i * 0.1));
+      stamp(B, "GONE", 540, 1230, HOT, at("B", "gaayab"));
+      M.fit(B, { y: 190, h: 1110 });
+
+      // diagram: C  (write, look, pull back)
+      show(panel(C, 190, 230, 700, 290, CYAN, "DESK = WINDOW"), 0.05);
+      const chipCss = (x, y, col) => `left:${x}px;top:${y}px;width:520px;height:80px;border-radius:12px;border:2px solid ${M.ca(col, .8)};background:${M.ca(col, .16)};font:700 40px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`;
+      const dchip = show(el(C, chipCss(280, 420, GOOD), "Python · pytest"), 0.2);
+      tl.to(dchip, { opacity: 0.25, duration: 0.3 }, at("C", "likhta"));
+      tl.to(dchip, { opacity: 1, duration: 0.45, ease: "power3.out" }, at("C", "kheench"));
+      M.pill(C, "1 WRITE", at("C", "pahla"), { x: 60, y: 610, size: 40 });
+      M.arrow(C, { from: [400, 530], to: [400, 760], color: GOOD, w: 10 }).show(at("C", "likhta"), 0.3);
+      show(panel(C, 190, 770, 700, 400, GOOD, "NOTEBOOK"), 0.1);
+      show(el(C, chipCss(280, 1060, GOOD), "Python · pytest"), at("C", "file"));
+      const ring = el(C, `left:170px;top:750px;width:740px;height:440px;border-radius:30px;border:3px solid ${ACC}`); show(ring, at("C", "memory"), { opacity: 0 }); tl.to(ring, { opacity: 0, duration: 0.3 }, at("C", "teesra"));
+      M.pill(C, "2 LOOK", at("C", "doosra"), { x: 130, y: 1210, size: 40 });
+      M.arrow(C, { from: [860, 760], to: [860, 530], color: ACC, w: 10 }).show(at("C", "vaapas"), 0.3);
+      M.pill(C, "3 PULL", at("C", "teesra"), { x: 580, y: 610, size: 40 });
+      M.fit(C, { y: 190, h: 1110 });
+
+      // diagram: D  (model asks, your app runs, folder stores)
+      M.pill(D, "ANTHROPIC MEMORY TOOL", 0.1, { x: 170, y: 200, kind: "acc", size: 40 });
+      M.box(D, { x: 190, y: 290, w: 700, h: 200, label: "MODEL", icon: "model", color: CYAN, size: 56 }).show(0.1);
+      const cmd = show(el(D, "left:640px;top:530px;padding:12px 28px;border-radius:12px;border:2px solid #5BC0EB;background:rgba(91,192,235,.14);font:700 40px var(--code);white-space:nowrap", "create notes.txt"), at("D", "Model"));
+      gsap.set(cmd, { xPercent: -50 });
+      M.arrow(D, { from: [260, 495], to: [260, 700], color: CYAN, w: 10 }).show(at("D", "commands"), 0.3);
+      const frame = el(D, `left:150px;top:640px;width:780px;height:580px;border-radius:30px;border:3px dashed ${M.ca(ACC, .7)}`); show(frame, 0.2, { opacity: 0 });
+      el(frame, `right:26px;top:12px;font:700 40px var(--lat);color:${ACC}`, "YOUR SIDE");
+      M.box(D, { x: 190, y: 700, w: 700, h: 200, label: "YOUR APP", icon: "gear", color: ACC, size: 56 }).show(0.2);
+      M.arrow(D, { from: [540, 915], to: [540, 1000], color: GOOD, w: 10 }).show(at("D", "chalati"), 0.3);
+      M.box(D, { x: 190, y: 1010, w: 700, h: 200, label: "/memories", icon: "db", color: GOOD, size: 56 }).show(0.3);
+      M.pill(D, "CLIENT-SIDE", at("D", "yaani"), { x: 540, y: 1255, kind: "out", size: 44 });
+      el(D, `left:540px;top:1340px;font:500 40px var(--lat);color:#B4BED3;white-space:nowrap;transform:translateX(-50%)`, "Source: Anthropic docs");
+      M.fit(D, { y: 190, h: 1150 });
+
+      // diagram: E  (what to write in the notes: three useful things, not everything)
+      const nt = show(panel(E, 130, 260, 820, 860, GOOD, "NOTES.TXT"), 0.05);
+      [110, 280, 450].forEach((y, i) => show(el(nt, `left:50px;top:${y}px;width:720px;height:140px;border-radius:14px;border:2px dashed rgba(150,175,215,.3)`), 0.1 + i * 0.1));
+      const row = (y, txt, col, w, dashed) => show(el(nt, `left:50px;top:${y}px;width:720px;height:140px;border-radius:14px;border:2px ${dashed ? "dashed" : "solid"} ${M.ca(col, .7)};background:${M.ca(col, dashed ? .06 : .14)};font:700 50px var(--code);display:flex;align-items:center;padding-left:30px;color:${col};white-space:nowrap`, txt), w);
+      row(110, "✓ PREFERENCES", GOOD, at("E", "preferences"));
+      row(280, "✓ DECISIONS", GOOD, at("E", "decisions"));
+      row(450, "✓ PROGRESS", GOOD, at("E", "progress"));
+      const all = row(650, "✗ EVERYTHING", HOT, at("E", "har"), true);
+      [[110, "user", GOOD, "preferences"], [280, "check", GOOD, "decisions"], [450, "clock", GOOD, "progress"], [650, "cross", HOT, "har"]].forEach(([y, k, c, w]) => M.icon(nt, k, 560, y + 35, 70, c).show(at("E", w)));
+      M.fit(E, { y: 190, h: 1110 });
+
+      // diagram: F  (desk = window, notebook = memory, then comment + follow)
+      M.box(F, { x: 190, y: 230, w: 700, h: 210, label: "DESK = WINDOW", icon: "chat", color: CYAN, size: 56 }).show(0.1);
+      M.box(F, { x: 190, y: 470, w: 700, h: 210, label: "NOTEBOOK = MEMORY", icon: "doc", color: GOOD, size: 50 }).show(0.25);
+      const cc = show(panel(F, 190, 740, 700, 250, ACC, "COMMENT KARO"), 0.4);
+      show(el(cc, `left:40px;right:40px;bottom:40px;height:90px;border-radius:45px;border:1.5px solid rgba(150,175,215,.35);font:500 36px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("F", "Comment") + 0.3, { opacity: 0 });
+      const fb = M.pill(F, "+  FOLLOW", at("F", "follow") - 0.4, { x: 400, y: 1050, kind: "acc", size: 48 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("F", "follow"));
+      M.fit(F, { y: 190, h: 1110 });
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F);
+      M.finish({ kw: { desk: "cyan", window: "cyan", notebook: "good", memory: "good", gaayab: "hot", nahi: "hot", client: "gold", follow: "gold", preferences: "good", decisions: "good", progress: "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
