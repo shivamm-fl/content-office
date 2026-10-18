@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Chhota jawab padhne se bill kam hota hai?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="75.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="75.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="75.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="75.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "WHAT'S NEW IN AI" });
+      Viz.install(M);
+      const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n);
+      const { ACC, CYAN, HOT, GOOD } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const GREY = "rgba(150,175,215,.38)";
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:18px;font-size:34px;color:${col};text-align:left`; } return d; };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, t);
+      const bar = (host, x, y, w, h, col) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${Math.min(h / 2, 12)}px;background:${col || GREY}`);
+      const stamp = (host, txt, x, y, col, t) => { const d = el(host, `left:${x}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 56px var(--code);color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, x, y, col, t, size) => { const d = el(host, `left:${x}px;top:${y}px;padding:12px 28px;border:2.5px solid ${col};border-radius:40px;background:${M.ca(col, .14)};font:700 ${size || 40}px var(--lat);color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 0.94 }); };
+      const cursor = (host, x, y) => el(host, `left:${x}px;top:${y}px;width:70px;height:70px`, `<svg viewBox="0 0 24 24" width="70" height="70"><path d="M4 2l15 10-7 1.5L8.5 21z" fill="#fff" stroke="#0E121E" stroke-width="1.5" stroke-linejoin="round"/></svg>`);
+      const grow = (b, t) => { tl.set(b, { opacity: 0, transformOrigin: "0% 50%" }, 0); tl.fromTo(b, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, t); };
+
+      // ===== A: hook, the trap, the baseline =====
+      M.hook(["Chhota jawab,", "kam bill?"], { size: 100, top: 230 });
+      // diagram: A
+      const longP = panel(A, 150, 480, 780, 400, M.CYAN, "LONG REPLY");
+      const lbars = [560, 470, 600, 520, 640, 440, 580, 380].map((w, i) => bar(longP, 40, 90 + i * 37, w * 1.1, 20));
+      const shortP = panel(A, 150, 930, 780, 250, M.GOOD, "SHORT VIEW");
+      [560, 440, 500].forEach((w, i) => bar(shortP, 40, 92 + i * 48, w * 1.1, 26, M.ca(M.GOOD, .85)));
+      show(shortP, at("A", "chhota"));
+      M.arrow(A, { from: [540, 886], to: [540, 924], color: M.CYAN, w: 8 }).show(at("A", "chhota"), 0.3);
+      M.box(A, { x: 150, y: 1215, w: 440, h: 170, label: "BILL", icon: "coin", color: ACC, size: 56 }).show(at("A", "bill"));
+      const trap = stamp(A, "TRAP", 770, 1250, HOT, at("A", "trap")); hide(trap, at("A", "poora") - 0.4);
+      lbars.slice(4).forEach((b) => tl.to(b, { opacity: 0.2, duration: 0.4, immediateRender: false }, at("A", "aadha")));
+      chip(A, "SKIMMED", 540, 740, ACC, at("A", "skim"), 40);
+      stamp(A, "FULL", 770, 1250, ACC, at("A", "poora"));
+      M.fit(A, { y: 450, h: 900 });
+
+      // ===== B: the plugin =====
+      // diagram: B
+      M.pill(B, "NEW PLUGIN", at("B", "plugin"), { x: 340, y: 230, size: 44 });
+      const term = panel(B, 140, 320, 800, 380, M.CYAN, "CLAUDE CODE");
+      el(term, "left:40px;top:120px;font:600 40px var(--code);color:#E8EDF6;white-space:nowrap", '<span style="color:#F2B544">&gt;</span> fix the login bug');
+      [520, 420, 480].forEach((w, i) => bar(term, 40, 210 + i * 50, w, 22));
+      show(term, M.S.B + 0.1);
+      M.box(B, { x: 220, y: 820, w: 640, h: 190, label: "cc-stretch", icon: "gear", color: ACC, size: 56 }).show(at("B", "cc-stretch"));
+      M.arrow(B, { from: [540, 812], to: [540, 712], color: ACC, w: 10 }).show(at("B", "cc-stretch"), 0.4);
+      chip(B, "UNOFFICIAL ADD-ON", 540, 1060, M.MUTED, at("B", "bana"), 36);
+      chip(B, "STRETCHTEXT", 540, 1150, ACC, at("B", "stretchtext"), 40);
+      chip(B, "Source: GitHub", 540, 1240, M.CYAN, at("B", "stretchtext") + 0.3, 36);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ===== C: short view, click opens in place =====
+      // diagram: C
+      const rep = panel(C, 100, 330, 880, 880, M.CYAN, "CLAUDE REPLY");
+      show(rep, M.S.C + 0.1);
+      const wall = [];
+      for (let i = 0; i < 13; i++) wall.push(bar(rep, 44, 90 + i * 54, [740, 640, 780, 700, 560, 760, 690, 740, 600, 770, 650, 720, 420][i], 24));
+      wall.forEach((b, i) => { tl.set(b, { opacity: 0 }, 0); tl.to(b, { opacity: 1, duration: 0.3, immediateRender: false }, M.S.C + 0.2 + i * 0.03); tl.to(b, { opacity: 0, duration: 0.3, immediateRender: false }, at("C", "skim") - 0.05); });
+      chip(rep, "EXAMPLE", 740, 40, ACC, at("C", "maan"), 34);
+      const L1 = el(rep, "left:50px;top:110px;font:600 50px var(--lat);white-space:nowrap", 'Bug: <span class="u1" style="border-bottom:5px solid rgba(91,192,235,0)">login check</span> fails');
+      const L2 = el(rep, "left:50px;top:250px;font:600 50px var(--lat);white-space:nowrap", 'Cause: <span class="u2" style="border-bottom:5px solid rgba(91,192,235,0)">token expiry</span>');
+      const L3 = el(rep, "left:50px;top:390px;font:600 50px var(--lat);white-space:nowrap", "Fix: refresh first");
+      [L1, L2, L3].forEach((l, i) => show(l, at("C", "skim") + 0.1 + i * 0.25));
+      tl.to(rep.querySelector(".u1"), { borderBottomColor: M.ca(CYAN, 1), color: CYAN, duration: 0.3, immediateRender: false }, at("C", "underlined"));
+      tl.to(rep.querySelector(".u2"), { borderBottomColor: M.ca(CYAN, 1), color: CYAN, duration: 0.3, immediateRender: false }, at("C", "underlined") + 0.15);
+      const cur = cursor(rep, 660, 560); tl.set(cur, { opacity: 0 }, 0);
+      tl.to(cur, { opacity: 1, duration: 0.2, immediateRender: false }, at("C", "Phrase"));
+      tl.to(cur, { x: -480, y: -420, duration: 0.7, ease: "power3.inOut", immediateRender: false }, at("C", "Phrase"));
+      tl.to(cur, { scale: 0.85, duration: 0.1, yoyo: true, repeat: 1, immediateRender: false }, at("C", "click"));
+      chip(rep, "CLICK", 700, 560, CYAN, at("C", "click"), 40);
+      const open = el(rep, `left:44px;top:190px;width:790px;height:230px;border-radius:16px;border:3px solid ${ACC};background:${M.ca(ACC, .12)}`);
+      [640, 700, 520].forEach((w, i) => bar(open, 30, 36 + i * 62, w, 26, M.ca(ACC, .8)));
+      show(open, at("C", "khul") - 0.2, { opacity: 0, scaleY: 0.2, transformOrigin: "50% 0%" });
+      tl.to(L2, { y: 235, duration: 0.45, ease: "power3.out", immediateRender: false }, at("C", "khul") - 0.2);
+      tl.to(L3, { y: 235, duration: 0.45, ease: "power3.out", immediateRender: false }, at("C", "khul") - 0.2);
+      tl.to(cur, { opacity: 0, duration: 0.3, immediateRender: false }, at("C", "khul") + 0.3);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ===== D: author's own numbers =====
+      // diagram: D
+      chip(D, "AUTHOR SAYS", 540, 250, ACC, at("D", "Author"), 44);
+      M.count(D, 69, at("D", "69"), { x: 140, y: 330, w: 800, size: 230, color: M.TEXT, dur: 0.9 });
+      show(el(D, "left:140px;top:575px;width:800px;text-align:center;font:700 60px var(--lat);color:#B8C2D8", "REPLIES"), at("D", "replies"));
+      show(bar(D, 100, 740, 880, 190, GREY), at("D", "mein"));
+      show(el(D, "left:560px;top:1000px;font:700 56px var(--lat);color:#B8C2D8", "ALL WORDS"), at("D", "mein"));
+      grow(bar(D, 100, 740, 150, 190, ACC), at("D", "17%"));
+      show(el(D, "left:100px;top:1000px;font:700 56px var(--lat);color:#F2B544", "FIRST VIEW"), at("D", "17%"));
+      M.count(D, 17, at("D", "17%"), { x: 100, y: 1080, w: 880, size: 260, suffix: "%", color: ACC, dur: 0.6 });
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ===== E: bill does not drop =====
+      // diagram: E
+      const g1 = M.mk("abs", E); g1.style.cssText += ";left:0;top:0;width:1080px;height:1400px";
+      M.box(g1, { x: 140, y: 260, w: 800, h: 150, label: "BILL", icon: "coin", color: ACC, size: 56 }).show(at("E", "bill"));
+      const lay = panel(g1, 140, 450, 800, 470, ACC, "WRITTEN UP FRONT");
+      [1, 2, 4].forEach((n, i) => {
+        const lc = el(lay, `left:40px;top:${70 + i * 125}px;width:720px;height:110px;border-radius:14px;border:2.5px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .1)}`);
+                for (let k = 0; k < n; k++) bar(lc, 40, 18 + k * (n > 2 ? 20 : 30), 560 - k * 40, 12, M.ca(CYAN, .6));
+        show(lc, at("E", "level") + i * 0.25);
+      });
+      show(lay, at("E", "Claude"));
+      M.box(g1, { x: 140, y: 960, w: 800, h: 160, label: "TOKENS: SAME", icon: "coin", color: ACC, size: 52 }).show(at("E", "tokens"));
+      hide(g1, at("E", "padhna") - 0.3); tl.set(g1, { opacity: 0 }, at("E", "padhna") - 0.02);
+      show(el(E, "left:140px;top:330px;font:800 80px var(--lat);color:#4CC38A", "READ"), at("E", "padhna"));
+      grow(bar(E, 140, 450, 220, 260, M.GOOD), at("E", "kam"));
+      show(el(E, "left:140px;top:790px;font:800 80px var(--lat);color:#F2B544", "BILL"), at("E", "bill", 1));
+      grow(bar(E, 140, 910, 800, 260, ACC), at("E", "bill", 1));
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ===== F: how to use, limits =====
+      // diagram: F
+      const steps = [["1", "INSTALL", "/plugin install cc-stretch", "pehle"], ["2", "FULLSCREEN", "/tui fullscreen", "phir"]];
+      steps.forEach(([n, lab, code, w], i) => {
+        const c = panel(F, 100, 260 + i * 320, 880, 270, i === 1 ? ACC : CYAN);
+        el(c, `left:36px;top:50px;width:110px;height:110px;border-radius:55px;border:4px solid ${i === 1 ? ACC : CYAN};font:800 64px var(--lat);display:flex;align-items:center;justify-content:center`, n);
+        el(c, "left:180px;top:36px;font:800 52px var(--lat);color:#E8EDF6;white-space:nowrap", lab);
+        el(c, "left:180px;top:130px;padding:14px 24px;border-radius:12px;background:rgba(5,8,16,.7);font:600 40px var(--code);color:#F2B544;white-space:nowrap", code);
+        show(c, i === 0 ? M.S.F + 0.05 : at("F", w) - 0.1);
+        if (i === 1) chip(c, "FOR CLICKS", 700, 56, ACC, at("F", "kyonki"), 36);
+      });
+      const warn = panel(F, 100, 900, 880, 330, M.VIOLET, "HEADS UP"); show(warn, at("F", "dhyaan") - 0.1);
+      chip(warn, "EARLY ACCESS", 440, 110, M.VIOLET, at("F", "early"), 40);
+      chip(warn, "WINDOWS: NO CLICK YET", 440, 210, HOT, at("F", "Windows"), 40);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ===== G: insight =====
+      // diagram: G
+      M.box(G, { x: 80, y: 300, w: 640, h: 450, label: "TIME", icon: "clock", color: GOOD, size: 72 }).show(M.S.G + 0.05);
+      M.icon(G, "check", 770, 450, 200, GOOD).show(at("G", "bachata"));
+      M.box(G, { x: 80, y: 800, w: 640, h: 450, label: "MONEY", icon: "coin", color: ACC, size: 72 }).show(at("G", "paisa"));
+      stamp(G, "SAME", 860, 990, ACC, at("G", "nahi"));
+      M.fit(G, { y: 250, h: 1050 });
+
+      // ===== H: follow, comment keyword, guide in DM =====
+      // diagram: H
+      const fb = M.pill(H, "+  FOLLOW", at("H", "Follow") - 0.2, { x: 340, y: 330, kind: "acc", size: 52 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "karo"));
+      const cc = panel(H, 120, 500, 840, 330, M.CYAN, "COMMENT");
+      show(cc, M.S.H + 0.05);
+      const inp = el(cc, "left:40px;right:40px;bottom:50px;height:110px;border-radius:55px;border:1.5px solid rgba(150,175,215,.35);font:700 56px var(--code);color:#F2B544;display:flex;align-items:center;padding:0 40px", "STRETCH");
+      tl.set(inp, { opacity: 0 }, 0); tl.fromTo(inp, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out", immediateRender: false }, at("H", "STRETCH"));
+      M.box(H, { x: 120, y: 940, w: 840, h: 220, label: "GUIDE IN DM", icon: "doc", color: GOOD, size: 52 }).show(at("H", "DM"));
+      M.fit(H, { y: 250, h: 1000 });
+
+      "BCDEFGH".split("").forEach((s) => M.wipe(M.S[s]));
+      M.finish({ kw: { bill: "gold", trap: "hot", click: "cyan", "17%": "gold", tokens: "gold", skim: "cyan", paisa: "gold", stretch: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

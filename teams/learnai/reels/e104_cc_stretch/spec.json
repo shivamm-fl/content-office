@@ -1,0 +1,49 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 10,
+    "B": 6,
+    "C": 13,
+    "D": 6,
+    "E": 9,
+    "F": 12,
+    "G": 4,
+    "H": 6
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook जवाब छोटा पढ़ो, | तो क्या bill भी कम होगा? || ज़्यादातर लोग बोलेंगे, हाँ। | पर यही trap है। || Claude Code का लंबा reply आता है, | और तुम आधा skim करके निकल जाते हो। | Time जाता है, | पर bill तो पूरा लगता है।",
+      "B": "इसी पर एक plugin बना है, cc-stretch। | इसका idea है stretchtext: | text जो click करने पर वहीं बढ़ता है।",
+      "C": "Claude हर phrase के छोटे और लंबे version लिखता है, | और तुम्हें पहले सिर्फ़ skim view दिखता है। | मान लो bug का जवाब आया: | तीन छोटी lines, | कुछ phrases underlined। | Phrase पर click करो, | वो वहीं खुल जाता है, | और पढ़े हुए words हिलते नहीं।",
+      "D": "Author का दावा है, | 69{sixty-nine} replies में skim view सिर्फ़ 17{seventeen}% words का था।",
+      "E": "पर bill यहाँ नहीं घटता। | क्योंकि Claude हर level पहले ही लिखता है, | तो tokens उतने ही लगते हैं। | Author खुद कहता है: | पढ़ना कम, bill नहीं।",
+      "F": "Use करना है? | पहले plugin install करो। | फिर terminal में /tui fullscreen चलाओ, | क्योंकि click वहीं चलता है। | ध्यान रहे, plugin early access है, | और Windows पर click अभी नहीं चलता।",
+      "G": "@emph Plugin तुम्हारा time बचाता है, | पैसा नहीं।",
+      "H": "Setup guide चाहिए? | Follow करो, | फिर comment करो STRETCH, | guide DM में मिल जाएगी।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
