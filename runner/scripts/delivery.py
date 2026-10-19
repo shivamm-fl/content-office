@@ -3,7 +3,7 @@
     python3 -I runner/scripts/delivery.py <verify.json>      prints and writes  deliver=true|false  to $GITHUB_OUTPUT
 
 The owner reviews every reel before anything is posted, so the automatic gate only stops a reel that is really broken: a file is missing,
-the video is not 1080x1920 h264, it has no audio, its length is outside 20 to 180 seconds, or its frames do not change. Everything else the
+the video is not 1080x1920 h264, it has no audio, its length is outside 20 to 180 seconds, its frames do not change, or the video is not the one made from the reel's files (a restored old video after a change that was never rendered). Everything else the
 gate checks (the independent mute test, layout, hook score, term count, caption lint, loudness, bookkeeping, a fact finding) is shown to
 the owner as a note on the reel and never keeps it from them (owner decision 2026-10-18: no failing on things that do not matter).
 """
@@ -13,7 +13,7 @@ import re
 import sys
 from pathlib import Path
 
-HARD = [re.compile(p) for p in (r"^state entry", r"^files exist", r"^video 1080x1920", r"^audio aac", r"^length \d+-\d+ s$", r"^frames change over time")]
+HARD = [re.compile(p) for p in (r"^state entry", r"^files exist", r"^video 1080x1920", r"^audio aac", r"^length \d+-\d+ s$", r"^frames change over time", r"^video matches the composition")]
 
 
 def checks(verify: dict) -> list[dict]:

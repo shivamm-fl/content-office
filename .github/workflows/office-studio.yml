@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     permissions: { contents: read, id-token: write }
+    outputs: { video_changed: "${{ steps.vid.outputs.video_changed }}" }
     steps:
       - name: Check inputs
         run: |
@@ -46,6 +47,12 @@ jobs:
       - name: Studio tools
         timeout-minutes: 20
         run: bash runner/scripts/studio_tools.sh
+      # git has no video, no voice and no phrase cache: bring back what the last delivery of this reel kept, so a note about the cover
+      # or a name on the screen needs no new voice (paid characters) and no render (runner/scripts/item_media.py)
+      - name: Restore the reel's last video, voice and phrase cache
+        continue-on-error: true
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: python3 -I runner/scripts/item_media.py restore --team "$TEAM" --item "$ITEM" --state "$RUNNER_TEMP/media_state.json"
       - name: Lock the machine
         run: bash runner/scripts/lock_machine.sh
       - name: Studio session (build)
@@ -55,6 +62,11 @@ jobs:
           OIDC_AUDIENCE: content-office
           OFFICE_PY: /opt/office/venv/bin/python
         run: node runner/bridge/bridge.mjs
+      - name: Did the video change?
+        id: vid
+        if: ${{ always() }}
+        continue-on-error: true
+        run: /usr/bin/python3 -I runner/scripts/item_media.py changed --team "$TEAM" --item "$ITEM" --state "$RUNNER_TEMP/media_state.json"
       - name: Pack the work
         if: ${{ always() }}
         run: bash runner/scripts/pack_work.sh
@@ -67,7 +79,8 @@ jobs:
 
   review:
     needs: build
-    if: ${{ needs.build.result == 'success' }}
+    # a video the session left exactly as it was (a cover or a caption note) was reviewed already: no second mute test and fact check of it
+    if: ${{ needs.build.result == 'success' && needs.build.outputs.video_changed != 'false' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     permissions: { contents: read }
@@ -309,6 +322,17 @@ jobs:
           tag="office-$TEAM-$ITEM"
           gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --title "$tag" --notes "Reel $ITEM of the $TEAM team, built by the office studio (run $RUN_ID)."
           xargs -a "$RUNNER_TEMP/out/assets.txt" gh release upload "$tag" --clobber
+      # the release above holds only the newest video and cover (--clobber). Keep every delivered version, and the voice with the paid phrase
+      # cache, in a second release: the next run of this reel restores them (runner/scripts/item_media.py)
+      - name: Keep this version, its voice and the phrase cache
+        if: ${{ steps.gate.outputs.deliver == 'true' }}
+        continue-on-error: true
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          python3 -I runner/scripts/item_media.py pack --team "$TEAM" --item "$ITEM" --run "$RUN_ID" --out "$RUNNER_TEMP/archive"
+          tag="office-$TEAM-$ITEM-archive"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --latest=false --title "$tag" --notes "Every delivered version of $ITEM (team $TEAM) by the office studio, and media.tgz: the last video, its voice and the owner-voice phrase cache that the next studio run restores."
+          gh release upload "$tag" --clobber "$RUNNER_TEMP/archive"/*
       - name: Save the item's files
         if: ${{ always() && steps.v.outputs.n != '' }}
         env: { BEST_WORK: "${{ steps.best.outputs.work }}" }

@@ -19,7 +19,7 @@ def rep(**bad):
              "true peak <= -1 dBTP", "hyperframes check", "caption lint (ig-caption, no FAIL)", "cover 1080x1920", "hindi-only spec", "hook (Roman caption line 1): no DEALBREAKER",
              "one idea: at most 6 technical terms", "hook_formula recorded in the state entry", "post texts are Roman Hinglish (no Devanagari in the caption and the YouTube text)",
              "visuals show the idea (lint_visuals: plan, pictures, text budget)", "visual review passed (mute test by a fresh reviewer)",
-             "facts checked against the sources (no high finding)", "youtube metadata has a title and a description", "frames change over time"]
+             "facts checked against the sources (no high finding)", "youtube metadata has a title and a description", "frames change over time", "video matches the composition"]
     return {"ok": not bad, "checks": [{"name": n, "ok": n not in bad.get("fail", []), "detail": "x"} for n in names]}
 
 
@@ -31,7 +31,7 @@ soft = ["length equals data.json total", "loudness -17..-12 LUFS", "true peak <=
         "facts checked against the sources (no high finding)", "youtube metadata has a title and a description"]
 check("every judgement and bookkeeping check together still deliver", D.deliver(rep(fail=soft)))
 check("the failed ones are listed as notes for the owner", len(D.notes(rep(fail=soft))) == len(soft))
-for hard in ["files exist", "video 1080x1920 h264 (vertical)", "audio aac present", "length 20-120 s", "frames change over time", "state entry"]:
+for hard in ["files exist", "video 1080x1920 h264 (vertical)", "audio aac present", "length 20-120 s", "frames change over time", "state entry", "video matches the composition"]:
     check(f"a broken reel is not delivered: {hard}", not D.deliver(rep(fail=[hard])))
 check("no gate report is not delivered", not D.deliver({}) and not D.deliver({"ok": False, "why": "no gate report"}))
 check("a length that only differs from data.json is a note", D.deliver(rep(fail=["length equals data.json total"])))

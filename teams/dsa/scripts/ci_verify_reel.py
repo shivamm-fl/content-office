@@ -56,6 +56,10 @@ def main(rid, skip_review=False):
     meta = ROOT / "social" / (folder.name + ".youtube.txt")
     chk("files exist", all(p.exists() for p in (mp4, cover, cap, meta, folder / "spec.json", folder / "data.json")), mp4.name + " " + cover.name + " " + cap.name + " " + meta.name)
     if not rep["ok"]: return rep
+    im = ROOT.parents[1] / "runner/scripts/item_media.py"   # the video must be made from these files: a restored video never passes for a new one
+    if im.exists():
+        vm = sh(sys.executable, str(im), "verify", "--team", ROOT.name, "--item", rid)
+        chk("video matches the composition", vm.returncode == 0, (vm.stdout + vm.stderr).strip())
     pr = sh("ffprobe", "-v", "error", "-show_entries", "stream=codec_name,codec_type,width,height", "-show_entries", "format=duration", "-of", "json", str(mp4))
     pj = json.loads(pr.stdout or "{}"); streams = pj.get("streams", []); dur = float(pj.get("format", {}).get("duration", 0))
     v = next((s for s in streams if s.get("codec_type") == "video"), {}); au = next((s for s in streams if s.get("codec_type") == "audio"), {})

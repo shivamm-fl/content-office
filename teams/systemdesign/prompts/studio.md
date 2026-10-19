@@ -31,4 +31,12 @@ The reviewers' reports are in `qa/facts_<id>.json` and `qa/visual_<id>.json`. Fo
 The owner watched the finished reel and asked for changes (the message has the notes). Do exactly what the owner asked; their wording wins over every rule except facts and safety (if a note would put a false claim in the reel, do the rest and say why you left that part). Read the item's files first: `state/phase5_status.json` has the folder (the reel folder is saved in the repo; the sound assets in `assets/*.wav` are copied back from `reels/_template/assets` for you).
 - **A note about the script** (clarity, hook, wording, value, order, "the script is bad") is a writing job: do not patch lines alone. Ask the scriptwriter (the Agent tool, subagent `scriptwriter`) to rewrite with the owner's note, and for a fact question the researcher, then build with the new script. Put the full new script in Roman Hinglish in your report so the owner can read it.
 - Then `make_voice` if the narration changed, `render_video`, the cover if its text changed, and `studio_gate` until it prints ok. The reviewers check it again before it comes back to the owner.
+- **Cost (owner, 2026-10-19): the owner's voice is paid ElevenLabs characters and a render is ten minutes of machine time. Never spend either for nothing.** The reel's last video, its voice and the phrase cache are restored before you start (`reels/<name>_hi.mp4`, `reels/<name>/audio/hi/`). Do only what the note needs:
+  | the note is about | do |
+  |---|---|
+  | the cover | `render_cover`, then `studio_gate`. No `make_voice`, no `render_video`. |
+  | the caption, the YouTube text, a title | edit the text file, then `studio_gate`. Nothing else. |
+  | a name or label on the screen (the handle, a word in the picture) | edit the composition (`index.html`), `render_video`, `studio_gate`. No `make_voice`: the narration did not change. |
+  | the spoken narration | `make_voice` (phrases that did not change are in the cache and cost nothing), `render_video`, `studio_gate`. |
+  `studio_gate` fails with "video matches the composition" when the picture or the voice changed and the video was not rendered again: then `render_video`, nothing else. Never run `make_voice` or `render_video` "to be safe".
 - **Learn from it.** For every note that is a lesson for later reels (not a one-off for this reel) call `mcp__office__record_learning` with the lesson in general form and the owner's words copied exactly. One call per lesson, after the fix is done.

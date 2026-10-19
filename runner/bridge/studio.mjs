@@ -6,6 +6,9 @@ import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ITEM_MEDIA = fileURLToPath(new URL("../scripts/item_media.py", import.meta.url));
 
 const PROTECTED = ["scripts", ".claude/skills", "reels/_template", "reels/_kit", "brand/covers/_template", "brand/fonts"];
 const HF = "hyperframes@0.8.149";
@@ -161,11 +164,14 @@ export function makeStudio({ teamDir, python, onProgress }) {
       onProgress("Checking the owner's voice credits");
       const dry = await py(["scripts/make_reel_audio.py", rel], { env: { ELEVENLABS_API_KEY: key, OWNER_VOICE_DRY: "1" }, timeoutMs: 120_000 });
       const need = Number(/(\d+) characters/.exec(dry.out)?.[1] ?? NaN);
-      const left = await ownerVoiceLeft(key);
-      if (dry.code === 0 && Number.isFinite(need) && left !== null && left >= need + 100) {
-        onProgress(`Recording in the owner's voice (${need} characters, ${left} left this month)`);
+      // every phrase is already in the cache (restored from the last delivery): nothing is bought, so the credits do not matter and
+      // the voice is never swapped for Swara just because the account could not be read
+      const cached = dry.code === 0 && need === 0;
+      const left = cached ? null : await ownerVoiceLeft(key);
+      if (cached || (dry.code === 0 && Number.isFinite(need) && left !== null && left >= need + 100)) {
+        onProgress(cached ? "The owner's voice: every phrase is already recorded (0 characters)" : `Recording in the owner's voice (${need} characters, ${left} left this month)`);
         const r = await py(["scripts/make_reel_audio.py", rel], { env: { ELEVENLABS_API_KEY: key }, timeoutMs: 20 * 60_000 });
-        if (r.code === 0) return text(`Voice: the owner's own voice (ElevenLabs), ${need} characters used, about ${left - need} left this month.\n${r.out.slice(-1500)}`);
+        if (r.code === 0) return text(`Voice: the owner's own voice (ElevenLabs), ${need} characters used${cached ? " (every phrase was already recorded)" : `, about ${left - need} left this month`}.\n${r.out.slice(-1500)}`);
         reason = `the owner's voice failed (${r.out.trim().split("\n").pop()?.slice(0, 200)})`;
       } else {
         reason = left === null ? "the ElevenLabs account could not be read" : `the owner's voice has ${left} characters left this month and this reel needs ${Number.isFinite(need) ? need : "more"}`;
@@ -192,7 +198,9 @@ export function makeStudio({ teamDir, python, onProgress }) {
       const r = await py(["scripts/render_reel.py", rel, `reels/${name_}`, "hi"], { timeoutMs: 40 * 60_000 });
       const mp4 = join(teamDir, "reels", `${name_}_hi.mp4`);
       if (r.code !== 0 || !existsSync(mp4)) return text(`Render failed:\n${r.out.slice(-3000)}`, true);
-      return text(`Rendered reels/${name_}_hi.mp4 (${(statSync(mp4).size / 1e6).toFixed(1)} MB).`);
+      // the stamp says which files this video was made from; the gate refuses a video whose files changed afterwards (runner/scripts/item_media.py)
+      const st = await py([ITEM_MEDIA, "stamp", "--team-dir", teamDir, "--folder", rel], { timeoutMs: 120_000 });
+      return text(`Rendered reels/${name_}_hi.mp4 (${(statSync(mp4).size / 1e6).toFixed(1)} MB).${st.code === 0 ? "" : `\n(the render stamp could not be written: ${st.out.slice(-300)})`}`);
     }
     if (name === "hyperframes") {
       const { rel, abs } = teamFolder(teamDir, a.folder);
