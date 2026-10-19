@@ -41,3 +41,13 @@ Run `python3 scripts/lint_script.py reels/<folder>/spec.json`. It checks the hoo
 - Keep the owner's closing rule (one comment question, one follow line) and the lint rules: the humanising pass changes the voice, not the facts, the steps or the numbers.
 
 - **Say a technical term only if the reel explains it (owner, 2026-10-19).** The audience is people becoming AI engineers, so use the real words (forward pass, loss function, gradient, learning rate, converge). But each one is explained at its first use in one clause: the term, "यानी", the plain meaning ("learning rate यानी कदम का size"). A term you cannot explain in the time you have is not said: say the plain thing instead, and never put it on screen either. The owner caught "cross-entropy" in a reel that never explained it.
+
+## Flow and continuity (owner, 2026-10-19: he pointed at a script whose flow he liked)
+The reference is a Day 1 script the owner got back from ChatGPT and called continuous, flowing, clear and not vague. What it does, and what every script here must do:
+- **Each beat grows out of the one before it, usually with a question the viewer is already asking.** "Ab model ko kaise pata chalega ki kitni galti hui? Yahan aata hai loss function." / "Negative gradient? Matlab weight badhane se loss kam hoga." Never drop the next thing in with no bridge ("Gradient minus 18.67. Negative hai, isliye w badhao." with nothing before it reads as a list, not a lesson).
+- **Show the example first, name it after.** "Weight zero tha, prediction zero, obviously galat. Ye pehla step hai: forward pass." The viewer has already seen the thing when the term arrives.
+- **After every number, say what it means in one plain sentence** ("loss jitna kam, predictions utni accurate"). A number with no meaning attached is vague.
+- **Failure right after success, in one plain line** ("Model target ko cross karke bahut aage nikal gaya"), then the term (diverge).
+- **No vague words.** "kaafi improve ho gaya" is replaced by the numbers (loss 18.67 se 0.083). "Patterns encode karte hain" is replaced by something the reel has shown.
+- Short sentences that talk to one person, a light human aside ("obviously"), but never a staged "Bilkul nahi!" or a dash used as a drumroll.
+- The owner's reference script still broke our own limits (about 400 words, unexplained learning rate and converge, a "next lesson" pointer): copy its flow, not those.
