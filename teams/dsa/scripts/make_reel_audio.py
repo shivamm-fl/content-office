@@ -10,7 +10,7 @@ TTS engines (spec.json "tts"):
   "elevenlabs" legacy (reels 1-2 only, paid plan needed for more). "kokoro" legacy English.
   "owner"      OPT-IN ONLY: the owner's own cloned voice on ElevenLabs. Use it only when the owner asks ("meri voice use karo") and gives the key
                (ELEVENLABS_API_KEY in env or ai-course/.env, never committed); otherwise every reel stays on Edge. Recipe the owner approved
-               (.claude/skills/owner-voice/SKILL.md): voice "Shivam Trainer", eleven_multilingual_v2, NO voice_settings, one request per phrase with
+               (.claude/skills/owner-voice/SKILL.md): voice "Shivam Trainer", model eleven_flash_v2_5 at owner_tempo 0.9 for new reels (owner 2026-10-19; spec "owner_model" / "owner_tempo", new_reel.py writes both; a spec without them keeps eleven_multilingual_v2 at tempo 1.0), NO voice_settings, one request per phrase with
                previous_text/next_text, spec "prime" = an unspoken lead-in for the first phrase, exact word timings and trimming from the character alignment.
                OWNER_VOICE_DRY=1 prints the characters to generate and stops (credits are limited: ask the owner before a big run).
 spec.json: scenes, min, tail, total (optional), cues (sfx), caption_mode ("scene" = legacy whisper), voice, tone.
@@ -155,7 +155,9 @@ def clean_mix(voice, sfx, music, d, TOTAL, dips):
     print(f"audio v2: voice {20 * np.log10(vr):.1f} dBFS rms, mix {lufs:.1f} LUFS -> x{k:.2f} (-14 LUFS)")
 
 # ---------------- owner's ElevenLabs voice (opt-in) ----------------
-OWNER_VOICE, OWNER_MODEL = "KgBloOsGmp6r57GIimqQ", "eleven_multilingual_v2"   # "Shivam Trainer"
+OWNER_VOICE = "KgBloOsGmp6r57GIimqQ"   # "Shivam Trainer"
+OWNER_MODEL = spec.get("owner_model", "eleven_multilingual_v2")   # the recipe the owner approved; spec "owner_model" tries another (eleven_flash_v2_5 costs half per character). The model is part of the cache key.
+OWNER_TEMPO = float(spec.get("owner_tempo", 1.0))   # spec "owner_tempo": ffmpeg atempo on every phrase after the paid audio is cached raw (0.9 = 10 % slower, 1.1 = 10 % faster). Not in the cache key: a new tempo costs nothing.
 def owner_text(toks):
     """Hindi in Devanagari, English in Latin (what makes the clone pronounce both): take the Latin form of a braced token (JSON{जेसन} -> JSON, 30{thirty} -> thirty)."""
     return " ".join(sp if re.search(r"[A-Za-z]", sp) else (d if re.search(r"[A-Za-z]", d) else sp) for d, sp in toks)
@@ -174,13 +176,14 @@ def owner_phrase(text, prev, nxt, cache_dir):
                                      headers={"xi-api-key": key, "Content-Type": "application/json"})
         r = json.loads(urllib.request.urlopen(req, timeout=120).read()); mp3.write_bytes(base64.b64decode(r["audio_base64"])); js.write_text(json.dumps(r["alignment"], ensure_ascii=False), encoding="utf-8")
     al = json.loads(js.read_text(encoding="utf-8")); words, cur = [], None
+    sc = 1.0 / OWNER_TEMPO   # every time of the raw audio moves by this factor when a tempo is set
     for ch, a, b in zip(al["characters"], al["character_start_times_seconds"], al["character_end_times_seconds"]):
         if ch.isspace(): cur = None; continue
-        if cur is None: cur = [ch, a, b]; words.append(cur)
-        else: cur[0] += ch; cur[2] = b
+        if cur is None: cur = [ch, a * sc, b * sc]; words.append(cur)
+        else: cur[0] += ch; cur[2] = b * sc
     words = [(w, a, b - a) for w, a, b in words if re.search(r"\w", w)]
-    wav = mp3.with_suffix(".wav")
-    if not wav.exists(): subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp3), "-ar", str(SR), "-ac", "1", str(wav)], check=True)
+    wav = mp3.with_suffix(".wav") if OWNER_TEMPO == 1.0 else mp3.with_name(f"{mp3.stem}_t{OWNER_TEMPO}.wav")
+    if not wav.exists(): subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp3), *(["-filter:a", f"atempo={OWNER_TEMPO}"] if OWNER_TEMPO != 1.0 else []), "-ar", str(SR), "-ac", "1", str(wav)], check=True)
     y, _ = sf.read(wav, dtype="float32"); a = max(0.0, words[0][1] - 0.05); b = min(len(y) / SR, words[-1][1] + words[-1][2] + 0.18)
     return y[int(a * SR):int(b * SR)], words, a
 

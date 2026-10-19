@@ -1,6 +1,6 @@
 ---
 name: owner-voice
-description: Voice a LearnAI reel with the OWNER'S OWN cloned ElevenLabs voice ("Shivam Trainer") using the recipe he approved on 2026-10-15 (multilingual_v2, voice defaults, one request per phrase, primed first line, exact word timings). OPT-IN ONLY — use it only when the owner explicitly says "meri voice use karo" / "my voice" / "ElevenLabs se bana" AND the ElevenLabs key is available; every other reel (including all CI builds) stays on the free Edge TTS default.
+description: Voice a LearnAI reel with the OWNER'S OWN cloned ElevenLabs voice ("Shivam Trainer") using the recipe he approved on 2026-10-15 (Flash v2.5 at tempo 0.9 since 2026-10-19, multilingual_v2 before, voice defaults, one request per phrase, primed first line, exact word timings). OPT-IN ONLY — use it only when the owner explicitly says "meri voice use karo" / "my voice" / "ElevenLabs se bana" AND the ElevenLabs key is available; every other reel (including all CI builds) stays on the free Edge TTS default.
 ---
 
 # Owner's voice (ElevenLabs)
@@ -12,6 +12,7 @@ description: Voice a LearnAI reel with the OWNER'S OWN cloned ElevenLabs voice (
 
 ## The recipe (why each point: the owner tested the alternatives)
 - Voice `Shivam Trainer` (`KgBloOsGmp6r57GIimqQ`), not the older `Shivam` clone. Model `eleven_multilingual_v2`.
+- **Model (owner decision 2026-10-19): `eleven_flash_v2_5` at `"owner_tempo": 0.9` for every new reel.** Same voice, half the price per character ($0.04 instead of $0.08 per 1,000); he listened to the first 20 seconds of Day 1 and the whole of Day 2 this way and approved it. `scripts/new_reel.py` writes `"owner_model": "eleven_flash_v2_5", "owner_tempo": 0.9` into the spec. A spec without `owner_model` is a reel voiced before this decision: it stays on `eleven_multilingual_v2` at tempo 1.0 (a new model is a new voice for a reel the owner already approved, and it spends the month's characters again). `owner_tempo` slows or speeds the cached audio with ffmpeg (0.9 = 10 percent slower), so a new tempo costs nothing; the model is part of the phrase cache key.
 - **No voice_settings** (stability/style/speed tweaks sounded unnatural). **No eleven_v3, no audio tags** like `[excited]` (sounded like shouting).
 - **One request per phrase**, never the whole script: one request makes it rushed with no pauses. `previous_text` / `next_text` keep the intonation continuous (not billed).
 - **Primed first line**: spec `"prime": "सुनो, ये बहुत interesting है!"` is sent as the first phrase's `previous_text` — never spoken, it lifts the hook's energy. The owner picked this over plain, "expressive settings" and v3.

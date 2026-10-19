@@ -60,6 +60,15 @@ def sha_file(p: Path) -> str:
     return h.hexdigest()
 
 
+def sha_text_aware(p: Path) -> str:
+    """sha256 of a file; a text file is hashed with LF line endings, because git keeps LF (.gitattributes eol=lf) while a Windows checkout and a Windows render write CRLF:
+    the same reel must have the same fingerprint on the laptop and on the Linux runner."""
+    data = p.read_bytes()
+    if b"\0" not in data[:8000]:
+        data = data.replace(b"\r\n", b"\n")
+    return hashlib.sha256(data).hexdigest()
+
+
 def composition(folder: Path) -> str:
     """Everything the video is made from: the composition and its data, kit, fonts and assets, and the voice / bed / effects wavs.
     Only what the final job also has: not the phrase cache, snapshots, other audio files, template wavs or the video itself."""
@@ -77,7 +86,7 @@ def composition(folder: Path) -> str:
         # assets/ for every build; voice samples), so they must not decide whether the video is fresh
         if parts[0] == "voice_samples" or (parts[0] == "assets" and rel.endswith(".wav")):
             continue
-        h.update(rel.encode() + b"\0" + sha_file(p).encode() + b"\0")
+        h.update(rel.encode() + b"\0" + sha_text_aware(p).encode() + b"\0")
     return h.hexdigest()
 
 

@@ -23,7 +23,7 @@ for f in ["motion.css", "motion.js", "viz.js"]:
 shutil.copy(tpl / "hyperframes.json", dst / "hyperframes.json"); shutil.copy(tpl / "package.json", dst / "package.json")
 (dst / "vars.hi.json").write_text(json.dumps({"lang": "hi", "voiceSrc": "audio/hi/voice.wav", "bedSrc": "audio/hi/bed.wav", "sfxSrc": "audio/hi/sfx.wav"}))
 (dst / "index.html").write_text((kit / "template_motion.html").read_text(encoding="utf-8").replace("{{TITLE}}", title).replace("{{CHIP}}", chip), encoding="utf-8")
-spec = {"tts": "edge", "voice": "hi-IN-SwaraNeural", "pace": 1.26, "audio": "v2", "tone": "calm", "scenes": ["A"], "min": {"A": 6.0}, "tail": {},
+spec = {"tts": "edge", "voice": "hi-IN-SwaraNeural", "pace": 1.26, "audio": "v2", "owner_model": "eleven_flash_v2_5", "owner_tempo": 0.9, "tone": "calm", "scenes": ["A"], "min": {"A": 6.0}, "tail": {},
         "cues": [["impact", None, None, 0.05]], "copy": {"hi": {"A": "@hook यहाँ पहला phrase लिखो।"}}}
 (dst / "spec.json").write_text(json.dumps(spec, ensure_ascii=False, indent=1), encoding="utf-8")
 PLAN = """# Visual plan: write this BEFORE editing index.html (rules: docs-notes/diagram-first-visuals.md)
