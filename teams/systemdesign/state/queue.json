@@ -12,24 +12,9 @@
       "hook_type": "direct_question",
       "hook_formula": "direct_question: an everyday app moment as one short question, answered in the next line",
       "hook_source": "hook-writer direct_question",
-      "hook_candidates": [
-        {
-          "formula": "direct_question",
-          "hook": "Instagram खोलते ही feed कहाँ से आती है?"
-        },
-        {
-          "formula": "direct_question",
-          "hook": "Phone में videos नहीं हैं, तो reels कौन भेजता है?"
-        },
-        {
-          "formula": "direct_question",
-          "hook": "App खोलते ही data कौन भेजता है?"
-        }
-      ],
-      "hook_10s": "Instagram खोलते ही feed कहाँ से आती है? तुम्हारे phone में तो ये सारी videos हैं ही नहीं। कोई और computer इन्हें भेजता है। उसे बोलते हैं server, और जो माँगता है, वो client, यानी तुम्हारा phone। [frame 0: a phone on the left, a computer on the right, an arrow going from phone to computer and a feed card coming back]",
-      "visual_idea": "A phone on the left and a computer rack on the right. An arrow labelled REQUEST goes phone to rack, a card (feed, photo) slides back labelled RESPONSE. Then a restaurant strip: customer, waiter, kitchen, with the waiter as the API and a menu as its rules; the phone-to-rack arrow passes through a small door labelled API. Finally one more app (weather) shows the same arrow pattern, and a rack that never sends anything unless asked.",
+      "visual_idea": "Phone left, rack right, REQUEST arrow, RESPONSE card; restaurant strip; Mars crossed out of the menu; server box turning into CLIENT box.",
       "everyday_anchor": "A restaurant: you (client) order from the menu, the waiter (API) carries the order by the menu's rules, the kitchen (server) cooks and sends the dish back.",
-      "example": "EXAMPLE: opening a weather app: phone asks 'weather for Pune', server answers with a temperature (invented values labelled EXAMPLE).",
+      "example": "EXAMPLE: weather app: phone asks 'weather for Pune', server answers 28 degree.",
       "sources": [
         "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview",
         "https://developer.mozilla.org/en-US/docs/Glossary/API",
@@ -37,11 +22,10 @@
         "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Network_requests"
       ],
       "facts_to_verify": [
-        "MDN HTTP Overview: HTTP is client-server, requests are initiated by the client (the browser is always the one starting the request); the server answers with a response.",
-        "MDN Glossary Server: software or hardware offering a service to a client; MDN HTTP Overview: a server is not necessarily one machine.",
-        "MDN Glossary API: a set of features and rules, a contract between the application offering it and other software; say 'contract' only as the MDN wording.",
-        "Say a request/response pair, not a stream; do not claim how Instagram works internally (no company-specific claim; phone-and-server picture is generic).",
-        "Keep jargon to three terms (client, server, API), each defined in one plain sentence; no HTTP verbs or status codes in this reel."
+        "Client starts the request, server answers (MDN HTTP Overview).",
+        "A server is not necessarily one machine.",
+        "API = set of features and rules, a contract (MDN Glossary API).",
+        "No company-specific claim; no HTTP verbs or status codes."
       ],
       "length_target_s": 110,
       "cover_headline": "Client, Server and API Explained",
