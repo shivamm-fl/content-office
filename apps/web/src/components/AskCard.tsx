@@ -19,7 +19,7 @@ export function AskCard({ ask, team, onAnswer, compact = false }: {
   const submit = async (ans: Record<string, unknown>) => {
     setBusy(true);
     setError(null);
-    try { await onAnswer(ans); setMode(null); setText(""); } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
+    try { await onAnswer(ans); if (ans.decision === "approved" || ans.decision === "approved_with_edits") window.dispatchEvent(new Event("office:approved")); setMode(null); setText(""); } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
   };
 
   if (ask.meta?.type === "final") return <FinalReelCard ask={ask} team={team} onAnswer={onAnswer} />;
@@ -111,7 +111,7 @@ function FinalReelCard({ ask, team, onAnswer }: { ask: Ask; team: Team; onAnswer
   const studio = agentOf(team, ask.agent);
   const submit = async (ans: Record<string, unknown>) => {
     setBusy(true); setError(null);
-    try { await onAnswer(ans); setMode(null); setNotes(""); } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
+    try { await onAnswer(ans); if (ans.decision === "approved") window.dispatchEvent(new Event("office:approved")); setMode(null); setNotes(""); } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
   };
   const decided = ask.answer as { decision?: string; notes?: string } | null;
   return (

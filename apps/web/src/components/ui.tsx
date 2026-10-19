@@ -63,15 +63,15 @@ export function Markdown({ children }: { children: string }) {
 
 export function Screen({ title, back, right, children }: { title: ReactNode; back?: string; right?: ReactNode; children: ReactNode }) {
   return (
-    <div className="flex h-full flex-col">
-      <header className="safe-top sticky top-0 z-10 flex items-center gap-2 border-b border-wall bg-ink/95 px-4 pb-3 backdrop-blur">
+    <div className="screen flex h-full flex-col">
+      <header className="screen-header safe-top sticky top-0 z-10 flex items-center gap-2 border-b border-wall bg-ink/95 px-4 pb-3 backdrop-blur">
         {back !== undefined && (
           <button onClick={() => (back ? go(back) : history.back())} className="-ml-2 rounded-lg px-2 py-1 text-lg text-dim" aria-label="Back">‹</button>
         )}
         <div className="min-w-0 flex-1 truncate text-[17px] font-semibold">{title}</div>
         {right}
       </header>
-      <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+      <div className="screen-body min-h-0 flex-1 overflow-y-auto">{children}</div>
     </div>
   );
 }

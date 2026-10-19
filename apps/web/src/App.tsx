@@ -24,8 +24,15 @@ type TeamInfo = { slug: string; name: string };
 function Shell({ team, teams, onSwitch, onAuthLost }: { team: string; teams: TeamInfo[]; onSwitch: (slug: string) => void; onAuthLost: () => void }) {
   const office = useOffice(team, onAuthLost);
   const hash = useHash();
+  const [approvalMoment, setApprovalMoment] = useState(false);
+  useEffect(() => {
+    const onApproved = () => setApprovalMoment(true);
+    window.addEventListener("office:approved", onApproved);
+    return () => window.removeEventListener("office:approved", onApproved);
+  }, []);
+  useEffect(() => { if (!approvalMoment) return; const t = setTimeout(() => setApprovalMoment(false), 3200); return () => clearTimeout(t); }, [approvalMoment]);
   const state = office.state;
-  if (!state) return <p className="p-8 text-center text-dim">Opening the office…</p>;
+  if (!state) return <p className="opening-screen">Opening the office…</p>;
 
   const thread = /^#\/t\/([\w-]+)/.exec(hash)?.[1] ?? null;
   const fresh = /^#\/new\/([\w-]+)/.exec(hash)?.[1] ?? null;
@@ -36,8 +43,8 @@ function Shell({ team, teams, onSwitch, onAuthLost }: { team: string; teams: Tea
   const running = state.runs.filter(isActive).length;
 
   return (
-    <div className="mx-auto flex h-full max-w-xl flex-col">
-      <main className="min-h-0 flex-1 overflow-y-auto">
+    <div className="app-shell">
+      <main className="app-main">
         {inChat ? <ChatView key={thread ?? fresh} office={office} threadId={thread} newAgent={fresh} />
           : tab === "inbox" ? <InboxView office={office} />
           : tab === "calendar" ? <CalendarView office={office} focus={calendar?.[1] ?? null} />
@@ -45,14 +52,15 @@ function Shell({ team, teams, onSwitch, onAuthLost }: { team: string; teams: Tea
           : <OfficeView office={office} teams={teams} onSwitch={onSwitch} />}
       </main>
       {!inChat && (
-        <nav className="safe-bottom grid grid-cols-4 border-t border-wall bg-ink pt-1.5 text-center text-[13px]">
-          {([["office", "#/", "Office", 0], ["calendar", "#/calendar", "Calendar", 0], ["inbox", "#/inbox", "Inbox", waiting], ["runs", "#/runs", "Runs", running]] as const).map(([id, href, label, n]) => (
-            <button key={id} onClick={() => go(href)} className={`py-2 ${tab === id ? "font-semibold text-paper" : "text-dim"}`} aria-current={tab === id ? "page" : undefined}>
-              {label}{n > 0 && <span className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${id === "inbox" ? "bg-gold text-ink" : "bg-wall text-paper"}`}>{n}</span>}
+        <nav className="app-nav safe-bottom" aria-label="Main navigation">
+          {([["office", "#/", "Office", "▦", 0], ["calendar", "#/calendar", "Calendar", "▤", 0], ["inbox", "#/inbox", "Inbox", "✉", waiting], ["runs", "#/runs", "Runs", "◈", running]] as const).map(([id, href, label, icon, n]) => (
+            <button key={id} onClick={() => go(href)} className={tab === id ? "active" : ""} aria-current={tab === id ? "page" : undefined}>
+              <span className="nav-icon" aria-hidden>{icon}</span><span>{label}</span>{n > 0 && <span className="nav-count">{n}</span>}
             </button>
           ))}
         </nav>
       )}
+      {approvalMoment && <div className="office-celebration" role="status"><span>✦</span>Approved · the team can continue<i /><i /><i /></div>}
     </div>
   );
 }
