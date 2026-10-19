@@ -2,40 +2,42 @@
 
 Floor: LearnAI (`learnai`, @ai.learnvora) | day type: `demo` | working id: a001 | hook_type: `direct_question`
 Roadmap Day 1 (S1). The ladder now opens here: the four old opening days were dropped on the owner's word (2026-10-19). Built to `docs-notes/teaching-flow.md`; the voice and the humanising pass follow the owner's feedback of 2026-10-19: no source-talk in the lines ("docs kehte hain" is never spoken), no stock AI phrasing (checked with the `no-ai-slop` and `humanizer` skills, see section 7).
-Length: **278 spoken words** (braces resolved) = about **114 s** at the **2.44 words per second measured on a real Swara run** (the d001 dsa reel: 268 words = 110.0 s). `lint_script.py` of this floor still assumes 2.3 w/s and an old 60 to 100 s window, so it prints a WARN (about 121 s); it reports VERDICT OK with no FAIL.
+Length: **280 spoken words** (braces resolved) = about **115 s** at the **2.44 words per second measured on a real Swara run** (the d001 dsa reel: 268 words = 110.0 s). `lint_script.py` of this floor still assumes 2.3 w/s and an old 60 to 100 s window, so it prints a WARN (about 121 s); it reports VERDICT OK with no FAIL.
 Stand-alone: no "kal", no "part", no tease. Three new terms only: weight, loss, learning rate.
 
 ## 1. Hook
 - Chosen: `AI खुद सीखता कैसे है? उसी तरह, जैसे तुमने बास्केटबॉल सीखी थी।` (direct_question, 5 words, then the answer in one breath).
 - Alternate: `Ek number, 4 steps, aur AI seekh gaya. Kaise?` (hookscore of its Roman form: 50.6 OK; the chosen one scores about 38, WEAK, because the scorer rewards numbers and stakes. I kept the plain question: it is the topic, in the viewer's words.)
 
-## 2. The script the owner reads (Roman Hinglish)
-1. "AI khud seekhta kaise hai? Usi tarah, jaise tumne basketball seekhi thi. Gend phenki, dekha kitna chuke, thoda sudhara, phir phenki. Ye teen steps hain. Chhote model par chalakar dikhata hoon."
-2. "Model ko sirf itna seekhna hai: kitne ghante padho, to kitne marks. 1 ghante par 2, 2 ghante par 4, 3 ghante par 6. Model ke andar bas ek number hai, weight, yaani w. Marks barabar w guna ghante."
-3. "Pehla step: phenko, yaani guess. w ko 0 rakha, to model har baar 0 bolega. 2 ki jagah 0, 6 ki jagah bhi 0."
-4. "Doosra step: dekho kitna chuke. Har jawab ki galti nikalo, uska square lo, aur average kar lo. Ise loss kehte hain. Square isliye, kyunki badi galti zyada ginni jaani chahiye. Maine code chalaya: loss 18.67. Jitna kam, utna achha."
-5. "Teesra step: sudharo. w ko usi taraf thoda sarkao, jidhar loss kam hota hai. Kitna sarkana hai, use learning rate kehte hain. Maine 0.1 rakha. Ek baar sudhara: w 1.87, loss 0.08. Chaar baar dohraya, to w theek 2, aur loss lagbhag zero."
-6. "Ab jaldbaazi karke dekho: learning rate 0.5. Pehle step mein loss 18 se seedha 251, phir hazaaron mein. Model bigadta ja raha hai. Jaise gend itne zor se phenki, ki board ke paar chali gayi."
+## 2. The script the owner reads (Roman Hinglish, numbers as they are spoken)
+1. "AI khud seekhta kaise hai? Usi tarah, jaise tumne basketball seekhi thi. Gend phenki, dekha kitna chuke, thoda sudhara, phir phenki. Ye three steps hain. Chhote model par chalakar dikhata hoon."
+2. "Model ko sirf itna seekhna hai: kitne ghante padho, to kitne marks. Ek ghante par do, do ghante par chaar, teen ghante par chhah. Model ke andar bas ek cheez hai: weight, yaani w. Marks equals w times hours."
+3. "Pehla step: phenko, yaani guess. w ko zero rakha, to model har baar zero bolega. Do ki jagah zero, chhah ki jagah bhi zero."
+4. "Doosra step: dekho kitna chuke. Har jawab ki galti nikalo, uska square lo, aur average kar lo. Ise loss kehte hain. Square isliye, kyunki badi galti zyada ginni jaani chahiye. Maine code chalaya: loss eighteen point six seven. Jitna kam, utna achha."
+5. "Teesra step: sudharo. w ko usi taraf thoda sarkao, jidhar loss kam hota hai. Kitna sarkana hai, use learning rate kehte hain. Yahan learning rate hai point one. Ek baar sudhara: w one point eight seven, loss point zero eight. Chaar baar dohraya, to w theek do, aur loss lagbhag zero."
+6. "Ab jaldbaazi karke dekho: learning rate point five. Pehle step mein loss atharah se seedha do sau ikyavan, phir hazaaron mein. Model bigadta ja raha hai. Jaise gend itne zor se phenki, ki board ke paar chali gayi."
 7. "Model ke andar answers nahi rakhe hote. Andar bas numbers hote hain, jo aise hi sudharte-sudharte set hue. LLM mein bhi yahi chalta hai. Bas wahan arbon numbers hain, aur guess agla word hota hai."
-8. "Yahi chakkar training hai. Ab tum batao: marks agar 3, 6, 9 hote, to w aakhir mein kis number par rukta? Comment mein likho, aur aise AI ideas ke liye follow karo."
+8. "Yahi chakkar training hai. Ab tum batao: marks agar teen, chhah, nau hote, to w aakhir mein kis number par rukta? Comment mein likho, aur aise AI ideas ke liye follow karo."
 
-## 3. Narration source (Hindi in Devanagari, English in Roman; `|` clause, `||` thought, spoken numbers in braces)
+Numbers (owner rule of 2026-10-19: the word AFTER a number decides its language): "ek ghante", "do", "chhah", "zero rakha", "atharah se", "do sau ikyavan", "teen, chhah, nau hote" are Hindi because a Hindi word follows; "three steps" and the readings "loss 18.67", "0.1", "1.87", "0.08", "0.5" stay English; the formula is English words: "marks equals w times hours".
+
+## 3. Narration source (Hindi in Devanagari, English in Roman; `|` clause, `||` thought, `display{spoken}` for every number)
 ```
-A: @hook AI खुद सीखता कैसे है? | उसी तरह, जैसे तुमने बास्केटबॉल सीखी थी। || गेंद फेंकी, देखा कितना चूके, थोड़ा सुधारा, फिर फेंकी। || ये तीन steps हैं। | छोटे model पर चलाकर दिखाता हूँ।
-B: model को सिर्फ़ इतना सीखना है: | कितने घंटे पढ़ो, तो कितने marks। || 1{one} घंटे पर 2{two}, | 2{two} घंटे पर 4{four}, | 3{three} घंटे पर 6{six}। || model के अंदर बस एक number है, | weight, यानी w। || marks बराबर w गुणा घंटे।
-C: पहला step: फेंको, यानी guess। || w को 0{zero} रखा, | तो model हर बार 0{zero} बोलेगा। || 2{two} की जगह 0{zero}, | 6{six} की जगह भी 0{zero}।
+A: @hook AI खुद सीखता कैसे है? | उसी तरह, जैसे तुमने बास्केटबॉल सीखी थी। || गेंद फेंकी, देखा कितना चूके, थोड़ा सुधारा, फिर फेंकी। || ये 3{three} steps हैं। | छोटे model पर चलाकर दिखाता हूँ।
+B: model को सिर्फ़ इतना सीखना है: | कितने घंटे पढ़ो, तो कितने marks। || 1{एक} घंटे पर 2{दो}, | 2{दो} घंटे पर 4{चार}, | 3{तीन} घंटे पर 6{छह}। || model के अंदर बस एक चीज़ है: | weight, यानी w{डब्ल्यू}। || marks equals w{डब्ल्यू} times hours।
+C: पहला step: फेंको, यानी guess। || w{डब्ल्यू} को 0{ज़ीरो} रखा, | तो model हर बार 0{ज़ीरो} बोलेगा। || 2{दो} की जगह 0{ज़ीरो}, | 6{छह} की जगह भी 0{ज़ीरो}।
 D: दूसरा step: देखो कितना चूके। || हर जवाब की गलती निकालो, | उसका square लो, | और average कर लो। | इसे loss कहते हैं। || square इसलिए, | क्योंकि बड़ी गलती ज़्यादा गिनी जानी चाहिए। || मैंने code चलाया: | loss 18.67{eighteen-point-six-seven}। | जितना कम, उतना अच्छा।
-E: तीसरा step: सुधारो। || w को उसी तरफ़ थोड़ा सरकाओ, | जिधर loss कम होता है। || कितना सरकाना है, | उसे learning rate कहते हैं। | मैंने 0.1{point-one} रखा। || एक बार सुधारा: | w 1.87{one-point-eight-seven}, | loss 0.08{point-zero-eight}। || चार बार दोहराया, | तो w ठीक 2{two}, | और loss लगभग zero।
-F: अब जल्दबाज़ी करके देखो: | learning rate 0.5{point-five}। || पहले step में loss 18{eighteen} से सीधा 251{two-hundred-fifty-one}, | फिर हज़ारों में। || model बिगड़ता जा रहा है। | जैसे गेंद इतने ज़ोर से फेंकी, | कि बोर्ड के पार चली गई।
+E: तीसरा step: सुधारो। || w{डब्ल्यू} को उसी तरफ़ थोड़ा सरकाओ, | जिधर loss कम होता है। || कितना सरकाना है, | उसे learning rate कहते हैं। | यहाँ learning rate है 0.1{point-one}। || एक बार सुधारा: | w{डब्ल्यू} 1.87{one-point-eight-seven}, | loss 0.08{point-zero-eight}। || चार बार दोहराया, | तो w{डब्ल्यू} ठीक 2{दो}, | और loss लगभग zero।
+F: अब जल्दबाज़ी करके देखो: | learning rate 0.5{point-five}। || पहले step में loss 18{अठारह} से सीधा 251{दो-सौ-इक्यावन}, | फिर हज़ारों में। || model बिगड़ता जा रहा है। | जैसे गेंद इतने ज़ोर से फेंकी, | कि बोर्ड के पार चली गई।
 G: @emph model के अंदर answers नहीं रखे होते। | अंदर बस numbers होते हैं, | जो ऐसे ही सुधरते-सुधरते set हुए। || LLM में भी यही चलता है। | बस वहाँ अरबों numbers हैं, | और guess अगला word होता है।
-H: यही चक्कर training है। || अब तुम बताओ: | marks अगर 3{three}, 6{six}, 9{nine} होते, | तो w आख़िर में किस number पर रुकता? | Comment में लिखो, | और ऐसे AI ideas के लिए follow करो।
+H: यही चक्कर training है। || अब तुम बताओ: | marks अगर 3{तीन}, 6{छह}, 9{नौ} होते, | तो w{डब्ल्यू} आख़िर में किस number पर रुकता? | Comment में लिखो, | और ऐसे AI ideas के लिए follow करो।
 ```
 
 ## 4. Beat table (seconds at the measured 2.44 w/s)
 | # | seconds | says | the picture that moves | on-screen label (1 to 3 words) |
 |---|---|---|---|---|
 | 1 | 0 to 13 (31 w) | the question, the basketball answer, three steps promised | a ball arcs and misses a hoop; three small marks land: throw, miss, fix. No step counter yet | HOW AI LEARNS |
-| 2 | 13 to 29 (39 w) | the task: hours to marks, one number w | three cards 1 to 2, 2 to 4, 3 to 6 with the EXAMPLE pill; a dial w appears; the chip marks = w x hours | EXAMPLE / W = WEIGHT |
+| 2 | 13 to 29 (39 w) | the task: hours to marks, one number w, the formula said in English | three cards 1 to 2, 2 to 4, 3 to 6 with the EXAMPLE pill; a dial w appears; the chip marks = w x hours | EXAMPLE / W = WEIGHT |
 | 3 | 29 to 39 (24 w) | step 1, guess: w = 0, every answer 0 | dial at 0; the three guesses 0, 0, 0 stand next to the true 2, 4, 6 in red | STEP 1/3 / GUESS |
 | 4 | 39 to 55 (39 w) | step 2, how far off: gap, square, average, loss 18.67 | a bar per card for the gap; bars square and merge into one gauge reading 18.67; the real printed line | STEP 2/3 / LOSS 18.67 |
 | 5 | 55 to 72 (43 w) | step 3, nudge w, the learning rate 0.1, w 1.87, loss 0.08, four rounds to w 2 | the dial nudges toward the lower loss; the gauge falls; the real 5-line run slides in, rows lit one by one | STEP 3/3 / LEARNING RATE |
@@ -92,6 +94,7 @@ The basketball picture, the marks example and the sentence "model ke andar answe
 - `lint_script.py` of this floor on the narration (hook_type set): VERDICT OK, 0 FAIL. One WARN: its stale length window (see the header).
 - Shape against teaching-flow: `demo` beat sheet (input, run 1 real, change one thing, run 2 real, why, catch, recap and check), 3 numbered steps with the kicker from step 1, a new picture about every 4 to 5 s. Detail checklist: 3 terms (weight, loss, learning rate), one running example run for real, the failure shown with numbers (rate 0.5), a why in step 2 and step 3, the catch at 76 percent, the check question with its answer in the caption, stand-alone.
 - Humanising pass with the two skills the owner named (github.com/petergyang/no-ai-slop, github.com/blader/humanizer), applied to the Hinglish lines: removed "ये सीख नहीं रहा, बिगड़ रहा है" (a not-X-but-Y) and "लोग सोचते हैं... नहीं।" (a staged contrast with a one-word reply); the recap shrank to one line; no dashes, no triads for show (the three steps are the real three), no "key point" announcements; first person only where true ("मैंने code चलाया"); no word of source-talk in any line. Kept on purpose: the one-line recap and the comment question, the owner's closing rule.
-- Voice: the owner's own voice by default, Swara when it is not available. A local run of the same pipeline with Swara gave 2.44 w/s; a second timing run of this exact text failed on Edge TTS (HTTP 403 from the old host), so the 114 s is computed from the measured rate, not heard.
+- Numbers and formula (owner correction 2026-10-19): every number follows the word after it (note under section 2); the calculation is spoken in English words. `lint_script.py` only checks that each number has a `{spoken}` brace, not which language, so the language is checked by eye (table in the session: every number and its next word).
+- Voice: the owner's own voice by default, Swara when it is not available. A local run of the same pipeline with Swara gave 2.44 w/s; a second timing run of this exact text failed on Edge TTS (HTTP 403 from the old host), so the 115 s is computed from the measured rate, not heard.
 - Cut first if the take runs past 118 s: "Square isliye ..." (9 words), "phir hazaaron mein" (3), "Maine 0.1 rakha" (3).
 - Unsure: (1) the hook scorer calls the chosen hook WEAK (about 38); the alternate scores 50.6 but makes a promise (4 steps) that the three-step frame does not match. (2) "arbon numbers" for an LLM is true for GPT-3 (175 billion) and the Wikipedia page; it is said as a plain size, not as a claim about every model.
