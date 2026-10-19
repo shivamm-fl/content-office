@@ -12,3 +12,4 @@ No rules yet. The first two weeks are a baseline.
 ## Owner corrections (recorded automatically)
 - 2026-10-19 (s001): The top-left header chip of every series reel shows the category and the day number, for example "SYSTEM DESIGN · DAY 001 / 150" (the Mo.init tag), not the category alone.
 - 2026-10-19: After the hook, go straight to the answer in the way a person would say it ("your answer should be: first I will ask questions, let me explain in 4 steps"). Do not add a "straight answer" line or a definition between the hook and that answer.
+- 2026-10-19 (s001): Do not source or flag trivial common knowledge such as the number of seconds in a day (24 x 60 x 60 = 86,400) or plain arithmetic; only claims that a reader could dispute need a fetched page, so a fact-check finding of severity "none" on such a line is ignored, not fixed with extra sources.
