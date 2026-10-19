@@ -125,7 +125,7 @@
   ],
   "copy": {
     "hi": {
-      "A": "@hook Interviewer ने पूछा: एक नया app design करना है, | तुम सबसे पहले क्या करोगे? || सीधा जवाब: | boxes बनाने से पहले सवाल पूछो। || System design यानी system के parts चुनना, | और उन्हें जोड़ना। || 4{four} steps में समझाता हूँ।",
+      "A": "@hook Interviewer ने पूछा: एक नया app design करना है, | तुम सबसे पहले क्या करोगे? || तुम्हारा जवाब होना चाहिए: | सबसे पहले मैं सवाल पूछूँगा। || आओ 4{four} steps में समझाता हूँ, | कैसे।",
       "B": "एक food delivery app सोचो। || सीधे boxes बना दिए: | app, server, database। || Server यानी जो app को जवाब दे, | database यानी जहाँ data रखा है। || ये drawing 100{one-hundred} users पर भी वही, | और 10{दस} करोड़ पर भी वही।",
       "C": "पहला step: requirements और scale। || Requirements यानी app को क्या करना है: | order देना, restaurant का accept करना। || फिर पूछो: | हर second कितनी requests? | Request यानी app का server से एक सवाल। || मान लो एक दिन में 1,00,000{one-lakh} orders हैं। || दिन में 86,400{eighty-six-thousand-four-hundred} seconds होते हैं, | तो average करीब 1.16{one-point-one-six} orders per second। || इसी से पता चलता है कि एक server काफ़ी है या नहीं।",
       "D": "दूसरा step: high-level design। || अब boxes बनाओ, | पर सिर्फ़ ज़रूरी।",
