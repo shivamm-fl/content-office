@@ -16,7 +16,7 @@ export function Login({ onDone }: { onDone: () => void }) {
   return (
     <form onSubmit={submit} className="safe-top mx-auto flex h-full max-w-sm flex-col justify-center px-6">
       <img src="/icon-192.png" alt="" className="h-16 w-16 rounded-2xl" />
-      <h1 className="mt-5 text-2xl font-semibold">LearnAI office</h1>
+      <h1 className="mt-5 text-2xl font-semibold">Content Office</h1>
       <p className="mt-1.5 text-sm leading-relaxed text-dim">Enter your office key. You stay signed in on this phone for 90 days.</p>
       <input value={key} onChange={(e) => setKey(e.target.value)} type="password" autoComplete="current-password" placeholder="Office key"
         className="mt-6 rounded-xl border border-wall bg-desk px-4 py-3 text-[15px] outline-none focus:border-gold" />

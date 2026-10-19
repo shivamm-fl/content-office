@@ -11,7 +11,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["apple-touch-icon.png", "SpaceGrotesk.ttf", "JetBrainsMono.ttf"],
       manifest: {
-        name: "LearnAI Office",
+        name: "Content Office",
         short_name: "Office",
         description: "Your content team: plan, write and build reels from your phone.",
         theme_color: "#0B1220",

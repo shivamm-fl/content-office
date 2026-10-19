@@ -20,8 +20,9 @@ export function AgentSheet({ state, slug, onClose }: { state: OfficeState; slug:
 
   return (
     <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/50" onClick={onClose} role="dialog" aria-modal aria-label={agent.name}>
-      <div onClick={(e) => e.stopPropagation()} className="safe-bottom sheet-in w-full max-w-xl rounded-t-2xl border-t border-wall bg-desk px-5 pt-3">
+      <div onClick={(e) => e.stopPropagation()} className="agent-sheet safe-bottom sheet-in w-full max-w-xl rounded-t-2xl border-t border-wall bg-desk px-5 pt-3">
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-wall" aria-hidden />
+        <button onClick={onClose} className="sheet-close" aria-label="Close agent profile">×</button>
         <div className="flex items-center gap-4">
           <Avatar color={agent.color} status={status} size={64} />
           <div className="min-w-0 flex-1">
