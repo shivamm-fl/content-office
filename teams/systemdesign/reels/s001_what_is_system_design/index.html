@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>What is system design</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="112" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="112" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="112" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="112" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "SYSTEM DESIGN" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:30px;color:${col}`; } return d; };
+      const kick = (host, txt, t) => show(el(host, `left:0;width:1080px;text-align:center;top:196px;font:700 40px var(--code);letter-spacing:.14em;color:${ACC}`, txt), t, { opacity: 0, y: 0 });
+      const center = (host, y, size, col, txt, t, w) => show(el(host, `left:${540 - (w || 900) / 2}px;width:${w || 900}px;text-align:center;top:${y}px;font:700 ${size}px var(--code);color:${col};white-space:nowrap`, txt), t);
+      const lab = (host, x, y, w, col, txt, t, size) => show(el(host, `left:${x}px;width:${w}px;text-align:center;top:${y}px;font:600 ${size || 38}px var(--code);letter-spacing:.06em;color:${col};white-space:nowrap`, txt), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx - 230}px;width:460px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+
+      // ===== A: ask first, then parts + links =====
+      // diagram: A
+      M.hook(["Interviewer ka sawal:", "Pehle kya karoge?"], { size: 96, top: 250 });
+      panel(A, 90, 490, 900, 740, ACC, null);
+      const q1 = show(el(A, `left:90px;width:900px;text-align:center;top:560px;font:700 460px var(--lat);color:#5B6A8C;line-height:1`, "?"), 0.05, { opacity: 0, y: 0 });
+      gone(q1, at("A", "boxes") - 0.1);
+      const rb = [[150, 600, 250, 150], [640, 590, 250, 170], [370, 900, 320, 150]].map(([x, y, w, h]) => M.box(A, { x, y, w, h, color: "#8592AD" }));
+      const rx = rb.map((b) => M.icon(A, "cross", b.cx - 70, b.cy - 70, 140, HOT));
+      rb.forEach((b, i) => b.show(at("A", "boxes") + i * 0.12));
+      rx.forEach((x, i) => x.show(at("A", "banane") + 0.1 + i * 0.13));
+      rb.forEach((b) => b.hide(at("A", "sawal") - 0.1)); rx.forEach((x) => x.hide(at("A", "sawal") - 0.1));
+      const q2 = show(el(A, `left:90px;width:900px;text-align:center;top:560px;font:700 440px var(--lat);color:${ACC};line-height:1`, "?"), at("A", "sawal"), { opacity: 0, scale: 0.9 });
+      const askl = lab(A, 90, 1090, 900, ACC, "ASK FIRST", at("A", "sawal") + 0.1, 58);
+      gone(q2, at("A", "System") - 0.1); gone(askl, at("A", "System") - 0.1);
+      center(A, 540, 52, ACC, "SYSTEM DESIGN", at("A", "System"), 800);
+      const pA = M.box(A, { x: 140, y: 680, w: 270, h: 170, label: "APP", icon: "user", color: CYAN, size: 40 });
+      const pS = M.box(A, { x: 670, y: 680, w: 270, h: 170, label: "SERVER", icon: "chip", color: CYAN, size: 40 });
+      const pD = M.box(A, { x: 405, y: 980, w: 270, h: 170, label: "DATABASE", icon: "db", color: CYAN, size: 36 });
+      pA.show(at("A", "parts") - 0.4); pS.show(at("A", "parts") - 0.2); pD.show(at("A", "parts"));
+      const l1 = M.arrow(A, { from: [410, 765], to: [670, 765], color: ACC, w: 10 });
+      const l2 = M.arrow(A, { from: [740, 850], to: [620, 980], color: ACC, w: 10 });
+      const l3 = M.arrow(A, { from: [320, 850], to: [440, 980], color: ACC, w: 10 });
+      l1.show(at("A", "jodna")); l2.show(at("A", "jodna") + 0.2); l3.show(at("A", "jodna") + 0.35);
+      const linkl = lab(A, 390, 690, 300, ACC, "LINKS", at("A", "jodna") + 0.1, 38); linkl.style.top = "700px";
+      [pA, pS, pD].forEach((b) => b.hide(at("A", "4") - 0.15)); [l1, l2, l3].forEach((a) => a.hide(at("A", "4") - 0.15)); gone(linkl, at("A", "4") - 0.15);
+
+      const tiles = [1, 2, 3, 4].map((n, i) => M.box(A, { x: 110 + i * 210, y: 790, w: 190, h: 220, label: String(n), color: ACC, size: 110 }));
+      tiles.forEach((b, i) => b.show(at("A", "4") + i * 0.16));
+      lab(A, 90, 1060, 900, ACC, "STEPS", at("A", "steps"), 44);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: the running example, boxes drawn blindly =====
+      // diagram: B
+      kick(B, "EXAMPLE · FOOD APP", 15.35);
+      const bA = M.box(B, { x: 400, y: 330, w: 380, h: 190, label: "APP", icon: "user", color: CYAN });
+      const bS = M.box(B, { x: 400, y: 640, w: 380, h: 190, label: "SERVER", icon: "chip", color: CYAN });
+      const bD = M.box(B, { x: 400, y: 950, w: 380, h: 190, label: "DATABASE", icon: "db", color: CYAN, size: 40 });
+      bA.show(at("B", "app")); bS.show(at("B", "server")); bD.show(at("B", "database"));
+      const aDown = M.arrow(B, { from: [470, 520], to: [470, 640], color: ACC, w: 9 }), aUp = M.arrow(B, { from: [710, 640], to: [710, 520], color: GOOD, w: 9 });
+      const bDown = M.arrow(B, { from: [470, 830], to: [470, 950], color: ACC, w: 9 }), bUp = M.arrow(B, { from: [710, 950], to: [710, 830], color: GOOD, w: 9 });
+      aDown.show(at("B", "server") + 0.2); aUp.show(at("B", "server") + 0.35); bDown.show(at("B", "database") + 0.2); bUp.show(at("B", "database") + 0.35);
+      aDown.travel(at("B", "Server"), 0.7, "#fff"); aUp.travel(at("B", "jawab"), 0.7, GOOD);
+      lab(B, 400, 1160, 380, ACC, "STORES DATA", at("B", "data"), 36);
+      const dots = []; for (let i = 0; i < 20; i++) dots.push(el(B, `left:${78 + (i % 4) * 62}px;top:${340 + Math.floor(i / 4) * 62}px;width:44px;height:44px;border-radius:50%;background:${M.ca(ACC, 0.85)}`));
+      dots.forEach((d, i) => show(d, i < 3 ? at("B", "100") + i * 0.1 : at("B", "10") + (i - 3) * 0.03, { opacity: 0, scale: 0.4 }));
+      const uA = M.arrow(B, { from: [330, 430], to: [398, 430], color: ACC, w: 8 }); uA.show(at("B", "100") + 0.3);
+      const u1 = lab(B, 60, 690, 300, ACC, "100 USERS", at("B", "users"), 38); gone(u1, at("B", "10") - 0.1);
+      lab(B, 60, 690, 300, ACC, "10 CRORE", at("B", "10") + 0.1, 38);
+      stamp(B, "SAME ✓", 540, 1230, GOOD, at("B", "wahi"), 52);
+      M.fit(B);
+
+      // ===== C: step 1, requirements and scale =====
+      // diagram: C
+      kick(C, "STEP 1/4 · REQUIREMENTS", 30.6);
+      const s1 = [];
+      const cp = show(panel(C, 120, 300, 840, 500, CYAN, "REQUIREMENTS"), 30.9); s1.push(cp);
+      [["ORDER FOOD", "order", 0, "dena"], ["ACCEPT ORDER", "restaurant", 0, "karna", 1], ["REQUESTS / SEC", "second", 0, "requests"]].forEach(([txt, w, n, w2, n2], i) => {
+        show(el(cp, `left:60px;top:${100 + i * 130}px;font:700 52px var(--lat);white-space:nowrap`, txt), at("C", w, n) - 0.05);
+        if (i < 2) show(el(cp, `right:60px;top:${100 + i * 130}px;font:800 60px var(--lat);color:${GOOD}`, "✓"), at("C", w2, n2), { opacity: 0, scale: 1.2 });
+        else show(el(cp, `right:60px;top:${100 + i * 130}px;font:800 72px var(--lat);color:${ACC}`, "?"), at("C", w2, n2), { opacity: 0, scale: 0.8 });
+      });
+      s1.push(lab(C, 270, 840, 540, ACC, "REQUEST", at("C", "Request"), 40));
+      const cA = M.box(C, { x: 120, y: 920, w: 300, h: 180, label: "APP", icon: "user", color: CYAN });
+      const cS = M.box(C, { x: 660, y: 920, w: 300, h: 180, label: "SERVER", icon: "chip", color: CYAN });
+      const cr = M.arrow(C, { from: [420, 1010], to: [660, 1010], color: ACC, w: 10 });
+      cA.show(at("C", "app", 1)); cS.show(at("C", "server", 0)); cr.show(at("C", "server", 0) + 0.3); cr.travel(at("C", "sawal"), 0.7, "#fff");
+      const t2 = at("C", "maan") - 0.15;
+      s1.forEach((d) => gone(d, t2)); [cA, cS].forEach((b) => b.hide(t2)); cr.hide(t2);
+      M.pill(C, "EXAMPLE", at("C", "maan"), { x: 410, y: 290, kind: "out", size: 34 });
+      center(C, 370, 126, M.TEXT, "1,00,000", at("C", "100000"), 900); lab(C, 90, 515, 900, ACC, "ORDERS / DAY", at("C", "orders", 0), 40);
+      center(C, 590, 126, M.TEXT, "÷ 86,400", at("C", "86400"), 900); lab(C, 90, 735, 900, ACC, "SECONDS / DAY", at("C", "seconds"), 40);
+      const hr = el(C, `left:150px;top:830px;width:780px;height:6px;border-radius:3px;background:#8592AD;transform-origin:0 50%`); tl.set(hr, { opacity: 0, scaleX: 0 }, 0); tl.to(hr, { opacity: 1, scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, at("C", "average"));
+      center(C, 860, 168, ACC, "= 1.16", at("C", "116"), 900); lab(C, 90, 1045, 900, ACC, "ORDERS / SEC", at("C", "orders", 1), 40);
+      const cSv = M.box(C, { x: 270, y: 1150, w: 540, h: 140, label: "1 SERVER", sub: "ENOUGH ?", icon: "chip", color: CYAN, size: 42 }); cSv.show(at("C", "server", 1));
+      M.fit(C);
+
+      // ===== D: step 2, boxes (only the necessary) =====
+      // diagram: D
+      kick(D, "STEP 2/4 · BOXES", 57.05);
+      const dA = M.box(D, { x: 60, y: 400, w: 270, h: 220, label: "APP", icon: "user", color: CYAN });
+      const dS = M.box(D, { x: 405, y: 400, w: 270, h: 220, label: "SERVER", icon: "chip", color: CYAN, sub: "1.16 / SEC", subsize: 30 });
+      const dD = M.box(D, { x: 750, y: 400, w: 270, h: 220, label: "DATABASE", icon: "db", color: CYAN, size: 36 });
+      dA.show(at("D", "boxes")); dS.show(at("D", "boxes") + 0.25); dD.show(at("D", "boxes") + 0.5);
+      const d1 = M.arrow(D, { from: [330, 510], to: [405, 510], color: ACC, w: 8 }), d2 = M.arrow(D, { from: [675, 510], to: [750, 510], color: ACC, w: 8 });
+      d1.show(at("D", "boxes") + 0.45); d2.show(at("D", "boxes") + 0.7);
+      const ghost = (x) => el(D, `left:${x}px;top:790px;width:270px;height:200px;border:4px dashed rgba(133,146,173,.7);border-radius:30px;display:flex;align-items:center;justify-content:center;font:700 42px var(--lat);color:#8592AD`, "EXTRA");
+      show(ghost(130), at("D", "sirf")); show(ghost(680), at("D", "sirf") + 0.15);
+      const dg1 = M.arrow(D, { from: [470, 620], to: [300, 790], color: "#8592AD", w: 6, dash: true }), dg2 = M.arrow(D, { from: [610, 620], to: [780, 790], color: "#8592AD", w: 6, dash: true });
+      dg1.show(at("D", "sirf")); dg2.show(at("D", "sirf") + 0.15);
+      const gx = [M.icon(D, "cross", 195, 820, 140, HOT), M.icon(D, "cross", 745, 820, 140, HOT)]; gx[0].show(at("D", "zaruri")); gx[1].show(at("D", "zaruri") + 0.15);
+      lab(D, 60, 1050, 960, GOOD, "ONLY NEEDED", at("D", "zaruri") + 0.2, 44);
+      M.fit(D);
+
+      // ===== E: step 3, detail of each box =====
+      // diagram: E
+      kick(E, "STEP 3/4 · DETAIL", 62.15);
+      const eD = M.box(E, { x: 380, y: 310, w: 320, h: 190, label: "DATABASE", icon: "db", color: CYAN, size: 38 }); eD.show(at("E", "box"));
+      const eA = M.arrow(E, { from: [540, 505], to: [540, 590], color: ACC, w: 9 }); eA.show(at("E", "database"));
+      const tp = show(panel(E, 90, 600, 900, 440, CYAN, "ORDERS TABLE"), at("E", "database"));
+      M.pill(E, "EXAMPLE", at("E", "order"), { x: 410, y: 1075, kind: "out", size: 34 });
+      const hdr = (x, w, txt, val, w0) => { show(el(tp, `left:${x}px;width:${w}px;top:140px;text-align:center;font:700 52px var(--code);color:${ACC}`, txt), at("E", w0), { opacity: 0, y: 0 });
+        show(el(tp, `left:${x}px;width:${w}px;top:280px;text-align:center;font:600 48px var(--code);color:${M.TEXT}`, val), at("E", w0) + 0.3); };
+      hdr(30, 230, "ID", "1042", "id"); hdr(290, 330, "ITEMS", "biryani", "items"); hdr(640, 230, "STATUS", "PLACED", "status");
+      show(el(tp, `left:30px;top:225px;width:840px;height:3px;background:rgba(150,175,215,.35)`), at("E", "database") + 0.2, { opacity: 0, y: 0 });
+      M.fit(E);
+
+      // ===== F: step 4, the balance scale FRESH vs FAST =====
+      // diagram: F
+      kick(F, "STEP 4/4 · TRADE-OFFS", 69.25);
+      const BX = 540, BY = 440;
+      const post = el(F, `left:${BX - 9}px;top:${BY}px;width:18px;height:210px;border-radius:6px;background:#52617F`), base = el(F, `left:${BX - 100}px;top:${BY + 205}px;width:200px;height:20px;border-radius:8px;background:#52617F`);
+      const beam = el(F, `left:${BX - 260}px;top:${BY - 8}px;width:520px;height:16px;border-radius:8px;background:#A9B6D0`);
+      const piv = el(F, `left:${BX - 22}px;top:${BY - 22}px;width:44px;height:44px;border-radius:50%;background:${ACC}`);
+      const pan = (x, txt) => el(F, `left:${x}px;top:${BY}px;width:240px;height:210px`, `<svg width="240" height="150" viewBox="0 0 240 150" style="position:absolute;left:0;top:0"><path d="M120 0 L10 150 M120 0 L230 150" stroke="#A9B6D0" stroke-width="5" fill="none"/></svg><div class="tray" style="position:absolute;left:0;top:150px;width:240px;height:60px;border:3px solid rgba(133,146,173,.8);border-radius:14px;background:rgba(133,146,173,.12);display:flex;align-items:center;justify-content:center;font:800 40px var(--lat);color:#E8EDF6;letter-spacing:.06em">${txt}</div>`);
+      const pL = pan(BX - 260 - 120, "FRESH"), pR = pan(BX + 260 - 120, "FAST");
+      const t0 = at("F", "Trade-off");
+      [post, base, beam, piv, pL, pR].forEach((d, i) => show(d, t0 + i * 0.07, { opacity: 0, y: 0 }));
+      tl.set(beam, { rotation: 0, transformOrigin: "50% 50%" }, 0);
+      const tip = (t, dir) => { // dir -1: FRESH side down, +1: FAST side down, 0: level
+        tl.to(beam, { rotation: dir * 9, duration: 0.7, ease: "power3.inOut", immediateRender: false }, t);
+        tl.to(pL, { y: -dir * 40, duration: 0.7, ease: "power3.inOut", immediateRender: false }, t); tl.to(pR, { y: dir * 40, duration: 0.7, ease: "power3.inOut", immediateRender: false }, t); };
+      const trayCol = (p, t, on) => tl.to(p.querySelector(".tray"), { borderColor: on ? M.ca(GOOD, 0.95) : "rgba(133,146,173,.8)", backgroundColor: on ? M.ca(GOOD, 0.2) : "rgba(133,146,173,.12)", duration: 0.3, immediateRender: false }, t);
+      const fA = M.box(F, { x: 60, y: 960, w: 240, h: 170, label: "APP", icon: "user", color: CYAN, size: 40 });
+      const fC = M.box(F, { x: 420, y: 960, w: 240, h: 170, label: "CACHE", icon: "bolt", color: ACC, size: 38 });
+      const fD = M.box(F, { x: 780, y: 960, w: 240, h: 170, label: "DATABASE", icon: "db", color: CYAN, size: 32 });
+      const fl = M.arrow(F, { from: [300, 1010], to: [780, 1010], color: ACC, w: 9, bend: -230 });
+      fA.show(at("F", "Menu")); fD.show(at("F", "database")); fl.show(at("F", "database") + 0.3);
+      tip(at("F", "fresh", 0), -1); trayCol(pL, at("F", "fresh", 0), true);
+      const slow = M.icon(F, "clock", 828, 1150, 90, HOT); slow.show(at("F", "dheema")); const slowl = lab(F, 740, 1245, 300, HOT, "SLOW", at("F", "dheema"), 40);
+      const tc = at("F", "Cache");
+      fC.show(tc); const fl2 = M.arrow(F, { from: [300, 1045], to: [420, 1045], color: GOOD, w: 9 }); fl2.show(tc + 0.4);
+      fl.hide(tc + 0.3); tl.to([fD.el, fD.parts[1]], { opacity: 0.3, duration: 0.3, immediateRender: false }, tc + 0.3);
+      slow.hide(at("F", "tez", 1) - 0.1); gone(slowl, at("F", "tez", 1) - 0.1);
+      tip(at("F", "tez", 1), 1); trayCol(pL, at("F", "tez", 1), false); trayCol(pR, at("F", "tez", 1), true);
+      fl2.travel(at("F", "tez", 1) + 0.1, 0.6, "#fff");
+      const old = M.icon(F, "clock", 465, 1150, 90, ACC); old.show(at("F", "minutes")); lab(F, 340, 1245, 400, ACC, "MINUTES OLD", at("F", "minutes"), 38);
+      tip(at("F", "Fast"), 0); trayCol(pR, at("F", "Fast"), false);
+      const rq = M.box(F, { x: 340, y: 760, w: 400, h: 110, label: "REQUIREMENTS", icon: "doc", color: ACC, size: 34 }); rq.show(at("F", "requirements"));
+      const ra = M.arrow(F, { from: [540, 760], to: [540, 655], color: ACC, w: 9 }); ra.show(at("F", "requirements") + 0.3); ra.travel(at("F", "hota"), 0.6, "#fff");
+      M.fit(F);
+
+      // ===== G: the catch, a commonly taught order =====
+      // diagram: G
+      kick(G, "ONE CATCH", 91.05);
+      const names = ["REQUIREMENTS", "BOXES", "DETAIL", "TRADE-OFFS"];
+      names.forEach((nm, i) => { const y = 310 + i * 200;
+        const row = show(panel(G, 90, y, 900, 150, CYAN, null), 91.25 + i * 0.25);
+        show(el(G, `left:130px;top:${y + 20}px;width:110px;height:110px;border:3px solid ${ACC};border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 62px var(--code);color:${ACC}`, String(i + 1)), 91.25 + i * 0.25);
+        show(el(G, `left:280px;top:${y + 36}px;font:800 56px var(--lat);white-space:nowrap`, nm), 91.3 + i * 0.25);
+        if (i < 3) { const a = M.arrow(G, { from: [540, y + 150], to: [540, y + 200], color: "#8592AD", w: 6 }); a.show(91.5 + i * 0.25, 0.25); } });
+      const cop = M.pill(G, "COMMON ORDER", at("G", "commonly"), { x: 320, y: 1130, kind: "out", size: 42 }); gone(cop, at("G", "koi") - 0.15);
+      stamp(G, "NOT A RULE", 540, 1130, VIOLET, at("G", "koi"), 52);
+      M.fit(G);
+
+      // ===== H: recap, follow, your turn =====
+      // diagram: H
+      kick(H, "REMEMBER", 96.55);
+      const tl4 = [["ASK", "?", "search", "sawal"], ["NUMBER", "1.16 / SEC", "numbers", "number"], ["BOXES", "+ DETAIL", "db", "boxes"], ["TRADE-OFF", "FRESH / FAST", "bolt", "trade-offs"]];
+      const hb = tl4.map(([lb, sb, ic, w], i) => M.box(H, { x: 100 + (i % 2) * 450, y: 330 + Math.floor(i / 2) * 360, w: 430, h: 320, label: lb, sub: sb, icon: ic, color: i % 2 ? ACC : CYAN, size: 50, subsize: 30 }));
+      hb.forEach((b, i) => b.show(at("H", tl4[i][3])));
+      const t3 = at("H", "aise") - 0.1; hb.forEach((b) => b.hide(t3));
+      const fcs = []; const fc = show(panel(H, 140, 360, 800, 520, CYAN, null), t3 + 0.15); fcs.push(fc);
+      fcs.push(show(el(H, `left:455px;top:410px;width:170px;height:170px`, `<svg viewBox="0 0 64 64" width="170" height="170"><circle cx="32" cy="32" r="30" fill="none" stroke="${ACC}" stroke-width="3"/><g fill="none" stroke="${ACC}" stroke-width="4.5" stroke-linecap="round"><circle cx="32" cy="24" r="9"/><path d="M14 52c0-10 8-16 18-16s18 6 18 16"/></g></svg>`), t3 + 0.2));
+      fcs.push(show(el(H, `left:140px;width:800px;text-align:center;top:620px;font:600 40px var(--code);color:${M.TEXT}`, "@systemdesign.learnvora"), t3 + 0.3));
+      const fb = M.pill(H, "+  FOLLOW", t3 + 0.4, { x: 340, y: 730, kind: "acc", size: 44, w: 400 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.93, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+      fcs.push(fb); const t4 = at("H", "ab") - 0.1; fcs.forEach((d) => gone(d, t4));
+      const cc = show(panel(H, 90, 300, 900, 900, CYAN, "YOUR TURN"), t4 + 0.15);
+      M.pill(H, "EXAMPLE", t4 + 0.2, { x: 410, y: 390, kind: "out", size: 34 });
+      show(el(cc, `left:0;width:900px;text-align:center;top:190px;font:700 110px var(--code)`, "2,00,000"), at("H", "200000"));
+      show(el(cc, `left:0;width:900px;text-align:center;top:320px;font:600 40px var(--code);color:${ACC}`, "ORDERS / DAY"), at("H", "orders"));
+      show(el(cc, `left:0;width:900px;text-align:center;top:390px;font:700 100px var(--code)`, "÷ 86,400"), at("H", "to"));
+      show(el(cc, `left:0;width:900px;text-align:center;top:520px;font:600 40px var(--code);color:${ACC}`, "SECONDS / DAY"), at("H", "to") + 0.2);
+      show(el(cc, `left:0;width:900px;text-align:center;top:600px;font:800 130px var(--code);color:${ACC}`, "= ? / SEC"), at("H", "kitne"), { opacity: 0, scale: 0.9 });
+      show(el(cc, "left:50px;right:50px;top:790px;height:80px;border-radius:40px;border:1.5px solid rgba(150,175,215,.4);font:500 34px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 34px", "Add a comment..."), at("H", "Comment"), { opacity: 0, y: 0 });
+      M.fit(H);
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
+      M.finish({ kw: { sawal: "gold", boxes: "cyan", requirements: "cyan", scale: "gold", "1.16": "gold", fresh: "good", dheema: "hot", cache: "cyan", "trade-offs": "gold", "trade-off": "gold", niyam: "hot", number: "gold", server: "cyan", database: "cyan" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

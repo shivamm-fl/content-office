@@ -13,3 +13,4 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 ## Strategist
 
 ## Motion designer
+- 2026-10-19 (s001): new_reel.py gives scene #sA only; add one `<div class="beat" id="sX">` per scene before `check`. `M.W` keys are the caption token without punctuation (`fresh`, not `fresh,`), use the nth argument for repeats. Fade a whole card by collecting its children in an array, or text under the next card overlaps. A 112 s day with 8 scenes held at one new object every 3 to 4 s.

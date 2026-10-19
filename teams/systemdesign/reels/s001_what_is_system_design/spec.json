@@ -1,0 +1,139 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 14.5,
+    "B": 14.5,
+    "C": 25,
+    "D": 4.5,
+    "E": 6,
+    "F": 21,
+    "G": 4.8,
+    "H": 13.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "dip",
+      "A",
+      2,
+      -0.1
+    ],
+    [
+      "err",
+      "A",
+      3,
+      0.5
+    ],
+    [
+      "click",
+      "A",
+      4,
+      1.8
+    ],
+    [
+      "pop",
+      "A",
+      6,
+      0
+    ],
+    [
+      "click",
+      "B",
+      2,
+      0
+    ],
+    [
+      "ok",
+      "B",
+      6,
+      1
+    ],
+    [
+      "ok",
+      "C",
+      2,
+      0.5
+    ],
+    [
+      "ok",
+      "C",
+      2,
+      1.8
+    ],
+    [
+      "dip",
+      "C",
+      8,
+      -0.1
+    ],
+    [
+      "ok",
+      "C",
+      8,
+      0.9
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      2,
+      0
+    ],
+    [
+      "click",
+      "F",
+      4,
+      0
+    ],
+    [
+      "dip",
+      "F",
+      9,
+      -0.1
+    ],
+    [
+      "pop",
+      "G",
+      2,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: एक नया app design करना है, | तुम सबसे पहले क्या करोगे? || सीधा जवाब: | boxes बनाने से पहले सवाल पूछो। || System design यानी system के parts चुनना, | और उन्हें जोड़ना। || 4{four} steps में समझाता हूँ।",
+      "B": "एक food delivery app सोचो। || सीधे boxes बना दिए: | app, server, database। || Server यानी जो app को जवाब दे, | database यानी जहाँ data रखा है। || ये drawing 100{one-hundred} users पर भी वही, | और 10{दस} करोड़ पर भी वही।",
+      "C": "पहला step: requirements और scale। || Requirements यानी app को क्या करना है: | order देना, restaurant का accept करना। || फिर पूछो: | हर second कितनी requests? | Request यानी app का server से एक सवाल। || मान लो एक दिन में 1,00,000{one-lakh} orders हैं। || दिन में 86,400{eighty-six-thousand-four-hundred} seconds होते हैं, | तो average करीब 1.16{one-point-one-six} orders per second। || इसी से पता चलता है कि एक server काफ़ी है या नहीं।",
+      "D": "दूसरा step: high-level design। || अब boxes बनाओ, | पर सिर्फ़ ज़रूरी।",
+      "E": "तीसरा step: हर box की detail। || जैसे database में order: | id, items, status।",
+      "F": "चौथा step: scale और trade-offs। || Trade-off यानी एक चीज़ पाने के लिए दूसरी छोड़ना। || Menu हर बार database से आए: | हमेशा fresh, पर धीमा। || Cache में रखो: | cache यानी तेज़ memory में copy। || तेज़ हो गया, | पर menu कुछ minutes पुराना हो सकता है। || Fast या fresh: | ये पहले step की requirements से तय होता है।",
+      "G": "@emph पर एक बात: | ये 4{four} steps एक commonly taught order हैं, | कोई नियम नहीं।",
+      "H": "@emph याद रखो: | पहले सवाल और number, | फिर boxes, detail, trade-offs। || ऐसे ही रोज़ एक idea के लिए follow करो। || अब तुम बताओ: | एक दिन में 2,00,000{two-lakh} orders हों, | तो average per second कितने? | Comment में लिखो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

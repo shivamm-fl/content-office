@@ -1,0 +1,9 @@
+Day 1/150: Interviewer ne poocha, ek naya app design karna hai, sabse pehle kya karoge? Boxes banane se pehle sawal poochho.
+
+System design matlab system ke parts chunna aur unhe jodna. Ek commonly taught order: requirements aur scale, high-level boxes, har box ki detail, phir trade-offs. Ye koi rule nahi hai, bas ek order jo kaam aata hai.
+
+Example: ek food delivery app par 1,00,000 orders ek din mein, 86,400 seconds ka din, to average 1.16 orders per second. Menu cache se aaye to fast, par kuch minutes purana ho sakta hai. Database se aaye to fresh, par dheema.
+
+Aapke liye sawal: 2,00,000 orders ek din mein hon, to average orders per second kitne? Jawab: 200000 / 86400 = 2.31 per second. Apna jawab comment karo.
+
+#systemdesign #systemdesigninterview #backend
