@@ -8,3 +8,4 @@ Format:
 ## Running
 
 - **2026-10-19 Opener: interviewer_asked on Day 1**: the "Interviewer ne poocha: <question>" opener (best on LearnAI) may hold viewers better here too. Reels: s001. We will know it worked when: skip rate under ~70 % and avg watch over 7 s once the numbers come in. Result: pending (first reel, no baseline).
+- **2026-10-20 Opener: direct_question on Day 2**: an everyday app moment as one short question ("Instagram kholte hi feed kahan se aati hai?") answered in the next line, set against Day 1's interviewer_asked. Reels: s002. We will know it worked when: skip rate and avg watch beat s001's once both numbers are in (two reels, so only a hint). Result: pending.
