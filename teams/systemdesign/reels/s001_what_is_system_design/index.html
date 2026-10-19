@@ -85,7 +85,7 @@
       const at1 = show(el(A, `left:340px;width:620px;text-align:center;top:872px;font:800 92px var(--lat);color:${GOOD};white-space:nowrap`, "ASK FIRST"), at("A", "sawal") - 0.1, { opacity: 0, scale: 0.92 });
       const tA = at("A", "aao") - 0.15;
       [iv.el, me.el, ivl, mel, bub, bq, ab, at1].forEach((d) => gone(d, tA));
-      const nm = ["REQUIREMENTS", "BOXES", "DETAIL", "TRADE-OFFS"];
+      const nm = ["REQUIREMENTS", "DESIGN", "DETAIL", "TRADE-OFFS"];
       const tiles = nm.map((n, i) => M.box(A, { x: 100 + (i % 2) * 450, y: 560 + Math.floor(i / 2) * 310, w: 400, h: 280, label: String(i + 1), sub: n, color: ACC, size: 150, subsize: 40 }));
       tiles.forEach((b, i) => b.show(at("A", "4") + i * 0.16));
       lab(A, 70, 1175, 940, ACC, "4 STEPS", at("A", "steps"), 48);
@@ -137,9 +137,9 @@
       const cSv = M.box(C, { x: 220, y: 1110, w: 640, h: 200, label: "1 SERVER", sub: "ENOUGH ?", subsize: 40, icon: "chip", color: CYAN, size: 42 }); cSv.show(at("C", "server", 1));
       M.fit(C);
 
-      // ===== D: step 2, boxes (only the necessary) =====
+      // ===== D: step 2, design (only the necessary parts) =====
       // diagram: D
-      kick(D, "STEP 2/4 · BOXES", (M.S.D + 0.1));
+      kick(D, "STEP 2/4 · DESIGN", (M.S.D + 0.1));
       const dA = M.box(D, { x: 50, y: 330, w: 290, h: 300, label: "APP", icon: "user", color: CYAN, size: 48 });
       const dS = M.box(D, { x: 395, y: 330, w: 290, h: 300, label: "SERVER", icon: "chip", color: CYAN, size: 48, sub: "1.16 / SEC", subsize: 40 });
       const dD = M.box(D, { x: 740, y: 330, w: 290, h: 300, label: "DATABASE", icon: "db", color: CYAN, size: 40 });
@@ -151,7 +151,7 @@
       const dg1 = M.arrow(D, { from: [470, 630], to: [330, 900], color: "#8592AD", w: 7, dash: true }), dg2 = M.arrow(D, { from: [610, 630], to: [750, 900], color: "#8592AD", w: 7, dash: true });
       dg1.show(at("D", "sirf")); dg2.show(at("D", "sirf") + 0.15);
       const gx = [M.icon(D, "cross", 340, 850, 130, HOT), M.icon(D, "cross", 870, 850, 130, HOT)]; gx[0].show(at("D", "zaruri")); gx[1].show(at("D", "zaruri") + 0.15);
-      lab(D, 60, 1215, 960, GOOD, "ONLY NEEDED", at("D", "zaruri") + 0.2, 56);
+      lab(D, 60, 1215, 960, GOOD, "ONLY NEEDED PARTS", at("D", "zaruri") + 0.2, 56);
       M.fit(D);
 
       // ===== E: step 3, detail of each box =====
@@ -208,7 +208,7 @@
       // ===== G: the catch, a guide and not a rule =====
       // diagram: G
       kick(G, "ONE CATCH", M.S.G);
-      const gn = ["REQUIREMENTS", "BOXES", "DETAIL", "TRADE-OFFS"], gy = [300, 520, 740, 960];
+      const gn = ["REQUIREMENTS", "DESIGN", "DETAIL", "TRADE-OFFS"], gy = [300, 520, 740, 960];
       const gb = gn.map((n, i) => M.box(G, { x: 90, y: gy[i], w: 900, h: 190, label: (i + 1) + "  " + n, color: ACC, size: 60 }));
       gb.forEach((b, i) => b.show(M.S.G + 0.2 + i * 0.15));
       [0, 1, 2].forEach((i) => M.arrow(G, { from: [540, gy[i] + 190], to: [540, gy[i + 1]], color: "#8592AD", w: 8 }).show(M.S.G + 0.45 + i * 0.15, 0.2));
@@ -220,7 +220,7 @@
       // ===== H: recap, follow, your turn =====
       // diagram: H
       kick(H, "REMEMBER", (M.S.H + 0.1));
-      const tl4 = [["ASK", "?", "search", "sawal"], ["NUMBER", "1.16 / SEC", "numbers", "number"], ["BOXES", "+ DETAIL", "db", "boxes"], ["TRADE-OFF", "FRESH / FAST", "bolt", "trade-offs"]];
+      const tl4 = [["ASK", "?", "search", "sawal"], ["NUMBER", "1.16 / SEC", "numbers", "number"], ["DESIGN", "+ DETAIL", "db", "design"], ["TRADE-OFF", "FRESH / FAST", "bolt", "trade-offs"]];
       const hb = tl4.map(([lb, sb, ic], i) => M.box(H, { x: 60 + (i % 2) * 490, y: 320 + Math.floor(i / 2) * 460, w: 470, h: 420, label: lb, sub: sb, icon: ic, color: i % 2 ? ACC : CYAN, size: 56, subsize: 40, isize: 120 }));
       hb.forEach((b, i) => { b.show(M.S.H + 0.2 + i * 0.12); b.glow(at("H", tl4[i][3]), tl4[i][3]); });
       const t3 = at("H", "aise") - 0.1; hb.forEach((b) => b.hide(t3));
@@ -242,7 +242,7 @@
       M.fit(H);
 
       M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
-      M.finish({ kw: { sawal: "gold", boxes: "cyan", requirements: "cyan", scale: "gold", "1.16": "gold", fresh: "good", dheema: "hot", cache: "cyan", "trade-offs": "gold", "trade-off": "gold", niyam: "hot", number: "gold", server: "cyan", database: "cyan" } });
+      M.finish({ kw: { sawal: "gold", design: "cyan", requirements: "cyan", scale: "gold", "1.16": "gold", fresh: "good", dheema: "hot", cache: "cyan", "trade-offs": "gold", "trade-off": "gold", niyam: "hot", number: "gold", server: "cyan", database: "cyan" } });
       window.__timelines["main"] = tl;
     </script>
   </body>
