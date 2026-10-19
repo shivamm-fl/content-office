@@ -47,4 +47,4 @@ Notes:
 - Considered, not added: the insider confession (it needs a credible named person, we are faceless) and the career-stress micro-story (it fits a concept day such as Day 1; use `relatable_stake` there only if the stake is concrete and true).
 - Test the formulas side by side like the types (Rules above); record each result in `state/experiments.md`.
 
-**Value first (owner, 2026-10-19).** A hook may be tuned on our numbers, but it never replaces or delays the teaching: say the question, then go straight to the answer. No detour line (rhetorical question, staged "nahi!") between them.
+**Value first (owner, 2026-10-19).** A hook may be tuned on our numbers, but it never replaces or delays the teaching: say the question, then the very next line teaches (an analogy, an example or the first step; it need not be a finished answer). No filler between them (rhetorical question, staged "nahi!", a warm-up).
