@@ -45,7 +45,7 @@ Words are a range: 2.3 w/s is what `scripts/lint_script.py` measured (165 words 
 1. One idea per sentence, about 14 words or fewer; never two ideas joined by "और" or "जबकि".
 2. Term, pause, decode: say the English term, `|`, then the decode in at most 5 words; reuse the same word every time, no synonyms.
 3. `||` after every step; a number is spoken once and shown on screen at the same instant; at most 3 numbers in any 8 s.
-4. A new object every 4 s and nothing still for more than 8 s: a stretch of speech with no new picture is split or cut. Numbers are spoken in English (`10{ten} लाख`), as in hinglish-script.
+4. A new object every 4 s and nothing still for more than 8 s: a stretch of speech with no new picture is split or cut. Numbers follow the word after them: Hindi before a Hindi word (`10{दस} लाख`), English before an English word (`20{twenty} steps`); formulas are spoken in English; see hinglish-script.
 5. Cut first: history, a second example, a third new term, a second analogy, every sentence the check question does not need, filler ("basically", "actually").
 6. Read it aloud once: where you must breathe inside a sentence, split it. The Roman Hinglish form is what the owner reads on his phone.
 

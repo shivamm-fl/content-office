@@ -60,7 +60,7 @@ chk("WARN", "names the weak baseline or a failure ('लेकिन', 'पर', 
 chk("FAIL", "closing is a comment question", "?" in last, last[-100:])
 chk("WARN", "closing asks for a comment and a follow, not a save (owner 2026-10-15)", bool(re.search(r"(comment|Comment|कमेंट)", last)) and bool(re.search(r"(follow|Follow|फ़ॉलो|फॉलो)", last)) and not re.search(r"(save कर|Save कर|सेव)", last))
 digits = [m for m in re.findall(r"(?<![\w{-])\d[\d.,]*(?![\w}]*\})", re.sub(r"\S+\{[^}]*\}", "", text))]
-chk("FAIL", "numbers are spoken in English (digits without a {spoken} brace)", not digits, ", ".join(digits[:6]))
+chk("FAIL", "every number has a {spoken} form (Hindi before a Hindi word, English before an English word)", not digits, ", ".join(digits[:6]))
 words = len(spoken.split())
 secs = words / 2.3
 chk("WARN", "length 60 to 120 s (about 2.3 words per second)", 55 <= secs <= 120, f"{words} words, about {secs:.0f} s")

@@ -35,14 +35,14 @@
  ],
  "copy": {
   "hi": {
-   "A": "@hook Interviewer ने पूछा: | 10{ten} लाख names में एक name, | 20{twenty} steps में कैसे ढूँढोगे? || जवाब: DSA, यानी Data Structures and Algorithms। || एक-एक name देखा, | तो 10{ten} लाख steps तक लगेंगे। || सही सोच से सिर्फ़ 20{twenty}। || मैं तीन steps में समझाता हूँ।",
-   "B": "पहले गलत तरीका। || Phone में 10{ten} लाख contacts हैं, | और तुम एक-एक name देखते हो। || एक name देखना, यानी एक step। || आख़िरी name हो, | तो पूरे 10{ten} लाख steps।",
+   "A": "@hook Interviewer ने पूछा: | 10{दस} लाख names में एक name, | 20{twenty} steps में कैसे ढूँढोगे? || जवाब: DSA, यानी Data Structures and Algorithms। || एक-एक name देखा, | तो 10{दस} लाख steps तक लगेंगे। || सही सोच से सिर्फ़ 20{twenty} steps। || मैं 3{three} steps में समझाता हूँ।",
+   "B": "पहले गलत तरीका। || Phone में 10{दस} लाख contacts हैं, | और तुम एक-एक name देखते हो। || एक name देखना, यानी एक step। || आख़िरी name हो, | तो पूरे 10{दस} लाख steps।",
    "C": "DSA में दो चीज़ें हैं। || Data structure: | data रखने का तरीका, | जैसे names की sorted list। || Algorithm: | उस data पर चलने वाले steps।",
    "D": "पहला step: names को A से Z तक sorted रखो। | ये तुम्हारा data structure है। || क्योंकि list sorted है, | हमें पता है कौन सा name किस तरफ़ होगा।",
    "E": "दूसरा step: बीच का name देखो, | जैसे dictionary बीच से खोलते हो। || तुम्हारा name पहले आता है, | तो पूरा आधा हिस्सा छोड़ दो। || ये steps तुम्हारा algorithm हैं, | नाम है Binary search।",
-   "F": "तीसरा step: यही बार-बार करो। || मैंने Python में चलाया: | 10{ten} लाख sorted numbers, आख़िरी number ढूँढना। || एक-एक करके 10{ten} लाख comparisons, | halving में सिर्फ़ 20{twenty}।",
-   "G": "@emph पर शर्त है: | list sorted होनी चाहिए। || interview में ये क्यों पूछते हैं? | ये मेरी अपनी सोच है, fact नहीं: | देखना कि data बड़ा होने पर भी तुम्हारे steps चलते हैं या नहीं। || Amazon की अपनी interview prep page भी यही कहती है: | data structures और algorithms सीखकर आओ।",
-   "H": "याद रखो: | data structure यानी data कैसे रखा है, | algorithm यानी उस पर steps। || अब तुम बताओ: | list 40{forty} लाख names की हो जाए, | तो halving में कितने steps लगेंगे? || Comment में लिखो। | ऐसे और DSA ideas के लिए follow करो।"
+   "F": "तीसरा step: यही बार-बार करो। || मैंने Python में चलाया: | 10{दस} लाख sorted numbers, आख़िरी number ढूँढना। || एक-एक करके 10{दस} लाख comparisons, | halving में सिर्फ़ 20{twenty} steps।",
+   "G": "@emph पर शर्त है: | list sorted होनी चाहिए। || interview में ये क्यों पूछते हैं? | क्योंकि data बड़ा होने पर भी तुम्हारे steps चलने चाहिए।",
+   "H": "याद रखो: | data structure यानी data कैसे रखा है, | algorithm यानी उस पर steps। || अब तुम बताओ: | list 40{चालीस} लाख names की हो जाए, | तो halving में कितने steps लगेंगे? || Comment में लिखो। | ऐसे और DSA ideas के लिए follow करो।"
   }
  },
  "hook_type": "interviewer_asked"
