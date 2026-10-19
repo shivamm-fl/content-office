@@ -18,6 +18,25 @@ export interface OfficeReel {
   item: string; title: string; track: string; thread_id: string | null; duration_s: number | null; cover_url: string | null;
   stage: PipelineItem["stage"] | "approved"; detail: string | null;
 }
+/** Where one reel stands, from its newest studio run and its newest final card (the owner's answer to it). A rework that did not pass leaves the
+ * version the owner approved in place: it is still the newest reel anyone approved, so it stays postable and is not hidden as "failed". */
+export function reelStage(
+  run: { status: string; created_at: number; stage?: string | null; summary?: string | null; error?: string | null } | null,
+  ask: { status: string; created_at: number; answer: { decision?: string; notes?: string } | null } | null,
+  active: readonly string[],
+): { stage: OfficeReel["stage"]; detail: string | null } {
+  if (run && active.includes(run.status)) return { stage: "studio", detail: run.status === "queued" ? "waiting for a free studio slot" : run.stage ?? "build" };
+  const decision = ask?.answer?.decision;
+  if (ask && !(run && run.created_at > ask.created_at)) {   // a final approval belongs to the newest studio work
+    if (ask.status === "pending") return { stage: "approval", detail: "waiting for your approval" };
+    if (decision === "approved") return { stage: "approved", detail: null };
+    if (decision === "changes_requested") return { stage: "changes", detail: ask.answer?.notes?.slice(0, 160) ?? null };
+    return { stage: "rejected", detail: null };
+  }
+  const why = (run?.summary ?? run?.error ?? "did not pass the gate").slice(0, 160);
+  if (ask && ask.status !== "pending" && decision === "approved") return { stage: "approved", detail: `a newer rework did not pass (${why}); this is the version you approved` };
+  return { stage: "failed", detail: why };
+}
 export interface CalendarInput {
   team: string; publishing: boolean; now: number; cfg: PostingConfig; status: Record<string, Phase5Entry>;
   office: OfficeReel[]; posts: PostRecord[]; days?: number; note?: string | null;

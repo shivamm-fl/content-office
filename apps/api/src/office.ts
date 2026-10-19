@@ -6,7 +6,7 @@ import type {
   Task, Team, Thread, Usage,
 } from "@office/protocol";
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
-import { buildCalendar, floorOfItem, floorStatus, refusePublish, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
+import { buildCalendar, floorOfItem, floorStatus, refusePublish, reelStage, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
 import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, learningsRepo, publishRepo, readAiCourse, runOutcome, SLOT_TEAM } from "./github";
 import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners, withHeading } from "./learnings";
 import { TEAMS, team as getTeam } from "./teams";
@@ -522,17 +522,8 @@ export class Office extends DurableObject<Env> {
         item: t.item, title: m?.title ?? t.title.replace(/^Build [a-z]\d+:\s*/, ""), track: trackOfItem(t.item), thread_id: t.id,
         duration_s: m?.duration_s ?? null, cover_url: m?.cover_url ?? null,
       };
-      if (run && ACTIVE.includes(run.status)) {
-        out.push({ ...base, stage: "studio", detail: run.status === "queued" ? "waiting for a free studio slot" : run.stage ?? "build" });
-      } else if (ask && !(run && run.created_at > ask.created_at)) {   // a final approval belongs to the newest studio work only
-        const a = ask.answer as { decision?: string; notes?: string } | null;
-        if (ask.status === "pending") out.push({ ...base, stage: "approval", detail: "waiting for your approval" });
-        else if (a?.decision === "approved") out.push({ ...base, stage: "approved", detail: null });
-        else if (a?.decision === "changes_requested") out.push({ ...base, stage: "changes", detail: a.notes?.slice(0, 160) ?? null });
-        else out.push({ ...base, stage: "rejected", detail: null });
-      } else {
-        out.push({ ...base, stage: "failed", detail: (run?.summary ?? run?.error ?? "did not pass the gate").slice(0, 160) });
-      }
+      const { stage, detail } = reelStage(run, ask ? { status: ask.status, created_at: ask.created_at, answer: ask.answer as { decision?: string; notes?: string } | null } : null, ACTIVE);
+      out.push({ ...base, stage, detail });
     }
     return out;
   }

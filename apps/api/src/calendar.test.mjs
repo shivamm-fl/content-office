@@ -1,7 +1,7 @@
 // node --test apps/api/src/calendar.test.mjs   (Node 24 runs the TypeScript module directly)
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildCalendar, canPostNow, floorOfItem, floorStatus, refusePublish, slotStartMs, trackOfItem } from "./calendar.ts";
+import { buildCalendar, canPostNow, floorOfItem, floorStatus, reelStage, refusePublish, slotStartMs, trackOfItem } from "./calendar.ts";
 
 const IST = (date, time) => slotStartMs(date, time);
 const cfg = { slots_ist: ["09:00", "13:00", "17:00"], posts_per_slot: 3, slot_late_min: 150, posting_window_ist: ["07:00", "21:00"], posting_paused: false, post_schedule: [] };
@@ -163,4 +163,42 @@ test("refusePublish: a floor hands over its own reels only; d and s reels are po
   assert.equal(refusePublish({ item: "d001", mode: "now" }, cfg, shared(), IST("2026-10-18", "22:00"), owns("dsa")), null);   // the owner's tap works at any hour
   assert.match(refusePublish({ item: "d002", mode: "now" }, cfg, shared(), now, owns("dsa")), /already posted/);
   assert.equal(refusePublish({ item: "x12", mode: "now" }, cfg, shared(), now, owns("learnai")), null);   // as before for learnai
+});
+
+// ---- where a reel stands: a rework that fails must not hide the version the owner approved ----
+const ACTIVE = ["queued", "starting", "live", "idle", "blocked_limit"];
+const askAt = (created_at, decision, status = "answered") => ({ status, created_at, answer: decision ? { decision, notes: "make the hook shorter" } : null });
+const runAt = (created_at, status, extra = {}) => ({ status, created_at, ...extra });
+
+test("reel stage: a running studio run is 'studio', a queued one says it waits", () => {
+  assert.deepEqual(reelStage(runAt(5, "live", { stage: "render" }), askAt(1, "approved"), ACTIVE), { stage: "studio", detail: "render" });
+  assert.equal(reelStage(runAt(5, "queued"), null, ACTIVE).detail, "waiting for a free studio slot");
+});
+
+test("reel stage: the owner's answer to the newest final card decides while no newer run exists", () => {
+  assert.equal(reelStage(runAt(1, "done"), askAt(2, null, "pending"), ACTIVE).stage, "approval");
+  assert.equal(reelStage(runAt(1, "done"), askAt(2, "approved"), ACTIVE).stage, "approved");
+  assert.equal(reelStage(runAt(1, "done"), askAt(2, "changes_requested"), ACTIVE).stage, "changes");
+  assert.equal(reelStage(runAt(1, "done"), askAt(2, "rejected"), ACTIVE).stage, "rejected");
+});
+
+test("reel stage: a rework that did not pass keeps the approved version postable (q103 and s001 vanished from the Calendar)", () => {
+  const r = reelStage(runAt(9, "done", { summary: "q103 is broken" }), askAt(2, "approved"), ACTIVE);
+  assert.equal(r.stage, "approved");
+  assert.match(r.detail, /newer rework did not pass \(q103 is broken\)/);
+  assert.equal(reelStage(runAt(9, "cancelled"), askAt(2, "approved"), ACTIVE).stage, "approved");
+});
+
+test("reel stage: a failure with no approved version behind it is still 'failed'", () => {
+  assert.deepEqual(reelStage(runAt(9, "done", { summary: "s002 is broken" }), null, ACTIVE), { stage: "failed", detail: "s002 is broken" });
+  assert.equal(reelStage(runAt(9, "done"), askAt(2, "changes_requested"), ACTIVE).stage, "failed");   // the owner asked for changes and the rework failed: nothing was approved
+  assert.equal(reelStage(runAt(9, "done"), askAt(2, null, "pending"), ACTIVE).stage, "failed");
+  assert.equal(reelStage(runAt(9, "error", { error: "boom" }), askAt(2, "rejected"), ACTIVE).detail, "boom");
+});
+
+test("reel stage: an approved reel whose rework failed is in the ready list of the Calendar", () => {
+  const stage = reelStage(runAt(9, "done", { summary: "broken" }), askAt(2, "approved"), ACTIVE);
+  const cal = buildCalendar(input(IST("2026-10-18", "10:00"), { status: {}, office: [{ item: "q103", title: "Q three", track: "interview", thread_id: "t1", duration_s: 70, cover_url: null, ...stage }] }));
+  assert.deepEqual(cal.ready.map((r) => r.item), ["q103"]);
+  assert.equal(cal.pipeline.length, 0);
 });
