@@ -481,6 +481,43 @@
       "studio_note": "FINISHED COMPOSITION, VOICE ONLY (owner, 2026-10-19). The owner approved this reel as a Swara preview and wants it in his own voice. reels/a001_how_a_model_learns already holds the final spec.json (narration and 25 sound cues), script.txt and index.html (all the pictures, placed from the word timings of data.json, so they follow the new voice). Do NOT rewrite the script, do NOT redraw the pictures, do NOT run new_reel.py (the folder exists). Steps: (1) make_voice with the owner's voice (the default). (2) If the total is over 178 s raise spec.json \"pace\" from 1.26 toward 1.32 (at most 1.35) and run make_voice again; never cut words. (3) hyperframes check and snapshots at about 8 times to confirm the pictures still match the voice; only fix a picture if its label lands more than 0.5 s off the spoken word. (4) render_video. (5) render_cover(folder=\"a001_how_a_model_learns\", pill=\"AI\", headline=\"How models <em>actually learn</em>\"): the series cover with DAY 001 / 150. (6) social/a001_how_a_model_learns.hi.caption.txt exists: lint it with .claude/skills/ig-caption/caption.py. (7) studio_gate. Length may run up to 180 s (owner).",
       "status": "planned",
       "qa_passed": false
+    },
+    {
+      "id": "a002",
+      "track": "series",
+      "day": 2,
+      "unit": "A3",
+      "format": "structure",
+      "title": "Train, validation and test: three piles of data",
+      "one_idea": "Data is split into three piles with three jobs: the model learns from train, validation is how we choose between models, and the test pile is opened once at the end, because only data the model has never seen says how it will do on new data.",
+      "hook_type": "direct_question",
+      "spoken_hook": "Train, validation aur test data alag kyun rakhte hain?",
+      "hook_formula": "plain_question",
+      "hook_source": "the plain direct question (9 words), then the exam analogy as the first teaching line, no filler in between (owner's rule 8 of 2026-10-19)",
+      "visual_idea": "A textbook, a mock test and a final exam become three piles; a grid of 1,000 dots is cut into three blocks of true size (70, 15, 15 percent); a model that memorises scores 100 on train and 72 on validation; a second model scores 82 on both and wins on validation; the test pile opens once and shows 79; peeking at the test score and changing the model turns the green pile gold.",
+      "everyday_anchor": "Exam preparation: textbook practice, a mock test, then a final exam with questions you have never seen.",
+      "example": "EXAMPLE (we ran it, Python 3.12 and numpy, seed 36, 1,000 fake points, 700 train, 150 validation, 150 test): model 1 copies the closest training point: train 100 percent, validation 72, test 71. Model 2 averages 151 neighbours (picked by validation among 1, 5, 15, 51, 151): train 82, validation 82, test 79. Median of 200 seeds: 100, 73, 72 and 81, 81, 79. The 1,000 emails are only the story; the script says the data is fake.",
+      "sources": [
+        "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets",
+        "https://scikit-learn.org/stable/modules/cross_validation.html"
+      ],
+      "facts_to_verify": [
+        "Training, validation and test sets and their jobs; repeated use of the test set makes the model fit it (Google ML Crash Course, fetched 2026-10-19). A model that only repeats the labels it has seen scores perfectly and fails on new data; tuning on the test set lets knowledge of it leak into the model (scikit-learn, fetched 2026-10-19). Every accuracy on screen is from the real run printed in docs-notes/pilot-script-day2.md."
+      ],
+      "length_target_s": 146,
+      "cover_headline": "Train, validation, test: three piles of data",
+      "thumb_text": "Train Val Test",
+      "keywords": [
+        "train validation test split",
+        "why test set",
+        "validation set explained",
+        "overfitting basics",
+        "ai engineer roadmap"
+      ],
+      "caption_note": "The answer to the check question is: nahi (put it in the caption).",
+      "studio_note": "FINISHED REEL, DELIVER ONLY (owner, 2026-10-19). The owner approved this reel: video, voice (his own voice on Flash v2.5 at tempo 0.9), cover and caption. The runner restores reels/a002_train_validation_test_hi.mp4, its voice files and the phrase cache before you start. Do NOT rewrite the script, redraw the pictures, run new_reel.py, make_voice, render_video or render_cover: the video is made from exactly these files, and the gate refuses a video whose composition changed without a render. Steps: (1) check that reels/a002_train_validation_test_hi.mp4 is there; (2) lint social/a002_train_validation_test.hi.caption.txt with .claude/skills/ig-caption/caption.py (it passes); (3) studio_gate; (4) a short report. If the video is missing, stop and say so in the report, do not rebuild it.",
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }

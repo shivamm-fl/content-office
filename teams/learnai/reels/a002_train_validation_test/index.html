@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Train, validation and test</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="146" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="146" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="146" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="146" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "150 DAYS OF AI · DAY 2" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+
+      // ============ helpers ============
+      const NSx = "http://www.w3.org/2000/svg";
+      const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NSx, tag); Object.keys(attrs).forEach((k) => e.setAttribute(k, attrs[k])); if (parent) parent.appendChild(e); return e; };
+      const svgLayer = (host) => { const s = svgEl("svg", { viewBox: "0 0 1080 1920" }, host); s.setAttribute("class", "ln"); return s; };
+      const pol = (cx, cy, R, deg) => [cx + R * Math.sin(deg * Math.PI / 180), cy - R * Math.cos(deg * Math.PI / 180)];
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      // a value that changes on the spoken word: one element per state, swapped instantly (seek-safe)
+      const states = (host, css, list) => list.map(([t, html], i) => { const d = el(host, css, html); tl.set(d, { opacity: 0 }, 0); tl.set(d, { opacity: 1 }, t);
+        if (i < list.length - 1) tl.set(d, { opacity: 0 }, list[i + 1][0]); tl.fromTo(d, { y: 10 }, { y: 0, duration: 0.25, ease: "power3.out", immediateRender: false }, t); return d; });
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return o.static ? w : show(w, t, { opacity: 0, y: -14 }); };
+      const labelC = (host, text, y, t, o) => { o = o || {}; const w = el(host, `left:0;top:${y}px;width:1080px;text-align:center;font:${o.weight || 700} ${o.size || 36}px ${o.font || COD};letter-spacing:${o.ls || ".18em"};color:${o.col || MUTED};white-space:nowrap`, text); return show(w, t, { opacity: 0, y: 12 }); };
+
+      // ============ shared pieces of a002 ============
+      const TRN = CYAN, VAL = ACC, TST = GOOD;
+      const sub = (host, text, x, y, w, t, col, size, align) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:${align || "center"};font:800 ${size || 34}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const big = (host, text, x, y, w, t, col, size, align) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:${align || "center"};font:800 ${size || 44}px ${LAT};letter-spacing:.02em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 14 });
+      // 100 emails as a 10 x 10 grid: the first `good` light green (the model was right), the rest red (it was wrong)
+      const grid10 = (host, x, y) => M.dots(host, { cols: 10, rows: 10, x, y, d: 28, gap: 6 });
+      const split100 = (G, t, good) => { const all = [...Array(100).keys()]; G.light(t, all.slice(0, good), GOOD, { each: 0.006, scale: 1 }); if (good < 100) G.light(t + good * 0.006 + 0.1, all.slice(good), HOT, { each: 0.012, scale: 1 }); };
+
+      // ============ A: the exam analogy, then the three piles of data ============
+      // diagram: A
+      M.hook(["Train, validation", "aur test: alag kyun?"], { size: 104, top: 220 });
+      const aCards = [[60, "book", "TEXTBOOK", TRN, 0.05], [390, "clock", "MOCK TEST", VAL, 0.2], [720, "doc", "FINAL EXAM", TST, 0.35]]
+        .map(([x, ic, lab, col, t]) => { const b = M.box(A, { x, y: 560, w: 300, h: 410, label: lab, icon: ic, color: col, size: 40, isize: 130 }); b.show(t); return b; });
+      const aSubs = [sub(A, "PRACTICE", 60, 990, 300, at("A", "textbook"), TRN), sub(A, "CHECK", 390, 990, 300, at("A", "mock"), VAL), sub(A, "NEW QUESTIONS", 640, 990, 460, at("A", "questions", 1), TST)];
+      aCards[0].glow(at("A", "textbook")); aCards[1].glow(at("A", "mock")); aCards[2].glow(at("A", "final"));
+      const tOld = at("A", "AI") - 0.15;
+      aCards.forEach((c) => c.hide(tOld)); aSubs.forEach((s) => gone(s, tOld));
+      const aM = M.box(A, { x: 390, y: 560, w: 300, h: 240, label: "AI MODEL", icon: "model", color: CYAN, size: 40 }); aM.show(at("A", "AI"));
+      const aT = [[60, "book", "TRAIN", TRN], [390, "clock", "VALIDATION", VAL], [720, "doc", "TEST", TST]].map(([x, ic, lab, col], i) => {
+        const ar = M.arrow(A, { from: [540, 800], to: [x + 150, 955], color: col, w: 8 }); ar.show(at("A", "3") + i * 0.28, 0.4);
+        const b = M.box(A, { x, y: 960, w: 300, h: 300, label: lab, icon: ic, color: col, size: lab.length > 6 ? 34 : 40, isize: 110 }); b.show(at("A", "3") + 0.3 + i * 0.28); return b; });
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: 1,000 emails in three piles (true proportions: 70, 15, 15 percent) ============
+      // diagram: B
+      pillC(B, "EXAMPLE DATA", 230, P("B", 0), { size: 32, h: 52, col: MUTED });
+      const GX = 80, GY = 440, GC = 40, GR = 25;
+      const D1 = M.dots(B, { cols: GC, rows: GR, x: GX, y: GY, d: 16, gap: 7 });
+      D1.pop(at("B", "1000"), { each: 0.0012 });
+      const idx = { tr: [], va: [], te: [] };
+      for (let r = 0; r < GR; r++) for (let c = 0; c < GC; c++) (c < 28 ? idx.tr : c < 34 ? idx.va : idx.te).push(r * GC + c);
+      const spamPill = pillC(B, "SPAM / NOT SPAM", 340, at("B", "spam"), { size: 32, h: 54, col: CYAN }); gone(spamPill, at("B", "inhen") - 0.1);
+      D1.light(at("B", "training"), idx.tr, TRN, { each: 0.0007, scale: 1 });
+      big(B, "TRAIN · 700", 80, 1040, 644, at("B", "700"), TRN, 44);
+      sub(B, "LEARNS", 80, 1095, 644, at("B", "seekhta"), MUTED, 34);
+      D1.light(at("B", "validation"), idx.va, VAL, { each: 0.003, scale: 1 });
+      big(B, "VALIDATION · 150", 573, 385, 440, at("B", "150"), VAL, 40);
+      sub(B, "CHECKS WEAK SPOTS", 553, 340, 480, at("B", "kamzor"), MUTED, 30);
+      D1.light(at("B", "test", 1), idx.te, TST, { each: 0.003, scale: 1 });
+      big(B, "TEST · 150", 700, 1040, 320, at("B", "150", 1), TST, 44, "right");
+      sub(B, "FINAL EXAM", 700, 1095, 320, at("B", "final"), MUTED, 34, "right");
+      const lockB = M.icon(B, "lock", 910, 1150, 100, TST); lockB.show(at("B", "sirf"));
+      sub(B, "OPEN ONCE", 560, 1180, 330, at("B", "baar"), TST, 36, "right");
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: model 1 memorises: 100 percent on train, 72 percent on validation ============
+      // diagram: C
+      pillC(C, "FAKE DATA", 230, at("C", "nakli"), { size: 34, h: 56, col: MUTED });
+      const m1 = M.box(C, { x: 60, y: 330, w: 460, h: 190, label: "MODEL 1", icon: "book", color: CYAN, size: 42 }); m1.show(at("C", "do"));
+      const m2 = M.box(C, { x: 560, y: 330, w: 460, h: 190, label: "MODEL 2", icon: "model", color: VAL, size: 42 }); m2.show(at("C", "models") + 0.2);
+      m1.glow(at("C", "pahla"));
+      sub(C, "MEMORISES", 60, 535, 460, at("C", "rat"), HOT, 36);
+      tl.to(m2.parts, { opacity: 0.25, duration: 0.4, immediateRender: false }, at("C", "Training") - 0.2);
+      big(C, "TRAIN", 100, 625, 340, at("C", "Training"), TRN, 42);
+      const cT = grid10(C, 100, 690); cT.pop(at("C", "Training") + 0.1, { each: 0.004 });
+      split100(cT, at("C", "100"), 100);
+      M.count(C, 100, at("C", "100"), { x: 100, y: 1045, w: 340, size: 130, suffix: "%", dur: 0.8, color: GOOD });
+      gone(sub(C, "OUT OF 100", 100, 1190, 340, at("C", "sau"), MUTED, 34), at("C", "isilie") - 0.1);
+      big(C, "VALIDATION", 640, 625, 340, at("C", "validation"), VAL, 40);
+      const cV = grid10(C, 640, 690); cV.pop(at("C", "validation") + 0.1, { each: 0.004 });
+      split100(cV, at("C", "72"), 72);
+      M.count(C, 72, at("C", "72"), { x: 640, y: 1045, w: 340, size: 130, suffix: "%", dur: 0.9, color: HOT, from: 100 });
+      const cross1 = M.icon(C, "cross", 170, 1040, 200, HOT); cross1.show(at("C", "bharose"));
+      pillC(C, "MEMORISED NOT LEARNED", 1250, at("C", "rat", 1), { size: 32, h: 54, col: HOT });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: model 2 holds up, and validation is how we choose ============
+      // diagram: D
+      const dEls = [];
+      const d2 = M.box(D, { x: 290, y: 230, w: 500, h: 190, label: "MODEL 2", icon: "model", color: VAL, size: 42 }); d2.show(at("D", "doosra"));
+      dEls.push(...d2.parts);
+      dEls.push(sub(D, "FINDS THE PATTERN", 190, 440, 700, at("D", "pattern"), VAL, 36));
+      dEls.push(big(D, "TRAIN", 100, 560, 340, at("D", "Training"), TRN, 42));
+      const dT = grid10(D, 100, 625); dT.pop(at("D", "Training") + 0.1, { each: 0.004 });
+      split100(dT, at("D", "82"), 82);
+      dEls.push(dT.el, M.count(D, 82, at("D", "82"), { x: 100, y: 980, w: 340, size: 130, suffix: "%", dur: 0.8, color: CYAN }));
+      dEls.push(big(D, "VALIDATION", 640, 560, 340, at("D", "validation"), VAL, 40));
+      const dV = grid10(D, 640, 625); dV.pop(at("D", "validation") + 0.1, { each: 0.004 });
+      split100(dV, at("D", "82", 1), 82);
+      dEls.push(dV.el, M.count(D, 82, at("D", "82", 1), { x: 640, y: 980, w: 340, size: 130, suffix: "%", dur: 0.8, color: CYAN }));
+      dEls.push(show(el(D, `left:440px;top:800px;width:200px;text-align:center;font:800 150px ${COD};color:${ACC};line-height:1`, "="), at("D", "donon"), { opacity: 0, scale: 0.8 }));
+      dEls.push(pillC(D, "HOLDS UP ON NEW DATA", 1150, at("D", "tikta") - 0.3, { size: 32, h: 54, col: GOOD }));
+      const tPick = at("D", "validation", 1) - 0.1;
+      dEls.forEach((x) => gone(x, tPick));
+      big(D, "VALIDATION SCORE", 60, 270, 960, at("D", "validation", 1), VAL, 48);
+      const pk1 = M.box(D, { x: 60, y: 380, w: 460, h: 420, label: "72%", sub: "MODEL 1", color: HOT, size: 150, subsize: 40 }); pk1.show(at("D", "models", 1));
+      const pk2 = M.box(D, { x: 560, y: 380, w: 460, h: 420, label: "82%", sub: "MODEL 2", color: GOOD, size: 150, subsize: 40 }); pk2.show(at("D", "models", 1) + 0.25);
+      pillC(D, "WHICH ONE?", 860, at("D", "kaun"), { size: 36, h: 58, col: ACC });
+      tl.to(pk1.parts, { opacity: 0.3, duration: 0.4, immediateRender: false }, at("D", "chuna"));
+      pk2.glow(at("D", "chuna"));
+      const ck = M.icon(D, "check", 900, 690, 90, GOOD); ck.show(at("D", "chuna") + 0.1);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: the test pile is opened once: 79 percent ============
+      // diagram: E
+      pillC(E, "FINAL EXAM", 230, at("E", "final"), { size: 36, h: 58, col: TST });
+      const eP = M.dots(E, { cols: 15, rows: 10, x: 277, y: 330, d: 26, gap: 9 }); eP.pop(at("E", "final") + 0.1, { each: 0.004 });
+      const lockE = M.icon(E, "lock", 470, 435, 140, TST); lockE.show(at("E", "final") + 0.2); lockE.hide(at("E", "data") - 0.2);
+      eP.light(at("E", "data") - 0.1, [...Array(150).keys()], TST, { each: 0.004, scale: 1 });
+      big(E, "150 EMAILS", 140, 700, 800, at("E", "150"), TST, 40);
+      const unEls = [];
+      [[100, "TRAIN", TRN, at("E", "training")], [600, "VALIDATION", VAL, at("E", "validation")]].forEach(([x, lab, col, t]) => {
+        const c = el(E, `left:${x}px;top:770px;width:380px;height:90px;border-radius:24px;border:2.5px solid ${ca(col, 0.8)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:flex-start;padding-left:34px;font:800 36px ${COD};letter-spacing:.04em;color:${col}`, lab);
+        show(c, t, { opacity: 0, y: 20 }); const xi = M.icon(E, "cross", x + 304, 782, 66, HOT); xi.show(t + 0.25); unEls.push(c, xi.el); });
+      unEls.push(pillC(E, "NEVER SEEN", 880, at("E", "mein", 1) + 0.3, { size: 34, h: 56, col: TST }));
+      const tAcc = at("E", "Test") - 0.1;
+      unEls.forEach((x) => gone(x, tAcc));
+      big(E, "TEST ACCURACY", 140, 760, 800, at("E", "accuracy"), MUTED, 40);
+      M.count(E, 79, at("E", "79"), { x: 140, y: 810, w: 800, size: 290, suffix: "%", dur: 1.0, color: GOOD });
+      M.mark(E, { x: 340, y: 1110, w: 400 }, at("E", "yahi"), { h: 10, color: ACC });
+      pillC(E, "EXPECT THIS", 1135, at("E", "number"), { size: 34, h: 56, col: ACC });
+      const old100 = el(E, `left:300px;top:1215px;width:480px;height:80px;border-radius:22px;border:2px solid ${ca(MUTED, 0.6)};background:${ca(MUTED, 0.10)};display:flex;align-items:center;justify-content:center;font:700 40px ${COD};letter-spacing:.04em;color:${MUTED}`, "TRAIN 100%");
+      show(old100, at("E", "100"), { opacity: 0, y: 14 });
+      const x100 = M.icon(E, "cross", 650, 1212, 84, HOT); x100.show(at("E", "nahi", 1) - 0.1);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: peek at the test score, change the model, and the test is not a test any more ============
+      // diagram: F
+      const fN = [[345, 300, "TEST SCORE", GOOD, "eye", at("F", "test")], [60, 780, "CHANGE MODEL", ACC, "gear", at("F", "badal")], [630, 780, "TEST AGAIN", GOOD, "doc", at("F", "phir")]]
+        .map(([x, y, lab, col, ic, t]) => { const b = M.box(F, { x, y, w: 390, h: 220, label: lab, icon: ic, color: col, size: 38 }); b.show(t); return b; });
+      const fA = [M.arrow(F, { from: [645, 520], to: [440, 770], color: MUTED, w: 8 }), M.arrow(F, { from: [450, 890], to: [620, 890], color: MUTED, w: 8 }), M.arrow(F, { from: [835, 770], to: [740, 520], color: MUTED, w: 8 })];
+      fA[0].show(at("F", "badal") - 0.35, 0.35); fA[1].show(at("F", "phir") - 0.3, 0.3); fA[2].show(at("F", "jaancha") + 0.1, 0.35);
+      const tCut = at("F", "to") - 0.05;
+      fN.forEach((b) => b.hide(tCut)); fA.forEach((a) => a.hide(tCut));
+      const fP = M.dots(F, { cols: 15, rows: 10, x: 315, y: 400, d: 22, gap: 8 }); fP.pop(tCut + 0.1, { each: 0.003 });
+      fP.light(tCut + 0.2, [...Array(150).keys()], GOOD, { each: 0.002, scale: 1 });
+      const lab1 = big(F, "TEST", 140, 740, 800, tCut + 0.2, GOOD, 56);
+      const crossF = M.icon(F, "cross", 760, 720, 110, HOT); crossF.show(at("F", "nahi"));
+      fP.light(at("F", "validation"), [...Array(150).keys()], ACC, { each: 0.002, scale: 1 });
+      gone(lab1, at("F", "validation") - 0.05);
+      const lab2 = big(F, "NOW IT IS VALIDATION", 60, 830, 960, at("F", "validation"), ACC, 46);
+      const tPaper = at("F", "paper") - 0.2;
+      [fP.el, crossF.el, lab2].forEach((x) => gone(x, tPaper));
+      const pp1 = M.box(F, { x: 60, y: 560, w: 290, h: 260, label: "PAPER SEEN", icon: "doc", color: CYAN, size: 34 }); pp1.show(at("F", "paper"));
+      const pp2 = M.box(F, { x: 395, y: 560, w: 290, h: 260, label: "HIGH MARKS", icon: "star", color: GOOD, size: 34 }); pp2.show(at("F", "marks"));
+      const pp3 = M.box(F, { x: 730, y: 560, w: 290, h: 260, label: "NOT REAL", icon: "cross", color: HOT, size: 34 }); pp3.show(at("F", "asli"));
+      M.arrow(F, { from: [355, 690], to: [390, 690], color: MUTED, w: 6 }).show(at("F", "marks") - 0.25, 0.25);
+      M.arrow(F, { from: [690, 690], to: [725, 690], color: MUTED, w: 6 }).show(at("F", "asli") - 0.25, 0.25);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: the three jobs in one picture ============
+      // diagram: G
+      [[260, "TRAIN", "MODEL LEARNS", TRN, "book", at("G", "training")], [505, "VALIDATION", "PICKS THE MODEL", VAL, "clock", at("G", "validation")], [750, "TEST", "CHECKS ONCE", TST, "doc", at("G", "test")]]
+        .forEach(([y, lab, sb, col, ic, t]) => { const b = M.box(G, { x: 100, y, w: 880, h: 215, label: lab, sub: sb, icon: ic, color: col, size: 52, subsize: 34, isize: 70 }); b.show(t); });
+      M.arrow(G, { from: [540, 970], to: [540, 1050], color: TST, w: 8 }).show(at("G", "naye") - 0.3, 0.35);
+      const gN = M.box(G, { x: 290, y: 1060, w: 500, h: 210, label: "NEW DATA", sub: "HOW WELL?", icon: "globe", color: TST, size: 44, subsize: 34 }); gN.show(at("G", "naye"));
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: check yourself, comment, follow ============
+      // diagram: H
+      pillC(H, "CHECK YOURSELF", 240, at("H", "batao") - 0.1, { size: 34, h: 56 });
+      [[60, "TEST SCORE", "eye", GOOD, at("H", "test")], [400, "CHANGE MODEL", "gear", ACC, at("H", "badal")], [740, "TRUST IT?", "shield", CYAN, at("H", "bharosa")]]
+        .forEach(([x, lab, ic, col, t]) => { const b = M.box(H, { x, y: 340, w: 280, h: 230, label: lab, icon: ic, color: col, size: 32 }); b.show(t); });
+      M.arrow(H, { from: [345, 455], to: [395, 455], color: MUTED, w: 6 }).show(at("H", "badal") - 0.25, 0.25);
+      M.arrow(H, { from: [685, 455], to: [735, 455], color: MUTED, w: 6 }).show(at("H", "bharosa") - 0.25, 0.25);
+      const yes = M.box(H, { x: 160, y: 650, w: 340, h: 150, label: "YES", color: GOOD, size: 64 }); yes.show(at("H", "haan"));
+      const no = M.box(H, { x: 580, y: 650, w: 340, h: 150, label: "NO", color: HOT, size: 64 }); no.show(at("H", "nahi"));
+      const cm = el(H, "left:120px;top:880px;width:840px;height:84px"); show(cm, at("H", "comment"), { opacity: 0, y: 30 });
+      el(cm, `left:0;top:0;width:840px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.4);background:${ca(PANEL, 0.9)};font:500 34px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 36px`, "Add a comment...");
+      const hc = el(H, "left:120px;top:1030px;width:840px;height:138px"); glass(hc, 0, 0, 840, 138, ACC, 28); show(hc, P("H", 4), { opacity: 0, y: 40 });
+      el(hc, `left:40px;top:22px;font:700 46px ${COD};color:${TEXT}`, "@ai.learnvora");
+      show(el(hc, `left:40px;top:86px;font:700 28px ${COD};letter-spacing:.08em;color:${ACC}`, "150 DAYS OF AI"), at("H", "AI"), { opacity: 0, y: 8 }, 0.3);
+      const fp = el(hc, `left:540px;top:31px;width:260px;height:76px;border-radius:38px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 36px ${COD};letter-spacing:.08em`, "+ FOLLOW");
+      tl.to(fp, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("H", "follow")); tl.to(fp, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("H", "follow") + 0.12);
+      M.fit(H, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
+      M.finish({ kw: { train: "cyan", training: "cyan", validation: "gold", test: "good", accuracy: "gold", rat: "hot", ratta: "hot", pattern: "good", "100": "hot", "72": "hot", "82": "good", "79": "good", baar: "gold", paper: "hot", asli: "hot", follow: "gold", comment: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

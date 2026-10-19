@@ -1,0 +1,9 @@
+Train, validation aur test data kya hote hain? Alag kyun rakhte hain
+
+Model ko data ke teen alag hisson (train, validation, test) mein baantna isliye zaroori hai, kyunki sirf wo data jo model ne pehle kabhi nahi dekha, bata sakta hai ki model naye data par kitna chalega. Is video mein 1,000 emails ka example hai (700 train, 150 validation, 150 test, example numbers): ek model jo train data rat leta hai (train par 100%, validation par 72%), aur ek jo pattern pakadta hai (82% dono par, test par 79%). Ye numbers ek chhote nakli data par chalaye gaye run ke hain. Phir wo galti jisme test ka score dekhkar model badal diya jata hai, aur test, test nahi rehta.
+
+Is video mein: training data, validation data, test data, accuracy, aur test ko sirf ek baar kholne ka rule. Check yourself ka jawab: nahi.
+
+Sources:
+https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets
+https://scikit-learn.org/stable/modules/cross_validation.html

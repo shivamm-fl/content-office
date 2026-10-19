@@ -1,0 +1,18 @@
+Day 2/150: Train, validation aur test data alag kyun rakhte hain?
+
+Jaise tum exam ki taiyari karte ho: textbook se practice, mock test se kamzori ki jaanch, aur final exam mein aise questions jo tumne pehle kabhi nahi dekhe. AI model ka data bhi aise hi 3 piles mein baanta jata hai.
+
+Example: 1,000 emails (spam ya nahi), 700 train, 150 validation, 150 test.
+Train: model isi se seekhta hai.
+Validation: isse hum jaanchte hain ki model kahan kamzor hai aur do models mein se kaun sa chunna hai.
+Test: final exam, sirf ek baar kholte hain.
+
+Chhote nakli data par do models chalaye. Jo model train data rat leta hai, uska accuracy train par 100%, validation par 72%. Jo sirf pattern pakadta hai, uska accuracy train aur validation dono par 82%, aur test par 79%. Training ka score bharose layak nahi hota, test ka number hota hai.
+
+Agar test ka score dekhkar model badal diya, to test ab test nahi raha, wo bhi validation ban gaya.
+
+Check yourself: test ka score dekhkar model badal do, to kya test score par bharosa kar sakte ho? Haan ya nahi, comment mein likho.
+
+Jawab: nahi.
+
+#AI #MachineLearning #150DaysOfAI

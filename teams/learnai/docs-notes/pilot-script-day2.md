@@ -1,78 +1,62 @@
-# Pilot script, Day 2: AI engineer, ML engineer, data scientist: who does what (draft for the owner, not wired into any queue)
+# Day 2: Train, validation and test (the owner approved the finished reel; AI floor, id a002)
 
-Floor: LearnAI, to become ai.learnvora (`learnai`) | day type: `trade-off` | working id: a002 (the prefix `a` is a pending proposal) | hook_type: `interviewer_asked`
-Built to `docs-notes/teaching-flow.md`. Length: **272 spoken words** (braces resolved, `lint_script.py` counting) = about **101 s at 2.7 w/s** and about **115 s at the 2.36 w/s that lint_script measured** (165 words = 70 s). If the owner's voice runs at the lint rate this is at the top of the 120 s limit, so the cut-first list in section 8 (21 words, about 9 s) is ready.
-Draft roadmap Day 2 (S1 Start here). Stand-alone: no "kal", no "part", no tease, no pointer to another reel. The food app, the 10,000 tickets and the 4,000 are EXAMPLE numbers. It follows the `trade-off` sheet of teaching-flow with three options instead of two (the three roles are the three steps).
+Floor: LearnAI (`learnai`, @ai.learnvora) | day type: `structure` | id: a002 (track `series`, Day 2 of 150) | hook_type: `direct_question`
+Status (2026-10-19): the owner watched the finished reel (video, voice, cover) and approved it ("achha bana hai"). The composition is in `reels/a002_train_validation_test/`, the voice is the owner's own on ElevenLabs **Flash v2.5 at `owner_tempo` 0.9** (his decision of the same day: Flash from now on for new reels, the same tempo), the cover is `brand/covers/a002_train_validation_test.png`, the caption and YouTube text are in `social/`. The queue entry carries a `studio_note`: the studio only delivers it (the runner restores the video and the voice from `office-learnai-a002-archive`), nothing is rebuilt. This file replaces the earlier Day 2 draft, which was about the roles of an AI engineer (those four opening days were removed from the roadmap on 2026-10-19).
+The owner's one edit of the draft: "mota pattern" became "pattern" in scene D.
 
-## 1. Hook (first line at most 10 words, up to 16 for interviewer_asked; spoken from frame 0)
-- Chosen: `Interviewer ने पूछा: data scientist, ML engineer, AI engineer, तीनों में फ़र्क क्या है?` (interviewer_asked).
-- Alternate 2: `AI engineer और ML engineer में फ़र्क क्या है?` (direct_question, 9 words).
-- Alternate 3: `10,000 tickets, एक boss: AI से कुछ बनाओ। किसे बुलाओगे?` (relatable_stake; the numbers are EXAMPLE).
+## Length
+394 spoken words (braces dropped, `lint_script.py` counting). Real run: **146.0 s** (scene starts A 0.0, B 18.7, C 47.5, D 73.9, E 94.9, F 109.8, G 123.2, H 132.5). 56 phrases, 2,053 characters sent to ElevenLabs once (about $0.08 at Flash prices); every phrase is cached, so a new tempo or a re-render costs nothing. `lint_script.py`: VERDICT OK (0 FAIL); its WARN about the weak-baseline word is a word match, the length WARN is about 171 s at the lint's 2.3 words per second (the real reel is 146 s).
 
-## 2. The script the owner reads (Roman Hinglish, one line per beat group)
-1. "Interviewer ne poocha: data scientist, ML engineer, AI engineer, teeno mein fark kya hai? Ek aasaan jawab hai: teeno ek hi hain, bas naam alag. Ye galat hai, teen steps mein dikhata hoon."
-2. "Maan lo ek food app ko har mahine 10,000 support tickets milte hain. Teeno us par kaam karenge, par teen alag cheezein banakar denge: ek chart, ek model service, aur ek chatbot."
-3. "Pehla, data scientist. Input: data, yaani wahi 10,000 tickets. Output: insight. Jaise 4,000 tickets ek hi sawal pooch rahe hain: order kahan hai? Kyunki kuch banane se pehle, dikkat pehchanni padti hai. BLS ke mutabik, ye data se insight nikalte hain."
-4. "Doosra, ML engineer. Input: ek model, yaani data se seekha hua program. Inka kaam use production mein chalana hai, yaani asli users ke saamne. Google Cloud ke role mein deploy, monitor, retrain sab hai, kyunki model banakar chhoda nahi jaata."
-5. "Teesra, AI engineer. Latent Space ke essay ke mutabik, ye model train nahi karte. Bana-banaya model, API yaani darwaze se bulate hain. Input: wahi model aur order ka data. Output: chatbot jo bataye, order kahan hai."
-6. "Par lakeerein dhundhli hain: usi essay ke mutabik, AI engineer kabhi-kabhi model ko apne data se thoda aur sikha bhi sakta hai. Isliye title nahi, kaam padho: insight banana hai, model chalana hai, ya product banana hai?"
-7. "Yaad rakho: data scientist insight deta hai, ML engineer model ko production mein chalata hai, AI engineer bane-banaye model par product banata hai. Roz ek idea: follow karo. Ab tum batao: tickets padhkar pata karna ki sabse zyada shikayat kis cheez ki hai, ye teeno mein se kiska kaam hai? Comment mein likho." 
-
-## 3. Narration source (Hindi in Devanagari, English in Roman; `|` clause, `||` thought, spoken numbers in braces)
+## The script (narration source)
 ```
-A: @hook Interviewer ने पूछा: | data scientist, ML engineer, AI engineer, | तीनों में फ़र्क क्या है? || एक आसान जवाब है: | तीनों एक ही हैं, बस नाम अलग। || ये गलत है, | तीन steps में दिखाता हूँ।
-B: @emph मान लो एक food app को हर महीने 10,000{ten-thousand} support tickets मिलते हैं। || तीनों उस पर काम करेंगे, | पर तीन अलग चीज़ें बनाकर देंगे: | एक chart, एक model service, और एक chatbot।
-C: पहला, data scientist। | Input: data, यानी वही 10,000{ten-thousand} tickets। || Output: insight। | जैसे 4,000{four-thousand} tickets एक ही सवाल पूछ रहे हैं: order कहाँ है? || क्योंकि कुछ बनाने से पहले, दिक्कत पहचाननी पड़ती है। || BLS{बी-एल-एस} के मुताबिक, ये data से insight निकालते हैं।
-D: दूसरा, ML engineer। | Input: एक model, यानी data से सीखा हुआ program। || इनका काम उसे production में चलाना है, | यानी असली users के सामने। || Google Cloud के role में deploy, monitor, retrain सब है, | क्योंकि model बनाकर छोड़ा नहीं जाता।
-E: तीसरा, AI engineer। | Latent Space के essay के मुताबिक, ये model train नहीं करते। || बना-बनाया model, API यानी दरवाज़े से बुलाते हैं। || Input: वही model और order का data। || Output: chatbot जो बताए, order कहाँ है।
-F: @emph पर लकीरें धुँधली हैं: | उसी essay के मुताबिक, AI engineer कभी-कभी model को अपने data से थोड़ा और सिखा भी सकता है। || इसलिए title नहीं, काम पढ़ो: | insight बनाना है, model चलाना है, या product बनाना है?
-G: याद रखो: | data scientist insight देता है, | ML engineer model को production में चलाता है, | AI engineer बने-बनाए model पर product बनाता है। || रोज़ एक idea: follow करो। || अब तुम बताओ: | tickets पढ़कर पता करना कि सबसे ज़्यादा शिकायत किस चीज़ की है, | ये तीनों में से किसका काम है? | Comment में लिखो।
+A: @hook Train, validation और test data अलग क्यों रखते हैं? || जैसे तुम exam की तैयारी करते हो: | textbook के questions से practice, | mock test से अपनी कमज़ोरी की जाँच, | और final exam में ऐसे questions, जो तुमने पहले कभी नहीं देखे। || AI model भी data को ऐसे ही 3{तीन} हिस्सों में बाँटकर सीखता है।
+B: मान लो हमारे पास 1,000{one-thousand} emails हैं, | हर email पर लिखा है: spam है या नहीं। || इन्हें हम 3{three} piles में बाँटते हैं। || पहला: training data, 700{seven-hundred} emails। | model इन्हीं से सीखता है, textbook की तरह। || दूसरा: validation data, 150{one-hundred-fifty} emails। | इन पर हम जाँचते हैं कि model कहाँ कमज़ोर है, mock test की तरह। || तीसरा: test data, 150{one-hundred-fifty} emails। | ये final exam है, | इसे सबसे आखिर में, सिर्फ़ एक बार खोलते हैं।
+C: अब मैंने ऐसा ही एक छोटा नकली data बनाकर, | दो models चलाए। || पहला model training data को रट लेता है। || Training पर उसका accuracy निकला 100{hundred} percent। | Accuracy यानी सौ में से कितनी बार model सही निकला। || पर validation data पर, | जो उसने पहले कभी नहीं देखा, | accuracy गिरकर 72{seventy-two} percent रह गई। || मतलब उसने सीखा नहीं, सिर्फ़ रट लिया था। | इसीलिए training का score भरोसे लायक नहीं होता।
+D: दूसरा model रटता नहीं, | सिर्फ़ pattern पकड़ता है। || Training पर उसका accuracy 82{eighty-two} percent है, | और validation पर भी 82{eighty-two} percent। || दोनों बराबर, | यानी ये model नए data पर भी टिकता है। || यही validation का काम है: | दो models में से कौन सा चुनना है, ये validation के score से तय होता है। | इसलिए हमने दूसरा चुना।
+E: अब final exam, यानी test data। || ये 150{one-hundred-fifty} emails न training में थे, न validation में। || Test पर accuracy आई 79{seventy-nine} percent। || नए data पर यही number मिलने की उम्मीद रखो, | training वाला 100{hundred} percent नहीं।
+F: @emph अगर test का score देखकर तुमने model बदल दिया, | और test पर फिर जाँचा, | तो test अब test नहीं रहा, | वो भी एक validation बन गया। || जैसे paper पहले देखकर तैयारी करना: | marks अच्छे आएँगे, पर असली नहीं होंगे।
+G: तो याद रखो: | training से model सीखता है, | validation से हम model चुनते हैं, | और test से सिर्फ़ एक बार जाँचते हैं, कि वो नए data पर कितना चलेगा।
+H: अब तुम बताओ: | test का score देखकर model बदल दो, | तो क्या test score पर भरोसा कर सकते हो? | हाँ या नहीं, comment में लिखो। || और रोज़ एक नया AI idea समझने के लिए, | follow कर लो।
 ```
+Numbers follow the owner's rule (the word after a number decides its language): `3{तीन} हिस्सों`, `3{three} piles`, `700 emails`, `72 percent` are English before English words. The 1,000 emails and the 700, 150, 150 split are the story (EXAMPLE pill on screen); scene C says the data is fake ("नकली data"). The 70/15/15 split is the one the Google ML Crash Course calls a much better split than 80/20; the script no longer says so, the picture shows the true proportions.
+Beats: the answer to the question in the hook is the whole reel (three piles, three jobs), the analogy is the first teaching line (no filler after the hook), the failure of the naive way comes in scene C (a memorising model scores 100 and drops to 72), the catch is scene F (peeking turns the test into a validation), the recap is G, the check question H (answer: nahi, in the caption).
 
-## 4. Beat table (seconds at 2.7 w/s from the word count of each beat)
-| # | seconds | says | the picture that moves | on-screen label (1 to 3 words) |
-|---|---|---|---|---|
-| 1 |    0 to   12 (33 w) | Interview question; the easy answer ("all the same") is called wrong; 3 steps promised | An INTERVIEW QUESTION chip; three role chips (data scientist, ML engineer, AI engineer) with an equals sign between them that gets crossed out | INTERVIEW QUESTION / 3 ROLES |
-| 2 |   12 to   24 (32 w) | One example: 10,000 tickets a month; the three roles hand back three different things | A pile of 10,000 ticket cards (EXAMPLE pill); three arrows lead to a bar chart, a model box and a chat bubble | 10,000 TICKETS / EXAMPLE / 3 OUTPUTS |
-| 3 |   24 to   39 (41 w) | Step 1, data scientist: input data, output an insight (4,000 tickets ask where the order is); why: find the problem first; source BLS | The ticket pile feeds a bar chart; the bar order kahan hai grows to 4,000 (EXAMPLE) and lights up; a source tag | STEP 1/3 / DATA SCIENTIST / OUTPUT: INSIGHT |
-| 4 |   39 to   54 (40 w) | Step 2, ML engineer: input a model (learned from data); the job is running it in production, with deploy, monitor, retrain; source Google Cloud | A small model box moves onto a stage in front of user dots; three loop arrows (deploy, monitor, retrain) circle it; a source tag | STEP 2/3 / ML ENGINEER / OUTPUT: MODEL SERVICE |
-| 5 |   54 to   67 (36 w) | Step 3, AI engineer: does not train a model; calls a ready-made one through an API; input model plus order data, output a chatbot; source Latent Space essay | A ready-made model box sits behind a door marked API; the order data goes in, a chat bubble comes out; a source tag | STEP 3/3 / AI ENGINEER / OUTPUT: PRODUCT |
-| 6 |   67 to   81 (37 w) | Catch: the lines are fuzzy (an AI engineer may also fine-tune), so read the work, not the title | The three boxes overlap with dashed borders; the AI engineer box leans into the model box; three chips: insight, model, product | FUZZY LINES / READ THE WORK |
-| 7 |   81 to   91 (28 w) | One-line recap, then the follow line | A 3-row card: insight, model in production, product on a ready-made model | REMEMBER |
-| 8 |   91 to  101 (25 w) | Check yourself: who reads the tickets to find the top complaint? | Question card: ticket pile, a ? over the three role chips, 2 s hold; the answer is not shown | CHECK YOURSELF |
-Total 101 s at 2.7 w/s. The `STEP n/3` kicker appears only when step 1 starts, never in the first 10 s. Look: clean-reel (flat navy and gold, one new object per beat, the running example stays on screen). Labels are English or Roman Hinglish, never the spoken sentence.
+## Pictures (a002 composition, header `150 DAYS OF AI · DAY 2`, cyan = train, gold = validation, green = test, red = a miss)
+A hook with the three exam cards under it from frame 0 (textbook, mock test, final exam) then AI MODEL with three arrows to TRAIN, VALIDATION, TEST. B a 40 x 25 grid of 1,000 dots cut into 28, 6 and 6 columns (true 70, 15, 15 percent) with their labels and a lock on the test block. C two 10 x 10 grids of 100 emails: all green with 100 percent, then 72 green and 28 red with the counter falling from 100 to 72, a red cross on the 100. D the second model's two grids (82 and 82, an equals sign), then the validation scores 72 against 82 and a ring and a check on model 2. E the locked 150-dot pile opens, never-seen chips, the counter to 79 percent, EXPECT THIS. F the loop test score, change model, test again, the green pile turning gold (NOW IT IS VALIDATION), then the paper seen first. G three job cards and NEW DATA. H the check question (test score, change model, trust it, YES and NO), the comment bar and the handle card with FOLLOW. 30 sound cues in `spec.json`.
 
-## 5. Caption (ig-caption linter: READY)
+## Caption (ig-caption linter: all PASS)
+See `social/a002_train_validation_test.hi.caption.txt` (starts `Day 2/150:`, the answer to the check question is in it).
+
+## What was run (real output) and sources
+Python 3.12, numpy 1.26: 1,000 points in two overlapping clouds (label 0 or 1, centres at plus and minus 0.6), split 700, 150, 150 by a seeded shuffle. Model 1 copies the label of the closest training point (k = 1). Model 2 averages the labels of the k nearest training points; k is picked among 1, 5, 15, 51, 151 by the validation accuracy. The test pile is looked at once.
 ```
-Day 2/150: Data scientist, ML engineer aur AI engineer mein asli fark kya hai?
-
-Teeno ka input ek hi ho sakta hai, par nateeja alag hota hai. Ek food app ke 10,000 support tickets ka example (example numbers, asli nahi):
-Data scientist: data se insight, jaise 4,000 tickets ek hi sawal pooch rahe hain
-ML engineer: model ko production mein chalana, deploy, monitor, retrain
-AI engineer: bana-banaya model API se bulakar product banana, jaise chatbot
-
-Lakeerein dhundhli hain, isliye job title nahi, kaam padho. AI engineer vs ML engineer ka fark samajhne ke liye yeh ek simple map hai.
-
-Check yourself: 10,000 tickets padhkar pata karna ki sabse zyada shikayat kis cheez ki hai, yeh teeno mein se kiska kaam hai? Comment mein jawab likho.
-
-Jawab: data scientist.
-
-#AI #AIEngineer #MLEngineer
+seed 36   k=1: train 1.000  validation 0.720  test 0.713  |  picked k=151: train 0.816  validation 0.820  test 0.793
+median of 200 seeds   k=1: 1.000, 0.727, 0.723  |  validation-picked: 0.808, 0.813, 0.793   (k=1 was never picked)
 ```
-The part under the "... more" cut carries the answer, so the check-yourself question can be marked by the viewer.
-
-## 6. Sources (all fetched with WebFetch on 2026-10-18)
-- https://www.bls.gov/ooh/math/data-scientists.htm (data scientists use analytical tools and techniques to extract insights from data; they create, validate and test models)
-- https://cloud.google.com/learn/certification/machine-learning-engineer (the ML engineer role: builds, evaluates, productionizes and optimizes AI solutions; training, retraining, deploying, tuning, monitoring)
-- https://www.latent.space/p/ai-engineer (an essay that names the AI engineer: builds on existing models through APIs, can succeed without training a model, may still fine-tune; an opinion piece, so the script says "ke mutabik")
-- The food app, 10,000 tickets and 4,000 are EXAMPLE numbers. Role titles overlap between companies; the script says so in the catch beat.
-
-## 7. What was run (real output is what the script says)
-No code on this day (nothing to run). All three role descriptions come from the fetched pages above; the ticket counts are invented and carry the EXAMPLE pill.
-
-## 8. Checks
-- `python -I scripts/lint_script.py` of this floor, on the narration above as a spec (hook_type set): **VERDICT OK**, 18 checks ok, 0 FAIL. WARN: length 60 to 100 s (about 2.3 words per second)  [272 words, about 118 s]. The WARN is the lint's length window.
-- Shape against teaching-flow: the mechanism steps are 43 percent of the words (aim about 40), the catch starts at 67 percent (aim 70 to 80; the frames show 70 to 77), 3 numbered steps with the `STEP n/3` kicker starting at step 1, a new object about every 4 s in the beat table (nothing still for more than 8 s).
-- Detail checklist (teaching-flow section c): terms defined: data scientist, ML engineer, AI engineer (3 roles), plus model, production and API each decoded in a few words. Running example: 10,000 tickets (EXAMPLE). Naive way first: beat 2 ("all the same" fails because the outputs differ). WHY per step: step 1 "kyunki kuch banane se pehle dikkat pehchanni padti hai", step 2 "kyunki model banakar chhoda nahi jaata", step 3 the essay's "train nahi karte". Catch: fuzzy lines (beat 6). Consequence: read the work, not the title. Recap and one check question (answer: the data scientist, in the caption). Stand-alone.
-- Cut first if the take runs past 115 s: "kyunki kuch banane se pehle dikkat pehchanni padti hai" (9 words), "Input: wahi model aur order ka data" (7) and the follow line (5, end card instead).
-- Unsure: (1) The "naive way fails" beat is weaker than on the other floors: it fails by showing three different outputs, not by a number; I judged an invented timeline (months vs days) would be a false claim. (2) The Latent Space essay is one influential opinion, not a standard; the script attributes it, and the owner may prefer a second source for the AI engineer role. (3) The `a` id prefix and the floor name `ai.learnvora` are the owner's pending proposal; the floor has no series-style.md yet.
+The reel uses seed 36 (rounded: 100, 72 | 82, 82, 79); it is the seed closest to the median of the 200. The code (run as is, it prints the median over 200 seeds and the five seeds closest to it):
+```python
+import numpy as np, json, sys
+def run(seed, sep=0.6):
+    rng = np.random.default_rng(seed); n = 1000
+    y = rng.integers(0, 2, n)
+    X = rng.normal(0, 1, (n, 2)) + np.where(y[:, None] == 1, sep, -sep)
+    idx = rng.permutation(n); tr, va, te = idx[:700], idx[700:850], idx[850:]
+    d = lambda Q: ((Q[:, None, :] - X[tr][None, :, :]) ** 2).sum(-1)
+    order = {name: np.argsort(d(X[ids]), axis=1) for name, ids in (("tr", tr), ("va", va), ("te", te))}
+    ids = {"tr": tr, "va": va, "te": te}
+    def acc(name, k):
+        nn = order[name][:, :k]; pred = (y[tr][nn].mean(1) > 0.5).astype(int); return float((pred == y[ids[name]]).mean())
+    return {k: (acc("tr", k), acc("va", k), acc("te", k)) for k in (1, 5, 15, 51, 151)}
+res = {s: run(s) for s in range(200)}
+def pick(r): return max(r, key=lambda k: r[k][1])
+rows = []
+for s, r in res.items():
+    b = pick(r); rows.append((s, r[1][0], r[1][1], r[1][2], b, r[b][0], r[b][1], r[b][2]))
+a = np.array([[x[1], x[2], x[3], x[5], x[6], x[7]] for x in rows])
+print("median over 200 seeds: k=1 train %.3f val %.3f test %.3f | validation-picked train %.3f val %.3f test %.3f" % tuple(np.median(a, axis=0)))
+print("picked k counts:", {k: sum(1 for x in rows if x[4] == k) for k in (1, 5, 15, 51, 151)})
+med = np.median(a, axis=0)
+best = sorted(rows, key=lambda x: sum(abs(np.array([x[1], x[2], x[3], x[5], x[6], x[7]]) - med)))[:5]
+for x in best: print("seed %d  k=1: train %.3f val %.3f test %.3f | picked k=%d: train %.3f val %.3f test %.3f" % x)
+```
+Sources (fetched 2026-10-19): https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets (training set the model learns from, validation set for the initial testing while developing, test set to double-check; using the same test set again and again makes the model fit its peculiarities), https://scikit-learn.org/stable/modules/cross_validation.html (a model that only repeats the labels it has seen scores perfectly and fails on new data; tuning on the test set lets knowledge of it leak into the model, so a validation set is held out). Nothing is quoted in the voice.
