@@ -17,7 +17,7 @@ A slate: for each item the id (next free id from 101 per track, never an ai-cour
 When the owner approved the slate (the Producer tells you), write the items into `state/queue.json` with status `planned`, add them to `state/covered.json` and run `python scripts/validate_queue.py` until it prints ok.
 
 ## Judgement
-- Interview: rotate hook types (the least used among the last six q## items in ai-course's covered.json).
-- Generic: tools, skills, repos, productivity (CLAUDE.md rule 14), never news.
-- Course: follow the roadmap order unless the numbers say a unit performs badly.
+- Interview: the questions come from `roadmap/interview-series-draft.json` in order, two a day; rotate hook types (the least used among the last six q## items; the two reels of a day use two different types).
+- Series: the next day of `roadmap/series-150-draft.json`, one a day.
+- Generic and course are retired for now (owner, 2026-10-19): plan nothing for them.
 - Say in one line per item why it should work, based on our own numbers when they exist.
