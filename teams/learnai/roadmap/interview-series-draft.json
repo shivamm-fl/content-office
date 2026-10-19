@@ -29,7 +29,7 @@
       "arc": "How the model answers",
       "unit": "C3",
       "title": "Interview: Few-shot examples dene se model kab behtar hota hai, kab nahi?",
-      "trap": "Adding examples blindly: a wrong or skewed example is copied as faithfully as a good one.",
+      "trap": "Adding examples blindly: they teach the answer format and the label options, but all examples of one label or an unlucky order can pull the answer, and every example costs tokens on every request.",
       "status": "todo"
     },
     {
