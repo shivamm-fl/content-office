@@ -1,0 +1,13 @@
+Interviewer ne pucha: AI app ne galat jawab diya, to galti kahan hui, kaise pata lagaoge?
+
+Galti: sirf aakhiri jawab dekhna. Langfuse ke docs ke hisaab se trace ek request ki poori life ka record hai: LLM calls, retrieval steps aur tool executions, timing, input aur output ke saath.
+1. Har request ka ek trace banao
+2. Har step ka input, output, timing aur token usage rakho, courier tracking jaisa
+3. Galat jawab ka trace kholo aur pehla galat step dhundho
+Example: refund chatbot ne 30 din bola, trace mein dikha ki search ne purana policy page uthaya. Tab prompt badalna bekar tha.
+
+Tum sabse pehle kya dekhoge: search, prompt ya tool? Comment mein ek word likho.
+
+Follow karo aise aur AI engineer interview sawalon ke liye.
+
+#aiengineer #llm #interviewprep

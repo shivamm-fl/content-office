@@ -1,0 +1,5 @@
+AI app ka galat jawab: trace se step dhundho | AI Engineer Interview
+Interviewer pooche ki AI app ne galat jawab diya to galti kahan hui, kaise pata karoge? Sirf aakhiri jawab dekhne se wajah nahi dikhti. Langfuse ke docs ke hisaab se trace ek request ki poori life record karta hai: LLM calls, retrieval steps aur tool executions, timing, input, output aur metadata ke saath. Is reel mein 3 steps: har request ka trace, har step ka input/output/timing/token usage, aur galat jawab ke trace mein pehla galat step. 30 din aur purana policy page sirf ek example hai.
+
+Sources:
+https://langfuse.com/docs/observability/overview
