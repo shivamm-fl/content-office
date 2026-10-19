@@ -39,4 +39,4 @@ A script written by another tool is not a source. Rule 1 applies to every claim.
 12. Say WHY, not only what: the cause of the behaviour in one clause (floating point and batching; similar training context).
 13. Use the interview vocabulary untouched: logits, greedy decoding, nucleus sampling, dense vector embeddings, cosine similarity, structured JSON, tool_calls.
 14. The closing is a comment question the viewer can answer in one word or a number, then a follow line with value (owner 2026-10-15: no save line; it was overused). This replaces the odd/even share-or-save test.
-15. Length is allowed up to 120 s (voice pace 1.3, single pauses; 1.5 was too fast, owner 2026-10-14). Depth beats brevity; but every number and claim still needs a fetched source (the owner's tool invents some, such as "ninety percent candidates"; check each one).
+15. Length is allowed up to 180 s (voice pace 1.3, single pauses; 1.5 was too fast, owner 2026-10-14). Depth beats brevity; but every number and claim still needs a fetched source (the owner's tool invents some, such as "ninety percent candidates"; check each one).

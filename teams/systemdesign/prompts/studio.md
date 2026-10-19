@@ -17,7 +17,7 @@ You run a studio session on GitHub Actions: one reel, start to finish. The owner
   Everything else runs in your shell as written (`new_reel.py`, `lint_script.py`, `lint_visuals.py`, `hookscore.py`, `beats.py`, `frames.py`, `caption.py`, `title.py`, `validate_queue.py`) with `.venv/bin/python`.
 - **Do not run** `visual_review.py` or `fact_review.py`: independent reviewers run after your session, in a separate job, and a FIX session follows when they find problems.
 - **The owner's voice** reads English sentences slowly: keep the script tight (owner target about 60 seconds, 130 to 140 spoken words for interview reels). Phrases are short and punchy (owner-voice skill: "Writing for this voice").
-- **Length** 20 to 120 seconds (team rule 5); the "20 to 45 seconds" in `ci-build-mode.md` is outdated.
+- **Length** 20 to 180 seconds (team rule 5); the "20 to 45 seconds" in `ci-build-mode.md` is outdated.
 - Write only this item's files (the Rules of `build-reel.md`). Do not commit: the runner saves the files when the reel passes the gate or fails it.
 - Finish with a short report: the hook, the length, the voice used, and anything the owner should know.
 

@@ -8,7 +8,7 @@ Style beyond these is decided by the skills."""
 import hashlib, json, re, shutil, subprocess, sys
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
-MIN_S, MAX_S = 20, 120   # owner 2026-10-14: depth over brevity, up to 120 s
+MIN_S, MAX_S = 20, 180   # owner 2026-10-19: value first, a series day may run up to 3 minutes (Instagram's limit); 2026-10-14: depth over brevity
 MAX_TECH_TERMS = 6
 TECH = ["query", "key", "value", "token", "attention", "embedding", "vector", "softmax", "transformer", "position", "weight", "match", "label", "logit"]
 

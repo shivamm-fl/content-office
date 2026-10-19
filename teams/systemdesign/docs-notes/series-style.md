@@ -7,12 +7,12 @@ The owner runs a 150-day series on each Learnvora handle: one idea per day, Day 
 - **Id = day.** Day N is `s` + N in three digits. The roadmap is the plan; skipping a day needs the owner.
 - **One idea, a picture first.** Visuals are diagrams that move (`docs-notes/diagram-first-visuals.md`); on-screen text is a label of one to three words. Code, when shown, is large (mono, at least 40 px), at most 8 lines, with the line being discussed highlighted.
 - **Hinglish voice, English screen.** Narration in natural spoken Hinglish, English technical terms untouched; cover and labels in clean English.
-- **Length** 30 to 120 seconds; teaching days (every day that explains a mechanism) run 90 to 120 (owner, 2026-10-18), clarity beats brevity, and the day type sets the shape. How a teaching day is built (beat sheet, detail checklist, pacing, when to split a day): `docs-notes/teaching-flow.md`.
+- **Length** 30 to 180 seconds; teaching days (every day that explains a mechanism) run as long as the teaching needs, 90 to 180 (owner, 2026-10-19: 2:30 to 3:00 is fine; value first, crystal clear, a human teacher's flow; never padded, never rushed), clarity beats brevity, and the day type sets the shape. How a teaching day is built (beat sheet, detail checklist, pacing, when to split a day): `docs-notes/teaching-flow.md`.
 - **Reference accounts teach format only** (CLAUDE.md rule 15). Never copy another account's slide copy, wording, mascot, colours or layout. The standard teaching order of the subject is not theirs; follow it.
 - A real company's design is told only as far as its own engineering post says (named on screen as `Source: <site>`). Anything else is "a typical design", labelled. Numbers (QPS, storage, latency) are either from a fetched page or marked EXAMPLE with the arithmetic shown.
 
 ## The day types (`format` in the roadmap and the queue item)
-| format | what the day is | arc of a teaching day, 90 to 120 s (seconds are a guide; every arc ends on a check-yourself question) |
+| format | what the day is | arc of a teaching day, 90 to 180 s (seconds are a guide; every arc ends on a check-yourself question) |
 |---|---|---|
 | `concept` | an idea every design uses (latency vs throughput, CAP, consistency) | hook and promise 10 s, the naive way crossed out, with its number 14 s, answer, definition and analogy 12 s, the mechanism in 3 to 5 steps on one running example 44 s, the catch or misconception 12 s, what it changes for you 6 s, recap, check and follow 12 s (110 s) |
 | `component` | one building block (load balancer, cache, queue, CDN, database index) | what breaks without it, with a number 12 s, where it sits between the boxes (diagram built box by box) 20 s, how it works, one request traced in 3 to 5 steps 40 s, the knob that matters 10 s, the catch: when it hurts 14 s, recap and check 10 s (106 s) |

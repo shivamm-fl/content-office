@@ -7,12 +7,12 @@ The owner runs a 150-day series on each Learnvora handle: one idea per day, Day 
 - **Id = day.** Day N is `d` + N in three digits. The roadmap is the plan; skipping a day needs the owner.
 - **One idea, a picture first.** Visuals are diagrams that move (`docs-notes/diagram-first-visuals.md`); on-screen text is a label of one to three words. Code, when shown, is large (mono, at least 40 px), at most 8 lines, with the line being discussed highlighted.
 - **Hinglish voice, English screen.** Narration in natural spoken Hinglish, English technical terms untouched; cover and labels in clean English.
-- **Length** 30 to 120 seconds; teaching days (every day that explains a mechanism) run 90 to 120 (owner, 2026-10-18), clarity beats brevity, and the day type sets the shape. How a teaching day is built (beat sheet, detail checklist, pacing, when to split a day): `docs-notes/teaching-flow.md`.
+- **Length** 30 to 180 seconds; teaching days (every day that explains a mechanism) run as long as the teaching needs, 90 to 180 (owner, 2026-10-19: 2:30 to 3:00 is fine; value first, crystal clear, a human teacher's flow; never padded, never rushed), clarity beats brevity, and the day type sets the shape. How a teaching day is built (beat sheet, detail checklist, pacing, when to split a day): `docs-notes/teaching-flow.md`.
 - **Reference accounts teach format only** (CLAUDE.md rule 15). Never copy another account's slide copy, wording, mascot, colours or layout. The standard teaching order of the subject is not theirs; follow it.
 - Problems are paraphrased from the original problem page (named in `sources`), never copied; solutions are written fresh. Every snippet shown is run first and the screen shows its real output. Python is the default language; the cost is always stated (time and space).
 
 ## The day types (`format` in the roadmap and the queue item)
-| format | what the day is | arc of a teaching day, 90 to 120 s (seconds are a guide; every arc ends on a check-yourself question) |
+| format | what the day is | arc of a teaching day, 90 to 180 s (seconds are a guide; every arc ends on a check-yourself question) |
 |---|---|---|
 | `concept` | an idea that every later day uses (Big-O, recursion, binary search) | hook and promise 10 s, the naive way crossed out, with its number 14 s, answer, definition and analogy 12 s, the mechanism in 3 to 5 steps on one running example 44 s, the catch or misconception 12 s, what it changes for you 6 s, recap, check and follow 12 s (110 s) |
 | `structure` | how a data structure really works inside (array memory, hash map, heap) | the surprise and the promise 10 s, the naive container crossed out, with its cost 12 s, the picture of its memory built box by box 20 s, how it works in 3 to 5 steps 30 s, the cost table (access, search, insert) with real counts 14 s, when not to use it or the misconception 12 s, recap and check 8 s (106 s) |

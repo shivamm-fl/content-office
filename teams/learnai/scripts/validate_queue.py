@@ -1,6 +1,6 @@
 """Validate state/queue.json (written by the daily planner).  python scripts/validate_queue.py   -> exit 0 ok, 1 problems.
 Checks what the builder and the poster depend on: track and id prefix, a source for every claim, cover and thumbnail text in clean English within their word limits,
-length 20-120 s (CLAUDE.md rule 5), and that the planner did not approve anything (qa_passed stays false until the owner releases it)."""
+length 20-180 s (CLAUDE.md rule 5), and that the planner did not approve anything (qa_passed stays false until the owner releases it)."""
 import json, re, sys
 from pathlib import Path
 
@@ -45,8 +45,8 @@ for it in items:
     if rid in seen:
         problems.append(f"{rid}: duplicate id")
     seen.add(rid)
-    if not (20 <= float(it.get("length_target_s") or 0) <= 120):
-        problems.append(f"{rid}: length_target_s must be between 20 and 120")
+    if not (20 <= float(it.get("length_target_s") or 0) <= 180):
+        problems.append(f"{rid}: length_target_s must be between 20 and 180")
     # hook-writer (owner decisions 2026-10-15 and 2026-10-16): the hook has a type; each type has its own form and none is banned
     ht = it.get("hook_type")
     sh = str(it.get("spoken_hook", ""))
