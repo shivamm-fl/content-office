@@ -40,6 +40,64 @@
       "caption_note": "Answer to the check question: 22 steps (40 lakh names), put it in the caption.",
       "status": "planned",
       "qa_passed": false
+    },
+    {
+      "id": "d002",
+      "track": "series",
+      "day": 2,
+      "unit": "P1",
+      "format": "concept",
+      "title": "Big-O: steps ka growth, seconds nahi",
+      "one_idea": "Big-O says how the number of steps grows when the input grows: one-by-one search grows in step with the data (10 lakh to 20 lakh names is 10 lakh to 20 lakh steps), halving adds one step, checking every pair quadruples when data doubles.",
+      "hook_type": "surprising_fact",
+      "spoken_hook": "10{दस} लाख names search करने हैं।",
+      "hook_formula": "double_data_one_step",
+      "hook_source": "owner-written script 2026-10-19; kept as written (lint hook check FAIL is a heuristic, owner wording wins)",
+      "hook_10s": "10{दस} लाख names search करने हैं। एक method को लगेंगे 10{दस} लाख steps, और दूसरे को सिर्फ़ 20{बीस}! Same problem, इतना बड़ा difference?",
+      "hook_candidates": [
+        {
+          "hook": "Data दोगुना करो, search में बस एक step बढ़ता है।",
+          "formula": "surprising_fact: double_data_one_step"
+        },
+        {
+          "hook": "तुम्हारा code slow है, या तुम्हारा approach?",
+          "formula": "relatable_stake: slow_code_blame"
+        },
+        {
+          "hook": "Interviewer ने पूछा: इस code की time complexity क्या है?",
+          "formula": "interviewer_asked: complexity_question"
+        }
+      ],
+      "visual_idea": "Two rows of name tiles side by side, then each row doubles in length: the one-by-one row's step counter doubles (10 lakh to 20 lakh) while the halving row's counter moves 20 to 21; a third row of pair-lines between every two tiles grows to four times as many lines when the row doubles; chips BIG-O, O(n), O(log n), O(n squared) land on the counters when named.",
+      "everyday_anchor": "Finding one contact among your saved numbers: scrolling one by one gets twice as long when you save twice as many contacts, while opening the sorted list in the middle adds only one more look.",
+      "example": "EXAMPLE (researcher ran it, counts not seconds): worst case, one-by-one search 1,000,000 and 2,000,000 steps for n = 10 lakh and 20 lakh; halving 20 and 21 steps (target last); pairs check 499,500 steps at n = 1,000 and 1,999,000 at n = 2,000 (about 4 times). 40 lakh names: halving 22.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Big_O_notation",
+        "https://en.wikipedia.org/wiki/Binary_search",
+        "https://wiki.python.org/moin/TimeComplexity"
+      ],
+      "facts_to_verify": [
+        "Run all counts again and show the real printed output on screen (1000000 and 2000000 linear; 20 and 21 halving, target last; 499500 and 1999000 pairs).",
+        "Wikipedia Big O notation: growth rates as the variable becomes large; an upper bound on growth; constant factors and lower-order terms omitted. 'Steps, not seconds' is our own framing of growth of steps, not a quote; do not attribute it to the source.",
+        "Python wiki: x in list is O(n) average; x in set is O(1) average (worst case O(n)); never say always O(1).",
+        "Halving needs a SORTED list; say it on screen. It takes at most floor(log2 n)+1 steps; say 'about 20' or name the target-last case.",
+        "Seconds differ per machine (0.022 s was one run on a runner): do NOT put a time on screen as a fact."
+      ],
+      "length_target_s": 120,
+      "cover_headline": "Big-O explained in plain words",
+      "thumb_text": "Big-O simple",
+      "keywords": [
+        "big o notation in hindi",
+        "time complexity kya hai",
+        "big o explained simply",
+        "time complexity for coding interview",
+        "o(n) o(log n) kya hai",
+        "dsa time complexity hinglish"
+      ],
+      "script_notes": "Numbers in Devanagari words (owner d001): 10{दस} लाख, 20{बीस}, 21{इक्कीस}. No 'wrong way first' announcement: the one-by-one search appears inside the story ('मान लो 10 लाख names हैं'). Nothing between hook and first teaching line (no rhetorical question). Terms: Big-O, O(n), O(log n); O(n squared) only in the catch beat. Header tag carries the day counter: DSA 002/150. Catch beat (about 75 percent): small inputs hide it (10 names: 45 vs 10 steps, both instant), Big-O is about growth when data gets big, constant factors dropped. OWNER WROTE THIS SCRIPT: keep wording; shorten only by deleting whole lines.",
+      "caption_note": "Day 2/150 caption. Answer to the check question: the list grows from 20 lakh to 40 lakh names, how many steps does halving take? 22 (target last). One-by-one takes 40 lakh.",
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }

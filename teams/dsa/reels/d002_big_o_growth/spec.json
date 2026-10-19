@@ -1,0 +1,44 @@
+{
+  "tts": "edge",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 6.0
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Data दोगुना हो, | तो क्या search के steps भी दोगुने होंगे? || कभी हाँ, | और कभी बस 1{one} step बढ़ता है। || मान लो phone में 10{दस} लाख contacts हैं। | तुम एक-एक करके name ढूँढते हो। || आख़िरी name हो, | तो 10{दस} लाख steps लगेंगे। || contacts 20{बीस} लाख हो गए, | तो steps भी 20{बीस} लाख।",
+      "B": "यही फ़र्क़ नापने का तरीका है Big-O। || Big-O यानी: | data बड़ा होने पर steps कितनी तेज़ी से बढ़ते हैं। || हम seconds नहीं गिनते, | क्योंकि seconds हर machine पर अलग आते हैं। | Steps हर जगह वही रहते हैं। || इसे 3{three} steps में समझाता हूँ।",
+      "C": "पहला step: एक-एक करके ढूँढना। || data दोगुना, | तो steps भी दोगुने। | इसे लिखते हैं O(n)। || n यानी data का size, | और O(n) यानी steps data के साथ सीधे बढ़ते हैं।",
+      "D": "दूसरा step: list sorted हो, | तो बीच से खोलो। || जिस तरफ़ name नहीं है, | वो पूरा आधा हिस्सा छोड़ दो। || मैंने Python में चलाया: | 10{दस} लाख names में 20{twenty} steps। || 20{बीस} लाख names हुए, | तो 21{twenty-one} steps। | बस एक step बढ़ा।",
+      "E": "इसे लिखते हैं O(log n)। || log n यानी data को कितनी बार आधा कर सकते हो। || और ये तभी चलता है, | जब list sorted हो।",
+      "F": "तीसरा step: हर name को बाकी हर name से मिलाना, | जैसे duplicate ढूँढने में। || मान लो 1000{एक-हज़ार} names हैं, | तो क़रीब 5{पाँच} लाख checks। || data दोगुना, 2000{दो-हज़ार} names, | तो क़रीब 20{बीस} लाख checks। | यानी 4{चार} गुना। || इसे लिखते हैं O(n squared)।",
+      "G": "@emph अब एक बात। | 10{ten} names पर इन तीनों में फ़र्क़ नहीं दिखता, | सब instant चलते हैं। || Big-O इसलिए है, | कि data बड़ा होने पर क्या होगा, ये पहले पता चल जाए।",
+      "H": "याद रखो: | O(n) data के साथ बढ़ता है, | O(log n) में बस एक step बढ़ता है, | O(n squared) चार गुना। || अब तुम बताओ: | names 40{चालीस} लाख हो जाएँ, | तो halving में कितने steps लगेंगे? || Comment में लिखो। | ऐसे और DSA ideas के लिए follow करो।"
+    }
+  },
+  "hook_type": "surprising_fact"
+}

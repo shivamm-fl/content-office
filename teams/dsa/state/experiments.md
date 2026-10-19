@@ -7,3 +7,4 @@ Format:
 
 ## Running
 - **2026-10-19 interviewer_asked opener on DSA**: opening with "Interviewer ne poocha: <question with a number>" gives lower skip rate than other openers (LearnAI: 69.7% vs 73.8-79.5%). Reels: d001. We will know it worked when: skip rate under 70% and avg watch above 7 s once the first reels have numbers (needs 3+ reels to compare). Result: pending.
+- **2026-10-19 surprising_fact opener vs interviewer_asked (side by side)**: a number-led surprise ("Data dugna karo, search mein bas ek step badhta hai") holds viewers at least as well as d001's interviewer question, because it gives the payoff in the first line and teaches at once. Reels: d002 (against d001). We will know it worked when: skip rate and avg watch of d002 versus d001 once both have numbers (two reels are a hint, not proof; keep rotating hook types before judging). Result: pending.
