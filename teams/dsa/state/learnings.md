@@ -11,3 +11,4 @@ No rules yet. The first two weeks are a baseline.
 
 ## Owner corrections (recorded automatically)
 - 2026-10-19 (d001): Say numbers in the spoken Hinglish in Hindi words ("दस लाख", "बीस", "चालीस लाख"), never half English like "ten lakh"; use a Devanagari brace such as 10{दस}. Do not open a teaching scene by announcing "the wrong way first"; put the example inside the story ("मान लो ... है").
+- 2026-10-19 (d001): The header tag inside every reel video carries the day counter, for example "DSA 001/150" (DSA, the day number padded to three digits, then / 150), not just "DSA". Set it in the tag option of Mo.init.
