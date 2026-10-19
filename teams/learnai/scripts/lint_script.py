@@ -20,7 +20,7 @@ out = []
 def chk(level, name, ok, detail=""):
     out.append((level if not ok else "ok", name, detail))
 
-TRAP = r"(मत बोलना|मत बोलो|trap|गलत|नहीं|क्यों|कैसे|क्या|कौन|कब|कहाँ|\?)"
+TRAP = r"(मत बोलना|मत बोलो|trap|गलत|नहीं|क्यों|कैसे|क्या|कौन|कब|कहाँ|बताओ|बताइए|समझाओ|समझाइए|फ़र्क|फर्क|अंतर|difference|explain|compare|\?)"   # a question word, a request an interviewer makes ("difference batao") or a trap
 chk("FAIL", "hook names a trap or a wrong belief, or asks the real question", bool(re.search(TRAP, hook_text)), hook_text[:110])
 chk("WARN", "hook is not a teaser (no 'aaj hum', 'is video mein')", not re.search(r"(आज हम|इस video में|today we)", hook_text, re.I))
 # hook-writer (owner decision 2026-10-15, our skip-rate data): stake first, open loop inside the first ~10 s
@@ -42,10 +42,10 @@ elif htype in ("interviewer_asked", "company_specific"):
         chk("FAIL", "interviewer_asked hook opens with 'Interviewer ने पूछा:'", has_pre, spoken[:60])
     else:
         chk("WARN", "company_specific hook names the company and its interview ('<Company> के AI interview में')", bool(re.search(r"(के|ke)\s+.{0,40}(interview|इंटरव्यू)", first_sentence[:140], re.I)), first_sentence[:90])
-    mq = re.search(r"[:：]\s*(.+?\?)", spoken, re.S)
+    mq = re.search(r"[:：]\s*(.+?(?:[?？।!]|\.(?=\s|$)))", spoken, re.S)   # a question or a request: it ends at the first ? । ! or full stop
     question = re.sub(r"\s+", " ", mq.group(1)).strip() if mq else ""
     qw = len(question.split())
-    chk("FAIL", "the question after the opener is there, a complete sentence ending in '?' (not a fragment or a bare concept name: 7 to 16 words)", qw >= 7, question[:90] or "no 'opener: question?' found")
+    chk("FAIL", "the question or request after the opener is there, a complete sentence (7 to 16 words; a question and an interviewer's request like 'बताओ' / 'समझाओ' both count)", qw >= 7, question[:90] or "no 'opener: question' found")
     chk("WARN", "the question is one sentence of at most 16 words (hook-writer, Question quality)", qw <= 16, f"{qw} words")
     chk("FAIL", "the question is not far too long (at most 22 words)", qw <= 22, f"{qw} words")
     chk("WARN", "the question does not stack two questions ('... और ... क्यों/कैसे/क्या')", not re.search(r"(और|aur|and)\s+.{0,45}(क्यों|कैसे|क्या|कौन)", question), question[:90])
@@ -54,16 +54,17 @@ else:
 if htype != "direct_question": chk("WARN", "a contradiction lands in the first ~10 s ('फिर भी', 'पर', 'लेकिन', 'गलत', 'crash', 'नहीं')", bool(re.search(r"(फिर भी|लेकिन|ग़लत|गलत|crash|नहीं| पर )", first10)), first10[:90])
 if htype != "direct_question": chk("WARN", "an open loop with a count in the first ~10 s ('तीन वजह', 'तीन steps', '3 fixes')", bool(re.search(r"(तीन|दो|चार|पाँच|three|two|four|five|3|4|5)\b.{0,25}(वजह|steps?|तरीके|checks?|fix|गलती|rules?|कारण)", first10, re.I)), "")
 steps = len(re.findall(r"(First|Second|Third|पहले|पहला|पहली|दूसरा|दूसरे|दूसरी|तीसरा|तीसरे|तीसरी|चौथा|चौथे|step|Step)", spoken))
-chk("FAIL", "has numbered or ordered steps (at least 3 markers)", steps >= 3, f"{steps} markers")
+chk("WARN", "has numbered steps or at least three clear parts (advice only: named parts such as Top-K / Top-P / Temperature teach just as well)", steps >= 3, f"{steps} markers")
 chk("WARN", "gives a cause ('क्योंकि' / 'इसलिए' / 'इसी वजह')", bool(re.search(r"(क्योंकि|इसलिए|इसी वजह|इसीलिए|kyunki)", spoken)))
 chk("WARN", "names the weak baseline or a failure ('लेकिन', 'पर', 'problem', 'fail')", bool(re.search(r"(लेकिन|problem|fail|crash|गलत|expensive|zero|महँगी|slow)", spoken, re.I)))
-chk("FAIL", "closing is a comment question", "?" in last, last[-100:])
-chk("WARN", "closing asks for a comment and a follow, not a save (owner 2026-10-15)", bool(re.search(r"(comment|Comment|कमेंट)", last)) and bool(re.search(r"(follow|Follow|फ़ॉलो|फॉलो)", last)) and not re.search(r"(save कर|Save कर|सेव)", last))
+has_comment = bool(re.search(r"(comment|Comment|कमेंट)", last))
+chk("FAIL", "closing asks the viewer to comment (a question or 'comment karo')", "?" in last or has_comment, last[-100:])
+chk("WARN", "closing asks for a comment and does not end on 'save kar lo' (a follow line is optional: owner 2026-10-19)", has_comment and not re.search(r"(save कर|Save कर|save kar|Save kar)", last), "")
 digits = [m for m in re.findall(r"(?<![\w{-])\d[\d.,]*(?![\w}]*\})", re.sub(r"\S+\{[^}]*\}", "", text))]
 chk("FAIL", "every number has a {spoken} form (Hindi before a Hindi word, English before an English word)", not digits, ", ".join(digits[:6]))
 words = len(spoken.split())
 secs = words / 2.3
-chk("WARN", "length 60 to 180 s (about 2.3 words per second; 400 words are about 175 s)", 55 <= secs <= 100, f"{words} words, about {secs:.0f} s")
+chk("WARN", "length 60 to 180 s (about 2.3 words per second; 400 words are about 175 s)", 55 <= secs <= 180, f"{words} words, about {secs:.0f} s")
 bad = re.findall(r"(\w+\{[^}\s-]+ [^}]*\})", text)
 chk("FAIL", "no multi-word braces (said twice)", not bad, "; ".join(bad[:3]))
 

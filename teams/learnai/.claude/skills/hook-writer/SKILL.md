@@ -34,7 +34,7 @@ The 4-beat shape the owner approved on 2026-10-15 ("Hook A"), 25-35 spoken words
 The owner's test (2026-10-16): the viewer has SEEN this happen but does not know the reason ("tumne ek message bheja aur usage ka bada hissa chala gaya", "do AI ke answers teesre AI ko dikhaye, order badla, winner badla", "AI ne tumhara calendar khol liya"). The reason is the payoff.
 
 ### 3. `interviewer_asked` (interview)
-`Interviewer ने पूछा: <one clear question>?` as the first words, then within 4 s the stake or the trap ("sabse zyada log yahan galat bolte hain") and the numbered open loop by ~10 s. The on-screen `INTERVIEW QUESTION` chip is up from frame 0. This is the type that gave us our best retention before 2026-10-15; keep it in the mix, with a question that passes the test below.
+`Interviewer ने पूछा: <one clear question or request>` as the first words (an interviewer may ask "...ka difference batao" as well as "...kya hai?": no question mark is needed), then within 4 s the stake or the trap ("sabse zyada log yahan galat bolte hain") and the numbered open loop by ~10 s. The on-screen `INTERVIEW QUESTION` chip is up from frame 0. This is the type that gave us our best retention before 2026-10-15; keep it in the mix, with a question that passes the test below.
 
 ### 4. `company_specific` (interview)
 `<Company> के AI interview में ये पूछा गया: <one clear question>?` (Zomato, Google, Swiggy, Flipkart, and so on). The question part follows the same "Question quality" rules.

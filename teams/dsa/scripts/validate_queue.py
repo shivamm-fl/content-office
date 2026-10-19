@@ -72,10 +72,10 @@ for it in items:
     if ht == "interviewer_asked":
         if not pre(sh):
             problems.append(f"{rid}: hook_type interviewer_asked: spoken_hook must open with 'Interviewer ने पूछा:'")
-        mq = re.search(r"[:：]\s*(.+?[?？])", sh, re.S)
+        mq = re.search(r"[:：]\s*(.+?(?:[?？।!]|\.(?=\s|$)))", sh, re.S)   # a question or an interviewer's request ("... difference batao.")
         qw = len(mq.group(1).split()) if mq else 0
         if qw < 7 or qw > 16:
-            problems.append(f"{rid}: hook_type interviewer_asked: the question after the opener must be one complete sentence of 7 to 16 words ending in '?' (found {qw}); see Question quality in .claude/skills/hook-writer")
+            problems.append(f"{rid}: hook_type interviewer_asked: the question or request after the opener must be one complete sentence of 7 to 16 words (found {qw}); see Question quality in .claude/skills/hook-writer")
     if ht == "direct_question" and not re.search(r"(\?|？|क्या|कैसे|क्यों|कौन)", sh):
         problems.append(f"{rid}: hook_type direct_question: spoken_hook must be a plain question about the topic")
     if ht == "company_specific":
