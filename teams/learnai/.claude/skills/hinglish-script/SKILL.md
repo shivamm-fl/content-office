@@ -33,3 +33,9 @@ Every number and claim comes from a page fetched in the session (primary source 
 
 ## Before you save
 Run `python3 scripts/lint_script.py reels/<folder>/spec.json`. It checks the hook, numbered steps, closing question, spoken numbers and length. Fix every FAIL; WARN is judgement.
+
+## Humanising pass (owner, 2026-10-19): the script must sound like a person, never like a summary
+"Docs ye bolte hain, wo bolta hai" and a lecture full of AI phrasing is what the owner rejected as slop. Before you save, run `.claude/skills/no-ai-slop` and `.claude/skills/humanizer` on the spoken lines. They are written for English prose; apply the same patterns to Hinglish: not-X-but-Y and "log sochte hain... nahi" set-ups, staged openers ("ek baat aur", "sach ye hai"), one-line closers and mic-drop kickers, triads for show, dramatic fragments, stock praise words, a summary that repeats the reel. Facts stay exactly as checked.
+- **No source-talk in the lines.** The script never says "docs ke mutabik", "paper kehta hai", "research batati hai" or names a page. The fetched URLs live in the queue entry and the notes, not in the voice. Say the fact like someone who knows it. A product or company name is fine when the reel is about it.
+- Talk to one person ("tum"), use what you really did ("maine code chalaya"), pick one picture the viewer already knows (a basketball throw, a phone contact list) and come back to it, keep a short human reaction where one belongs ("bilkul bekaar guess"). No dashes.
+- Keep the owner's closing rule (one comment question, one follow line) and the lint rules: the humanising pass changes the voice, not the facts, the steps or the numbers.

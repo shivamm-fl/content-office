@@ -59,12 +59,12 @@ Words are a range: 2.3 w/s is what `scripts/lint_script.py` measured (165 words 
 - Caption: `Day N/150:` first line, 3 hashtags, one ask; theirs ran about 250 words and 11 tags [seen]. Depth over count: 3 to 5 steps taught well; their captions list up to 9 points [seen].
 
 ## f. When a topic cannot be taught properly in about 2 minutes
+Update 2026-10-19: the old Day 5 (now Day 1, how a model learns) was on this list as 5a and 5b. The pilot script (`pilot-script-day1.md`) fits it in about 114 s with three terms, so it stays one day. The four opening days of the old ladder were dropped, four new days were added to S1, and Days 11 to 150 keep their numbers, so the rows below still match.
 Split it into two stand-alone days (no "part 2" in any script; each title names its sub-idea) when ANY of these holds: more than 3 new terms are needed; the mechanism needs more than 5 steps, or its steps cannot stay at or under 10 s each; two running examples are needed outside the catch; the code is longer than 8 lines; the beat sheet is over 120 s after the cuts of section d; the check question needs the second half. Most days stay one day.
-Roadmap effect (a proposal, the roadmap file is NOT edited): a split day becomes two days with their own titles (N-1, N-2), so the series grows from 150 to 158 days with the 8 splits below, or the owner drops thin days to stay at 150. Cover counter, caption and ids follow the owner's choice. CLAUDE.md rule 5 (20 to 120 s) already allows these lengths; no change was made to it.
+Roadmap effect (a proposal, the roadmap file is NOT edited): a split day becomes two days with their own titles (N-1, N-2), so the series grows from 150 to 157 days with the 7 splits below, or the owner drops thin days to stay at 150. Cover counter, caption and ids follow the owner's choice. CLAUDE.md rule 5 (20 to 120 s) already allows these lengths; no change was made to it.
 
 | Day | Title | Why it does not fit | Proposed split |
 |---|---|---|---|
-| 5 | How a model learns: guess, measure the error, adjust | three ideas: prediction, loss, update | 5a guess and measure the error; 5b adjust the weights |
 | 13 | The transformer | embeddings, attention, feed-forward and stacking in one reel | 13a text to vectors to layers; 13b what one layer does |
 | 14 | Attention | the scores and the weighted mix are two steps of thought | 14a the scores: who looks at whom; 14b mixing words by those scores |
 | 65 | The whole RAG pipeline, end to end | index time and query time are two flows | 65a building the index; 65b answering one question |

@@ -1,5 +1,5 @@
 {
- "about": "DRAFT (2026-10-18, for the owner's approval; not wired into any script): the ladder of 150 Days of AI on the LearnAI floor (@ai.learnvora, renamed from ig.learnai by the owner on 2026-10-18): one idea per day, in this order. Day titles are our own wording of concepts. The topic titles of roadmap.sh/ai-engineer are used only as a checklist, through roadmap/ai-engineer.json (every one of its 65 units appears here); roadmap.sh text is copyrighted and is never copied into reels, captions or this repo. Scripts, examples and numbers come from primary sources fetched in the session. The owner decides changes to this file.",
+ "about": "DRAFT (2026-10-18, for the owner's approval; not wired into any script): the ladder of 150 Days of AI on the LearnAI floor (@ai.learnvora, renamed from ig.learnai by the owner on 2026-10-18): one idea per day, in this order. Day titles are our own wording of concepts. The topic titles of roadmap.sh/ai-engineer are used only as a checklist, through roadmap/ai-engineer.json (every one of its 65 units appears here); roadmap.sh text is copyrighted and is never copied into reels, captions or this repo. Scripts, examples and numbers come from primary sources fetched in the session. The owner decides changes to this file. Revised 2026-10-19 on the owner's word: the four opening days (what an AI engineer does, the roles, AI vs ML vs DL, AI vs AGI) taught nothing a viewer could use, so the ladder opens with how a model learns. Four new days were added to phase S1 (train/validation/test, overfitting, pretraining, training vs inference), so the total stays 150 and Days 11 to 150 keep their numbers.",
  "rules": [
   "Day N is item id a + N in three digits (Day 7 = a007) if the owner approves the prefix a (proposal 2026-10-18-learnvora-and-150-days-of-ai.md). Days are made in order; none is skipped without the owner.",
   "Each reel is stand-alone: one idea, terms defined inside it, the day is only a label on the cover and in the caption. The script never says yesterday, kal, Part N or next video, and never points at another day or at a course reel.",
@@ -11,52 +11,35 @@
  "phases": [
   {
    "id": "S1",
-   "title": "Start here: what AI is",
+   "title": "How a model learns and answers",
    "days": [
     {
      "day": 1,
-     "title": "What an AI engineer actually does all day",
-     "format": "concept",
-     "unit": "A1",
-     "note": "r01 (published) asked this question; show the day-in-the-life picture, not the same script.",
+     "title": "How a model learns: guess, measure the error, adjust",
+     "format": "demo",
+     "unit": "A3",
      "status": "todo",
-     "reels": []
+     "reels": [],
+     "script": "docs-notes/pilot-script-day1.md"
     },
     {
      "day": 2,
-     "title": "AI engineer, ML engineer, data scientist: who does what",
-     "format": "trade-off",
-     "unit": "A1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 3,
-     "title": "AI, machine learning, deep learning, GenAI: the nesting dolls",
-     "format": "concept",
-     "unit": "A2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 4,
-     "title": "AI vs AGI: what today's models can and cannot do",
-     "format": "myth-bust",
-     "unit": "A2",
-     "note": "r02 (published) covers AI vs AGI; take the myth angle.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 5,
-     "title": "How a model learns: guess, measure the error, adjust",
-     "format": "demo",
+     "title": "Train, validation and test: three piles of data",
+     "format": "structure",
      "unit": "A3",
      "status": "todo",
      "reels": []
     },
     {
-     "day": 6,
+     "day": 3,
+     "title": "Overfitting: when a model memorises instead of learning",
+     "format": "concept",
+     "unit": "A3",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 4,
      "title": "An LLM is a next-word predictor: watch the guesses",
      "format": "demo",
      "unit": "A3",
@@ -65,7 +48,15 @@
      "reels": []
     },
     {
-     "day": 7,
+     "day": 5,
+     "title": "Pretraining: how an LLM first learns language from text",
+     "format": "concept",
+     "unit": "A3",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 6,
      "title": "Tokens: how text becomes numbers",
      "format": "demo",
      "unit": "A4",
@@ -74,7 +65,7 @@
      "reels": []
     },
     {
-     "day": 8,
+     "day": 7,
      "title": "Why tokens decide your bill, your limits and some silly mistakes",
      "format": "myth-bust",
      "unit": "A4",
@@ -82,11 +73,19 @@
      "reels": []
     },
     {
-     "day": 9,
+     "day": 8,
      "title": "Raw model vs chat model: why the first one cannot answer",
      "format": "concept",
      "unit": "A3",
      "note": "r04 (published) is this idea; pick a different picture.",
+     "status": "todo",
+     "reels": []
+    },
+    {
+     "day": 9,
+     "title": "Training vs inference: learn once, answer a million times",
+     "format": "concept",
+     "unit": "A3",
      "status": "todo",
      "reels": []
     },
