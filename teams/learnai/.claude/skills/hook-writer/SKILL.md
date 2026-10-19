@@ -110,3 +110,5 @@ Picture: a chat bubble "Refund in 30 days ✓" types in, the policy line "7 DAYS
 
 ## Measure (this decides which types stay)
 After 72 h read `reels_skip_rate` and `avg_watch_s` in `state/insights.json` and group by `hook_type`. A type is retired only when it has at least three reels AND its median skip rate is at least 10 points worse than the other types of the same track. A type that beats our 59 % best over at least three reels goes into `state/learnings.md` with the numbers. Never drop a type because a new one exists. Where available, post a second hook of the same reel as a Trial Reel (non-followers only) and keep the winner.
+
+**Value first (owner, 2026-10-19).** A hook may be tuned on our numbers, but it never replaces or delays the teaching: say the question, then go straight to the answer. No detour line (rhetorical question, staged "nahi!") between them.

@@ -2,6 +2,7 @@
   python scripts/render_cover.py <folder> "AI ENGINEER ROADMAP" "How Does an LLM <em>Write Answers?</em>"
 The template (brand/covers/_template) is: a filled gold pill with the category only (no item number, owner decision 2026-10-16), a centred headline whose key words are gold, the LearnAI robot Bit, the handle.
 Wrap the key words of the headline in <em></em>; without it the last one to three words get it. A trailing item number in the pill text (" · 03", " - 3") is removed automatically.
+A series cover (folder a047_slug is Day 47 of 150, or --day N --of 150) uses brand/covers/_template_series: pill, headline, the DAY NNN / 150 counter with its progress bar, the handle, no mascot.
 Options: --template <dir> to use another template folder (tests). Clean English only: no Hindi, no emoji."""
 import argparse
 import html
@@ -31,9 +32,17 @@ def main():
     a.add_argument("folder")
     a.add_argument("pill")
     a.add_argument("headline")
-    a.add_argument("--template", default=str(ROOT / "brand" / "covers" / "_template"))
+    a.add_argument("--template", default=None)
+    a.add_argument("--day", type=int, default=None, help="series cover: the day (1..of); default: the number in a folder named a047_slug")
+    a.add_argument("--of", type=int, default=150, help="length of the series")
     a = a.parse_args()
-    tpl = Path(a.template)
+    if a.day is None:
+        m = re.match(r"a(\d{2,4})(?:_|$)", a.folder)
+        a.day = int(m.group(1)) if m else None
+    series = a.day is not None
+    if series and not 1 <= a.day <= a.of:
+        sys.exit("--day must be between 1 and --of")
+    tpl = Path(a.template) if a.template else ROOT / "brand" / "covers" / ("_template_series" if series else "_template")
     cover = ROOT / "brand" / "covers" / a.folder
     if not (tpl / "index.html").exists():
         sys.exit(f"template not found: {tpl}")
@@ -53,6 +62,12 @@ def main():
     s, n2 = re.subn(r'(<div id="headline"><div>).*?(</div></div>)', lambda m: m.group(1) + headline_html(a.headline) + m.group(2), s, flags=re.S)
     if n1 != 1 or n2 != 1:
         sys.exit("the template must contain <div id=\"pill\">..</div> and <div id=\"headline\"><div>..</div></div>")
+    if series:
+        s, n3 = re.subn(r'(<div id="daynum">)[^<]*(</div>)', lambda m: m.group(1) + f"{a.day:03d}" + m.group(2), s)
+        s, n4 = re.subn(r'(<div id="dayof">)[^<]*(</div>)', lambda m: m.group(1) + f"/ {a.of}" + m.group(2), s)
+        s, n5 = re.subn(r'(<div id="fill" style="width:)[^"]*(")', lambda m: m.group(1) + f"{100 * a.day / a.of:.2f}%" + m.group(2), s)
+        if (n3, n4, n5) != (1, 1, 1):
+            sys.exit('the series template must contain <div id="daynum">, <div id="dayof"> and <div id="fill" style="width:..">')
     with open(cover / "index.html", "w", encoding="utf-8", newline="\n") as fh:
         fh.write(s)
     npx = shutil.which("npx") or shutil.which("npx.cmd")

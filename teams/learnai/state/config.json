@@ -1,9 +1,30 @@
 {
   "mode": "office",
   "mode_note": "Office mode (owner, 2026-10-17): nothing runs on a schedule; every run is started from the office app. Plan slate, script and final video wait for the owner's approval. The office never posts.",
-  "id_start": { "generic": 101, "course": 101, "interview": 101 },
-  "id_note": "Office ids start at 101 per track so they never collide with ai-course during the test phase.",
+  "id_start": {
+    "series": 1,
+    "generic": 101,
+    "course": 101,
+    "interview": 101
+  },
+  "id_note": "Office ids of course and interview start at 101 so they never collide with ai-course. The series track (prefix a) has the id number equal to the day: Day 1 is a001, Day 150 is a150.",
   "per_track": 3,
-  "youtube_tracks": ["course", "interview"],
-  "release_mode": "approval"
+  "youtube_tracks": [
+    "course",
+    "interview"
+  ],
+  "release_mode": "approval",
+  "series_days": 150,
+  "formats": [
+    "concept",
+    "structure",
+    "pattern",
+    "demo",
+    "myth-bust",
+    "trade-off",
+    "recap",
+    "finding",
+    "question",
+    "explainer"
+  ]
 }

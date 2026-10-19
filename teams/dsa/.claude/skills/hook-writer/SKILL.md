@@ -46,3 +46,5 @@ Notes:
 - The day counter stays out of the spoken hook (it is a label; the benchmark counter alone drew little). The keyword call to action belongs in the closing and the caption, never in the hook.
 - Considered, not added: the insider confession (it needs a credible named person, we are faceless) and the career-stress micro-story (it fits a concept day such as Day 1; use `relatable_stake` there only if the stake is concrete and true).
 - Test the formulas side by side like the types (Rules above); record each result in `state/experiments.md`.
+
+**Value first (owner, 2026-10-19).** A hook may be tuned on our numbers, but it never replaces or delays the teaching: say the question, then go straight to the answer. No detour line (rhetorical question, staged "nahi!") between them.

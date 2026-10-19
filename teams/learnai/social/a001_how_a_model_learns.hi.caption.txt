@@ -1,0 +1,16 @@
+Day 1/150: AI model seekhta kaise hai?
+
+Jaise tumne basketball khelna seekha: shot maara, miss hua, galti samjhi, phir try kiya. AI bhi kuch aise hi seekhta hai, bas maths ke saath.
+
+Setup: study hours se marks predict karna. 1 ghante par 2, 2 par 4, 3 par 6. Model mein ek hi weight w, aur prediction = weight x input.
+
+Forward pass: w = 0 se shuru, to har prediction 0.
+Loss function (MSE): loss = 18.67.
+Gradient descent: gradient = -18.67, negative hai, to w badhao. Learning rate 0.1 par ek update mein w = 1.87, loss = 0.083. 4 baar dohrao to w = 2 par converge, yaani model sahi answer tak pahunch gaya.
+Learning rate 0.5 kar do, to loss 18.67 se 251 par chala jata hai aur model diverge karta hai.
+
+Check yourself: marks 3, 6, 9 hote, to w kis value par converge hota? Comment mein likho.
+
+Jawab: 3.
+
+#AI #MachineLearning #150DaysOfAI

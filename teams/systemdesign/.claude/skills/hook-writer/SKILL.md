@@ -46,3 +46,5 @@ How to use them:
 - Concrete beats abstract: name an app, an event or a number in the first line. The weakest reel in the study had a long abstract sentence ("reverse-engineer X from the outside") as its title; a topic name alone is never a hook.
 - Not adopted: a recurring named character (a mascot device, and our cover rule says no mascot), version or launch news, interview humour as a hook, and the day counter or a "tomorrow" tease in the spoken line.
 - `hookscore.py` reads English words, so Hinglish lines score WEAK on stakes even when the hook is fine; the examples above raise no DEALBREAKER. Use the score to catch greetings and throat-clearing, not to rank two decent hooks.
+
+**Value first (owner, 2026-10-19).** A hook may be tuned on our numbers, but it never replaces or delays the teaching: say the question, then go straight to the answer. No detour line (rhetorical question, staged "nahi!") between them.

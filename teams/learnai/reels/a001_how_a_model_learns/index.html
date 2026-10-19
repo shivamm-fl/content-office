@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>How a model learns</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="174" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="174" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="174" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="174" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "150 DAYS OF AI · DAY 1" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+
+      // ============ helpers ============
+      const NSx = "http://www.w3.org/2000/svg";
+      const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NSx, tag); Object.keys(attrs).forEach((k) => e.setAttribute(k, attrs[k])); if (parent) parent.appendChild(e); return e; };
+      const svgLayer = (host) => { const s = svgEl("svg", { viewBox: "0 0 1080 1920" }, host); s.setAttribute("class", "ln"); return s; };
+      const pol = (cx, cy, R, deg) => [cx + R * Math.sin(deg * Math.PI / 180), cy - R * Math.cos(deg * Math.PI / 180)];
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      // a value that changes on the spoken word: one element per state, swapped instantly (seek-safe)
+      const states = (host, css, list) => list.map(([t, html], i) => { const d = el(host, css, html); tl.set(d, { opacity: 0 }, 0); tl.set(d, { opacity: 1 }, t);
+        if (i < list.length - 1) tl.set(d, { opacity: 0 }, list[i + 1][0]); tl.fromTo(d, { y: 10 }, { y: 0, duration: 0.25, ease: "power3.out", immediateRender: false }, t); return d; });
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return o.static ? w : show(w, t, { opacity: 0, y: -14 }); };
+      const labelC = (host, text, y, t, o) => { o = o || {}; const w = el(host, `left:0;top:${y}px;width:1080px;text-align:center;font:${o.weight || 700} ${o.size || 36}px ${o.font || COD};letter-spacing:${o.ls || ".18em"};color:${o.col || MUTED};white-space:nowrap`, text); return show(w, t, { opacity: 0, y: 12 }); };
+      const stepper = (host, n, word, t) => { const w = el(host, "left:0;top:240px;width:1080px;height:64px;display:flex;justify-content:center");
+        w.innerHTML = `<div style="display:flex;align-items:center;gap:22px;height:64px;padding:0 32px;border-radius:32px;border:2px solid ${ACC};background:${ca(ACC, 0.10)}"><span style="font:800 36px ${COD};color:${ACC};letter-spacing:.06em">STEP ${n}/3</span><span style="width:2px;height:30px;background:${ca(ACC, 0.5)}"></span><span style="font:800 36px ${LAT};color:${TEXT};letter-spacing:.1em">${word}</span><span style="display:flex;gap:8px;margin-left:6px">${[1, 2, 3].map((i) => `<i style="display:block;width:26px;height:8px;border-radius:4px;background:${i <= n ? ACC : ca(MUTED, 0.4)}"></i>`).join("")}</span></div>`;
+        return show(w, t, { opacity: 0, y: -16 }); };
+
+      // dial: the weight w. Angle from the top, clockwise: w / 4 * 120 degrees, clamped to the end stops (+-120).
+      const ang = (w) => Math.max(-120, Math.min(120, w / 4 * 120));
+      const dial = (host, cx, cy, r, o) => { o = o || {};
+        const wrap = el(host, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px`);
+        const sv = svgEl("svg", { viewBox: `0 0 ${2 * r} ${2 * r}`, width: 2 * r, height: 2 * r }, wrap); sv.style.cssText = "position:absolute;left:0;top:0;overflow:visible";
+        svgEl("circle", { cx: r, cy: r, r: r - 2, fill: PANEL, stroke: "rgba(150,175,215,.34)", "stroke-width": Math.max(2, r * 0.03) }, sv);
+        const Rt = r * 0.80, p0 = pol(r, r, Rt, -120), p1 = pol(r, r, Rt, 120);
+        svgEl("path", { d: `M${p0[0]} ${p0[1]} A${Rt} ${Rt} 0 1 1 ${p1[0]} ${p1[1]}`, fill: "none", stroke: "rgba(150,175,215,.24)", "stroke-width": r * 0.1, "stroke-linecap": "round" }, sv);
+        if (!o.mini) for (let a = -120; a <= 120; a += 30) { const i = pol(r, r, r * (a === 0 ? 0.88 : 0.91), a), j = pol(r, r, r * 0.96, a);
+          svgEl("line", { x1: i[0], y1: i[1], x2: j[0], y2: j[1], stroke: a === 0 ? "rgba(232,237,246,.75)" : "rgba(150,175,215,.55)", "stroke-width": r * 0.025, "stroke-linecap": "round" }, sv); }
+        const nl = r * 0.74, nw = Math.max(4, r * 0.075);
+        const needle = el(wrap, `left:${r - nw / 2}px;top:${r - nl}px;width:${nw}px;height:${nl}px;border-radius:${nw / 2}px;background:${ACC}`);
+        el(wrap, `left:${r - r * 0.12}px;top:${r - r * 0.12}px;width:${r * 0.24}px;height:${r * 0.24}px;border-radius:50%;background:${ACC};border:${Math.max(2, r * 0.035)}px solid ${PANEL}`);
+        if (o.letter) el(wrap, `left:0;top:${r * 1.28}px;width:${2 * r}px;text-align:center;font:800 ${r * 0.34}px ${COD};color:${ACC};line-height:1`, "w");
+        gsap.set(needle, { transformOrigin: "50% 100%", rotation: o.a0 || 0 });
+        const api = { wrap, needle, r, cx, cy,
+          aim: (t, a0, a1, dur, ease) => tl.fromTo(needle, { rotation: a0 }, { rotation: a1, duration: dur, ease: ease || "power3.inOut", immediateRender: false }, t),
+          show: (t) => show(wrap, t, { opacity: 0, scale: 0.92 }),
+          ring: (t) => { const rg = el(wrap, `left:-9px;top:-9px;width:${2 * r + 18}px;height:${2 * r + 18}px;border-radius:50%;border:5px solid ${ACC}`); tl.set(rg, { opacity: 0 }, 0); tl.to(rg, { opacity: 1, duration: 0.3, immediateRender: false }, t); return rg; },
+          target: (t, a, label) => { const i = pol(r, r, r * 0.62, a), j = pol(r, r, r * 0.99, a), q = pol(r, r, r * 1.2, a);
+            const g = svgEl("svg", { viewBox: `0 0 ${2 * r} ${2 * r}`, width: 2 * r, height: 2 * r }, wrap); g.style.cssText = "position:absolute;left:0;top:0;overflow:visible";
+            svgEl("line", { x1: i[0], y1: i[1], x2: j[0], y2: j[1], stroke: ACC, "stroke-width": r * 0.05, "stroke-linecap": "round" }, g);
+            const lb = el(wrap, `left:${q[0] - 30}px;top:${q[1] - 26}px;width:60px;text-align:center;font:800 ${Math.max(36, r * 0.32)}px ${COD};color:${ACC};line-height:52px`, label);
+            tl.set([g, lb], { opacity: 0 }, 0); tl.to([g, lb], { opacity: 1, duration: 0.3, immediateRender: false }, t); },
+          nudge: (t, a0, a1, tOut) => { const R = r * 1.2, s0 = pol(r, r, R, a0), s1 = pol(r, r, R, a1), th = a1 * Math.PI / 180, tx = Math.cos(th), ty = Math.sin(th), nx = -ty, ny = tx;
+            const g = svgEl("svg", { viewBox: `0 0 ${2 * r} ${2 * r}`, width: 2 * r, height: 2 * r }, wrap); g.style.cssText = "position:absolute;left:0;top:0;overflow:visible";
+            svgEl("path", { d: `M${s0[0]} ${s0[1]} A${R} ${R} 0 0 1 ${s1[0] - tx * 4} ${s1[1] - ty * 4}`, fill: "none", stroke: ACC, "stroke-width": Math.max(5, r * 0.05), "stroke-linecap": "round" }, g);
+            svgEl("polygon", { points: `${s1[0] + tx * 22},${s1[1] + ty * 22} ${s1[0] + nx * 13},${s1[1] + ny * 13} ${s1[0] - nx * 13},${s1[1] - ny * 13}`, fill: ACC }, g);
+            tl.set(g, { opacity: 0 }, 0); tl.to(g, { opacity: 1, duration: 0.35, immediateRender: false }, t); if (tOut) gone(g, tOut); return g; } };
+        return api; };
+
+      // hoop (rim centre at cx,cy; scale s) and ball
+      const hoop = (host, cx, cy, s, poleBottom) => { const bw = Math.max(2, 3 * s);
+        const bb = el(host, `left:${cx + 66 * s}px;top:${cy - 210 * s}px;width:${26 * s}px;height:${232 * s}px;border-radius:${6 * s}px;border:${bw}px solid rgba(232,237,246,.8);background:rgba(232,237,246,.10)`);
+        const pole = el(host, `left:${cx + 73 * s}px;top:${cy + 22 * s}px;width:${12 * s}px;height:${poleBottom - (cy + 22 * s)}px;border-radius:${4 * s}px;background:rgba(133,146,173,.42)`);
+        const rim = el(host, `left:${cx - 70 * s}px;top:${cy - 6 * s}px;width:${142 * s}px;height:${12 * s}px;border-radius:${6 * s}px;background:${ACC}`);
+        return [bb, pole, rim]; };
+      const hoopNet = (host, cx, cy, s) => { const sv = svgLayer(host); const g = svgEl("g", {}, sv);
+        const L = (x1, y1, x2, y2) => svgEl("line", { x1: cx + x1 * s, y1: cy + y1 * s, x2: cx + x2 * s, y2: cy + y2 * s, stroke: "rgba(232,237,246,.55)", "stroke-width": Math.max(2, 3 * s), "stroke-linecap": "round" }, g);
+        for (let i = 0; i < 5; i++) L(-62 + 31 * i, 6, -34 + 17 * i, 100);
+        [0.35, 0.7, 1].forEach((f) => { const y = 6 + 94 * f, hw = 62 - 28 * f; L(-hw, y, hw, y); });
+        return g; };
+      const ballEl = (host, d, p, visible) => { const b = el(host, `left:0;top:0;width:${d}px;height:${d}px`);
+        b.innerHTML = `<svg viewBox="0 0 100 100" width="${d}" height="${d}"><circle cx="50" cy="50" r="47" fill="${ACC}"/><g fill="none" stroke="#0B1220" stroke-width="4" stroke-linecap="round"><path d="M50 3V97M3 50H97"/><path d="M14 17C34 33 34 67 14 83M86 17C66 33 66 67 86 83"/></g></svg>`;
+        gsap.set(b, { x: p[0] - d / 2, y: p[1] - d / 2, opacity: visible ? 1 : 0, scale: visible ? 1 : 0.4 }); return b; };
+      const fly = (b, d, p0, p1, h, t, dur, ease) => { const o = { u: 0 };
+        tl.fromTo(o, { u: 0 }, { u: 1, duration: dur, ease: ease || "none", immediateRender: false, onUpdate: () => {
+          gsap.set(b, { x: p0[0] + (p1[0] - p0[0]) * o.u - d / 2, y: p0[1] + (p1[1] - p0[1]) * o.u - 4 * h * o.u * (1 - o.u) - d / 2 }); } }, t); };
+      const arcPts = (p0, p1, h, n) => { const a = []; for (let i = 0; i <= n; i++) { const u = i / n; a.push([p0[0] + (p1[0] - p0[0]) * u, p0[1] + (p1[1] - p0[1]) * u - 4 * h * u * (1 - u)]); } return a; };
+
+      // ---------- the running example: three cards hours -> marks, large in B and C, a strip from D on ----------
+      const cardX = [60, 390, 720];
+      const bigCard = (host, k, y, o) => { o = o || {}; const hrs = k + 1, ym = (o.mult || 2) * hrs, H = o.pred ? 410 : 250;
+        const root = el(host, `left:${cardX[k]}px;top:${y}px;width:300px;height:${H}px`); glass(root, 0, 0, 300, H, null, 28);
+        el(root, `left:0;top:12px;width:300px;height:84px;text-align:center;line-height:84px;white-space:nowrap`, `<span style="font:700 76px ${COD};color:${CYAN}">${hrs}</span><span style="font:700 32px ${COD};color:${MUTED};letter-spacing:.1em;margin-left:14px">${hrs === 1 ? "HOUR" : "HOURS"}</span>`);
+        el(root, `left:30px;top:104px;width:240px;height:2px;background:${ca(MUTED, 0.3)}`);
+        const yv = el(root, `left:0;top:114px;width:300px;height:116px;text-align:center;line-height:116px;white-space:nowrap`, `<span style="font:700 100px ${COD};color:${ACC}">${ym}</span><span style="font:700 32px ${COD};color:${MUTED};letter-spacing:.1em;margin-left:14px">MARKS</span>`);
+        const r = { root, yv, ys: [yv.children[0], yv.children[1]] };
+        if (o.pred) { r.aLab = el(root, `left:0;top:246px;width:300px;text-align:center;font:700 34px ${COD};color:${MUTED};letter-spacing:.1em`, "PREDICTION");
+          r.slot = el(root, `left:75px;top:294px;width:150px;height:100px;border-radius:18px;border:3px dashed ${ca(MUTED, 0.75)};text-align:center;line-height:92px;font:700 64px ${COD};color:${MUTED}`, "?");
+          r.val = el(root, `left:0;top:286px;width:300px;height:112px;text-align:center;line-height:112px;font:700 104px ${COD};color:${TEXT}`, "0"); }
+        return r; };
+      const miniCard = (host, k, y, preds, ym) => { const root = el(host, `left:${cardX[k]}px;top:${y}px;width:300px;height:150px`); const panel = glass(root, 0, 0, 300, 150, null, 24);
+        states(root, `left:0;top:8px;width:300px;height:80px;text-align:center;line-height:80px;font:700 60px ${COD};color:${TEXT};white-space:nowrap`, preds);
+        const tr = el(root, `left:0;top:96px;width:300px;text-align:center;font:700 34px ${COD};white-space:nowrap;letter-spacing:.04em`, `<span class="tv" style="color:${HOT}">MARKS ${ym}</span>`); const tv = tr.querySelector(".tv");
+        return { root, panel, tv, border: (t, col) => tl.to(panel, { borderColor: ca(col, 0.9), duration: 0.3, immediateRender: false }, t), tint: (t, col) => tl.to(tv, { color: col, duration: 0.3, immediateRender: false }, t) }; };
+
+      // the loss curve (a bowl): loss(w) = 14/3 * (w - 2)^2 for the cards (1,2),(2,4),(3,6); its slope at w = 0 is -18.667, the printed gradient
+      const bowl = (host, X, Y, o) => { const W = 580, HH = 315, px = (w) => 26 + (w + 0.5) * 105.6, py = (l) => 262 - l * 6.5, lossAt = (w) => 14 / 3 * (w - 2) * (w - 2);
+        const root = el(host, `left:${X}px;top:${Y}px;width:${W}px;height:${HH}px`); glass(root, 0, 0, W, HH, CYAN, 24); show(root, o.tShow, { opacity: 0, y: 30 });
+        el(root, `left:22px;top:12px;font:800 34px ${LAT};letter-spacing:.14em;color:${TEXT}`, "LOSS");
+        states(root, `left:150px;top:4px;width:408px;text-align:right;font:700 48px ${COD};line-height:58px;white-space:nowrap`, o.read);
+        const sv = svgEl("svg", { viewBox: `0 0 ${W} ${HH}`, width: W, height: HH }, root); sv.style.cssText = "position:absolute;left:0;top:0;overflow:visible";
+        svgEl("line", { x1: 26, y1: 262, x2: 554, y2: 262, stroke: "rgba(150,175,215,.4)", "stroke-width": 3 }, sv);
+        el(root, `left:526px;top:268px;font:700 34px ${COD};color:${MUTED}`, "w");
+        const pts = []; for (let i = 0; i <= 50; i++) { const w = -0.5 + i * 0.1; pts.push([px(w), py(lossAt(w))]); }
+        let L = 0; for (let i = 1; i < pts.length; i++) L += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+        const curve = svgEl("path", { d: "M" + pts.map((p) => p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" L"), fill: "none", stroke: CYAN, "stroke-width": 6, "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": L + 4 }, sv);
+        tl.set(curve, { strokeDashoffset: L + 4, opacity: 0 }, 0); tl.set(curve, { opacity: 1 }, o.tCurve); tl.to(curve, { strokeDashoffset: 0, duration: o.curveDur || 0.9, ease: "power2.out", immediateRender: false }, o.tCurve);
+        const dot = el(root, `left:0;top:0;width:24px;height:24px;border-radius:50%;background:${ACC};border:3px solid ${PANEL}`); gsap.set(dot, { x: px(0) - 12, y: py(lossAt(0)) - 12, opacity: 0 });
+        tl.to(dot, { opacity: 1, duration: 0.3, immediateRender: false }, o.tDot);
+        const api = { root, px, py, lossAt, dot,
+          roll: (t, w0, w1, dur) => { const q = { w: w0 }; tl.fromTo(q, { w: w0 }, { w: w1, duration: dur, ease: "power2.inOut", immediateRender: false, onUpdate: () => gsap.set(dot, { x: px(q.w) - 12, y: py(lossAt(q.w)) - 12 }) }, t); },
+          jump: (t, p0, p1, dur) => { const q = { u: 0 }; tl.fromTo(q, { u: 0 }, { u: 1, duration: dur, ease: "power2.inOut", immediateRender: false, onUpdate: () => gsap.set(dot, { x: p0[0] + (p1[0] - p0[0]) * q.u - 12, y: p0[1] + (p1[1] - p0[1]) * q.u - 12 }) }, t);
+            const ln = svgEl("line", { x1: p0[0], y1: p0[1], x2: p1[0], y2: p1[1], stroke: HOT, "stroke-width": 4, "stroke-dasharray": "10 10", "stroke-linecap": "round" }, sv); tl.set(ln, { opacity: 0 }, 0); tl.to(ln, { opacity: 0.9, duration: 0.25, immediateRender: false }, t); },
+          downhill: (t, tOut) => { const q = []; for (let w = 0.12; w <= 1.15; w += 0.05) q.push([px(w), py(lossAt(w))]); const n = q.length;
+            const tx = q[n - 1][0] - q[n - 2][0], ty = q[n - 1][1] - q[n - 2][1], tn = Math.hypot(tx, ty), ux = tx / tn, uy = ty / tn, nx = -uy, ny = ux; let L = 0; for (let i = 1; i < n; i++) L += Math.hypot(q[i][0] - q[i - 1][0], q[i][1] - q[i - 1][1]);
+            const g = svgEl("g", {}, sv); const path = svgEl("path", { d: "M" + q.map((a) => a[0].toFixed(1) + " " + a[1].toFixed(1)).join(" L"), fill: "none", stroke: ACC, "stroke-width": 8, "stroke-linecap": "round", "stroke-dasharray": L + 2 }, g);
+            const head = svgEl("polygon", { points: `${q[n - 1][0] + ux * 28},${q[n - 1][1] + uy * 28} ${q[n - 1][0] - ux * 4 + nx * 15},${q[n - 1][1] - uy * 4 + ny * 15} ${q[n - 1][0] - ux * 4 - nx * 15},${q[n - 1][1] - uy * 4 - ny * 15}`, fill: ACC }, g);
+            tl.set(path, { strokeDashoffset: L + 2, opacity: 0 }, 0); tl.set(head, { opacity: 0 }, 0); tl.set(path, { opacity: 1 }, t); tl.to(path, { strokeDashoffset: 0, duration: 0.6, ease: "power2.out", immediateRender: false }, t); tl.to(head, { opacity: 1, duration: 0.15, immediateRender: false }, t + 0.5);
+            if (tOut) tl.to(g, { opacity: 0, duration: 0.3, immediateRender: false }, tOut); },
+          tangent: (tIn) => { const a = [px(-0.25), py(lossAt(0) + 4.667)], b = [px(0.7), py(lossAt(0) - 13.067)];
+            const ln = svgEl("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: TEXT, "stroke-width": 4, "stroke-linecap": "round" }, sv); tl.set(ln, { opacity: 0 }, 0); tl.to(ln, { opacity: 0.95, duration: 0.4, immediateRender: false }, tIn); return ln; },
+          target: (t, label) => { const g = svgEl("line", { x1: px(2), y1: 262, x2: px(2), y2: 236, stroke: ACC, "stroke-width": 5, "stroke-linecap": "round" }, sv);
+            const lb = el(root, `left:${px(2) - 90}px;top:268px;width:180px;text-align:center;font:800 32px ${COD};color:${ACC};white-space:nowrap`, label); tl.set([g, lb], { opacity: 0 }, 0); tl.to([g, lb], { opacity: 1, duration: 0.3, immediateRender: false }, t); } };
+        return api; };
+
+      // the real printed run: columns iteration, w, loss, gradient. times[i] = [iteration, w, loss, gradient]
+      const runTable = (host, y, c) => { const CX = [28, 250, 440, 700]; const TH = 52 + c.rows.length * 38; const root = el(host, `left:60px;top:${y}px;width:960px;height:${TH}px`); glass(root, 0, 0, 960, TH, MUTED, 22); show(root, c.tShow, { opacity: 0, y: 50 }, 0.55);
+        ["update", "w", "loss", "gradient"].forEach((l, i) => el(root, `left:${CX[i]}px;top:6px;font:600 32px ${COD};color:${MUTED}`, l));
+        return c.rows.map((r, i) => { const row = el(root, `left:14px;top:${46 + i * 38}px;width:932px;height:34px;border-radius:8px;background-color:${ca(i === 0 ? ACC : c.col, 0)}`); const T = c.times[i];
+          const cell = (x, v, tt, base) => { const s = el(row, `left:${x - 14}px;top:0;font:700 32px ${COD};line-height:34px;white-space:nowrap;color:${base || TEXT}`, v); tl.set(s, { opacity: 0 }, 0); tl.to(s, { opacity: 1, duration: 0.25, immediateRender: false }, tt); return s; };
+          const s0 = el(row, `left:${CX[0] - 14}px;top:0;font:700 32px ${COD};line-height:34px;color:${MUTED}`, String(i));
+          cell(CX[1], r[0], T[1]); cell(CX[2], r[1], T[2]); cell(CX[3], r[2], T[3]);
+          tl.to(s0, { color: TEXT, duration: 0.25, immediateRender: false }, T[0]); tl.to(row, { backgroundColor: ca(i === 0 ? ACC : c.col, 0.16), duration: 0.3, immediateRender: false }, T[0]); return row; }); };
+
+      // a clockwise arc arrow on a circle (the training loop)
+      const arcArrow = (host, cx, cy, R, a0, a1, col, t) => { const sv = svgLayer(host), g = svgEl("g", {}, sv), th = a1 * Math.PI / 180, tx = Math.cos(th), ty = Math.sin(th), nx = -ty, ny = tx, s0 = pol(cx, cy, R, a0), s1 = pol(cx, cy, R, a1);
+        const Lh = 34, len = R * (a1 - a0) * Math.PI / 180;
+        svgEl("path", { d: `M${s0[0]} ${s0[1]} A${R} ${R} 0 0 1 ${s1[0] - tx * Lh * 0.7} ${s1[1] - ty * Lh * 0.7}`, fill: "none", stroke: col, "stroke-width": 8, "stroke-linecap": "round", "stroke-dasharray": len + 10 }, g).setAttribute("class", "arcp");
+        const head = svgEl("polygon", { points: `${s1[0] + tx * Lh * 0.45},${s1[1] + ty * Lh * 0.45} ${s1[0] - tx * Lh * 0.55 + nx * 15},${s1[1] - ty * Lh * 0.55 + ny * 15} ${s1[0] - tx * Lh * 0.55 - nx * 15},${s1[1] - ty * Lh * 0.55 - ny * 15}`, fill: col }, g);
+        const path = g.querySelector(".arcp"); tl.set(path, { strokeDashoffset: len + 10, opacity: 0 }, 0); tl.set(head, { opacity: 0 }, 0); tl.set(path, { opacity: 1 }, t);
+        tl.to(path, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, t); tl.to(head, { opacity: 1, duration: 0.15, immediateRender: false }, t + 0.35);
+        return { hide: (tt) => gone(g, tt, 0.3) }; };
+
+      // ============ A: the title, the basketball, the four marks, plus maths ============
+      // diagram: A
+      M.hook(["HOW MODELS", "LEARN"], { size: 104, top: 300, until: P("A", 1) - 0.05 });
+      const tHoop = P("A", 1);
+      const floorA = el(A, `left:60px;top:1290px;width:960px;height:4px;border-radius:2px;background:${ca(MUTED, 0.45)}`); show(floorA, tHoop, { opacity: 0 });
+      const hpA = hoop(A, 870, 930, 1, 1290); hpA.forEach((d) => show(d, tHoop, { opacity: 0, y: 16 }));
+      const ball1 = ballEl(A, 84, [170, 1248]), ball2 = ballEl(A, 84, [170, 1248]);
+      const netA = hoopNet(A, 870, 930, 1); tl.set(netA, { opacity: 0 }, 0); tl.to(netA, { opacity: 1, duration: 0.4, immediateRender: false }, tHoop);
+      tl.to(ball1, { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, at("A", "basketball"));
+      labelC(A, "HOW MODELS LEARN", 330, tHoop + 0.1);
+      const markChip = (x, y, n, word, col, t) => show(el(A, `left:${x}px;top:${y}px;width:460px;height:76px;border-radius:22px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)};display:flex;align-items:center;gap:16px;padding:0 24px`,
+        `<span style="display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:${col};color:#0B1220;font:800 26px ${COD}">${n}</span><span style="font:800 36px ${COD};letter-spacing:.06em;color:${TEXT}">${word}</span>`), t, { opacity: 0, y: -18, scale: 0.96 }).setAttribute("data-layout-allow-occlusion", "");
+      const tShot = P("A", 2), tMiss = at("A", "miss"), tUnd = at("A", "samjhi"), tTry = at("A", "phir");
+      fly(ball1, 84, [170, 1248], [772, 892], 340, tShot, 0.95);
+      fly(ball1, 84, [772, 892], [500, 1248], 240, tShot + 0.95, 0.75);
+      markChip(60, 380, 1, "SHOT", CYAN, tShot);
+      M.icon(A, "cross", 758, 780, 56, HOT).show(tShot + 0.95);
+      markChip(560, 380, 2, "MISS", HOT, tMiss);
+      markChip(60, 470, 3, "UNDERSTAND", ACC, tUnd);
+      markChip(560, 470, 4, "TRY AGAIN", CYAN, tTry);
+      gone(ball1, tUnd + 0.2, 0.3);
+      const ghost = svgLayer(A); const gp = arcPts([170, 1248], [871, 920], 340, 28);
+      svgEl("path", { d: "M" + gp.map((q) => q.join(" ")).join(" L"), fill: "none", stroke: ACC, "stroke-width": 6, "stroke-linecap": "round", "stroke-dasharray": "2 18" }, ghost);
+      tl.set(ghost, { opacity: 0 }, 0); tl.to(ghost, { opacity: 0.9, duration: 0.4, immediateRender: false }, tUnd);
+      tl.to(ball2, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, tUnd + 0.3);
+      fly(ball2, 84, [170, 1248], [871, 920], 340, tTry, 0.75);
+      fly(ball2, 84, [871, 920], [871, 1040], 0, tTry + 0.75, 0.25, "power2.in"); gone(ball2, tTry + 0.98, 0.15); gone(ghost, tTry + 0.75, 0.3);
+      M.icon(A, "robot", 90, 930, 120, CYAN).show(P("A", 4));
+      show(el(A, `left:60px;top:1062px;width:180px;text-align:center;font:800 34px ${LAT};letter-spacing:.1em;color:${TEXT}`, "AI"), P("A", 4));
+      const mathsA = el(A, "left:0;top:604px;width:1080px;display:flex;justify-content:center"); mathsA.innerHTML = `<div style="padding:8px 34px;border-radius:999px;background:${ACC};color:#0B1220;font:800 40px ${COD};letter-spacing:.08em">+ MATHS</div>`;
+      show(mathsA, at("A", "maths"), { opacity: 0, y: 10 });
+
+      // ============ B: study hours to marks, the three pairs, prediction = weight x input ============
+      // diagram: B
+      pillC(B, "EXAMPLE", 240, P("B", 0) + 0.05, { size: 32, h: 52 });
+      const tStudy = at("B", "study", 0), tMarks = at("B", "marks", 0);
+      M.icon(B, "clock", 170, 326, 64, CYAN).show(tStudy);
+      show(el(B, `left:246px;top:332px;font:800 44px ${LAT};letter-spacing:.06em;color:${TEXT}`, "STUDY HOURS"), tStudy);
+      M.icon(B, "arrow", 596, 326, 64, MUTED).show(tMarks - 0.15);
+      M.icon(B, "star", 676, 326, 64, ACC).show(tMarks);
+      show(el(B, `left:752px;top:332px;font:800 44px ${LAT};letter-spacing:.06em;color:${TEXT}`, "MARKS"), tMarks);
+      [0, 1, 2].forEach((k) => { const c = bigCard(B, k, 440); show(c.root, [P("B", 1), P("B", 2), P("B", 3)][k], { opacity: 0, y: 40 }); });
+      const fxB = glass(B, 90, 790, 900, 100, ACC, 26); show(fxB, P("B", 4), { opacity: 0, y: 30 });
+      const fxRow = el(B, "left:90px;top:790px;width:900px;height:100px;display:flex;align-items:center;justify-content:center;gap:20px");
+      const fxPart = (html, t) => { const d = document.createElement("div"); d.style.cssText = `font:800 50px ${COD};white-space:nowrap;color:${TEXT}`; d.innerHTML = html; fxRow.appendChild(d); return show(d, t, { opacity: 0, y: 14 }, 0.3); };
+      fxPart(`<span style="color:${ACC}">prediction</span>`, P("B", 5)); fxPart(`<span style="color:${MUTED}">=</span>`, at("B", "equals"));
+      fxPart(`<span style="display:inline-block;padding:0 14px;border:3px solid ${ACC};border-radius:14px;color:${ACC}">weight</span>`, at("B", "weight", 0)); fxPart(`<span style="color:${MUTED}">&times;</span>`, at("B", "times"));
+      fxPart(`<span style="color:${CYAN}">input</span>`, at("B", "input", 0));
+      const stripB = (txt, t, tOut, col) => { const w = el(B, "left:0;top:904px;width:1080px;height:46px;display:flex;justify-content:center"); w.innerHTML = `<div style="display:flex;align-items:center;height:46px;padding:0 28px;border-radius:999px;border:2.5px solid ${col};background:${ca(col, 0.12)};font:800 30px ${COD};letter-spacing:.04em;color:${col};white-space:nowrap">${txt}</div>`;
+        show(w, t, { opacity: 0, y: 10 }, 0.35); if (tOut) gone(w, tOut, 0.25); return w; };
+      stripB("INPUT = STUDY HOURS", P("B", 6), P("B", 7) - 0.3, CYAN); stripB("WEIGHT = w", P("B", 7), null, ACC);
+      const dB = dial(B, 300, 1125, 120, { letter: true, a0: -50 }); dB.show(P("B", 7));
+      const wTag = el(B, "left:520px;top:1010px;width:500px;height:250px");
+      const wBig = el(wTag, `left:0;top:0;font:800 170px ${COD};color:${ACC};line-height:1`, "w"); const wLab = el(wTag, `left:6px;top:180px;font:800 48px ${LAT};letter-spacing:.14em;color:${TEXT}`, "WEIGHT");
+      show(wBig, P("B", 7), { opacity: 0, x: 40, y: 0 }); show(wLab, at("B", "weight", 1), { opacity: 0, x: 40, y: 0 });
+      dB.ring(at("B", "weight", 2));
+
+      // ============ C: step 1, forward pass: weight 0, every prediction 0 ============
+      // diagram: C
+      const cc = [0, 1, 2].map((k) => bigCard(C, k, 330, { pred: true }));
+      cc.forEach((c) => tl.set([c.slot, c.val], { opacity: 0 }, 0));
+      cc.forEach((c, k) => show(c.slot, at("C", "hours") + k * 0.12 - 0.5, { opacity: 0, scale: 0.9 }, 0.3));
+      const dC = dial(C, 540, 995, 120, { letter: true, a0: -50 }); dC.show(P("C", 0));
+      dC.ring(at("C", "weight")); dC.aim(at("C", "zero", 0), -50, 0, 0.8);
+      states(C, `left:290px;top:1128px;width:500px;text-align:center;font:700 56px ${COD};white-space:nowrap`, [[at("C", "initialize") + 0.1, `<span style="color:${ACC}">w</span> <span style="color:${MUTED}">=</span> <span style="color:${TEXT}">0</span>`]]);
+      cc.forEach((c, k) => M.beam(C, [540, 876], [210 + k * 330, 748], P("C", 1) + k * 0.12, { color: CYAN, w: 5, dur: 0.5 }));
+      cc.forEach((c, k) => { const t = at("C", "prediction", 0) + k * 0.15; tl.set(c.slot, { opacity: 0 }, t); show(c.val, t, { opacity: 0, y: 16 }, 0.35); });
+      cc.forEach((c, k) => tl.to(c.root.firstElementChild, { borderColor: ca(HOT, 0.9), duration: 0.3, immediateRender: false }, P("C", 3) + k * 0.1));
+      cc.forEach((c, k) => tl.to(c.ys, { color: HOT, duration: 0.3, immediateRender: false }, P("C", 3) + k * 0.1));
+      stepper(C, 1, "FORWARD PASS", P("C", 4));
+      const stripC = el(C, "left:0;top:1216px;width:1080px;height:46px;display:flex;justify-content:center"); stripC.innerHTML = `<div style="display:flex;align-items:center;height:46px;padding:0 28px;border-radius:999px;border:2.5px solid ${CYAN};background:${ca(CYAN, 0.12)};font:800 32px ${COD};letter-spacing:.04em;color:${CYAN};white-space:nowrap">INPUT &rarr; PREDICTION</div>`;
+      show(stripC, at("C", "input"), { opacity: 0, y: 10 }, 0.35);
+
+      // ============ D: step 2, loss function: MSE, gap, square, average ============
+      // diagram: D
+      const dm = [0, 1, 2].map((k) => miniCard(D, k, 330, [[S.D, "0"]], [2, 4, 6][k]));
+      dm.forEach((m) => m.border(S.D + 0.05, HOT));
+      const qc = el(D, "left:190px;top:520px;width:700px;height:380px"); glass(qc, 0, 0, 700, 380, ACC, 28); show(qc, P("D", 0), { opacity: 0, y: 30 }); gone(qc, P("D", 1) - 0.2, 0.25);
+      el(qc, `left:0;top:34px;width:700px;text-align:center;font:800 56px ${LAT};letter-spacing:.08em;color:${ACC}`, "HOW WRONG?");
+      el(qc, `left:0;top:110px;width:700px;text-align:center;font:800 210px ${COD};color:${MUTED};line-height:1`, "?");
+      stepper(D, 2, "LOSS FUNCTION", P("D", 1));
+      const mse = el(D, "left:150px;top:498px;width:780px;height:84px"); glass(mse, 0, 0, 780, 84, ACC, 24); show(mse, at("D", "MSE"), { opacity: 0, y: 24 });
+      el(mse, `left:30px;top:0;height:84px;display:flex;align-items:center;font:800 54px ${COD};color:${ACC};letter-spacing:.06em`, "MSE");
+      show(el(mse, `left:210px;top:0;height:84px;display:flex;align-items:center;font:700 38px ${LAT};color:${TEXT};white-space:nowrap`, "mean squared error"), at("D", "Mean"), { opacity: 0, x: 20, y: 0 }, 0.4);
+      const fm = el(D, `left:0;top:598px;width:1080px;text-align:center;font:600 32px ${COD};color:${MUTED};white-space:nowrap`, `<span class="f1">mean</span>((<span class="f2">prediction - actual</span>)<span class="f3">^2</span>)`);
+      show(fm, P("D", 4), { opacity: 0, y: 12 }, 0.4);
+      const tGap = at("D", "difference"), tSq = at("D", "square"), tAvg = at("D", "average");
+      tl.to(fm.querySelector(".f2"), { color: HOT, duration: 0.3, immediateRender: false }, tGap); tl.to(fm.querySelector(".f3"), { color: CYAN, duration: 0.3, immediateRender: false }, tSq); tl.to(fm.querySelector(".f1"), { color: ACC, duration: 0.3, immediateRender: false }, tAvg);
+      const cxs = [210, 540, 870], gaps = [2, 4, 6], U = 40, TOP = 672, GY = 1010;
+      const segW = [4 / 3 * 42, 16 / 3 * 42, 36 / 3 * 42], segX = [120, 120 + segW[0], 120 + segW[0] + segW[1]];
+      const gTrack = el(D, `left:116px;top:${GY - 4}px;width:848px;height:78px;border-radius:16px;border:2px solid ${ca(MUTED, 0.4)};background:${ca(MUTED, 0.12)}`); show(gTrack, at("D", "loss", 0) - 0.05, { opacity: 0, y: 20 });
+      show(el(D, `left:112px;top:${GY + 80}px;width:60px;font:700 34px ${COD};color:${MUTED}`, "0"), at("D", "loss", 0) + 0.2, { opacity: 0 });
+      show(el(D, `left:900px;top:${GY + 80}px;width:60px;text-align:right;font:700 34px ${COD};color:${MUTED}`, "20"), at("D", "loss", 0) + 0.2, { opacity: 0 });
+      show(el(D, `left:116px;top:${GY + 126}px;font:800 44px ${LAT};letter-spacing:.14em;color:${TEXT}`, "LOSS"), at("D", "loss", 0), { opacity: 0, y: 12 });
+      const sqs = cxs.map((cx, k) => { const h = gaps[k] * U, s = h;
+        const b = el(D, `left:${cx - 28}px;top:${TOP}px;width:56px;height:${h}px;border-radius:10px;border:3px solid ${HOT};background:${ca(HOT, 0.28)}`);
+        tl.set(b, { opacity: 0, scaleY: 0, transformOrigin: "50% 0%" }, 0);
+        tl.to(b, { opacity: 1, scaleY: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, tGap + k * 0.12);
+        tl.to(b, { left: cx - s / 2, width: s, duration: 0.6, ease: "power3.inOut", immediateRender: false }, tSq + k * 0.05);
+        tl.to(b, { left: segX[k], top: GY, width: segW[k], height: 70, duration: 0.85, ease: "power3.inOut", immediateRender: false }, tAvg + k * 0.06);
+        states(D, `left:${cx - 100}px;top:${TOP + h + 8}px;width:200px;text-align:center;font:700 44px ${COD};color:${HOT}`, [[tGap + k * 0.12 + 0.25, String(gaps[k])], [tSq + 0.5, String(gaps[k] * gaps[k])], [tAvg, ""]]);
+        return b; });
+      const d3 = el(D, `left:0;top:${TOP + 248 + 14}px;width:1080px;display:flex;justify-content:center`); d3.innerHTML = `<div style="padding:4px 26px;border-radius:999px;background:${ACC};color:#0B1220;font:800 38px ${COD};letter-spacing:.08em">&divide; 3</div>`;
+      show(d3, tAvg + 0.3, { opacity: 0, y: 10 }); gone(d3, P("D", 7) - 0.05);
+      tl.to(sqs, { borderColor: ACC, duration: 0.3, immediateRender: false }, P("D", 7));
+      show(el(D, `left:300px;top:${GY + 100}px;font:800 104px ${COD};color:${HOT};line-height:1.1;white-space:nowrap`, "18.67"), at("D", "1867"), { opacity: 0, y: 20 });
+      const tagD = el(D, `left:640px;top:${GY + 140}px;width:380px;text-align:center;font:800 30px ${COD};letter-spacing:.04em;color:${ACC};white-space:nowrap`, "LOWER LOSS = BETTER"); show(tagD, at("D", "kam"), { opacity: 0, x: -30, y: 0 });
+
+      // ============ E and F share one board: cards, dial, loss curve, the real run ============
+      const board = (host, c) => {
+        stepper(host, 3, "GRADIENT DESCENT", c.tStep);
+        const cards = [0, 1, 2].map((k) => miniCard(host, k, 330, c.preds[k], [2, 4, 6][k]));
+        const dl = dial(host, 235, 635, 112, { letter: true, a0: 0 });
+        states(host, `left:25px;top:762px;width:420px;text-align:center;font:700 44px ${COD};white-space:nowrap`, c.wRead.map(([t, v]) => [t, `<span style="color:${ACC}">w</span> <span style="color:${MUTED}">=</span> <span style="color:${TEXT}">${v}</span>`]));
+        c.needle.forEach(([t, a0, a1, d]) => dl.aim(t, a0, a1, d));
+        const bw = bowl(host, 440, 500, { tShow: c.tBowl, tCurve: c.tCurve, curveDur: c.curveDur, tDot: c.tDot, read: c.lossRead });
+        const tab = runTable(host, 1055, { rows: c.rows, times: c.times, col: c.col, tShow: c.tTab });
+        return { cards, dl, bw, tab }; };
+
+      // ============ E: step 3, gradient descent: one update, then four updates, converged ============
+      // diagram: E
+      const eT = { go: at("E", "descent"), gdef: at("E", "Gradient"), tan: at("E", "direction"), how: at("E", "kitna"), val: at("E", "-1867"), up: at("E", "new"), lr: at("E", "Learning"), lr0: at("E", "01"), roll: P("E", 9), w1: at("E", "187"), l1: at("E", "0083"),
+        rep: at("E", "dohrao"), u2: at("E", "4"), u3: at("E", "4") + 0.45, u4: at("E", "4") + 0.9, two: at("E", "2"), pred: at("E", "prediction"), sahi: at("E", "sahi", 0), ans: at("E", "answer"), conv: P("E", 17) };
+      const eb = board(E, { tStep: P("E", 0), tBowl: S.E + 0.1, tCurve: at("E", "gradient", 0), curveDur: 0.9, tDot: eT.go,
+        preds: [["0", "1.87", "1.99", "2.0", `<span style="color:${GOOD}">2</span>`], ["0", "3.73", "3.98", "4.0", `<span style="color:${GOOD}">4</span>`], ["0", "5.6", "5.97", "6.0", `<span style="color:${GOOD}">6</span>`]].map((a) => [[S.E, a[0]], [eT.w1, a[1]], [eT.u2, a[2]], [eT.u3, a[3]], [eT.pred, a[4]]]),
+        wRead: [[S.E, "0.0"], [eT.w1, "1.867"], [eT.u2, "1.991"], [eT.u3, "1.999"], [eT.u4, "2.0"], [eT.two, `<span style="color:${GOOD}">2.00</span>`]],
+        needle: [[eT.roll, 0, ang(1.867), 1.2], [eT.u2, ang(1.867), ang(1.991), 0.35], [eT.u3, ang(1.991), ang(1.999), 0.3], [eT.u4, ang(1.999), ang(2.0), 0.3]],
+        lossRead: [[S.E + 0.1, `<span style="color:${TEXT}">18.667</span>`], [eT.l1, `<span style="color:${TEXT}">0.083</span>`], [P("E", 12), `<span style="color:${ACC}">0.083</span>`], [eT.u2, `<span style="color:${TEXT}">0.0</span>`], [eT.pred, `<span style="color:${GOOD}">0.0</span>`]],
+        col: ACC, tTab: S.E + 0.3,
+        rows: [["0.0", "18.667", "-18.667"], ["1.867", "0.083", "-1.244"], ["1.991", "0.0", "-0.083"], ["1.999", "0.0", "-0.006"], ["2.0", "0.0", "-0.0"]],
+        times: [[S.E + 0.7, S.E + 0.7, S.E + 0.7, eT.val], [eT.roll, eT.w1, eT.l1, eT.l1 + 0.35], [eT.u2, eT.u2, eT.u2, eT.u2], [eT.u3, eT.u3, eT.u3, eT.u3], [eT.u4, eT.u4, eT.u4, eT.u4]] });
+      const bwE = eb.bw;
+      bwE.roll(eT.roll, 0, 1.867, 1.2); bwE.roll(eT.u2, 1.867, 1.991, 0.35); bwE.roll(eT.u3, 1.991, 1.999, 0.3); bwE.roll(eT.u4, 1.999, 2.0, 0.3);
+      bwE.downhill(eT.go + 0.15, P("E", 1) - 0.1);
+      const tanE = bwE.tangent(eT.tan); gone(tanE, eT.roll);
+      const dirChip = (txt, t, y) => { const c = el(bwE.root, `left:210px;top:${y}px;width:220px;height:40px;border:2px solid ${ca(CYAN, 0.7)};border-radius:12px;background:${ca(CYAN, 0.10)};text-align:center;line-height:36px;font:800 28px ${COD};letter-spacing:.08em;color:${CYAN}`, txt); show(c, t, { opacity: 0, y: 8 }, 0.3); gone(c, P("E", 3) - 0.3, 0.2); };
+      dirChip("DIRECTION", eT.tan, 80); dirChip("HOW MUCH", eT.how, 126);
+      const gch = el(bwE.root, "left:200px;top:76px;width:240px;height:100px"); glass(gch, 0, 0, 240, 100, ACC, 18); show(gch, P("E", 3), { opacity: 0, scale: 0.94 }, 0.4); gone(gch, eT.w1 + 0.7);
+      el(gch, `left:0;top:6px;width:240px;text-align:center;font:700 28px ${COD};letter-spacing:.14em;color:${MUTED}`, "GRADIENT");
+      show(el(gch, `left:0;top:36px;width:240px;text-align:center;font:800 54px ${COD};color:${TEXT};line-height:1.2`, "-18.667"), eT.val, { opacity: 0, y: 12 });
+      const rowD = (html, t, tOut) => { const b = el(E, "left:60px;top:835px;width:960px;height:150px"); glass(b, 0, 0, 960, 150, null, 24); el(b, `left:0;top:0;width:960px;height:150px;display:flex;align-items:center;justify-content:center;font:800 46px ${COD};white-space:nowrap`, html);
+        show(b, t, { opacity: 0, y: 24 }); gone(b, tOut, 0.25); return b; };
+      rowD(`<span style="color:${ACC}">DESCENT</span><span style="color:${MUTED}">&nbsp;=&nbsp;</span><span style="color:${TEXT}">MOVE AGAINST GRADIENT</span>`, eT.go, P("E", 1) - 0.3);
+      rowD(`<span style="color:${ACC}">GRADIENT</span><span style="color:${MUTED}">&nbsp;=&nbsp;</span><span style="color:${TEXT}">&part;loss/&part;w</span>`, P("E", 1), P("E", 4) - 0.35);
+      rowD(`<span style="color:${HOT}">NEGATIVE</span><span style="color:${MUTED}">&nbsp;&rarr;&nbsp;</span><span style="color:${TEXT}">INCREASE&nbsp;w</span>`, P("E", 4), P("E", 6) - 0.35);
+      const incA = M.arrow(E, { from: [440 + bwE.px(0) + 22, 500 + bwE.py(18.667)], to: [440 + bwE.px(0) + 100, 500 + bwE.py(18.667)], color: ACC, w: 7 }); incA.show(at("E", "badhane"), 0.4); incA.hide(eT.roll);
+      const up = el(E, "left:60px;top:835px;width:960px;height:150px"); glass(up, 0, 0, 960, 150, ACC, 24); show(up, P("E", 6), { opacity: 0, y: 30 }); gone(up, eT.w1 - 0.35, 0.25);
+      const upLine = (top, size, gap) => el(up, `left:24px;top:${top}px;height:${size + 24}px;width:600px;display:flex;align-items:center;gap:${gap}px;font:800 ${size}px ${COD};white-space:nowrap`);
+      const upPart = (host, html, t) => { const d = document.createElement("div"); d.innerHTML = html; host.appendChild(d); return show(d, t, { opacity: 0, y: 12 }, 0.3); };
+      const l1 = upLine(6, 46, 14), l2 = upLine(78, 42, 14);
+      const wsub = (col, sub) => `<span style="color:${col}">w<span style="font-size:.5em;vertical-align:-.15em">${sub}</span></span>`;
+      upPart(l1, `<span style="display:inline-block;padding:0 10px;border:3px solid ${ACC};border-radius:12px">${wsub(ACC, "new")}</span>`, eT.up); upPart(l1, `<span style="color:${MUTED}">=</span>`, at("E", "equals"));
+      upPart(l1, wsub(TEXT, "old"), at("E", "old")); upPart(l1, `<span style="color:${MUTED}">&minus;</span>`, at("E", "minus")); upPart(l1, `<span style="color:${CYAN}">lr</span>`, at("E", "learning", 0));
+      upPart(l1, `<span style="color:${MUTED}">&times;</span>`, at("E", "times")); upPart(l1, `<span style="color:${TEXT}">gradient</span>`, at("E", "gradient", 3));
+      upPart(l2, `<span style="color:${TEXT}">0</span>`, eT.lr); upPart(l2, `<span style="color:${MUTED}">&minus;</span> <span style="color:${CYAN}">0.1</span> <span style="color:${MUTED}">&times;</span>`, eT.lr0);
+      upPart(l2, `<span style="color:${TEXT}">(&minus;18.67)</span>`, eT.lr0 + 0.6);
+      const lrc = el(up, "left:640px;top:6px;width:306px;height:138px"); glass(lrc, 0, 0, 306, 138, CYAN, 20); show(lrc, eT.lr, { opacity: 0, scale: 0.94 }, 0.4);
+      el(lrc, `left:0;top:4px;width:306px;text-align:center;font:700 32px ${COD};letter-spacing:.06em;color:${MUTED}`, "LEARNING RATE");
+      show(el(lrc, `left:0;top:40px;width:306px;text-align:center;font:800 30px ${COD};letter-spacing:.08em;color:${ACC}`, "= STEP SIZE"), at("E", "rate", 1), { opacity: 0, y: 8 }, 0.3);
+      states(lrc, `left:0;top:70px;width:306px;text-align:center;font:800 68px ${COD};line-height:1.0`, [[eT.lr, `<span style="color:${MUTED}">?</span>`], [eT.lr0, `<span style="color:${CYAN}">0.1</span>`]]);
+      // the result of one update, big
+      const res = el(E, "left:60px;top:835px;width:960px;height:150px"); glass(res, 0, 0, 960, 150, ACC, 24); show(res, eT.w1 - 0.1, { opacity: 0, y: 30 }); gone(res, eT.two - 0.4, 0.25);
+      el(res, `left:44px;top:12px;font:700 30px ${COD};letter-spacing:.12em;color:${MUTED}`, "WEIGHT"); el(res, `left:440px;top:12px;font:700 30px ${COD};letter-spacing:.12em;color:${MUTED}`, "LOSS");
+      show(el(res, `left:40px;top:42px;font:800 92px ${COD};color:${ACC};line-height:1.1`, "1.87"), eT.w1, { opacity: 0, y: 14 });
+      show(el(res, `left:436px;top:56px;font:800 62px ${COD};color:${HOT};line-height:1.1`, "18.67"), eT.w1, { opacity: 0, y: 14 });
+      show(el(res, `left:632px;top:60px;font:800 52px ${COD};color:${MUTED};line-height:1.1`, "&rarr;"), eT.l1 - 0.1, { opacity: 0, x: -20, y: 0 });
+      show(el(res, `left:696px;top:44px;font:800 76px ${COD};color:${ACC};line-height:1.1`, "0.083"), eT.l1, { opacity: 0, y: 14 });
+      // after four updates: w = 2.00 big, the cards turn into 2, 4, 6 with green ticks, converged
+      const fin = el(E, "left:60px;top:835px;width:960px;height:150px"); glass(fin, 0, 0, 960, 150, GOOD, 24); show(fin, eT.two, { opacity: 0, y: 30 });
+      show(el(fin, `left:50px;top:24px;font:800 92px ${COD};color:${TEXT};line-height:1.1;white-space:nowrap`, `<span style="color:${ACC}">w</span> <span style="color:${MUTED}">=</span> <span style="color:${GOOD}">2.00</span>`), eT.two, { opacity: 0, y: 14 });
+      show(el(fin, `left:560px;top:12px;font:700 30px ${COD};letter-spacing:.12em;color:${MUTED}`, "LOSS"), eT.pred - 0.2, { opacity: 0, y: 8 });
+      show(el(fin, `left:560px;top:50px;font:800 70px ${COD};color:${GOOD};line-height:1.1;white-space:nowrap`, "&asymp; 0"), eT.pred - 0.2, { opacity: 0, y: 14 });
+      eb.cards.forEach((m, k) => { m.border(eT.sahi, GOOD); m.tint(eT.sahi, GOOD); const ck = M.icon(E, "check", cardX[k] + 244, 330 + 100, 40, GOOD); ck.show(eT.sahi + 0.1); });
+      bwE.target(eT.ans, "2"); eb.dl.target(eT.ans, 60, "2");
+      const strip1 = (txt, t, tOut, col, size) => { const w = el(E, "left:0;top:997px;width:1080px;height:46px;display:flex;justify-content:center"); w.innerHTML = `<div style="display:flex;align-items:center;height:46px;padding:0 26px;border-radius:999px;border:2.5px solid ${col};background:${ca(col, 0.12)};font:800 ${size || 30}px ${COD};letter-spacing:.03em;color:${col};white-space:nowrap">${txt}</div>`;
+        show(w, t, { opacity: 0, y: 10 }, 0.35); if (tOut) gone(w, tOut, 0.25); return w; };
+      strip1("AFTER 4 UPDATES", eT.rep, eT.conv - 0.3, CYAN);
+      strip1("CONVERGED = REACHED THE CORRECT ANSWER (w = 2)", eT.conv, null, GOOD, 28);
+
+      // ============ F: learning rate 0.5, the model overshoots and diverges ============
+      // diagram: F
+      const fT = { w0: at("F", "weight"), w1: at("F", "933"), l0: at("F", "loss"), l1: at("F", "251"), h2: at("F", "diverge"), h3: at("F", "diverge") + 0.4, h4: at("F", "diverge") + 0.8 };
+      const fb = board(F, { tStep: P("F", 0), tBowl: S.F + 0.05, tCurve: S.F + 0.1, curveDur: 0.4, tDot: S.F + 0.3,
+        preds: [["0", "9.33", "-24.89", "100.6", "-359.5"], ["0", "18.67", "-49.78", "201.2", "-719.0"], ["0", "28.0", "-74.67", "301.8", "-1078.5"]].map((a) => [[S.F, a[0]], [fT.w1, a[1]], [fT.h2, a[2]], [fT.h3, a[3]], [fT.h4, a[4]]]),
+        wRead: [[S.F, "0.0"], [fT.w1, "9.333"], [fT.h2, "-24.889"], [fT.h3, "100.593"], [fT.h4, "-359.506"]],
+        needle: [[fT.w0, 0, 120, 0.5], [fT.h2, 120, -120, 0.35], [fT.h3, -120, 120, 0.35], [fT.h4, 120, -120, 0.35]],
+        lossRead: [[S.F + 0.05, `<span style="color:${TEXT}">18.667</span>`], [fT.l0, `<span style="color:${HOT}">18.667</span>`], [fT.l1, `<span style="color:${HOT}">250.963</span>`], [fT.h2, `<span style="color:${HOT}">3374.058</span>`], [fT.h3, `<span style="color:${HOT}">45362.33</span>`], [fT.h4, `<span style="color:${HOT}">609871.327</span>`]],
+        col: HOT, tTab: S.F + 0.3,
+        rows: [["0.0", "18.667", "-18.667"], ["9.333", "250.963", "68.444"], ["-24.889", "3374.058", "-250.963"], ["100.593", "45362.33", "920.198"], ["-359.506", "609871.327", "-3374.058"]],
+        times: [[S.F + 0.7, S.F + 0.7, S.F + 0.7, S.F + 0.7], [at("F", "update"), fT.w1, fT.l1, fT.l1 + 0.3], [fT.h2, fT.h2, fT.h2, fT.h2], [fT.h3, fT.h3, fT.h3, fT.h3], [fT.h4, fT.h4, fT.h4, fT.h4]] });
+      const bwF = fb.bw; const P0 = [bwF.px(0), bwF.py(bwF.lossAt(0))]; const hops = [[554, 112], [26, 92], [554, 78], [26, 66]];
+      bwF.jump(fT.w0, P0, hops[0], 0.45); bwF.jump(fT.h2, hops[0], hops[1], 0.4); bwF.jump(fT.h3, hops[1], hops[2], 0.4); bwF.jump(fT.h4, hops[2], hops[3], 0.4);
+      bwF.target(at("F", "target"), "TARGET 2");
+      fb.cards.forEach((m) => m.border(fT.l1, HOT));
+      const divS = el(bwF.root, `left:170px;top:152px;width:240px;height:66px;border:3px solid ${HOT};border-radius:14px;background:rgba(14,18,30,.95);text-align:center;line-height:60px;font:800 34px ${COD};letter-spacing:.02em;color:${HOT}`, "DIVERGE");
+      show(divS, P("F", 5), { opacity: 0, scale: 1.08 }, 0.35);
+      const lrF = el(F, "left:60px;top:845px;width:370px;height:190px"); glass(lrF, 0, 0, 370, 190, CYAN, 24); show(lrF, at("F", "learning", 0), { opacity: 0, y: 30 });
+      el(lrF, `left:0;top:12px;width:370px;text-align:center;font:700 32px ${COD};letter-spacing:.06em;color:${MUTED}`, "LEARNING RATE");
+      states(lrF, `left:0;top:64px;width:370px;text-align:center;font:800 96px ${COD};line-height:1.1`, [[at("F", "learning", 0), `<span style="color:${CYAN}">0.1</span>`], [at("F", "05"), `<span style="color:${CYAN}">0.5</span>`], [fT.h2, `<span style="color:${HOT}">0.5</span>`]]);
+      el(F, `left:450px;top:1040px;width:570px;height:4px;border-radius:2px;background:${ca(MUTED, 0.45)}`);
+      const hpF = hoop(F, 905, 980, 0.55, 1040); const netF = hoopNet(F, 905, 980, 0.55);
+      const ballF = ballEl(F, 48, [490, 1016]); ballF.setAttribute("data-layout-allow-overflow", "");
+      tl.to(ballF, { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, at("F", "target"));
+      fly(ballF, 48, [490, 1016], [1110, 880], 130, at("F", "cross") - 0.2, 1.3); gone(ballF, S.G - 0.2, 0.15);
+
+      // ============ G: billions of parameters, the same loop in LLMs, weights hold learned patterns ============
+      // diagram: G
+      const bigD = dial(G, 540, 590, 150, { letter: true, a0: -30 }); bigD.show(P("G", 0));
+      bigD.aim(P("G", 0) + 0.5, -30, 60, 0.8);
+      const rnd = ((seed) => () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296)(7);
+      const t0F = at("G", "billions"); const minis = [];
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 7; c++) { const cx = 150 + c * 130, cy = 395 + r * 130;
+        if (r === 1 && c === 3) continue;
+        const a0 = Math.round((rnd() * 2 - 1) * 100); const md = dial(G, cx, cy, 48, { mini: true, a0 }); const dist = Math.hypot(c - 3, r - 1); md.a0 = a0; minis.push(md);
+        tl.set(md.wrap, { opacity: 0, scale: 0.3 }, 0); tl.to(md.wrap, { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, t0F + dist * 0.09); }
+      tl.to(bigD.wrap, { scale: 48 / 150, y: -65, duration: 0.55, ease: "power3.inOut", immediateRender: false }, t0F);
+      labelC(G, "BILLIONS OF PARAMETERS", 250, t0F, { size: 40, font: LAT, weight: 800, col: ACC, ls: ".08em" });
+      const llm = el(G, `left:60px;top:240px;width:130px;height:56px;border:2px solid ${ACC};border-radius:999px;background:${ca(ACC, 0.10)};text-align:center;line-height:52px;font:800 34px ${COD};letter-spacing:.1em;color:${ACC}`, "LLM"); show(llm, at("G", "LLMs"), { opacity: 0, y: -14 });
+      const lit = ["predictions", "loss", "gradients", "update"].map((w, i) => at("G", w, i === 3 ? 0 : 0));
+      const boxes = [["FORWARD", 61], ["LOSS", 317], ["GRADIENT", 573], ["UPDATE", 829]].map(([lab, x], i) => { const b = el(G, `left:${x}px;top:880px;width:190px;height:96px;border-radius:22px;border:2.5px solid ${ca(CYAN, 0.7)};background:${ca(CYAN, 0.08)};display:flex;align-items:center;justify-content:center;font:800 32px ${LAT};letter-spacing:.04em;color:${TEXT}`, lab);
+        show(b, P("G", 1) + i * 0.25, { opacity: 0, y: 24 }, 0.4); tl.to(b, { borderColor: ACC, backgroundColor: ca(ACC, 0.2), duration: 0.35, immediateRender: false }, lit[i]); return b; });
+      [0, 1, 2].forEach((i) => M.arrow(G, { from: [61 + 190 * (i + 1) + 66 * i + 5, 928], to: [317 + 256 * i - 5, 928], color: MUTED, w: 6 }).show(P("G", 1) + 0.3 + i * 0.25, 0.3));
+      minis.forEach((md) => md.aim(lit[3], md.a0, md.a0 + 28, 0.7));
+      // the REPEAT arrow: from UPDATE back to FORWARD
+      const rep = svgLayer(G); const rg = svgEl("g", {}, rep); const rpath = "M924 980 L924 1034 L156 1034 L156 1000"; const rlen = 54 + 768 + 34 + 4;
+      const rp = svgEl("path", { d: rpath, fill: "none", stroke: ACC, "stroke-width": 7, "stroke-linecap": "round", "stroke-linejoin": "round", "stroke-dasharray": rlen }, rg);
+      const rh = svgEl("polygon", { points: "156,982 141,1008 171,1008", fill: ACC }, rg);
+      tl.set(rp, { strokeDashoffset: rlen, opacity: 0 }, 0); tl.set(rh, { opacity: 0 }, 0); tl.set(rp, { opacity: 1 }, at("G", "baar-baar")); tl.to(rp, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut", immediateRender: false }, at("G", "baar-baar")); tl.to(rh, { opacity: 1, duration: 0.15, immediateRender: false }, at("G", "baar-baar") + 0.7);
+      show(el(G, `left:0;top:1046px;width:1080px;text-align:center;font:800 34px ${COD};letter-spacing:.14em;color:${ACC}`, "REPEAT"), at("G", "repeat"), { opacity: 0, y: 8 });
+      labelC(G, "WEIGHTS = LEARNED PATTERNS", 1100, P("G", 5), { size: 44, font: LAT, weight: 800, col: ACC, ls: ".04em" });
+      minis.forEach((md, i) => md.ring(at("G", "weights", 1) + i * 0.03)); bigD.ring(at("G", "learned"));
+      const shelf = el(G, "left:90px;top:1170px;width:900px;height:124px"); glass(shelf, 0, 0, 900, 124, MUTED, 22); show(shelf, P("G", 6), { opacity: 0, y: 24 });
+      el(shelf, `left:30px;top:100px;width:840px;height:8px;border-radius:4px;background:${ca(MUTED, 0.5)}`);
+      [["1", "2"], ["2", "4"], ["3", "6"], ["4", "8"]].forEach(([a, b], i) => { const cd = el(shelf, `left:${40 + i * 210}px;top:14px;width:190px;height:78px;border-radius:16px;border:2px solid ${ca(CYAN, 0.6)};background:${ca(CYAN, 0.10)};text-align:center;line-height:74px;font:700 40px ${COD};color:${TEXT}`, `${a} &rarr; ${b}`);
+        show(cd, P("G", 6) + 0.2 + i * 0.12, { opacity: 0, y: 16 }, 0.3); });
+      const xs = svgLayer(G); [[110, 1180, 970, 1284], [970, 1180, 110, 1284]].forEach(([x1, y1, x2, y2], i) => { const l = svgEl("line", { x1, y1, x2, y2, stroke: HOT, "stroke-width": 14, "stroke-linecap": "round", "stroke-dasharray": 900 }, xs);
+        tl.set(l, { strokeDashoffset: 900 }, 0); tl.to(l, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out", immediateRender: false }, at("G", "nahi") + i * 0.2); });
+      tl.set(xs, { opacity: 0 }, 0); tl.set(xs, { opacity: 1 }, at("G", "nahi"));
+      const nol = el(G, "left:0;top:1210px;width:1080px;display:flex;justify-content:center"); nol.innerHTML = `<div style="padding:6px 30px;border-radius:999px;border:2.5px solid ${HOT};background:rgba(14,18,30,.96);font:800 34px ${COD};letter-spacing:.06em;color:${HOT}">NO LIST OF ANSWERS</div>`;
+      show(nol, at("G", "list"), { opacity: 0, y: 14 });
+
+      // ============ H: remember the loop; check yourself; comment and follow ============
+      // diagram: H
+      const LC = [540, 650], LR = 270; const nodeA = [0, 72, 144, 216, 288];
+      const nodes = [["FORWARD PASS", CYAN, P("H", 1)], ["LOSS", HOT, at("H", "loss")], ["GRADIENT", ACC, at("H", "gradient")], ["UPDATE", CYAN, at("H", "update")], ["REPEAT", MUTED, at("H", "repeat")]].map(([lab, col, t], i) => { const p = pol(LC[0], LC[1], LR, nodeA[i]); const w = 270;
+        const d = el(H, `left:${p[0] - w / 2}px;top:${p[1] - 38}px;width:${w}px;height:76px;border-radius:22px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;font:800 34px ${COD};letter-spacing:.04em;color:${TEXT};white-space:nowrap`, lab);
+        return show(d, t, { opacity: 0, y: 24, scale: 0.96 }); });
+      const ring0 = svgLayer(H); svgEl("circle", { cx: LC[0], cy: LC[1], r: LR, fill: "none", stroke: "rgba(150,175,215,.22)", "stroke-width": 4, "stroke-dasharray": "12 14" }, ring0); tl.set(ring0, { opacity: 0 }, 0); tl.to(ring0, { opacity: 1, duration: 0.5, immediateRender: false }, P("H", 0) + 0.2);
+      const tlab = show(el(H, `left:0;top:${LC[1] - 30}px;width:1080px;text-align:center;font:800 48px ${COD};letter-spacing:.06em;color:${ACC};line-height:1.15`, "REMEMBER"), at("H", "yaad"), { opacity: 0, scale: 0.94 });
+      const arcAng = [[34, 58], [86, 126], [168, 194], [236, 272], [300, 328]];
+      const arcs = [0, 1, 2, 3, 4].map((i) => arcArrow(H, LC[0], LC[1], LR, arcAng[i][0], arcAng[i][1], i === 4 ? ACC : MUTED, [at("H", "loss"), at("H", "gradient"), at("H", "update"), at("H", "repeat"), at("H", "repeat") + 0.35][i] - 0.05));
+      const loopOut = P("H", 2); gone(ring0, loopOut, 0.3); [...nodes, tlab].forEach((d) => gone(d, loopOut, 0.3)); arcs.forEach((a) => a.hide(loopOut));
+      pillC(H, "CHECK YOURSELF", 250, at("H", "batao") - 0.1, { size: 34, h: 56 });
+      [0, 1, 2].forEach((k) => { const c = bigCard(H, k, 330, { mult: 3 }); const q = el(c.root, `left:0;top:114px;width:300px;height:116px;text-align:center;line-height:116px;font:700 100px ${COD};color:${MUTED}`, "?");
+        const tk = [at("H", "3"), at("H", "6"), at("H", "9")][k]; show(c.root, P("H", 3) + k * 0.12, { opacity: 0, y: 40 }); tl.set(c.yv, { opacity: 0 }, 0); tl.set(c.yv, { opacity: 1 }, tk); tl.set(q, { opacity: 0 }, tk); });
+      const dH = dial(H, 540, 790, 125, { letter: true, a0: -20 }); dH.show(P("H", 3) + 0.9);
+      show(el(H, `left:0;top:926px;width:1080px;text-align:center;font:700 34px ${COD};letter-spacing:.14em;color:${MUTED}`, "CONVERGES TO"), at("H", "converge"), { opacity: 0, y: 10 });
+      states(H, `left:290px;top:964px;width:500px;text-align:center;font:700 62px ${COD};white-space:nowrap`, [[P("H", 4), `<span style="color:${ACC}">w</span> <span style="color:${MUTED}">=</span> <span style="color:${TEXT}">?</span>`]]);
+      const cm = el(H, "left:120px;top:1062px;width:840px;height:84px"); show(cm, at("H", "Comment"), { opacity: 0, y: 30 });
+      el(cm, `left:0;top:0;width:840px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.4);background:${ca(PANEL, 0.9)};font:500 34px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 36px`, "Add a comment...");
+      const hc = el(H, "left:120px;top:1158px;width:840px;height:138px"); glass(hc, 0, 0, 840, 138, ACC, 28); show(hc, P("H", 6), { opacity: 0, y: 40 });
+      el(hc, `left:40px;top:22px;font:700 46px ${COD};color:${TEXT}`, "@ai.learnvora");
+      show(el(hc, `left:40px;top:86px;font:700 28px ${COD};letter-spacing:.08em;color:${ACC}`, "150 DAYS OF AI MASTERY"), at("H", "150"), { opacity: 0, y: 8 }, 0.3);
+      const fp = el(hc, `left:540px;top:31px;width:260px;height:76px;border-radius:38px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 36px ${COD};letter-spacing:.08em`, "+ FOLLOW");
+      tl.to(fp, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("H", "follow")); tl.to(fp, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("H", "follow") + 0.12);
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
+      M.finish({ kw: { gradient: "gold", gradients: "gold", loss: "hot", prediction: "cyan", predictions: "cyan", weight: "gold", weights: "gold", diverge: "hot", mse: "cyan", input: "cyan", loop: "gold", converge: "gold", billions: "cyan", negative: "hot", update: "cyan", maths: "gold", repeat: "gold", answers: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -442,6 +442,45 @@
       "status": "planned",
       "qa_passed": false,
       "unit": "D6"
+    },
+    {
+      "id": "a001",
+      "track": "series",
+      "day": 1,
+      "unit": "A3",
+      "format": "demo",
+      "title": "How a model learns: forward pass, loss, gradient descent",
+      "one_idea": "A model learns by guessing, measuring how wrong the guess was (the loss) and nudging its weight against the gradient, repeated until it converges; the same loop trains an LLM.",
+      "hook_type": "direct_question",
+      "spoken_hook": "AI model seekhta kaise hai?",
+      "hook_formula": "plain_question",
+      "hook_source": "the owner's own wording of 2026-10-19: the plain question, a 0.6 s pause, then straight to the basketball answer (the 'kya use ratwaya jaata hai?' detour was cut by the owner)",
+      "visual_idea": "A ball and hoop with four marks (shot, miss, understand, try again), then three cards hours to marks with one weight dial, a loss gauge, a loss curve with a dot sliding against the gradient arrow and a table of real runs, then the same run diverging with a larger step.",
+      "everyday_anchor": "Learning basketball: take a shot, miss, understand the mistake, try again.",
+      "example": "EXAMPLE (we ran it, Python 3.12): one weight w, marks = w x hours for 1, 2, 3 hours giving 2, 4, 6. Learning rate 0.1: w 1.867 and loss 0.083 after one update, w 2.0 after four. Learning rate 0.5: loss 18.667, 250.963, 3374.058 (diverges). Check question: marks 3, 6, 9 give w = 3.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Gradient_descent",
+        "https://en.wikipedia.org/wiki/Loss_function",
+        "https://en.wikipedia.org/wiki/Large_language_model",
+        "https://arxiv.org/abs/2005.14165"
+      ],
+      "facts_to_verify": [
+        "Every number on screen is from the real run printed in docs-notes/pilot-script-day1.md section 6; the claim 'billions of parameters' is the largest models (more than 100 billion, GPT-3 175 billion)."
+      ],
+      "length_target_s": 175,
+      "cover_headline": "How models actually learn",
+      "thumb_text": "How AI learns",
+      "keywords": [
+        "how do ai models learn",
+        "gradient descent explained",
+        "loss function",
+        "learning rate",
+        "ai engineer roadmap"
+      ],
+      "caption_note": "The answer to the check question is 3 (put it in the caption).",
+      "studio_note": "FINISHED COMPOSITION, VOICE ONLY (owner, 2026-10-19). The owner approved this reel as a Swara preview and wants it in his own voice. reels/a001_how_a_model_learns already holds the final spec.json (narration and 25 sound cues), script.txt and index.html (all the pictures, placed from the word timings of data.json, so they follow the new voice). Do NOT rewrite the script, do NOT redraw the pictures, do NOT run new_reel.py (the folder exists). Steps: (1) make_voice with the owner's voice (the default). (2) If the total is over 178 s raise spec.json \"pace\" from 1.26 toward 1.32 (at most 1.35) and run make_voice again; never cut words. (3) hyperframes check and snapshots at about 8 times to confirm the pictures still match the voice; only fix a picture if its label lands more than 0.5 s off the spoken word. (4) render_video. (5) render_cover(folder=\"a001_how_a_model_learns\", pill=\"AI\", headline=\"How models <em>actually learn</em>\"): the series cover with DAY 001 / 150. (6) social/a001_how_a_model_learns.hi.caption.txt exists: lint it with .claude/skills/ig-caption/caption.py. (7) studio_gate. Length may run up to 180 s (owner).",
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }

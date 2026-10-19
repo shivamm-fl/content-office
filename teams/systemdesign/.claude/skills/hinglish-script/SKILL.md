@@ -51,3 +51,5 @@ The reference is a Day 1 script the owner got back from ChatGPT and called conti
 - **No vague words.** "kaafi improve ho gaya" is replaced by the numbers (loss 18.67 se 0.083). "Patterns encode karte hain" is replaced by something the reel has shown.
 - Short sentences that talk to one person, a light human aside ("obviously"), but never a staged "Bilkul nahi!" or a dash used as a drumroll.
 - The owner's reference script still broke our own limits (about 400 words, unexplained learning rate and converge, a "next lesson" pointer): copy its flow, not those.
+
+- **After the hook question, go straight to the answer** (owner, 2026-10-19). He cut "kya use har answer ratwaya jaata hai? Bilkul nahi!" between the question and the basketball answer: it did not teach anything, it only delayed the answer and would raise the skip rate. Every line either teaches or leads straight into the next thing that teaches.
