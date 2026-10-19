@@ -14,3 +14,4 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 
 ## Motion designer
 - 2026-10-19 (d001 FIX): `M.fit` measures the whole scene, so a card that appears late leaves the lower half empty early. Put every panel on screen from the start (dim it, then light it on its word). A true-scale sliver (20 of 1,000,000) is invisible: show the halving ladder (÷2 bars) instead. A real page screenshot needs a crop (cookie banner, faces) before it goes on screen.
+- 2026-10-19 (d002): `M.W(scene, word)` compares the word without punctuation ("double!" is "double"); repeated words need the nth index. Show doubling as the same objects growing (a second column of tiles, a bar that extends, a 4x4 grid next to an 8x8 grid for x4), with the real printed count beside it. A text label inside a same-colour bar must use a dark colour.

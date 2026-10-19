@@ -1,0 +1,9 @@
+Day 2/150: Big-O kya hai? Data double karo, to steps kitne badhte hain?
+
+10 lakh names ek-ek karke dhoondho, to worst case mein 1,000,000 steps. 20 lakh karo, to 2,000,000. Sorted list ko beech se aadha karte jao (halving), to 20 steps, aur data double hone par bas 21. Maine Python mein chalaya, counts dekho, seconds nahi.
+
+O(n): data double, work double. O(log n): data double, ek extra step. O(n squared): data double, work lagbhag 4 guna.
+
+Ab tum batao: 40 lakh names ho jayein, to halving mein kitne steps? Answer: 22. Pehle comment mein apna guess likho.
+
+#dsa #bigo #codinginterview

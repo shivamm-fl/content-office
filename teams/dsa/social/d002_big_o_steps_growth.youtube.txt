@@ -1,0 +1,8 @@
+Big-O Explained in Hinglish: O(n), O(log n), O(n squared)
+
+Big-O describes how the number of steps an algorithm needs grows when the input grows. Python run, worst case, target last (counts, not seconds): one by one 1000000 steps for 10 lakh names and 2000000 for 20 lakh; halving a sorted list 20 and 21; checking every pair 499500 steps for 1000 names and 1999000 for 2000. Halving needs a sorted list. "Steps, not seconds" is our own framing.
+
+Sources:
+https://en.wikipedia.org/wiki/Big_O_notation
+https://en.wikipedia.org/wiki/Binary_search
+https://wiki.python.org/moin/TimeComplexity
