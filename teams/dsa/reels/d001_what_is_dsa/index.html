@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="102" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="97" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -48,13 +48,13 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="102" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="102" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="102" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="97" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="97" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="97" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "DSA" });
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "DSA 001/150" });
       Viz.install(M);
       const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n); const { ACC, CYAN, HOT, GOOD } = M;
       const $s = (k) => M.$("#s" + k);
@@ -72,35 +72,37 @@
       const NAMES = ["Aarav", "Divya", "Esha", "Kabir", "Meera", "Rohan", "Zoya"];
 
       // diagram: A  (hook picture: contact list, magnifier, 10 lakh vs 20)
-      M.hook(["10 LAKH NAMES", "20 STEPS?"], { size: 96, top: 250 });
-      const cA = panel(A, 150, 540, 780, 640, CYAN, "CONTACTS");
-      NAMES.slice(0, 5).forEach((n, i) => tile(cA, 60, 80 + i * 100, 660, n, CYAN));
-      el(cA, "left:0;width:780px;top:585px;text-align:center;font:700 44px var(--code);color:#8592AD", "⋮ 10 LAKH ⋮");
-      const mag = M.icon(A, "search", 820, 580, 150, ACC); mag.show(at("A", "name", 0));
-      M.pill(A, "DSA", at("A", "DSA"), { x: 470, y: 1215, kind: "acc", size: 46 });
-      counter(A, "left:70px;top:1300px;width:460px", at("A", "10", 1), at("A", "tak"), 1000000, HOT, 72);
-      show(el(A, "left:70px;top:1385px;width:460px;text-align:center;font:700 38px var(--code);color:#8592AD", "ONE BY ONE"), at("A", "10", 1));
-      show(el(A, `left:560px;top:1300px;width:460px;font:800 72px var(--code);color:${GOOD};text-align:center`, "20"), at("A", "sirf"), { opacity: 0, scale: 0.8 });
-      show(el(A, "left:560px;top:1385px;width:460px;text-align:center;font:700 38px var(--code);color:#8592AD", "HALVING"), at("A", "sirf"));
-      M.fit(A, { y: 460, h: 940, maxScale: 1.15 });
+      const hookEnd = M.hook(["10 LAKH NAMES", "20 STEPS?"], { size: 96, top: 250 });
+      // header strip stays after the big hook line leaves, so the top is never empty
+      show(el(A, `left:60px;top:250px;width:960px;text-align:center;font:800 64px var(--lat);color:#E8EDF6`, '10 LAKH NAMES <span style="color:#5BC0EB">→</span> <span style="color:#4CC38A">20 STEPS?</span>'), hookEnd + 0.3, { opacity: 0 });
+      const cA = panel(A, 150, 470, 780, 640, CYAN, "CONTACTS");
+      NAMES.slice(0, 5).forEach((n, i) => tile(cA, 60, 80 + i * 92, 660, n, CYAN));
+      el(cA, "left:0;width:780px;top:552px;text-align:center;font:700 52px var(--code);color:#E8EDF6", "⋮ 10 LAKH ⋮");
+      const mag = M.icon(A, "search", 820, 560, 150, ACC); mag.show(at("A", "name", 0));
+      M.pill(A, "DSA", at("A", "DSA"), { x: 470, y: 385, kind: "acc", size: 46 });
+      counter(A, "left:70px;top:1150px;width:460px", at("A", "10", 1), at("A", "tak"), 1000000, HOT, 72);
+      show(el(A, "left:70px;top:1250px;width:460px;text-align:center;font:700 48px var(--code);color:#E8EDF6", "ONE BY ONE"), at("A", "10", 1));
+      show(el(A, `left:560px;top:1150px;width:460px;font:800 72px var(--code);color:${GOOD};text-align:center`, "20"), at("A", "sirf"), { opacity: 0, scale: 0.8 });
+      show(el(A, "left:560px;top:1250px;width:460px;text-align:center;font:700 48px var(--code);color:#E8EDF6", "HALVING"), at("A", "sirf"));
+      M.fit(A, { y: 250, h: 1050, maxScale: 1.15, align: "top" });
 
       // diagram: B  (one by one, counter to 1,000,000)
       M.pill(B, "ONE BY ONE", 0.05, { x: 330, y: 220, kind: "out", size: 40 });
-      M.pill(B, "EXAMPLE", at("B", "Phone"), { x: 700, y: 220, kind: "out", size: 30 });
+      M.pill(B, "EXAMPLE", at("B", "phone"), { x: 700, y: 220, kind: "out", size: 30 });
       const cB = panel(B, 150, 330, 780, 700, CYAN, "CONTACTS"); show(cB, 0.05);
       NAMES.forEach((n, i) => { const t = tile(cB, 60, 80 + i * 86, 560, n, CYAN); t.style.height = "74px"; show(t, 0.1 + i * 0.04); });
       const mg = M.icon(B, "search", 710, 400, 130, ACC); mg.show(at("B", "tum"));
       const o = { i: 0 };
       tl.to(o, { i: 6, duration: at("B", "aakhiri") - at("B", "ek-ek"), ease: "none", immediateRender: false, onUpdate: () => gsap.set(mg.el, { y: Math.round(o.i) * 86 }) }, at("B", "ek-ek"));
       counter(B, "left:150px;top:1070px;width:780px", at("B", "dekhna"), at("B", "poore"), 1000000, HOT);
-      el(B, "left:150px;top:1180px;width:780px;text-align:center;font:700 44px var(--code);color:#8592AD", "STEPS");
+      el(B, "left:150px;top:1180px;width:780px;text-align:center;font:700 44px var(--code);color:#B8C4DC", "STEPS");
       stamp(B, "LAST NAME", 540, 1250, HOT, at("B", "steps"));
       M.fit(B, { y: 200, h: 1100 });
 
       // diagram: C  (two parts: data structure, algorithm acting on the names; both on screen from the start)
       const dsP = panel(C, 140, 300, 800, 470, CYAN, "DATA STRUCTURE"); show(dsP, 0.05);
       ["Aarav", "Esha", "Kabir", "Zoya"].forEach((n, i) => show(tile(dsP, 36 + (i % 2) * 380, 90 + Math.floor(i / 2) * 110, 350, n, CYAN), 0.15 + i * 0.1));
-      el(dsP, "left:0;width:800px;top:350px;text-align:center;font:700 44px var(--code);color:#8592AD", "A → Z  SORTED");
+      el(dsP, "left:0;width:800px;top:350px;text-align:center;font:700 44px var(--code);color:#B8C4DC", "A → Z  SORTED");
       const alP = panel(C, 140, 830, 800, 430, ACC, "ALGORITHM"); show(alP, 0.5);
       ["SORT", "MIDDLE", "HALVE"].forEach((w, i) => { const b = el(alP, `left:${28 + i * 262}px;top:130px;width:226px;height:220px;border-radius:24px;border:3px solid ${M.ca(ACC, .7)};background:${M.ca(ACC, .12)};font:800 44px var(--code);display:flex;align-items:center;justify-content:center`, w); show(b, 0.7 + i * 0.2, { opacity: 0, scale: 0.8 });
         if (i < 2) show(el(alP, `left:${256 + i * 262}px;top:210px;font:700 48px var(--code);color:${ACC}`, "→"), 0.8 + i * 0.2); });
@@ -134,7 +136,7 @@
 
       // diagram: F  (halving ladder 1,000,000 -> 20 steps next to the full one-by-one bar, from the real run)
       const cF = panel(F, 120, 300, 840, 250, GOOD, "PYTHON RUN"); show(cF, 0.05);
-      show(el(cF, "left:50px;top:90px;font:600 40px var(--code);color:#8592AD;white-space:pre", "1,000,000 sorted ints"), 0.15);
+      show(el(cF, "left:50px;top:90px;font:600 40px var(--code);color:#B8C4DC;white-space:pre", "1,000,000 sorted ints"), 0.15);
       show(el(cF, `left:50px;top:155px;font:700 62px var(--code);color:${GOOD};white-space:pre`, "1000000 20 True"), at("F", "halving"));
       show(el(F, `left:120px;top:590px;font:700 40px var(--code);color:${HOT}`, "ONE BY ONE"), 0.2);
       const bar1 = el(F, `left:120px;top:645px;width:840px;height:90px;border-radius:10px;background:${HOT};transform-origin:0 50%`); tl.set(bar1, { scaleX: 0 }, 0);
@@ -144,42 +146,36 @@
       [["500,000", 420], ["250,000", 210], ["125,000", 105], ["62,500", 52], ["31,250", 26]].forEach(([lab, w], i) => {
         const t = at("F", "baar-baar") + i * 0.55;
         show(el(F, `left:120px;top:${900 + i * 72}px;width:${w}px;height:54px;border-radius:8px;background:${GOOD}`), t, { opacity: 0, x: -20 });
-        show(el(F, `left:${140 + w}px;top:${904 + i * 72}px;font:700 40px var(--code);color:#8592AD`, "÷2  " + lab), t); });
+        show(el(F, `left:${140 + w}px;top:${904 + i * 72}px;font:700 40px var(--code);color:#B8C4DC`, "÷2  " + lab), t); });
       show(el(F, `left:120px;top:1270px;font:800 66px var(--code);color:${GOOD}`, "… 20 STEPS"), at("F", "sirf"), { opacity: 0, scale: 0.9 });
       M.fit(F, { y: 260, h: 1040 });
 
-      // diagram: G  (halving needs a sorted list: same search on both; then the real Amazon prep page and its video)
+      // diagram: G  (halving needs a sorted list: same search on both)
       M.pill(G, "NEEDS SORTED", 0.05, { x: 340, y: 225, kind: "acc", size: 44 });
       const SORT = ["Aarav", "Divya", "Kabir", "Rohan", "Zoya"], SHUF = ["Rohan", "Zoya", "Kabir", "Divya", "Aarav"];
-      const colG = (x, nm, col, label) => { const p = panel(G, x, 330, 440, 700, col, label); show(p, 0.05);
-        return [p, ...nm.map((n, i) => { const t = tile(p, 30, 90 + i * 112, 380, n, n === "Aarav" ? ACC : col); t.style.height = "92px"; show(t, 0.1 + i * 0.04); return t; })]; };
+      const colG = (x, nm, col, label) => { const p = panel(G, x, 320, 440, 800, col, label); show(p, 0.05);
+        return [p, ...nm.map((n, i) => { const t = tile(p, 30, 90 + i * 140, 380, n, n === "Aarav" ? ACC : col); t.style.height = "112px"; show(t, 0.1 + i * 0.04); return t; })]; };
       const sT = colG(90, SORT, GOOD, "SORTED"), hT = colG(550, SHUF, HOT, "SHUFFLED");
-      const fa = el(G, `left:90px;top:1060px;width:440px;text-align:center;font:700 40px var(--code);color:#8592AD`, "FIND AARAV"); show(fa, 0.2);
+      const fa = el(G, `left:90px;top:1150px;width:900px;text-align:center;font:800 56px var(--code);color:#E8EDF6`, "FIND AARAV"); show(fa, 0.2);
       [sT, hT].forEach((c) => tl.to(c[3], { backgroundColor: M.ca(ACC, .35), borderColor: ACC, duration: 0.25, immediateRender: false }, at("G", "list")));
       [4, 5].forEach((i) => { tl.to(sT[i], { opacity: 0.12, duration: 0.3, immediateRender: false }, at("G", "sorted")); tl.to(hT[i], { opacity: 0.12, duration: 0.3, immediateRender: false }, at("G", "sorted")); });
-      const okS = el(G, `left:90px;top:1120px;width:440px;text-align:center;font:800 52px var(--code);color:${GOOD}`, "FOUND ✓"); show(okS, at("G", "honi"));
-      const noS = el(G, `left:550px;top:1120px;width:440px;text-align:center;font:800 52px var(--code);color:${HOT}`, "LOST ✗"); show(noS, at("G", "honi"));
-      const imgBox = el(G, "left:60px;top:330px;width:960px;height:278px;border-radius:20px;overflow:hidden;border:2px solid rgba(150,175,215,.4)", '<img src="assets/amazon-crop.png" style="width:960px;height:auto;display:block"/>'); show(imgBox, at("G", "Amazon"));
-      show(el(G, "left:60px;top:620px;width:960px;text-align:center;font:600 36px var(--code);color:#8592AD", "Source: amazon.jobs"), at("G", "Amazon") + 0.1);
-      const vid = panel(G, 160, 720, 760, 420, ACC, "VIDEO"); show(vid, at("G", "video") - 0.2);
-      show(M.icon(G, "video", 440, 830, 200, ACC).el, at("G", "video"));
-      show(el(vid, `left:0;width:760px;top:340px;text-align:center;font:800 40px var(--code);color:${CYAN}`, "DATA STRUCTURES + ALGORITHMS"), at("G", "algorithms"));
-      [fa, okS, noS, ...sT, ...hT].forEach((d) => gone(d, at("G", "Amazon") - 0.1));
+      const okS = el(G, `left:90px;top:1240px;width:440px;text-align:center;font:800 56px var(--code);color:${GOOD}`, "FOUND ✓"); show(okS, at("G", "honi"));
+      const noS = el(G, `left:550px;top:1240px;width:440px;text-align:center;font:800 56px var(--code);color:${HOT}`, "LOST ✗"); show(noS, at("G", "honi"));
       M.fit(G, { y: 200, h: 1100 });
 
       // diagram: H  (recap as pictures + comment + follow)
-      const rc1 = panel(H, 140, 250, 800, 400, CYAN, "DATA STRUCTURE"); show(rc1, 0.05);
-      ["A", "D", "K", "R", "Z"].forEach((n, i) => show(tile(rc1, 36 + i * 146, 130, 126, n, CYAN), 0.15 + i * 0.06));
-      el(rc1, "left:0;width:800px;top:270px;text-align:center;font:700 44px var(--code);color:#8592AD", "SORTED NAMES");
-      const rc2 = panel(H, 140, 680, 800, 360, ACC, "ALGORITHM"); show(rc2, 0.5);
-      ["MIDDLE", "HALVE", "REPEAT"].forEach((w, i) => { show(el(rc2, `left:${28 + i * 262}px;top:110px;width:226px;height:200px;border-radius:20px;border:3px solid ${M.ca(ACC, .7)};background:${M.ca(ACC, .12)};font:800 40px var(--code);display:flex;align-items:center;justify-content:center`, w), 0.7 + i * 0.2, { opacity: 0, scale: 0.85 });
-        if (i < 2) show(el(rc2, `left:${256 + i * 262}px;top:180px;font:700 48px var(--code);color:${ACC}`, "→"), 0.8 + i * 0.2); });
-      const cc = panel(H, 140, 1070, 800, 330, CYAN, "COMMENT KARO"); show(cc, at("H", "ab"));
-      el(cc, "left:0;width:800px;top:90px;text-align:center;font:800 88px var(--code);color:#E8EDF6", "40 LAKH = ?");
-      show(el(cc, "left:40px;right:40px;top:220px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.35);font:500 34px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("H", "Comment"), { opacity: 0 });
-      const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 400, y: 1450, kind: "acc", size: 44 });
+      const rc1 = panel(H, 100, 220, 880, 340, CYAN, "DATA STRUCTURE"); show(rc1, 0.05);
+      ["A", "D", "K", "R", "Z"].forEach((n, i) => { const t = tile(rc1, 36 + i * 166, 100, 140, n, CYAN); t.style.height = "110px"; t.style.fontSize = "62px"; show(t, 0.15 + i * 0.06); });
+      el(rc1, "left:0;width:800px;top:240px;text-align:center;font:700 48px var(--code);color:#B8C4DC", "SORTED NAMES");
+      const rc2 = panel(H, 100, 590, 880, 330, ACC, "ALGORITHM"); show(rc2, 0.5);
+      ["MIDDLE", "HALVE", "REPEAT"].forEach((w, i) => { show(el(rc2, `left:${28 + i * 290}px;top:100px;width:250px;height:190px;border-radius:20px;border:3px solid ${M.ca(ACC, .7)};background:${M.ca(ACC, .12)};font:800 44px var(--code);display:flex;align-items:center;justify-content:center`, w), 0.7 + i * 0.2, { opacity: 0, scale: 0.85 });
+        if (i < 2) show(el(rc2, `left:${278 + i * 290}px;top:170px;font:700 48px var(--code);color:${ACC}`, "→"), 0.8 + i * 0.2); });
+      const cc = panel(H, 100, 950, 880, 330, CYAN, "COMMENT KARO"); show(cc, at("H", "ab"));
+      el(cc, "left:0;width:880px;top:90px;text-align:center;font:800 100px var(--code);color:#E8EDF6", "40 LAKH = ?");
+      show(el(cc, "left:40px;right:40px;top:220px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.35);font:500 40px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("H", "Comment"), { opacity: 0 });
+      const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 400, y: 1310, kind: "acc", size: 44 });
       tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
-      M.fit(H, { y: 220, h: 1120 });
+      M.fit(H, { y: 200, h: 1120, maxScale: 1.15 });
 
       ["B","C","D","E","F","G","H"].forEach((k) => M.wipe(M.S[k]));
       M.finish({ kw: { "10": "hot", laakh: "hot", "20": "good", DSA: "gold", sorted: "cyan", algorithm: "gold", structure: "cyan", halving: "good", Binary: "gold", steps: "gold" } });
