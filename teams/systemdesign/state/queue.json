@@ -1,3 +1,62 @@
 {
-  "items": []
+  "items": [
+    {
+      "id": "s001",
+      "track": "series",
+      "day": 1,
+      "unit": "P1",
+      "title": "System design kya hai aur interview mein kya test hota hai",
+      "format": "concept",
+      "one_idea": "System design means choosing the parts of a system and how they connect to meet requirements at a given scale, and an interview checks whether you can do that in order: ask requirements, estimate scale, sketch components, then argue the trade-offs.",
+      "spoken_hook": "Interviewer ने पूछा: एक नया app design करना है, तुम सबसे पहले क्या करोगे?",
+      "hook_type": "interviewer_asked",
+      "hook_10s": "Interviewer ने पूछा: एक नया app design करना है, तुम सबसे पहले क्या करोगे? ज़्यादातर लोग सीधे boxes बनाने लगते हैं। पर interview boxes नहीं, सोचने का तरीका देखता है। System design यानी parts चुनना और उन्हें जोड़ना। चार steps में समझाता हूँ। [frame 0: a blank whiteboard with one big question mark; a hand starts drawing random boxes, then a red cross over them]",
+      "hook_candidates": [
+        {
+          "hook": "Interviewer ने पूछा: एक नया app design करना है, तुम सबसे पहले क्या करोगे?",
+          "formula": "interviewer_asked, everyday-task question"
+        },
+        {
+          "hook": "System design interview में लोग पहले box क्यों बनाते हैं, और क्यों reject होते हैं?",
+          "formula": "direct_question, shared pain"
+        },
+        {
+          "hook": "एक app, 4 steps: system design interview ऐसे ही check होता है.",
+          "formula": "relatable_stake, hard-number stake (4 steps from a fetched page)"
+        }
+      ],
+      "hook_formula": "interviewer_asked: Interviewer ने पूछा opener with one self-contained question (first-day side-by-side test, no own numbers yet; LearnAI carry-over hypothesis in state/learnings.md)",
+      "hook_source": ".claude/skills/hook-writer (interviewer_asked form); learnings.md LearnAI carry-over, to be tested here",
+      "visual_idea": "A blank whiteboard with a question mark; random boxes are drawn and crossed out in red. Then one running example, a food-delivery app (EXAMPLE), is built in four steps, each step adds one object to the same board: a requirements checklist, a users-to-requests number, four labelled boxes joined by arrows, then a balance scale with two options (fast vs cheap) weighing against each other.",
+      "everyday_anchor": "Planning a wedding or a trip before booking anything: you first ask how many guests and what budget, and only then pick the venue and the caterer.",
+      "example": "EXAMPLE: a food-delivery app. Requirements: customers order, restaurants accept, riders get a route. Scale: EXAMPLE 1,00,000 orders a day is about 1 order per second on average (100,000 / 86,400 s), peak maybe 10x; arithmetic shown on screen with the EXAMPLE pill. Components: app, server, database, queue to restaurants. Trade-off: show a restaurant's menu from a cache (fast, may be a few minutes stale) vs always from the database (fresh, slower).",
+      "sources": [
+        "https://github.com/donnemartin/system-design-primer",
+        "https://en.wikipedia.org/wiki/Systems_design"
+      ],
+      "source_claims": {
+        "https://github.com/donnemartin/system-design-primer": "Re-fetched by researcher 2026-10-19 (page and README). Section 'How to approach a system design interview question': 'Step 1: Outline use cases, constraints, and assumptions' ('Gather requirements and scope the problem'); 'Step 2: Create a high level design' ('Outline a high level design with all important components'); 'Step 3: Design core components' ('Dive into details for each core component'); 'Step 4: Scale the design' ('Identify and address bottlenecks, given the constraints'). 'Everything is a trade-off' is on the page. 'Back-of-the-envelope calculations' is a separate subsection ('You might be asked to do some estimates by hand'), not a numbered step. Page says 'The system design interview is an open-ended conversation. You are expected to lead it.' It does NOT say what interviewers test or score.",
+        "https://en.wikipedia.org/wiki/Systems_design": "Re-fetched by researcher 2026-10-19. Opening sentence: 'The basic study of system design is the understanding of component parts and their subsequent interaction with one another.' The article also covers architecture (scalability, reliability, efficiency; capacity estimation, load balancing, caching), interfaces and data. 'At a given scale / to meet requirements' is the team's wording, not the page's."
+      },
+      "facts_to_verify": [
+        "VERIFIED 2026-10-19 (researcher): the primer lists four steps in the order use cases/constraints, high level design, core components, scale. Say 'a commonly taught order (system design primer)'.",
+        "VERIFIED: arithmetic 100000/86400 = 1.157 per second, about 1.16 (python). Show as EXAMPLE.",
+        "Do NOT say 'interviewers test/check these four things' as fact: no source says it. Keep it as team framing ('ek common tareeka').",
+        "Estimation is a sub-topic of the primer, not its own step: if the script says four steps 'requirements, estimate scale, sketch, trade-offs', either fold estimation into step 1 (primer's questions: how many users, requests per second) or label the order as the team's teaching order. Step 3 in the primer is design core components in detail, not trade-offs.",
+        "No company-specific claim anywhere; the delivery app is an invented example."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "What System Design Interviews Really Test",
+      "thumb_text": "Boxes First?",
+      "keywords": [
+        "what is system design",
+        "system design interview kya hota hai",
+        "system design for beginners hindi",
+        "system design interview kaise prepare kare",
+        "how to start a system design interview answer"
+      ],
+      "status": "planned",
+      "qa_passed": false
+    }
+  ]
 }
