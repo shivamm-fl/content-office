@@ -44,7 +44,9 @@ def main() -> None:
     folder = Path(entry.get("folder") or "")
     name = folder.name
     office = os.environ.get("OFFICE_URL", "").rstrip("/")
-    media = lambda f: f"{office}/media/{a.team}/{a.item}/{f}" if a.release and f else None  # noqa: E731
+    # the file names of a reel never change between versions and the office serves /media with a one hour browser cache: the run id in the URL
+    # makes every delivery a new address, so a new cover or video is never hidden behind the old one (the route ignores the query)
+    media = lambda f: f"{office}/media/{a.team}/{a.item}/{f}?v={a.run}" if a.release and f else None  # noqa: E731
     cover = Path(entry.get("cover") or "").name
     thumb = f"{name}.jpg" if (root / "brand/yt_thumbs" / f"{name}.jpg").exists() else ""
     payload = {
