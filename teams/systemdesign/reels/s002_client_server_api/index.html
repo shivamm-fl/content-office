@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Client, Server and API Explained</title>
+    <title>Client, Server and API</title>
     <script src="assets/gsap.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="kit/motion.css" />
@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="106" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -33,6 +33,12 @@
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
         <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,19 +47,179 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="106" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="106" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="106" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "SYSTEM DESIGN" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
-      const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G"], tag: "SYSTEM DESIGN · DAY 002 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const kick = (host, txt, t) => show(el(host, `left:0;width:1080px;text-align:center;top:196px;font:700 46px var(--code);letter-spacing:.14em;color:${ACC}`, txt), t, { opacity: 0, y: 0 });
+      const center = (host, y, size, col, txt, t, w) => show(el(host, `left:${540 - (w || 900) / 2}px;width:${w || 900}px;text-align:center;top:${y}px;font:700 ${size}px var(--code);color:${col};white-space:nowrap`, txt), t);
+      const lab = (host, x, y, w, col, txt, t, size) => show(el(host, `left:${x}px;width:${w}px;text-align:center;top:${y}px;font:600 ${size || 38}px var(--code);letter-spacing:.06em;color:${col};white-space:nowrap`, txt), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx - 230}px;width:460px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
 
-      M.finish();   // LAST: captions
-      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+      const grp = (arr, t) => arr.forEach((d) => gone(d.el || d, t));
+      // custom pictures: phone and server rack, same shape and place every day
+      const phone = (host, x, y, w, h, col) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border:5px solid ${col};border-radius:44px;background:rgba(20,28,46,.92)`);
+        el(d, `left:${w / 2 - 40}px;top:14px;width:80px;height:10px;border-radius:5px;background:${col};opacity:.6`); return d; };
+      const rack = (host, x, y, w, h, col) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border:5px solid ${col};border-radius:22px;background:rgba(20,28,46,.92)`);
+        const sh = (h - 40) / 3; for (let i = 0; i < 3; i++) { const s = el(d, `left:20px;top:${16 + i * (sh + 4)}px;width:${w - 50}px;height:${sh - 12}px;border:3px solid ${M.ca(col, .7)};border-radius:12px`); el(s, `right:18px;top:${(sh - 12) / 2 - 8}px;width:16px;height:16px;border-radius:50%;background:${col}`); } return d; };
+      const tag = (host, x, y, w, col, txt, t, size) => lab(host, x, y, w, col, txt, t, size || 46);
+      const tile = (host, x, y, w, h, col) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;background:${M.ca(col, .35)};border:2px solid ${M.ca(col, .8)}`);
+
+      // ===== A: hook, the feed comes from another computer =====
+      // diagram: A
+      M.hook(["Instagram kholte hi", "feed kahan se aati hai?"], { size: 92, top: 250 });
+      const aRack = rack(A, 330, 430, 420, 300, GOOD); show(aRack, at("A", "computer"));
+      const aSrv = tag(A, 330, 370, 420, GOOD, "SERVER", at("A", "computer") + 0.1, 48);
+      const aPh = phone(A, 400, 900, 280, 400, CYAN); show(aPh, 0.05, { opacity: 0, y: 0 });
+      const aTiles = [0, 1, 2].map((i) => tile(A, 425, 950 + i * 100, 230, 80, ACC)); aTiles.forEach((d) => show(d, 0.1, { opacity: 0, y: 0 }));
+      const aFeed = tag(A, 340, 1320, 400, ACC, "FEED", 0.15, 48);
+      const aX = el(A, `left:400px;top:950px;width:280px;text-align:center;font:800 300px var(--lat);color:${HOT};line-height:300px`, "✕"); show(aX, at("A", "nahi"), { opacity: 0, scale: 1.1 });
+      aTiles.forEach((d) => tl.to(d, { opacity: 0.15, duration: 0.25, immediateRender: false }, at("A", "nahi")));
+      const aArr = M.arrow(A, { from: [540, 740], to: [540, 890], color: GOOD, w: 12 });
+      aArr.show(at("A", "bhejta") - 0.1); aArr.travel(at("A", "bhejta"), 0.7, "#fff");
+      tl.to(aX, { opacity: 0, duration: 0.2, immediateRender: false }, at("A", "bhejta") + 0.5);
+      aTiles.forEach((d, i) => tl.to(d, { opacity: 1, duration: 0.25, immediateRender: false }, at("A", "bhejta") + 0.6 + i * 0.1));
+      const aSideT = []; const aSide = [70, 730].map((x) => { const p = phone(A, x, 900, 280, 400, CYAN); show(p, at("A", "har")); [0, 1, 2].forEach((i) => aSideT.push(show(tile(A, x + 25, 950 + i * 100, 230, 80, ACC), at("A", "har") + 0.1, { opacity: 0, y: 0 }))); return p; });
+      const aSA = [[300, 740, 210, 890], [780, 740, 870, 890]].map(([x1, y1, x2, y2], i) => { const a = M.arrow(A, { from: [i ? 640 : 440, 700], to: [x2, y2], color: GOOD, w: 8 }); a.show(at("A", "har") + 0.3); return a; });
+      const tA = at("A", "3") - 0.1;
+      [aPh, aFeed, aX, aRack, aSrv].concat(aTiles, aSide, aSideT).forEach((d) => gone(d.el || d, tA)); aArr.hide(tA); aSA.forEach((a) => a.hide(tA));
+      document.querySelectorAll("#sA .abs").forEach(() => 0);
+      const nm = [["1", "CLIENT", "client", CYAN, "user"], ["2", "SERVER", "server", GOOD, "chip"], ["3", "API", "API", ACC, "doc"]];
+      nm.forEach(([n, l, w, c, ic], i) => { const b = M.box(A, { x: 110, y: 450 + i * 280, w: 860, h: 240, label: `${n}  ${l}`, icon: ic, color: c, size: 90, isize: 110 }); b.show(at("A", w) - 0.1); });
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: restaurant beside the phone-computer pair =====
+      // diagram: B
+      kick(B, "RESTAURANT", M.S.B + 0.05);
+      const rows = [["CUSTOMER", "user", 330], ["WAITER", "chat", 670], ["KITCHEN", "gear", 1010]];
+      const bL = rows.map(([l, ic, y]) => M.box(B, { x: 50, y, w: 450, h: 260, label: l, icon: ic, color: ACC, size: 50, isize: 100 }));
+      bL[0].show(M.S.B + 0.2); bL[1].show(at("B", "Waiter")); bL[2].show(at("B", "kitchen"));
+      const bA1 = M.arrow(B, { from: [200, 590], to: [200, 670], color: ACC, w: 10 }), bA2 = M.arrow(B, { from: [200, 930], to: [200, 1010], color: ACC, w: 10 });
+      const bR1 = M.arrow(B, { from: [360, 1010], to: [360, 930], color: GOOD, w: 10 }), bR2 = M.arrow(B, { from: [360, 670], to: [360, 590], color: GOOD, w: 10 });
+      bA1.show(at("B", "order") + 0.1); bA1.travel(at("B", "order") + 0.15, 0.6, "#fff");
+      bA2.show(at("B", "le") + 0.1); bA2.travel(at("B", "le") + 0.15, 0.6, "#fff");
+      bR1.show(at("B", "bhejti")); bR1.travel(at("B", "bhejti"), 0.5, GOOD); bR2.show(at("B", "bhejti") + 0.5); bR2.travel(at("B", "bhejti") + 0.5, 0.5, GOOD);
+      const nodeR = (y, col, label, t) => { const p = M.mk("glass", B); p.style.cssText += `;left:580px;top:${y}px;width:450px;height:260px;border-color:${M.ca(col, .45)}`; show(p, t); return p; };
+      const bPp = nodeR(330, CYAN, "PHONE", at("B", "Phone")); const bPi = phone(B, 610, 350, 130, 220, CYAN); show(bPi, at("B", "Phone")); const bPl = tag(B, 750, 430, 270, CYAN, "PHONE", at("B", "Phone") + 0.1, 46);
+      const bWp = nodeR(670, ACC, "API", at("B", "beech")); const bWi = M.icon(B, "doc", 625, 720, 110, ACC); bWi.show(at("B", "beech")); const bWl = tag(B, 750, 770, 270, ACC, "API", at("B", "beech") + 0.1, 46);
+      const bKp = nodeR(1010, GOOD, "COMPUTER", at("B", "computer")); const bKi = rack(B, 610, 1030, 130, 220, GOOD); show(bKi, at("B", "computer")); const bKl = tag(B, 750, 1110, 270, GOOD, "COMPUTER", at("B", "computer") + 0.1, 40);
+      const bz = M.arrow(B, { from: [800, 1010], to: [800, 930], color: GOOD, w: 8 }); bz.show(at("B", "yahi"));
+      const bz2 = M.arrow(B, { from: [800, 670], to: [800, 590], color: GOOD, w: 8 }); bz2.show(at("B", "yahi") + 0.1);
+      const bz3 = M.arrow(B, { from: [660, 590], to: [660, 670], color: ACC, w: 8 }); bz3.show(at("B", "yahi") + 0.2);
+      const bz4 = M.arrow(B, { from: [660, 930], to: [660, 1010], color: ACC, w: 8 }); bz4.show(at("B", "yahi") + 0.3);
+      M.fit(B);
+
+      // ===== C: step 1, the client =====
+      // diagram: C
+      kick(C, "STEP 1/3 · CLIENT", M.S.C + 0.1);
+      const cPh = phone(C, 90, 400, 400, 680, CYAN); show(cPh, M.S.C + 0.15, { opacity: 0, y: 0 });
+      const cRk = rack(C, 600, 560, 400, 380, "#6F7C99"); show(cRk, M.S.C + 0.4, { opacity: 0, y: 0 }); tl.set(cRk, { opacity: 0 }, 0); tl.to(cRk, { opacity: 0.5, duration: 0.4, immediateRender: false }, M.S.C + 0.4);
+      const cL = tag(C, 70, 305, 380, CYAN, "CLIENT", at("C", "Client"), 56);
+      const cYou = M.icon(C, "user", 175, 1190, 130, ACC); cYou.show(at("C", "tum")); const cYl = tag(C, 330, 1220, 300, ACC, "= YOU", at("C", "tum") + 0.05, 52);
+      const cWh = show(el(cPh, `left:30px;top:80px;width:320px;text-align:center;font:700 52px var(--lat);color:#E8EDF6`, "WEATHER"), at("C", "Weather"), { opacity: 0, y: 0 });
+      const cSun = M.icon(C, "cloud", 150, 640, 180, CYAN); cSun.show(at("C", "Weather") + 0.1);
+      const cQ = show(el(cPh, `left:20px;top:420px;width:340px;padding:18px 0;text-align:center;border-radius:28px 28px 28px 6px;background:${M.ca(ACC, .18)};border:2px solid ${ACC};font:700 54px var(--lat);color:${ACC};white-space:nowrap`, "Pune ?"), at("C", "Pune"), { opacity: 0, scale: 0.9 });
+      const cAr = M.arrow(C, { from: [455, 740], to: [595, 740], color: ACC, w: 12 }); cAr.show(at("C", "Pune") + 0.15); cAr.travel(at("C", "Pune") + 0.25, 0.6, "#fff");
+      const cRq = tag(C, 300, 1085, 480, ACC, "REQUEST", at("C", "request"), 62);
+      tl.to(cQ, { backgroundColor: M.ca(ACC, .5), duration: 0.2, immediateRender: false }, at("C", "request"));
+      M.fit(C);
+
+      // ===== D: step 2, the server =====
+      // diagram: D
+      kick(D, "STEP 2/3 · SERVER", M.S.D + 0.1);
+      const dPh = phone(D, 90, 400, 400, 680, "#6F7C99"); show(dPh, M.S.D + 0.1, { opacity: 0, y: 0 }); tl.set(dPh, { opacity: 0 }, 0); tl.to(dPh, { opacity: 0.5, duration: 0.4, immediateRender: false }, M.S.D + 0.1);
+      const dRk = rack(D, 600, 560, 400, 380, GOOD); show(dRk, M.S.D + 0.15, { opacity: 0, y: 0 });
+      const dL = tag(D, 600, 480, 380, GOOD, "SERVER", at("D", "Server"), 56);
+      const dOn = M.pill(D, "ALWAYS ON", at("D", "hamesha"), { x: 590, y: 960, kind: "out", size: 46 });
+      const dDot = el(D, `left:560px;top:978px;width:22px;height:22px;border-radius:50%;background:${GOOD}`); show(dDot, at("D", "hamesha"), { opacity: 0, scale: 0.4 });
+      const dK = M.icon(D, "gear", 650, 1080, 130, GOOD); dK.show(at("D", "kitchen")); const dKl = tag(D, 790, 1115, 300, GOOD, "= KITCHEN", at("D", "kitchen") + 0.05, 50);
+      const dAr = M.arrow(D, { from: [595, 740], to: [455, 740], color: GOOD, w: 12 }); dAr.show(at("D", "bheja") - 0.1); dAr.travel(at("D", "bheja"), 0.6, "#fff");
+      const dCard = show(el(D, `left:100px;top:560px;width:360px;padding:24px 0;text-align:center;border-radius:26px;background:rgba(14,18,30,.95);border:3px solid ${GOOD};font:800 120px var(--lat);color:${GOOD}`, "28°"), at("D", "28"), { opacity: 0, scale: 0.9 });
+      M.pill(D, "EXAMPLE", at("D", "28"), { x: 110, y: 335, kind: "out", size: 44 });
+      const dRs = tag(D, 260, 1000, 560, GOOD, "RESPONSE", at("D", "response"), 62); dRs.style.top = "1160px"; dRs.style.left = "60px"; dRs.style.width = "400px"; dRs.style.fontSize = "50px";
+      M.fit(D);
+
+      // ===== E: step 3, the API (the menu) =====
+      // diagram: E
+      kick(E, "STEP 3/3 · API", M.S.E + 0.1);
+      const ePh = phone(E, 330, 300, 420, 190, CYAN); show(ePh, M.S.E + 0.1, { opacity: 0, y: 0 }); tag(E, 330, 360, 420, CYAN, "CLIENT", M.S.E + 0.15, 48);
+      const eRk = rack(E, 330, 1165, 420, 220, GOOD); show(eRk, M.S.E + 0.1, { opacity: 0, y: 0 }); tag(E, 770, 1240, 250, GOOD, "SERVER", M.S.E + 0.15, 44);
+      const eMenu = show(panel(E, 140, 530, 800, 520, ACC, "API · MENU"), at("E", "API", 1)); 
+      const eRow = (i, txt, col, w, n) => { const r = el(eMenu, `left:50px;top:${100 + i * 90}px;width:700px;height:72px;border-radius:12px;border:2px solid ${M.ca(col, .6)};padding:0 24px;display:flex;align-items:center;font:700 44px var(--code);color:#E8EDF6;white-space:nowrap`, txt); show(r, at("E", w, n), { opacity: 0, y: 0 }); return r; };
+      const r1 = eRow(0, 'WEATHER · PUNE <span style="margin-left:auto;color:#4CC38A">✓</span>', GOOD, "maang"); const r2 = eRow(1, 'WEATHER · DELHI <span style="margin-left:auto;color:#4CC38A">✓</span>', GOOD, "sakte");
+      const r3 = eRow(2, 'REPLY SHAPE · { temp }', CYAN, "shakl");
+      const eA1 = M.arrow(E, { from: [540, 495], to: [540, 530], color: ACC, w: 10 }), eA2 = M.arrow(E, { from: [540, 1055], to: [540, 1160], color: ACC, w: 10 });
+      eA1.show(at("E", "menu")); eA2.show(at("E", "menu") + 0.1);
+      eA1.travel(at("E", "waiter"), 0.5, "#fff"); eA2.travel(at("E", "waiter") + 0.4, 0.5, "#fff");
+      tl.to(r1, { backgroundColor: M.ca(GOOD, .25), duration: 0.2, immediateRender: false }, at("E", "Pune"));
+      gone(r3, at("E", "par") - 0.05);
+      const r4 = eRow(2, 'WEATHER · MARS <span style="margin-left:auto;color:#E8596B">✗</span>', HOT, "Mars"); tl.set(r4, { borderStyle: "dashed" }, 0);
+      tl.to(r4, { backgroundColor: M.ca(HOT, .22), duration: 0.2, immediateRender: false }, at("E", "nahi", 0));
+      const eSt = stamp(E, "NOT ON MENU", 540, 925, HOT, at("E", "menu", 1));
+      M.fit(E);
+
+      // ===== F: roles, not computers =====
+      // diagram: F
+      kick(F, "ROLES", M.S.F + 0.05);
+      const fP = phone(F, 90, 330, 300, 280, CYAN); show(fP, M.S.F + 0.15, { opacity: 0, y: 0 });
+      const fPt = M.pill(F, "CLIENT", M.S.F + 0.2, { x: 430, y: 420, kind: "out", size: 66, w: 480 });
+      const fS1 = rack(F, 90, 720, 300, 280, GOOD); show(fS1, at("F", "server"), { opacity: 0, y: 0 });
+      const fS1t = M.pill(F, "SERVER", at("F", "server"), { x: 430, y: 810, kind: "out", size: 66, w: 480 });
+      const fS2 = rack(F, 90, 1110, 300, 280, GOOD); show(fS2, at("F", "doosre"), { opacity: 0, y: 0 });
+      const fS2t = M.pill(F, "SERVER", at("F", "doosre") + 0.3, { x: 430, y: 1200, kind: "out", size: 66, w: 480 });
+      const fa1 = M.arrow(F, { from: [240, 615], to: [240, 715], color: ACC, w: 10 }); fa1.show(at("F", "client") + 0.2);
+      const fa2 = M.arrow(F, { from: [240, 1005], to: [240, 1105], color: ACC, w: 10 }); fa2.show(at("F", "maangta")); fa2.travel(at("F", "maangta") + 0.1, 0.6, "#fff");
+      gone(fS1t, at("F", "client", 1) + 0.1);
+      const fS1c = M.pill(F, "CLIENT", at("F", "client", 1) + 0.45, { x: 430, y: 810, kind: "acc", size: 66, w: 480 });
+      M.fit(F);
+
+      // ===== G: recap as one diagram, your turn, follow =====
+      // diagram: G
+      kick(G, "REMEMBER", M.S.G + 0.05);
+      const gPh = phone(G, 130, 330, 260, 300, CYAN); show(gPh, M.S.G + 0.15, { opacity: 0, y: 0 });
+      const gPt = tag(G, 420, 440, 560, CYAN, "CLIENT · ASKS", at("G", "client"), 50); gPt.style.textAlign = "left";
+      const gMenu = show(panel(G, 130, 700, 820, 190, ACC, null), M.S.G + 0.25);
+      el(gMenu, `left:0;width:820px;text-align:center;top:60px;font:700 60px var(--code);color:${ACC}`, "API · MENU");
+      const gRk = rack(G, 130, 970, 260, 300, GOOD); show(gRk, M.S.G + 0.35, { opacity: 0, y: 0 });
+      const gRt = tag(G, 420, 1090, 560, GOOD, "SERVER · ANSWERS", at("G", "server"), 50); gRt.style.textAlign = "left";
+      const gA1 = M.arrow(G, { from: [260, 635], to: [260, 695], color: ACC, w: 10 }), gA2 = M.arrow(G, { from: [260, 895], to: [260, 965], color: ACC, w: 10 });
+      const gB1 = M.arrow(G, { from: [330, 965], to: [330, 895], color: GOOD, w: 10 }), gB2 = M.arrow(G, { from: [330, 695], to: [330, 635], color: GOOD, w: 10 });
+      gA1.show(at("G", "maangta")); gA1.travel(at("G", "maangta"), 0.5, "#fff"); gA2.show(at("G", "maangta") + 0.3); gA2.travel(at("G", "maangta") + 0.3, 0.5, "#fff");
+      gB1.show(at("G", "jawab")); gB1.travel(at("G", "jawab"), 0.5, GOOD); gB2.show(at("G", "jawab") + 0.3); gB2.travel(at("G", "jawab") + 0.3, 0.5, GOOD);
+      tl.to(gMenu, { backgroundColor: M.ca(ACC, .2), duration: 0.25, immediateRender: false }, at("G", "API"));
+      const gTile = tile(G, 160, 650, 200, 40, ACC); tl.set(gTile, { opacity: 0 }, 0);
+      tl.to(gTile, { opacity: 1, duration: 0.1, immediateRender: false }, at("G", "aati")); tl.fromTo(gTile, { y: 330 }, { y: 0, duration: 0.8, ease: "power2.inOut", immediateRender: false }, at("G", "aati"));
+      const tG = at("G", "ab") - 0.15;
+      [gPh, gPt, gMenu, gRk, gRt].forEach((d) => gone(d, tG)); [gA1, gA2, gB1, gB2].forEach((a) => a.hide(tG)); gone(gTile, tG);
+      const cc = show(panel(G, 60, 300, 960, 900, CYAN, "YOUR TURN"), tG); cc.firstChild.style.fontSize = "44px";
+      show(el(cc, `left:0;width:960px;text-align:center;top:110px;font:700 62px var(--lat);color:${ACC}`, "WEATHER · PUNE ?"), tG + 0.2);
+      const opt = (x, who, ic, w, n, col) => { const o = el(cc, `left:${x}px;top:240px;width:410px;height:420px;border:3px solid ${M.ca(col, .6)};border-radius:24px`); show(o, tG + 0.3, { opacity: 0, scale: 0.92 }); tl.to(o, { backgroundColor: M.ca(col, .2), duration: 0.25, immediateRender: false }, at("G", w, n));
+        const holder = who === "CLIENT" ? phone(o, 115, 30, 180, 250, col) : rack(o, 105, 30, 200, 250, col); el(o, `left:0;width:410px;text-align:center;top:310px;font:700 64px var(--code);color:${col}`, who); };
+      opt(50, "CLIENT", "user", "client", 1, CYAN); opt(500, "SERVER", "chip", "server", 2, GOOD);
+      show(el(cc, "left:50px;right:50px;top:740px;height:100px;border-radius:50px;border:2px solid rgba(169,182,208,.6);font:500 44px var(--code);color:#C3CCDE;display:flex;align-items:center;padding:0 38px", "Add a comment..."), at("G", "Comment"), { opacity: 0, y: 0 });
+      const tF = at("G", "aise") - 0.1; gone(cc, tF);
+      const fcs = [show(panel(G, 100, 380, 880, 760, CYAN, null), tF + 0.15)];
+      fcs.push(show(el(G, `left:340px;top:430px;width:400px;height:400px`, `<svg viewBox="0 0 64 64" width="400" height="400"><circle cx="32" cy="32" r="30" fill="none" stroke="${ACC}" stroke-width="2.5"/><g fill="none" stroke="${ACC}" stroke-width="3.5" stroke-linecap="round"><circle cx="32" cy="24" r="9"/><path d="M14 52c0-10 8-16 18-16s18 6 18 16"/></g></svg>`), tF + 0.2));
+      fcs.push(show(el(G, `left:100px;width:880px;text-align:center;top:860px;font:600 50px var(--code);color:${M.TEXT}`, "@systemdesign.learnvora"), tF + 0.3));
+      const fb = M.pill(G, "+  FOLLOW", tF + 0.4, { x: 290, y: 970, kind: "acc", size: 60, w: 500 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.93, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("G", "follow"));
+      M.fit(G);
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G);
+      M.finish({ kw: { client: "cyan", server: "good", API: "gold", request: "gold", response: "good", menu: "gold", Mars: "hot", role: "gold", feed: "gold" } });
+      window.__timelines["main"] = tl;
     </script>
   </body>
 </html>

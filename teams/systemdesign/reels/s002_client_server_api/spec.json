@@ -1,48 +1,126 @@
 {
- "tts": "edge",
- "voice": "hi-IN-SwaraNeural",
- "pace": 1.26,
- "audio": "v2",
- "owner_model": "eleven_flash_v2_5",
- "owner_tempo": 0.9,
- "tone": "calm",
- "scenes": [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G"
- ],
- "min": {
-  "A": 6.0,
-  "B": 6.0,
-  "C": 6.0,
-  "D": 6.0,
-  "E": 6.0,
-  "F": 6.0,
-  "G": 6.0
- },
- "tail": {},
- "cues": [
-  [
-   "impact",
-   null,
-   null,
-   0.05
-  ]
- ],
- "copy": {
-  "hi": {
-   "A": "@hook Instagram खोलते ही feed कहाँ से आती है? || तुम्हारे phone में ये videos हैं ही नहीं। | कोई दूसरा computer इन्हें भेजता है। || हर app यही करता है, | और ये बातचीत समझ ली, | तो किसी भी app का design समझ आने लगता है। || इसे 3{तीन} चीज़ों में समझाता हूँ: | client, server और API।",
-   "B": "Restaurant सोचो। || तुम table पर बैठे हो, | menu देखकर order देते हो। || Waiter order kitchen ले जाता है, | और kitchen खाना बनाकर भेजती है। || Phone और computer के बीच भी यही चलता है।",
-   "C": "पहला step: client। || Client यानी जो माँगता है: | तुम्हारे phone का app या browser। || Restaurant में ये तुम हो। || Weather app खोला, | और phone ने पूछा: | Pune का weather क्या है? || इस सवाल को बोलते हैं request।",
-   "D": "दूसरा step: server। || Server यानी वो computer जो जवाब देने के लिए हमेशा चालू रहता है। || Restaurant में ये kitchen है। || Server ने जवाब भेजा: | 28{twenty-eight} degree। || इस जवाब को बोलते हैं response।",
-   "E": "तीसरा step: API। || API यानी पूछने के तय नियम: | क्या माँग सकते हो, और जवाब किस शक्ल में आएगा। || Restaurant में ये menu है, | और waiter वो रास्ता है। || इसीलिए Pune का weather मिल जाता है, | पर Mars का नहीं: | वो menu में है ही नहीं।",
-   "F": "एक बात ध्यान रखो: | client और server computer के नाम नहीं, role हैं। || कोई server जब दूसरे server से कुछ माँगता है, | तब वो उसका client बन जाता है।",
-   "G": "@emph याद रखो: | client माँगता है, server जवाब देता है, | और API बताती है कि कैसे माँगना है। || तो तुम्हारी feed server से आती है, | API के रास्ते। || अब तुम बताओ: | Pune का weather माँगने वाला कौन है, | client या server? | Comment में लिखो। || ऐसे ही रोज़ एक system design idea के लिए follow करो।"
-  }
- },
- "hook_type": "direct_question"
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 14,
+    "B": 11,
+    "C": 14,
+    "D": 12,
+    "E": 16,
+    "F": 9,
+    "G": 16
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "A",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "A",
+      5,
+      0
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "C",
+      4,
+      0
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      3,
+      0
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "E",
+      3,
+      -0.1
+    ],
+    [
+      "err",
+      "E",
+      3,
+      0.3
+    ],
+    [
+      "click",
+      "F",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "G",
+      0,
+      -0.1
+    ],
+    [
+      "save",
+      "G",
+      3,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Instagram खोलते ही feed कहाँ से आती है? || तुम्हारे phone में ये videos हैं ही नहीं। | कोई दूसरा computer इन्हें भेजता है। || हर app यही करता है, | और ये बातचीत समझ ली, | तो किसी भी app का design समझ आने लगता है। || इसे 3{तीन} चीज़ों में समझाता हूँ: | client, server और API।",
+      "B": "Restaurant सोचो। || तुम table पर बैठे हो, | menu देखकर order देते हो। || Waiter order kitchen ले जाता है, | और kitchen खाना बनाकर भेजती है। || Phone और computer के बीच भी यही चलता है।",
+      "C": "पहला step: client। || Client यानी जो माँगता है: | तुम्हारे phone का app या browser। || Restaurant में ये तुम हो। || Weather app खोला, | और phone ने पूछा: | Pune का weather क्या है? || इस सवाल को बोलते हैं request।",
+      "D": "दूसरा step: server। || Server यानी वो computer जो जवाब देने के लिए हमेशा चालू रहता है। || Restaurant में ये kitchen है। || Server ने जवाब भेजा: | 28{twenty-eight} degree। || इस जवाब को बोलते हैं response।",
+      "E": "तीसरा step: API। || API यानी पूछने के तय नियम: | क्या माँग सकते हो, और जवाब किस शक्ल में आएगा। || Restaurant में ये menu है, | और waiter वो रास्ता है। || इसीलिए Pune का weather मिल जाता है, | पर Mars का नहीं: | वो menu में है ही नहीं।",
+      "F": "एक बात ध्यान रखो: | client और server computer के नाम नहीं, role हैं। || कोई server जब दूसरे server से कुछ माँगता है, | तब वो उसका client बन जाता है।",
+      "G": "@emph याद रखो: | client माँगता है, server जवाब देता है, | और API बताती है कि कैसे माँगना है। || तो तुम्हारी feed server से आती है, | API के रास्ते। || अब तुम बताओ: | Pune का weather माँगने वाला कौन है, | client या server? | Comment में लिखो। || ऐसे ही रोज़ एक system design idea के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
 }
