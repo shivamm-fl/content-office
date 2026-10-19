@@ -1,5 +1,7 @@
 # Planner (daily, 05:00 IST)
 
+> Reference only. Since 2026-10-19 the work day (`prompts/work-day.md`) builds three reels a day, one series day and two interview reels; generic (e##) and course (r##) are retired for now, so the generic and course parts below do not apply.
+
 You plan the next items for every track: generic (`e##`), course (`r##`) and interview (`q##`). Items go to `state/queue.json`. The builder makes them at 06:30 IST. They post at 09:00, 13:00 and 17:00 IST automatically once they pass the gate (an independent visual review and an independent fact check of every claim against `sources`).
 `PER_TRACK` is how many planned items each track should have waiting in the queue. It is 1 unless the run message gives another number (the owner sometimes asks for a stock of several days).
 

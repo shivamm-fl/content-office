@@ -6,6 +6,7 @@ import type {
   Task, Team, Thread, Usage,
 } from "@office/protocol";
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
+import { dayPlanLine } from "./dayplan";
 import { buildCalendar, floorOfItem, floorStatus, refusePublish, reelStage, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
 import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, learningsRepo, publishRepo, readAiCourse, runOutcome, SLOT_TEAM } from "./github";
 import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners, withHeading } from "./learnings";
@@ -311,10 +312,9 @@ export class Office extends DurableObject<Env> {
       await this.postMessage(slug, { thread_id: today.id as string, text: "Continue today's work day where it stopped: check what is already in the studio (team_feed) and finish the rest. Follow prompts/work-day.md." });
       return { thread: this.getThreadRow(today.id as string)! };
     }
-    const pace = team.pace ?? 6;
     const { thread } = await this.postMessage(slug, {
       agent: team.lead, kind: "workday", title: `Work day, ${day}`,
-      text: `Start the day (${iso}): ${pace} reels, ${Math.round(pace / Math.max(1, team.tracks.length))} per track. Follow prompts/work-day.md.`,
+      text: dayPlanLine(team, iso),
     });
     return { thread };
   }

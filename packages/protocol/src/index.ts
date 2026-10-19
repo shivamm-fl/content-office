@@ -12,11 +12,14 @@ export interface Room { id: string; name: string; kind?: "desks" | "meeting" | "
 export interface Team {
   slug: string; name: string; tagline: string; lead: string; model: string;
   handles: { platform: string; handle: string }[];
-  tracks: { id: string; prefix: string; name: string }[];
+  /** `retired`: the track keeps its ids (finished reels stay on this floor) but the work day neither plans nor builds it. */
+  tracks: { id: string; prefix: string; name: string; retired?: boolean }[];
   agents: TeamAgent[];
   rooms?: Room[];
   /** Reels the team aims to finish per work day (owner decision). */
   pace?: number;
+  /** The work day's fixed set per track id, e.g. { series: 1, interview: 2 }; without it `pace` is spread over the tracks. */
+  daily?: Record<string, number>;
 }
 
 /** `done` counts finished pieces of work (turns as lead, hand-offs as teammate): the agent's XP. */

@@ -8,7 +8,6 @@
     "interview": 101
   },
   "id_note": "Office ids of course and interview start at 101 so they never collide with ai-course. The series track (prefix a) has the id number equal to the day: Day 1 is a001, Day 150 is a150.",
-  "per_track": 3,
   "youtube_tracks": [
     "course",
     "interview"
@@ -26,5 +25,14 @@
     "finding",
     "question",
     "explainer"
-  ]
+  ],
+  "daily": {
+    "series": 1,
+    "interview": 2
+  },
+  "retired_tracks": [
+    "generic",
+    "course"
+  ],
+  "daily_note": "Work day (owner, 2026-10-19): 3 reels a day, 1 series day (a###) and 2 interview reels (q##). Generic (e##) and course (r##) are retired for now: nothing is planned or built for them, their ids and finished reels stay. The same set is in team.json (daily) and is what the Start-the-day tap sends."
 }
