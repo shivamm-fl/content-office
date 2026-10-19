@@ -13,3 +13,4 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 ## Strategist
 
 ## Motion designer
+- 2026-10-19 (d001 FIX): `M.fit` measures the whole scene, so a card that appears late leaves the lower half empty early. Put every panel on screen from the start (dim it, then light it on its word). A true-scale sliver (20 of 1,000,000) is invisible: show the halving ladder (÷2 bars) instead. A real page screenshot needs a crop (cookie banner, faces) before it goes on screen.
