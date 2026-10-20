@@ -1,0 +1,9 @@
+Space Complexity Explained in Hinglish: Time-Space Trade-off
+
+Space complexity is how much extra memory an algorithm needs as the input grows. The time-space trade-off means paying memory to save steps. Example: finding a duplicate among 10 lakh numbers by comparing every pair takes n(n-1)/2 = 499999500000 pair checks (formula; Python run, counts not seconds: 499500 for n=1000) with almost no extra memory. With a set it takes 1000000 steps, but the set costs O(n) memory: in a Python 3.12 run the set container was about 4x the list container (container only). We make no claim about set lookup speed.
+
+Sources:
+https://en.wikipedia.org/wiki/Space_complexity
+https://en.wikipedia.org/wiki/Space%E2%80%93time_tradeoff
+https://docs.python.org/3/library/sys.html#sys.getsizeof
+https://en.wikipedia.org/wiki/Hash_table

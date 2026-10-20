@@ -1,0 +1,115 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "err",
+      "A",
+      0,
+      0.3
+    ],
+    [
+      "tick",
+      "B",
+      1,
+      0
+    ],
+    [
+      "err",
+      "C",
+      2,
+      0.2
+    ],
+    [
+      "pop",
+      "D",
+      1,
+      0
+    ],
+    [
+      "save",
+      "E",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "F",
+      2,
+      0
+    ],
+    [
+      "ok",
+      "F",
+      4,
+      0.2
+    ],
+    [
+      "ok",
+      "G",
+      1,
+      0.2
+    ],
+    [
+      "warn",
+      "H",
+      2,
+      0.2
+    ],
+    [
+      "pop",
+      "I",
+      2,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Code अटक रहा था, | memory बढ़ाते ही चल गया।",
+      "B": "मान लो 10{दस} लाख numbers की list है, | और पता करना है कि कोई number दो बार आया है या नहीं, | यानी duplicate। || सबसे सीधा तरीका: हर number को बाकी हर number से compare करो। || इसमें extra memory नहीं लगती।",
+      "C": "पर गिनती देखो। || Formula है n times n minus one by two। || 10{दस} लाख numbers पर 499999500000{पाँच-सौ-अरब} pair checks बनते हैं। || इतने steps में code अटकेगा ही।",
+      "D": "दुकानदार हर बार calculator पर पूरा हिसाब नहीं लगाता। || वो दीवार पर price list टाँग देता है। || जगह घेरती है, | पर हर बार का हिसाब बच जाता है। || Code में भी यही करो: time बचाने के लिए memory खर्च करो।",
+      "E": "इसे कहते हैं space complexity: | input बढ़ने पर algorithm को कितनी extra memory चाहिए। || पहले तरीके में extra memory लगभग शून्य है, | पर steps बहुत ज़्यादा। || इस लेन-देन का नाम है time-space trade-off।",
+      "F": "दूसरा तरीका, | तीन steps में। || पहला step: एक खाली set बनाओ। | Set वो डिब्बा है जिसमें हर number एक ही बार रहता है। || दूसरा step: list का हर number देखो, | और पूछो: यह set में पहले से है? || तीसरा step: है, तो duplicate मिल गया। | नहीं है, तो उसे set में डाल दो।",
+      "G": "हर number पर एक बार काम, | तो steps हुए 1000000{दस-लाख}। || 499999500000{पाँच-सौ-अरब} से सीधे 10{दस} लाख।",
+      "H": "पर यह मुफ़्त नहीं है। || Set बनाने में O(n) steps लगते हैं, | और memory भी O(n) लगती है। || मैंने Python में चलाया: set का container list के container से लगभग 4{चार} गुना बड़ा निकला। || तो memory price है, | और time उसका फ़ायदा।",
+      "I": "अब बताओ, | list बढ़कर 20{बीस} लाख numbers की हो जाए, | तो set वाले तरीके में कितने steps लगेंगे? || Comment करो! || Answer caption में है। | ऐसे DSA concepts simple Hinglish में समझने के लिए follow कर लो।"
+    }
+  },
+  "hook_type": "relatable_stake",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

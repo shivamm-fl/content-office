@@ -93,28 +93,9 @@
       "hook_type": "relatable_stake",
       "spoken_hook": "Code अटक रहा था, memory बढ़ाते ही चल गया।",
       "hook_formula": "memory_buys_speed",
-      "hook_source": "relatable_stake rotation: d001 interviewer_asked, d002 surprising_fact; stake first, first teaching line (the 10 lakh numbers setup) follows with nothing between",
-      "hook_10s": "Code अटक रहा था, memory बढ़ाते ही चल गया। मान लो 10{दस} लाख numbers हैं और duplicate ढूँढना है। इसे ही space और time का trade-off कहते हैं, देखो कैसे। [frame 0: 10 lakh number tiles on the left, a memory bar on the right empty, a step counter stuck high]",
-      "hook_candidates": [
-        {
-          "hook": "Code अटक रहा था, memory बढ़ाते ही चल गया।",
-          "formula": "memory_buys_speed",
-          "type": "relatable_stake"
-        },
-        {
-          "hook": "Memory मुफ़्त नहीं है, पर time से सस्ती है।",
-          "formula": "cost_framing",
-          "type": "surprising_fact"
-        },
-        {
-          "hook": "10{दस} लाख numbers में duplicate कितनी memory में ढूँढोगे?",
-          "formula": "scale_question",
-          "type": "direct_question"
-        }
-      ],
-      "visual_idea": "A row of 10 lakh number tiles. Left lane: every tile paired with every other tile by lines, a step counter racing toward 5 hundred billion, memory bar flat and tiny. Right lane: tiles dropped one by one into a growing shelf (the set), memory bar rising to about 4x, step counter stopping at 10 lakh; two bars (steps and memory) swap sizes between the lanes.",
-      "everyday_anchor": "A shopkeeper who keeps a price list on the wall (more space used) instead of recalculating every price at the counter each time (more time).",
-      "example": "EXAMPLE (researcher ran it, Python 3.12.3, counts not seconds): 10 lakh ints, duplicate check by comparing pairs: n(n-1)/2 = 499999500000 steps (formula run for n=1000: 499500, matches; n=10 lakh not run); with a set: 1000000 steps, set length 1000000, memory O(n). List scan of absent target: 1000000 comparisons, O(1) extra memory. Memory bytes vary by machine, so say 'about 4x the list container' and 'tens of MB' (getsizeof list 8000056 B vs set 33554648 B, container only). Optional cut-first second example for the catch beat: fib(30) naive 2692537 calls vs dict memo 59 calls, dict size 31.",
+      "visual_idea": "Two lanes: pair lines vs a set shelf; step and memory bars swap sizes.",
+      "everyday_anchor": "A shopkeeper who keeps a price list on the wall instead of recalculating every price at the counter.",
+      "example": "EXAMPLE (ran it, Python 3.12, counts not seconds): n(n-1)/2 = 499999500000 pair checks for 10 lakh ints (n=1000: 499500; n=2000: 1999000); set: 1000000 steps; getsizeof list 8000056 B vs set 33554648 B = about 4x (container only).",
       "sources": [
         "https://en.wikipedia.org/wiki/Space_complexity",
         "https://en.wikipedia.org/wiki/Space%E2%80%93time_tradeoff",
@@ -122,25 +103,21 @@
         "https://en.wikipedia.org/wiki/Hash_table"
       ],
       "facts_to_verify": [
-        "Space complexity = memory an algorithm needs as input grows (Wikipedia Space complexity, fetched).",
-        "Trade-off = more space for less time, or the reverse (Wikipedia Space-time tradeoff, fetched).",
-        "Hash table lookup: average constant time, worst case O(n) (Wikipedia Hash table, fetched). That a Python set is a hash table is NOT verified: wiki.python.org/moin/TimeComplexity returned 404 twice, so do not claim 'set lookup is O(1)' as a Python fact; say 'a hash-based set' as our reasoning or drop the claim until a primary Python page loads.",
-        "sys.getsizeof counts only the object itself, not what it refers to (docs.python.org, fetched): say 'container only'.",
-        "Run the duplicate-check snippets again and show the real printed counts (1000000 and 499999500000 formula, checked at n=1000 as 499500); do not put bytes or seconds on screen as exact numbers.",
-        "The set also costs O(n) steps to build once; say it."
+        "Do not claim set lookup is O(1) as a Python fact.",
+        "Show real printed counts; no exact bytes or seconds on screen.",
+        "Say the set costs O(n) to build and O(n) memory."
       ],
-      "length_target_s": 120,
+      "length_target_s": 130,
       "cover_headline": "Spend memory, save time: space complexity",
       "thumb_text": "Space vs time",
       "keywords": [
         "space complexity in hindi",
         "time space tradeoff kya hai",
         "space complexity explained simply",
-        "space complexity for coding interview",
-        "o(1) space o(n) space kya hai"
+        "space complexity for coding interview"
       ],
-      "caption_note": "Day 3/150 caption. Check answer: if the list grows to 20 lakh numbers, the set method takes 20 lakh steps (the pair way takes about 4x more, nearly 2 lakh arab). Put it in the caption.",
-      "script_notes": "No wrong-way-first announcement: put the numbers inside the story (maan lo ...). Numbers in Hindi words in the narration (5 hundred arab = पाँच सौ अरब, 10{दस} लाख). Nothing between the hook and 'maan lo 10 lakh numbers'. Catch: the extra memory is real (about 4x the list container), so memory is the price. Header tag DSA 003/150.",
+      "caption_note": "Day 3/150 caption. Check answer: 20 lakh numbers with the set method take 20 lakh steps.",
+      "script_notes": "Owner approved the script as written on 2026-10-21; keep wording. Header tag DSA 003/150.",
       "status": "planned",
       "qa_passed": false
     }

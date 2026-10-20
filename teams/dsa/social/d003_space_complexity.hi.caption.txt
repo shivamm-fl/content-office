@@ -1,0 +1,9 @@
+Day 3/150: Code atak raha tha, memory badhate hi chal gaya. Space complexity kya hoti hai?
+
+10 lakh numbers mein duplicate dhoondhna hai. Har number ko baaki har number se compare karo, to extra memory nahi lagti, par 499999500000 pair checks bante hain. Ek set mein numbers daalte jao aur poochho "yeh pehle se hai?", to steps sirf 1000000. Price: set banane mein O(n) steps aur O(n) memory. Maine Python mein chalaya: set ka container list ke container se lagbhag 4 guna bada nikla.
+
+Space complexity: input badhne par algorithm ko kitni extra memory chahiye. Memory dekar time bachana, isi ko time-space trade-off kehte hain.
+
+Ab tum batao: list 20 lakh numbers ki ho jaye, to set wale tareeke mein kitne steps? Answer: 20 lakh steps. Pehle comment mein apna guess likho.
+
+#dsa #spacecomplexity #codinginterview
