@@ -1,0 +1,8 @@
+Developer ya user: AI kiski maane? Interview jawab
+
+Interview mein poochha jata hai: developer ki instruction aur user ke message mein takraav ho, to AI kiska order follow karega? Jawab: generally developer ki instruction, kyunki OpenAI ke Model Spec mein authority ka order hai: system, developer, user. Par prompt security boundary nahi hai: refund limit jaisi critical business rule backend code mein enforce karo. Is video mein ek invented refund bot (limit 500 rupye, request 2,000 rupye) aur ek simple code run hai: model ne "Approved!" bola, backend ne Approved: False print kiya.
+
+Is video mein: instruction hierarchy, developer vs user prompt, prompt injection, server-side validation, authorization, payment controls.
+
+Sources:
+https://model-spec.openai.com/2025-02-12.html
