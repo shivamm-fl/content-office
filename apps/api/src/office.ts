@@ -41,6 +41,9 @@ const LOST_AFTER_MS = 3 * 60_000;
 
 const newId = (p: string) => `${p}_${Date.now().toString(36)}${randomToken(5).replace(/[-_]/g, "x")}`;
 
+/** The owner is talking to a desk (not a button tap, not a studio note): its session stays open for them like a chat. */
+const isOwnerChat = (run: Run, author: string, body: { tap?: boolean }) => run.profile !== "studio" && author === "owner" && !body.tap;
+
 type Row = Record<string, SqlStorageValue>;
 
 export class Office extends DurableObject<Env> {
@@ -249,7 +252,8 @@ export class Office extends DurableObject<Env> {
   }
 
   // ---------- owner actions ----------
-  async postMessage(slug: string, input: { thread_id?: string | null; agent?: string; text: string; kind?: string; title?: string }): Promise<{ thread: Thread; message: Message }> {
+  /** tap: the message is a button press ("Start the day"), not the owner talking; the session ends when its task is done. */
+  async postMessage(slug: string, input: { thread_id?: string | null; agent?: string; text: string; kind?: string; title?: string; tap?: boolean }): Promise<{ thread: Thread; message: Message }> {
     const team = this.ensureTeam(slug);
     const text = input.text.trim();
     if (!text) throw new Error("empty message");
@@ -263,7 +267,7 @@ export class Office extends DurableObject<Env> {
       thread = this.getThreadRow(id)!;
       this.broadcast({ t: "thread", thread });
     }
-    const message = this.addMessage({ thread_id: thread.id, run_id: null, author: "owner", kind: "text", body: { text }, delivered: false });
+    const message = this.addMessage({ thread_id: thread.id, run_id: null, author: "owner", kind: "text", body: input.tap ? { text, tap: true } : { text }, delivered: false });
     const active = this.activeRunFor(thread.id);
     if (active) this.deliverPending(active);
     else await this.startRun(thread, thread.kind === "build" ? "studio" : "desk");  // a note in a build thread revises the reel
@@ -311,11 +315,11 @@ export class Office extends DurableObject<Env> {
     // A second tap on the same day continues that day's conversation (with its memory) instead of a new day.
     const today = this.one("SELECT * FROM threads WHERE kind = 'workday' AND title = ? ORDER BY created_at DESC LIMIT 1", `Work day, ${day}`);
     if (today) {
-      await this.postMessage(slug, { thread_id: today.id as string, text: "Continue today's work day where it stopped: check what is already in the studio (team_feed) and finish the rest. Follow prompts/work-day.md." });
+      await this.postMessage(slug, { thread_id: today.id as string, tap: true, text: "Continue today's work day where it stopped: check what is already in the studio (team_feed) and finish the rest. Follow prompts/work-day.md." });
       return { thread: this.getThreadRow(today.id as string)! };
     }
     const { thread } = await this.postMessage(slug, {
-      agent: team.lead, kind: "workday", title: `Work day, ${day}`,
+      agent: team.lead, kind: "workday", title: `Work day, ${day}`, tap: true,
       text: dayPlanLine(team, iso),
     });
     return { thread };
@@ -850,7 +854,7 @@ export class Office extends DurableObject<Env> {
     if (!run.thread_id || !this.runnerSocket(run.id)) return;
     for (const m of this.rows("SELECT * FROM messages WHERE thread_id = ? AND author IN ('owner', 'office') AND delivered = 0 ORDER BY created_at", run.thread_id)) {
       const body = JSON.parse(m.body as string);
-      if (this.sendRunner(run.id, { t: "user_message", id: m.id as string, text: body.text })) {
+      if (this.sendRunner(run.id, { t: "user_message", id: m.id as string, text: body.text, chat: isOwnerChat(run, m.author as string, body) })) {
         this.sql.exec("UPDATE messages SET delivered = 1, run_id = ? WHERE id = ?", run.id, m.id);
       }
     }
@@ -908,7 +912,12 @@ export class Office extends DurableObject<Env> {
       resume,
       digest: this.digest(run.thread_id),
       // task_mode: the session ends when its work is done (studio jobs, the work day), no waiting for chat.
-      settings: { idle_minutes: taskMode ? 2 : Number(this.env.IDLE_MINUTES ?? "15"), max_minutes: run.profile === "studio" ? 110 : 340, max_turns: 500, task_mode: taskMode },
+      // chat: the owner is talking to this desk, so it stays open for them like a normal chat (chat_idle_minutes) instead of closing 45 s after the task is done.
+      settings: {
+        idle_minutes: taskMode ? 2 : Number(this.env.IDLE_MINUTES ?? "15"), chat_idle_minutes: Number(this.env.IDLE_MINUTES ?? "15"),
+        max_minutes: run.profile === "studio" ? 110 : 340, max_turns: 500, task_mode: taskMode,
+        chat: pending.some((m) => isOwnerChat(run, m.author as string, JSON.parse(m.body as string))),
+      },
     };
   }
 
@@ -1126,6 +1135,9 @@ export class Office extends DurableObject<Env> {
         return;
       case "done": {
         if (threadId && ev.transcript_key) this.sql.exec("UPDATE threads SET transcript_key = ?, session_id = COALESCE(?, session_id) WHERE id = ?", ev.transcript_key, ev.session_id, threadId);
+        // Messages that arrived while the session was closing were never read: they wait again for the next session.
+        const unread = threadId ? (ev.unread ?? []).filter((id) => typeof id === "string") : [];
+        for (const id of unread) this.sql.exec("UPDATE messages SET delivered = 0, run_id = NULL WHERE id = ? AND thread_id = ?", id, threadId);
         if (ev.keep_open && run.profile === "studio" && ev.status === "done") {
           // The studio session is done; independent reviews, a possible fix and the final gate run in later jobs.
           this.updateRun(run.id, { status: "idle", stage: "review", token_hash: null });
@@ -1135,6 +1147,9 @@ export class Office extends DurableObject<Env> {
           return;
         }
         this.finishRun(run.id, ev.status, ev.summary || null, ev.status === "failed" ? ev.summary || "the agent session failed" : null);
+        // the owner wrote while the session was closing: wake the desk again for it (it resumes this conversation)
+        const thread = unread.length && threadId ? this.getThreadRow(threadId) : null;
+        if (thread && !this.activeRunFor(thread.id)) await this.startRun(thread, thread.kind === "build" ? "studio" : "desk");
         return;
       }
     }

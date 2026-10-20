@@ -365,6 +365,11 @@ async function main() {
   let idleTimer = null;
   const seen = new Set(work.messages.map((m) => m.id));
   const idleMs = (work.settings?.idle_minutes ?? 15) * 60_000;
+  const chatIdleMs = (work.settings?.chat_idle_minutes ?? work.settings?.idle_minutes ?? 15) * 60_000;
+  // The owner is talking to this desk (their own message, not a tap on "Start the day"): the session stays open like a chat.
+  let chatting = Boolean(work.settings?.chat);
+  // Messages that reached us while the session was closing. Nobody read them; the office hands them to a new session.
+  const unread = [];
   const hardStop = setTimeout(() => endSession("time limit of this runner reached"), (work.settings?.max_minutes ?? 340) * 60_000);
 
   const writeUser = (text) => {
@@ -389,14 +394,22 @@ async function main() {
   const scheduleEnd = () => {
     clearTimeout(idleTimer);
     if (busy || ctx.waiting || background > 0 || ending) return;
-    const wait = work.settings?.task_mode ? 45_000 : idleMs;
+    const quick = work.settings?.task_mode && !chatting;
+    const wait = quick ? 45_000 : chatting ? chatIdleMs : idleMs;
     idleTimer = setTimeout(() => {
-      if (!busy && !ctx.waiting && background === 0) endSession(work.settings?.task_mode ? "the task is done" : `no message for ${idleMs / 60000} minutes`);
+      if (!busy && !ctx.waiting && background === 0) endSession(quick ? "the task is done" : `no message for ${wait / 60000} minutes`);
     }, wait);
   };
 
   ctx.link = new OfficeLink(work.token, (cmd) => {
-    if (cmd.t === "user_message" && !seen.has(cmd.id)) { seen.add(cmd.id); writeUser(cmd.text); }
+    if (cmd.t === "user_message" && !seen.has(cmd.id)) {
+      if (ending) { unread.push(cmd.id); return; }
+      seen.add(cmd.id);
+      if (cmd.chat) chatting = true;
+      // Still starting (the transcript is downloading): it goes into the first message.
+      if (!child) work.messages.push({ id: cmd.id, text: cmd.text });
+      else writeUser(cmd.text);
+    }
     else if (cmd.t === "answer") ctx.resolveAsk(cmd.ask_id, cmd.answer);
     else if (cmd.t === "interrupt" && child) child.stdin.write(JSON.stringify({ type: "control_request", request_id: rid("req"), request: { subtype: "interrupt" } }) + "\n");
     else if (cmd.t === "end") endSession("the owner ended the session");
@@ -510,7 +523,7 @@ async function main() {
   }
   // A studio session is one job of the studio workflow: the run stays open for the reviews and the final gate.
   const keepOpen = Boolean(work.run.mode) && !failed;
-  ctx.link.send({ t: "done", status: failed ? "failed" : "done", summary, transcript_key: key, session_id: state.sessionId, keep_open: keepOpen });
+  ctx.link.send({ t: "done", status: failed ? "failed" : "done", summary, transcript_key: key, session_id: state.sessionId, keep_open: keepOpen, unread });
   await ctx.link.drain();
   ctx.link.close();
   mcp.server.close();

@@ -118,12 +118,14 @@ export type RunnerEvent =
   /** One agent messaged another directly inside the session. */
   | { t: "dm"; from: string; to: string; text: string }
   | { t: "heartbeat" }
-  /** keep_open: a studio session finished its part; the run goes on (reviews, fix, final gate) in later jobs. */
-  | { t: "done"; status: "done" | "failed"; summary: string; transcript_key: string | null; session_id: string | null; keep_open?: boolean };
+  /** keep_open: a studio session finished its part; the run goes on (reviews, fix, final gate) in later jobs.
+   *  unread: ids of messages that reached the runner while it was closing, so nobody read them. */
+  | { t: "done"; status: "done" | "failed"; summary: string; transcript_key: string | null; session_id: string | null; keep_open?: boolean; unread?: string[] };
 
 /** Office -> runner. */
 export type RunnerCommand =
-  | { t: "user_message"; id: string; text: string }
+  /** chat: the owner is talking to this desk, so the session stays open like a chat instead of ending when the task is done. */
+  | { t: "user_message"; id: string; text: string; chat?: boolean }
   | { t: "answer"; ask_id: string; answer: Record<string, unknown> }
   | { t: "interrupt" }
   | { t: "end" };
