@@ -20,6 +20,9 @@ export interface Team {
   pace?: number;
   /** The work day's fixed set per track id, e.g. { series: 1, interview: 2 }; without it `pace` is spread over the tracks. */
   daily?: Record<string, number>;
+  /** `floor` (default): a team that makes reels, its agents work inside teams/<slug>/. `company` (HQ): its agents see the whole repo and
+   *  every change they make goes to a proposal branch for the owner (nothing of theirs reaches main on its own, except teams/<slug>/state). */
+  scope?: "floor" | "company";
 }
 
 /** `done` counts finished pieces of work (turns as lead, hand-offs as teammate): the agent's XP. */
@@ -142,3 +145,23 @@ export type RoomEvent =
   | { t: "task"; task: Task }
   | { t: "thread"; thread: Thread }
   | { t: "usage"; usage: Usage };
+
+// ---------- proposals: changes the agents made that wait for the owner (branch proposal/<run_id>) ----------
+export type ProposalKind = "rules" | "code" | "content" | "mixed";
+export interface ProposalFile { path: string; status: "added" | "modified" | "removed" | "renamed"; additions: number; deletions: number; patch: string | null }
+export interface ProposalSummary {
+  branch: string;                 // "proposal/run_abc"
+  run_id: string;                 // "run_abc"
+  team: string | null;            // the floor whose session made it (from the commit message "office: <team> ...")
+  title: string;                  // first heading of teams/hq/proposals/<run_id>.md when the branch has it, else the commit subject
+  summary: string | null;         // that file's text (first ~800 characters)
+  files: number; additions: number; deletions: number;
+  updated_at: number;             // ms
+  kind: ProposalKind;             // rules = prompts/agents/skills/team settings, code = apps/ packages/ runner/ tools/ .github/, content = reels/state/social, mixed = more than one
+  needs_deploy: boolean;          // touches apps/, packages/ or a team.json: the Worker must be deployed after the merge
+  behind_by: number;              // commits main gained since the branch was cut (conflict risk)
+  conflicts: boolean | null;      // null = unknown
+}
+export interface ProposalDetail extends ProposalSummary { proposal_md: string | null; files_list: ProposalFile[] }
+export interface DeployInfo { status: "none" | "queued" | "running" | "success" | "failure"; run_url: string | null; commit: string | null; started_at: number | null }
+export interface ProposalsState { proposals: ProposalSummary[]; deploy: DeployInfo | null; active_runs: number }
