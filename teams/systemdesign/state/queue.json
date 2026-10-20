@@ -39,6 +39,62 @@
       ],
       "status": "planned",
       "qa_passed": false
+    },
+    {
+      "id": "s003",
+      "track": "series",
+      "day": 3,
+      "unit": "P1",
+      "title": "Website kholte hi andar kya hota hai",
+      "format": "concept",
+      "one_idea": "When you type a web address and press enter, the browser looks up the server's address (DNS), connects, asks for the page (HTTP request), gets the HTML back, then asks for the images, styles and scripts it names, and draws the page.",
+      "spoken_hook": "वेबसाइट slow हो, तो आप तुरंत छोड़ देते हैं।",
+      "hook_type": "relatable_stake",
+      "hook_formula": "relatable_stake: the viewer's own everyday behaviour (leaving a slow site) as the stake, answered by showing where the time goes",
+      "hook_source": "hook-writer relatable_stake",
+      "hook_10s": "वेबसाइट slow हो, तो आप तुरंत छोड़ देते हैं। Enter दबाने से page दिखने तक चार-पाँच काम होते हैं, और हर काम में वक़्त लगता है। चलिए एक-एक करके देखते हैं कि time कहाँ जाता है। [frame 0: a browser address bar with a spinner, a clock ticking, then a path of small stops lighting one by one]",
+      "hook_candidates": [
+        {
+          "text": "वेबसाइट slow हो, तो आप तुरंत छोड़ देते हैं।",
+          "formula": "relatable_stake"
+        },
+        {
+          "text": "Enter दबाया, और page खुलने में कितने काम होते हैं?",
+          "formula": "direct_question"
+        },
+        {
+          "text": "एक website खोलने में browser आठ बार server तक चक्कर लगाता है।",
+          "formula": "surprising_fact (MDN: eight round trips before the request, HTTPS case)"
+        }
+      ],
+      "visual_idea": "A browser bar on the left and a server rack on the right; a path of stops between them lights up in order: name lookup (DNS book), connection, REQUEST arrow, HTML card coming back, then small image, style and script cards flying in and assembling into the page. A clock strip under the path fills as each stop adds time.",
+      "everyday_anchor": "Ordering a courier parcel: you find the shop's address (DNS), call and get picked up (connection), place the order (request), get the box (HTML), then extra items listed inside arrive in separate deliveries (images, styles).",
+      "example": "EXAMPLE: typing a shopping site address; the first reply is the HTML, then dozens of image and script requests follow.",
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work",
+        "https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_URL",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview"
+      ],
+      "facts_to_verify": [
+        "Order: DNS lookup, TCP connection (plus TLS for HTTPS), HTTP GET, server replies with HTML, parse and fetch sub-resources, render (MDN How browsers work).",
+        "MDN counts eight round trips before the request in the HTTPS case; keep it as that example or drop it.",
+        "The browser parses the HTML, then makes more requests for scripts, CSS, images (MDN HTTP Overview).",
+        "URL parts: scheme, domain name, path (MDN What is a URL).",
+        "Do not claim a '3 second' abandon number; no company-specific claim; DNS only named and defined in one line (Day 4 covers it).",
+        "Stand-alone: no mention of other days."
+      ],
+      "length_target_s": 120,
+      "cover_headline": "What Happens When You Open a Website",
+      "thumb_text": "Enter Dabaya?",
+      "keywords": [
+        "website kholne par kya hota hai",
+        "what happens when you type a url in browser",
+        "browser kaise kaam karta hai",
+        "dns tcp http kya hai hindi",
+        "how a website loads explained"
+      ],
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }
