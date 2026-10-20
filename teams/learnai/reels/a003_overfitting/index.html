@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Overfitting: zero error on training, 133 on new data</title>
+    <title>Overfitting</title>
     <script src="assets/gsap.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="kit/motion.css" />
@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="172.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -30,9 +30,7 @@
       </div>
 
       <div id="cam">
-        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
-             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,19 +39,266 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="172.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="172.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="172.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "AI ENGINEER ROADMAP" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
-      const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "150 DAYS OF AI · DAY 3" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+      const TRN = CYAN, NEW = ACC;
+      const DATA = {"xt": [1.42, 1.81, 2.46, 3.98, 4.03, 5.11, 5.35, 6.83, 8.75, 8.94], "yt": [4.57, 4.73, 5.37, 7.74, 10.69, 10.43, 10.91, 13.35, 18.82, 18.98], "g": [1.42, 1.45, 1.48, 1.51, 1.54, 1.57, 1.6, 1.62, 1.65, 1.68, 1.71, 1.74, 1.77, 1.8, 1.83, 1.86, 1.89, 1.91, 1.94, 1.97, 2.0, 2.03, 2.06, 2.09, 2.12, 2.15, 2.18, 2.21, 2.23, 2.26, 2.29, 2.32, 2.35, 2.38, 2.41, 2.44, 2.47, 2.5, 2.52, 2.55, 2.58, 2.61, 2.64, 2.67, 2.7, 2.73, 2.76, 2.79, 2.81, 2.84, 2.87, 2.9, 2.93, 2.96, 2.99, 3.02, 3.05, 3.08, 3.1, 3.13, 3.16, 3.19, 3.22, 3.25, 3.28, 3.31, 3.34, 3.37, 3.4, 3.42, 3.45, 3.48, 3.51, 3.54, 3.57, 3.6, 3.63, 3.66, 3.69, 3.71, 3.74, 3.77, 3.8, 3.83, 3.86, 3.89, 3.92, 3.95, 3.98, 4.0, 4.03, 4.06, 4.09, 4.12, 4.15, 4.18, 4.21, 4.24, 4.27, 4.29, 4.32, 4.35, 4.38, 4.41, 4.44, 4.47, 4.5, 4.53, 4.56, 4.58, 4.61, 4.64, 4.67, 4.7, 4.73, 4.76, 4.79, 4.82, 4.85, 4.88, 4.9, 4.93, 4.96, 4.99, 5.02, 5.05, 5.08, 5.11, 5.14, 5.17, 5.19, 5.22, 5.25, 5.28, 5.31, 5.34, 5.37, 5.4, 5.43, 5.46, 5.48, 5.51, 5.54, 5.57, 5.6, 5.63, 5.66, 5.69, 5.72, 5.75, 5.77, 5.8, 5.83, 5.86, 5.89, 5.92, 5.95, 5.98, 6.01, 6.04, 6.07, 6.09, 6.12, 6.15, 6.18, 6.21, 6.24, 6.27, 6.3, 6.33, 6.36, 6.38, 6.41, 6.44, 6.47, 6.5, 6.53, 6.56, 6.59, 6.62, 6.65, 6.67, 6.7, 6.73, 6.76, 6.79, 6.82, 6.85, 6.88, 6.91, 6.94, 6.96, 6.99, 7.02, 7.05, 7.08, 7.11, 7.14, 7.17, 7.2, 7.23, 7.26, 7.28, 7.31, 7.34, 7.37, 7.4, 7.43, 7.46, 7.49, 7.52, 7.55, 7.57, 7.6, 7.63, 7.66, 7.69, 7.72, 7.75, 7.78, 7.81, 7.84, 7.86, 7.89, 7.92, 7.95, 7.98, 8.01, 8.04, 8.07, 8.1, 8.13, 8.15, 8.18, 8.21, 8.24, 8.27, 8.3, 8.33, 8.36, 8.39, 8.42, 8.44, 8.47, 8.5, 8.53, 8.56, 8.59, 8.62, 8.65, 8.68, 8.71, 8.74, 8.76, 8.79, 8.82, 8.85, 8.88, 8.91, 8.94], "l1": [3.84, 3.9, 3.96, 4.01, 4.07, 4.13, 4.18, 4.24, 4.3, 4.35, 4.41, 4.47, 4.52, 4.58, 4.63, 4.69, 4.75, 4.8, 4.86, 4.92, 4.97, 5.03, 5.09, 5.14, 5.2, 5.26, 5.31, 5.37, 5.43, 5.48, 5.54, 5.6, 5.65, 5.71, 5.77, 5.82, 5.88, 5.94, 5.99, 6.05, 6.11, 6.16, 6.22, 6.27, 6.33, 6.39, 6.44, 6.5, 6.56, 6.61, 6.67, 6.73, 6.78, 6.84, 6.9, 6.95, 7.01, 7.07, 7.12, 7.18, 7.24, 7.29, 7.35, 7.41, 7.46, 7.52, 7.58, 7.63, 7.69, 7.74, 7.8, 7.86, 7.91, 7.97, 8.03, 8.08, 8.14, 8.2, 8.25, 8.31, 8.37, 8.42, 8.48, 8.54, 8.59, 8.65, 8.71, 8.76, 8.82, 8.88, 8.93, 8.99, 9.05, 9.1, 9.16, 9.22, 9.27, 9.33, 9.38, 9.44, 9.5, 9.55, 9.61, 9.67, 9.72, 9.78, 9.84, 9.89, 9.95, 10.01, 10.06, 10.12, 10.18, 10.23, 10.29, 10.35, 10.4, 10.46, 10.52, 10.57, 10.63, 10.69, 10.74, 10.8, 10.86, 10.91, 10.97, 11.02, 11.08, 11.14, 11.19, 11.25, 11.31, 11.36, 11.42, 11.48, 11.53, 11.59, 11.65, 11.7, 11.76, 11.82, 11.87, 11.93, 11.99, 12.04, 12.1, 12.16, 12.21, 12.27, 12.33, 12.38, 12.44, 12.5, 12.55, 12.61, 12.66, 12.72, 12.78, 12.83, 12.89, 12.95, 13.0, 13.06, 13.12, 13.17, 13.23, 13.29, 13.34, 13.4, 13.46, 13.51, 13.57, 13.63, 13.68, 13.74, 13.8, 13.85, 13.91, 13.97, 14.02, 14.08, 14.13, 14.19, 14.25, 14.3, 14.36, 14.42, 14.47, 14.53, 14.59, 14.64, 14.7, 14.76, 14.81, 14.87, 14.93, 14.98, 15.04, 15.1, 15.15, 15.21, 15.27, 15.32, 15.38, 15.44, 15.49, 15.55, 15.61, 15.66, 15.72, 15.77, 15.83, 15.89, 15.94, 16.0, 16.06, 16.11, 16.17, 16.23, 16.28, 16.34, 16.4, 16.45, 16.51, 16.57, 16.62, 16.68, 16.74, 16.79, 16.85, 16.91, 16.96, 17.02, 17.08, 17.13, 17.19, 17.25, 17.3, 17.36, 17.41, 17.47, 17.53, 17.58, 17.64, 17.7, 17.75, 17.81, 17.87, 17.92, 17.98, 18.04, 18.09, 18.15, 18.21, 18.26, 18.32, 18.38, 18.43, 18.49], "c9": [4.57, -2.67, -7.84, -11.23, -13.12, -13.75, -13.36, -12.13, -10.25, -7.88, -5.16, -2.21, 0.85, 3.93, 6.96, 9.85, 12.57, 15.05, 17.25, 19.16, 20.75, 22.0, 22.91, 23.47, 23.69, 23.57, 23.13, 22.37, 21.32, 19.99, 18.4, 16.58, 14.55, 12.34, 9.97, 7.46, 4.85, 2.15, -0.61, -3.4, -6.2, -8.99, -11.74, -14.44, -17.07, -19.6, -22.03, -24.33, -26.49, -28.5, -30.35, -32.03, -33.53, -34.85, -35.97, -36.9, -37.64, -38.17, -38.51, -38.66, -38.61, -38.37, -37.95, -37.35, -36.57, -35.64, -34.54, -33.3, -31.93, -30.42, -28.8, -27.07, -25.25, -23.35, -21.38, -19.34, -17.26, -15.15, -13.01, -10.85, -8.7, -6.56, -4.43, -2.34, -0.29, 1.71, 3.65, 5.53, 7.33, 9.04, 10.67, 12.21, 13.64, 14.97, 16.2, 17.31, 18.31, 19.19, 19.96, 20.62, 21.16, 21.58, 21.9, 22.11, 22.21, 22.21, 22.12, 21.93, 21.66, 21.31, 20.89, 20.4, 19.85, 19.25, 18.62, 17.94, 17.25, 16.53, 15.81, 15.1, 14.39, 13.7, 13.04, 12.42, 11.84, 11.32, 10.86, 10.48, 10.16, 9.94, 9.8, 9.76, 9.82, 9.99, 10.27, 10.67, 11.18, 11.81, 12.56, 13.43, 14.42, 15.53, 16.76, 18.1, 19.55, 21.1, 22.75, 24.49, 26.32, 28.22, 30.19, 32.22, 34.28, 36.39, 38.51, 40.63, 42.75, 44.84, 46.9, 48.9, 50.82, 52.66, 54.38, 55.98, 57.43, 58.72, 59.82, 60.72, 61.4, 61.83, 62.0, 61.89, 61.48, 60.76, 59.7, 58.29, 56.51, 54.35, 51.79, 48.82, 45.42, 41.59, 37.32, 32.59, 27.41, 21.76, 15.65, 9.06, 2.01, -5.5, -13.47, -21.9, -30.76, -40.06, -49.77, -59.88, -70.36, -81.2, -92.37, -103.84, -115.58, -127.56, -139.74, -152.08, -164.54, -177.08, -189.64, -202.19, -214.66, -227.0, -239.15, -251.06, -262.67, -273.91, -284.73, -295.04, -304.8, -313.92, -322.36, -330.03, -336.88, -342.83, -347.83, -351.81, -354.71, -356.48, -357.06, -356.4, -354.46, -351.2, -346.59, -340.61, -333.24, -324.46, -314.29, -302.75, -289.84, -275.62, -260.15, -243.48, -225.72, -206.97, -187.35, -167.02, -146.15, -124.93, -103.6, -82.41, -61.65, -41.63, -22.72, -5.29, 10.21, 23.31, 33.5, 40.2, 42.79, 40.62, 32.94, 18.98], "xb": [0.0, 0.05, 0.21, 0.38, 0.4, 0.53, 0.53, 0.54, 0.85, 1.3, 1.32, 1.33, 1.38, 1.56, 1.61, 1.62, 1.65, 1.74, 1.8, 1.81, 1.84, 1.89, 1.98, 2.18, 2.32, 2.36, 2.41, 2.49, 2.74, 2.76, 2.83, 2.88, 3.06, 3.09, 3.14, 3.19, 3.22, 3.23, 3.29, 3.39, 3.59, 3.96, 3.99, 4.03, 4.21, 4.23, 4.25, 4.42, 4.58, 4.59, 4.61, 4.63, 4.64, 4.73, 4.76, 4.78, 4.94, 4.95, 4.97, 5.22, 5.44, 5.49, 5.6, 5.63, 5.68, 5.71, 5.82, 6.14, 6.14, 6.33, 6.47, 6.47, 6.55, 6.81, 7.07, 7.14, 7.22, 7.35, 7.41, 7.46, 7.47, 7.94, 8.15, 8.61, 8.65, 8.7, 8.73, 8.81, 8.85, 8.94, 8.98, 8.99, 9.09, 9.2, 9.28, 9.29, 9.3, 9.36, 9.61, 9.88], "yb": [0.02, 0.98, 1.5, 2.56, 0.28, 2.31, 2.28, 2.93, 0.34, 4.21, 2.41, 3.59, 3.23, 3.29, 5.25, 5.03, 5.51, 4.79, 3.35, 5.46, 5.19, 6.35, 5.29, 4.82, 6.14, 4.86, 5.66, 5.99, 7.03, 6.57, 6.19, 7.41, 8.27, 8.13, 8.24, 7.6, 8.56, 7.14, 6.1, 7.59, 9.45, 7.39, 6.72, 10.62, 8.1, 10.1, 8.81, 10.76, 9.02, 9.25, 10.5, 10.11, 10.96, 12.11, 10.16, 10.54, 10.74, 10.47, 11.77, 11.17, 12.38, 13.5, 11.1, 12.09, 12.4, 12.3, 13.97, 14.08, 13.79, 13.46, 16.16, 11.51, 12.57, 14.64, 16.58, 15.01, 15.93, 14.65, 16.06, 15.66, 16.53, 16.58, 16.69, 17.96, 16.58, 18.46, 19.22, 18.06, 19.96, 19.46, 18.06, 19.9, 18.59, 20.6, 18.34, 19.08, 17.42, 19.32, 19.22, 19.82], "gb": [0.0, 0.04, 0.08, 0.12, 0.15, 0.19, 0.23, 0.27, 0.31, 0.34, 0.38, 0.42, 0.46, 0.5, 0.53, 0.57, 0.61, 0.65, 0.69, 0.73, 0.76, 0.8, 0.84, 0.88, 0.92, 0.95, 0.99, 1.03, 1.07, 1.11, 1.15, 1.18, 1.22, 1.26, 1.3, 1.34, 1.37, 1.41, 1.45, 1.49, 1.53, 1.57, 1.6, 1.64, 1.68, 1.72, 1.76, 1.79, 1.83, 1.87, 1.91, 1.95, 1.98, 2.02, 2.06, 2.1, 2.14, 2.18, 2.21, 2.25, 2.29, 2.33, 2.37, 2.4, 2.44, 2.48, 2.52, 2.56, 2.6, 2.63, 2.67, 2.71, 2.75, 2.79, 2.82, 2.86, 2.9, 2.94, 2.98, 3.02, 3.05, 3.09, 3.13, 3.17, 3.21, 3.24, 3.28, 3.32, 3.36, 3.4, 3.44, 3.47, 3.51, 3.55, 3.59, 3.63, 3.66, 3.7, 3.74, 3.78, 3.82, 3.85, 3.89, 3.93, 3.97, 4.01, 4.05, 4.08, 4.12, 4.16, 4.2, 4.24, 4.27, 4.31, 4.35, 4.39, 4.43, 4.47, 4.5, 4.54, 4.58, 4.62, 4.66, 4.69, 4.73, 4.77, 4.81, 4.85, 4.89, 4.92, 4.96, 5.0, 5.04, 5.08, 5.11, 5.15, 5.19, 5.23, 5.27, 5.3, 5.34, 5.38, 5.42, 5.46, 5.5, 5.53, 5.57, 5.61, 5.65, 5.69, 5.72, 5.76, 5.8, 5.84, 5.88, 5.92, 5.95, 5.99, 6.03, 6.07, 6.11, 6.14, 6.18, 6.22, 6.26, 6.3, 6.34, 6.37, 6.41, 6.45, 6.49, 6.53, 6.56, 6.6, 6.64, 6.68, 6.72, 6.75, 6.79, 6.83, 6.87, 6.91, 6.95, 6.98, 7.02, 7.06, 7.1, 7.14, 7.17, 7.21, 7.25, 7.29, 7.33, 7.37, 7.4, 7.44, 7.48, 7.52, 7.56, 7.59, 7.63, 7.67, 7.71, 7.75, 7.79, 7.82, 7.86, 7.9, 7.94, 7.98, 8.01, 8.05, 8.09, 8.13, 8.17, 8.21, 8.24, 8.28, 8.32, 8.36, 8.4, 8.43, 8.47, 8.51, 8.55, 8.59, 8.62, 8.66, 8.7, 8.74, 8.78, 8.82, 8.85, 8.89, 8.93, 8.97, 9.01, 9.04, 9.08, 9.12, 9.16, 9.2, 9.24, 9.27, 9.31, 9.35, 9.39, 9.43, 9.46, 9.5, 9.54, 9.58, 9.62, 9.66, 9.69, 9.73, 9.77, 9.81, 9.85, 9.88], "cb": [0.48, 0.67, 0.84, 0.98, 1.12, 1.23, 1.34, 1.43, 1.52, 1.6, 1.67, 1.73, 1.8, 1.86, 1.92, 1.98, 2.04, 2.1, 2.16, 2.22, 2.28, 2.35, 2.41, 2.48, 2.56, 2.63, 2.71, 2.79, 2.87, 2.96, 3.05, 3.14, 3.23, 3.32, 3.42, 3.51, 3.61, 3.71, 3.81, 3.92, 4.02, 4.12, 4.23, 4.33, 4.43, 4.54, 4.64, 4.74, 4.84, 4.94, 5.04, 5.14, 5.24, 5.33, 5.42, 5.52, 5.61, 5.7, 5.78, 5.87, 5.95, 6.04, 6.12, 6.2, 6.27, 6.35, 6.42, 6.49, 6.56, 6.63, 6.7, 6.77, 6.83, 6.9, 6.96, 7.02, 7.08, 7.14, 7.2, 7.26, 7.31, 7.37, 7.43, 7.49, 7.54, 7.6, 7.65, 7.71, 7.77, 7.82, 7.88, 7.94, 8.0, 8.06, 8.12, 8.18, 8.24, 8.3, 8.37, 8.43, 8.5, 8.56, 8.63, 8.7, 8.77, 8.84, 8.92, 8.99, 9.06, 9.14, 9.22, 9.3, 9.38, 9.46, 9.54, 9.62, 9.71, 9.79, 9.88, 9.97, 10.06, 10.14, 10.23, 10.32, 10.41, 10.51, 10.6, 10.69, 10.78, 10.87, 10.97, 11.06, 11.15, 11.24, 11.34, 11.43, 11.52, 11.61, 11.7, 11.79, 11.88, 11.97, 12.06, 12.15, 12.23, 12.32, 12.4, 12.49, 12.57, 12.65, 12.73, 12.81, 12.89, 12.97, 13.04, 13.12, 13.19, 13.27, 13.34, 13.41, 13.48, 13.55, 13.61, 13.68, 13.74, 13.81, 13.87, 13.94, 14.0, 14.06, 14.12, 14.18, 14.24, 14.3, 14.36, 14.42, 14.48, 14.54, 14.6, 14.66, 14.72, 14.78, 14.84, 14.9, 14.96, 15.02, 15.09, 15.15, 15.22, 15.28, 15.35, 15.42, 15.49, 15.56, 15.63, 15.7, 15.78, 15.85, 15.93, 16.01, 16.09, 16.17, 16.25, 16.34, 16.42, 16.5, 16.59, 16.68, 16.77, 16.85, 16.94, 17.03, 17.12, 17.21, 17.3, 17.39, 17.48, 17.56, 17.65, 17.74, 17.82, 17.9, 17.98, 18.06, 18.14, 18.22, 18.29, 18.36, 18.42, 18.49, 18.55, 18.6, 18.66, 18.71, 18.75, 18.79, 18.83, 18.87, 18.9, 18.93, 18.95, 18.98, 19.0, 19.01, 19.03, 19.04, 19.06, 19.07, 19.09, 19.11, 19.13, 19.16, 19.19, 19.24, 19.29, 19.35, 19.43, 19.52, 19.63, 19.76], "xn": [1.43, 2.22, 2.92, 3.52, 4.21, 4.91, 5.64, 6.34, 7.01, 7.71, 8.31, 8.94], "yn": [4.47, 5.57, 6.91, 9.14, 8.99, 8.83, 13.11, 13.27, 14.91, 15.5, 18.02, 18.15], "n9": [2.6, 21.81, -33.17, -24.61, 18.5, 14.35, 21.84, 61.96, -37.11, -312.1, -271.19, 19.66], "n1": [3.86, 5.4, 6.77, 7.93, 9.28, 10.63, 12.07, 13.43, 14.74, 16.1, 17.26, 18.49], "xc": [0.55, 2.53, 3.2, 4.71, 6.13, 7.48, 7.67, 7.89, 8.36, 8.57], "yc": [9.0, 17.42, 19.06, 20.39, 20.2, 17.6, 15.76, 15.54, 12.85, 12.3], "gc": [0.55, 0.59, 0.63, 0.67, 0.71, 0.75, 0.79, 0.83, 0.87, 0.91, 0.95, 0.99, 1.03, 1.07, 1.11, 1.15, 1.19, 1.23, 1.27, 1.31, 1.35, 1.39, 1.43, 1.48, 1.52, 1.56, 1.6, 1.64, 1.68, 1.72, 1.76, 1.8, 1.84, 1.88, 1.92, 1.96, 2.0, 2.04, 2.08, 2.12, 2.16, 2.2, 2.24, 2.28, 2.32, 2.36, 2.4, 2.44, 2.48, 2.52, 2.56, 2.6, 2.65, 2.69, 2.73, 2.77, 2.81, 2.85, 2.89, 2.93, 2.97, 3.01, 3.05, 3.09, 3.13, 3.17, 3.21, 3.25, 3.29, 3.33, 3.37, 3.41, 3.45, 3.49, 3.53, 3.57, 3.61, 3.65, 3.69, 3.73, 3.77, 3.81, 3.86, 3.9, 3.94, 3.98, 4.02, 4.06, 4.1, 4.14, 4.18, 4.22, 4.26, 4.3, 4.34, 4.38, 4.42, 4.46, 4.5, 4.54, 4.58, 4.62, 4.66, 4.7, 4.74, 4.78, 4.82, 4.86, 4.9, 4.94, 4.98, 5.03, 5.07, 5.11, 5.15, 5.19, 5.23, 5.27, 5.31, 5.35, 5.39, 5.43, 5.47, 5.51, 5.55, 5.59, 5.63, 5.67, 5.71, 5.75, 5.79, 5.83, 5.87, 5.91, 5.95, 5.99, 6.03, 6.07, 6.11, 6.15, 6.19, 6.24, 6.28, 6.32, 6.36, 6.4, 6.44, 6.48, 6.52, 6.56, 6.6, 6.64, 6.68, 6.72, 6.76, 6.8, 6.84, 6.88, 6.92, 6.96, 7.0, 7.04, 7.08, 7.12, 7.16, 7.2, 7.24, 7.28, 7.32, 7.36, 7.41, 7.45, 7.49, 7.53, 7.57, 7.61, 7.65, 7.69, 7.73, 7.77, 7.81, 7.85, 7.89, 7.93, 7.97, 8.01, 8.05, 8.09, 8.13, 8.17, 8.21, 8.25, 8.29, 8.33, 8.37, 8.41, 8.45, 8.49, 8.53, 8.57], "c1": [15.74, 15.75, 15.75, 15.75, 15.75, 15.75, 15.76, 15.76, 15.76, 15.76, 15.76, 15.77, 15.77, 15.77, 15.77, 15.77, 15.78, 15.78, 15.78, 15.78, 15.79, 15.79, 15.79, 15.79, 15.79, 15.8, 15.8, 15.8, 15.8, 15.8, 15.81, 15.81, 15.81, 15.81, 15.81, 15.82, 15.82, 15.82, 15.82, 15.83, 15.83, 15.83, 15.83, 15.83, 15.84, 15.84, 15.84, 15.84, 15.84, 15.85, 15.85, 15.85, 15.85, 15.85, 15.86, 15.86, 15.86, 15.86, 15.87, 15.87, 15.87, 15.87, 15.87, 15.88, 15.88, 15.88, 15.88, 15.88, 15.89, 15.89, 15.89, 15.89, 15.89, 15.9, 15.9, 15.9, 15.9, 15.91, 15.91, 15.91, 15.91, 15.91, 15.92, 15.92, 15.92, 15.92, 15.92, 15.93, 15.93, 15.93, 15.93, 15.93, 15.94, 15.94, 15.94, 15.94, 15.95, 15.95, 15.95, 15.95, 15.95, 15.96, 15.96, 15.96, 15.96, 15.96, 15.97, 15.97, 15.97, 15.97, 15.97, 15.98, 15.98, 15.98, 15.98, 15.99, 15.99, 15.99, 15.99, 15.99, 16.0, 16.0, 16.0, 16.0, 16.0, 16.01, 16.01, 16.01, 16.01, 16.01, 16.02, 16.02, 16.02, 16.02, 16.03, 16.03, 16.03, 16.03, 16.03, 16.04, 16.04, 16.04, 16.04, 16.04, 16.05, 16.05, 16.05, 16.05, 16.05, 16.06, 16.06, 16.06, 16.06, 16.07, 16.07, 16.07, 16.07, 16.07, 16.08, 16.08, 16.08, 16.08, 16.08, 16.09, 16.09, 16.09, 16.09, 16.09, 16.1, 16.1, 16.1, 16.1, 16.11, 16.11, 16.11, 16.11, 16.11, 16.12, 16.12, 16.12, 16.12, 16.12, 16.13, 16.13, 16.13, 16.13, 16.14, 16.14, 16.14, 16.14, 16.14, 16.15, 16.15, 16.15, 16.15, 16.15, 16.16, 16.16, 16.16, 16.16], "c2": [8.94, 9.16, 9.38, 9.59, 9.81, 10.02, 10.23, 10.44, 10.65, 10.85, 11.05, 11.25, 11.45, 11.65, 11.84, 12.04, 12.23, 12.41, 12.6, 12.78, 12.97, 13.15, 13.32, 13.5, 13.67, 13.85, 14.02, 14.18, 14.35, 14.51, 14.67, 14.83, 14.99, 15.15, 15.3, 15.45, 15.6, 15.75, 15.89, 16.03, 16.17, 16.31, 16.45, 16.58, 16.72, 16.85, 16.98, 17.1, 17.23, 17.35, 17.47, 17.59, 17.7, 17.82, 17.93, 18.04, 18.15, 18.25, 18.36, 18.46, 18.56, 18.66, 18.75, 18.85, 18.94, 19.03, 19.11, 19.2, 19.28, 19.36, 19.44, 19.52, 19.59, 19.67, 19.74, 19.81, 19.87, 19.94, 20.0, 20.06, 20.12, 20.18, 20.23, 20.28, 20.33, 20.38, 20.43, 20.47, 20.52, 20.56, 20.59, 20.63, 20.66, 20.7, 20.72, 20.75, 20.78, 20.8, 20.82, 20.84, 20.86, 20.88, 20.89, 20.9, 20.91, 20.92, 20.92, 20.92, 20.93, 20.92, 20.92, 20.92, 20.91, 20.9, 20.89, 20.88, 20.86, 20.84, 20.82, 20.8, 20.78, 20.75, 20.72, 20.69, 20.66, 20.63, 20.59, 20.55, 20.51, 20.47, 20.43, 20.38, 20.33, 20.28, 20.23, 20.17, 20.12, 20.06, 20.0, 19.94, 19.87, 19.8, 19.74, 19.66, 19.59, 19.52, 19.44, 19.36, 19.28, 19.2, 19.11, 19.02, 18.93, 18.84, 18.75, 18.65, 18.55, 18.45, 18.35, 18.25, 18.14, 18.03, 17.92, 17.81, 17.7, 17.58, 17.46, 17.34, 17.22, 17.1, 16.97, 16.84, 16.71, 16.58, 16.44, 16.31, 16.17, 16.03, 15.88, 15.74, 15.59, 15.44, 15.29, 15.14, 14.98, 14.82, 14.67, 14.5, 14.34, 14.17, 14.01, 13.84, 13.67, 13.49, 13.32, 13.14, 12.96, 12.78, 12.59, 12.41], "c9c": [9.0, 730.8, 1347.79, 1869.57, 2305.13, 2662.82, 2950.39, 3175.08, 3343.57, 3462.06, 3536.27, 3571.5, 3572.6, 3544.05, 3489.96, 3414.08, 3319.83, 3210.35, 3088.46, 2956.72, 2817.45, 2672.72, 2524.38, 2374.09, 2223.31, 2073.33, 1925.26, 1780.08, 1638.61, 1501.57, 1369.55, 1243.01, 1122.35, 1007.85, 899.72, 798.11, 703.09, 614.67, 532.81, 457.43, 388.41, 325.58, 268.76, 217.73, 172.25, 132.07, 96.91, 66.51, 40.57, 18.81, 0.92, -13.38, -24.39, -32.4, -37.68, -40.52, -41.18, -39.91, -36.98, -32.61, -27.02, -20.44, -13.06, -5.07, 3.35, 12.05, 20.88, 29.69, 38.38, 46.82, 54.93, 62.62, 69.81, 76.44, 82.47, 87.84, 92.54, 96.53, 99.81, 102.37, 104.21, 105.34, 105.78, 105.55, 104.68, 103.19, 101.13, 98.54, 95.44, 91.9, 87.95, 83.64, 79.03, 74.15, 69.07, 63.82, 58.46, 53.03, 47.58, 42.16, 36.79, 31.53, 26.42, 21.47, 16.74, 12.24, 8.0, 4.05, 0.41, -2.92, -5.91, -8.55, -10.84, -12.78, -14.36, -15.58, -16.45, -16.98, -17.18, -17.05, -16.62, -15.89, -14.89, -13.64, -12.16, -10.47, -8.59, -6.55, -4.37, -2.08, 0.29, 2.73, 5.21, 7.7, 10.18, 12.63, 15.03, 17.35, 19.57, 21.69, 23.68, 25.53, 27.22, 28.75, 30.11, 31.29, 32.28, 33.09, 33.72, 34.16, 34.42, 34.5, 34.41, 34.17, 33.77, 33.24, 32.58, 31.82, 30.95, 30.01, 29.0, 27.95, 26.86, 25.76, 24.66, 23.58, 22.53, 21.53, 20.58, 19.69, 18.89, 18.17, 17.53, 16.99, 16.54, 16.18, 15.9, 15.7, 15.58, 15.51, 15.49, 15.51, 15.54, 15.58, 15.6, 15.59, 15.53, 15.42, 15.23, 14.97, 14.63, 14.22, 13.74, 13.23, 12.71, 12.23, 11.86, 11.68, 11.78, 12.3]};
 
-      M.finish();   // LAST: captions
-      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+      // ============ helpers ============
+      const NSx = "http://www.w3.org/2000/svg";
+      const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NSx, tag); Object.keys(attrs).forEach((k) => e.setAttribute(k, attrs[k])); if (parent) parent.appendChild(e); return e; };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (list, t) => list.flat(3).forEach((e) => gone(e.el && !(e instanceof Element) ? e.el : e, t));
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const txt = (host, text, x, y, w, t, col, size, align, font) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:${align || "center"};font:800 ${size || 36}px ${font || COD};letter-spacing:.04em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const errCard = (host, x, y, w, h, label, col, val, tLab, tNum, o) => { o = o || {}; const els = [];
+        els.push(show(glass(host, x, y, w, h, col), tLab));
+        els.push(txt(host, label, x, y + 22, w, tLab, col, o.lsize || 36));
+        els.push(M.count(host, val, tNum, { x, y: y + (o.ny || 84), w, size: o.nsize || 124, dec: o.dec ?? 2, dur: o.dur || 0.9, color: o.ncol || col }));
+        return els; };
+      const check = (host, x, y, s, t) => M.icon(host, "check", x, y, s, GOOD).show(t);
+
+      let CID = 0;
+      const chart = (host, x, y, w, h, o) => { o = o || {}; const id = "clip" + (CID++);
+        const wrap = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:24px;overflow:hidden;background:${ca(PANEL, 0.92)};border:1.5px solid rgba(150,175,215,.28)`);
+        tl.set(wrap, { opacity: 0 }, 0); tl.to(wrap, { opacity: 1, duration: 0.3, immediateRender: false }, o.t ?? 0);
+        const svg = svgEl("svg", { viewBox: `0 0 ${w} ${h}`, width: w, height: h }, wrap); svg.style.cssText = "position:absolute;left:0;top:0";
+        const pl = 14, pr = 14, pt = 12, pb = 14, lo = o.lo ?? -6, hi = o.hi ?? 28;
+        const X = (v) => pl + (v / 10) * (w - pl - pr), Y = (v) => h - pb - ((v - lo) / (hi - lo)) * (h - pt - pb);
+        const defs = svgEl("defs", {}, svg), cp = svgEl("clipPath", { id }, defs); svgEl("rect", { x: pl, y: pt, width: w - pl - pr, height: h - pt - pb }, cp);
+        const g = svgEl("g", { "clip-path": `url(#${id})` }, svg);
+        const base = svgEl("path", { d: `M${X(0)} ${Y(0)}H${X(10)}M${X(0)} ${Y(lo)}V${Y(hi)}`, stroke: "rgba(150,175,215,.35)", "stroke-width": 3, fill: "none" }, g);
+        tl.set(base, { opacity: 0 }, 0); tl.to(base, { opacity: 1, duration: 0.3, immediateRender: false }, o.t ?? 0);
+        const R = o.r || Math.max(7, Math.round(w / 64));
+        return { wrap, X, Y, w, h,
+          dots: (xs, ys, col, t, each, r, hollow) => xs.map((xv, i) => { const c = svgEl("circle", { cx: X(xv), cy: Y(ys[i]), r: 0, fill: hollow ? "none" : col, stroke: hollow ? col : "none", "stroke-width": hollow ? 5 : 0 }, g);
+            tl.set(c, { attr: { r: 0 } }, 0); tl.to(c, { attr: { r: r || R }, duration: 0.3, ease: "power3.out", immediateRender: false }, t + i * (each ?? 0.05)); return c; }),
+          path: (xs, ys, col, t, dur, sw, dash) => { const d = xs.map((xv, i) => (i ? "L" : "M") + X(xv).toFixed(1) + " " + Y(ys[i]).toFixed(1)).join("");
+            const p = svgEl("path", { d, stroke: col, "stroke-width": sw || 7, fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" }, g);
+            if (dash) { p.setAttribute("stroke-dasharray", "16 14"); tl.set(p, { opacity: 0 }, 0); tl.to(p, { opacity: 1, duration: dur || 0.5, immediateRender: false }, t); }
+            else { p.setAttribute("pathLength", "1"); p.setAttribute("stroke-dasharray", "1"); tl.set(p, { attr: { "stroke-dashoffset": 1 }, opacity: 0 }, 0); tl.set(p, { opacity: 1 }, t); tl.to(p, { attr: { "stroke-dashoffset": 0 }, duration: dur || 0.9, ease: "power2.inOut", immediateRender: false }, t); }
+            return p; },
+          ticks: (xs, ya, yb, col, t, each, sw) => xs.map((xv, i) => { const l = svgEl("line", { x1: X(xv), x2: X(xv), y1: Y(ya[i]), y2: Y(yb[i]), stroke: col, "stroke-width": sw || 4, "stroke-linecap": "round" }, g);
+            tl.set(l, { opacity: 0 }, 0); tl.to(l, { opacity: 0.9, duration: 0.3, immediateRender: false }, t + i * (each ?? 0.04)); return l; }) }; };
+      const tru = (xs) => xs.map((v) => 2 * v + 1);
+      const lineAt = (xs, gs, ys) => xs.map((v) => { const k = gs.findIndex((gv) => gv >= v); return ys[k < 0 ? ys.length - 1 : k]; });
+      const gx = [0.2, 9.8];
+      const T0 = (sc) => M.P(sc, 0) - 0.3;   // the first picture of a scene lands with the push: no empty first frame
+
+      // ============ A: the two numbers that contradict ============
+      // diagram: A
+      M.hook(["Training error: 0", "New data error: 133"], { size: 96, top: 230 });
+      glass(A, 60, 540, 460, 400, GOOD);
+      el(A, `left:60px;top:570px;width:460px;text-align:center;font:800 36px ${COD};letter-spacing:.04em;color:${GOOD};white-space:nowrap`, "TRAINING ERROR");
+      el(A, `left:60px;top:690px;width:460px;text-align:center;font:800 140px ${COD};color:${GOOD};line-height:1.1`, "0.00");
+      check(A, 255, 850, 70, 0.4);
+      errCard(A, 560, 540, 460, 400, "NEW DATA ERROR", HOT, 133, at("A", "naye"), at("A", "133"), { dec: 0, dur: 0.9, nsize: 140, ny: 130 });
+      const aCh = chart(A, 60, 960, 960, 330, { t: 0.15 });
+      aCh.dots(DATA.xt, DATA.yt, TRN, 0.25, 0.04, 10);
+      const aCv = aCh.path(DATA.g, DATA.c9, HOT, at("A", "zero"), 1.4, 7);
+      const aNd = aCh.dots(DATA.xn, DATA.yn, NEW, at("A", "naye"), 0.08, 11, true);
+      const aNt = aCh.ticks(DATA.xn, DATA.yn, DATA.n9, HOT, at("A", "naye") + 0.3, 0.08, 3);
+      const tAq = at("A", "intelligent") - 0.2; [aCh.wrap, aCv, ...aNd, ...aNt].forEach((e) => gone(e, tAq));
+      const aS = M.box(A, { x: 60, y: 1000, w: 460, h: 280, label: "SMART", icon: "star", color: GOOD, size: 44 }); aS.show(at("A", "intelligent"));
+      const aM = M.box(A, { x: 560, y: 1000, w: 460, h: 280, label: "MEMORISED", icon: "book", color: HOT, size: 44 }); aM.show(at("A", "bas")); aM.glow(at("A", "ratta"));
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: the student who memorises, then the model ============
+      // diagram: B
+      const bRow1 = [M.box(B, { x: 60, y: 240, w: 330, h: 320, label: "STUDENT", icon: "user", color: CYAN, size: 44, isize: 130 }), M.box(B, { x: 440, y: 240, w: 580, h: 320, label: "SOLVED EXAMPLES", icon: "book", color: CYAN, size: 40 })];
+      bRow1[0].show(T0("B")); bRow1[1].show(T0("B") + 0.35);
+      const bSame = M.box(B, { x: 60, y: 640, w: 460, h: 340, label: "SAME QUESTIONS", sub: "7 × 8 = ?", color: GOOD, icon: "doc", size: 36, subsize: 40 }); bSame.show(at("B", "questions"));
+      const bNew = M.box(B, { x: 560, y: 640, w: 460, h: 340, label: "NEW QUESTION", sub: "7 × 9 = ?", color: HOT, icon: "doc", size: 36, subsize: 40 }); bNew.show(at("B", "question"));
+      const bOk = M.icon(B, "check", 410, 655, 100, GOOD); bOk.show(at("B", "full")); const bNo = M.icon(B, "cross", 910, 655, 100, HOT); bNo.show(at("B", "game"));
+      const bT1 = txt(B, "FULL MARKS", 60, 1010, 460, at("B", "marks"), GOOD, 44); const bT2 = txt(B, "GAME OVER", 560, 1010, 460, at("B", "over"), HOT, 44);
+      pillC(B, "EXAMPLE", 575, at("B", "questions"), { size: 28, h: 46, col: MUTED, pad: 22 }).id = "bEx";
+      const bOld = [bRow1.flatMap((b) => b.parts), bSame.parts, bNew.parts, bOk.el, bNo.el, bT1, bT2].flat(); const tB = at("B", "AI") - 0.15;
+      bOld.forEach((e) => gone(e, tB)); gone(document.getElementById("bEx"), tB);
+      const bM = M.box(B, { x: 240, y: 240, w: 600, h: 320, label: "AI MODEL", icon: "model", color: CYAN, size: 54, isize: 130 }); bM.show(at("B", "AI"));
+      pillC(B, "OVERFITTING", 620, at("B", "overfitting"), { size: 52, h: 84, pad: 44, col: ACC });
+      const bMe = M.box(B, { x: 60, y: 800, w: 460, h: 380, label: "MEMORISE", sub: "EXAMPLES", icon: "book", color: HOT, size: 48, isize: 130, subsize: 34 }); bMe.show(at("B", "examples", 1)); bMe.glow(at("B", "examples", 1) + 0.3);
+      const bPa = M.box(B, { x: 560, y: 800, w: 460, h: 380, label: "PATTERN", sub: "INSTEAD", icon: "model", color: MUTED, size: 48, isize: 130, subsize: 34 }); bPa.show(at("B", "pattern")); tl.to(bPa.parts, { opacity: 0.4, duration: 0.4, immediateRender: false }, at("B", "pattern") + 0.6);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: the experiment: hidden rule, noise, ten examples ============
+      // diagram: C
+      const cRule = glass(C, 60, 230, 960, 200, MUTED); show(cRule, P("C", 0) + 0.1);
+      txt(C, "HIDDEN RULE", 60, 246, 700, P("C", 0) + 0.1, MUTED, 36, "left").style.left = "100px";
+      const cF0 = txt(C, "y = ?", 100, 306, 800, P("C", 0) + 0.1, TEXT, 96, "left"); gone(cF0, at("C", "2") - 0.1, 0.15);
+      const cF1 = txt(C, "y = 2x + 1", 100, 306, 800, at("C", "2") - 0.1, ACC, 96, "left");
+      const cLock = M.icon(C, "lock", 850, 265, 120, MUTED); cLock.show(at("C", "nahi"));
+      const ch = chart(C, 60, 470, 960, 700, { t: P("C", 0) + 0.3 });
+      const tl1 = ch.path(gx, tru(gx), MUTED, at("C", "double"), 0.9, 6, true);
+      ch.dots(DATA.xt, DATA.yt, TRN, at("C", "random") - 0.2, 0.2);
+      const cTk = ch.ticks(DATA.xt, tru(DATA.xt), DATA.yt, HOT, at("C", "noise"), 0.06, 4);
+      const cNoise = pillC(C, "NOISE", 500, at("C", "noise"), { size: 36, h: 56, col: HOT });
+      gone(cNoise, at("C", "nahi") - 0.2); cTk.forEach((t) => gone(t, at("C", "nahi") + 0.2)); gone(tl1, at("C", "nahi") + 0.2);
+      tl.to([cRule, cF1], { opacity: 0.35, duration: 0.4, immediateRender: false }, at("C", "nahi") + 0.2);
+      const cLab = pillC(C, "10 EXAMPLES", 1200, at("C", "10"), { size: 38, h: 60, col: TRN });
+      gone(cLab, at("C", "seekhta") - 0.1);
+      const cP = M.box(C, { x: 60, y: 1200, w: 460, h: 140, label: "PATTERN", color: CYAN, size: 42 }); cP.show(at("C", "seekhta"));
+      const cR = M.box(C, { x: 560, y: 1200, w: 460, h: 140, label: "MEMORISE", color: HOT, size: 42 }); cR.show(at("C", "ratta"));
+      { const ex = pillC(C, "EXAMPLE RUN", 490, at("C", "experiment"), { size: 28, h: 46, col: MUTED, pad: 22 }); ex.firstChild.style.marginLeft = "-640px"; }
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: the straight line, then the flexible curve: 0.00 on training, 133 on new data ============
+      // diagram: D
+      const dch = chart(D, 60, 262, 960, 480, { t: 0.05 });
+      dch.dots(DATA.xt, DATA.yt, TRN, 0.1, 0.05);
+      const tSw = at("D", "ab") - 0.1;
+      // phase 1: the straight line
+      const d1 = [];
+      d1.push(pillC(D, "STRAIGHT LINE", 200, at("D", "straight"), { size: 34, h: 54, col: GOOD }));
+      d1.push(dch.path(DATA.g, DATA.l1, GOOD, at("D", "straight"), 0.9, 9));
+      d1.push(...dch.ticks(DATA.xt, DATA.yt, lineAt(DATA.xt, DATA.g, DATA.l1), TRN, at("D", "Training"), 0.05, 4));
+      d1.push(errCard(D, 60, 770, 440, 300, "TRAIN ERROR", TRN, 0.87, at("D", "Training"), at("D", "087"), { lsize: 34, ny: 82, nsize: 118 }));
+      d1.push(...dch.dots(DATA.xn, DATA.yn, NEW, at("D", "naye"), 0.07, 9, true));
+      d1.push(...dch.ticks(DATA.xn, DATA.yn, DATA.n1, NEW, at("D", "naye") + 0.3, 0.07, 3));
+      d1.push(errCard(D, 580, 770, 440, 300, "NEW DATA ERROR", NEW, 1.04, at("D", "data"), at("D", "104"), { lsize: 34, ny: 82, nsize: 118 }));
+      d1.push(show(el(D, `left:500px;top:850px;width:80px;text-align:center;font:800 90px ${COD};color:${GOOD};line-height:1`, "≈"), at("D", "donon"), { opacity: 0, scale: 0.8 }));
+      d1.push(pillC(D, "PATTERN CAUGHT", 1110, at("D", "pattern"), { size: 36, h: 58, col: GOOD }));
+      goneAll(d1, tSw);
+      // phase 2: the flexible curve
+      pillC(D, "FLEXIBLE MODEL", 200, at("D", "flexible"), { size: 34, h: 54, col: HOT });
+      dch.path(DATA.g, DATA.c9, HOT, at("D", "curve"), 2.0, 7);
+      errCard(D, 60, 770, 440, 330, "TRAIN ERROR", TRN, 0, at("D", "Training", 1), at("D", "ZERO"), { lsize: 34, ny: 82, nsize: 118, dur: 0.1, ncol: GOOD });
+      M.icon(D, "check", 410, 785, 70, GOOD).show(at("D", "Perfect"));
+      dch.dots(DATA.xn, DATA.yn, NEW, at("D", "naye", 1), 0.06, 9, true);
+      const eNt = dch.ticks(DATA.xn, DATA.yn, DATA.n9, HOT, at("D", "naye", 1) + 0.3, 0.06, 3);
+      errCard(D, 580, 770, 440, 330, "NEW DATA ERROR", HOT, 133, at("D", "data", 1), at("D", "133"), { dec: 0, lsize: 34, ny: 82, nsize: 118, dur: 1.2 });
+      const bars = [];
+      bars.push(show(el(D, `left:60px;top:1130px;width:${Math.round(960 * 21 / 133)}px;height:50px;border-radius:10px;background:${GOOD}`), at("D", "actual")));
+      bars.push(txt(D, "Y: 1 TO 21", 60 + Math.round(960 * 21 / 133) + 20, 1136, 400, at("D", "21"), GOOD, 36, "left"));
+      bars.push(show(el(D, `left:60px;top:1200px;width:960px;height:50px;border-radius:10px;background:${HOT}`), at("D", "actual") + 0.5));
+      bars.push(txt(D, "ERROR 133", 60, 1206, 960, at("D", "actual") + 0.5, "#0B1220", 36, "center"));
+      const tChamp = at("D", "chhote-mote") - 0.1;
+      bars.forEach((b) => gone(b, tChamp)); eNt.forEach((t) => gone(t, tChamp));
+      dch.path(gx, tru(gx), MUTED, at("D", "chhote-mote"), 0.8, 6, true);
+      dch.ticks(DATA.xt, tru(DATA.xt), DATA.yt, HOT, at("D", "random", 1), 0.08, 5);
+      pillC(D, "MEMORISED NOISE", 1125, at("D", "fluctuations"), { size: 34, h: 56, col: HOT });
+      txt(D, "CHAMPION", 60, 1030, 440, at("D", "champion…"), GOOD, 36); txt(D, "DISASTER", 580, 1030, 440, at("D", "disaster"), HOT, 36);
+      pillC(D, "OVERFITTING", 1205, at("D", "overfitting"), { size: 52, h: 82, pad: 44, col: ACC });
+      M.fit(D, { y: 190, h: 1110 });
+
+      // ============ E: how to catch it: unseen data, the gap ============
+      // diagram: E
+      const fM = M.box(E, { x: 290, y: 250, w: 500, h: 420, label: "MODEL", icon: "model", color: CYAN, size: 50, isize: 170 }); fM.show(T0("E"));
+      const fP = M.box(E, { x: 60, y: 780, w: 460, h: 380, label: "PRACTICE", color: TRN, size: 46 }); fP.show(at("E", "practice"));
+      const fA1 = M.arrow(E, { from: [440, 675], to: [330, 775], color: MUTED, w: 6 }); fA1.show(at("E", "practice") - 0.1, 0.2);
+      const fX = M.icon(E, "cross", 400, 790, 110, HOT); fX.show(at("E", "judge"));
+      const fU = M.box(E, { x: 560, y: 780, w: 460, h: 380, label: "UNSEEN DATA", color: NEW, size: 46 }); fU.show(at("E", "aise"));
+      const fA2 = M.arrow(E, { from: [640, 675], to: [750, 775], color: MUTED, w: 6 }); fA2.show(at("E", "aise") - 0.15, 0.3);
+      const dotRows = (x0, col, hollow, t) => { const out = []; for (let r = 0; r < 2; r++) for (let c = 0; c < 5; c++) { const d = el(E, `left:${x0 + 40 + c * 76}px;top:${815 + r * 64}px;width:34px;height:34px;border-radius:50%;${hollow ? `border:5px solid ${col}` : `background:${col}`}`); show(d, t + (r * 5 + c) * 0.03, { opacity: 0, scale: 0.5 }); out.push(d); } return out; };
+      const fD1 = dotRows(60, TRN, false, at("E", "practice") + 0.1), fD2 = dotRows(560, NEW, true, at("E", "aise") + 0.1);
+      const tFc = at("E", "agar") - 0.15; [fM.parts, fP.parts, [fX.el], fU.parts, fD1, fD2, fA1.el || [], fA2.el || []].flat().forEach((e) => gone(e, tFc));
+      [fA1, fA2].forEach((a) => a.hide && a.hide(tFc));
+      const fc = el(E, `left:60px;top:260px;width:960px;height:640px;border-radius:24px;overflow:hidden;background:${ca(PANEL, 0.92)};border:1.5px solid rgba(150,175,215,.28)`);
+      show(fc, at("E", "agar") - 0.1);
+      const fs = svgEl("svg", { viewBox: "0 0 960 640", width: 960, height: 640 }, fc); fs.style.cssText = "position:absolute;left:0;top:0";
+      svgEl("path", { d: "M70 30V590H920", stroke: "rgba(150,175,215,.35)", "stroke-width": 3, fill: "none" }, fs);
+      const curve = (d, col, t, dur) => { const p = svgEl("path", { d, stroke: col, "stroke-width": 10, fill: "none", "stroke-linecap": "round", "stroke-linejoin": "round", pathLength: 1, "stroke-dasharray": 1 }, fs);
+        tl.set(p, { attr: { "stroke-dashoffset": 1 }, opacity: 0 }, 0); tl.set(p, { opacity: 1 }, t); tl.to(p, { attr: { "stroke-dashoffset": 0 }, duration: dur, ease: "power2.inOut", immediateRender: false }, t); return p; };
+      curve("M80 150 C260 250 420 450 880 510", TRN, at("E", "gir"), 1.4);
+      curve("M80 160 C220 260 330 370 460 380 C600 390 700 280 880 110", NEW, at("E", "badh") - 0.9, 2.0);
+      txt(E, "TRAIN ERROR ↓", 120, 830, 400, at("E", "gir"), TRN, 36, "left"); txt(E, "UNSEEN ERROR ↑", 110, 300, 450, at("E", "badh"), NEW, 36, "left");
+      const fGap = svgEl("path", { d: "M900 510V110", stroke: HOT, "stroke-width": 6, fill: "none", "stroke-dasharray": "10 10" }, fs); tl.set(fGap, { opacity: 0 }, 0); tl.to(fGap, { opacity: 1, duration: 0.4, immediateRender: false }, at("E", "signal") - 0.4);
+      txt(E, "GAP", 760, 560, 130, at("E", "signal") - 0.3, HOT, 40, "right");
+      pillC(E, "ILLUSTRATION", 930, at("E", "agar"), { size: 28, h: 46, col: MUTED, pad: 22 });
+      pillC(E, "OVERFITTING SIGNAL", 1020, at("E", "strong"), { size: 44, h: 76, pad: 40, col: HOT });
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: three fixes ============
+      // diagram: F
+      const g1 = pillC(F, "3 FIXES", 230, T0("F"), { size: 40, h: 62, col: ACC });
+      const gOv = [[330, "1 · SIMPLER MODEL", "model", CYAN, "teen"], [630, "2 · MORE DATA", "db", CYAN, "practical"], [930, "3 · VALIDATE", "eye", NEW, "solutions"]].map(([y, lab, ic, col, w], i) => { const b = M.box(F, { x: 100, y, w: 880, h: 250, label: lab, icon: ic, color: col, size: 50, isize: 100 }); b.show(T0("F") + 0.2 + i * 0.35); return b; });
+      gOv.forEach((b) => b.parts.forEach((e) => gone(e, at("F", "One") - 0.2)));
+      const g1k = pillC(F, "1 · SIMPLER MODEL", 230, at("F", "One"), { size: 38, h: 62, col: CYAN, pad: 34 }); gone(g1, at("F", "One") - 0.2, 0.2);
+      const gA = chart(F, 60, 340, 460, 560, { t: at("F", "complex"), r: 8 }), gB = chart(F, 560, 340, 460, 560, { t: at("F", "Simple") - 0.3, r: 8 });
+      gA.dots(DATA.xt, DATA.yt, TRN, at("F", "complex"), 0.03); gA.path(DATA.g, DATA.c9, HOT, at("F", "complex") + 0.3, 0.9, 6);
+      gB.dots(DATA.xt, DATA.yt, TRN, at("F", "Simple") - 0.2, 0.03); gB.path(DATA.g, DATA.l1, GOOD, at("F", "Simple"), 0.8, 7);
+      const g1a = txt(F, "COMPLEX", 60, 920, 460, at("F", "complex"), HOT, 40), g1b = txt(F, "SIMPLE", 560, 920, 460, at("F", "simple"), GOOD, 40);
+      const g1x = M.icon(F, "cross", 215, 1000, 150, HOT); g1x.show(at("F", "banao")); const g1o = M.icon(F, "check", 715, 1000, 150, GOOD); g1o.show(at("F", "kaafi"));
+      const g1Els = [g1k, gA.wrap, gB.wrap, g1a, g1b, g1x.el, g1o.el]; const tG2 = at("F", "Two") - 0.15; g1Els.forEach((e) => gone(e, tG2));
+      const g2k = pillC(F, "2 · MORE DATA", 230, at("F", "Two"), { size: 38, h: 62, col: CYAN, pad: 34 });
+      const gC = chart(F, 60, 330, 960, 480, { t: at("F", "Two") + 0.3 });
+      const g10 = gC.dots(DATA.xt, DATA.yt, TRN, at("F", "representative"), 0.04, 9);
+      gC.dots(DATA.xb, DATA.yb, TRN, at("F", "100"), 0.012, 6); g10.forEach((c) => gone(c, at("F", "100")));
+      const gW = gC.path(DATA.g, DATA.c9, HOT, at("F", "representative") + 0.5, 0.9, 5); gone(gW, at("F", "100") + 0.3);
+      gC.path(DATA.gb, DATA.cb, GOOD, at("F", "093") - 0.4, 1.2, 7);
+      const g2p = pillC(F, "100 POINTS", 830, at("F", "100"), { size: 36, h: 56, col: TRN });
+      const g2c = errCard(F, 60, 930, 440, 300, "TRAIN ERROR", TRN, 0.93, at("F", "093") - 0.3, at("F", "093"), { lsize: 34, ny: 90, nsize: 120 });
+      const g2d = errCard(F, 580, 930, 440, 300, "NEW DATA ERROR", NEW, 1.03, at("F", "naye") - 0.1, at("F", "103"), { lsize: 34, ny: 90, nsize: 120 });
+      const g2e = show(el(F, `left:500px;top:1010px;width:80px;text-align:center;font:800 90px ${COD};color:${GOOD};line-height:1`, "≈"), at("F", "donon"), { opacity: 0, scale: 0.8 });
+      const g2Els = [g2p, g2k, gC.wrap, ...g2c, ...g2d, g2e]; const tG3 = at("F", "Three") - 0.2;
+      g2Els.forEach((e) => gone(e, tG3));
+      pillC(F, "3 · VALIDATE, REGULARIZE", 230, at("F", "Three"), { size: 34, h: 62, col: NEW, pad: 28 });
+      const g3m = M.box(F, { x: 60, y: 400, w: 330, h: 340, label: "MODEL", icon: "model", color: CYAN, size: 42 }); g3m.show(at("F", "Three") + 0.1);
+      M.arrow(F, { from: [395, 570], to: [450, 570], color: MUTED, w: 7 }).show(at("F", "Validation") - 0.1, 0.3);
+      const g3v = M.box(F, { x: 455, y: 400, w: 565, h: 340, label: "VALIDATION DATA", sub: "CHECK", icon: "eye", color: NEW, size: 38 }); g3v.show(at("F", "Validation"));
+      M.icon(F, "check", 870, 410, 80, GOOD).show(at("F", "check"));
+      M.box(F, { x: 100, y: 820, w: 880, h: 360, label: "REGULARIZATION", sub: "SIMPLER FIT", icon: "gear", color: CYAN, size: 54, isize: 130, subsize: 34 }).show(at("F", "regularization"));
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: too simple is wrong too: underfitting ============
+      // diagram: G
+      const hS = M.box(G, { x: 240, y: 300, w: 600, h: 520, label: "SIMPLE MODEL", icon: "model", color: CYAN, size: 56, isize: 200 }); hS.show(T0("G"));
+      const hX = M.icon(G, "cross", 740, 270, 160, HOT); hX.show(at("G", "nahi"));
+      const tH = at("G", "agar") - 0.1; gone(hX.el, tH); hS.parts.forEach((e) => gone(e, tH));
+      const hch = chart(G, 60, 270, 960, 540, { t: at("G", "agar"), lo: 0, hi: 24 });
+      hch.dots(DATA.xc, DATA.yc, TRN, at("G", "agar"), 0.05);
+      const hC = hch.path(DATA.gc, DATA.c2, MUTED, at("G", "curved"), 0.9, 6, true);
+      const gCp = txt(G, "CURVED PATTERN", 60, 830, 960, at("G", "curved"), MUTED, 38); gone(gCp, at("G", "ratta") - 0.25);
+      hch.path(DATA.gc, DATA.c1, HOT, at("G", "straight"), 0.9, 9);
+      hch.ticks(DATA.xc, DATA.yc, lineAt(DATA.xc, DATA.gc, DATA.c1), HOT, at("G", "nahi", 1) - 0.2, 0.05, 4);
+      gone(pillC(G, "EXAMPLE DATA", 200, at("G", "agar"), { size: 28, h: 46, col: MUTED, pad: 22 }), at("G", "ratta") - 0.25);
+      const gUf = pillC(G, "UNDERFITTING", 910, at("G", "underfitting"), { size: 52, h: 82, pad: 44, col: ACC }); gone(gUf, at("G", "ratta") - 0.25);
+      const tGl = at("G", "ratta") - 0.25;
+      [hch.wrap, hC].forEach((e) => gone(e, tGl));
+      // three big rows on the same dots: overfit, good fit, underfit
+      [[330, "OVERFIT", DATA.c9c, HOT, at("G", "ratta")], [650, "GOOD FIT", DATA.c2, GOOD, at("G", "asli")], [970, "UNDERFIT", DATA.c1, HOT, at("G", "oversimplification")]].forEach(([y, lab, ys, col, t], i) => {
+        const m = chart(G, 380, y, 640, 280, { t, lo: 0, hi: 24, r: 9 }); m.dots(DATA.xc, DATA.yc, TRN, t, 0.02); m.path(DATA.gc, ys, col, t + 0.2, 0.7, 7);
+        txt(G, lab, 60, y + 100, 300, t, col, 44, "left");
+        if (lab === "GOOD FIT") show(el(G, `left:40px;top:${y - 14}px;width:1000px;height:308px;border-radius:30px;border:4px solid ${GOOD}`), t + 0.6, { opacity: 0 }); });
+      M.fit(G, { y: 180, h: 1130 });
+
+      // ============ H: ask "which data?", recap, comment, follow ============
+      // diagram: H
+      const iU = M.icon(H, "user", 80, 290, 150, CYAN); iU.show(T0("H"));
+      const iB = el(H, `left:260px;top:260px;width:760px;height:220px;border-radius:34px 34px 34px 8px;background:${ca(CYAN, 0.12)};border:2px solid ${ca(CYAN, 0.6)};display:flex;align-items:center;justify-content:center;font:800 56px ${COD};color:${TEXT};white-space:nowrap`, 'ACCURACY <span style="color:#F2B544;margin-left:20px">99%</span>');
+      show(iB, T0("H") + 0.1, { opacity: 0, y: 20 });
+      const iQ = M.box(H, { x: 120, y: 580, w: 840, h: 460, label: "WHICH DATA?", icon: "search", color: ACC, size: 70, isize: 180 }); iQ.show(T0("H") + 0.9); iQ.glow(at("H", "kis"));
+      const tI = at("H", "aur") - 0.15; [iU.el, iB, ...iQ.parts].forEach((e) => gone(e, tI));
+      errCard(H, 60, 250, 460, 400, "TRAIN ERROR", GOOD, 0, tI + 0.1, at("H", "zero"), { lsize: 40, ny: 130, nsize: 170, dur: 0.1 });
+      errCard(H, 560, 250, 460, 400, "NEW DATA ERROR", HOT, 133, tI + 0.2, at("H", "133"), { dec: 0, lsize: 40, ny: 130, nsize: 170, dur: 1.0 });
+      M.box(H, { x: 60, y: 700, w: 460, h: 260, label: "LEARNING", icon: "star", color: GOOD, size: 44 }).show(at("H", "seekh"));
+      const iR = M.box(H, { x: 560, y: 700, w: 460, h: 260, label: "MEMORISING", icon: "book", color: HOT, size: 42 }); iR.show(at("H", "ratta")); iR.glow(at("H", "ratta") + 0.4);
+      const cm = el(H, "left:120px;top:1000px;width:840px;height:84px"); show(cm, at("H", "Comment"), { opacity: 0, y: 30 });
+      el(cm, `left:0;top:0;width:840px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.4);background:${ca(PANEL, 0.9)};font:500 34px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 36px`, "Add a comment...");
+      const hc = el(H, "left:120px;top:1120px;width:840px;height:138px"); glass(hc, 0, 0, 840, 138, ACC, 28); show(hc, at("H", "150") - 0.1, { opacity: 0, y: 40 });
+      el(hc, `left:40px;top:22px;font:700 46px ${COD};color:${TEXT}`, "@ai.learnvora");
+      el(hc, `left:40px;top:86px;font:700 28px ${COD};letter-spacing:.08em;color:${ACC}`, "150 DAYS OF AI");
+      const fp = el(hc, `left:540px;top:31px;width:260px;height:76px;border-radius:38px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 36px ${COD};letter-spacing:.08em`, "+ FOLLOW");
+      tl.to(fp, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("H", "follow")); tl.to(fp, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("H", "follow") + 0.12);
+      M.fit(H, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
+      M.finish({ kw: { training: "cyan", Training: "cyan", error: "hot", ZERO: "good", "133": "hot", ratta: "hot", overfitting: "gold", underfitting: "gold", unseen: "gold", straight: "good", curve: "hot", "087": "good", "104": "good", "093": "good", "103": "good", pattern: "good", simple: "good", Simple: "good", Validation: "gold", follow: "gold", Comment: "gold" } });
+      window.__timelines["main"] = tl;
     </script>
   </body>
 </html>
