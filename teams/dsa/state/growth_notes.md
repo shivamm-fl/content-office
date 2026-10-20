@@ -14,3 +14,6 @@ No own numbers exist yet (n=0 reels with insights), so this is a script read, no
 - Proposed fix: lead with the fact, e.g. "Data दोगुना करो, search में बस 1 step बढ़ता है।" (8 words), then go straight to the 10 lakh contacts example; drop "कभी हाँ, और कभी...".
 - Keep d001 vs d002 as a hint only until both have numbers; keep rotating hook types.
 - Owner decision: pending.
+
+## 2026-10-20 (planner)
+Planned Day 3 (d003, concept, space complexity and the time-space trade-off): hook type relatable_stake to rotate away from d001 interviewer_asked and d002 surprising_fact, so three types now run side by side; no own numbers yet. Running example: duplicate check among 10 lakh numbers, about 5 hundred billion pair steps with no extra memory vs 10 lakh steps with a set (about 4x a list's memory), counts run by the researcher; the Python-set O(1) claim is unverified (wiki.python.org 404) and is kept out as a fact.
