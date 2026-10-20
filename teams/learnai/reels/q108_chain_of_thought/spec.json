@@ -1,0 +1,229 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      null,
+      null,
+      2.4
+    ],
+    [
+      "ok",
+      null,
+      null,
+      4.5
+    ],
+    [
+      "err",
+      null,
+      null,
+      7.1
+    ],
+    [
+      "pop",
+      null,
+      null,
+      8.6
+    ],
+    [
+      "click",
+      null,
+      null,
+      10.3
+    ],
+    [
+      "dip",
+      null,
+      null,
+      15.4
+    ],
+    [
+      "err",
+      null,
+      null,
+      15.7
+    ],
+    [
+      "click",
+      null,
+      null,
+      19.5
+    ],
+    [
+      "click",
+      null,
+      null,
+      20.6
+    ],
+    [
+      "ok",
+      null,
+      null,
+      22.9
+    ],
+    [
+      "pop",
+      null,
+      null,
+      29.3
+    ],
+    [
+      "click",
+      null,
+      null,
+      31.9
+    ],
+    [
+      "ok",
+      null,
+      null,
+      34.6
+    ],
+    [
+      "err",
+      null,
+      null,
+      41
+    ],
+    [
+      "err",
+      null,
+      null,
+      45.5
+    ],
+    [
+      "ok",
+      null,
+      null,
+      49
+    ],
+    [
+      "click",
+      null,
+      null,
+      53.2
+    ],
+    [
+      "click",
+      null,
+      null,
+      63.6
+    ],
+    [
+      "click",
+      null,
+      null,
+      67.9
+    ],
+    [
+      "ok",
+      null,
+      null,
+      74
+    ],
+    [
+      "pop",
+      null,
+      null,
+      80.6
+    ],
+    [
+      "click",
+      null,
+      null,
+      93
+    ],
+    [
+      "err",
+      null,
+      null,
+      98.1
+    ],
+    [
+      "click",
+      null,
+      null,
+      100.1
+    ],
+    [
+      "pop",
+      null,
+      null,
+      110
+    ],
+    [
+      "click",
+      null,
+      null,
+      115.6
+    ],
+    [
+      "click",
+      null,
+      null,
+      121.1
+    ],
+    [
+      "click",
+      null,
+      null,
+      127.6
+    ],
+    [
+      "click",
+      null,
+      null,
+      133.7
+    ],
+    [
+      "pop",
+      null,
+      null,
+      150.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook France की capital पूछी… | Bot ने तीन lines में जवाब दिया! || जब Paris एक word में बताया जा सकता है, | तो इतना extra effort क्यों? || Interview में पूछें: | Does chain-of-thought prompting always improve performance?",
+      "B": "तुम्हारा answer होना चाहिए: No, not always. || Chain-of-thought prompting का मतलब है, | model से problem को step by step solve करने को कहना। || ये complex, multi-step problems में help कर सकता है। || लेकिन हर simple question के लिए ये ज़रूरी नहीं। || चलो, तीन situations देखते हैं।",
+      "C": "Question: France की capital क्या है? || Direct answer: Paris। || बस, काम खत्म! || अगर हर बार unnecessary explanation generate करवाओगे, | तो output tokens बढ़ेंगे। || और production में इसका मतलब हो सकता है extra latency और API cost। || Simple task? Simple prompt से शुरू करो।",
+      "D": "अब एक shop का bill solve करो। || तीन notebooks, 45{forty-five} रुपये each। || दो pens, 12{twelve} रुपये each। || Customer ने दिए 200{two-hundred} रुपये। || कितने पैसे वापस करोगे? || पहले notebooks: 3{three} × 45{forty-five} = 135{one-hundred-thirty-five} रुपये। || फिर pens: 2{two} × 12{twelve} = 24{twenty-four} रुपये। || Total: 159{one-hundred-fifty-nine} रुपये। || Change: 41{forty-one} रुपये। || यहाँ intermediate steps लिखना calculation की गलती पकड़ने में help कर सकता है। || Research में भी कुछ mathematical reasoning tasks पर step-by-step prompting से improvement देखा गया है। || लेकिन exact improvement model और task पर depend करता है।",
+      "E": "@emph अब important twist! || अगर तुम reasoning-focused model use कर रहे हो, | तो ज़रूरी नहीं कि हर बार उसको think step by step बोलो। || वो पहले से ही multi-step reasoning के लिए designed हो सकता है। || Extra instruction कभी redundant हो सकती है, | और performance भी model के हिसाब से change हो सकती है।",
+      "F": "Interview में confidently बोलो: || Chain-of-thought prompting can improve performance on complex, multi-step tasks, but it isn't universally beneficial. || For simple tasks, it may increase output tokens, latency, and cost without adding value. || I'd evaluate both approaches on representative examples and compare accuracy, latency, and cost. || For reasoning models, I'd also test whether explicit step-by-step instructions provide any additional benefit.",
+      "G": "अब तुम बताओ: || अगर तुम्हें AI API का bill optimize करना हो, | तो हर prompt में think step by step लिखोगे? || या पहले test करोगे? || Comment करो: ALWAYS या TEST FIRST। || और AI interviews की practical preparation के लिए follow कर लो!"
+    }
+  },
+  "hook_type": "relatable_stake",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

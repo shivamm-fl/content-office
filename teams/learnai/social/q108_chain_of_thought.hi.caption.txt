@@ -1,0 +1,17 @@
+France ki capital poochhi, bot ne teen lines mein jawab diya! Interview mein poochte hain: chain-of-thought prompting hamesha performance badhata hai?
+
+Jawab: nahi, hamesha nahi. Chain-of-thought ka matlab hai model se problem ko step by step solve karne ko kehna. Teen situations:
+
+1. Simple question: "France ki capital?" ka jawab Paris ek word mein ho jata hai. Extra explanation se output tokens badhte hain, aur production mein extra latency aur API cost ho sakti hai.
+2. Multi-step question: shop bill (3 notebooks 45 rupye each, 2 pens 12 rupye each, 200 diye) mein steps likhne se calculation ki galti pakadne mein help mil sakti hai. Research mein bhi kuch mathematical reasoning tasks par step-by-step prompting se improvement dikha hai, par exact improvement model aur task par depend karta hai. Bill ka example invented hai.
+3. Reasoning models: ye pehle se multi-step reasoning ke liye designed ho sakte hain, isliye "think step by step" ki extra instruction redundant ho sakti hai.
+
+Interview mein bolo: CoT complex, multi-step tasks par performance badha sakta hai, par simple tasks par tokens, latency aur cost badhata hai. Dono approaches ko representative examples par test karo aur accuracy, latency, cost compare karo.
+
+Ab tum batao: AI API ka bill optimize karna ho, to har prompt mein "think step by step" likhoge ya pehle test karoge? Comment karo ALWAYS ya TEST FIRST.
+
+Jawab: TEST FIRST.
+
+AI interviews ki practical preparation ke liye follow karo.
+
+#AI #PromptEngineering #AIInterview

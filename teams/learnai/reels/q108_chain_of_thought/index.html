@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Interview: Chain-of-thought prompting hamesha performance badhata hai?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="157" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="157" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="157" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="157" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const states = (host, css, list) => list.map(([t, html], i) => { const d = el(host, css, html); tl.set(d, { opacity: 0 }, 0); tl.set(d, { opacity: 1 }, t);
+        if (i < list.length - 1) tl.set(d, { opacity: 0 }, list[i + 1][0]); tl.fromTo(d, { y: 10 }, { y: 0, duration: 0.25, ease: "power3.out", immediateRender: false }, t); return d; });
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tile = (w, h, text, col, size) => `<div style="width:${w}px;height:${h}px;border-radius:24px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;font:800 ${size || 40}px ${COD};letter-spacing:.04em;color:${col}">${text}</div>`;
+      const tileEl = (host, x, y, w, h, text, col, t, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`, tile(w, h, text, col, size)), t, { opacity: 0, y: 20 });
+      const mono = (host, x, y, w, text, col, size) => el(host, `left:${x}px;top:${y}px;width:${w}px;font:600 ${size || 40}px ${COD};color:${col || TEXT};white-space:pre;line-height:1.2`, text);
+      const chipAt = (host, x, y, text, col, size) => { const s = size || 36, w = Math.round(text.length * s * 0.6 + 40);
+        return [el(host, `left:${x}px;top:${y}px;width:${w}px;height:${s + 30}px;border-radius:16px;border:2px solid ${ca(col, 0.8)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;font:700 ${s}px ${COD};color:${col};white-space:pre`, text.replace(/ /g, "·")), w]; };
+      const rowCard = (host, x, y, w, h, lab, col, t) => { const row = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`);
+        el(row, `left:0;top:0;width:${w}px;height:${h}px;border-radius:24px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)}`);
+        el(row, `left:130px;top:0;height:${h > 200 ? 100 : h}px;display:flex;align-items:center;font:800 40px ${COD};letter-spacing:.03em;color:${col};white-space:nowrap`, lab);
+        show(row, t, { opacity: 0, y: 24 }); const ck = M.icon(host, col === HOT ? "cross" : "check", x + 28, y + (h > 200 ? 10 : (h - 80) / 2), 80, col); ck.show(t + 0.15); return row; };
+
+      // ============ A: the stake (chat), the interview question ============
+      // diagram: A
+      M.hook(["Capital of France?", "Bot wrote 3 lines"], { size: 92, top: 215 });
+      show(glass(A, 60, 520, 960, 520, CYAN, 28), 0.05, { opacity: 0, y: 20 });
+      show(el(A, `left:500px;top:555px;width:480px;height:84px;border-radius:28px 28px 6px 28px;background:#26324A;display:flex;align-items:center;justify-content:center;font:600 40px ${LAT};white-space:nowrap`, "France ki capital?"), 0.01, { opacity: 0, y: 0 }, 0.05);
+      const dots = show(el(A, `left:80px;top:690px;padding:18px 30px;border-radius:28px 28px 28px 6px;border:1.5px solid ${ca(CYAN, 0.6)};font:700 44px ${LAT};color:${CYAN}`, "• • •"), 0.35, { opacity: 0 });
+      gone(dots, at("A", "Bot"), 0.1);
+      const botB = el(A, `left:80px;top:670px;width:880px;height:330px;border-radius:28px 28px 28px 6px;border:1.5px solid ${ca(CYAN, 0.6)};background:${ca(CYAN, 0.12)}`); show(botB, at("A", "Bot"), { opacity: 0, y: 10 });
+      ["Let's think step by step.", "France is a country in Europe.", "Its capital city is Paris."].forEach((t, i) => show(el(A, `left:116px;top:${705 + i * 90}px;font:600 40px ${LAT};white-space:nowrap`, t), at("A", "teen") + i * 0.35, { opacity: 0, y: 10 }, 0.3));
+      const parisA = tileEl(A, 240, 1070, 600, 130, "PARIS", GOOD, at("A", "Paris"), 64);
+      const oneW = pillC(A, "1 WORD", 1220, at("A", "word"), { size: 34, h: 54, col: GOOD });
+      const ringA = el(A, `left:68px;top:662px;width:904px;height:346px;border:3px solid ${HOT};border-radius:30px`); show(ringA, at("A", "extra"), { opacity: 0 });
+      const tOut = at("A", "Interview") - 0.2;
+      [parisA, oneW, ringA].forEach((d) => gone(d, tOut));
+      pillC(A, "INTERVIEW QUESTION", 1070, at("A", "Interview"), { size: 32, h: 52 });
+      M.box(A, { x: 120, y: 1140, w: 840, h: 160, label: "ALWAYS BETTER?", sub: "CHAIN-OF-THOUGHT", color: ACC, size: 54, subsize: 36 }).show(at("A", "chain-of-thought"));
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: the answer, the definition, when it helps ============
+      // diagram: B
+      pillC(B, "NOT ALWAYS", 215, at("B", "No"), { size: 60, h: 92, col: HOT, pad: 48 });
+      const cotP = pillC(B, "CHAIN-OF-THOUGHT", 325, at("B", "Chain-of-thought"), { size: 36, h: 58 });
+      const chainH = []; const cy = [430, 590, 750, 910];
+      [["PROBLEM", ACC, at("B", "problem")], ["STEP 1", CYAN, at("B", "step", 0)], ["STEP 2", CYAN, at("B", "step", 1)], ["ANSWER", GOOD, at("B", "solve")]].forEach(([lab, col, t], i) => {
+        const b = M.box(B, { x: 290, y: cy[i], w: 500, h: 110, label: lab, color: col, size: 46 }); b.show(t); chainH.push(b);
+        if (i > 0) { const a = M.arrow(B, { from: [540, cy[i - 1] + 114], to: [540, cy[i] - 4], color: CYAN, w: 8 }); a.show(t - 0.05, 0.3); chainH.push(a); } });
+      const tChainOut = at("B", "complex") - 0.3;
+      chainH.forEach((h) => h.hide(tChainOut)); gone(cotP, tChainOut, 0.2);
+      const mh = M.box(B, { x: 120, y: 430, w: 840, h: 230, label: "MULTI-STEP", sub: "HELPS", icon: "check", color: GOOD, size: 60, subsize: 40 }); mh.show(at("B", "complex"));
+      const sh = M.box(B, { x: 120, y: 720, w: 840, h: 230, label: "SIMPLE", sub: "NOT NEEDED", color: MUTED, size: 60, subsize: 40 }); sh.show(at("B", "simple"));
+      const tSit = at("B", "chalo");
+      mh.hide(tSit); sh.hide(tSit);
+      pillC(B, "3 SITUATIONS", 330, tSit, { size: 40, h: 64 });
+      [["1", "SIMPLE", CYAN], ["2", "MULTI-STEP", ACC], ["3", "REASONING", GOOD]].forEach(([n, lab, col], i) => M.box(B, { x: 60 + i * 330, y: 470, w: 300, h: 280, label: n, sub: lab, color: col, size: 130, subsize: 36 }).show(at("B", "teen") + i * 0.25));
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: situation 1, the simple question ============
+      // diagram: C
+      pillC(C, "SITUATION 1  ·  SIMPLE", 215, P("C", 0), { size: 34, h: 56 });
+      const qC = glass(C, 120, 300, 840, 110, CYAN, 24); show(qC, at("C", "Question"), { opacity: 0, y: 20 });
+      show(mono(C, 120, 330, 840, "France ki capital?", TEXT, 46), at("C", "Question"), { opacity: 0, y: 10 }).style.textAlign = "center";
+      M.box(C, { x: 200, y: 450, w: 680, h: 160, label: "PARIS", sub: "1 WORD", color: GOOD, size: 70, subsize: 36 }).show(at("C", "Paris"));
+      M.icon(C, "check", 900, 490, 80, GOOD).show(at("C", "kaam"));
+      const extra = pillC(C, "EXTRA TEXT", 660, at("C", "unnecessary"), { size: 36, h: 56, col: HOT });
+      const TK = ["France", " is", " a", " country", " in", " Europe", ".", " Its", " capital", " is", " Paris", "."];
+      let cx = 60, cyy = 750;
+      TK.forEach((tk, i) => { const [c, w] = chipAt(C, cx, cyy, tk, i === 10 ? GOOD : HOT, 36); if (cx + w > 1020) { cx = 60; cyy += 84; c.style.left = cx + "px"; c.style.top = cyy + "px"; } cx += w + 12;
+        show(c, at("C", "explanation") + i * 0.2, { opacity: 0, y: 14 }, 0.3); });
+      gone(extra, at("C", "output") - 0.1, 0.2);
+      pillC(C, "MORE TOKENS", 660, at("C", "output"), { size: 36, h: 56, col: HOT });
+      M.box(C, { x: 60, y: 960, w: 450, h: 140, label: "SLOWER", icon: "clock", color: HOT, size: 44 }).show(at("C", "latency"));
+      M.box(C, { x: 570, y: 960, w: 450, h: 140, label: "COSTLIER", icon: "coin", color: HOT, size: 44 }).show(at("C", "cost"));
+      pillC(C, "SIMPLE PROMPT", 1150, at("C", "prompt"), { size: 40, h: 62, col: GOOD });
+      pillC(C, "EXAMPLE", 1235, at("C", "explanation"), { size: 26, h: 44, col: MUTED });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: situation 2, the shop bill ============
+      // diagram: D
+      const dHead = pillC(D, "SITUATION 2  ·  MULTI-STEP", 215, P("D", 0), { size: 34, h: 56 });
+      const dEx = pillC(D, "EXAMPLE", 285, at("D", "shop"), { size: 26, h: 44, col: MUTED });
+      const rc = glass(D, 120, 345, 840, 395, ACC, 24); show(rc, at("D", "shop"), { opacity: 0, y: 20 });
+      const rcT = show(mono(D, 150, 362, 780, "SHOP BILL", MUTED, 36), at("D", "shop"), { opacity: 0 });
+      const r1 = show(mono(D, 150, 430, 780, "3 Notebooks · Rs 45 each", TEXT, 42), at("D", "notebooks"), { opacity: 0, y: 8 });
+      const r2 = show(mono(D, 150, 510, 780, "2 Pens · Rs 12 each", TEXT, 42), at("D", "pens"), { opacity: 0, y: 8 });
+      const r3 = show(mono(D, 150, 590, 780, "Paid · Rs 200", TEXT, 42), at("D", "200"), { opacity: 0, y: 8 });
+      const r4 = states(D, `left:150px;top:670px;width:780px;font:700 42px ${COD};white-space:pre`, [[at("D", "kitne"), `<span style="color:${ACC}">Change · ?</span>`], [at("D", "41"), `<span style="color:${GOOD}">Change · Rs 41</span>`]]);
+      const sc = glass(D, 120, 780, 840, 410, CYAN, 24); show(sc, at("D", "pehle"), { opacity: 0, y: 20 });
+      const steps = [["3 x 45 = 135", at("D", "3"), TEXT], ["2 x 12 = 24", at("D", "2"), TEXT], ["135 + 24 = 159", at("D", "Total"), TEXT], ["200 - 159 = 41", at("D", "Change"), GOOD]]
+        .map(([t, tm, col], i) => show(mono(D, 160, 815 + i * 92, 700, t, col, 54), tm, { opacity: 0, y: 10 }));
+      const mag = M.icon(D, "search", 800, 1000, 110, GOOD); mag.show(at("D", "galti"));
+      const slips = pillC(D, "CATCHES SLIPS", 1225, at("D", "intermediate"), { size: 36, h: 58, col: GOOD });
+      const tR = at("D", "Research") - 0.15;
+      [dHead, dEx, rc, rcT, r1, r2, r3, ...r4, sc, ...steps, slips].forEach((d) => gone(d, tR, 0.25)); mag.hide(tR);
+      pillC(D, "RESEARCH", 215, at("D", "Research"), { size: 38, h: 60 });
+      M.box(D, { x: 120, y: 340, w: 840, h: 250, label: "MATH TASKS", sub: "GAINS SEEN", icon: "bolt", color: GOOD, size: 62, subsize: 40 }).show(at("D", "mathematical"));
+      show(el(D, `left:120px;top:700px;width:840px;height:230px;border-radius:24px;border:3px dashed ${ca(MUTED, 0.8)};display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 60px ${COD};color:${TEXT}`, `EXACT GAIN <span style="color:${ACC}">?</span>`), at("D", "exact"), { opacity: 0, y: 14 });
+      tileEl(D, 120, 1040, 380, 120, "MODEL", CYAN, at("D", "model"), 44);
+      tileEl(D, 580, 1040, 380, 120, "TASK", ACC, at("D", "task"), 44);
+      M.arrow(D, { from: [310, 1035], to: [310, 940], color: CYAN, w: 7 }).show(at("D", "model"), 0.3);
+      M.arrow(D, { from: [770, 1035], to: [770, 940], color: ACC, w: 7 }).show(at("D", "task"), 0.3);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: situation 3, reasoning models ============
+      // diagram: E
+      pillC(E, "SITUATION 3  ·  REASONING", 215, P("E", 0), { size: 34, h: 56 });
+      M.box(E, { x: 140, y: 320, w: 800, h: 250, label: "REASONING MODEL", icon: "gear", color: CYAN, size: 52 }).show(at("E", "reasoning-focused"));
+      const pr = el(E, `left:200px;top:640px;width:680px;height:96px;border-radius:20px;border:2.5px solid ${ca(ACC, 0.85)};background:${ca(ACC, 0.10)};display:flex;align-items:center;justify-content:center;font:700 42px ${COD};color:${ACC}`, "think step by step"); show(pr, at("E", "think"), { opacity: 0, y: 14 });
+      const crX = M.icon(E, "cross", 780, 653, 70, HOT); crX.show(at("E", "bolo"));
+      const nn = pillC(E, "NOT NEEDED", 760, at("E", "bolo"), { size: 40, h: 62, col: HOT });
+      const tSw = at("E", "wo") - 0.1;
+      gone(pr, tSw, 0.2); gone(nn, tSw, 0.2); crX.hide(tSw);
+      [["STEP 1", 60], ["STEP 2", 390], ["STEP 3", 720]].forEach(([lab, x], i) => tileEl(E, x, 640, 300, 110, lab, CYAN, at("E", "multi-step") + i * 0.3, 40));
+      pillC(E, "DESIGNED FOR IT", 790, at("E", "designed"), { size: 36, h: 58, col: CYAN });
+      pillC(E, "REDUNDANT?", 880, at("E", "redundant"), { size: 40, h: 62, col: ACC });
+      const gb = el(E, `left:100px;top:1040px;width:880px;height:56px;border-radius:28px;background:linear-gradient(90deg, ${HOT}, ${ACC}, ${GOOD})`); show(gb, at("E", "performance"), { opacity: 0, scale: 0.96 });
+      show(el(E, `left:100px;top:1112px;width:300px;font:800 36px ${COD};color:${HOT}`, "WORSE"), at("E", "performance"), { opacity: 0 });
+      show(el(E, `left:680px;top:1112px;width:300px;text-align:right;font:800 36px ${COD};color:${GOOD}`, "BETTER"), at("E", "performance"), { opacity: 0 });
+      const mk2 = el(E, "left:474px;top:975px;width:52px;height:52px", `<svg viewBox="0 0 48 48" width="52" height="52"><polygon points="24,44 6,6 42,6" fill="${TEXT}"/></svg>`);
+      tl.set(mk2, { opacity: 0 }, 0); tl.set(mk2, { opacity: 1 }, at("E", "performance") + 0.2);
+      tl.fromTo(mk2, { x: 0 }, { x: -300, duration: 0.7, ease: "power2.inOut", immediateRender: false }, at("E", "performance") + 0.4);
+      tl.to(mk2, { x: 300, duration: 0.8, ease: "power2.inOut", immediateRender: false }, at("E", "performance") + 1.4);
+      pillC(E, "VARIES", 1170, at("E", "change"), { size: 40, h: 62 });
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: say it in the interview ============
+      // diagram: F
+      pillC(F, "INTERVIEW ANSWER", 215, at("F", "Interview"), { size: 38, h: 60 });
+      show(glass(F, 60, 305, 960, 915, ACC, 28), at("F", "Interview") + 0.3, { opacity: 0, y: 20 });
+      rowCard(F, 90, 345, 900, 170, "MULTI-STEP: CAN HELP", GOOD, at("F", "complex"));
+      rowCard(F, 90, 535, 900, 170, "SIMPLE: MORE COST", HOT, at("F", "simple"));
+      rowCard(F, 90, 725, 900, 270, "TEST BOTH", ACC, at("F", "evaluate"));
+      [["ACCURACY", 130, at("F", "accuracy")], ["LATENCY", 395, at("F", "latency", 1)], ["COST", 640, at("F", "cost", 1)]].forEach(([t, x, tm]) => { const [c] = chipAt(F, x, 880, t, ACC, 36); show(c, tm, { opacity: 0, y: 12 }, 0.3); });
+      rowCard(F, 90, 1015, 900, 170, "REASONING MODEL: TEST", CYAN, at("F", "reasoning"));
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: check yourself, comment, follow ============
+      // diagram: G
+      pillC(G, "CHECK YOURSELF", 215, at("G", "batao") - 0.1, { size: 34, h: 56 });
+      M.box(G, { x: 340, y: 310, w: 400, h: 160, label: "API BILL", icon: "coin", color: ACC, size: 44 }).show(at("G", "bill"));
+      const pc = el(G, `left:140px;top:570px;width:800px;height:100px;border-radius:20px;border:2.5px solid ${ca(CYAN, 0.85)};background:${ca(CYAN, 0.10)};display:flex;align-items:center;justify-content:center;font:700 44px ${COD};color:${CYAN}`, "think step by step"); show(pc, at("G", "think"), { opacity: 0, y: 14 });
+      M.arrow(G, { from: [540, 565], to: [540, 476], color: CYAN, w: 8 }).show(at("G", "think") + 0.2, 0.3);
+      tileEl(G, 60, 790, 460, 150, "ALWAYS", ACC, at("G", "ALWAYS"), 54);
+      tileEl(G, 560, 790, 460, 150, "TEST FIRST", CYAN, at("G", "TEST"), 48);
+      const cm = el(G, "left:120px;top:990px;width:840px;height:84px"); show(cm, at("G", "Comment"), { opacity: 0, y: 30 });
+      el(cm, `left:0;top:0;width:840px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.4);background:${ca(PANEL, 0.9)};font:500 34px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 36px`, "Add a comment...");
+      const hc = el(G, "left:120px;top:1100px;width:840px;height:138px"); glass(hc, 0, 0, 840, 138, ACC, 28); show(hc, P("G", 5), { opacity: 0, y: 40 });
+      el(hc, `left:40px;top:22px;font:700 46px ${COD};color:${TEXT}`, "@ai.learnvora");
+      show(el(hc, `left:40px;top:86px;font:700 28px ${COD};letter-spacing:.08em;color:${ACC}`, "AI ENGINEER INTERVIEW"), at("G", "interviews"), { opacity: 0, y: 8 }, 0.3);
+      const fp = el(hc, `left:540px;top:31px;width:260px;height:76px;border-radius:38px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 36px ${COD};letter-spacing:.08em`, "+ FOLLOW");
+      tl.to(fp, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("G", "follow")); tl.to(fp, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("G", "follow") + 0.12);
+      M.fit(G, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G);
+      M.finish({ kw: { step: "gold", always: "gold", simple: "cyan", tokens: "hot", latency: "hot", cost: "hot", reasoning: "cyan", unnecessary: "hot", paris: "good", test: "good", redundant: "hot", follow: "gold", comment: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
