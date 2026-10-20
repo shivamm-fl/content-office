@@ -16,6 +16,7 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 
 ## Motion designer
 - 2026-10-18: Do not hold a scene after its line has ended; long gaps between parts read as dead air on the phone.
+- 2026-10-20 (a003): For a model-fit idea, draw the real run: the exact points and curves of the printed run on one SVG chart (clip the wild curve at the frame) beat labelled boxes. SVG paths drawn with dashoffset need opacity 0 until their start time, or the round cap shows as a stray dot. A chart panel must fade in with its first element, or it sits empty on screen.
 
 ## Packager
 

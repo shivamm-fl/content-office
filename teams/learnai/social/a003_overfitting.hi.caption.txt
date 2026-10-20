@@ -1,0 +1,20 @@
+Day 3/150: Ek AI model ka training error zero, phir bhi naye data par error 133. Ye kaise?
+
+Jaise exam se pehle solved examples ratne wala student: wahi questions aaye to full marks, question badla to game over. Model ke saath bhi aisa hota hai, ise overfitting kehte hain: pattern samajhne ki jagah examples yaad karna.
+
+Hamne Python mein chalakar dekha (example run): hidden rule y = 2x + 1, thoda random noise, sirf 10 examples.
+Straight line: training error 0.87, naye data par 1.04. Dono close.
+Bahut flexible curve: training error 0, naye data par 133 (actual y 1 se 21 ke beech).
+Wahi curve 100 points ke saath: 0.93 aur 1.03, dono phir close.
+
+Kaise pakdein: model ko sirf practice questions par judge mat karo, unseen data par check karo. Training error gir raha ho aur unseen data par error badh raha ho, to overfitting ka strong signal hai.
+Fix: simple model, zyada representative data, validation data par check.
+Lekin model bahut simple ho to underfitting: curved pattern ko straight line pakad nahi paati.
+
+Ye numbers ek chhote toy run ke hain, asli models ka claim nahi.
+
+Comment karo: model seekh raha hai ya ratta maar raha hai?
+
+Roz ek naya AI idea ke liye follow karo.
+
+#AI #MachineLearning #150DaysOfAI

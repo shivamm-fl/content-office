@@ -1,0 +1,11 @@
+Overfitting kya hai? Zero error, phir bhi fail
+
+Overfitting tab hota hai jab model training data ko itna kareeb se yaad kar leta hai ki naye data par sahi prediction nahi kar paata. Is video mein ek chhota Python run hai (example numbers, hamara apna run): hidden rule y = 2x + 1 plus noise, 10 training points. Straight line ka error training par 0.87 aur naye data par 1.04. Bahut flexible curve ka training error 0 aur naye data par 133. Wahi curve 100 points ke saath 0.93 aur 1.03. Ye numbers ek toy run ke hain, asli models ka claim nahi.
+
+Is video mein: overfitting, underfitting, unseen data, training error vs new data error, aur overfitting ko kam karne ke teen tareeke (simple model, zyada data, validation data).
+
+Hidden rule y = 2x + 1, 7 × 8 jaisa example aur "99% accuracy" wali baat hamara apna example hai, kisi source ka claim nahi. Overfitting ko kam karne ke tareeke (simple model, zyada data, validation) standard practice hain; Google page overfitting ke causes batata hai (bahut complex model, kam representative data).
+
+Sources:
+https://developers.google.com/machine-learning/crash-course/overfitting/overfitting
+https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html
