@@ -3,7 +3,7 @@
 // (ai-course scripts/post_plan.py): one released reel per track and slot in the order generic, course, interview, taken from
 // the lowest id up; an explicit entry of state/config.json post_schedule names exactly the ids of its slot; nothing posts while
 // posting_paused is true, outside the posting window, or later than slot_late_min minutes after a slot started.
-import type { CalendarCell, CalendarData, CalendarDay, CalendarSlot, PipelineItem, PostRecord, PostedReel, ReadyReel } from "@office/protocol";
+import type { CalendarCell, CalendarData, CalendarDay, CalendarSlot, PipelineItem, PostRecord, PostedReel, PublishRequest, ReadyReel } from "@office/protocol";
 
 export interface Phase5Entry {
   status?: string; track?: string; title?: string; mp4?: string; duration_s?: number; published?: boolean; published_at?: string;
@@ -111,7 +111,8 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
   const titleOf = (k: string) => status[k]?.title ?? inp.office.find((o) => o.item === k)?.title ?? k;
 
   // released and waiting: what the slot poster can take (qa_passed, media in the release, not yet published)
-  const waiting = (k: string) => isItem(k) && status[k]?.qa_passed === true && status[k]?.release_assets === true && !status[k]?.published;
+  const postedByOffice = new Set(inp.posts.filter((p) => p.mode === "now" && p.status === "done").map((p) => p.item));
+  const waiting = (k: string) => isItem(k) && status[k]?.qa_passed === true && status[k]?.release_assets === true && !status[k]?.published && !postedByOffice.has(k);
   const pools: Record<string, string[]> = {};
   for (const t of TRACKS) {
     pools[t.id] = Object.keys(status).filter((k) => k[0] === t.prefix && /^[a-z]\d+$/.test(k) && waiting(k)).sort((a, b) => idNum(a) - idNum(b));
@@ -184,7 +185,7 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
   const handing = new Set(inp.posts.filter((p) => p.status === "handing_over").map((p) => p.item));
   const ready: ReadyReel[] = [];
   for (const o of inp.office) {
-    if (o.stage !== "approved" || waiting(o.item) || status[o.item]?.published || handing.has(o.item)) continue;
+    if (o.stage !== "approved" || waiting(o.item) || status[o.item]?.published || postedByOffice.has(o.item) || handing.has(o.item)) continue;
     ready.push({ item: o.item, track: o.track || trackOfItem(o.item), title: o.title, duration_s: o.duration_s, cover_url: o.cover_url, source: "office", can_schedule: TRACKS.some((t) => t.prefix === o.item[0]) });
   }
   for (const k of Object.keys(status).filter((x) => waiting(x) && !handing.has(x)).sort((a, b) => a[0].localeCompare(b[0]) || idNum(a) - idNum(b))) {
@@ -203,7 +204,7 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
   return {
     team: inp.team, publishing: inp.publishing, now, today, clock: istClock(now), paused, window: postingWindow(cfg), slot_times: slotTimes, posts_per_slot: perSlot,
     can_post_now: canPostNow(cfg, now), last_post_hours: posted.length ? Math.round(((now - posted[0].ms) / 3_600_000) * 10) / 10 : null,
-    ready, days, pipeline, recent, posts: inp.posts, empty_slots: emptySlots, note: inp.note ?? null, slots: slotsOn,
+    ready, days, pipeline, recent, posts: inp.posts.slice(0, 8), empty_slots: emptySlots, note: inp.note ?? null, slots: slotsOn,
   };
 }
 
@@ -212,10 +213,11 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
  * `ownsItem`: whether the reel belongs to this floor (the publishing repo posts a reel to the handle of its id's team, so a floor must never hand over another floor's reel).
  */
 export function refusePublish(
-  req: { item: string; mode: "now" | "slot"; date?: string; time?: string }, cfg: PostingConfig, status: Record<string, Phase5Entry>, now: number,
+  req: PublishRequest, cfg: PostingConfig, status: Record<string, Phase5Entry>, now: number,
   ownsItem?: (item: string) => boolean,
 ): string | null {
   if (!/^[a-z]\d{2,4}$/.test(req.item)) return "bad item id";
+  if (req.trial && req.mode !== "now") return "Trial reels can only be posted now. Switch to Post now.";
   if (ownsItem && !ownsItem(req.item)) return `${req.item} is not a reel of this floor`;
   if (status[req.item]?.published) return `${req.item} is already posted`;
   // The owner's own tap works at any hour (owner decision 2026-10-18: "post now kabhi bhi"); the posting window only limits the automatic slots.

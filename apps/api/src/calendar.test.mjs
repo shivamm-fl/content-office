@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildCalendar, canPostNow, floorOfItem, floorStatus, reelStage, refusePublish, slotStartMs, trackOfItem } from "./calendar.ts";
+import { handoverInputs, toPost } from "./posting.ts";
 
 const IST = (date, time) => slotStartMs(date, time);
 const cfg = { slots_ist: ["09:00", "13:00", "17:00"], posts_per_slot: 3, slot_late_min: 150, posting_window_ist: ["07:00", "21:00"], posting_paused: false, post_schedule: [] };
@@ -87,6 +88,20 @@ test("a reel being handed over is not offered again", () => {
   assert.equal(cal.ready.find((r) => r.item === "e150"), undefined);
 });
 
+test("a trial reel leaves the ready list during hand-over and after a successful hand-over", () => {
+  const office = [{ item: "e150", title: "Fresh", track: "generic", thread_id: "t1", duration_s: 40, cover_url: null, stage: "approved", detail: null }];
+  const post = { id: "p1", item: "e150", mode: "now", trial: true, date: null, time: null, status: "handing_over", gh_url: null, error: null, created_at: 1, updated_at: 1 };
+  for (const state of ["handing_over", "done"]) {
+    const cal = buildCalendar(input(IST("2026-10-18", "10:00"), { office, posts: [{ ...post, status: state }] }));
+    assert.equal(cal.ready.find((r) => r.item === "e150"), undefined, state);
+  }
+  const older = buildCalendar(input(IST("2026-10-18", "10:00"), { office, posts: [...Array.from({ length: 8 }, (_, i) => ({ ...post, id: `p${i + 2}`, item: `x${i + 10}` })), { ...post, status: "done" }] }));
+  assert.equal(older.ready.find((r) => r.item === "e150"), undefined);
+  assert.equal(older.posts.length, 8);
+  const failed = buildCalendar(input(IST("2026-10-18", "10:00"), { office, posts: [{ ...post, status: "failed" }] }));
+  assert.equal(failed.ready[0].item, "e150");
+});
+
 test("empty slots are counted and paused is reported", () => {
   const cal = buildCalendar(input(IST("2026-10-18", "10:00"), { status: { q24: base().q24 }, cfg: { ...cfg, posting_paused: true } }));
   assert.equal(cal.paused, true);
@@ -97,6 +112,8 @@ test("empty slots are counted and paused is reported", () => {
 test("refusePublish: window, slots, capacity, ids", () => {
   const now = IST("2026-10-18", "10:00");
   assert.equal(refusePublish({ item: "e101", mode: "now" }, cfg, base(), now), null);
+  assert.equal(refusePublish({ item: "e101", mode: "now", trial: true }, cfg, base(), now), null);
+  assert.match(refusePublish({ item: "e101", mode: "slot", date: "2026-10-18", time: "13:00", trial: true }, cfg, base(), now), /Trial reels can only be posted now/);
   for (const t of ["00:30", "06:59", "21:00", "22:00", "23:59"]) {   // the owner's own tap works at any hour; only the automatic slots keep the window
     assert.equal(refusePublish({ item: "e101", mode: "now" }, cfg, base(), IST("2026-10-18", t)), null, t);
   }
@@ -109,6 +126,22 @@ test("refusePublish: window, slots, capacity, ids", () => {
   const full = { ...cfg, post_schedule: [{ date: "2026-10-18", time: "13:00", ids: ["e101", "r101", "q101"] }] };
   assert.match(refusePublish({ item: "q102", mode: "slot", date: "2026-10-18", time: "13:00" }, full, base(), now), /full/);
   assert.equal(refusePublish({ item: "q101", mode: "slot", date: "2026-10-18", time: "13:00" }, full, base(), now), null);   // already in it: idempotent
+});
+
+test("hand-over inputs send trial as a string for trial and normal reels", () => {
+  assert.deepEqual(handoverInputs("learnai", { item: "e101", mode: "now", trial: true }, "office", { caption: "Caption", youtube: "YouTube" }), {
+    team: "learnai", item: "e101", action: "now", date: "", time: "", source: "office", caption: "Caption", youtube: "YouTube", trial: "true",
+  });
+  assert.deepEqual(handoverInputs("learnai", { item: "e101", mode: "now" }, "released", null), {
+    team: "learnai", item: "e101", action: "now", date: "", time: "", source: "released", caption: "", youtube: "", trial: "false",
+  });
+});
+
+test("post rows from before the trial column read as normal posts", () => {
+  const old = { id: "p1", item: "e101", mode: "now", date: null, time: null, status: "done", gh_url: null, error: null, created_at: 1, updated_at: 2 };
+  assert.equal(toPost(old).trial, false);
+  assert.equal(toPost({ ...old, trial: 0 }).trial, false);
+  assert.equal(toPost({ ...old, trial: 1 }).trial, true);
 });
 
 // ---- floors that only post now (dsa: d, systemdesign: s): the publishing repo's status and settings are shared by every floor

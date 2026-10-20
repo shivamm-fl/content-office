@@ -82,6 +82,7 @@ export interface PostedReel { item: string; track: string; title: string; at: st
 export interface PostRecord {
   id: string; item: string; mode: "now" | "slot" | "pause" | "resume"; date: string | null; time: string | null;
   status: "handing_over" | "done" | "failed"; gh_url: string | null; error: string | null; created_at: number; updated_at: number;
+  trial?: boolean;
 }
 export interface CalendarData {
   team: string; publishing: boolean; now: number; today: string; clock: string;
@@ -93,7 +94,7 @@ export interface CalendarData {
   /** the floor has slot posting (learnai: slots, automatic posting and its pause switch); false: its reels are posted with Post now only (dsa, systemdesign) */
   slots: boolean;
 }
-export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string }
+export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string; trial?: boolean }
 /** What the owner sees when previewing a reel before it is posted: the video, the cover and the texts that would go out. */
 export interface PreviewInfo {
   item: string; title: string; video_url: string; cover_url: string | null; caption: string; youtube: string; duration_s: number | null;

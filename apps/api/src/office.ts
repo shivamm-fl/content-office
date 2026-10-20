@@ -10,6 +10,7 @@ import { dayPlanLine } from "./dayplan";
 import { buildCalendar, floorOfItem, floorStatus, refusePublish, reelStage, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
 import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, learningsRepo, publishRepo, readAiCourse, runOutcome, SLOT_TEAM } from "./github";
 import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners, withHeading } from "./learnings";
+import { handoverInputs, toPost } from "./posting";
 import { TEAMS, team as getTeam } from "./teams";
 
 /** Id prefix of every floor's tracks to the floor (e r q learnai, d dsa, s systemdesign): the publishing repo's state holds the reels of all floors. */
@@ -80,6 +81,7 @@ export class Office extends DurableObject<Env> {
       "ALTER TABLE asks ADD COLUMN meta TEXT",     // final reels: video, cover, texts
       "ALTER TABLE threads ADD COLUMN day TEXT",   // build threads: the work day that sent the reel to the studio
       "ALTER TABLE threads ADD COLUMN done_at INTEGER", // work days: when the last reel of the day finished
+      "ALTER TABLE posts ADD COLUMN trial INTEGER NOT NULL DEFAULT 0",
     ]) {
       try { this.sql.exec(ddl); } catch { /* already there */ }
     }
@@ -501,14 +503,6 @@ export class Office extends DurableObject<Env> {
     return this.pub;
   }
 
-  private toPost(r: Row): PostRecord {
-    return {
-      id: r.id as string, item: r.item as string, mode: r.mode as PostRecord["mode"], date: (r.date as string) ?? null, time: (r.time as string) ?? null,
-      status: r.status as PostRecord["status"], gh_url: (r.gh_url as string) ?? null, error: (r.error as string) ?? null,
-      created_at: r.created_at as number, updated_at: r.updated_at as number,
-    };
-  }
-
   /** What the office knows about each reel its studio built: where it stands now (build threads, studio runs, final approvals). */
   private officeReels(): OfficeReel[] {
     const out: OfficeReel[] = [];
@@ -552,7 +546,7 @@ export class Office extends DurableObject<Env> {
     this.ensureTeam(slug);
     const repo = publishRepo(this.env, slug);
     await this.refreshPosts(repo);
-    const posts = this.rows("SELECT * FROM posts ORDER BY created_at DESC LIMIT 8").map((r) => this.toPost(r));
+    const posts = this.rows("SELECT * FROM posts ORDER BY created_at DESC").map((r) => toPost(r));
     let cfg: PostingConfig = {};
     let status: Record<string, Phase5Entry> = {};
     let note: string | null = null;
@@ -573,7 +567,7 @@ export class Office extends DurableObject<Env> {
     const why = refusePublish(req, cfg, status, Date.now(), (item) => floorOfItem(item, floors) === slug);
     if (why) throw new Error(why);
     const open = this.one("SELECT * FROM posts WHERE item = ? AND status = 'handing_over'", req.item);
-    if (open) return this.toPost(open);   // a second tap is the same hand-over
+    if (open) return toPost(open);   // a second tap is the same hand-over
     const released = status[req.item]?.qa_passed === true && status[req.item]?.release_assets === true;
     if (!released) {
       const reel = this.officeReels().find((r) => r.item === req.item);
@@ -582,11 +576,8 @@ export class Office extends DurableObject<Env> {
     // A reel from the office is posted with exactly the texts of the final card the owner approved (a reel built before the studio saved its
     // texts has no files in the repo, and the card is what the owner actually read).
     const meta = released ? null : this.finalMeta(req.item);
-    const run = await dispatchPublisher(this.env, repo, "office-handover.yml", {
-      team: slug, item: req.item, action: req.mode, date: req.date ?? "", time: req.time ?? "", source: released ? "released" : "office",
-      caption: (meta?.caption ?? "").slice(0, 8000), youtube: (meta?.youtube ?? "").slice(0, 8000),
-    });
-    return this.recordPost(req.item, req.mode, req.date ?? null, req.time ?? null, run);
+    const run = await dispatchPublisher(this.env, repo, "office-handover.yml", handoverInputs(slug, req, released ? "released" : "office", meta ?? null));
+    return this.recordPost(req.item, req.mode, req.date ?? null, req.time ?? null, run, Boolean(req.trial));
   }
 
   /** The newest final card (video, cover, caption, YouTube text) of a reel the office built. */
@@ -607,16 +598,16 @@ export class Office extends DurableObject<Env> {
     if (Boolean(cfg.posting_paused) === paused) throw new Error(paused ? "Automatic posting is already paused." : "Automatic posting is already on.");
     if (this.one("SELECT id FROM posts WHERE item = 'posting' AND status = 'handing_over'")) throw new Error("A change of the posting switch is already on its way.");
     const mode = paused ? "pause" : "resume";
-    const run = await dispatchPublisher(this.env, repo, "office-handover.yml", { team: slug, item: "posting", action: mode, date: "", time: "", source: "released" });
+    const run = await dispatchPublisher(this.env, repo, "office-handover.yml", { team: slug, item: "posting", action: mode, date: "", time: "", source: "released", trial: "false" });
     return this.recordPost("posting", mode, null, null, run);
   }
 
-  private recordPost(item: string, mode: PostRecord["mode"], date: string | null, time: string | null, run: { gh_run_id: string | null; url: string | null }): PostRecord {
+  private recordPost(item: string, mode: PostRecord["mode"], date: string | null, time: string | null, run: { gh_run_id: string | null; url: string | null }, trial = false): PostRecord {
     const id = newId("p");
     const now = Date.now();
-    this.sql.exec("INSERT INTO posts (id, item, mode, date, time, status, gh_run_id, gh_url, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 'handing_over', ?, ?, ?, ?)", id, item, mode, date, time, run.gh_run_id, run.url, now, now);
+    this.sql.exec("INSERT INTO posts (id, item, mode, date, time, status, gh_run_id, gh_url, created_at, updated_at, trial) VALUES (?, ?, ?, ?, ?, 'handing_over', ?, ?, ?, ?, ?)", id, item, mode, date, time, run.gh_run_id, run.url, now, now, trial ? 1 : 0);
     this.pub = null;
-    return this.toPost(this.one("SELECT * FROM posts WHERE id = ?", id)!);
+    return toPost(this.one("SELECT * FROM posts WHERE id = ?", id)!);
   }
 
   /**

@@ -134,10 +134,10 @@ app.get("/api/teams/:team/preview/:item/:kind", async (c) => {
 app.post("/api/teams/:team/publish", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");
-  const body = await c.req.json<{ item?: string; mode?: string; date?: string; time?: string }>().catch(() => ({} as Record<string, string | undefined>));
+  const body = await c.req.json<{ item?: string; mode?: string; date?: string; time?: string; trial?: unknown }>().catch(() => ({} as Record<string, string | undefined>));
   if (typeof body.item !== "string" || (body.mode !== "now" && body.mode !== "slot")) return bad(c, 400, "item and mode (now or slot) are required");
   try {
-    return c.json(await office(c.env, slug).publish(slug, { item: body.item, mode: body.mode, date: body.date, time: body.time }));
+    return c.json(await office(c.env, slug).publish(slug, { item: body.item, mode: body.mode, date: body.date, time: body.time, trial: body.trial === true }));   // only a real true is a trial: anything else is a normal post
   } catch (e) {
     return bad(c, 400, (e as Error).message);
   }
