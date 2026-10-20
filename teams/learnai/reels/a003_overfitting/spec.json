@@ -1,54 +1,349 @@
 {
- "tts": "owner",
- "voice": "hi-IN-SwaraNeural",
- "pace": 1.26,
- "audio": "v2",
- "owner_model": "eleven_flash_v2_5",
- "owner_tempo": 0.9,
- "tone": "calm",
- "scenes": [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G",
-  "H",
-  "I"
- ],
- "min": {
-  "A": 6,
-  "B": 6,
-  "C": 6,
-  "D": 6,
-  "E": 6,
-  "F": 6,
-  "G": 6,
-  "H": 6,
-  "I": 6
- },
- "tail": {},
- "cues": [
-  [
-   "impact",
-   null,
-   null,
-   0.05
-  ]
- ],
- "copy": {
-  "hi": {
-   "A": "@hook Overfitting क्या होता है? || सोचो एक student ने 10{ten} solved examples के answers रट लिए। | उन्हीं 10{ten} में पूरे marks, | पर exam में नया question आया, तो अटक गया। || Model भी ऐसा कर सकता है: | training data रट ले, यानी जिन examples से वो सीखता है, | और नए data पर फेल हो जाए। || यही overfitting है।",
-   "B": "मैंने इसे Python में चलाकर देखा। || एक छुपा हुआ rule है: | y equals 2{two} x plus 1{one}, | मतलब x बढ़ेगा, तो y double होकर एक add करेगा, | और हर point में थोड़ा noise, यानी random गड़बड़ी। || Model को rule नहीं बताया, सिर्फ़ 10{ten} points दिए। || और error यानी model की average गलती: | उसकी prediction असली value से औसतन कितनी दूर रही।",
-   "C": "पहले एक सीधी line लगाई, यानी degree 1{one}। || Training पर error 0.87{zero-point-eight-seven}, | नए data पर 1.04{one-point-zero-four}। || नया data यानी 1,000{one-thousand} fresh points, जो model ने कभी नहीं देखे। || दोनों लगभग बराबर, तो line ने rule पकड़ा है।",
-   "D": "अब एक बहुत flexible curve, degree 9{nine}। || Degree यानी curve कितने मोड़ ले सकती है। || ये curve 10{ten} के 10{ten} points से गुज़र गई। || Training error: 0.00{zero-point-zero-zero}। | Perfect लगता है। || पर नए data पर error निकला 133{one-hundred-thirty-three}, | जबकि y की values 1{one} से 21{twenty-one} के बीच हैं। || Curve हर point छूने के चक्कर में, points के बीच झूल जाती है। | मतलब उसने rule नहीं सीखा, | noise तक रट लिया।",
-   "E": "अब ये गड़बड़ पकड़ें कैसे? || पहला: training और नए data का error, दोनों साथ में देखो। || Degree 1{one} से 9{nine} तक, | training error गिरता गया: 0.87{zero-point-eight-seven} से 0.00{zero-point-zero-zero}। | और नए data का error बढ़ता गया: 1.04{one-point-zero-four} से 133{one-hundred-thirty-three}। || यही overfitting की निशानी है: | training में zero के पास, नए data पर बहुत बड़ा। | इसीलिए सिर्फ़ training score पर भरोसा मत करो, | score उस data पर देखो जो model ने सीखते समय देखा ही नहीं।",
-   "F": "दूसरा: model को उतना ही flexible रखो, जितनी ज़रूरत है। || यहाँ rule सीधी line थी, | तो degree 1{one} काफ़ी था। || क्योंकि flexible model के पास noise रटने की जगह बचती है। || तीसरा: ज़्यादा data दो। || वही degree 9{nine}, पर 100{hundred} points पर। | Training error 0.93{zero-point-nine-three}, | नए data पर 1.03{one-point-zero-three}। || अब वो रट नहीं पाता, | क्योंकि 100{hundred} points का noise एक curve में नहीं समाता, | तो उसे असली rule ही पकड़ना पड़ता है।",
-   "G": "@emph पर सरल model हमेशा नहीं जीतता। | अगर असली rule curved होता, तो सीधी line उसे पकड़ ही नहीं पाती, | ये underfitting है, यानी model बहुत सरल है। || और 1.04{one-point-zero-four} भी zero नहीं है: | noise की वजह से अच्छा model भी लगभग 1{one} से चूकता है।",
-   "H": "तो अगली बार कोई कहे, मेरा model 99{ninety-nine} percent है, | पहले पूछो: किस data पर?",
-   "I": "अब तुम बताओ: | एक model training पर 0.00{zero-point-zero-zero}, | और नए data पर 133{one-hundred-thirty-three} दे रहा है। | वो सीख रहा है या रट रहा है? || Comment में लिखो। || और रोज़ एक नया AI idea समझने के लिए, | follow कर लो।"
-  }
- },
- "hook_type": "surprising_fact"
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 6,
+    "B": 6,
+    "C": 6,
+    "D": 6,
+    "E": 6,
+    "F": 6,
+    "G": 6,
+    "H": 6,
+    "I": 6
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      "A",
+      1,
+      0.4
+    ],
+    [
+      "ok",
+      "A",
+      2,
+      1
+    ],
+    [
+      "err",
+      "A",
+      3,
+      1.6
+    ],
+    [
+      "pop",
+      "A",
+      7,
+      0.4
+    ],
+    [
+      "click",
+      "B",
+      2,
+      0.6
+    ],
+    [
+      "tick",
+      "B",
+      4,
+      1.3
+    ],
+    [
+      "lock",
+      "B",
+      5,
+      0.8
+    ],
+    [
+      "pop",
+      "B",
+      6,
+      0.3
+    ],
+    [
+      "pop",
+      "C",
+      1,
+      0.8
+    ],
+    [
+      "click",
+      "C",
+      2,
+      1.5
+    ],
+    [
+      "ok",
+      "C",
+      4,
+      1.2
+    ],
+    [
+      "tick",
+      "C",
+      5,
+      1.9
+    ],
+    [
+      "tick",
+      "C",
+      6,
+      1.3
+    ],
+    [
+      "ok",
+      "C",
+      8,
+      0.4
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0.2
+    ],
+    [
+      "ok",
+      "D",
+      3,
+      1.1
+    ],
+    [
+      "dip",
+      "D",
+      6,
+      0.3
+    ],
+    [
+      "err",
+      "D",
+      6,
+      0.7
+    ],
+    [
+      "click",
+      "D",
+      7,
+      2.3
+    ],
+    [
+      "err",
+      "D",
+      8,
+      0.6
+    ],
+    [
+      "click",
+      "E",
+      2,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      3,
+      1.4
+    ],
+    [
+      "tick",
+      "E",
+      4,
+      1.8
+    ],
+    [
+      "err",
+      "E",
+      4,
+      3
+    ],
+    [
+      "pop",
+      "E",
+      5,
+      0.4
+    ],
+    [
+      "err",
+      "E",
+      7,
+      1.5
+    ],
+    [
+      "ok",
+      "E",
+      8,
+      1.1
+    ],
+    [
+      "click",
+      "F",
+      0,
+      0.1
+    ],
+    [
+      "ok",
+      "F",
+      2,
+      0.7
+    ],
+    [
+      "err",
+      "F",
+      3,
+      1.6
+    ],
+    [
+      "click",
+      "F",
+      4,
+      0
+    ],
+    [
+      "click",
+      "F",
+      5,
+      1
+    ],
+    [
+      "tick",
+      "F",
+      6,
+      0.7
+    ],
+    [
+      "tick",
+      "F",
+      7,
+      0.7
+    ],
+    [
+      "ok",
+      "F",
+      8,
+      0.8
+    ],
+    [
+      "ok",
+      "F",
+      10,
+      0.5
+    ],
+    [
+      "err",
+      "G",
+      0,
+      1.1
+    ],
+    [
+      "pop",
+      "G",
+      2,
+      0.3
+    ],
+    [
+      "click",
+      "G",
+      3,
+      0.3
+    ],
+    [
+      "err",
+      "G",
+      4,
+      0
+    ],
+    [
+      "pop",
+      "H",
+      0,
+      1.2
+    ],
+    [
+      "dip",
+      "H",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "H",
+      1,
+      0.6
+    ],
+    [
+      "tick",
+      "I",
+      1,
+      1.1
+    ],
+    [
+      "err",
+      "I",
+      2,
+      0.9
+    ],
+    [
+      "pop",
+      "I",
+      3,
+      0.2
+    ],
+    [
+      "pop",
+      "I",
+      4,
+      0
+    ],
+    [
+      "pop",
+      "I",
+      5,
+      0
+    ],
+    [
+      "save",
+      "I",
+      6,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Overfitting क्या होता है? || सोचो एक student ने 10{ten} solved examples के answers रट लिए। | उन्हीं 10{ten} में पूरे marks, | पर exam में नया question आया, तो अटक गया। || Model भी ऐसा कर सकता है: | training data रट ले, यानी जिन examples से वो सीखता है, | और नए data पर फेल हो जाए। || यही overfitting है।",
+      "B": "मैंने इसे Python में चलाकर देखा। || एक छुपा हुआ rule है: | y equals 2{two} x plus 1{one}, | मतलब x बढ़ेगा, तो y double होकर एक add करेगा, | और हर point में थोड़ा noise, यानी random गड़बड़ी। || Model को rule नहीं बताया, सिर्फ़ 10{ten} points दिए। || और error यानी model की average गलती: | उसकी prediction असली value से औसतन कितनी दूर रही।",
+      "C": "पहले एक simple model देखते हैं। | Graph में ये dots actual data हैं। | Model ने इनके बीच एक सीधी line बनाई। | Line हर dot को exactly touch नहीं कर रही, | लेकिन overall pattern पकड़ रही है। | अब training data पर error है 0.87{zero-point-eight-seven}। | और बिल्कुल नए data पर 1.04{one-point-zero-four}। | मतलब model ने सिर्फ़ examples याद नहीं किए, | उसने pattern सीखा।",
+      "D": "अब model को बोलो कि हर dot से होकर गुज़रो। | देखो, line अब टेढ़ी-मेढ़ी हो गई! | Training के सारे dots touch हो गए, | इसलिए training error zero। | लेकिन dots के बीच model अजीब तरह से ऊपर-नीचे हो रहा है। | अब नए data पर test किया… | Error निकला 133{one-hundred-thirty-three}! | मतलब model ने असली pattern के साथ random noise भी याद कर लिया। | ये learning नहीं, overfitting है।",
+      "E": "अब ये गड़बड़ पकड़ें कैसे? || पहला: training और नए data का error, दोनों साथ में देखो। || Degree 1{one} से 9{nine} तक, | training error गिरता गया: 0.87{zero-point-eight-seven} से 0.00{zero-point-zero-zero}। | और नए data का error बढ़ता गया: 1.04{one-point-zero-four} से 133{one-hundred-thirty-three}। || यही overfitting की निशानी है: | training में zero के पास, नए data पर बहुत बड़ा। | इसीलिए सिर्फ़ training score पर भरोसा मत करो, | score उस data पर देखो जो model ने सीखते समय देखा ही नहीं।",
+      "F": "दूसरा: model को उतना ही flexible रखो, जितनी ज़रूरत है। || यहाँ rule सीधी line थी, | तो degree 1{one} काफ़ी था। || क्योंकि flexible model के पास noise रटने की जगह बचती है। || तीसरा: ज़्यादा data दो। || वही degree 9{nine}, पर 100{hundred} points पर। | Training error 0.93{zero-point-nine-three}, | नए data पर 1.03{one-point-zero-three}। || अब वो रट नहीं पाता, | क्योंकि 100{hundred} points का noise एक curve में नहीं समाता, | तो उसे असली rule ही पकड़ना पड़ता है।",
+      "G": "@emph पर सरल model हमेशा नहीं जीतता। | अगर असली rule curved होता, तो सीधी line उसे पकड़ ही नहीं पाती, | ये underfitting है, यानी model बहुत सरल है। || और 1.04{one-point-zero-four} भी zero नहीं है: | noise की वजह से अच्छा model भी लगभग 1{one} से चूकता है।",
+      "H": "तो अगली बार कोई कहे, मेरा model 99{ninety-nine} percent है, | पहले पूछो: किस data पर?",
+      "I": "अब तुम बताओ: | एक model training पर 0.00{zero-point-zero-zero}, | और नए data पर 133{one-hundred-thirty-three} दे रहा है। | वो सीख रहा है या रट रहा है? || Comment में लिखो। || और रोज़ एक नया AI idea समझने के लिए, | follow कर लो।"
+    }
+  },
+  "hook_type": "surprising_fact",
+  "prime": "सुनो, ये बहुत interesting है!"
 }
