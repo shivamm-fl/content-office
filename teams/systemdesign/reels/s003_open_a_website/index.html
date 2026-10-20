@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Website kholte hi andar kya hota hai</title>
+    <title>What Happens When You Open a Website</title>
     <script src="assets/gsap.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="kit/motion.css" />
@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="109" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -33,6 +33,12 @@
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
         <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,18 +47,178 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="109" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="109" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="109" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "SYSTEM DESIGN" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
-      const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G"], tag: "SYSTEM DESIGN · DAY 003 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { (Array.isArray(d) ? d : [d]).forEach((x) => tl.to(x, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t)); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const kick = (host, txt, t) => show(el(host, `left:0;width:1080px;text-align:center;top:196px;font:700 46px var(--code);letter-spacing:.14em;color:${ACC}`, txt), t, { opacity: 0, y: 0 });
+      const lab = (host, x, y, w, col, txt, t, size) => show(el(host, `left:${x}px;width:${w}px;text-align:center;top:${y}px;font:700 ${size || 40}px var(--code);letter-spacing:.06em;color:${col};white-space:nowrap`, txt), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx - 260}px;width:520px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      // TIME strip: five segments, the first n-1 already full, segment n fills at t
+      const strip = (host, n, t0, t) => { const out = [];
+        out.push(lab(host, 60, 262, 150, "#8592AD", "TIME", t0, 36));
+        for (let i = 0; i < 5; i++) { const x = 215 + i * 162;
+          const s = el(host, `left:${x}px;top:270px;width:148px;height:26px;border-radius:10px;border:2.5px solid rgba(133,146,173,.6);background:rgba(133,146,173,.1)`); show(s, t0, { opacity: 0, y: 0 }); out.push(s);
+          if (i < n - 1) { const f = el(host, `left:${x + 3}px;top:273px;width:142px;height:20px;border-radius:7px;background:${M.ca(ACC, 0.9)}`); show(f, t0, { opacity: 0, y: 0 }); out.push(f); }
+          if (i === n - 1) { const f = el(host, `left:${x + 3}px;top:273px;width:142px;height:20px;border-radius:7px;background:${M.ca(HOT, 0.9)};transform-origin:0 50%`);
+            tl.set(f, { opacity: 0, scaleX: 0 }, 0); tl.to(f, { opacity: 1, scaleX: 1, duration: 0.9, ease: "power2.out", immediateRender: false }, t); out.push(f); } }
+        return out; };
 
-      M.finish();   // LAST: captions
+      // ===== A: hook, slow site, 5 jobs =====
+      // diagram: A
+      M.hook(["Website slow hai?", "Tum chhod dete ho"], { size: 96, top: 250 });
+      const bw = panel(A, 110, 520, 860, 480, CYAN, null); show(bw, 0.05, { opacity: 0, y: 0 });
+      el(A, "left:110px;top:520px;width:860px;height:84px;border-radius:24px 24px 0 0;background:rgba(150,175,215,.14)");
+      [0, 1, 2].forEach((i) => el(A, `left:${150 + i * 44}px;top:550px;width:24px;height:24px;border-radius:50%;background:${[HOT, ACC, GOOD][i]}`));
+      el(A, "left:290px;top:540px;width:640px;height:46px;border-radius:23px;background:rgba(14,18,30,.9);border:2px solid rgba(150,175,215,.4);font:600 34px var(--code);color:#E8EDF6;line-height:42px;padding-left:24px;white-space:nowrap", "shop.com");
+      const spin = M.icon(A, "clock", 440, 680, 200, HOT); spin.show(0.2);
+      const barT = el(A, "left:190px;top:930px;width:700px;height:30px;border-radius:15px;border:2.5px solid rgba(133,146,173,.7)");
+      const barF = el(A, `left:194px;top:934px;width:692px;height:22px;border-radius:11px;background:${M.ca(HOT, 0.9)};transform-origin:0 50%`);
+      tl.set(barF, { scaleX: 0.08 }, 0); tl.to(barF, { scaleX: 0.5, duration: 2.6, ease: "power1.out", immediateRender: false }, 0.3);
+      [0, 1, 2, 3, 4].forEach((i) => { const c = el(A, `left:${95 + i * 180}px;top:1080px;width:150px;height:150px;border-radius:50%;border:4px solid ${M.ca(ACC, 0.9)};background:${M.ca(ACC, 0.12)};text-align:center;font:800 90px var(--lat);line-height:150px;color:#E8EDF6`, String(i + 1));
+        show(c, at("A", "5") + i * 0.14, { opacity: 0, scale: 0.7 }); });
+      lab(A, 60, 1250, 960, ACC, "5 JOBS", at("A", "kaam", 0), 48);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: courier parcel analogy =====
+      // diagram: B
+      kick(B, "COURIER PARCEL", M.S.B + 0.1);
+      const bt = [["ADDRESS", "globe", "address", 0], ["CALL", "chat", "call", 0], ["ORDER", "doc", "order", 0], ["BOX", "image", "box", 0]].map(([l, ic, w, n], i) =>
+        M.box(B, { x: 90 + (i % 2) * 470, y: 330 + Math.floor(i / 2) * 330, w: 440, h: 300, label: l, icon: ic, color: i === 3 ? GOOD : CYAN, size: 54 }));
+      bt.forEach((b, i) => b.show(at("B", ["address", "call", "order", "box"][i])));
+      const ex = [0, 1, 2].map((i) => { const b = el(B, `left:${150 + i * 280}px;top:1040px;width:220px;height:170px;border-radius:18px;border:3px solid ${M.ca(ACC, 0.9)};background:${M.ca(ACC, 0.14)};display:flex;align-items:center;justify-content:center;font:700 42px var(--code);color:${ACC}`, "BOX");
+        show(b, at("B", "alag-alag") + i * 0.35, { opacity: 0, y: -50 }); return b; });
+      lab(B, 60, 985, 960, ACC, "EXTRA, SEPARATE", at("B", "extra"), 44);
+      const bb = M.pill(B, "BROWSER = SAME", at("B", "Browser"), { x: 330, y: 1250, kind: "acc", size: 40 });
+      M.fit(B);
+
+      // ===== C: step 1, DNS =====
+      // diagram: C
+      kick(C, "STEP 1/5 · ADDRESS", M.S.C + 0.1); strip(C, 1, M.S.C + 0.15, at("C", "dhoondhna"));
+      const sb = el(C, `left:140px;top:360px;width:800px;height:110px;border-radius:55px;border:3px solid rgba(150,175,215,.5);background:rgba(14,18,30,.9);font:700 62px var(--code);color:#E8EDF6;line-height:104px;padding-left:50px;white-space:nowrap;overflow:hidden`);
+      show(sb, M.S.C + 0.3, { opacity: 0, y: 0 });
+      const typed = "shop.com"; const tspan = el(sb, "left:50px;top:0;white-space:nowrap", ""); tl.set(tspan, { opacity: 0 }, 0);
+      const cnt = { u: 0 }; tl.set(tspan, { opacity: 1 }, at("C", "taaip")); tl.to(cnt, { u: typed.length, duration: 0.6, ease: "none", onUpdate: () => { tspan.textContent = typed.slice(0, Math.round(cnt.u)); }, immediateRender: false }, at("C", "taaip"));
+      const dn = show(panel(C, 140, 590, 800, 330, CYAN, null), at("C", "naam", 0));
+      const hd1 = el(dn, "left:0;width:800px;top:20px;text-align:center;font:700 40px var(--code);color:#5BC0EB;letter-spacing:.08em", "NAME → NUMBER");
+      const hd2 = el(dn, `left:0;width:800px;top:20px;text-align:center;font:700 40px var(--code);color:${ACC};letter-spacing:.08em`, "DNS LOOKUP"); tl.set(hd2, { opacity: 0 }, 0);
+      tl.to(hd1, { opacity: 0, duration: 0.25, immediateRender: false }, at("C", "DNS")); tl.to(hd2, { opacity: 1, duration: 0.3, immediateRender: false }, at("C", "DNS"));
+      el(dn, "left:30px;top:100px;width:740px;height:2px;background:rgba(150,175,215,.3)");
+      el(dn, "left:50px;top:160px;font:700 60px var(--code);color:#E8EDF6;white-space:nowrap", "shop.com");
+      const qm = el(dn, `left:440px;top:150px;width:320px;text-align:center;font:800 76px var(--code);color:${ACC}`, "?"); show(qm, at("C", "nahi"), { opacity: 0, scale: 0.8 });
+      const ipv = el(dn, `left:400px;top:168px;width:380px;text-align:center;font:700 50px var(--code);color:${GOOD};white-space:nowrap`, "203.0.113.7"); show(ipv, at("C", "IP"), { opacity: 0, y: 0 });
+      tl.to(qm, { opacity: 0, duration: 0.2, immediateRender: false }, at("C", "IP"));
+      lab(C, 100, 945, 520, GOOD, "IP ADDRESS", at("C", "IP"), 48);
+      M.pill(C, "EXAMPLE", at("C", "IP") + 0.2, { x: 150, y: 1005, kind: "out", size: 40 });
+      const sv = M.box(C, { x: 280, y: 1080, w: 520, h: 200, label: "SERVER", icon: "chip", sub: "", color: CYAN, size: 50 });
+      sv.show(at("C", "server")); const sa = M.arrow(C, { from: [740, 925], to: [740, 1080], color: ACC, w: 10 }); sa.show(at("C", "number")); sa.travel(at("C", "IP"), 0.7, "#fff");
+      M.fit(C);
+
+      // ===== D: step 2, connection =====
+      // diagram: D
+      kick(D, "STEP 2/5 · CONNECT", M.S.D + 0.1); strip(D, 2, M.S.D + 0.15, at("D", "connection"));
+      const dB = M.box(D, { x: 270, y: 350, w: 540, h: 210, label: "BROWSER", icon: "globe", color: CYAN, size: 54 }); dB.show(M.S.D + 0.3);
+      const dS = M.box(D, { x: 270, y: 1040, w: 540, h: 210, label: "SERVER", icon: "chip", color: CYAN, size: 54 }); dS.show(M.S.D + 0.45);
+      const dl = M.arrow(D, { from: [400, 570], to: [400, 1035], color: ACC, w: 10 }), dr = M.arrow(D, { from: [680, 1035], to: [680, 570], color: GOOD, w: 10 });
+      dl.show(at("D", "connect")); dr.show(at("D", "connect") + 0.2);
+      dl.travel(at("D", "kai"), 0.7, "#fff"); dr.travel(at("D", "kai") + 0.7, 0.7, "#fff"); dl.travel(at("D", "aage-peechhe") + 0.4, 0.7, "#fff"); dr.travel(at("D", "aage-peechhe") + 1.1, 0.7, "#fff");
+      const pg = el(D, `left:440px;top:700px;width:200px;height:250px;border-radius:16px;border:4px dashed rgba(133,146,173,.8)`); show(pg, at("D", "abhi"), { opacity: 0, y: 0 });
+      el(pg, `left:0;width:200px;top:50px;text-align:center;font:800 130px var(--lat);color:#6F7C99`, "?");
+      const pgx = M.icon(D, "cross", 490, 1000 - 120, 100, HOT); pgx.show(at("D", "nahi"));
+      lab(D, 190, 1280, 700, HOT, "NO PAGE YET", at("D", "nahi"), 48);
+      M.fit(D);
+
+      // ===== E: step 3, request and HTML =====
+      // diagram: E
+      kick(E, "STEP 3/5 · REQUEST", M.S.E + 0.1); strip(E, 3, M.S.E + 0.15, at("E", "request"));
+      const eB = M.box(E, { x: 270, y: 350, w: 540, h: 200, label: "BROWSER", icon: "globe", color: CYAN, size: 54 }); eB.show(M.S.E + 0.3);
+      const eS = M.box(E, { x: 270, y: 1080, w: 540, h: 200, label: "SERVER", icon: "chip", color: CYAN, size: 54 }); eS.show(M.S.E + 0.45);
+      const eq = M.arrow(E, { from: [150, 580], to: [150, 1070], color: ACC, w: 11 }), er = M.arrow(E, { from: [930, 1070], to: [930, 580], color: GOOD, w: 11 });
+      eq.show(at("E", "HTTP")); eq.travel(at("E", "bhejta"), 0.8, "#fff");
+      lab(E, 10, 460, 260, ACC, "REQUEST", at("E", "HTTP"), 34);
+      er.show(at("E", "jawab@".replace("@", ""), 1)); er.travel(at("E", "HTML"), 0.8, "#fff");
+      lab(E, 810, 460, 260, GOOD, "HTML", at("E", "HTML"), 38);
+      const hp = show(panel(E, 270, 620, 540, 400, GOOD, "HTML"), at("E", "HTML", 1));
+      [["TEXT", "text", "text"], ["IMAGES", "image", "images"], ["SCRIPTS", "code", "scripts"]].forEach(([l, ic, w], i) => {
+        const r = el(hp, `left:40px;top:${110 + i * 90}px;width:460px;height:76px;display:flex;align-items:center;font:700 44px var(--code);color:#E8EDF6;gap:22px`, `<svg width="56" height="56" viewBox="0 0 64 64">${Viz.ICONS[ic](i === 0 ? "#E8EDF6" : ACC)}</svg>${l}`);
+        show(r, at("E", w), { opacity: 0, x: 30 }); });
+      M.fit(E);
+
+      // ===== F: step 4 extra files, step 5 assemble =====
+      // diagram: F
+      const k4 = [kick(F, "STEP 4/5 · EXTRA FILES", M.S.F + 0.1), ...strip(F, 4, M.S.F + 0.15, at("F", "baaki"))];
+      const fh = M.box(F, { x: 340, y: 340, w: 400, h: 170, label: "HTML", icon: "doc", color: GOOD, size: 52 }); fh.show(at("F", "HTML"));
+      const cards = [["IMAGE", "image", "images"], ["STYLE", "gear", "styles"], ["SCRIPT", "code", "scripts"]].map(([l, ic, w], i) => {
+        const b = M.box(F, { x: 50 + i * 345, y: 640, w: 300, h: 230, label: l, icon: ic, color: ACC, size: 40 }); b.show(at("F", w));
+        const a = M.arrow(F, { from: [540, 515], to: [200 + i * 345, 635], color: ACC, w: 8 }); a.show(at("F", w) + 0.1); return [b, a]; });
+      const fs = M.box(F, { x: 270, y: 1080, w: 540, h: 190, label: "SERVER", icon: "chip", color: CYAN, size: 50 }); fs.show(at("F", "har"));
+      const reqs = [0, 1, 2].map((i) => { const a = M.arrow(F, { from: [200 + i * 345, 875], to: [340 + i * 200, 1075], color: HOT, w: 8 }); a.show(at("F", "nayi") + i * 0.2); a.travel(at("F", "request") + i * 0.2, 0.6, "#fff"); return a; });
+      const nrl = lab(F, 60, 985, 960, HOT, "NEW REQUESTS", at("F", "nayi"), 44);
+      const t1 = at("F", "maan") - 0.15; gone(nrl, t1);
+      gone([fh.el, fh.parts[1], fs.el, fs.parts[1]].filter(Boolean), t1); cards.forEach(([b, a]) => { b.hide(t1); a.hide(t1); }); reqs.forEach((a) => a.hide(t1));
+      // the requests label dies with the cards
+      // dozens of files grid
+      const exp = M.pill(F, "EXAMPLE", at("F", "maan"), { x: 395, y: 330, kind: "out", size: 40 });
+      const g1 = M.box(F, { x: 300, y: 430, w: 480, h: 170, label: "1 HTML", icon: "doc", color: GOOD, size: 50 }); g1.show(at("F", "pahli"));
+      const gts = []; for (let i = 0; i < 18; i++) { const c = [CYAN, ACC, VIOLET][i % 3]; const tt = el(F, `left:${130 + (i % 6) * 135}px;top:${690 + Math.floor(i / 6) * 135}px;width:112px;height:112px;border-radius:18px;border:3px solid ${M.ca(c, 0.9)};background:${M.ca(c, 0.18)}`);
+        show(tt, at("F", "darjnon") + i * 0.07, { opacity: 0, scale: 0.6 }); gts.push(tt); }
+      const gl = lab(F, 60, 1115, 960, ACC, "DOZENS MORE", at("F", "darjnon"), 48);
+      const t2 = at("F", "paanchvan") - 0.1;
+      gone(gts, t2); gone(k4, t2); gone(gl, t2); g1.hide(t2); gone(exp, t2);
+      // step 5 assemble
+      const kick5 = kick(F, "STEP 5/5 · BUILD PAGE", t2 + 0.1);
+      const wf = show(panel(F, 140, 420, 800, 760, CYAN, null), at("F", "paanchvan"), { opacity: 0, y: 0 });
+      const piece = (x, y, w, h, col, t, r) => show(el(F, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${r || 14}px;background:${M.ca(col, 0.35)};border:3px solid ${M.ca(col, 0.9)}`), t, { opacity: 0, scale: 0.9 });
+      piece(180, 460, 720, 90, VIOLET, at("F", "ye", 0));
+      piece(180, 580, 720, 300, ACC, at("F", "sab"));
+      [0, 1, 2].forEach((i) => piece(180, 910 + i * 70, 720 - i * 160, 40, CYAN, at("F", "jodkar") + i * 0.15, 10));
+      piece(600, 1060, 300, 90, GOOD, at("F", "page", 0));
+      stamp(F, "PAGE READY", 540, 1220, GOOD, at("F", "dikhta"), 50);
+      strip(F, 5, at("F", "paanchvan"), at("F", "kaam", 1));
+      M.fit(F);
+
+      // ===== G: reads early, where did the time go, comment close =====
+      // diagram: G
+      const gk = kick(G, "READS AS IT ARRIVES", M.S.G + 0.1);
+      const gb = el(G, "left:140px;top:340px;width:800px;height:44px;border-radius:22px;border:3px solid rgba(133,146,173,.7)"); show(gb, M.S.G + 0.2, { opacity: 0, y: 0 });
+      const gl1 = lab(G, 140, 290, 800, GOOD, "HTML ARRIVING", M.S.G + 0.25, 36);
+      const gf = el(G, `left:146px;top:346px;width:788px;height:32px;border-radius:16px;background:${M.ca(GOOD, 0.9)};transform-origin:0 50%`);
+      tl.set(gf, { scaleX: 0, opacity: 0 }, 0); tl.set(gf, { opacity: 1 }, M.S.G + 0.3); tl.to(gf, { scaleX: 1, duration: 5, ease: "none", immediateRender: false }, at("G", "poori"));
+      const gwf = panel(G, 140, 440, 800, 760, CYAN, null); show(gwf, M.S.G + 0.3, { opacity: 0, y: 0 });
+      const gp = (x, y, w, h, col, t, r) => show(el(G, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${r || 14}px;background:${M.ca(col, 0.35)};border:3px solid ${M.ca(col, 0.9)}`), t, { opacity: 0, scale: 0.9 });
+      const gsc = [gp(180, 480, 720, 90, VIOLET, at("G", "jitni")), gp(180, 600, 720, 300, ACC, at("G", "utni")), gp(180, 930, 560, 40, CYAN, at("G", "padhna")), gp(180, 1000, 400, 40, CYAN, at("G", "shuru")), gp(600, 1080, 300, 90, GOOD, at("G", "deta"))];
+      const t3 = at("G", "har") - 0.1;
+      gone([gb, gf, gwf, gl1, gk, ...gsc], t3);
+      const rows = [["1  DNS", "globe"], ["2  CONNECT", "chat"], ["3  REQUEST", "doc"], ["4  FILES", "image"], ["5  DRAW", "code"]];
+      const rr = rows.map(([l, ic], i) => { const r = show(panel(G, 130, 330 + i * 175, 820, 150, CYAN, null), at("G", "kaam", 0) + i * 0.08);
+        el(r, `left:40px;top:34px;font:700 54px var(--code);color:#E8EDF6;white-space:nowrap`, l);
+        const c = M.icon(r, ic, 640, 40, 70, ACC); c.show(at("G", "kaam", 0) + i * 0.08 + 0.1);
+        const k = M.icon(r, "clock", 730, 40, 70, "#8592AD"); k.show(at("G", "time", 1) + i * 0.08); return r; });
+      const mg = M.icon(G, "search", 760, 1110, 150, HOT); mg.show(at("G", "kahan"));
+      const gl2 = lab(G, 140, 1230, 500, HOT, "WHERE?", at("G", "kahan"), 48);
+      const t4 = at("G", "ab") - 0.1;
+      gone(rr, t4); mg.hide(t4); gone(gl2, t4);
+      const cc = show(panel(G, 120, 330, 840, 620, CYAN, "COMMENT KARO"), at("G", "ab"));
+      [["1 · DNS", "DNS"], ["2 · REQUEST", "request"]].forEach(([l, w], i) => M.pill(cc, l, at("G", w), { x: 270 + (i ? 20 : 0), y: 200 + i * 130, kind: "out", size: 44 }));
+      show(el(cc, "left:40px;right:40px;bottom:36px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 30px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("G", "Comment") - 0.1, { opacity: 0 });
+      const fb = M.pill(G, "+  FOLLOW", at("G", "follow") - 0.4, { x: 400, y: 1035, kind: "acc", size: 40 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("G", "follow"));
+      M.fit(G);
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G);
+      M.finish({ kw: { slow: "hot", chhod: "hot", address: "cyan", DNS: "gold", IP: "gold", connection: "cyan", HTTP: "gold", HTML: "good", request: "gold", images: "cyan", scripts: "cyan", time: "hot", "5": "gold" } });
       window.__timelines["main"] = tl;   // register (must stay literal for the linter)
     </script>
   </body>

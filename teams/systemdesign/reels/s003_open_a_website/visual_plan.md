@@ -1,8 +1,14 @@
-# Visual plan: write this BEFORE editing index.html (rules: docs-notes/diagram-first-visuals.md)
+# Visual plan: s003 What happens when you open a website (rules: docs-notes/diagram-first-visuals.md)
 
-Idea in one line:
-The picture that explains it with the sound off (from the queue item's visual_idea, improved if you can):
+Idea in one line: a path of five stops between the browser and the server, each stop adds time; a TIME strip of five segments fills one segment per stop.
+The picture that explains it with the sound off: a browser on top, a server below, and between them the five jobs drawn as real objects (typed address, contact list, messages going back and forth, a request arrow with an HTML card coming back, extra cards flying in, a page being assembled).
 
 | Scene | Spoken (short) | The picture: what is drawn, what moves, what changes (at least six words) | On-screen labels (1-3 words each) | Built with (helper names or custom) |
 |---|---|---|---|---|
-| A |  |  |  |  |
+| A | slow site, you leave; 5 jobs, each takes time | A browser window with a half-filled loading bar and a clock; five numbered circles pop in a row under it | SHOP.COM, 1 to 5 | custom panel + M.icon clock + circles |
+| B | courier parcel: address, call, order, box, extra deliveries | Four big tiles (address pin, phone call, order paper, box) in a 2x2 grid, then three small extra boxes arrive one by one underneath | ADDRESS, CALL, ORDER, BOX, EXTRA | M.box x4, small custom boxes, M.icon |
+| C | step 1: name to IP number, DNS lookup | Search bar types shop.com; a contact-list card has the name and a question mark that turns into the number; an arrow carries the number to the server box; time strip fills segment 1 | SHOP.COM, IP ADDRESS, DNS | custom bar + panel + M.box + M.arrow, strip |
+| D | step 2: connect, messages go back and forth | Browser box on top, server box at the bottom, a dot travels down, up, down, up between them; a dashed empty page card in the middle gets a cross: not asked yet | BROWSER, SERVER, NO PAGE YET | M.box x2, M.arrow travel, dashed doc icon, strip |
+| E | step 3: HTTP request, HTML comes back | Request arrow goes down to the server, an HTML card comes back up and opens into three rows: text, images, scripts | REQUEST, HTML, TEXT, IMAGES, SCRIPTS | M.box, M.arrow travel, custom panel with rows, strip |
+| F | step 4 extra files, step 5 assemble | HTML card sends three arrows to image, style and script cards; then a grid of many tiles (one HTML, dozens of files); then a page wireframe fills piece by piece and a PAGE stamp lands | IMAGE, STYLE, SCRIPT, DOZENS, EXAMPLE, PAGE | custom cards, M.arrow, tile grid, wireframe, strip |
+| G | browser reads as HTML arrives; find where time went; comment | A bar fills with arriving HTML while a page wireframe draws at the same time; then five job rows with clocks and a magnifier; then a COMMENT card with DNS and REQUEST options and a FOLLOW pill | READS EARLY, 1 DNS, 2 CONNECT, 3 REQUEST, 4 FILES, 5 DRAW, COMMENT KARO | custom bars/rows, M.icon, comment recipe 11 |

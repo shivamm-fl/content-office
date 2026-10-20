@@ -1,48 +1,49 @@
 {
- "tts": "edge",
- "voice": "hi-IN-SwaraNeural",
- "pace": 1.26,
- "audio": "v2",
- "owner_model": "eleven_flash_v2_5",
- "owner_tempo": 0.9,
- "tone": "calm",
- "scenes": [
-  "A",
-  "B",
-  "C",
-  "D",
-  "E",
-  "F",
-  "G"
- ],
- "min": {
-  "A": 6.0,
-  "B": 6.0,
-  "C": 6.0,
-  "D": 6.0,
-  "E": 6.0,
-  "F": 6.0,
-  "G": 6.0
- },
- "tail": {},
- "cues": [
-  [
-   "impact",
-   null,
-   null,
-   0.05
-  ]
- ],
- "copy": {
-  "hi": {
-   "A": "@hook वेबसाइट slow हो, | तो तुम तुरंत छोड़ देते हो। || Enter दबाने से page दिखने तक 5{पाँच} काम होते हैं, | और हर काम में time लगता है।",
-   "B": "Courier से parcel मँगवाने जैसा सोचो। || पहले दुकान का address ढूँढते हो, | फिर call करके बात जोड़ते हो, | फिर order देते हो, | और दुकान से box आता है। || उस box में लिखा extra सामान, | अलग-अलग delivery में आता है। || Browser भी यही करता है।",
-   "C": "पहला काम: address ढूँढना। || तुमने टाइप किया shop.com। | Browser को नाम नहीं, server का number चाहिए, | जिसे बोलते हैं IP address। || नाम से number ढूँढने का ये काम है DNS lookup। | Phone की contact list जैसा: | नाम दो, number लो।",
-   "D": "दूसरा काम: connection। || Browser server से connect होता है, | और इसमें messages कई बार आगे-पीछे जाते हैं। || मज़ेदार बात: | अभी तक page माँगा भी नहीं गया।",
-   "E": "तीसरा काम: request और जवाब। || Browser HTTP request भेजता है: | मुझे ये page दो। || Server जवाब में HTML भेजता है। || HTML यानी page का ढाँचा: | text, और ये list कि कौन सी images और scripts चाहिए।",
-   "F": "चौथा काम: बाकी सामान। || Browser HTML पढ़ता है, | और उसमें जो भी लिखा है, | images, styles और scripts, | हर एक के लिए नई request भेजता है। || मान लो एक shopping site है: | पहली request HTML की, | फिर दर्जनों images और scripts की। || पाँचवाँ काम: ये सब जोड़कर page बनाना, | और तब तुम्हें page दिखता है।",
-   "G": "@emph Browser HTML पूरी आने का इंतज़ार नहीं करता, | जितनी आई, उतनी पढ़ना शुरू कर देता है। || हर काम में time लगता है, | इसलिए slow page में पहले ये देखो कि time कहाँ गया। || अब बताओ: | इन 5{पाँच} कामों में सबसे पहला कौन सा है, | DNS या request? | Comment में लिखो। || ऐसे ही रोज़ एक system design idea के लिए follow करो।"
-  }
- },
- "hook_type": "relatable_stake"
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 5,
+    "B": 5,
+    "C": 5,
+    "D": 5,
+    "E": 5,
+    "F": 5,
+    "G": 5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook वेबसाइट slow हो, | तो तुम तुरंत छोड़ देते हो। || Enter दबाने से page दिखने तक | 5{पाँच} काम होते हैं, | और हर काम में time लगता है।",
+      "B": "Courier से parcel मँगवाने जैसा सोचो। || पहले दुकान का address ढूँढते हो, | फिर call करके बात जोड़ते हो, | फिर order देते हो, | और दुकान से box आता है। || उस box में लिखा extra सामान, | अलग-अलग delivery में आता है। || Browser भी यही करता है।",
+      "C": "पहला काम: address ढूँढना। || तुमने टाइप किया shop.com। || Browser को नाम नहीं, | server का number चाहिए, | जिसे बोलते हैं IP address। || नाम से number ढूँढने का ये काम है DNS lookup। || Phone की contact list जैसा: | नाम दो, number लो।",
+      "D": "दूसरा काम: connection। || Browser server से connect होता है, | और इसमें messages कई बार आगे-पीछे जाते हैं। || मज़ेदार बात: | अभी तक page माँगा भी नहीं गया।",
+      "E": "तीसरा काम: request और जवाब। || Browser HTTP request भेजता है: | मुझे ये page दो। || Server जवाब में HTML भेजता है। || HTML यानी page का ढाँचा: | text, और ये list कि कौन सी images और scripts चाहिए।",
+      "F": "चौथा काम: बाकी सामान। || Browser HTML पढ़ता है, | और उसमें जो भी लिखा है, | images, styles और scripts, | हर एक के लिए नई request भेजता है। || मान लो एक shopping site है: | पहली request HTML की, | फिर दर्जनों images और scripts की। || पाँचवाँ काम: | ये सब जोड़कर page बनाना, | और तब तुम्हें page दिखता है।",
+      "G": "@emph Browser HTML पूरी आने का इंतज़ार नहीं करता, | जितनी आई, उतनी पढ़ना शुरू कर देता है। || हर काम में time लगता है, | इसलिए slow page में पहले ये देखो कि time कहाँ गया। || अब बताओ: | इन 5{पाँच} कामों में सबसे पहला कौन सा है, | DNS या request? | Comment में लिखो। || ऐसे ही रोज़ एक system design idea के लिए follow करो।"
+    }
+  },
+  "hook_type": "relatable_stake",
+  "prime": "सुनो, ये बहुत interesting है!"
 }
