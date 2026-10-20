@@ -83,6 +83,15 @@ def main(rid, skip_review=False):
     chk("cover 1080x1920", cv.stdout.strip() == "1080,1920", cv.stdout.strip())
     spec = json.loads((folder / "spec.json").read_text(encoding="utf-8"))
     chk("hindi-only spec", list(spec.get("copy", {}).keys()) == ["hi"], list(spec.get("copy", {}).keys()))
+    sys.path.insert(0, str(ROOT.parents[1] / "runner/scripts"))
+    try:
+        import script_lock   # the owner's own script is locked: the reel must say his words, not a rewrite (runner/scripts/script_lock.py)
+    except ImportError:
+        script_lock = None
+    if script_lock:
+        locked, lock_text = script_lock.locked_script(ROOT, rid)
+        if locked:
+            chk("narration is the owner's locked script", *(script_lock.compare(lock_text, spec) if lock_text is not None else (False, "the locked script file is missing")))
     ok_hook, hook_detail = hook_check(cap)
     chk("hook (Roman caption line 1): no DEALBREAKER", ok_hook, hook_detail)
     terms = tech_terms(spec)

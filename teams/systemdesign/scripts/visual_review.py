@@ -29,6 +29,10 @@ def claude(prompt, tools):
     exe = shutil.which("claude") or str(Path.home() / ".local" / "bin" / "claude")
     r = subprocess.run([exe, "-p", prompt, "--model", MODEL, "--allowedTools", tools, "--permission-mode", "acceptEdits"],
                        capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=ROOT)
+    if r.returncode != 0 or not r.stdout.strip():
+        # the reviewer returned nothing: say why in the log (a usage limit, a login problem and a crash look the same from outside)
+        tail = lambda t: " ".join((t or "").split())[-300:]  # noqa: E731
+        print(f"claude reviewer: exit {r.returncode}; stderr: {tail(r.stderr)!r}; stdout: {tail(r.stdout)!r}")
     return r.stdout
 
 

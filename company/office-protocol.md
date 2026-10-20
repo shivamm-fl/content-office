@@ -34,3 +34,10 @@ The team's one goal is to **grow the handle**: more people who watch a reel to t
 - Work only inside this team folder. Do not commit or push: the runner saves your files when the session ends. Changes to `.claude/`, `CLAUDE.md` or `prompts/` become a proposal for the owner. Never edit `state/learnings.md` by hand: what the owner corrects goes in with `record_learning` (their own words are the authority, no card), and a rule from our numbers goes through `request_approval` with kind `learning` (the exact section to append; the office appends it when the owner approves). `state/team_playbook.md`, `state/experiments.md` and `state/growth_notes.md` you may edit freely; they are saved with the rest of your files.
 - Item ids in the office start at 101 per track (e101, r101, q101) and go up; never reuse an id from ai-course.
 - The session may end when the owner is idle. Before you finish a piece of work, write down where things stand (the item's files and a one-paragraph summary in your last message).
+
+## Sessions, files and hand-overs
+- **Your files live in your session until it ends.** The runner saves them afterwards. Another desk, a task card or the studio started meanwhile sees the repository as it was when it began. Never tell a teammate "use the file I wrote": put the text in the message (or in `request_build`'s `script`).
+- **Reels are built by the studio only.** A desk session never creates or edits `reels/`, `brand/covers/`, `social/`: the save step keeps those files off main and tells the owner. Hand the item to the studio with `request_build`.
+- **The owner's wording is locked** (`script_locked` on the queue item, `state/scripts/<id>.txt`). Rework patches that file; it never replaces it with a scriptwriter draft. The gate fails a reel whose narration differs from it.
+- **If the office says files were not saved to main**, say so to the owner in your next message and name the files; do not hide it.
+- **HQ (the company floor)** is the only floor that sees the whole repository. Its agents investigate failures and change code, UI, floors, agents and rules, always as a proposal the owner approves in the Proposals tab.

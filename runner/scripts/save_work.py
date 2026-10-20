@@ -7,7 +7,12 @@ Runs in a fresh checkout of main, never on the machine where the agent worked. T
 - the shared state files (queue, covered, phase5_status) are merged item by item with what other desks
   saved meanwhile, so two desks working at the same time never lose each other's items;
 - rules, prompts, agents, skills, scripts and the team's settings go to branch proposal/<run> for the owner;
-- any other content file that changed on main since the session started also goes to the proposal branch;
+- any other content file that changed on main since the session started is merged line by line with what main has now (git merge-file);
+  only when the same lines changed on both sides does it go to the proposal branch, and then the office is told loudly (`diverted`);
+- a desk session (--profile desk) may not write a reel's files (reels/, brand/covers/, social/): the studio is their only writer, so those go
+  to the proposal branch too, and a studio save wins over main for a reel's own files (two studio sessions of one reel never overlap, the office waits);
+- a company floor (team.json "scope": "company", the HQ) sees the whole repository, but nothing of it reaches main on its own: every file goes to
+  proposal/<run> for the owner, except the floor's own state/ notes;
 - everything else (other teams, the office code, workflows, links, huge files) is dropped and listed.
 Pushes retry on a fresh main, so several runs can save at once. Then the office is told what was saved.
 """
@@ -18,6 +23,7 @@ import re
 import subprocess
 import sys
 import tarfile
+import tempfile
 import urllib.request
 from pathlib import Path
 
@@ -37,6 +43,8 @@ PROPOSAL = re.compile(
     r"|reels/_kit/[\w./ -]+|reels/_template/[\w./ -]+|brand/[\w./ -]+)$"
 )
 NEVER = re.compile(r"(^|/)(\.env[^/]*|\.dev\.vars|\.git|\.github|node_modules|\.venv)(/|$)|\.(mp4|pem|key)$")
+# A reel's own files: the studio writes them, a desk session never does (a desk draft of a reel once replaced the studio's real build).
+STUDIO_ONLY = re.compile(r"^(reels/(?!_kit/|_template/)|brand/covers/|brand/yt_thumbs/|social/)")
 # Shared state merged per item: {"items": [{"id": ...}]} lists, or a dict keyed by item id.
 MERGEABLE = {"state/queue.json": "items", "state/covered.json": "items", "state/phase5_status.json": "dict"}
 
@@ -61,6 +69,39 @@ def classify(rel: str) -> str:
     if PROPOSAL.match(rel):
         return "proposal"
     return "drop"
+
+
+def team_scope(team: str) -> str:
+    """"company" for the HQ floor, else "floor". Read from the fresh checkout of main, which only the owner's merges can change."""
+    try:
+        return "company" if json.loads(Path(f"teams/{team}/team.json").read_text(encoding="utf-8")).get("scope") == "company" else "floor"
+    except (OSError, ValueError, AttributeError):
+        return "floor"
+
+
+def classify_company(path: str, team: str) -> str:
+    """A company floor's whole-repo bundle: its own state notes may go to main, everything else is a proposal, secrets and workflows are dropped."""
+    if NEVER.search(path):
+        return "drop"
+    own = f"teams/{team}/"
+    if path.startswith(own + "state/") and CONTENT.match(path[len(own):]):
+        return "content"
+    return "proposal"
+
+
+def merge3(base: str, path: str, ours: bytes) -> bytes | None:
+    """The session's version of a text file merged with the version main has now (base = main when the session started); None when that is not clean."""
+    old = git_bytes(base, path) if valid_base(base) else None
+    theirs = git_bytes("HEAD", path)   # the committed bytes: a checkout may have changed the line endings of the working copy
+    if old is None or theirs is None or b"\0" in ours or b"\0" in old or b"\0" in theirs or len(ours) > 2_000_000:
+        return None
+    with tempfile.TemporaryDirectory() as d:
+        files = {}
+        for name, data in (("ours", ours), ("base", old), ("theirs", theirs)):
+            files[name] = Path(d) / name
+            files[name].write_bytes(data)
+        r = subprocess.run(["git", "merge-file", "-p", str(files["ours"]), str(files["base"]), str(files["theirs"])], capture_output=True)
+    return r.stdout if r.returncode == 0 else None
 
 
 def valid_base(base: str) -> bool:
@@ -125,6 +166,7 @@ def main() -> None:
     ap.add_argument("--work", required=True)
     ap.add_argument("--team", required=True)
     ap.add_argument("--run", required=True)
+    ap.add_argument("--profile", choices=("desk", "studio"), default="studio")
     a = ap.parse_args()
     if not re.fullmatch(r"[a-z0-9-]{2,40}", a.team) or not re.fullmatch(r"run_[A-Za-z0-9]{6,40}", a.run):
         raise SystemExit("bad team or run id")
@@ -133,7 +175,8 @@ def main() -> None:
     work = Path(a.work)
     manifest = json.loads((work / "manifest.json").read_text()) if (work / "manifest.json").exists() else {"base": "", "deleted": []}
     base = manifest.get("base", "")
-    prefix = f"teams/{a.team}/"
+    company = team_scope(a.team) == "company"
+    prefix = "" if company else f"teams/{a.team}/"
 
     # Read the bundle once: path -> bytes (None = deleted).
     files: dict[str, bytes | None] = {}
@@ -142,7 +185,7 @@ def main() -> None:
     if bundle.exists():
         with tarfile.open(bundle, "r:gz") as tf:
             for m in tf.getmembers():
-                name = m.name.lstrip("./")
+                name = re.sub(r"^(\./)+", "", m.name)   # only a leading "./" (lstrip("./") also ate the dot of .github and .env)
                 if m.isdir():
                     continue
                 if not m.isfile() or m.size > MAX_FILE:
@@ -153,17 +196,21 @@ def main() -> None:
     for path in manifest.get("deleted", []):
         files[path] = None
     for path in list(files):
-        if not path.startswith(prefix) or ".." in path.split("/") or classify(path[len(prefix):]) == "drop":
+        if (path.startswith("/") or ".." in path.split("/") or not path.startswith(prefix)
+                or (classify_company(path, a.team) if company else classify(path[len(prefix):])) == "drop"):
             dropped.append(path)
             files.pop(path)
 
-    def plan() -> tuple[dict[str, bytes | None], dict[str, bytes | None], list[str]]:
-        """Route every file against the current HEAD: (to main, to the proposal branch, merged names)."""
-        content, proposal, merged = {}, {}, []
+    def plan() -> tuple[dict[str, bytes | None], dict[str, bytes | None], list[str], list[str]]:
+        """Route every file against the current HEAD: (to main, to the proposal branch, merged names, files kept off main and why)."""
+        content, proposal, merged, diverted = {}, {}, [], []
         for path, data in files.items():
             rel = path[len(prefix):]
-            kind = classify(rel)
-            if kind == "content" and rel in MERGEABLE and data is not None and changed_on_main(base, path):
+            kind = classify_company(path, a.team) if company else classify(rel)
+            if kind == "content" and not company and a.profile == "desk" and STUDIO_ONLY.match(rel):
+                kind = "proposal"
+                diverted.append(f"{path} (only the studio writes a reel's files)")
+            elif kind == "content" and rel in MERGEABLE and data is not None and changed_on_main(base, path):
                 try:
                     theirs = json.loads(Path(path).read_text(encoding="utf-8")) if Path(path).exists() else {}
                     old = git_bytes(base, path) if valid_base(base) else None
@@ -175,10 +222,20 @@ def main() -> None:
                     continue
                 except (ValueError, TypeError, AttributeError):
                     kind = "proposal"
+                    diverted.append(f"{path} (could not be merged item by item)")
             elif kind == "content" and changed_on_main(base, path):
-                kind = "proposal"
+                if a.profile == "studio" and STUDIO_ONLY.match(rel):
+                    pass   # the studio is the only writer of a reel's files: its version wins over whatever main has
+                else:
+                    text = merge3(base, path, data) if data is not None else None
+                    if text is not None:
+                        content[path] = text
+                        merged.append(rel)
+                        continue
+                    kind = "proposal"
+                    diverted.append(f"{path} (the same lines changed on main meanwhile)")
             (content if kind == "content" else proposal)[path] = data
-        return content, proposal, merged
+        return content, proposal, merged, diverted
 
     def apply(changes: dict[str, bytes | None]) -> int:
         """Stage every change and return how many files differ from HEAD. A file the job already wrote to disk with exactly the bundle's content
@@ -197,13 +254,14 @@ def main() -> None:
                 raise SystemExit(f"git add {path} failed: {r.stderr.strip()[:300]}")
         return len(git("diff", "--cached", "--name-only").splitlines())
 
-    result: dict = {"team": a.team, "run_id": a.run, "commit": None, "files": 0, "proposal_branch": None, "note": None}
+    result: dict = {"team": a.team, "run_id": a.run, "commit": None, "files": 0, "proposal_branch": None, "diverted": [], "note": None}
     proposal: dict[str, bytes | None] = {}
     merged: list[str] = []
+    diverted: list[str] = []
     for attempt in range(5):
         git("fetch", "-q", "origin", "main")
         git("reset", "-q", "--hard", "origin/main")
-        content, proposal, merged = plan()
+        content, proposal, merged, diverted = plan()
         n = apply(content)
         if not n:
             break
@@ -219,12 +277,15 @@ def main() -> None:
         branch = f"proposal/{a.run}"
         git("checkout", "-q", "-B", branch, "origin/main")
         if apply(proposal):
-            git("commit", "-q", "-m", f"office: proposed by {a.run} (needs the owner's review)")
+            git("commit", "-q", "-m", f"office: {a.team} proposal from {a.run} (needs the owner's review)")
             subprocess.run(["git", "-c", "core.hooksPath=/dev/null", "push", "-q", "-f", "origin", f"HEAD:refs/heads/{branch}"], check=True)
             result["proposal_branch"] = branch
+            result["diverted"] = [d for d in diverted if d.split(" (")[0] in proposal]
     notes = []
     if merged:
         notes.append("Merged item by item with other desks' work: " + ", ".join(sorted(set(merged))) + ".")
+    if result["diverted"]:
+        notes.append(f"{len(result['diverted'])} file(s) were NOT saved to main and wait on {result['proposal_branch']}: " + "; ".join(result["diverted"][:6]))
     if dropped:
         notes.append(f"{len(dropped)} file(s) outside the team's content were not saved: " + ", ".join(sorted(set(dropped))[:8]))
     result["note"] = " ".join(notes) or None

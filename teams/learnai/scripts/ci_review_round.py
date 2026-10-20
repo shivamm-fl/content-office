@@ -11,6 +11,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -18,6 +19,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import fact_review as FR   # noqa: E402  (current_sha: a facts report is only valid for the texts it was made for)
 
 MAX_ROUNDS = 3
+RETRY_WAIT = 45   # seconds between the attempts of a reviewer that returned nothing (a limit or a crash often clears within a minute)
+ATTEMPTS = 3
 KEEP = Path(os.environ.get("RUNNER_TEMP") or "/tmp") / "best_reel"
 
 
@@ -97,18 +100,22 @@ def review_round(rid, rnd):
     if not mp4.exists():
         sys.exit(f"{rid}: {mp4} does not exist")
     v = f = None
-    for attempt in (1, 2):   # the visual review writes qa/visual_<id>.json only for a complete review
+    for attempt in range(1, ATTEMPTS + 1):   # the visual review writes qa/visual_<id>.json only for a complete review
         run_script("visual_review.py", rid)
         v = visual_report(rid, mp4)
         if v:
             break
         print(f"visual review, attempt {attempt}: no report was written")
-    for attempt in (1, 2):   # the fact check exits 2 when the reviewer could not run
+        if attempt < ATTEMPTS:
+            time.sleep(RETRY_WAIT * attempt)
+    for attempt in range(1, ATTEMPTS + 1):   # the fact check exits 2 when the reviewer could not run
         run_script("fact_review.py", rid)
         f = facts_report(rid)
         if f:
             break
         print(f"fact check, attempt {attempt}: no usable report was written")
+        if attempt < ATTEMPTS:
+            time.sleep(RETRY_WAIT * attempt)
     if not v or not f:
         set_output("fix", "false")
         print("::error::a reviewer could not run (no " + ("visual" if not v else "fact") + " report). Nothing is committed; the item is built again at the next run.")
