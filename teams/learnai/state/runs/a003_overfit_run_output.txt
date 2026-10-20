@@ -1,0 +1,9 @@
+median of 200 seeds, degree 1 : train RMSE 0.84, new-data RMSE 1.06
+median of 200 seeds, degree 3 : train RMSE 0.73, new-data RMSE 1.15
+median of 200 seeds, degree 5 : train RMSE 0.56, new-data RMSE 1.36
+median of 200 seeds, degree 9 : train RMSE 0.00, new-data RMSE 136.58
+median of 200 seeds, degree 9_with_100 : train RMSE 0.94, new-data RMSE 1.04
+seed 36 1: 0.87 / 1.04 3: 0.75 / 1.19 5: 0.65 / 1.24 9: 0.00 / 133.27 9_with_100: 0.93 / 1.03
+seed 41 1: 0.91 / 1.02 3: 0.80 / 1.10 5: 0.55 / 2.03 9: 0.00 / 133.73 9_with_100: 0.97 / 1.03
+seed 96 1: 0.47 / 1.14 3: 0.41 / 1.15 5: 0.38 / 1.20 9: 0.00 / 139.44 9_with_100: 0.83 / 1.07
+note: degree 9 with 10 points passes through every point, train RMSE is about 0

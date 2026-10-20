@@ -34,3 +34,10 @@ Housekeeping: every earlier queue item (e13-e15, r12-r14, q12-q14) is in phase5_
 
 ## 2026-10-17 (single item, owner asked for the next viral reel)
 Planned q27 (H2 tracing: how to find which step of an LLM app went wrong; Langfuse docs). Hook type interviewer_asked, because the last q## were mostly stake hooks and our clear-question reels (q16, q15, q10) reached 1,200 to 1,950 views at 57 to 62 % skip. Not planned: generic and course (owner asked for one reel). The OpenTelemetry GenAI page only redirected, so no standard claims are used.
+
+## 2026-10-20 (growth analyst, work day a003 + q for chain-of-thought and system-vs-user prompt)
+Numbers: asked-question openers "Interviewer ne poocha: <full question>" median skip ~59 % (n=9, 53 to 65 %); concrete stake lines ~61 % (n=10, one outlier q102 79.7 %); answer-first or statement lines r102, r103, r104 ~70 to 78 % (n=3, hint). Today's q105 (command hook, 88.5 s) is at 54.7 % skip, 15.4 s watch, 17 % retention on 306 views (hours old, hint only); trial q107 (127.5 s) 57.8 %, 8.9 s, 7 % retention on 185 views; q106 has no data yet. a001 (172.5 s, n=1): 67.4 % skip but 18 s watch and 9 shares, the best watch time on the grid.
+Do: make the first line one complete question or scenario; keep interview reels at 75 to 90 s; do not open with the answer. Keep testing: stake vs asked (within 3 points, no retirement). Nothing for the owner to decide yet.
+
+## 2026-10-20 (owner correction: series reels are read on likes, saves, shares, follows and watch time, not skip rate)
+a001 (series day 1, 172.5 s, n=1 so a hint): 47 likes, 30 saves (2.34 per 100 reach), 9 shares (0.7 per 100 reach), 87 total interactions on 1,742 views / 1,284 reach, average watch 18.0 s, the longest on the grid (next: q16 17.7 s). Saves per reach are in the top 5 of 47 reels. Follows are not in insights.json, so none are quoted. Read: a001 did great on this measure; the 67 % skip is not held against it. Judge a002 and a003 the same way.
