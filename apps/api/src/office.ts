@@ -11,6 +11,10 @@ import { buildCalendar, floorOfItem, floorStatus, refusePublish, reelStage, trac
 import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, learningsRepo, publishRepo, readAiCourse, runOutcome, SLOT_TEAM } from "./github";
 import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners, withHeading } from "./learnings";
 import { handoverInputs, toPost } from "./posting";
+import { buildHistory, historyText } from "./history";
+import { waitForSave } from "./save_gate";
+import { stallAction } from "./stall";
+import { findAnomalies } from "./health";
 import { TEAMS, team as getTeam } from "./teams";
 
 /** Id prefix of every floor's tracks to the floor (e r q learnai, d dsa, s systemdesign): the publishing repo's state holds the reels of all floors. */
@@ -85,6 +89,10 @@ export class Office extends DurableObject<Env> {
       "ALTER TABLE threads ADD COLUMN day TEXT",   // build threads: the work day that sent the reel to the studio
       "ALTER TABLE threads ADD COLUMN done_at INTEGER", // work days: when the last reel of the day finished
       "ALTER TABLE posts ADD COLUMN trial INTEGER NOT NULL DEFAULT 0",
+      "ALTER TABLE runs ADD COLUMN gh_done_at INTEGER",
+      "ALTER TABLE runs ADD COLUMN last_activity INTEGER",
+      "ALTER TABLE runs ADD COLUMN owner_delivered_at INTEGER",
+      "ALTER TABLE runs ADD COLUMN stall_warned_at INTEGER",
     ]) {
       try { this.sql.exec(ddl); } catch { /* already there */ }
     }
@@ -249,6 +257,43 @@ export class Office extends DurableObject<Env> {
     const messages = this.rows("SELECT * FROM messages WHERE thread_id = ? ORDER BY created_at LIMIT 2000", id).map((r) => this.toMessage(r));
     const runs = this.rows("SELECT * FROM runs WHERE thread_id = ? ORDER BY created_at", id).map((r) => this.toRun(r));
     return { thread, messages, runs };
+  }
+
+  async activeRunCount(slug: string): Promise<number> {
+    this.ensureTeam(slug);
+    return this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE status IN ('starting','live','idle')")!.n;
+  }
+
+  async opsOverview(slug: string): Promise<string> {
+    const team = this.ensureTeam(slug);
+    const runs = this.rows("SELECT * FROM runs ORDER BY created_at DESC LIMIT 100");
+    const asks = this.rows<{ thread_id: string; status: string; created_at: number }>("SELECT thread_id, status, created_at FROM asks WHERE status = 'pending'");
+    const threads = this.rows("SELECT * FROM threads ORDER BY updated_at DESC LIMIT 10").map((r) => this.toThread(r));
+    const ownerAt = Object.fromEntries(this.rows<{ thread_id: string; at: number }>("SELECT thread_id, MAX(created_at) AS at FROM messages WHERE author = 'owner' GROUP BY thread_id").map((r) => [r.thread_id, r.at]));
+    const anomalies = findAnomalies({ now: Date.now(), runs: runs.map((r) => ({ ...this.toRun(r), last_activity: r.last_activity as number | null, gh_done_at: r.gh_done_at as number | null })), lastOwnerMessageAt: ownerAt, asks, savePending: runs.filter((r) => r.gh_run_id && !r.gh_done_at).map((r) => r.id as string) });
+    const lines = [`${team.slug} ${team.name}`, `pending asks: ${asks.length}`, "runs:"];
+    for (const r of runs.slice(0, 15)) lines.push([r.id, r.agent, r.profile, r.status, new Date(r.created_at as number).toISOString(), r.ended_at ? `${Math.round(((r.ended_at as number) - (r.created_at as number)) / 60000)}m` : "-", r.cost_usd, r.gh_run_id ?? "-", r.item ?? "-", String(r.error ?? "-").slice(0, 200)].join(" | "));
+    lines.push("threads:");
+    for (const t of threads) lines.push([t.id, t.kind, t.title, new Date(t.updated_at).toISOString(), (t.preview ?? "").slice(0, 100)].join(" | "));
+    lines.push("anomalies:", ...anomalies.map((a) => `${a.severity} ${a.kind} ${a.run_id ?? a.thread_id ?? ""}: ${a.text}`), `usage: ${JSON.stringify(this.usage())}`);
+    return lines.join("\n");
+  }
+
+  async opsRuns(slug: string, limit: number): Promise<string> {
+    this.ensureTeam(slug);
+    return this.rows("SELECT * FROM runs ORDER BY created_at DESC LIMIT ?", Math.min(100, Math.max(1, limit))).map((r) => [r.id, r.agent, r.profile, r.status, new Date(r.created_at as number).toISOString(), r.ended_at ? `${Math.round(((r.ended_at as number) - (r.created_at as number)) / 60000)}m` : "-", r.cost_usd, r.gh_run_id ?? "-", r.item ?? "-", String(r.error ?? "-").slice(0, 300)].join(" | ")).join("\n") || "No runs.";
+  }
+
+  async opsThread(slug: string, id: string, limit: number, tools: boolean): Promise<string> {
+    this.ensureTeam(slug);
+    const thread = this.getThreadRow(id);
+    if (!thread) return `No conversation ${id}.`;
+    const rows = this.rows(`SELECT * FROM messages WHERE thread_id = ? ${tools ? "" : "AND kind != 'tool'"} ORDER BY created_at DESC LIMIT ?`, id, Math.min(200, Math.max(1, limit))).reverse();
+    return [`${thread.title} (${thread.id})`, ...rows.map((r) => {
+      const body = JSON.parse(r.body as string) as Record<string, unknown>;
+      const words = r.kind === "tool" ? `${body.name ?? "tool"}: ${body.summary ?? ""} ${body.result ?? ""}` : historyText({ author: r.author as string, kind: r.kind as string, body });
+      return `${new Date(r.created_at as number).toISOString()} ${r.author} ${r.kind}: ${words.slice(0, r.kind === "decision" ? 6000 : 1500)}`;
+    })].join("\n");
   }
 
   // ---------- owner actions ----------
@@ -465,6 +510,11 @@ export class Office extends DurableObject<Env> {
     const now = Date.now();
     this.sql.exec("UPDATE asks SET status = 'answered', answer = ?, answered_at = ? WHERE id = ?", JSON.stringify(answer), now, askId);
     this.addMessage({ thread_id: ask.thread_id, run_id: ask.run_id, author: "owner", kind: ask.kind === "approval" ? "decision" : "answer", body: { ask_id: askId, ...answer } });
+    if (ask.body.startsWith("[script]") && ["approved", "approved_with_edits"].includes(String(answer.decision ?? ""))) {
+      const final = typeof answer.edited === "string" && answer.edited ? answer.edited : ask.body;
+      const content = `# ${ask.title}\n\nDecision: ${String(answer.decision)}\nTime: ${new Date(now).toISOString()}\nThread: ${ask.thread_id}\n\n${final}\n`;
+      this.ctx.waitUntil(editRepoFile(this.env, this.env.GITHUB_REPO, `teams/${slug}/state/approved_scripts/${askId}.md`, () => content, `office: save approved script ${askId}`).catch((e) => console.error("approved script save", e)));
+    }
     if (ask.meta?.type === "final") {
       const updated = this.toAsk(this.one("SELECT * FROM asks WHERE id = ?", askId)!);
       this.broadcast({ t: "ask", ask: updated });
@@ -777,20 +827,28 @@ export class Office extends DurableObject<Env> {
     return this.one<{ n: number }>("SELECT COUNT(*) AS n FROM runs WHERE profile = ? AND status IN ('starting','live','idle','blocked_limit')", profile)!.n;
   }
 
+  private waitingForPriorSave(threadId: string, before: number, now: number): boolean {
+    const r = this.one<{ status: string; gh_run_id: string | null; gh_done_at: number | null; ended_at: number | null }>(
+      "SELECT status, gh_run_id, gh_done_at, ended_at FROM runs WHERE thread_id = ? AND created_at < ? AND status IN ('done','failed','cancelled','lost') AND gh_run_id IS NOT NULL AND gh_done_at IS NULL AND ended_at > ? ORDER BY created_at DESC LIMIT 1", threadId, before, now - 6 * 60_000,
+    );
+    return waitForSave(r, now);
+  }
+
   private async startRun(thread: Thread, profile: Profile): Promise<Run> {
     const id = newId("run");
     const now = Date.now();
     const cap = this.cap(profile);
     const busy = this.busy(profile);
     const blockedUntil = Number(this.meta("blocked_until") ?? 0);
-    const wait = busy >= cap || blockedUntil > now;
+    const saveWait = this.waitingForPriorSave(thread.id, now + 1, now);
+    const wait = busy >= cap || blockedUntil > now || saveWait;
     const item = profile === "studio" ? (this.one<{ item: string | null }>("SELECT item FROM threads WHERE id = ?", thread.id)?.item ?? null) : null;
     this.sql.exec("INSERT INTO runs (id, thread_id, agent, profile, status, created_at, item, stage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
       id, thread.id, thread.agent, profile, wait ? "queued" : "starting", now, item, profile === "studio" ? "build" : null);
     this.sql.exec("UPDATE threads SET last_run = ? WHERE id = ?", id, thread.id);
     const agentName = this.team().agents.find((a) => a.slug === thread.agent)?.name ?? thread.agent;
     if (wait) {
-      this.system(thread.id, id, blockedUntil > now
+      this.system(thread.id, id, saveWait ? "Waiting for the previous session to finish saving its files (up to 6 minutes)…" : blockedUntil > now
         ? `Claude usage limit reached. ${agentName} starts when it resets (${new Date(blockedUntil).toISOString().slice(11, 16)} UTC).`
         : profile === "studio" ? `The studio is building ${busy} reels; this one starts when a slot frees.` : `${busy} chats are running; ${agentName} starts when one finishes.`);
       this.setDesk(thread.agent, "waiting", "In the queue", id);
@@ -842,6 +900,7 @@ export class Office extends DurableObject<Env> {
     for (const r of this.rows("SELECT * FROM runs WHERE status = 'queued' ORDER BY created_at")) {
       const run = this.toRun(r);
       if (busy[run.profile] >= this.cap(run.profile)) continue;
+      if (run.thread_id && this.waitingForPriorSave(run.thread_id, run.created_at, Date.now())) continue;
       this.updateRun(run.id, { status: "starting" });
       this.setDesk(run.agent, "working", "Starting up", run.id);
       this.system(run.thread_id, run.id, "Starting now…");
@@ -856,6 +915,7 @@ export class Office extends DurableObject<Env> {
       const body = JSON.parse(m.body as string);
       if (this.sendRunner(run.id, { t: "user_message", id: m.id as string, text: body.text, chat: isOwnerChat(run, m.author as string, body) })) {
         this.sql.exec("UPDATE messages SET delivered = 1, run_id = ? WHERE id = ?", run.id, m.id);
+        this.sql.exec("UPDATE runs SET owner_delivered_at = ? WHERE id = ?", Date.now(), run.id);
       }
     }
   }
@@ -871,7 +931,7 @@ export class Office extends DurableObject<Env> {
     if (run.gh_run_id && ghRunId && run.gh_run_id !== ghRunId) throw new Error("GitHub run id does not match");
     const token = randomToken(32);
     const now = Date.now();
-    this.updateRun(runId, { status: "live", claimed_at: now, last_seen: now, gh_run_id: ghRunId ?? run.gh_run_id, token_hash: await sha256Hex(token) });
+    this.updateRun(runId, { status: "live", claimed_at: now, last_seen: now, last_activity: now, gh_run_id: ghRunId ?? run.gh_run_id, token_hash: await sha256Hex(token) });
     const thread = run.thread_id ? this.getThreadRow(run.thread_id) : null;
     const pending = thread
       ? this.rows("SELECT * FROM messages WHERE thread_id = ? AND (author IN ('owner', 'office') OR kind = 'brief') AND delivered = 0 ORDER BY created_at", thread.id)
@@ -890,14 +950,15 @@ export class Office extends DurableObject<Env> {
     }
     const taskMode = run.profile === "studio" || thread?.kind === "workday";
     for (const m of pending) this.sql.exec("UPDATE messages SET delivered = 1, run_id = ? WHERE id = ?", runId, m.id);
+    if (pending.some((m) => m.author === "owner" || m.author === "office")) this.sql.exec("UPDATE runs SET owner_delivered_at = ? WHERE id = ?", now, runId);
     const saved = thread ? this.one<{ transcript_key: string | null; session_id: string | null }>("SELECT transcript_key, session_id FROM threads WHERE id = ?", thread.id) : null;
     const resume = saved?.transcript_key && saved.session_id ? { key: saved.transcript_key, session_id: saved.session_id } : null;
-    // The chat so far (text only): the bridge briefs the agent with it when there is no transcript to resume.
+    // The briefing preserves the owner's approved wording when there is no transcript to resume.
     const history = thread
       ? this.rows(
-          "SELECT author, kind, body FROM messages WHERE thread_id = ? AND kind IN ('text','answer','decision') AND parent IS NULL AND delivered = 1 AND run_id IS NOT ? ORDER BY created_at DESC LIMIT 40",
+          "SELECT author, kind, body FROM messages WHERE thread_id = ? AND kind IN ('text','answer','decision','approval','question') AND parent IS NULL AND delivered = 1 AND run_id IS NOT ? ORDER BY created_at DESC LIMIT 40",
           thread.id, runId,
-        ).reverse().map((m) => ({ author: m.author as string, text: String(JSON.parse(m.body as string).text ?? JSON.stringify(JSON.parse(m.body as string))) }))
+        ).reverse().map((m) => ({ author: m.author as string, kind: m.kind as string, body: m.body as string }))
       : [];
     const agent = team.agents.find((a) => a.slug === run.agent) ?? team.agents.find((a) => a.slug === team.lead)!;
     this.setDesk(agent.slug, "working", "Reading your message", runId);
@@ -905,10 +966,10 @@ export class Office extends DurableObject<Env> {
     return {
       token,
       run: { id: runId, agent: agent.slug, profile: run.profile, thread_id: run.thread_id, item: run.item ?? null, mode: studioMode },
-      team: { slug: team.slug, name: team.name, lead: team.lead, model: team.model, agents: team.agents.map((a) => ({ slug: a.slug, name: a.name })) },
+      team: { slug: team.slug, name: team.name, scope: team.scope ?? "floor", lead: team.lead, model: team.model, agents: team.agents.map((a) => ({ slug: a.slug, name: a.name })) },
       agent,
       messages: pending.map((m) => ({ id: m.id as string, text: String(JSON.parse(m.body as string).text) })),
-      history,
+      history: buildHistory(history),
       resume,
       digest: this.digest(run.thread_id),
       // task_mode: the session ends when its work is done (studio jobs, the work day), no waiting for chat.
@@ -928,7 +989,7 @@ export class Office extends DurableObject<Env> {
       threadId, n,
     ).reverse().map((m) => {
       const b = JSON.parse(m.body as string) as Record<string, unknown>;
-      const text = String(b.text ?? b.title ?? "") + (b.notes ? ` (notes: ${b.notes})` : "") + (b.edited ? " (approved with the owner's edits)" : "");
+      const text = historyText({ author: m.author as string, kind: m.kind as string, body: b });
       return { author: m.author as string, kind: m.kind as string, text, at: m.created_at as number };
     });
   }
@@ -973,7 +1034,13 @@ export class Office extends DurableObject<Env> {
     return timingSafeEqual(r.token_hash, await sha256Hex(token));
   }
 
-  async runnerSaved(slug: string, runId: string, info: { commit?: string | null; files?: number; proposal_branch?: string | null; note?: string | null }) {
+  async verifyOpsToken(slug: string, token: string): Promise<boolean> {
+    if (this.ensureTeam(slug).scope !== "company") return false;
+    const hash = await sha256Hex(token);
+    return !!this.one(`SELECT id FROM runs WHERE token_hash = ? AND status IN ${ACTIVE_SQL} LIMIT 1`, hash);
+  }
+
+  async runnerSaved(slug: string, runId: string, info: { commit?: string | null; files?: number; proposal_branch?: string | null; note?: string | null; diverted?: string[] }) {
     this.ensureTeam(slug);
     const run = this.getRun(runId);
     if (!run) return;
@@ -982,17 +1049,19 @@ export class Office extends DurableObject<Env> {
     if (info.proposal_branch) parts.push(`Changes to rules, prompts or agents wait for your review on branch ${info.proposal_branch}.`);
     if (info.note) parts.push(info.note);
     if (parts.length) this.system(run.thread_id, runId, parts.join(" "), { commit: info.commit ?? null, proposal_branch: info.proposal_branch ?? null });
+    if (info.diverted?.length) this.system(run.thread_id, runId, `${info.diverted.length} file(s) of this session were NOT saved to main: ${info.diverted.slice(0, 6).join("; ")}. They wait on ${info.proposal_branch ?? "the proposal branch"}.`, { error: true });
   }
 
   async ghRunCompleted(slug: string, runId: string, ghRunId: string, conclusion: string, url: string | null) {
     this.ensureTeam(slug);
     const run = this.getRun(runId);
     if (!run) return;
-    if (url) this.updateRun(runId, { gh_url: url, gh_run_id: run.gh_run_id ?? ghRunId });
+    this.updateRun(runId, { gh_done_at: Date.now(), gh_url: url ?? run.gh_url ?? null, gh_run_id: run.gh_run_id ?? ghRunId });
     if (ACTIVE.includes(run.status)) {
       this.finishRun(runId, conclusion === "success" ? "done" : conclusion === "cancelled" ? "cancelled" : "failed", null,
         conclusion === "success" ? null : `GitHub run ended: ${conclusion}`);
     }
+    await this.startQueued();
   }
 
   // ---------- sockets ----------
@@ -1034,6 +1103,7 @@ export class Office extends DurableObject<Env> {
     if (!run || !ACTIVE.includes(run.status)) return;
     this.sql.exec("UPDATE runs SET last_seen = ? WHERE id = ?", Date.now(), run.id);
     for (const ev of data.events ?? []) {
+      if (ev.t !== "heartbeat") this.sql.exec("UPDATE runs SET last_activity = ? WHERE id = ?", Date.now(), run.id);
       try { await this.onRunnerEvent(run, ev); } catch (e) { console.error("event", ev.t, (e as Error).message); }
     }
   }
@@ -1164,6 +1234,20 @@ export class Office extends DurableObject<Env> {
     const now = Date.now();
     for (const r of this.rows(`SELECT * FROM runs WHERE status IN ${ACTIVE_SQL}`)) {
       const run = this.toRun(r);
+      const pending = this.one<{ n: number }>("SELECT COUNT(*) AS n FROM asks WHERE run_id = ? AND status = 'pending'", run.id)!.n;
+      const action = stallAction({ now, status: run.status, profile: run.profile, last_activity: r.last_activity as number | null, delivered_at: r.owner_delivered_at as number | null, pending_asks: pending, warned: !!r.stall_warned_at });
+      if (action === "warn") {
+        this.sql.exec("UPDATE runs SET stall_warned_at = ? WHERE id = ?", now, run.id);
+        this.system(run.thread_id, run.id, `The desk has not reacted to your message for ${Math.floor((now - (r.last_activity as number)) / 60000)} minutes. If it stays silent I restart it with your message in a few minutes; you can also tap End.`);
+      } else if (action === "restart" && run.thread_id) {
+        this.sql.exec("UPDATE messages SET delivered = 0, run_id = NULL WHERE run_id = ? AND author IN ('owner','office') AND created_at >= ?", run.id, r.last_activity as number);
+        if (run.gh_run_id) await cancelRun(this.env, run.gh_run_id).catch(() => undefined);
+        this.finishRun(run.id, "cancelled", null, null);
+        this.system(run.thread_id, run.id, "The desk stayed silent, so I restarted it with your message.");
+        const thread = this.getThreadRow(run.thread_id);
+        if (thread) await this.startRun(thread, "desk");
+        continue;
+      }
       // a studio job installs its tools (ffmpeg, Python, HyperFrames) before it reports in
       if (run.status === "starting" && now - (run.claimed_at ?? run.created_at) > (run.profile === "studio" ? 2 : 1) * START_TIMEOUT_MS) {
         this.finishRun(run.id, "failed", null, "the GitHub runner did not start within 15 minutes (see the Runs tab)");

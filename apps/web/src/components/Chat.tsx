@@ -132,11 +132,11 @@ function AnsweredAsk({ m, team, answer }: { m: Message; team: Team; answer: Mess
   );
 }
 
-export function ChatView({ office, threadId, newAgent }: { office: Office; threadId: string | null; newAgent: string | null }) {
+export function ChatView({ office, threadId, newAgent, initialText = "" }: { office: Office; threadId: string | null; newAgent: string | null; initialText?: string }) {
   const state = office.state!;
   const team = state.team;
   const data = threadId ? office.threads[threadId] : undefined;
-  const [text, setText] = useState("");
+  const [text, setText] = useState(initialText);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
@@ -200,8 +200,8 @@ export function ChatView({ office, threadId, newAgent }: { office: Office; threa
     >
       <div className="flex h-full flex-col">
         <div ref={scroller} onScroll={(e) => { const el = e.currentTarget; stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80; }} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
-          {data?.thread.kind === "workday" && threadId && <DayBoard state={state} dayId={threadId} />}
-          {data?.thread.kind === "workday" && data.thread.done_at && <p className="text-center text-xs text-gold">This work day is finished.</p>}
+          {team.scope !== "company" && data?.thread.kind === "workday" && threadId && <DayBoard state={state} dayId={threadId} />}
+          {team.scope !== "company" && data?.thread.kind === "workday" && data.thread.done_at && <p className="text-center text-xs text-gold">This work day is finished.</p>}
           {!threadId && (
             <div className="rounded-xl border border-wall bg-desk p-4 text-[14px] leading-relaxed text-dim">
               <p className="font-semibold text-paper">{agent.name}</p>

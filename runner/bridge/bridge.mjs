@@ -15,6 +15,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { mapClaudeEvent, newMapState, parseFrontmatter, roster } from "./events.mjs";
+import { callOps, OPS_TOOLS } from "./ops.mjs";
 import { makeStudio, STUDIO_TOOLS } from "./studio.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -24,12 +25,12 @@ const RUN_ID = process.env.RUN_ID || "";
 const TEAM = process.env.TEAM || "learnai";
 const TEAM_DIR = join(ROOT, "teams", TEAM);
 const CLAUDE_BIN = process.env.CLAUDE_BIN || "claude";
-// File edits only inside the team folder (the session's working directory; "./**" is relative to it, tested: a write
-// outside is refused); the shell is sandboxed to it as well.
-const ALLOWED_TOOLS = [
+// Floor edits stay under the working directory. Company runs add the repo root as a workspace.
+const allowedTools = (company) => [
   "Bash", "Read", "Glob", "Grep", "WebSearch", "WebFetch",
-  "Write(./**)", "Edit(./**)", "MultiEdit(./**)", "NotebookEdit(./**)",
+  ...(company ? ["Write", "Edit", "MultiEdit", "NotebookEdit"] : ["Write(./**)", "Edit(./**)", "MultiEdit(./**)", "NotebookEdit(./**)"]),
   "Agent", "Task", "SendMessage", "Skill", "TodoWrite", "mcp__office",
+  ...(company ? OPS_TOOLS.map((tool) => `mcp__office__${tool.name}`) : []),
 ].join(",");
 
 const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
@@ -218,6 +219,9 @@ function startMcp(ctx) {
       const r = await fetch(`${OFFICE}/api/runner/ai-course?team=${TEAM}&run=${RUN_ID}&path=${encodeURIComponent(a.path || "")}`, { headers: { "X-Run-Token": ctx.token } });
       return text(await r.text(), !r.ok);
     }
+    if (ctx.company && OPS_TOOLS.some((tool) => tool.name === name)) {
+      return text(await callOps(name, a, { office: OFFICE, team: TEAM, runId: RUN_ID, token: ctx.token, fetch }));
+    }
     if (name === "ask_owner" || name === "request_approval") {
       const id = rid("ask");
       const approval = name === "request_approval";
@@ -254,7 +258,7 @@ function startMcp(ctx) {
         return { jsonrpc: "2.0", id: m.id, result: { protocolVersion: m.params?.protocolVersion || "2025-06-18", capabilities: { tools: {} }, serverInfo: { name: "office", version: "1.0.0" } } };
       }
       if (m.method === "ping") return { jsonrpc: "2.0", id: m.id, result: {} };
-      if (m.method === "tools/list") return { jsonrpc: "2.0", id: m.id, result: { tools: ctx.studio ? [...TOOLS, ...STUDIO_TOOLS] : TOOLS } };
+      if (m.method === "tools/list") return { jsonrpc: "2.0", id: m.id, result: { tools: [...TOOLS, ...(ctx.studio ? STUDIO_TOOLS : []), ...(ctx.company ? OPS_TOOLS : [])] } };
       if (m.method === "tools/call") {
         try { return { jsonrpc: "2.0", id: m.id, result: await call(m.params?.name, m.params?.arguments || {}) }; }
         catch (e) { return { jsonrpc: "2.0", id: m.id, result: text(`office tool failed: ${e.message}`, true) }; }
@@ -300,13 +304,16 @@ async function downloadTranscript(token, resume) {
 // ---------- the session ----------
 function systemPrompt(work) {
   const protocol = readFileSync(join(ROOT, "company", "office-protocol.md"), "utf8");
+  const scope = work.team.scope === "company"
+    ? "\n\n# Company scope\nThis desk may read and edit across the repository. Code and rule changes go to a proposal branch for the owner's review. Never commit or push."
+    : "";
   const agentFile = join(TEAM_DIR, ".claude", "agents", `${work.agent.slug}.md`);
   const { body } = existsSync(agentFile) ? parseFrontmatter(readFileSync(agentFile, "utf8")) : { body: "" };
   const team = work.team.agents.map((a) => `${a.slug} (${a.name})`).join(", ");
   const recent = work.digest
     ? `\n\n# What the other desks did recently\nOther conversations of the team (newest first). Read one in full with mcp__office__team_feed(thread_id). Their files reach the repo when their session closes.\n${work.digest}`
     : "";
-  return `${protocol}\n\n# Who you are\nYou are **${work.agent.name}** (${work.agent.title}) of the ${work.team.name} team. Teammates: ${team}.\nOffice run ${RUN_ID}. Today is ${new Date().toISOString().slice(0, 10)}.\n\n${body}${recent}`;
+  return `${protocol}${scope}\n\n# Who you are\nYou are **${work.agent.name}** (${work.agent.title}) of the ${work.team.name} team. Teammates: ${team}.\nOffice run ${RUN_ID}.${work.run.thread_id ? ` This conversation: ${work.run.thread_id}.` : ""} Today is ${new Date().toISOString().slice(0, 10)}.\n\n${body}${recent}`;
 }
 
 function agentModel(work) {
@@ -352,7 +359,7 @@ async function main() {
   log(`office run ${RUN_ID} (${TEAM}) claiming…`);
   const work = await claim();
   log(`claimed: agent ${work.agent.slug}, ${work.messages.length} message(s)`);
-  const ctx = { token: work.token, team: work.team, waiting: 0, link: null, resolveAsk: () => undefined, currentAgent: () => work.agent.slug };
+  const ctx = { token: work.token, team: work.team, company: work.team.scope === "company", waiting: 0, link: null, resolveAsk: () => undefined, currentAgent: () => work.agent.slug };
   const state = newMapState(work.agent.slug);
   ctx.roster = () => roster(state);
   if (work.run.profile === "studio") {
@@ -437,12 +444,13 @@ async function main() {
       "--include-partial-messages", "--forward-subagent-text",
       "--model", agentModel(work), "--max-turns", String(work.settings?.max_turns ?? 400),
       "--permission-mode", "acceptEdits", "--permission-prompts", "none",
-      "--allowedTools", ALLOWED_TOOLS,
+      "--allowedTools", allowedTools(ctx.company),
       "--mcp-config", mcpFile, "--strict-mcp-config",
       "--append-system-prompt-file", promptFile,
       // no unsandboxed retries: a command that needs the network or a key is a studio tool, run by the bridge
       "--settings", JSON.stringify({ sandbox: { allowUnsandboxedCommands: false } }),
     ];
+    if (ctx.company) args.push("--add-dir", ROOT);
     if (useResume && resumePath) args.push("--resume", resumePath);
     const win = process.platform === "win32";
     const c = spawn(CLAUDE_BIN, win ? args.map((a) => (/[\s"]/.test(a) ? `"${a.replace(/"/g, '\\"')}"` : a)) : args, {

@@ -21,4 +21,7 @@ This repo is **PUBLIC**. Anything committed here can be read by anyone.
 - `.github/workflows/office-run.yml`: the only way agents run. It is started by the office (`workflow_dispatch`), never on a schedule.
 - `teams/<team>/team.json`: the roster the office shows. Each agent is `teams/<team>/.claude/agents/<slug>.md`.
 - `tools/import_from_ai_course.py`: one-time import of the LearnAI workspace from the private ai-course repo.
-- Tests: `pnpm -r test`, `node --test runner/bridge`.
+- `teams/hq`: the company floor (`"scope": "company"` in its `team.json`). Its CTO sees the whole repo and has read tools for every floor's runs, conversations, logs and transcripts; everything it changes goes to `proposal/<run_id>` and the owner approves it in the app's **Proposals** tab (merge, reject, deploy). A new floor is a new `teams/<slug>/` folder plus `node tools/gen_teams.mjs` (it writes `apps/api/src/teams.generated.ts`).
+- `.github/workflows/deploy.yml`: the owner's Deploy button (type check and tests first, then `pnpm run deploy`); needs the repo secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` once.
+- `runner/scripts/save_work.py`: what a session may save (floor content to main; desk sessions never write a reel's files; conflicts are merged line by line or reported; HQ only proposes). `runner/scripts/script_lock.py`: a queue item with `script_locked` must keep the owner's words.
+- Tests: `pnpm test`, `python3 runner/scripts/test_*.py`.

@@ -1,7 +1,9 @@
 // The office Worker: serves the PWA, the owner's API, the runner endpoints and the GitHub webhook.
 import { Hono, type Context } from "hono";
 import { hmacHex, makeSession, readSession, sessionCookie, timingSafeEqual } from "./auth";
-import { readAiCourse, releaseAssetResponse, WORKFLOWS } from "./github";
+import { readAiCourse, releaseAssetResponse, WORKFLOWS, listProposals, getProposal, mergeProposal, deleteProposal, latestDeploy, dispatchDeploy, workflowLog } from "./github";
+import { validRun } from "./proposals";
+import { renderTranscript } from "./ops";
 import { verifyGithubOidc } from "./oidc";
 import { Office, type Env } from "./office";
 import { TEAMS, team as getTeam } from "./teams";
@@ -44,7 +46,7 @@ app.post("/api/logout", (c) => {
 });
 
 // Every owner route below needs the session cookie; state-changing requests must come from this origin.
-app.use("/api/teams/*", async (c, next) => {
+const ownerMiddleware = async (c: C, next: () => Promise<void>) => {
   const owner = await readSession(c.env.SESSION_SECRET, c.req.header("Cookie") ?? null);
   if (!owner) return bad(c, 401, "login required");
   if (c.req.method !== "GET") {
@@ -53,13 +55,47 @@ app.use("/api/teams/*", async (c, next) => {
   }
   c.set("owner", owner);
   await next();
-});
+};
+app.use("/api/teams/*", ownerMiddleware);
+app.use("/api/company/*", ownerMiddleware);
 app.get("/api/me", async (c) => {
   const owner = await readSession(c.env.SESSION_SECRET, c.req.header("Cookie") ?? null);
-  return owner ? c.json({ owner, teams: Object.values(TEAMS).map((t) => ({ slug: t.slug, name: t.name })) }) : bad(c, 401, "login required");
+  return owner ? c.json({ owner, teams: Object.values(TEAMS).map((t) => ({ slug: t.slug, name: t.name, scope: t.scope ?? "floor" })) }) : bad(c, 401, "login required");
 });
 
 // ---------- owner API ----------
+app.get("/api/company/proposals", async (c) => {
+  const [proposals, deploy, counts] = await Promise.all([
+    listProposals(c.env), latestDeploy(c.env), Promise.all(Object.keys(TEAMS).map((slug) => office(c.env, slug).activeRunCount(slug))),
+  ]);
+  return c.json({ proposals, deploy, active_runs: counts.reduce((a, b) => a + b, 0) });
+});
+
+app.get("/api/company/proposals/:run", async (c) => {
+  const detail = await getProposal(c.env, c.req.param("run"));
+  return detail ? c.json(detail) : bad(c, 404, "proposal not found");
+});
+
+app.post("/api/company/proposals/:run/merge", async (c) => {
+  const run = c.req.param("run");
+  if (!validRun(run)) return bad(c, 404, "proposal not found");
+  try {
+    const merged = await mergeProposal(c.env, run);
+    return "conflict" in merged ? bad(c, 409, "main changed the same lines; ask the CTO to rebase this proposal") : c.json({ ok: true, ...merged });
+  } catch (e) {
+    if ((e as Error).message === "proposal not found") return bad(c, 404, "proposal not found");
+    throw e;
+  }
+});
+
+app.post("/api/company/proposals/:run/reject", async (c) => {
+  if (!validRun(c.req.param("run"))) return bad(c, 404, "proposal not found");
+  return (await deleteProposal(c.env, c.req.param("run"))) ? c.json({ ok: true }) : bad(c, 404, "proposal not found");
+});
+
+app.get("/api/company/deploy", async (c) => c.json(await latestDeploy(c.env)));
+app.post("/api/company/deploy", async (c) => { await dispatchDeploy(c.env); return c.json({ ok: true }); });
+
 const teamOr404 = (c: C) => (getTeam(c.req.param("team") ?? "") ? (c.req.param("team") as string) : null);
 
 app.get("/api/teams/:team/state", async (c) => {
@@ -220,7 +256,7 @@ app.post("/api/runner/claim", async (c) => {
 });
 
 app.post("/api/runner/saved", async (c) => {
-  const body = await c.req.json<{ team: string; run_id: string; commit?: string; files?: number; proposal_branch?: string; note?: string }>();
+  const body = await c.req.json<{ team: string; run_id: string; commit?: string; files?: number; proposal_branch?: string; note?: string; diverted?: string[] }>();
   try {
     await runnerIdentity(c, body.team);
   } catch (e) {
@@ -304,6 +340,65 @@ app.get("/api/runner/ai-course", async (c) => {
   } catch (e) {
     return bad(c, 404, (e as Error).message);
   }
+});
+
+async function opsCaller(c: C): Promise<string | null> {
+  const run = c.req.query("run") ?? "";
+  const token = c.req.header("X-Run-Token") ?? "";
+  if (!token) return null;
+  for (const t of Object.values(TEAMS).filter((t) => t.scope === "company")) {
+    if ((run && await office(c.env, t.slug).verifyRunToken(run, token)) || await office(c.env, t.slug).verifyOpsToken(t.slug, token)) return t.slug;
+  }
+  return null;
+}
+const opsTarget = (c: C, caller: string) => c.req.query("target") ?? c.req.query("team") ?? caller;
+const count = (value: string | undefined, fallback: number, max: number) => Math.min(max, Math.max(1, Number(value) || fallback));
+
+app.get("/api/runner/ops/overview", async (c) => {
+  if (!await opsCaller(c)) return bad(c, 403, "company run required");
+  const floors = await Promise.all(Object.keys(TEAMS).map((slug) => office(c.env, slug).opsOverview(slug)));
+  const proposals = await listProposals(c.env);
+  return c.text([...floors, "Proposals:", ...proposals.map((p) => `${p.run_id} | ${p.team ?? "?"} | ${p.kind} | ${p.title} | ${p.files} files | behind ${p.behind_by}`)].join("\n\n").slice(0, 60_000));
+});
+
+app.get("/api/runner/ops/runs", async (c) => {
+  const caller = await opsCaller(c);
+  if (!caller) return bad(c, 403, "company run required");
+  const slug = opsTarget(c, caller);
+  if (!getTeam(slug)) return bad(c, 404, "no such team");
+  return c.text(await office(c.env, slug).opsRuns(slug, count(c.req.query("limit"), 15, 100)));
+});
+
+app.get("/api/runner/ops/thread", async (c) => {
+  const caller = await opsCaller(c);
+  if (!caller) return bad(c, 403, "company run required");
+  const slug = opsTarget(c, caller);
+  if (!getTeam(slug)) return bad(c, 404, "no such team");
+  return c.text(await office(c.env, slug).opsThread(slug, c.req.query("id") ?? "", count(c.req.query("limit"), 60, 200), c.req.query("tools") === "1"));
+});
+
+app.get("/api/runner/ops/log", async (c) => {
+  if (!await opsCaller(c)) return bad(c, 403, "company run required");
+  try { return c.text(await workflowLog(c.env, c.req.query("gh_run") ?? "", c.req.query("grep") ?? null, count(c.req.query("tail"), 200, 2000))); }
+  catch (e) { return bad(c, 400, (e as Error).message); }
+});
+
+app.get("/api/runner/ops/transcript", async (c) => {
+  const caller = await opsCaller(c);
+  if (!caller) return bad(c, 403, "company run required");
+  const slug = opsTarget(c, caller);
+  const run = c.req.query("source_run") ?? c.req.query("transcript_run") ?? c.req.query("run") ?? c.req.query("id") ?? "";
+  if (!getTeam(slug) || !/^run_[A-Za-z0-9]{6,40}$/.test(run)) return bad(c, 400, "bad team or run id");
+  const compressed = await c.env.TRANSCRIPTS.get(`transcript/${slug}/${run}.jsonl.gz`, "arrayBuffer");
+  if (!compressed) return c.text(`No transcript for ${slug}/${run}; it may have expired.`);
+  const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream("gzip"));
+  const source = await new Response(stream).text();
+  return c.text(renderTranscript(source, Math.max(0, Number(c.req.query("from")) || 0), count(c.req.query("tail"), 200, 1000)));
+});
+
+app.get("/api/runner/ops/proposals", async (c) => {
+  if (!await opsCaller(c)) return bad(c, 403, "company run required");
+  return c.text((await listProposals(c.env)).map((p) => `${p.run_id} | ${p.team ?? "?"} | ${p.kind} | ${p.title} | ${p.files} files | behind ${p.behind_by}`).join("\n") || "No proposals.");
 });
 
 // ---------- GitHub webhook (workflow_run): catches runs that end without reporting ----------

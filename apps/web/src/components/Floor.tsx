@@ -56,6 +56,7 @@ export function Floor({ state, onOpenAgent, onSync, syncRun, syncing }: {
       <div className="grid grid-cols-2 gap-2">
         {rooms.map((room) => {
           if (room.kind === "meeting") {
+            if (team.scope === "company") return null;
             const live = syncRun && isActive(syncRun);
             const attendees = [...inSync].map(agent).filter(Boolean) as TeamAgent[];
             return (

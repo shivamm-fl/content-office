@@ -4,12 +4,13 @@
   "type": "module",
   "packageManager": "pnpm@10.18.0",
   "scripts": {
-    "build": "pnpm --filter @office/web build",
-    "deploy": "pnpm build && pnpm --filter @office/api run deploy",
+    "gen:teams": "node tools/gen_teams.mjs",
+    "build": "pnpm gen:teams && pnpm --filter @office/web build",
+    "deploy": "pnpm gen:teams && pnpm build && pnpm --filter @office/api run deploy",
     "dev:api": "pnpm --filter @office/api dev",
     "dev:web": "pnpm --filter @office/web dev",
-    "typecheck": "pnpm -r typecheck",
-    "test": "node --test runner/bridge/events.test.mjs runner/bridge/studio.test.mjs apps/api/src/calendar.test.mjs apps/api/src/dayplan.test.mjs apps/api/src/learnings.test.mjs apps/api/src/github.test.mjs"
+    "typecheck": "pnpm gen:teams && pnpm -r typecheck",
+    "test": "node --test runner/bridge/events.test.mjs runner/bridge/studio.test.mjs runner/bridge/ops.test.mjs apps/api/src/*.test.mjs tools/gen_teams.test.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

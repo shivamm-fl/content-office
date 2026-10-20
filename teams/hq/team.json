@@ -1,0 +1,43 @@
+{
+  "slug": "hq",
+  "name": "HQ",
+  "tagline": "The company's engineering desk: the CTO finds what is broken, fixes it and runs the floors",
+  "handles": [],
+  "tracks": [],
+  "lead": "cto",
+  "model": "claude-sonnet-5-5",
+  "scope": "company",
+  "agents": [
+    {
+      "slug": "cto",
+      "name": "CTO",
+      "title": "Owns the whole company. Talk to me first.",
+      "color": "#F2B544",
+      "desk": "desk",
+      "skills": [
+        "Debugging",
+        "Root cause",
+        "Code and app",
+        "Floors and series",
+        "Hire and fire"
+      ]
+    },
+    {
+      "slug": "auditor",
+      "name": "Auditor",
+      "title": "Reviews every change before you see it",
+      "color": "#9AE6B4",
+      "desk": "desk",
+      "skills": [
+        "Review",
+        "Security",
+        "Tests"
+      ]
+    }
+  ],
+  "rooms": [
+    { "id": "cabin", "name": "CTO office", "agents": ["cto"] },
+    { "id": "audit", "name": "Audit desk", "agents": ["auditor"] },
+    { "id": "reception", "name": "Reception", "kind": "reception" }
+  ]
+}

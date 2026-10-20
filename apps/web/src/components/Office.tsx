@@ -1,6 +1,7 @@
 // The office: the team's floor (rooms, seats, sync room, reception), what is happening now, conversations.
-import type { Usage } from "@office/protocol";
-import { useState } from "react";
+import type { ProposalsState, Team, Usage } from "@office/protocol";
+import { useEffect, useState } from "react";
+import { companyApi } from "../api";
 import type { Office } from "../store";
 import { AgentSheet } from "./AgentSheet";
 import { Avatar } from "./Avatar";
@@ -41,12 +42,22 @@ function UsageMeter({ usage, onResume }: { usage: Usage | null; onResume: () => 
   );
 }
 
-export function OfficeView({ office, teams, onSwitch }: { office: Office; teams: { slug: string; name: string }[]; onSwitch: (slug: string) => void }) {
+const HQ_STARTS = ["What failed or got stuck recently?", "Check the health of every floor", "Add a new floor …", "Change something in the app …"];
+
+export function OfficeView({ office, teams, onSwitch }: { office: Office; teams: { slug: string; name: string; scope?: Team["scope"] }[]; onSwitch: (slug: string) => void }) {
   const state = office.state!;
   const { team } = state;
+  const company = team.scope === "company";
   const [sheet, setSheet] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [proposalCount, setProposalCount] = useState(0);
+  useEffect(() => {
+    if (company) return;
+    let live = true;
+    companyApi.proposals().then((r: ProposalsState) => { if (live) setProposalCount(r.proposals.length); }).catch(() => {});
+    return () => { live = false; };
+  }, [company]);
   const syncThreads = new Set(state.threads.filter((t) => t.kind === "sync").map((t) => t.id));
   const syncRun = state.runs.find((r) => r.thread_id && syncThreads.has(r.thread_id) && isActive(r));
   const working = state.desks.filter((d) => d.status !== "idle" && d.activity);
@@ -90,7 +101,7 @@ export function OfficeView({ office, teams, onSwitch }: { office: Office; teams:
           <img src="/icon-192.png" alt="" className="h-9 w-9 rounded-lg" />
           <div className="min-w-0 flex-1">
             <h1 className="text-xl font-semibold leading-tight">Content office</h1>
-            <p className="truncate text-xs text-dim">{team.name}: {team.handles.map((h) => h.handle).join(", ")}</p>
+            <p className="truncate text-xs text-dim">{company ? team.tagline : `${team.name}: ${(team.handles ?? []).map((h) => h.handle).join(", ")}`}</p>
           </div>
           <span className={`text-xs ${office.connected ? "text-dim" : "text-coral"}`}>{office.connected ? "Live" : "Reconnecting"}</span>
         </div>
@@ -98,8 +109,8 @@ export function OfficeView({ office, teams, onSwitch }: { office: Office; teams:
           <nav aria-label="Floors" className="mt-3 flex gap-2 overflow-x-auto pb-0.5">
             {teams.map((t) => (
               <button key={t.slug} onClick={() => onSwitch(t.slug)} aria-current={t.slug === team.slug ? "true" : undefined}
-                className={`shrink-0 rounded-full border px-3 py-1 text-[12.5px] ${t.slug === team.slug ? "border-gold bg-desk font-medium text-paper" : "border-wall text-dim"}`}>
-                {t.name}
+                className={`shrink-0 rounded-xl border px-3 py-1.5 text-[12.5px] ${t.slug === team.slug ? "border-gold bg-desk font-medium text-paper" : "border-wall text-dim"}`}>
+                <span className="block">{t.name}</span>{t.scope === "company" && <span className="block text-[10px] leading-tight text-dim">company</span>}
               </button>
             ))}
           </nav>
@@ -107,7 +118,9 @@ export function OfficeView({ office, teams, onSwitch }: { office: Office; teams:
         <UsageMeter usage={state.usage} onResume={office.resume} />
       </header>
 
-      <button onClick={startDay} disabled={starting} className={`mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left ${dayRun ? "border border-gold/70 bg-desk" : "bg-gold text-ink"}`}>
+      {!company && proposalCount > 0 && <button onClick={() => go("#/proposals")} className="mt-3 flex min-h-11 w-full items-center justify-between rounded-lg border border-gold/40 bg-desk px-3.5 text-left text-sm text-gold">Proposals waiting: {proposalCount}<span aria-hidden>›</span></button>}
+
+      {!company && <button onClick={startDay} disabled={starting} className={`mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left ${dayRun ? "border border-gold/70 bg-desk" : "bg-gold text-ink"}`}>
         <span>
           <span className="block text-[16px] font-semibold">{dayRun ? "The work day is running" : starting ? "Starting the day…" : "Start the day"}</span>
           <span className={`block text-[12.5px] ${dayRun ? "text-dim" : "text-ink/75"}`}>
@@ -115,16 +128,23 @@ export function OfficeView({ office, teams, onSwitch }: { office: Office; teams:
           </span>
         </span>
         <span className="text-sm">{dayRun ? "Open" : ""}</span>
-      </button>
-      {inStudio.length > 0 && (
+      </button>}
+      {!company && inStudio.length > 0 && (
         <p className="mt-2 text-[12.5px] text-dim">In the studio now: {inStudio.map((r) => `${r.item ?? "reel"} (${r.status === "queued" ? "waiting" : r.stage ?? "build"})`).join(", ")}</p>
       )}
 
       <div className="mt-4">
         <Floor state={state} onOpenAgent={setSheet} onSync={callSync} syncRun={syncRun} syncing={syncing} />
         {note && <p className="mt-2 text-sm text-coral">{note}</p>}
-        <EmptyFloor onClick={() => setNote("Adding a team for another handle is the next step of the office. Tell me the handle when you are ready.")} />
+        {!company && <EmptyFloor onClick={() => setNote("Adding a team for another handle is the next step of the office. Tell me the handle when you are ready.")} />}
       </div>
+
+      {company && <section className="mt-5">
+        <h2 className="mb-2 text-sm text-dim">Ask the CTO</h2>
+        <div className="flex flex-wrap gap-2">
+          {HQ_STARTS.map((text) => <button key={text} onClick={() => go(`#/new/${team.lead}?text=${encodeURIComponent(text)}`)} className="min-h-11 rounded-full border border-wall bg-desk px-3.5 py-2 text-left text-[13px] leading-snug">{text}</button>)}
+        </div>
+      </section>}
 
       {working.length > 0 && (
         <section className="mt-5">
@@ -151,7 +171,7 @@ export function OfficeView({ office, teams, onSwitch }: { office: Office; teams:
           <button onClick={() => go(`#/new/${team.lead}`)} className="text-sm text-gold">New</button>
         </div>
         {state.threads.length === 0 ? (
-          <Empty>No conversations yet. Tap the Producer and give the team its first job, for example "Plan three reels for this week".</Empty>
+          <Empty>{company ? "No conversations yet. Ask the CTO to check the company or propose a change." : "No conversations yet. Tap the Producer and give the team its first job, for example \"Plan three reels for this week\"."}</Empty>
         ) : (
           <ul className="divide-y divide-wall overflow-hidden rounded-xl border border-wall bg-desk">
             {state.threads.map((t) => {

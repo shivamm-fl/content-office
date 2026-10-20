@@ -4,9 +4,8 @@
 # Job "work": the agent session. It can read the repo but not write to it (contents: read, no git credentials),
 #   sudo is switched off before the session starts, and the session's subprocesses never see the Claude token
 #   (CLAUDE_CODE_SUBPROCESS_ENV_SCRUB). The conversation goes to the office only; this public log gets coarse lines.
-# Job "save": a fresh checkout of main applies the team's changed files after a path check
-#   (runner/scripts/save_work.py): content (state, reels, social, covers) goes to main; rules, prompts, agents and
-#   scripts go to a proposal/<run> branch for the owner; anything else is dropped.
+# Job "save": a fresh checkout of main checks the packed paths (runner/scripts/save_work.py):
+#   floor content goes to main; rules and company changes go to a proposal/<run> branch for the owner.
 name: office-run
 run-name: "office ${{ inputs.team }} ${{ inputs.profile }} ${{ inputs.run_id }}"
 on:
@@ -33,7 +32,7 @@ jobs:
           [[ "$TEAM" =~ ^[a-z0-9-]{2,40}$ ]] || { echo "bad team"; exit 1; }
           [ -n "$OFFICE_URL" ] || { echo "repository variable OFFICE_URL is not set"; exit 1; }
       - uses: actions/checkout@v4
-        with: { persist-credentials: false }
+        with: { persist-credentials: false, fetch-depth: 100 }
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: Claude Code
@@ -42,6 +41,13 @@ jobs:
           sudo apt-get install -y -qq bubblewrap socat >/dev/null 2>&1 || { sudo apt-get update -qq && sudo apt-get install -y -qq bubblewrap socat >/dev/null; }
           npm install -g --no-fund --no-audit @anthropic-ai/claude-code@2.1.301 >/dev/null
           claude --version && bwrap --version && socat -V | head -1
+      - name: Workspace tools for a company run
+        run: |
+          scope=$(python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1])).get("scope", "floor"))' "teams/$TEAM/team.json")
+          if [ "$scope" = company ]; then
+            corepack enable
+            pnpm install --frozen-lockfile >/dev/null 2>&1 || echo "::warning::pnpm install failed: the HQ run cannot type-check"
+          fi
       - name: Studio tools
         if: ${{ inputs.profile == 'studio' }}
         run: |
@@ -61,15 +67,22 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           OIDC_AUDIENCE: content-office
         run: node runner/bridge/bridge.mjs
-      - name: Pack the team's changes
+      - name: Pack the run's changes
         if: ${{ always() }}
         run: |
           # system binaries only, git without hooks or fsmonitor: the session could have changed PATH dirs or .git/config
           export PATH=/usr/bin:/bin
           G="/usr/bin/git -c core.hooksPath=/dev/null -c core.fsmonitor=false"
           base=$(cat "$RUNNER_TEMP/base_sha")
-          $G ls-files -m -o --exclude-standard -z -- "teams/$TEAM" > "$RUNNER_TEMP/changed"
-          $G ls-files -d -z -- "teams/$TEAM" > "$RUNNER_TEMP/deleted"
+          # Use the claimed checkout's scope even if the session edited or deleted team.json.
+          scope=$($G show "$base:teams/$TEAM/team.json" | /usr/bin/python3 -I -c 'import json,sys; print(json.load(sys.stdin).get("scope", "floor"))')
+          if [ "$scope" = company ]; then
+            $G ls-files -m -o --exclude-standard -z > "$RUNNER_TEMP/changed"
+            $G ls-files -d -z > "$RUNNER_TEMP/deleted"
+          else
+            $G ls-files -m -o --exclude-standard -z -- "teams/$TEAM" > "$RUNNER_TEMP/changed"
+            $G ls-files -d -z -- "teams/$TEAM" > "$RUNNER_TEMP/deleted"
+          fi
           mkdir -p "$RUNNER_TEMP/work"
           if [ -s "$RUNNER_TEMP/changed" ]; then /usr/bin/tar --null -T "$RUNNER_TEMP/changed" -czf "$RUNNER_TEMP/work/files.tgz"; fi
           /usr/bin/python3 -I -c "import json,sys; d=open(sys.argv[1],'rb').read().split(b'\0'); json.dump({'base': sys.argv[2], 'deleted': [x.decode() for x in d if x]}, open(sys.argv[3],'w'))" "$RUNNER_TEMP/deleted" "$base" "$RUNNER_TEMP/work/manifest.json"
@@ -100,4 +113,4 @@ jobs:
           [[ "$RUN_ID" =~ ^run_[A-Za-z0-9]{6,40}$ ]] && [[ "$TEAM" =~ ^[a-z0-9-]{2,40}$ ]] || exit 1
           git config user.name "office-bot"
           git config user.email "office-bot@users.noreply.github.com"
-          python3 -I runner/scripts/save_work.py --work "$RUNNER_TEMP/work" --team "$TEAM" --run "$RUN_ID"
+          python3 -I runner/scripts/save_work.py --work "$RUNNER_TEMP/work" --team "$TEAM" --run "$RUN_ID" --profile desk

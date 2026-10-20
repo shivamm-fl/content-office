@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
+import type { Team } from "@office/protocol";
 import { api, AuthError } from "./api";
 import { CalendarView } from "./components/Calendar";
 import { ChatView } from "./components/Chat";
 import { InboxView } from "./components/Inbox";
 import { Login } from "./components/Login";
 import { OfficeView } from "./components/Office";
+import { ProposalsView } from "./components/Proposals";
 import { RunsView } from "./components/Runs";
 import { go, isActive } from "./components/ui";
 import { useOffice } from "./store";
@@ -19,7 +21,7 @@ function useHash() {
   return hash;
 }
 
-type TeamInfo = { slug: string; name: string };
+type TeamInfo = { slug: string; name: string; scope?: Team["scope"] };
 
 function Shell({ team, teams, onSwitch, onAuthLost }: { team: string; teams: TeamInfo[]; onSwitch: (slug: string) => void; onAuthLost: () => void }) {
   const office = useOffice(team, onAuthLost);
@@ -30,23 +32,33 @@ function Shell({ team, teams, onSwitch, onAuthLost }: { team: string; teams: Tea
   const thread = /^#\/t\/([\w-]+)/.exec(hash)?.[1] ?? null;
   const fresh = /^#\/new\/([\w-]+)/.exec(hash)?.[1] ?? null;
   const calendar = /^#\/calendar(?:\/([\w-]+))?/.exec(hash);
-  const tab = calendar ? "calendar" : hash.startsWith("#/inbox") ? "inbox" : hash.startsWith("#/runs") ? "runs" : "office";
+  const proposal = /^#\/proposals(?:\/([^/?#]+))?/.exec(hash);
+  const tab = proposal ? "proposals" : calendar ? "calendar" : hash.startsWith("#/inbox") ? "inbox" : hash.startsWith("#/runs") ? "runs" : "office";
   const inChat = Boolean(thread || fresh);
+  const company = state.team.scope === "company";
+  const draft = fresh ? new URLSearchParams(hash.split("?")[1] ?? "").get("text") ?? "" : "";
   const waiting = state.asks.length + state.tasks.length;
   const running = state.runs.filter(isActive).length;
+  const tabs: [string, string, string, number][] = [
+    ["office", "#/", "Office", 0],
+    company ? ["proposals", "#/proposals", "Proposals", 0] : ["calendar", "#/calendar", "Calendar", 0],
+    ["inbox", "#/inbox", "Inbox", waiting],
+    ["runs", "#/runs", "Runs", running],
+  ];
 
   return (
     <div className="mx-auto flex h-full max-w-xl flex-col">
       <main className="min-h-0 flex-1 overflow-y-auto">
-        {inChat ? <ChatView key={thread ?? fresh} office={office} threadId={thread} newAgent={fresh} />
+        {inChat ? <ChatView key={thread ?? hash} office={office} threadId={thread} newAgent={fresh} initialText={draft} />
           : tab === "inbox" ? <InboxView office={office} />
-          : tab === "calendar" ? <CalendarView office={office} focus={calendar?.[1] ?? null} />
+          : tab === "proposals" ? <ProposalsView run={proposal?.[1] ?? null} />
+          : tab === "calendar" && !company ? <CalendarView office={office} focus={calendar?.[1] ?? null} />
           : tab === "runs" ? <RunsView office={office} />
           : <OfficeView office={office} teams={teams} onSwitch={onSwitch} />}
       </main>
       {!inChat && (
         <nav className="safe-bottom grid grid-cols-4 border-t border-wall bg-ink pt-1.5 text-center text-[13px]">
-          {([["office", "#/", "Office", 0], ["calendar", "#/calendar", "Calendar", 0], ["inbox", "#/inbox", "Inbox", waiting], ["runs", "#/runs", "Runs", running]] as const).map(([id, href, label, n]) => (
+          {tabs.map(([id, href, label, n]) => (
             <button key={id} onClick={() => go(href)} className={`py-2 ${tab === id ? "font-semibold text-paper" : "text-dim"}`} aria-current={tab === id ? "page" : undefined}>
               {label}{n > 0 && <span className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] font-semibold ${id === "inbox" ? "bg-gold text-ink" : "bg-wall text-paper"}`}>{n}</span>}
             </button>
