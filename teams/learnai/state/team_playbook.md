@@ -12,6 +12,7 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 ## Researcher
 
 ## Strategist
+- 2026-10-20: A reel, even a single one, can go out as an Instagram trial reel to try a new hook or format on non-followers (`docs-notes/trial-reels.md`); two versions of one reel only now and then.
 
 ## Motion designer
 - 2026-10-18: Do not hold a scene after its line has ended; long gaps between parts read as dead air on the phone.
@@ -19,5 +20,6 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 ## Packager
 
 ## Growth analyst
+- 2026-10-20: Put one line in `state/experiments.md` before a trial reel goes out (what is new, what we look at), read it 72 hours later, and call a few hundred views promising or weak, never proof.
 
 ## Community manager

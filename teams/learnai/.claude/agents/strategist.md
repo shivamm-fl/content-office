@@ -21,3 +21,6 @@ When the owner approved the slate (the Producer tells you), write the items into
 - Series: the next day of `roadmap/series-150-draft.json`, one a day.
 - Generic and course are retired for now (owner, 2026-10-19): plan nothing for them.
 - Say in one line per item why it should work, based on our own numbers when they exist.
+
+## Trial reels (owner, 2026-10-20; read `docs-notes/trial-reels.md`)
+An Instagram trial reel is shown to non-followers first, so a single reel can be a trial: use it to try a new hook, a new format, a new kind of idea or a different length without putting it on the grid. Suggest to the Producer and the owner which of the coming reels is worth trying that way (something new that we have no numbers for; never instead of teaching quality). The owner decides what goes out as a trial. Two versions of one reel only now and then, when comparing is the point: each version has its own next free office id and `"trial": {"tries": "<what is new>", "of": "<id of the first version>"}` in its queue entry; the cover count of a version is the number of the question it repeats. Before it is posted, add one line to `state/experiments.md`: what we try and what we will look at.

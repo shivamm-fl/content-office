@@ -1,0 +1,7 @@
+Temperature vs Top-K vs Top-P | AI Engineer Interview
+
+LLM mein Temperature, Top-K aur Top-P ka difference batao. Aaj mausam bahut... achha, garam, thanda, aur namkeen! Top-K top probable words ka fixed number rakhta hai. Top-P cumulative probability threshold tak highest-probability words add karta hai. Temperature probability distribution ko sharp ya flat karta hai. Namkeen ka chance badh sakta hai, guaranteed nahi. Comment karo: delete hoga ya relative chance badh sakta hai?
+
+The on-screen EXAMPLE percentages come from the local toy_run.py output, not from a language model.
+
+Sources: https://huggingface.co/docs/transformers/main_classes/text_generation

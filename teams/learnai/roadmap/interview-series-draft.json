@@ -22,7 +22,11 @@
       "unit": "C6",
       "title": "Interview: Temperature, top-k aur top-p teeno laga diye. Output pe kaun sa asar karta hai?",
       "trap": "Treating the three knobs as one: top-p and top-k cut the list of candidate words, temperature reshapes the odds inside what is left.",
-      "status": "todo"
+      "status": "built",
+      "office_id": "q105",
+      "variant_ids": [
+        "q107"
+      ]
     },
     {
       "n": 2,
@@ -30,7 +34,8 @@
       "unit": "C3",
       "title": "Interview: Few-shot examples dene se model kab behtar hota hai, kab nahi?",
       "trap": "Adding examples blindly: they teach the answer format and the label options, but all examples of one label or an unlucky order can pull the answer, and every example costs tokens on every request.",
-      "status": "todo"
+      "status": "built",
+      "office_id": "q106"
     },
     {
       "n": 3,

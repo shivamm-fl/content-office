@@ -1,0 +1,10 @@
+Temperature, top-k aur top-p mein kya fark hai? AI engineer interview
+
+Top-k aur top-p model ke agle word ki list chhoti karte hain (top-k ginti se, top-p kul chance se), aur temperature bache hue words ke chance badalta hai, kuch hatata nahi. Is video mein 8 words ki ek chhoti nakli list par teeno ko chalakar dikhaya hai (example numbers, hamne Python mein chalaye): temperature 1.5 par ek bekaar word ka chance 0.6% se 1.9% ho gaya, top-k 3 ne use hata diya, top-p 0.9 ne 5 words rakhe, aur temperature 1.5 par wahi top-p 6 words rakhta hai. Aakhir mein wo do line jo interview mein bolni hain.
+
+Is video mein: temperature, top-k, top-p, probability, aur teeno ka ek saath asar. Check yourself ka jawab: badhte hain.
+
+Sources:
+https://platform.claude.com/docs/en/api/messages
+https://arxiv.org/abs/1904.09751
+https://huggingface.co/blog/how-to-generate

@@ -518,6 +518,125 @@
       "studio_note": "FINISHED REEL, DELIVER ONLY (owner, 2026-10-19). The owner approved this reel: video, voice (his own voice on Flash v2.5 at tempo 0.9), cover and caption. The runner restores reels/a002_train_validation_test_hi.mp4, its voice files and the phrase cache before you start. Do NOT rewrite the script, redraw the pictures, run new_reel.py, make_voice, render_video or render_cover: the video is made from exactly these files, and the gate refuses a video whose composition changed without a render. Steps: (1) check that reels/a002_train_validation_test_hi.mp4 is there; (2) lint social/a002_train_validation_test.hi.caption.txt with .claude/skills/ig-caption/caption.py (it passes); (3) studio_gate; (4) a short report. If the video is missing, stop and say so in the report, do not rebuild it.",
       "status": "planned",
       "qa_passed": false
+    },
+    {
+      "id": "q105",
+      "track": "interview",
+      "unit": "C6",
+      "title": "Interview: Temperature, Top-K aur Top-P ka difference batao",
+      "one_idea": "Top-K keeps a fixed count of the most probable next words, Top-P keeps the smallest set reaching a cumulative probability threshold, and Temperature reshapes the probability distribution.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ne poocha: LLM mein Temperature, Top-K aur Top-P ka difference batao.",
+      "hook_formula": "The owner's interview command",
+      "hook_source": "the owner's own script of 2026-10-19, used word for word",
+      "visual_idea": "One next-word distribution for Aaj mausam bahut is cut at three for Top-K, accumulated to 90 percent for Top-P, and reshaped from sharp to flat for Temperature; NAMKEEN marks the tail.",
+      "example": "EXAMPLE: a toy run with invented scores for 8 words after 'Aaj mausam bahut' (state/runs/q105_toy_run.py, output in state/runs/q105_toy_run_output.txt): at T=1 ACHHA 36.7 %, GARAM 24.6 %, THANDA 16.5 %, NAMKEEN 0.6 %; top-k 3 leaves NAMKEEN out; top-p 0.9 keeps five words at T=1 and six at T=1.5; NAMKEEN is 0.015 % at T=0.5 and 1.874 % at T=1.5.",
+      "sources": [
+        "https://huggingface.co/docs/transformers/main_classes/text_generation"
+      ],
+      "length_target_s": 88.5,
+      "cover_headline": "Temperature, Top-K, Top-P: what's the difference?",
+      "thumb_text": "3 Controls",
+      "keywords": [
+        "temperature top k top p",
+        "llm sampling explained",
+        "ai engineer interview"
+      ],
+      "caption_note": "Use the owner's command hook unchanged; one comment ask about NAMKEEN, with the answer not shown in the reel.",
+      "status": "planned",
+      "qa_passed": false,
+      "facts_to_verify": [
+        "top_k: the number of highest probability vocabulary tokens kept for top-k filtering (Hugging Face GenerationConfig docs, fetched 2026-10-20)",
+        "top_p: only the smallest set of most probable tokens whose probabilities add up to top_p or higher are kept (same page)",
+        "temperature: the value used to modulate the next token probabilities (same page); sampling must be on (do_sample) for these to apply"
+      ]
+    },
+    {
+      "id": "q106",
+      "track": "interview",
+      "unit": "C3",
+      "title": "Interview: Prompt mein examples dene se model hamesha behtar hota hai?",
+      "one_idea": "Examples in a prompt show the model the shape of the answer and the allowed labels, so they usually help; but every example costs tokens on every request, a one-sided set or a bad order pulls the answer, and the only way to know is to measure with and without.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ne poocha: prompt mein examples dene se model hamesha behtar jawab deta hai?",
+      "hook_formula": "interviewer_asked: one complete question of 11 words in plain words",
+      "hook_source": "hook-writer interviewer_asked; the question passes the Question quality test (one sentence, 11 words, no stacked question, no jargon beyond 'prompt', 'examples', 'model')",
+      "visual_idea": "The real classification prompt as a mono card under the hook from frame 0; it grows from 23 to 85 tokens when five examples are added (a real tiktoken count); two label chips feed a model box; three all-positive examples make a red ALWAYS POSITIVE? pill; a gauge from NEAR CHANCE to NEAR BEST swings with the examples and their order; three measuring runs (0, 3, 5 examples) on the same reviews.",
+      "everyday_anchor": "Showing a new hire a few solved tickets before the real one: a good set teaches the format, a one-sided set teaches a bad habit.",
+      "example": "EXAMPLE prompt (invented): 'Classify the review as positive or negative.' with up to five Review/Label pairs and the review 'The delivery was late and the box was damaged.' We ran tiktoken (o200k_base): 0 examples 23 tokens, 1 example 35, 3 examples 60, 5 examples 85; five examples add 62 tokens to every request, 62 million tokens over a million requests. No model result is shown or claimed.",
+      "sources": [
+        "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices",
+        "https://arxiv.org/abs/2102.09690",
+        "https://arxiv.org/abs/2202.12837",
+        "https://arxiv.org/abs/2005.14165",
+        "https://developers.openai.com/api/docs/guides/reasoning-best-practices",
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ],
+      "facts_to_verify": [
+        "Examples steer output format, tone and structure; they should be relevant and diverse so the model does not pick up unintended patterns; 3 to 5 examples (Anthropic prompting best practices, fetched 2026-10-19).",
+        "GPT-3 few-shot accuracy depends on the prompt format, the training examples and their order, from near chance to near state of the art; the model is biased toward answers near the end of the prompt or common in pre-training data (Zhao et al., 'Calibrate Before Use', abstract, fetched 2026-10-19).",
+        "Randomly replacing the labels in the demonstrations barely hurts performance across 12 models; the label space, the distribution of the input text and the overall format of the demonstrations matter (Min et al., abstract, fetched 2026-10-19).",
+        "Reasoning models often do not need few-shot examples: try zero shot first, then few shot if needed; examples must align closely with the instructions (OpenAI reasoning best practices, fetched 2026-10-19).",
+        "Token counts are from tiktoken o200k_base on the exact prompt shown; other models tokenize differently. API usage is billed per token (Anthropic pricing page, fetched 2026-10-19)."
+      ],
+      "length_target_s": 122.5,
+      "cover_headline": "Do more examples always help?",
+      "thumb_text": "More examples?",
+      "keywords": [
+        "few shot prompting",
+        "how many examples in a prompt",
+        "in context learning",
+        "prompt engineering interview",
+        "ai engineer interview questions"
+      ],
+      "trap": "Adding examples blindly. Reframed after reading the sources: labels barely matter (Min et al.), so the trap is not 'a wrong example is copied'; it is cost on every request, a one-sided or badly ordered set that pulls the answer, and never measuring against the no-example prompt.",
+      "caption_note": "The answer to the check question is: positive (the model may lean toward positive when all three examples are positive). Put it in the caption.",
+      "status": "planned",
+      "qa_passed": false
+    },
+    {
+      "id": "q107",
+      "track": "interview",
+      "unit": "C6",
+      "title": "Interview: Temperature, top-k aur top-p teeno laga diye. Output pe kaun sa asar karta hai?",
+      "one_idea": "Temperature, top-k and top-p do three different jobs: top-k (by count) and top-p (by total chance) cut the list of next words, temperature only reshapes the chances of the words that are left, and changing one changes what another keeps.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Chatbot ne bola: aaj mausam bahut namkin hai.",
+      "hook_formula": "stake_nonsense_output",
+      "hook_source": "the stake from frame 0 (the bot says something silly), then the interview question, then the answer first in one plain sentence (owner's rule 8 and his correction of 2026-10-19: no filler between the hook and the answer)",
+      "visual_idea": "A chat where the bot says the weather is salty, then one toy list of 8 candidate words drawn as bars with their real chances (NAMKIN 0.6 percent); temperature 1.5 flattens the bars and makes NAMKIN three times likelier without removing it; a cut line after word 3 (top-k) removes it; a running total stops at 90 percent after 5 words (top-p); the same top-p keeps 6 words once the bars are flatter.",
+      "everyday_anchor": "Choosing the next word like picking from a menu: top-k and top-p shorten the menu, temperature changes how strongly the menu favours the first items.",
+      "example": "EXAMPLE (we ran it, Python 3.12 and numpy, invented logits for 8 words after 'Aaj mausam bahut ...'): at T 1.0 ACHHA 36.7 percent and NAMKIN 0.6 percent; T 1.5 makes NAMKIN 1.9 percent (3.1 times) and removes nothing; top-k 3 keeps ACHHA, GARAM, THANDA (47.2, 31.6, 21.2 after renormalising) and NAMKIN is never drawn in 10,000 draws; top-p 0.9 adds 36.7, 61.4, 77.9, 88.9, 95.0 and keeps 5 words; T 0.5 gives ACHHA 56.3 percent, T 1.5 gives 28.8; top-p 0.9 keeps 5 words at T 1.0 and 6 words at T 1.5. Order of the stack in the run: temperature, then top-k, then top-p, then renormalise.",
+      "sources": [
+        "https://platform.claude.com/docs/en/api/messages",
+        "https://arxiv.org/abs/1904.09751",
+        "https://huggingface.co/blog/how-to-generate"
+      ],
+      "facts_to_verify": [
+        "Anthropic Messages API reference (fetched 2026-10-19): temperature is the amount of randomness injected into the response (default 1.0, range 0.0 to 1.0, closer to 0.0 for analytical tasks, closer to 1.0 for creative ones, not fully deterministic even at 0.0); top_k samples only from the top K options for each token to remove the long tail; top_p uses nucleus sampling: cumulative distribution in decreasing probability order, cut off once it reaches top_p. The same page marks all three as not settable on models released after Claude Opus 4.6 (not used in the reel).",
+        "Hugging Face 'How to generate text' (fetched 2026-10-19): lower temperature makes the softmax sharper; top-k keeps the K most likely next words and redistributes the probability mass among them; top-p picks from the smallest set of words whose cumulative probability exceeds p, so the set size changes with the distribution; top-p can be combined with top-k.",
+        "Holtzman et al., nucleus sampling (arXiv 1904.09751, fetched 2026-10-19): sampling from the dynamic nucleus of the distribution cuts the unreliable tail and avoids bland, repetitive likelihood-based text.",
+        "Every number on screen is from the seeded toy run in docs: toy_run.py (invented logits, labelled EXAMPLE); the claim 'top-p keeps more words when temperature is higher' is a result of that run and follows from flatter chances needing more words to reach p."
+      ],
+      "length_target_s": 127.5,
+      "cover_headline": "Temperature, top-k, top-p: who does what?",
+      "thumb_text": "Temp top-k top-p",
+      "keywords": [
+        "temperature top k top p",
+        "llm sampling parameters",
+        "nucleus sampling explained",
+        "ai engineer interview questions",
+        "top p vs temperature"
+      ],
+      "caption_note": "The answer to the check question is: badhte hain (put it in the caption).",
+      "status": "planned",
+      "qa_passed": false,
+      "cover_count": 1,
+      "trial": {
+        "tries": "the team's longer numbers-first version of question 001 on non-followers",
+        "of": "q105"
+      },
+      "variant_note": "Version B of the first interview question (q105): the team's own script, built first as a demo. Same question as q105, so its cover counts 001 like q105."
     }
   ]
 }

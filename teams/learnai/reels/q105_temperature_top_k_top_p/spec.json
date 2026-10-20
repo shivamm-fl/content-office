@@ -1,0 +1,35 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "interviewer_asked",
+  "scenes": ["A", "B", "C", "D", "E", "F", "G"],
+  "min": {"A": 3.0, "B": 5.0, "C": 8.0, "D": 8.0, "E": 8.0, "F": 7.0, "G": 4.0},
+  "tail": {},
+  "cues": [
+    ["impact", null, null, 0.05],
+    ["pop", "B", 3, 0.0],
+    ["slice", "C", 2, 0.0],
+    ["err", "C", 3, 0.0],
+    ["tick", "D", 1, 0.0],
+    ["click", "D", 2, 0.0],
+    ["rise", "E", 3, 0.0],
+    ["dip", "F", 0, -0.1],
+    ["pop", "G", 2, 0.0]
+  ],
+  "sources": ["https://huggingface.co/docs/transformers/main_classes/text_generation"],
+  "copy": {"hi": {
+    "A": "@hook Interviewer ने पूछा: | LLM में Temperature, Top-K और Top-P का difference बताओ. || भाई, तीनों AI को next word choose करने में help करते हैं... | पर तीनों का काम अलग है!",
+    "B": "मान लो AI को complete करना है: || आज मौसम बहुत... || AI के पास options हैं: | अच्छा, गरम, ठंडा... | और नमकीन! || अब game समझो.",
+    "C": "Top-K बोलता है: | सिर्फ़ top 3{three} probable words रखो. || अच्छा, गरम, ठंडा — बस! || नमकीन की probability कितनी भी हो, | अगर वो top 3{तीन} में नहीं है, | तो out!",
+    "D": "Top-P fixed number नहीं देखता. || ये highest-probability words को add करता है, | जब तक उनकी cumulative probability threshold तक नहीं पहुँच जाती. || Model confident है तो कम options. | Probability spread है तो ज़्यादा options हो सकते हैं.",
+    "E": "Temperature का काम अलग है! || Low temperature? | High-probability words को और preference. || High temperature? | Probability distribution flatter, | तो less-likely words को भी comparatively ज़्यादा chance. || मतलब temperature बढ़ाओ, | तो नमकीन जैसा word भी ज़्यादा likely हो सकता है — | guaranteed नहीं!",
+    "F": "Interview में याद रखना: || Top-K = fixed number of candidates. || Top-P = cumulative probability के basis पर candidates. || Temperature = probability distribution कितनी sharp या flat होगी.",
+    "G": "अब बताओ: | temperature बढ़ाने से नमकीन word delete होगा या उसका relative chance बढ़ सकता है? || Comment करो!"
+  }}
+}

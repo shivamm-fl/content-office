@@ -45,6 +45,7 @@ Ids: continue from the highest number used for that prefix anywhere in `state/qu
 - `thumb_text`: clean English, at most 3 words, not a copy of the title
 - `keywords`: at least three search phrases a person would type
 - `status`: `"planned"`. `qa_passed`: `false`
+- `trial` (optional, only for a reel the owner will post as a trial reel, `docs-notes/trial-reels.md`): `{"tries": "<what is new>", "of": "<id of the first version, only for a second version of one reel>"}`; a second version has its own id and its cover count is the number of the question it repeats
 
 ## Step 4: quality bar
 - The first line is a question the viewer already has: a plain question about a topic they hear about (`direct_question`), a clear interview question (`interviewer_asked`, `company_specific`), or something they have seen happen without knowing why (`relatable_stake`). The reel answers it inside itself. Never a concept name with no question and no stake in an interview or generic reel, and never a confusing, fragmentary or double question after `Interviewer ने पूछा:`.

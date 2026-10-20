@@ -1,0 +1,15 @@
+# Visual plan: q105 Temperature vs Top-K vs Top-P
+
+The picture with sound off: one toy next-word distribution is cut to three candidates by Top-K, accumulated to a probability threshold by Top-P, and reshaped by Temperature. The figures are from `toy_run_output.txt` beside the owner's `toy_run.py`; its invented logits make this an EXAMPLE, not measured language-model output. The spoken copy stays unchanged.
+
+Look: clean navy cards, gold for the selected set, cyan for probability, red only for a removed candidate. The caption lane stays clear. The running sentence is an example artifact; the other on-screen text is short diagram labels.
+
+| Scene | Spoken (short) | The picture: what is drawn and what changes | On-screen labels (1-3 words each) | Built with |
+|---|---|---|---|---|
+| A | Interviewer asks the difference; all three help choose a next word | From frame zero the interview question sits above a next-word card, with three large knob boxes beneath it; the boxes take focus when Temperature, Top-K and Top-P are spoken. | NEXT WORD, TEMPERATURE, TOP-K, TOP-P | M.hook, custom question card and boxes |
+| B | “Aaj mausam bahut…”; options include namkeen | The unfinished sentence becomes a large prompt card above eight ranked probability bars; ACHHA, GARAM and THANDA brighten in turn, then a slim red NAMKEEN bar is called out. | EXAMPLE, NEXT WORD, ACHHA, GARAM, THANDA, NAMKEEN | custom true-proportion bar chart |
+| C | Top-K keeps top three; namkeen is out | The same eight ranked bars acquire a cut line after the third; lower bars dim and the NAMKEEN row drops visually below the cut with a red cross. | EXAMPLE, TOP-K, KEEP 3, OUT | custom bar chart, SVG line and cross |
+| D | Top-P adds until the threshold; fewer or more words | Two cumulative meters fill left to right toward one 90% marker: the dominant T=0.5 run reaches 93.0% with three words, while the flatter T=1.5 run needs six to reach 94.9%. | EXAMPLE, TOP-P, 90% LIMIT, DOMINANT, FLAT, 3 WORDS, 6 WORDS | custom stacked cumulative meters |
+| E | Low temperature sharpens; high flattens; namkeen may rise | The same bars are shown as two aligned distributions; low T=0.5 gives ACHHA 56.3% and NAMKEEN 0.015%, high T=1.5 gives ACHHA 28.8% and NAMKEEN 1.874%. The NAMKEEN bar grows but the final tag says it is not certain. | EXAMPLE, LOW T, HIGH T, NAMKEEN, NOT GUARANTEED | custom paired bar chart and callout |
+| F | Interview summary of the three controls | Three wide rows appear on their names; a miniature three-bar cut, a cumulative meter, and a sharp-to-flat bar motif each sit beside a two-to-three-word meaning. | TOP-K, FIXED COUNT, TOP-P, CUMULATIVE LIMIT, TEMPERATURE, SHARP OR FLAT | custom summary cards and miniature charts |
+| G | Does higher temperature delete namkeen or raise its chance? Comment | A small NAMKEEN probability bar stays between two large answer buttons; DELETE and CHANCE UP arrive without revealing the answer, followed by the comment bar and an @ai.learnvora card with a visual-only FOLLOW pill. | CHECK YOURSELF, DELETE, CHANCE UP, COMMENT, FOLLOW | custom check card, buttons and handle card |

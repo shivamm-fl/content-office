@@ -1,0 +1,9 @@
+LLM mein Temperature, Top-K aur Top-P ka difference batao.
+
+Bhai, teeno AI ko next word choose karne mein help karte hain, par teeno ka kaam alag hai.
+
+Aaj mausam bahut... achha, garam, thanda, aur namkeen! Top-K sirf top 3 probable words rakhta hai. Top-P highest-probability words ko add karta hai jab tak cumulative probability threshold tak nahi pahunch jaati. Low temperature high-probability words ko aur preference deta hai; high temperature distribution flatter karta hai. Namkeen jaisa word zyada likely ho sakta hai, guaranteed nahi.
+
+Comment karo: temperature badhane se namkeen word delete hoga ya uska relative chance badh sakta hai?
+
+#AIEngineerInterview #LLM #MachineLearning

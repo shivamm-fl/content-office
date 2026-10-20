@@ -846,6 +846,40 @@
       "hook_formula": "plain_question",
       "status": "planned",
       "planned": "2026-10-19"
+    },
+    {
+      "id": "q105",
+      "track": "interview",
+      "unit": "C6",
+      "title": "Interview: Temperature, Top-K aur Top-P ka difference batao",
+      "kind": "question",
+      "topic": "Top-K keeps a fixed count of the most probable next words, Top-P keeps the smallest set reaching a cumulative probability threshold, and Temperature reshapes the probability distribution.",
+      "hook_formula": "The owner's interview command",
+      "status": "built",
+      "planned": "2026-10-19"
+    },
+    {
+      "id": "q106",
+      "track": "interview",
+      "unit": "C3",
+      "title": "Interview: Prompt mein examples dene se model hamesha behtar hota hai?",
+      "kind": "question",
+      "topic": "Examples in a prompt show the model the shape of the answer and the allowed labels, so they usually help; but every example costs tokens on every request, a one-sided set or a bad order pulls the answer, and the only way to know is to measure with and without.",
+      "hook_formula": "interviewer_asked: one complete question of 11 words in plain words",
+      "status": "built",
+      "planned": "2026-10-19"
+    },
+    {
+      "id": "q107",
+      "track": "interview",
+      "unit": "C6",
+      "title": "Interview: Temperature, top-k aur top-p teeno laga diye. Output pe kaun sa asar karta hai?",
+      "kind": "question",
+      "topic": "Temperature, top-k and top-p do three different jobs: top-k (by count) and top-p (by total chance) cut the list of next words, temperature only reshapes the chances of the words that are left, and changing one changes what another keeps.",
+      "hook_formula": "stake_nonsense_output",
+      "status": "built",
+      "planned": "2026-10-19",
+      "office_note": "version B of question 105 for the trial test T01; a repeat on purpose, not a new question"
     }
   ]
 }

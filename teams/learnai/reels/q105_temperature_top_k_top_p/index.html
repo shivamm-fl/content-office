@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Temperature, top-k, top-p</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="88.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="88.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="88.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="88.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+      // ============ helpers (a002 pattern) ============
+      const NSx = "http://www.w3.org/2000/svg";
+      const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NSx, tag); Object.keys(attrs).forEach((k) => e.setAttribute(k, attrs[k])); if (parent) parent.appendChild(e); return e; };
+      const svgLayer = (host) => { const s = svgEl("svg", { viewBox: "0 0 1080 1920" }, host); s.setAttribute("class", "ln"); return s; };
+      const pol = (cx, cy, R, deg) => [cx + R * Math.sin(deg * Math.PI / 180), cy - R * Math.cos(deg * Math.PI / 180)];
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const states = (host, css, list) => list.map(([t, html], i) => { const d = el(host, css, html); tl.set(d, { opacity: 0 }, 0); tl.set(d, { opacity: 1 }, t);
+        if (i < list.length - 1) tl.set(d, { opacity: 0 }, list[i + 1][0]); tl.fromTo(d, { y: 10 }, { y: 0, duration: 0.25, ease: "power3.out", immediateRender: false }, t); return d; });
+      const pillC = (host, word, y, t, col=ACC) => {
+        const w = el(host, `left:80px;top:${y}px;width:920px;height:56px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;padding:0 30px;border-radius:999px;border:2px solid ${col};background:${ca(col,.1)};font:700 36px ${COD};letter-spacing:.12em;color:${col}">${word}</div>`;
+        return show(w,t,{opacity:0,y:-14});
+      };
+      const labelC = (host, word, y, t, col=MUTED) => show(el(host,`left:0;top:${y}px;width:1080px;text-align:center;font:700 36px ${COD};letter-spacing:.18em;color:${col}`,word),t,{opacity:0,y:12});
+
+      // Percentages from the owner's toy_run_output.txt. The invented logits require EXAMPLE.
+      const words = ["ACHHA","GARAM","THANDA","SUNDAR","KHARAB","AJEEB","NEELA","NAMKEEN"];
+      const base = [36.7,24.6,16.5,11.1,6.1,3.0,1.4,0.6];
+      const low = [56.3,25.3,11.4,5.1,1.5,0.4,0.1,0.015];
+      const high = [28.8,22.1,16.9,13.0,8.7,5.4,3.2,1.874];
+      const pct = v => (v<.1?v.toFixed(3):v.toFixed(1))+"%";
+      const chart = (host, vals, title, t, y=330) => {
+        const frame=glass(host,80,y,920,850,CYAN,32); frame.style.background=PANEL;
+        el(frame,`left:32px;top:24px;font:800 43px ${LAT};color:${TEXT}`,title);
+        const rows=[];
+        words.forEach((word,i)=>{
+          const row=el(frame,`left:25px;top:${112+i*88}px;width:870px;height:72px;display:flex;align-items:center`);
+          el(row,`left:0;top:0;width:220px;height:72px;display:flex;align-items:center;font:800 38px ${LAT};color:${i===7?HOT:TEXT}`,word);
+          const track=el(row,"left:230px;top:16px;width:490px;height:40px;border-radius:9px;background:#233147");
+          const fill=el(track,`left:0;top:0;width:${Math.max(2,vals[i]/60*490)}px;height:40px;border-radius:9px;background:${i===7?HOT:CYAN}`);
+          el(row,`left:735px;top:0;width:130px;height:72px;display:flex;align-items:center;justify-content:flex-end;font:800 35px ${COD};color:${i===7?HOT:TEXT}`,pct(vals[i]));
+          rows.push({row,fill});
+        });
+        show(frame,t,{opacity:0,y:24});
+        return {frame,rows};
+      };
+      const meter=(host,y,title,values,keep,t,answer,fillAt=t)=>{
+        const box=glass(host,95,y,890,330,CYAN,30); box.style.background=PANEL;
+        el(box,`left:34px;top:22px;font:800 44px ${LAT};color:${TEXT}`,title);
+        const lane=el(box,"left:34px;top:116px;width:820px;height:88px;border-radius:15px;background:#233147;overflow:hidden");
+        let sum=0;
+        values.slice(0,keep).forEach((v,i)=>{
+          const seg=el(lane,`left:${sum*8.2}px;top:0;width:${v*8.2}px;height:88px;background:${i%2?ACC:CYAN};border-right:3px solid #0E1626`);
+          tl.set(seg,{scaleX:0,transformOrigin:"left center"},0);
+          tl.to(seg,{scaleX:1,duration:.45,ease:"power3.out",immediateRender:false},fillAt+i*.22);
+          sum+=v;
+        });
+        el(box,`left:772px;top:104px;width:4px;height:112px;background:${HOT}`);
+        el(box,`left:620px;top:70px;width:210px;text-align:right;font:800 34px ${COD};color:${HOT}`,"90% LIMIT");
+        const result=el(box,`left:34px;top:235px;font:800 44px ${LAT};color:${ACC}`,answer);
+        const total=el(box,`left:585px;top:238px;width:265px;text-align:right;font:800 40px ${COD};color:${TEXT}`,sum.toFixed(1)+"%");
+        tl.set([result,total],{opacity:0},0);
+        tl.to([result,total],{opacity:1,duration:.3,immediateRender:false},fillAt+keep*.22+.3);
+        show(box,t,{opacity:0,y:28}); return box;
+      };
+
+      // diagram: A — the question and three controls are a frame-zero picture.
+      M.hook(["Temperature, Top-K, Top-P","difference batao"],{size:79,top:215,until:M.Ed("A",1)+.25});
+      const aq=glass(A,110,480,860,225,ACC,32); aq.style.background=PANEL;
+      el(aq,`left:50px;top:35px;font:800 40px ${COD};color:${ACC};letter-spacing:.1em`,"INTERVIEWER");
+      el(aq,`left:50px;top:105px;font:800 67px ${LAT};color:${TEXT}`,"NEXT WORD?");
+      tl.set(aq,{opacity:1},0);
+      [["TEMPERATURE",CYAN,at("A","Temperature")],["TOP-K",ACC,at("A","Top-K")],["TOP-P",CYAN,at("A","Top-P")]].forEach(([lab,col,t],i)=>{
+        const card=glass(A,110,750+i*158,860,130,col,26); card.style.background=PANEL;
+        el(card,`left:40px;top:36px;font:800 53px ${LAT};color:${col}`,lab);
+        el(card,`left:760px;top:28px;font:800 65px ${LAT};color:${col}`,"›");
+        show(card,t,{opacity:0,y:24});
+      });
+      M.fit(A,{y:460,h:840});
+
+      // diagram: B — the unfinished sentence feeds eight probability bars.
+      pillC(B,"EXAMPLE",220,P("B",0));
+      const prompt=glass(B,80,300,920,175,ACC,28); prompt.style.background=PANEL;
+      el(prompt,`left:36px;top:34px;font:700 36px ${COD};color:${ACC}`,"NEXT WORD");
+      el(prompt,`left:36px;top:90px;font:800 53px ${LAT};color:${TEXT}`,"Aaj mausam bahut...");
+      show(prompt,at("B","aaj"),{opacity:0,y:26});
+      const b=chart(B,base,"NEXT-WORD CHANCES",at("B","options"),500);
+      [at("B","achha"),at("B","garam"),at("B","thanda"),at("B","namkin")].forEach((t,j)=>{
+        const i=[0,1,2,7][j]; tl.to(b.rows[i].row,{backgroundColor:ca(i===7?HOT:ACC,.16),duration:.35,immediateRender:false},t);
+      });
+      M.fit(B,{y:170,h:1130});
+
+      // diagram: C — the fixed Top-K line leaves the tail outside.
+      pillC(C,"EXAMPLE",220,P("C",0));
+      const c=chart(C,base,"TOP-K",P("C",0),315);
+      const cut=el(c.frame,`left:25px;top:377px;width:870px;height:6px;background:${ACC}`);
+      tl.set(cut,{opacity:0,scaleX:0,transformOrigin:"left center"},0);
+      tl.to(cut,{opacity:1,scaleX:1,duration:.5,ease:"power3.out",immediateRender:false},at("C","3"));
+      const keepTag=el(c.frame,`left:585px;top:26px;width:260px;text-align:right;font:800 40px ${COD};color:${ACC}`,"KEEP 3");
+      show(keepTag,at("C","3"),{opacity:0,y:12});
+      c.rows.slice(3).forEach(({row},i)=>tl.to(row,{opacity:i===4?.62:.22,duration:.4,immediateRender:false},at("C","bas")));
+      const cross=el(c.frame,`left:630px;top:721px;width:82px;height:82px;display:flex;align-items:center;justify-content:center;border:5px solid ${HOT};border-radius:50%;font:800 72px ${LAT};color:${HOT}`,"×");
+      show(cross,at("C","out"),{opacity:0,y:-25});
+      tl.to(c.rows[7].row,{y:18,duration:.45,ease:"power3.out",immediateRender:false},at("C","out"));
+      M.fit(C,{y:170,h:1130});
+
+      // diagram: D — 90% is crossed by three concentrated words or six flatter words.
+      pillC(D,"EXAMPLE",205,P("D",0));
+      pillC(D,"TOP-P",275,at("D","Top-P"),CYAN);
+      meter(D,365,"DOMINANT · T=0.5",[56.3,25.3,11.4],3,P("D",0),"3 WORDS",at("D","add"));
+      meter(D,745,"FLAT · T=1.5",[28.8,22.1,16.9,13.0,8.7,5.4],6,P("D",0),"6 WORDS",at("D","spread"));
+      M.fit(D,{y:170,h:1130});
+
+      // diagram: E — the same chart is reshaped in place.
+      pillC(E,"EXAMPLE",215,P("E",0));
+      const eLow=chart(E,low,"LOW T = 0.5",P("E",0),330);
+      const eHigh=chart(E,high,"HIGH T = 1.5",at("E","High"),330);
+      gone(eLow.frame,at("E","High")-.2,.2);
+      tl.to(eHigh.rows[7].row,{backgroundColor:ca(HOT,.16),duration:.4,immediateRender:false},at("E","less-likely"));
+      const eMark=el(E,`left:110px;top:1196px;width:860px;height:90px;border-radius:24px;border:2px solid ${HOT};background:${PANEL};display:flex;align-items:center;justify-content:center;font:800 37px ${COD};color:${HOT}`,"NAMKEEN  0.015% → 1.874%");
+      show(eMark,at("E","namkin"),{opacity:0,y:18});
+      const eCaveat=el(E,`left:268px;top:1287px;width:544px;height:62px;border-radius:31px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 34px ${COD}`,"NOT GUARANTEED");
+      show(eCaveat,at("E","guaranteed"),{opacity:0,y:15});
+      M.fit(E,{y:170,h:1130});
+
+      // diagram: F — three controls, three mini pictures, three meanings.
+      pillC(F,"INTERVIEW RECAP",215,P("F",0));
+      [{y:315,name:"TOP-K",meaning:"FIXED COUNT",t:at("F","Top-K"),kind:"cut"},
+       {y:610,name:"TOP-P",meaning:"CUMULATIVE LIMIT",t:at("F","Top-P"),kind:"meter"},
+       {y:905,name:"TEMPERATURE",meaning:"SHARP OR FLAT",t:at("F","Temperature"),kind:"shape"}].forEach(r=>{
+        const card=glass(F,80,r.y,920,245,CYAN,30); card.style.background=PANEL;
+        el(card,`left:36px;top:24px;font:800 53px ${LAT};color:${ACC}`,r.name);
+        el(card,`left:36px;top:105px;font:800 38px ${COD};color:${TEXT}`,r.meaning);
+        [170,124,82].forEach((v,i)=>el(card,`left:${594+i*100}px;top:${171-v*.48}px;width:56px;height:${v*.48}px;border-radius:9px 9px 0 0;background:${i===2&&r.kind==="cut"?HOT:CYAN}`));
+        if(r.kind==="cut") el(card,`left:573px;top:102px;width:290px;height:4px;background:${HOT}`);
+        if(r.kind==="meter") el(card,`left:594px;top:193px;width:272px;height:15px;border-radius:9px;background:${ACC}`);
+        if(r.kind==="shape") el(card,`left:728px;top:93px;font:800 64px ${LAT};color:${ACC}`,"↔");
+        show(card,r.t,{opacity:0,y:28});
+      });
+      M.fit(F,{y:170,h:1130});
+
+      // diagram: G — two unanswered choices, then comment and visual-only follow.
+      pillC(G,"CHECK YOURSELF",225,P("G",0));
+      const gBar=glass(G,90,345,900,230,CYAN,30); gBar.style.background=PANEL;
+      el(gBar,`left:38px;top:25px;font:800 53px ${LAT};color:${HOT}`,"NAMKEEN");
+      el(gBar,"left:38px;top:112px;width:720px;height:46px;border-radius:12px;background:#233147");
+      el(gBar,`left:38px;top:112px;width:14px;height:46px;border-radius:12px;background:${HOT}`);
+      el(gBar,`left:775px;top:105px;font:800 43px ${COD};color:${TEXT}`,"?");
+      show(gBar,P("G",0),{opacity:0,y:24});
+      [["DELETE",HOT,at("G","delete")],["CHANCE UP",ACC,at("G","chance")]].forEach(([word,col,t],i)=>{
+        const button=glass(G,90+i*465,630,435,170,col,28); button.style.background=PANEL;
+        el(button,`left:0;top:53px;width:435px;text-align:center;font:800 50px ${LAT};color:${col}`,word);
+        show(button,t,{opacity:0,y:22});
+      });
+      const cm=glass(G,90,870,900,110,CYAN,55); cm.style.background=PANEL;
+      el(cm,`left:43px;top:30px;font:700 39px ${COD};color:${MUTED}`,"COMMENT...");
+      show(cm,at("G","Comment"),{opacity:0,y:22});
+      const hc=glass(G,90,1030,900,165,ACC,28); hc.style.background=PANEL;
+      el(hc,`left:38px;top:48px;font:800 49px ${COD};color:${TEXT}`,"@ai.learnvora");
+      el(hc,`left:615px;top:40px;width:240px;height:85px;border-radius:43px;background:${ACC};display:flex;align-items:center;justify-content:center;font:800 39px ${COD};color:#0B1220`,"FOLLOW");
+      show(hc,M.Ed("G",2)+.1,{opacity:0,y:22});
+      M.fit(G,{y:170,h:1130});
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G);
+      M.finish({kw:{temperature:"gold","top-k":"gold","top-p":"gold",namkin:"hot",achha:"cyan",garam:"cyan",thanda:"cyan",comment:"gold"}});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

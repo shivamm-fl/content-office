@@ -1,0 +1,18 @@
+Chatbot ne bola: aaj mausam bahut namkin hai. Temperature, top-k aur top-p mein kaun kya karta hai?
+
+Interview mein yahi poocha jata hai. Jawab: teeno ke kaam alag hain. Top-k aur top-p next words ki list chhoti karte hain, temperature bache hue words ke chance badalta hai.
+
+Example (8 words ki ek chhoti nakli list, numbers hamne chalakar nikale):
+Temperature 1.5 karne par "namkin" ka chance 0.6% se 1.9% ho gaya, yaani 3 guna. Koi word hata nahi, sirf chance badle.
+Top-k = 3: sirf upar ke 3 words bache, namkin bahar.
+Top-p = 0.9: upar se chance jodte gaye, 5 words mein 95% ho gaya, wahin ruk gaye.
+Temperature 0.5 par ACHHA 37% se 56%, 1.5 par 29%.
+Teeno saath lagao to ek ka asar doosre par padta hai: top-p 0.9 ne T = 1.0 par 5 words rakhe, T = 1.5 par 6.
+
+Interview mein ye bolna: top-k ginti se, top-p kul chance se list kaatte hain. Temperature kuch nahi kaatta, chance badalta hai.
+
+Check yourself: temperature badhane se betuke words hat jate hain, ya aane ke chance badhte hain? "hatte hain" ya "badhte hain", comment mein likho.
+
+Jawab: badhte hain.
+
+#AI #AIEngineer #LLM

@@ -1,0 +1,19 @@
+Interviewer ne poocha: prompt mein examples dene se model hamesha behtar jawab deta hai?
+
+Jawab: hamesha nahi. Examples model ko jawab ki shakl dikhate hain, par chunne mein galti ho to nuksan bhi karte hain. 3 steps mein:
+
+1. Shape: examples jawab ka format aur label ke options sikhate hain. Ek research mein 12 models par labels random kar diye gaye, phir bhi performance kam giri.
+2. Mix: har tarah ke case rakho. Teeno examples positive hon to model ko lag sakta hai ki jawab hamesha positive hai. GPT-3 par examples aur unka order badalne se accuracy andaze ke barabar se best results ke paas tak badal gayi.
+3. Measure: 0, 3 aur 5 examples ke saath apne data par accuracy naapo, aur jahan fark ruk jaye wahin ruko.
+
+Cost bhi dekho: ek chhote review prompt mein 5 examples jodne se prompt 23 tokens se 85 tokens ka ho gaya (tiktoken, o200k_base), yaani har request par 62 tokens zyada. Prompt example ke liye banaya gaya hai.
+
+Boundary: reasoning models mein aksar examples ki zaroorat nahi padti, pehle bina examples try karo.
+
+Interview mein ye bolo: examples jawab ka format sikhate hain, isliye 3 se 5 alag-alag examples se shuru karo, bina examples ke prompt se tulna karo, aur fark na dikhe to examples mat badhao.
+
+Check yourself: teeno examples positive hon, to model kis taraf jhuk sakta hai? Positive ya negative, comment mein likho.
+
+Jawab: positive.
+
+#AI #PromptEngineering #AIInterview

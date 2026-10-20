@@ -1,0 +1,13 @@
+Prompt mein examples dene se model hamesha behtar hota hai? Few-shot interview jawab
+
+Interview mein poochha jata hai ki prompt mein examples (few-shot) dene se model hamesha behtar jawab deta hai ya nahi. Jawab: hamesha nahi. Examples jawab ka format aur label ke options sikhate hain, par ek hi tarah ke ya galat chune examples model ko ek taraf kheench sakte hain, aur har example har request par tokens badhata hai. Is video mein ek chhote review-classification prompt par tiktoken (o200k_base) se naapa gaya: bina example 23 tokens, 5 examples ke saath 85 tokens, yaani har request par 62 tokens zyada. Phir teen steps: shape, mix, measure, ek boundary (reasoning models), aur interview mein bolne wale do vaakya.
+
+Is video mein: few-shot prompting, label, token, examples ka order, apne data par naapna, reasoning models. Check yourself ka jawab: positive.
+
+Sources:
+https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+https://arxiv.org/abs/2102.09690
+https://arxiv.org/abs/2202.12837
+https://arxiv.org/abs/2005.14165
+https://developers.openai.com/api/docs/guides/reasoning-best-practices
+https://platform.claude.com/docs/en/about-claude/pricing
