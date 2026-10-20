@@ -1,0 +1,14 @@
+# Visual plan: q108 Chain-of-thought
+
+Idea in one line: step-by-step prompting helps when the task has many steps, costs extra output on simple questions, and may be redundant on reasoning models, so test both.
+The picture that explains it with the sound off: the same bot answering "capital of France" in 3 lines, a 1-tile vs 16-tile answer, a shop bill solved in written steps, a reasoning model with a crossed-out instruction, and a with/without test.
+
+| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes (at least six words) | On-screen labels (1-3 words each) | Built with |
+|---|---|---|---|---|
+| A | France ki capital, bot ne 3 lines; prompt line; interview: kaam karta hai? | Chat: user asks capital of France, bot answers in three lines; a prompt card gets the line "think step by step" added; a chip "INTERVIEW QUESTION" and a gold "ALWAYS ?" land | EXAMPLE CHAT, PROMPT, INTERVIEW QUESTION, ALWAYS ? | custom chat bubbles, M.hook |
+| B | jawab: nahi; chain-of-thought = steps pehle; kai steps mein haan, aasaan mein nahi; 3 baaten | Red NO stamp; vertical flow QUESTION, STEPS, ANSWER runs; two chips MULTI-STEP (green tick) and SIMPLE (red cross); numbered 1 2 3 pills | NO, CHAIN-OF-THOUGHT, QUESTION, STEPS, ANSWER, 1 2 3 | M.flow, pills |
+| C | aasaan sawal: Paris 1 word vs 16 words, 16 guna, 1000 requests, 15000 extra words, time, kharch | One gold tile "Paris" versus 16 word tiles filling two rows; 16X badge; then the board swaps to 1000 requests, a big +15000 words counter, a clock and a coin | 1 WORD, 16 WORDS, 16X, 1000 REQUESTS, SLOWER, COSTLIER | custom tiles, count tween |
+| D | notebooks 45, pens 12, 200 diye; steps 135, 24, 159, 41; har hissa agla padhta hai; 10.4 se 40.7 percent | A shop bill with rows; written results 135, 24, 159 appear then change 41 turns green; arrows chain the results; then two true-scale bars 10.4 and 40.7 | EXAMPLE BILL, PAID, CHANGE, WITHOUT LINE, WITH LINE, Source label | custom receipt, bars |
+| E | reasoning model par line zaroori nahi; redundant; performance badal sakta hai | Standard LLM box takes the step-by-step chip fine; a Reasoning Model box thinks inside; the chip flies in and is stamped REDUNDANT; up/down arrows show results vary | STANDARD LLM, REASONING MODEL, THINKS INSIDE, REDUNDANT | M.box, custom |
+| F | interview mein bolna: kai steps; apne sawalon par line ke saath aur bina; extra output | Answer card with green MULTI-STEP tick; own questions split into WITH LINE and WITHOUT runs that end in two results; an EXTRA OUTPUT bar grows under the with-line run | INTERVIEW ANSWER, WITH LINE, WITHOUT, TEST BOTH, EXTRA OUTPUT | custom |
+| G | aasaan ya steps, comment; follow karo | Comment card with two options EASY and STEPS popping on their words, input bar, handle card with FOLLOW pill pressing | COMMENT KARO, EASY, STEPS, + FOLLOW | recipe 11 |

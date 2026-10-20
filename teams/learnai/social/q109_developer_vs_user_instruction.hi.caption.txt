@@ -1,0 +1,14 @@
+Interviewer ne poocha: developer ka system prompt aur user ka message ulta ho, to model kiski sunega?
+
+Jawab: aam taur par system prompt ki, par wo taala nahi hai.
+
+Example (invented refund bot): limit 500 rupye, user ne maange 2000.
+1. Ranking: system instructions, developer instructions se upar, developer instructions user instructions se upar. Isse instruction hierarchy kehte hain.
+2. Ye ranking training se aati hai, code se nahi, isliye chaalak message model ko ghuma sakta hai.
+3. Jo kabhi nahi hona chahiye, wo code mein rakho. Chhote Python code mein model ki haan ke baad bhi Approved: False aaya, kyonki code ne limit dekhi.
+
+Boundary: ranking tabhi lagti hai jab donon mein takrav ho.
+
+Tumhare app ki sabse zaruri rule prompt mein hai ya code mein? "prompt" ya "code", comment mein likho. Jawab: code.
+
+#AI #AIEngineer #LLM
