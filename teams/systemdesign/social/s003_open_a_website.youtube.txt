@@ -1,0 +1,8 @@
+What Happens When You Open a Website in Hinglish (Day 3/150)
+
+When you type a web address and press enter, the browser looks up the server's IP address (DNS), sets up a connection, sends an HTTP GET request, receives the HTML, requests the images, styles and scripts the HTML refers to, and renders the page (MDN, How browsers work). The five-step grouping in this video is our own way of teaching it: for HTTPS sites the connection step also includes a secure (TLS) negotiation. The browser starts parsing HTML before all of it has arrived. The IP address 203.0.113.7 and the shopping-site picture are examples only. Explained with a courier-parcel analogy.
+
+Sources:
+https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_URL
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview

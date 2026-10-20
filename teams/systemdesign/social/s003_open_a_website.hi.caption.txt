@@ -1,0 +1,17 @@
+Day 3/150: Website slow ho, to tum turant chhod dete ho. Enter dabane se page dikhne tak 5 kaam hote hain.
+
+Har kaam mein time lagta hai.
+
+Courier se parcel mangwane jaisa socho: dukan ka address dhoondho, call karke baat jodo, order do, box aaye, aur extra saaman alag delivery mein aaye. Browser bhi yahi karta hai.
+
+1. Address dhoondhna: naam se server ka IP address nikalna, ise DNS lookup kehte hain.
+2. Connection: browser server se jud jaata hai, messages kai baar aage-peechhe jaate hain.
+3. Request aur jawab: browser HTTP request bhejta hai, server HTML bhejta hai.
+4. Baaki saaman: HTML mein likhi images, styles aur scripts ke liye nayi requests.
+5. Page banana: sab jodkar page dikhta hai.
+
+Browser HTML poori aane ka intezaar nahi karta, jitni aayi utni padhna shuru kar deta hai. (Yeh 5 kaam samjhane ka hamara tarika hai; HTTPS sites par connection ke andar ek secure handshake bhi hota hai.)
+
+Sawal: in 5 kaamon mein sabse pehla kaun sa hai, DNS ya request? Apna jawab comment karo.
+
+#systemdesign #webdevelopment #backend
