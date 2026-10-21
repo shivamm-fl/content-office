@@ -17,8 +17,7 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 ## Motion designer
 - 2026-10-18: Do not hold a scene after its line has ended; long gaps between parts read as dead air on the phone.
 - 2026-10-20 (a003): For a model-fit idea, draw the real run: the exact points and curves of the printed run on one SVG chart (clip the wild curve at the frame) beat labelled boxes. SVG paths drawn with dashoffset need opacity 0 until their start time, or the round cap shows as a stray dot. A chart panel must fade in with its first element, or it sits empty on screen.
-
-- 2026-10-21 (q110): `M.W` strips `, . : ! ? "` from the caption word before matching, so a number like 0.30 is written "030" in `M.W`. A bare tag/label you add for one phase must be `gone()` when that phase ends, or it stays over the next picture (the layout check flags it). `M.dist` bars fill `p` of the height: with p<=0.3 the picture is a thin strip, so draw rank-heights and put the real % on the top bar only.
+- 2026-10-21 (a004): `M.W(scene, "word")` compares the caption token without punctuation, so pass "mat", not "mat." or "chuno,"; a repeated word needs its index (`M.W("F","kaam",1)`). Anything shown in the middle of a scene must be faded before the next part (grab the scene's children with a small helper and fade them), or the HyperFrames check reports overlaps. For an "odds" idea, bars drawn at true proportion with the fraction and the percent appearing on their spoken words, then a stacked 100 % bar, read well on mute.
 
 ## Packager
 
