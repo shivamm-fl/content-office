@@ -1,16 +1,9 @@
-"""q112: why cosine and not raw distance. EXAMPLE: invented word-count vectors [refund, payment, cricket].
-Doc A is a short note; doc B is the same note repeated 5 times (same topic, 5x the length); doc C is a short cricket note."""
+"""q112: distance vs cosine on invented word counts [refund, payment, cricket]."""
 import math
-q = [1, 1, 0]            # query: 'refund payment'
-A = [1, 1, 0]            # short refund note
-B = [5, 5, 0]            # same refund note, 5 times longer
-C = [0, 0, 1]            # cricket note
-def dist(x, y): return math.sqrt(sum((a-b)**2 for a, b in zip(x, y)))
-def cos(x, y):
-    d = sum(a*b for a, b in zip(x, y)); return d / (math.sqrt(sum(a*a for a in x)) * math.sqrt(sum(b*b for b in y)))
-for n, v in (("A short refund note", A), ("B refund note x5", B), ("C cricket note", C)):
-    print(f"{n:20s} distance {dist(q, v):.2f}   cosine {cos(q, v):.2f}")
-def unit(x): m = math.sqrt(sum(a*a for a in x)); return [a/m for a in x]
-print("after scaling every vector to length 1:")
-for n, v in (("A", A), ("B", B), ("C", C)):
-    print(f"{n} distance {dist(unit(q), unit(v)):.2f}   cosine {cos(q, v):.2f}")
+def norm(v): n = math.sqrt(sum(x*x for x in v)); return [x/n for x in v]
+def dist(a, b): return math.sqrt(sum((x-y)**2 for x, y in zip(a, b)))
+def cos(a, b): return sum(x*y for x, y in zip(a, b)) / (math.sqrt(sum(x*x for x in a)) * math.sqrt(sum(x*x for x in b)))
+q = [1, 1, 0]
+notes = {"short refund": [1, 1, 0], "refund x5": [5, 5, 0], "cricket": [0, 0, 1]}
+for name, v in notes.items():
+    print(f"{name:13s} raw: dist {dist(q, v):.2f} cos {cos(q, v):.2f} | scaled to length 1: dist {dist(norm(q), norm(v)):.2f} cos {cos(norm(q), norm(v)):.2f}")
