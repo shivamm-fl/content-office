@@ -867,14 +867,14 @@
       "hook_type": "direct_question",
       "spoken_hook": "ChatGPT ने language कैसे सीखी? बहुत सारा text पढ़कर!",
       "hook_formula": "plain_question",
-      "visual_idea": "A sentence 'the dog sat on the ___' with the last word hidden; the model's guess bars, then the hidden word revealed and the error shown as one number; a loss line falling from 3.58 to 2.19 as the text pile grows (10, 20, 40, 53 words); a pile of books labelled RAW TEXT, no labels; a label PRETRAINED = raw text predictor.",
-      "everyday_anchor": "Fill-in-the-blank practice: a student who has read a lot of text gets better at guessing the missing word, with the answer printed on the next line.",
-      "example": "EXAMPLE (toy counting model on an invented 53-word corpus with 12 distinct words, not a real LLM), real run state/runs/a005_pretrain_run.py: loss before reading 3.58 bits per word (even guess among 12 words); after 10 words 3.09; 20 words 2.74; 40 words 2.37; all 53 words 2.19. A real LLM does the same job with a neural network over tokens and trillions of words.",
+      "visual_idea": "A sentence 'the dog sat on the ___' with the last word hidden; the model's guess bars, then the hidden word revealed and the error shown as one number; a loss line falling from 3.58 to 2.29 as the text pile grows (10, 20, 40, 53 words); a pile of books labelled RAW TEXT, no labels; a label PRETRAINED = raw text predictor.",
+      "everyday_anchor": "Fill-in-the-blank practice: the answer is printed on the next line.",
+      "example": "EXAMPLE (toy counting model on an invented 53-word corpus with 12 distinct words, not a real LLM), real run state/runs/a005_pretrain_run.py: loss before reading 3.58 bits per word (even guess among 12 words); after 10 words 3.17; 20 words 2.84; 40 words 2.48; all 53 words 2.29. After 'the': dog 4, cat 4. A real LLM does the same job with a neural network over tokens.",
       "sources": [
         "https://huggingface.co/learn/llm-course/chapter1/4"
       ],
       "facts_to_verify": [
-        "Hugging Face LLM course (fetched 2026-10-22): 'Pretraining is the act of training a model from scratch: the weights are randomly initialized' and the training starts without any prior knowledge; trained on large amounts of raw text in a self-supervised fashion; next-word prediction (from the n previous words) is given as an example objective. Fine-tuning is the training done after pretraining, supervised, on human-annotated labels. Do not say 'trillions of words' or name any real model's data size in the reel: not verified."
+        "Hugging Face LLM course (fetched 2026-10-21): pretraining starts with randomly initialized weights, on large amounts of raw text, self-supervised; next-word prediction is an example. Fine-tuning comes after, supervised, human-annotated labels."
       ],
       "length_target_s": 150,
       "cover_headline": "How an LLM first learns language",
@@ -889,7 +889,7 @@
       "script_file": "state/scripts/a005.txt",
       "status": "planned",
       "qa_passed": false,
-      "hook_source": "strategist, 2026-10-22 (hook-writer; growth-analyst standup)"
+      "hook_source": "strategist, 2026-10-22"
     },
     {
       "id": "q112",

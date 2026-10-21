@@ -1,0 +1,17 @@
+Day 5/150: ChatGPT ne language kaise seekhi? Bahut saara text padhkar!
+
+Is seekhne ko pretraining kehte hain: model ko shuru se train karo, ek bahut bade raw text par, ek hi kaam ke saath: agla word guess karo. Shuru mein uske numbers (weights) random hote hain.
+
+Hamne ek chhota toy counting model chalaya (example, asli LLM nahi): hamara banaya 53 words ka text, 12 alag words. Chaar step: 1) agla word chhupao, 2) model guess kare, 3) asli word kholo aur guess ki galti naapo (is score ko loss kehte hain), 4) model apne numbers thode badle.
+
+Loss 3.58 se shuru hua. 10 words padhne ke baad 3.17, 20 ke baad 2.84, 40 ke baad 2.48, poora text padhne par 2.29. Jitna zyada padha, guess utna behtar. Loss zero nahi hua, kyunki "the" ke baad kai words sahi ho sakte hain.
+
+Asli LLM mein count table ki jagah neural network hota hai aur wo tokens (text ke tukde) par chalta hai. Pretraining ke baad model bas text aage badhana jaanta hai; sawal-jawab wala assistant banane ke liye baad mein fine-tuning hoti hai, insaano ke labels wale examples se.
+
+Jawab: pretraining mein text ko labels kisi ne nahi diye. Agla word hi answer hai, text khud answer sheet hai.
+
+Comment karo: pretraining mein text ko labels kisne diye? HUMAN ya KISI NE NAHI?
+
+150 Days of AI ke liye follow karo.
+
+#AI #LLM #150DaysOfAI

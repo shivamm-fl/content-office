@@ -956,10 +956,10 @@
       "unit": "A3",
       "title": "Pretraining: how an LLM first learns language from text",
       "kind": "concept",
-      "topic": "Pretraining is training a model from scratch on a huge pile of raw text with one task, guess the next word; nobody labels anything, the text itself is the answer sheet, and the error falls as it reads more.",
+      "topic": "Pretraining: training from scratch on raw text with next-word guessing; no human labels; loss falls as it reads; fine-tuning with labels comes later.",
       "hook_formula": "plain_question",
       "hook_type": "direct_question",
-      "status": "planned",
+      "status": "built",
       "planned": "2026-10-22"
     },
     {

@@ -1,0 +1,10 @@
+ChatGPT ne language kaise seekhi? Pretraining samjho
+
+Pretraining ka matlab hai model ko shuru se train karna, bahut saare raw text par, ek hi kaam ke saath: agla word guess karo. Kisi insaan ko labels nahi lagane padte, text khud answer sheet hai. Is video mein ek chhota toy counting model chalta hai (example, invented 53 words ka text, 12 alag words, asli LLM nahi): guess ki galti, yaani loss, 3.58 se 2.29 tak girta hai jaise model zyada text padhta hai. Phir dekhte hain ki asli LLM mein neural network aur tokens hote hain, aur pretraining ke baad fine-tuning kyun aati hai.
+
+Is video mein: pretraining kya hai, self-supervised learning, loss, next word prediction, fine-tuning.
+
+Toy model ke numbers hamare apne example ke hain, kisi source ka claim nahi. Pretraining ki definition (random weights se shuru, raw text par, self-supervised, next word prediction ek example, fine-tuning baad mein human labels ke saath) Hugging Face LLM course se hai.
+
+Sources:
+https://huggingface.co/learn/llm-course/chapter1/4

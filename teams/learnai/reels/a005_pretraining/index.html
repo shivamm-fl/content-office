@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Pretraining</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="152.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="152.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="152.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="152.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "150 DAYS OF AI · DAY 5" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+
+      // ============ helpers ============
+      const grab = (host) => { const i0 = host.children.length; return () => [...host.children].slice(i0); };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (list, t) => list.forEach((d) => gone(d, t));
+      const txt = (host, text, x, y, w, t, col, size, align, font) => { const sz = size || 36, tw = Math.min(w, Math.round(String(text).length * 0.68 * sz) + 12), a = align || "center";
+        const lx = a === "left" ? x : (a === "right" ? x + w - tw : x + (w - tw) / 2);
+        return show(el(host, `left:${lx}px;top:${y}px;width:${tw}px;text-align:${a};font:800 ${sz}px ${font || COD};letter-spacing:.04em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 }); };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 58, sz = o.size || 36, pad = o.pad || 30, tw = Math.round(String(text).length * 0.72 * sz + 2 * pad + 10); const w = el(host, `left:${540 - tw / 2}px;top:${y}px;width:${tw}px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${pad}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${sz}px ${COD};letter-spacing:.12em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      // one label slot whose text changes on the spoken word: [[t, text, colour], ...]
+      const slot = (host, y, list, o) => { o = o || {}; return list.map(([t, text, col], i) => { const sz = o.size || 36, tw = Math.round(String(text).length * 0.72 * sz + 74), w = el(host, `left:${540 - tw / 2}px;top:${y}px;width:${tw}px;height:${o.h || 60}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${o.h || 60}px;padding:0 32px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${sz}px ${COD};letter-spacing:.12em;color:${col};white-space:nowrap">${text}</div>`;
+        tl.set(w, { opacity: 0 }, 0); tl.set(w, { opacity: 1 }, t); if (i < list.length - 1) tl.set(w, { opacity: 0 }, list[i + 1][0]); tl.fromTo(w, { y: 10 }, { y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, t); return w; }); };
+      // word chips in a centred row (mono, fixed width per char so the row can be planned before the chips show)
+      const chipW = (word, size, pad) => Math.round(word.length * 0.6 * size + 2 * pad + 5);
+      const rowPos = (words, size, pad, gap, cx) => { const ws = words.map((w) => chipW(w, size, pad)); const total = ws.reduce((a, b) => a + b, 0) + gap * (words.length - 1); let x = cx - total / 2;
+        return ws.map((w) => { const r = { x: Math.round(x), w }; x += w + gap; return r; }); };
+      const chip = (host, word, x, y, w, size, col, filled) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${Math.round(size * 1.75)}px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:14px;border:2.5px solid ${col};background:${ca(col, filled ? 0.24 : 0.10)};font:700 ${size}px ${COD};color:${TEXT};white-space:nowrap`, word);
+      // bar row: word label, bar (true length, px per percent), fraction and percent that appear on their spoken words
+      const barRow = (host, x, y, word, pct, k, n, scale, o) => { o = o || {}; const h = o.h || 76, fs = o.fs || 54;
+        const lab = el(host, `left:${x}px;top:${y}px;width:${o.lw || 200}px;height:${h}px;display:flex;align-items:center;font:700 ${fs}px ${COD};color:${TEXT}`, word);
+        const bar = el(host, `left:${x + (o.lw || 200) + 10}px;top:${y}px;width:${Math.round(pct * scale)}px;height:${h}px;border-radius:12px;background:${ca(CYAN, 0.85)};transform-origin:0 50%`);
+        const val = el(host, `left:${x + (o.lw || 200) + 34 + Math.round(pct * scale)}px;top:${y}px;height:${h}px;display:flex;align-items:center;font:700 ${o.vs || 44}px ${COD};color:${ACC};white-space:nowrap`, `<span class="f" style="color:${MUTED}">${k}/${n}</span><span class="p">&nbsp;= ${pct} %</span>`);
+        return { lab, bar, val, f: val.querySelector(".f"), p: val.querySelector(".p") }; };
+      const barTimes = (r, tLab, tBar, tFrac, tPct) => { show(r.lab, tLab, { opacity: 0, x: -20, y: 0 }); tl.set(r.bar, { opacity: 0, scaleX: 0 }, 0); tl.set(r.bar, { opacity: 1 }, tBar); tl.to(r.bar, { scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, tBar);
+        tl.set(r.val, { opacity: 0 }, 0); tl.set(r.val, { opacity: 1 }, tFrac); tl.set(r.p, { opacity: 0 }, 0); tl.set(r.p, { opacity: 1 }, tPct); };
+
+
+      // ============ extra helpers ============
+      const NSx = "http://www.w3.org/2000/svg";
+      const svgEl = (tag, attrs, parent) => { const e = document.createElementNS(NSx, tag); Object.keys(attrs).forEach((k) => e.setAttribute(k, attrs[k])); if (parent) parent.appendChild(e); return e; };
+      const LOSS = [3.585, 3.585, 3.546, 3.497, 3.412, 3.327, 3.323, 3.289, 3.245, 3.218, 3.172, 3.126, 3.118, 3.084, 3.067, 3.02, 2.952, 2.884, 2.872, 2.855, 2.836, 2.81, 2.78, 2.75, 2.754, 2.737, 2.729, 2.716, 2.694, 2.672, 2.671, 2.653, 2.642, 2.63, 2.593, 2.557, 2.538, 2.523, 2.518, 2.501, 2.484, 2.467, 2.463, 2.445, 2.438, 2.413, 2.389, 2.365, 2.359, 2.344, 2.329, 2.311, 2.293, 2.288];
+
+      // ============ A: a pile of raw text feeds the model, language skill rises ============
+      // diagram: A
+      M.hook(["ChatGPT ne language", "kaise seekhi?"], { size: 96, top: 230 });
+      const aBooks = [0, 1, 2].map((i) => { const w = [700, 640, 680][i], x = Math.round(540 - w / 2) + [0, 34, -22][i], y = 500 + i * 120, t = 0.05 + i * 0.15;
+        const b = show(glass(A, x, y, w, 100, CYAN, 14), t, { opacity: 0, y: -40 }, 0.45);
+        const l1 = show(el(A, `left:${x + 34}px;top:${y + 26}px;width:${w - 68}px;height:12px;border-radius:6px;background:${ca(CYAN, 0.55)}`), t + 0.1, { opacity: 0 });
+        const l2 = show(el(A, `left:${x + 34}px;top:${y + 58}px;width:${Math.round((w - 68) * 0.66)}px;height:12px;border-radius:6px;background:${ca(CYAN, 0.35)}`), t + 0.15, { opacity: 0 });
+        return [b, l1, l2]; });
+      txt(A, "RAW TEXT", 90, 440, 900, 0.1, CYAN, 46);
+      [["the", 330], ["dog", 480], ["sat", 630]].forEach(([w, x], i) => [at("A", "padhkar"), at("A", "padhkar", 1)].forEach((t0, r) => { const c = chip(A, w, x, 870, 125, 44, CYAN, false), t = t0 + i * 0.3;
+        tl.set(c, { opacity: 0, y: -10 }, 0); tl.to(c, { opacity: 1, y: 0, duration: 0.2, immediateRender: false }, t); tl.to(c, { y: 150, duration: 0.7, ease: "power2.in", immediateRender: false }, t + 0.2); tl.to(c, { opacity: 0, duration: 0.15, immediateRender: false }, t + 0.8); }));
+      M.box(A, { x: 110, y: 960, w: 560, h: 240, label: "CHATGPT", icon: "robot", color: CYAN, size: 52 }).show(at("A", "text"));
+      show(glass(A, 760, 960, 180, 240, MUTED, 20), at("A", "text"), { opacity: 0, y: 14 });
+      const aF = el(A, `left:776px;top:976px;width:148px;height:208px;border-radius:14px;background:${ca(GOOD, 0.85)};transform-origin:50% 100%`); tl.set(aF, { opacity: 0, scaleY: 0.08 }, 0); tl.set(aF, { opacity: 1 }, at("A", "text")); tl.to(aF, { scaleY: 0.95, duration: 2.6, ease: "power1.inOut", immediateRender: false }, at("A", "padhkar", 1));
+      txt(A, "LANGUAGE", 700, 1215, 300, at("A", "text"), GOOD, 36);
+      pillC(A, "PRETRAINING", 1290, at("A", "pretraining"), { col: ACC, size: 52, h: 84, pad: 44 });
+      M.fit(A, { y: 470, h: 880, maxScale: 2.2 });
+
+      // ============ B: fill in the blank: the answer is in the text ============
+      // diagram: B
+      const bPage = glass(B, 90, 290, 900, 400, CYAN); show(bPage, P("B", 0) + 0.05, { opacity: 0, y: 20 });
+      txt(B, "A BOOK", 120, 312, 400, P("B", 0) + 0.05, MUTED, 32, "left");
+      const bW = ["the", "dog", "sat", "on", "the", "rug"], bP = rowPos(bW, 52, 22, 14, 540), bT = [at("B", "the"), at("B", "dog"), at("B", "sat"), at("B", "on"), at("B", "the", 1)];
+      bT.forEach((t, i) => show(chip(B, bW[i], bP[i].x, 400, bP[i].w, 52, CYAN, false), t, { opacity: 0, y: 14 }, 0.3));
+      const bQ = show(chip(B, "?", bP[5].x, 400, bP[5].w, 52, ACC, true), at("B", "the", 1) + 0.3, { opacity: 0, y: 14 }, 0.3);
+      const bR = show(chip(B, "rug", bP[5].x, 400, bP[5].w, 52, GOOD, true), at("B", "rug"), { opacity: 0, scale: 0.8, y: 0 }, 0.3); gone(bQ, at("B", "rug"), 0.1);
+      const b2 = ["the", "cat", "sat", "on", "the", "mat"];
+      b2.forEach((w, i) => show(chip(B, w, bP[i].x, 530, bP[i].w, 52, MUTED, false), P("B", 0) + 0.3 + i * 0.08, { opacity: 0, y: 14 }, 0.3));
+      const bRing = el(B, `left:${bP[5].x - 8}px;top:392px;width:${bP[5].w + 16}px;height:107px;border-radius:20px;border:4px solid ${GOOD};box-sizing:border-box`); show(bRing, at("B", "hi"), { opacity: 0, scale: 1.15 }, 0.3);
+      slot(B, 735, [[at("B", "guess"), "GUESS", ACC], [at("B", "dekhte"), "CHECK", CYAN], [at("B", "rug"), "RIGHT", GOOD], [at("B", "jawab"), "NO ANSWER KEY", HOT], [at("B", "text"), "ANSWER IS IN THE TEXT", GOOD]], { size: 36 });
+      const bG = ["rug", "mat", "bed"], bGp = rowPos(bG, 44, 20, 20, 540);
+      const bGc = bG.map((w, i) => show(chip(B, w, bGp[i].x, 855, bGp[i].w, 44, ACC, false), at("B", "guess") + 0.15 + i * 0.12, { opacity: 0, y: 14 }, 0.3));
+      txt(B, "YOUR GUESS", 90, 808, 900, at("B", "guess"), ACC, 30);
+      tl.to(bGc[0], { borderColor: GOOD, backgroundColor: ca(GOOD, 0.3), duration: 0.25, immediateRender: false }, at("B", "rug")); bGc.slice(1).forEach((c) => tl.to(c, { opacity: 0.3, duration: 0.3, immediateRender: false }, at("B", "rug")));
+      const bMod = M.box(B, { x: 90, y: 1000, w: 380, h: 200, label: "MODEL", icon: "model", color: CYAN, size: 40 }); bMod.show(at("B", "Model"));
+      M.arrow(B, { from: [600, 1100], to: [490, 1100], color: CYAN, w: 8 }).show(at("B", "kitaben"), 0.3);
+      [0, 1, 2].forEach((i) => { const g = glass(B, 620, 1010 + i * 64, 370, 54, CYAN, 12); show(g, at("B", "bas") + i * 0.12, { opacity: 0, x: 20, y: 0 }, 0.35);
+        show(el(B, `left:${650}px;top:${1026 + i * 64}px;width:${300 - i * 40}px;height:8px;border-radius:4px;background:${ca(CYAN, 0.45)}`), at("B", "bas") + i * 0.12, { opacity: 0 }); });
+      txt(B, "MANY BOOKS", 620, 1210, 370, at("B", "kitaben"), CYAN, 38);
+      M.fit(B, { y: 250, h: 1050, maxScale: 2.2 });
+
+      // ============ C: from scratch, random weights, the toy model ============
+      // diagram: C
+      const cPill = pillC(C, "FROM SCRATCH", 240, at("C", "shuru"), { col: ACC, size: 52, h: 84, pad: 44 });
+      const cMod = M.box(C, { x: 140, y: 350, w: 800, h: 330, label: "MODEL", icon: "model", color: CYAN, size: 64 }); cMod.show(P("C", 0) + 0.1);
+      const wv = ["0.31", "-0.72", "0.05", "0.88", "-0.14", "0.47"], cW = [];
+      wv.forEach((v, i) => { const x = 140 + (i % 3) * 275, y = 780 + Math.floor(i / 3) * 130; cW.push(show(chip(C, v, x, y, 250, 52, CYAN, false), at("C", "weights") + i * 0.1, { opacity: 0, y: 14 }, 0.3)); });
+      const cWl = txt(C, "WEIGHTS", 90, 715, 900, at("C", "weights"), CYAN, 44);
+      const cRn = pillC(C, "RANDOM", 1060, at("C", "random"), { col: ACC, size: 52, h: 84, pad: 44 });
+      const cKn = pillC(C, "KNOWS NOTHING", 1180, at("C", "pata"), { col: HOT, size: 52, h: 84, pad: 44 });
+      const tC = at("C", "dekhne") - 0.15; goneAll([cPill, cWl, cRn, cKn].concat(cW, cMod.parts), tC);
+      const cWin = glass(C, 90, 330, 900, 540, MUTED, 22); show(cWin, at("C", "Python"), { opacity: 0, y: 20 });
+      txt(C, "toy_model.py", 120, 350, 500, at("C", "Python"), MUTED, 38, "left");
+      ["the dog sat on the rug", "the cat sat on the mat", "the cat ran to the door", "the dog sat on the bed", "..."].forEach((l, i) =>
+        show(el(C, `left:130px;top:${430 + i * 80}px;font:600 50px ${COD};color:${TEXT};white-space:pre`, l), at("C", "chhota") + i * 0.14, { opacity: 0, y: 10 }, 0.3));
+      slot(C, 240, [[at("C", "toy"), "TOY MODEL", CYAN], [at("C", "asli"), "NOT A REAL LLM", HOT], [at("C", "EXAMPLE"), "EXAMPLE", MUTED]], { size: 48, h: 80 });
+      [[90, "53", "WORDS", CYAN], [560, "12", "DIFFERENT", CYAN]].forEach(([x, v, lab], i) => { const t = at("C", v);
+        show(glass(C, x, 940, 430, 330, CYAN), t - 0.1, { opacity: 0, y: 20 }); M.count(C, +v, t, { x, y: 975, w: 430, size: 170, dec: 0, dur: 0.6, color: ACC }); txt(C, lab, x, 1180, 430, t, CYAN, 46); });
+      M.fit(C, { y: 200, h: 1100, maxScale: 2.2 });
+
+      // ============ D: four steps: hide, guess, check, improve ============
+      // diagram: D
+      const dW = ["the", "dog", "sat", "on", "the", "rug"], dP = rowPos(dW, 52, 22, 14, 540);
+      dW.slice(0, 5).forEach((w, i) => show(chip(D, w, dP[i].x, 300, dP[i].w, 52, CYAN, false), P("D", 0) + 0.05 + i * 0.08, { opacity: 0, y: 14 }, 0.3));
+      const dRug = show(chip(D, "rug", dP[5].x, 300, dP[5].w, 52, GOOD, true), at("D", "kholo"), { opacity: 0, scale: 0.85, y: 0 }, 0.3);
+      const dCov = show(el(D, `left:${dP[5].x}px;top:300px;width:${dP[5].w}px;height:91px;box-sizing:border-box;border-radius:14px;border:2.5px solid ${ACC};background:${PANEL};display:flex;align-items:center;justify-content:center;font:700 52px ${COD};color:${ACC}`, "?"), at("D", "chhupa"), { opacity: 0, scale: 1.1 }, 0.3);
+      gone(dCov, at("D", "kholo"), 0.1);
+            slot(D, 450, [[at("D", "pahla"), "1 · HIDE", CYAN], [at("D", "doosra"), "2 · GUESS", ACC], [at("D", "teesra"), "3 · CHECK", GOOD], [at("D", "chautha"), "4 · IMPROVE", CYAN], [at("D", "koi"), "NO HUMAN LABELS", HOT], [at("D", "khud"), "TEXT = ANSWER SHEET", GOOD]], { size: 38, h: 66 });
+      const bw = ["rug", "mat", "bed", "door", "park", "cat"], dBars = [], dKeep = [];
+      bw.forEach((w, i) => { const x = 155 + i * 132, t = at("D", "chance") + i * 0.08;
+        const b = el(D, `left:${x}px;top:770px;width:110px;height:250px;border-radius:12px;background:${ca(CYAN, 0.85)};transform-origin:50% 100%`); tl.set(b, { opacity: 0, scaleY: 0.2 }, 0); tl.to(b, { opacity: 1, scaleY: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, t);
+        dBars.push(b); dKeep.push(b, txt(D, w, x - 15, 1035, 140, t, TEXT, 34)); });
+      const dGh = el(D, `left:155px;top:520px;width:110px;height:500px;box-sizing:border-box;border-radius:12px;border:3px dashed ${ACC}`); show(dGh, at("D", "naapo"), { opacity: 0 }, 0.3);
+      const dGl = txt(D, "TARGET", 130, 478, 160, at("D", "naapo"), ACC, 32); gone(dGh, at("D", "badalta")); gone(dGl, at("D", "badalta"));
+      tl.to(dBars[0], { backgroundColor: ca(GOOD, 0.95), duration: 0.25, immediateRender: false }, at("D", "kholo"));
+      dBars.slice(1).forEach((b) => tl.to(b, { opacity: 0.4, duration: 0.3, immediateRender: false }, at("D", "kholo")));
+      tl.to(dBars[0], { scaleY: 2, duration: 0.8, ease: "power3.inOut", immediateRender: false }, at("D", "badalta"));
+      dBars.slice(1).forEach((b) => tl.to(b, { scaleY: 0.5, duration: 0.8, ease: "power3.inOut", immediateRender: false }, at("D", "badalta")));
+      const nud = [["0.31", "0.34"], ["-0.72", "-0.69"], ["0.05", "0.09"]];
+      const dN = nud.map(([a, b], i) => { const x = 90 + i * 320, t = at("D", "badalta") + i * 0.12; return show(el(D, `left:${x}px;top:1295px;width:300px;text-align:center;white-space:nowrap;font:700 32px ${COD};color:${MUTED}`, `${a} → <span style="color:${GOOD}">${b}</span>`), t, { opacity: 0, y: 12 }, 0.3); });
+      dN.push(txt(D, "NUMBERS NUDGED", 90, 1250, 900, at("D", "badalta"), CYAN, 34));
+      const mTr = show(el(D, `left:150px;top:1105px;width:780px;height:30px;border-radius:15px;background:linear-gradient(90deg,${ca(GOOD, 0.45)},${ca(HOT, 0.45)})`), at("D", "galti"), { opacity: 0 });
+      const mLo = txt(D, "LOW", 150, 1148, 200, at("D", "galti"), GOOD, 34, "left"), mHi = txt(D, "HIGH", 730, 1148, 200, at("D", "galti"), HOT, 34, "right");
+      const mLs = txt(D, "LOSS", 340, 1148, 400, at("D", "loss"), ACC, 40);
+      const mK = el(D, `left:${905 - 25}px;top:1095px;width:50px;height:50px;border-radius:50%;background:${ACC};border:4px solid ${PANEL};box-sizing:border-box`); show(mK, at("D", "galti"), { opacity: 0, y: 0 }, 0.3);
+      tl.to(mK, { x: -300, duration: 0.7, ease: "power3.inOut", immediateRender: false }, at("D", "kam")); tl.to(mK, { x: -580, duration: 0.8, ease: "power3.inOut", immediateRender: false }, at("D", "lage"));
+      const mGood = txt(D, "LOW = GOOD", 90, 1195, 900, at("D", "achha"), GOOD, 40);
+      const tD = at("D", "koi") - 0.2; goneAll(dKeep.concat(dN, dBars, [mTr, mLo, mHi, mLs, mK, mGood]), tD);
+      const dU = M.icon(D, "user", 290, 640, 300, CYAN); dU.show(at("D", "koi")); const dX = M.icon(D, "cross", 600, 720, 200, HOT); dX.show(at("D", "nahi"));
+      const dBk = M.icon(D, "book", 340, 600, 400, CYAN); dBk.show(at("D", "pahla")); dBk.hide(at("D", "chance") - 0.1);
+      const dRing = el(D, `left:70px;top:285px;width:940px;height:122px;box-sizing:border-box;border-radius:22px;border:4px solid ${ACC}`); show(dRing, at("D", "khud"), { opacity: 0, scale: 1.04 }, 0.35);
+      M.fit(D, { y: 200, h: 1100, maxScale: 2.2 });
+
+      // ============ E: the loss chart of the real run, then what came after "the" ============
+      // diagram: E
+      const CW = 960, CH = 760, PL = 110, PT = 80, PH = 520, PWd = 810;
+      const X = (n) => PL + (n / 53) * PWd, Y = (v) => PT + (1 - v / 4) * PH;
+      const eWrap = el(E, `left:60px;top:230px;width:${CW}px;height:${CH}px;border-radius:24px;overflow:hidden;background:${ca(PANEL, 0.92)};border:1.5px solid rgba(150,175,215,.28)`);
+      tl.set(eWrap, { opacity: 0 }, 0); tl.to(eWrap, { opacity: 1, duration: 0.3, immediateRender: false }, at("E", "chart"));
+      const svg = svgEl("svg", { viewBox: `0 0 ${CW} ${CH}`, width: CW, height: CH }, eWrap); svg.style.cssText = "position:absolute;left:0;top:0";
+      const sTxt = (s, x, y, col, size, anchor, t) => { const e = svgEl("text", { x, y, fill: col, "font-size": size, "font-family": "JetBrains Mono, monospace", "font-weight": 700, "text-anchor": anchor || "middle" }, svg); e.textContent = s; tl.set(e, { opacity: 0 }, 0); tl.to(e, { opacity: 1, duration: 0.3, immediateRender: false }, t); return e; };
+      const axes = svgEl("path", { d: `M${PL} ${PT}V${Y(0)}H${PL + PWd + 10}M${PL} ${Y(2)}H${PL + PWd}M${PL} ${Y(4)}H${PL + PWd}`, stroke: "rgba(150,175,215,.35)", "stroke-width": 3, fill: "none" }, svg);
+      tl.set(axes, { opacity: 0 }, 0); tl.to(axes, { opacity: 1, duration: 0.3, immediateRender: false }, at("E", "chart"));
+      [[0, 0], [2, 2], [4, 4]].forEach(([v, s]) => sTxt(String(s), PL - 18, Y(v) + 12, "#A9B4CC", 38, "end", at("E", "chart")));
+      [0, 10, 20, 40, 53].forEach((n) => sTxt(String(n), X(n), Y(0) + 48, "#A9B4CC", 38, "middle", at("E", "chart")));
+      sTxt("WORDS READ", PL + PWd / 2, CH - 18, CYAN, 36, "middle", at("E", "neeche")); sTxt("LOSS", 24, 38, ACC, 36, "start", at("E", "upar"));
+      const idx = [0, 10, 20, 40, 53], vals = ["3.58", "3.17", "2.84", "2.48", "2.29"], tVal = [at("E", "358"), at("E", "317"), at("E", "284"), at("E", "248"), at("E", "229")];
+      const segT = [[tVal[0] + 0.8, 1.4], [tVal[1] + 0.7, 1.1], [tVal[2] + 0.6, 1.1], [tVal[3] + 0.6, 1.3]];
+      const curve = (a, b) => { let d = ""; for (let n = a; n <= b; n++) d += (n === a ? "M" : "L") + X(n).toFixed(1) + " " + Y(LOSS[n]).toFixed(1); return d; };
+      const mkPath = (d, col, sw, t, dur) => { const p = svgEl("path", { d, stroke: col, "stroke-width": sw, fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round", pathLength: 1, "stroke-dasharray": 1 }, svg);
+        tl.set(p, { attr: { "stroke-dashoffset": 1 }, opacity: 0 }, 0); tl.set(p, { opacity: 1 }, t); tl.to(p, { attr: { "stroke-dashoffset": 0 }, duration: dur, ease: "power2.inOut", immediateRender: false }, t); return p; };
+      for (let k = 0; k < 4; k++) mkPath(curve(idx[k], idx[k + 1]), CYAN, 8, tVal[k] + 0.5, tVal[k + 1] - tVal[k] - 0.7);
+      idx.forEach((n, k) => { const c = svgEl("circle", { cx: X(n), cy: Y(LOSS[n]), r: 0, fill: ACC }, svg); const t = k === 0 ? at("E", "andaza") : tVal[k];
+        tl.set(c, { attr: { r: 0 } }, 0); tl.to(c, { attr: { r: 15 }, duration: 0.3, ease: "power3.out", immediateRender: false }, t);
+        sTxt(vals[k], k === 0 ? X(n) + 30 : (k === 4 ? X(n) - 10 : X(n)), Y(LOSS[n]) - 30, ACC, 42, k === 0 ? "start" : "middle", tVal[k]); });
+      const gold = mkPath(curve(0, 53), ACC, 9, at("E", "358", 1), 1.2);
+      const eS = slot(E, 1010, [[at("E", "barabar"), "EVEN GUESS: 1/12 EACH", MUTED], [at("E", "line"), "LOSS FALLS", GOOD], [at("E", "matlab"), "MORE READING", CYAN], [at("E", "behtar"), "BETTER GUESSES", GOOD]], { size: 40, h: 70 });
+      const eB = pillC(E, "3.58 → 2.29", 1100, at("E", "358", 1) + 0.9, { col: ACC, size: 56, h: 90, pad: 44 });
+      const tE = at("E", "jaise") - 0.2; goneAll(eS.concat([eWrap, eB]), tE);
+      pillC(E, "AFTER THE", 250, at("E", "the"), { col: CYAN, size: 46, h: 76, pad: 40 });
+      const nx = [["dog", 4], ["cat", 4], ["rug", 2], ["mat", 2], ["door", 2], ["park", 2], ["bed", 1]], nBars = [], nNum = [];
+      nx.forEach(([w, c], i) => { const y = 350 + i * 92, t = at("E", "the") + i * 0.07;
+        show(el(E, `left:130px;top:${y}px;width:200px;height:72px;display:flex;align-items:center;font:700 48px ${COD};color:${TEXT}`, w), t, { opacity: 0, x: -20, y: 0 }, 0.3);
+        const b = el(E, `left:350px;top:${y}px;width:${c * 130}px;height:72px;border-radius:12px;background:${ca(CYAN, 0.85)};transform-origin:0 50%`); tl.set(b, { opacity: 0, scaleX: 0 }, 0); tl.to(b, { opacity: 1, scaleX: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t);
+        const n = show(el(E, `left:${350 + c * 130 + 20}px;top:${y}px;height:72px;display:flex;align-items:center;font:700 48px ${COD};color:${MUTED}`, String(c)), t + 0.25, { opacity: 0 }, 0.3); nBars.push(b); nNum.push(n); });
+      tl.to(nBars[1], { backgroundColor: ca(GOOD, 0.95), duration: 0.25, immediateRender: false }, at("E", "cat")); tl.to(nBars[0], { backgroundColor: ca(GOOD, 0.95), duration: 0.25, immediateRender: false }, at("E", "dog"));
+      [nNum[0], nNum[1]].forEach((n) => tl.to(n, { color: ACC, duration: 0.25, immediateRender: false }, at("E", "chaar-chaar")));
+      pillC(E, "COUNTED IN TEXT", 1040, at("E", "donon"), { col: MUTED, size: 36, h: 62, pad: 34 });
+      M.fit(E, { y: 200, h: 1100, maxScale: 2.2 });
+
+      // ============ F: loss never reaches zero ============
+      // diagram: F
+      slot(F, 250, [[at("F", "zero"), "LOSS > 0", HOT], [at("F", "sahi"), "SEVERAL ARE RIGHT", GOOD]], { size: 52, h: 90 });
+      show(chip(F, "the", 90, 640, 300, 72, ACC, true), P("F", 0) + 0.05, { opacity: 0, x: -20, y: 0 }, 0.3);
+      const fO = ["cat", "dog", "rug", "mat"], fY = [390, 570, 750, 930];
+      fO.forEach((w, i) => { const t = at("F", "kai") + i * 0.12;
+        M.arrow(F, { from: [400, 703], to: [550, fY[i] + 63], color: MUTED, w: 6 }).show(t, 0.3);
+        show(chip(F, w, 560, fY[i], 330, 64, CYAN, false), t, { opacity: 0, x: 20, y: 0 }, 0.3);
+        const ck = M.icon(F, "check", 905, fY[i] + 20, 80, GOOD); ck.show(at("F", "sahi") + i * 0.1); });
+      const fTr = show(el(F, `left:120px;top:1160px;width:840px;height:30px;border-radius:15px;background:linear-gradient(90deg,${ca(GOOD, 0.45)},${ca(HOT, 0.45)})`), at("F", "zero"), { opacity: 0 }, 0.3);
+      txt(F, "0", 120, 1205, 100, at("F", "zero"), GOOD, 40, "left");
+      const fK = el(F, `left:${330 - 28}px;top:1152px;width:56px;height:56px;border-radius:50%;background:${ACC};border:4px solid ${PANEL};box-sizing:border-box`); show(fK, at("F", "zero"), { opacity: 0 }, 0.3);
+      txt(F, "LOSS", 250, 1205, 200, at("F", "zero"), ACC, 40);
+      M.icon(F, "cross", 90, 1100, 56, HOT).show(at("F", "zero") + 0.2);
+      M.fit(F, { y: 200, h: 1100, maxScale: 2.2 });
+
+      // ============ G: the real thing: neural network and tokens ============
+      // diagram: G
+      const g1 = [];
+      g1.push(show(glass(G, 140, 300, 800, 330, MUTED, 24), at("G", "ginti"), { opacity: 0, y: 20 }));
+      g1.push(txt(G, "COUNT TABLE", 175, 318, 400, at("G", "ginti"), MUTED, 40, "left"));
+      [["the → cat", "4"], ["the → dog", "4"], ["sat → on", "6"]].forEach(([l, n], i) => { const t = at("G", "ginti") + 0.15 + i * 0.12;
+        g1.push(show(el(G, `left:190px;top:${400 + i * 70}px;font:700 48px ${COD};color:${TEXT};white-space:nowrap`, l), t, { opacity: 0 }, 0.3));
+        g1.push(show(el(G, `left:800px;top:${400 + i * 70}px;font:700 48px ${COD};color:${ACC}`, n), t, { opacity: 0 }, 0.3)); });
+      const gX = M.icon(G, "cross", 820, 318, 96, HOT); gX.show(at("G", "table")); g1.push(gX.el);
+      g1.push(show(glass(G, 140, 690, 800, 440, CYAN, 24), at("G", "neural"), { opacity: 0, y: 20 }));
+      g1.push(txt(G, "NEURAL NETWORK", 175, 708, 560, at("G", "neural"), CYAN, 40, "left"));
+      const nnW = el(G, "left:190px;top:780px;width:700px;height:320px"); const nsv = svgEl("svg", { viewBox: "0 0 700 320", width: 700, height: 320 }, nnW);
+      const layers = [[0, [40, 120, 200, 280]], [350, [0, 80, 160, 240, 320]], [700, [80, 160, 240]]].map(([x, ys]) => ys.map((y) => [x === 0 ? 20 : (x === 700 ? 680 : 350), Math.min(300, y + 10)]));
+      for (let a = 0; a < 2; a++) layers[a].forEach((p) => layers[a + 1].forEach((q) => svgEl("line", { x1: p[0], y1: p[1], x2: q[0], y2: q[1], stroke: ca(CYAN, 0.35), "stroke-width": 3 }, nsv)));
+      layers.flat().forEach((p) => svgEl("circle", { cx: p[0], cy: p[1], r: 17, fill: CYAN }, nsv));
+      g1.push(show(nnW, at("G", "neural") + 0.2, { opacity: 0 }, 0.5));
+      const gC = M.icon(G, "check", 830, 705, 90, GOOD); gC.show(at("G", "network")); g1.push(gC.el);
+      const tG1 = at("G", "aur") - 0.1; goneAll(g1, tG1);
+      const g2 = [pillC(G, "TOKENS", 300, at("G", "tokens"), { col: ACC, size: 60, h: 96, pad: 50 })];
+      const gW = show(chip(G, "playing", 300, 500, 480, 96, CYAN, false), at("G", "tokens") + 0.4, { opacity: 0, y: 14 }, 0.3); g2.push(gW); gone(gW, at("G", "tukdon") - 0.05, 0.15);
+      g2.push(show(chip(G, "play", 246, 500, 307, 96, CYAN, true), at("G", "tukdon"), { opacity: 0, x: 20, y: 0 }, 0.3), show(chip(G, "ing", 583, 500, 250, 96, ACC, true), at("G", "tukdon"), { opacity: 0, x: -20, y: 0 }, 0.3));
+      g2.push(pillC(G, "TEXT PIECES", 740, at("G", "tukdon") + 0.2, { col: CYAN, size: 50, h: 84, pad: 44 }), pillC(G, "EXAMPLE", 860, at("G", "tukdon") + 0.2, { col: MUTED, size: 40, h: 68, pad: 36 }));
+      const tG2 = at("G", "kaam") - 0.1; goneAll(g2, tG2);
+      [["GUESS TOKEN", "search", CYAN, at("G", "token", 1)], ["MEASURE LOSS", "warn", ACC, at("G", "loss")], ["CHANGE NUMBERS", "gear", GOOD, at("G", "numbers")]].forEach(([l, ic, c, t], i) => {
+        M.box(G, { x: 140, y: 300 + i * 260, w: 800, h: 190, label: l, icon: ic, color: c, size: 54 }).show(t);
+        if (i < 2) M.arrow(G, { from: [540, 495 + i * 260], to: [540, 555 + i * 260], color: MUTED, w: 8 }).show(t + 0.2, 0.3); });
+      M.fit(G, { y: 200, h: 1100, maxScale: 2.2 });
+
+      // ============ H: after pretraining: continues text, not yet an assistant; fine-tuning comes later ============
+      // diagram: H
+      const hM = M.box(H, { x: 140, y: 290, w: 800, h: 220, label: "PRETRAINED", icon: "model", color: CYAN, size: 60 }); hM.show(P("H", 0) + 0.1);
+      const hAr1 = M.arrow(H, { from: [540, 510], to: [540, 600], color: CYAN, w: 8 }); hAr1.show(P("H", 0) + 0.3, 0.3);
+      const hS = show(glass(H, 90, 610, 900, 290, CYAN), P("H", 0) + 0.3, { opacity: 0, y: 14 }), hSl = [txt(H, "TEXT IN", 120, 622, 300, P("H", 0) + 0.4, MUTED, 30, "left"), txt(H, "TEXT OUT", 120, 752, 300, at("H", "aage"), CYAN, 30, "left")];
+      const hIn = ["the", "dog", "sat", "on", "the", "rug"], hOu = ["the", "cat", "sat", "on", "the", "mat"], hP = rowPos(hIn, 52, 22, 14, 540), hCh = [];
+      hIn.forEach((w, i) => hCh.push(show(chip(H, w, hP[i].x, 655, hP[i].w, 52, MUTED, false), P("H", 0) + 0.4 + i * 0.06, { opacity: 0, y: 14 }, 0.3)));
+      hOu.forEach((w, i) => hCh.push(show(chip(H, w, hP[i].x, 795, hP[i].w, 52, CYAN, false), at("H", "aage") + i * 0.1, { opacity: 0, y: 14 }, 0.3)));
+      const hCt = pillC(H, "CONTINUES TEXT", 915, at("H", "aage"), { col: CYAN, size: 46, h: 80, pad: 40 });
+      const hBub = show(glass(H, 140, 1030, 800, 150, MUTED, 40), at("H", "abhi"), { opacity: 0, y: 14 }); const hBt = txt(H, "Question?", 140, 1070, 800, at("H", "abhi"), TEXT, 64, "center", LAT);
+      const hBx = M.icon(H, "cross", 810, 1000, 130, HOT); hBx.show(at("H", "nahi"));
+      const hNa = pillC(H, "NOT AN ASSISTANT YET", 1210, at("H", "assistant"), { col: HOT, size: 46, h: 80, pad: 40 });
+      const tH = at("H", "uske") - 0.15; goneAll(hCh.concat([hS, hCt, hBub, hBt, hBx.el, hNa], hSl), tH); hAr1.hide(tH);
+      M.arrow(H, { from: [540, 510], to: [540, 700], color: MUTED, w: 8 }).show(at("H", "uske"), 0.4);
+      const hF = M.box(H, { x: 140, y: 710, w: 800, h: 230, label: "FINE-TUNING", icon: "gear", color: ACC, size: 60 }); hF.show(at("H", "fine-tuning"));
+      [0, 1].forEach((i) => { const t = at("H", "labels") + i * 0.2; show(glass(H, 90 + i * 470, 1010, 430, 160, GOOD, 20), t, { opacity: 0, y: 20 });
+        txt(H, "Q → A", 90 + i * 470, 1060, 430, t, TEXT, 64, "center", COD); });
+      pillC(H, "HUMAN LABELS", 1215, at("H", "labels"), { col: GOOD, size: 50, h: 84, pad: 44 });
+      M.fit(H, { y: 200, h: 1100, maxScale: 2.2 });
+
+      // ============ I: recap, the question, comment and follow ============
+      // diagram: I
+      const iR = [["RAW TEXT", CYAN, "raw"], ["HIDE", ACC, "chhupao"], ["GUESS", CYAN, "guess"], ["LOSS", HOT, "loss"], ["IMPROVE", GOOD, "sudhro"]], iEls = [];
+      iR.forEach(([l, c, w], i) => { const t0 = P("I", 0) + 0.05 + i * 0.1, w2 = pillC(I, l, 300 + i * 170, t0, { col: c, size: 64, h: 120, pad: 60 });
+        tl.to(w2, { opacity: 0.3, duration: 0.2, immediateRender: false }, t0 + 0.5); tl.to(w2, { opacity: 1, duration: 0.25, immediateRender: false }, at("I", w)); iEls.push(w2);
+        if (i) iEls.push(txt(I, "↓", 90, 405 + (i - 1) * 170, 900, t0, MUTED, 44)); });
+      const tI = at("I", "ab") - 0.15; goneAll(iEls, tI);
+      const iC = glass(I, 90, 300, 900, 740, CYAN); show(iC, at("I", "ab"), { opacity: 0, y: 20 }); txt(I, "WHO GAVE LABELS?", 130, 335, 820, at("I", "ab"), CYAN, 50, "left");
+      M.pill(I, "HUMAN", at("I", "HUMAN"), { x: 260, y: 480, kind: "out", size: 68 }); M.pill(I, "KISI NE NAHI", at("I", "KISI"), { x: 200, y: 650, kind: "out", size: 68 });
+      show(el(I, `left:130px;top:880px;width:820px;height:96px;border-radius:48px;border:1.5px solid rgba(150,175,215,.35);font:500 36px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 36px;box-sizing:border-box`, "Add a comment..."), at("I", "Comment") + 0.2, { opacity: 0 });
+      txt(I, "150 DAYS OF AI", 60, 1090, 960, at("I", "150"), ACC, 64);
+      const iF = M.pill(I, "+  FOLLOW", at("I", "follow") - 0.4, { x: 370, y: 1200, kind: "acc", size: 52 });
+      tl.fromTo(iF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("I", "follow"));
+      M.fit(I, { y: 200, h: 1100, maxScale: 2.2 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I);
+      M.finish({ kw: { pretraining: "gold", text: "cyan", guess: "gold", loss: "hot", rug: "good", weights: "cyan", random: "gold", label: "hot", labels: "hot", tokens: "gold", token: "gold", "3.58": "gold", "2.29": "good", cat: "good", dog: "good", "fine-tuning": "gold", human: "gold", nahi: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
