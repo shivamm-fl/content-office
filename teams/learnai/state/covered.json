@@ -968,11 +968,8 @@
       "unit": "B2",
       "title": "Interview: Embeddings ko compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi?",
       "kind": "question",
-      "topic": "Cosine similarity compares the direction of two embedding vectors (what they are about) and ignores their length, while plain distance also punishes a difference in length; when every vector is scaled to length 1 (as OpenAI's embeddings already are) the two give the same ranking.",
-      "hook_formula": "search picks the wrong note by distance, then the interview question",
-      "hook_type": "relatable_stake",
-      "status": "planned",
-      "planned": "2026-10-22"
+      "topic": "Cosine similarity compares direction (topic) and ignores length; distance also counts length; at length 1 they rank the same.",
+      "status": "built"
     },
     {
       "id": "q113",

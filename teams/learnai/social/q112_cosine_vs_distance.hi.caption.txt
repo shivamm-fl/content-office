@@ -1,0 +1,13 @@
+Refund search kiya, cricket ka note upar aa gaya! Embeddings mein cosine similarity kyun, seedhi distance kyun nahi?
+
+Jawab: cosine similarity do vectors ki direction dekhti hai, yaani baat ek hi hai ya nahi. Distance length bhi ginta hai, aur note ko dohrane se sirf length badhti hai, topic nahi badalta.
+
+Example (invented word counts [refund, payment, cricket]): query 1, 1, 0. Short refund note ka distance 0, wahi note 5 baar likha to distance 5.66, cricket note ka 1.73. Distance se cricket jeet gaya. Cosine mein short 1.00, lamba 1.00, cricket 0.00.
+
+Vectors ko length 1 par scale karo (normalize) to distance bhi sahi chalta hai: 0, 0 aur 1.41. OpenAI ke embeddings docs ke hisaab se unke embeddings pehle se length 1 ke hote hain, isliye wahan cosine aur distance ka ranking ek hi hai. Jahan length mein matlab ho, jaise popularity, wahan length hatana galat hai.
+
+Interview mein bolo: "Cosine similarity compares the direction of two embeddings, which carries the meaning, while distance also penalizes a difference in length."
+
+5 baar dohraya refund note, kya usi topic ka hai? Comment karo: haan ya nahi. Jawab: haan.
+
+#AI #AIInterview #Embeddings

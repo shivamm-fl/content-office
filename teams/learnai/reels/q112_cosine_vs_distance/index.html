@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Cosine or distance for embeddings?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="125.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="125.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="125.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="125.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const fade = (d, t0) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, t0); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 34}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 54}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const rowTile = (host, x, y, w, h, left, right, col, t, lsz, rsz) => { const r = glass(host, x, y, w, h, col, 20);
+        el(r, `left:30px;top:${(h - (lsz || 40)) / 2 - 6}px;font:800 ${lsz || 40}px ${COD};color:${col}`, left); el(r, `right:34px;top:${(h - (rsz || 48)) / 2 - 6}px;font:800 ${rsz || 48}px ${COD};color:${TEXT}`, right);
+        return show(r, t, { opacity: 0, y: 16 }); };
+
+      // ---- svg plane helpers (all seek-safe: attribute updates inside tween onUpdate) ----
+      const NS = "http://www.w3.org/2000/svg";
+      const svgAt = (host, x, y, w, h) => { const s = document.createElementNS(NS, "svg"); s.setAttribute("width", w); s.setAttribute("height", h); s.setAttribute("viewBox", `0 0 ${w} ${h}`);
+        s.style.cssText = `position:absolute;left:${x}px;top:${y}px;overflow:visible`; host.appendChild(s); return s; };
+      const sv = (p, tagName, attrs) => { const e = document.createElementNS(NS, tagName); for (const k in attrs) e.setAttribute(k, attrs[k]); p.appendChild(e); return e; };
+      const txt = (svg, x, y, s, col, size, anchor) => sv(svg, "text", { x, y, fill: col, "text-anchor": anchor || "start", style: `font:800 ${size || 40}px ${COD};letter-spacing:.04em` }).appendChild(document.createTextNode(s)).parentNode;
+      // a vector from (ox,oy) along unit direction (dx,dy); len is tweened; head follows the tip
+      const vec = (svg, ox, oy, dx, dy, col, w) => { const g = sv(svg, "g", {}); const ln = sv(g, "line", { x1: ox, y1: oy, x2: ox, y2: oy, stroke: col, "stroke-width": w || 10, "stroke-linecap": "butt" });
+        const hd = sv(g, "polygon", { fill: col }); const o = { l: 0 };
+        const upd = (l) => { const a = Math.min(l, 30); const bx = ox + dx * (l - a), by = oy + dy * (l - a); ln.setAttribute("x2", bx); ln.setAttribute("y2", by);
+          const tx = ox + dx * l, ty = oy + dy * l, nx = -dy, ny = dx, hw = 17; hd.setAttribute("points", `${tx},${ty} ${bx + nx * hw},${by + ny * hw} ${bx - nx * hw},${by - ny * hw}`); };
+        upd(0); tl.set(g, { opacity: 0 }, 0);
+        const api = { g, o, ox, oy, dx, dy, tip: (l) => [ox + dx * l, oy + dy * l],
+          grow: (t, to, dur) => { tl.set(g, { opacity: 1 }, t); o.l = 0; tl.fromTo(o, { l: 0 }, { l: to, duration: dur || 0.55, ease: "power2.out", immediateRender: false, onUpdate: () => upd(o.l) }, t); return api; },
+          morph: (t, from, to, dur) => { tl.fromTo(o, { l: from }, { l: to, duration: dur, ease: "power2.inOut", immediateRender: false, onUpdate: () => upd(o.l) }, t); return api; },
+          at: (l) => upd(l) };
+        return api; };
+      const line = (svg, x1, y1, x2, y2, col, w, dash) => sv(svg, "line", { x1, y1, x2, y2, stroke: col, "stroke-width": w, "stroke-linecap": "round", ...(dash ? { "stroke-dasharray": dash } : {}) });
+      // person: head, body, pointing arm toward (dx,dy)
+      const person = (svg, x, y, col, dx, dy) => { const g = sv(svg, "g", {}); sv(g, "circle", { cx: x, cy: y, r: 26, fill: "none", stroke: col, "stroke-width": 8 });
+        line(g, x, y + 26, x, y + 120, col, 8); line(g, x, y + 120, x - 24, y + 190, col, 8); line(g, x, y + 120, x + 24, y + 190, col, 8);
+        line(g, x, y + 52, x + dx * 80, y + 52 + dy * 80, col, 8); return g; };
+
+      // ============ A: wrong ranking, from frame 0 ============
+      // diagram: A
+      M.hook(["Refund search:", "cricket note #1!"], { size: 96, top: 215 });
+      const sb = glass(A, 90, 480, 900, 150, CYAN, 75); show(sb, 0.05, { opacity: 0, y: 10 });
+      el(sb, `left:44px;top:20px;font:700 34px ${COD};color:${MUTED};letter-spacing:.12em`, "SEARCH");
+      el(sb, `left:44px;top:66px;font:700 52px ${LAT};white-space:nowrap`, "refund payment");
+      const r1 = glass(A, 90, 700, 900, 190, HOT, 24), r2 = glass(A, 90, 930, 900, 190, CYAN, 24);
+      show(r1, 0.15, { opacity: 0, y: 14 }); show(r2, 0.3, { opacity: 0, y: 14 });
+      el(r1, `left:30px;top:20px;font:800 56px ${COD};color:${HOT}`, "#1"); el(r1, `left:150px;top:30px;font:800 50px ${COD};white-space:nowrap`, "CRICKET NOTE");
+      el(r1, `left:150px;top:108px;font:600 38px ${COD};color:${MUTED}`, "match score, tomorrow");
+      const x1 = el(r1, `right:34px;top:36px;font:800 84px ${COD};color:${HOT};opacity:0`, "✗"); tl.set(x1, { opacity: 0 }, 0); tl.set(x1, { opacity: 1 }, at("A", "upar"));
+      el(r2, `left:30px;top:20px;font:800 56px ${COD};color:${CYAN}`, "#2"); el(r2, `left:150px;top:30px;font:800 50px ${COD};white-space:nowrap`, "LONG REFUND NOTE");
+      el(r2, `left:150px;top:108px;font:600 38px ${COD};color:${MUTED}`, "refund policy, repeated");
+      tag(A, "BY DISTANCE", 90, 1170, 900, 0.5, ACC, 48);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: the question, then the answer ============
+      // diagram: B
+      const pq = pillC(B, "INTERVIEW QUESTION", 200, P("B", 0), { size: 34, h: 56 });
+      const bq0 = M.box(B, { x: 140, y: 290, w: 800, h: 210, label: "EMBEDDINGS", icon: "model", color: ACC, size: 60 }); bq0.show(P("B", 0) + 0.2);
+      const bq1 = M.box(B, { x: 140, y: 560, w: 800, h: 230, label: "COSINE", icon: "check", color: VIOLET, size: 64 });
+      const bq2 = M.box(B, { x: 140, y: 960, w: 800, h: 230, label: "DISTANCE", icon: "model", color: CYAN, size: 64 });
+      bq1.show(at("B", "cosine")); const why = tag(B, "WHY NOT?", 140, 830, 800, at("B", "kyun"), ACC, 72); bq2.show(at("B", "distance"));
+      const tAns = at("B", "tumhara") - 0.1;
+      [bq0, bq1, bq2].forEach((b) => b.parts.forEach((d) => gone(d, tAns))); gone(pq, tAns); gone(why, tAns);
+      pillC(B, "YOUR ANSWER", 200, tAns + 0.3, { size: 34, h: 56, col: GOOD });
+      M.box(B, { x: 100, y: 310, w: 880, h: 340, label: "DIRECTION", sub: "= SAME TOPIC", icon: "check", color: GOOD, size: 72, subsize: 48 }).show(at("B", "cosine", 1));
+      M.box(B, { x: 100, y: 710, w: 880, h: 340, label: "LENGTH TOO", sub: "DISTANCE COUNTS IT", icon: "cross", color: HOT, size: 72, subsize: 44 }).show(at("B", "Distance"));
+      stamp(B, "TOPIC UNCHANGED", 540, 1120, GOOD, at("B", "topic"), 56);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // the plane (to scale): topic axis U points up-right, cricket axis V up-left (perpendicular); K px per unit
+      const TH = Math.PI / 3, Ux = Math.cos(TH), Uy = -Math.sin(TH), Vx = -Math.sin(TH), Vy = -Math.cos(TH);
+      const plane = (host, x, y, w, h, ox, oy, K) => { const s = svgAt(host, x, y, w, h); const Pt = (a, b) => [ox + K * (a * Ux + b * Vx), oy + K * (a * Uy + b * Vy)];
+        const a1 = Pt(-0.5, 0), a2 = Pt(7.5, 0), b1 = Pt(0, -0.5), b2 = Pt(0, 2.2);
+        line(s, a1[0], a1[1], a2[0], a2[1], "rgba(150,175,215,.25)", 3); line(s, b1[0], b1[1], b2[0], b2[1], "rgba(150,175,215,.25)", 3);
+        sv(s, "circle", { cx: ox, cy: oy, r: 11, fill: TEXT }); return { s, Pt, ox, oy, K }; };
+      const brace = (pl, a1, a2, b, col) => { const g = sv(pl.s, "g", {}); const p1 = pl.Pt(a1, b), p2 = pl.Pt(a2, b);
+        [[p1, a1], [p2, a2]].forEach(([p, a]) => { const t1 = pl.Pt(a, b + 0.2), t2 = pl.Pt(a, b - 0.2); line(g, t1[0], t1[1], t2[0], t2[1], col, 5); });
+        line(g, p1[0], p1[1], p2[0], p2[1], col, 5); return g; };
+
+      // ============ C: arrows, counts, nearest wins ============
+      // diagram: C
+      const ci1 = M.box(C, { x: 140, y: 290, w: 800, h: 200, label: "refund payment", icon: "doc", color: TEXT, size: 54 }); ci1.show(P("C", 0) + 0.1);
+      const ci2 = M.box(C, { x: 140, y: 530, w: 800, h: 200, label: "1 · 1 · 0", icon: "model", color: CYAN, size: 66 }); ci2.show(at("C", "numbers") - 0.2);
+      const ci3 = tag(C, "VECTOR", 140, 770, 800, at("C", "vector"), ACC, 52);
+      const K1 = 80, plC = plane(C, 80, 650, 920, 640, 300, 590, K1), PC = plC.Pt; fade(plC.s, at("C", "teer") - 0.1);
+      const vq = vec(plC.s, 300, 590, Ux, Uy, ACC, 15); vq.grow(at("C", "origin"), 1.414 * K1, 0.6);
+      ci1.parts.forEach((d) => gone(d, at("C", "EXAMPLE") - 0.1)); ci2.parts.forEach((d) => gone(d, at("C", "EXAMPLE") - 0.1)); gone(ci3, at("C", "EXAMPLE") - 0.1);
+      const exC = pillC(C, "EXAMPLE", 200, at("C", "EXAMPLE"), { size: 36, h: 58, col: MUTED }); gone(exC, at("C", "Tempting") - 0.1);
+      const tbl = [tag(C, "REFUND · PAYMENT · CRICKET", 60, 280, 960, at("C", "teen"), MUTED, 36)];
+      const rowsC = [["QUERY", "1 · 1 · 0", ACC, at("C", "Query")], ["SHORT", "1 · 1 · 0", ACC, at("C", "short")], ["LONG ×5", "5 · 5 · 0", CYAN, at("C", "5", 1)], ["CRICKET", "0 · 0 · 1", HOT, at("C", "Cricket")]];
+      rowsC.forEach(([a, b, col, t], i) => tbl.push(rowTile(C, 110, 335 + i * 74, 860, 66, a, b, col, t - 0.15, 38, 42)));
+      const qp = PC(2.6, 0.45), qlab = txt(plC.s, qp[0], qp[1], "QUERY = SHORT", ACC, 38, "end"); show(qlab, at("C", "Query"), { opacity: 0 });
+      const vl = vec(plC.s, 300, 590, Ux, Uy, CYAN, 8), vc = vec(plC.s, 300, 590, Vx, Vy, HOT, 10);
+      vl.grow(at("C", "5", 1), 7.071 * K1, 0.7); vc.grow(at("C", "Cricket"), K1, 0.5);
+      const lp = PC(7.071, 0), llab = txt(plC.s, lp[0] + 24, lp[1] + 16, "LONG ×5", CYAN, 38); show(llab, at("C", "5", 1) + 0.5, { opacity: 0 });
+      const cp0 = PC(0, 1), clab = txt(plC.s, cp0[0] - 6, cp0[1] - 20, "CRICKET", HOT, 38, "end"); show(clab, at("C", "Cricket"), { opacity: 0 });
+      const tT = at("C", "Tempting") - 0.1; tbl.forEach((d) => gone(d, tT));
+      tl.to(plC.s, { y: -415, x: -90, scale: 1.3, transformOrigin: "0 0", duration: 0.6, ease: "power2.inOut", immediateRender: false }, tT);
+      pillC(C, "CLOSEST = BEST?", 215, at("C", "Tempting") + 0.3, { size: 44, h: 70, col: ACC });
+      const brk = brace(plC, 1.414, 7.071, -0.4, TEXT); fade(brk, at("C", "566") - 0.3);
+      const q0 = PC(1.414, -0.9), d0 = txt(plC.s, q0[0], q0[1] + 12, "0", GOOD, 60); show(d0, at("C", "0", 4), { opacity: 0 });
+      const p566 = PC(4.2, -1.0), d566 = txt(plC.s, p566[0], p566[1], "5.66", CYAN, 64); show(d566, at("C", "566"), { opacity: 0 });
+      const qt = PC(1.414, 0), dcl = line(plC.s, qt[0], qt[1], cp0[0], cp0[1], HOT, 6, "12 10"); fade(dcl, at("C", "173") - 0.3);
+      const d173 = txt(plC.s, 215, 600, "1.73", HOT, 64, "end"); show(d173, at("C", "173"), { opacity: 0 });
+      stamp(C, "CRICKET WINS", 540, 1150, HOT, at("C", "Cricket", 1), 66);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: cosine reads the angle ============
+      // diagram: D
+      pillC(D, "MEANING = DIRECTION", 205, P("D", 0), { size: 40, h: 64, col: GOOD });
+      const K2 = 100, OXD = 230, OYD = 700, plD = plane(D, 40, 330, 580, 800, OXD, OYD, K2), PD = plD.Pt; fade(plD.s, P("D", 0) + 0.2);
+      const dq = vec(plD.s, OXD, OYD, Ux, Uy, ACC, 15), dl = vec(plD.s, OXD, OYD, Ux, Uy, CYAN, 8), dc = vec(plD.s, OXD, OYD, Vx, Vy, HOT, 10);
+      dq.grow(at("D", "matlab"), 1.414 * K2, 0.5); dl.grow(at("D", "direction"), 7.071 * K2, 0.7); dc.grow(at("D", "length"), K2, 0.5);
+      const labs = [[PD(2.4, 0.45), "SHORT", ACC, "end", 0], [PD(7.071, 0.3), "LONG ×5", CYAN, "end", 0], [PD(0, 1), "CRICKET", HOT, "start", 0]];
+      labs.forEach(([p, s2, col, an], i) => { const x = i === 2 ? OXD - 50 : p[0], y = i === 2 ? p[1] + 56 : p[1]; show(txt(plD.s, x, y, s2, col, 36, i === 2 ? "end" : an), at("D", "length") + 0.3, { opacity: 0 }); });
+      const aU = PD(0, 0), arcS = [OXD + 90 * Ux, OYD + 90 * Uy], arcE = [OXD + 90 * Vx, OYD + 90 * Vy];
+      const arc90 = sv(plD.s, "path", { d: `M ${arcS[0]} ${arcS[1]} A 90 90 0 0 0 ${arcE[0]} ${arcE[1]}`, fill: "none", stroke: HOT, "stroke-width": 7 }); fade(arc90, at("D", "angle"));
+      const l90 = txt(plD.s, OXD - 35, OYD - 130, "90°", HOT, 48, "middle"); show(l90, at("D", "angle") + 0.2, { opacity: 0 });
+      const z0 = PD(2.6, -0.45), l0 = txt(plD.s, z0[0], z0[1], "0°", GOOD, 52); show(l0, at("D", "angle") + 0.35, { opacity: 0 });
+      const chA = rowTile(D, 640, 330, 390, 78, "1", "SAME WAY", GOOD, at("D", "1"), 44, 34), chB = rowTile(D, 640, 420, 390, 78, "0", "DIFFERENT", HOT, at("D", "0"), 44, 34);
+      const sbD = [["SHORT", "1.00", ACC, at("D", "100")], ["LONG ×5", "1.00", CYAN, at("D", "100", 1)], ["CRICKET", "0.00", HOT, at("D", "000")]].map(([a, b, col, t], i) => rowTile(D, 640, 540 + i * 88, 390, 76, a, b, col, t - 0.1, 38, 46));
+      const tK = at("D", "kyun") - 0.15;
+      [chA, chB, ...sbD].forEach((d) => gone(d, tK)); gone(l90, tK); gone(l0, tK); gone(arc90, tK);
+      // two people pointing the same way, one near, one far
+      const ps = svgAt(D, 640, 330, 390, 480); fade(ps, at("D", "log"));
+      sv(ps, "circle", { cx: 345, cy: 50, r: 34, fill: "none", stroke: ACC, "stroke-width": 8 }); sv(ps, "circle", { cx: 345, cy: 50, r: 12, fill: ACC });
+      person(ps, 240, 190, CYAN, 0.8, -0.6); person(ps, 60, 190, CYAN, 0.8, -0.6);
+      show(txt(ps, 240, 440, "NEAR", TEXT, 44, "middle"), at("D", "paas"), { opacity: 0 }); show(txt(ps, 60, 440, "FAR", TEXT, 44, "middle"), at("D", "door"), { opacity: 0 });
+      gone(ps, at("D", "Note") - 0.1);
+      const sd = stamp(D, "SAME DIRECTION", 835, 850, GOOD, at("D", "hai", 2), 36); gone(sd, at("D", "Note") - 0.1);
+      const ext = brace(plD, 1.414, 7.071, -0.7, ACC); fade(ext, at("D", "dohrane"));
+      tag(D, "ONLY LENGTH", 640, 560, 390, at("D", "length", 1), ACC, 46);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: remove the length ============
+      // diagram: E
+      pillC(E, "REMOVE LENGTH", 205, P("E", 0) + 0.1, { size: 42, h: 64, col: CYAN });
+      const OXE = 480, OYE = 640, plE = plane(E, 90, 290, 880, 700, OXE, OYE, 96); fade(plE.s, P("E", 0) + 0.2);
+      const R = 270, k0 = 96, L0q = 1.414 * k0, L0l = 7.071 * k0, L0c = k0;
+      const eq = vec(plE.s, OXE, OYE, Ux, Uy, ACC, 15), el2 = vec(plE.s, OXE, OYE, Ux, Uy, CYAN, 8), ec = vec(plE.s, OXE, OYE, Vx, Vy, HOT, 10);
+      el2.grow(P("E", 0) + 0.3, L0l, 0.6); eq.grow(P("E", 0) + 0.5, L0q, 0.4); ec.grow(P("E", 0) + 0.7, L0c, 0.4);
+      const eS = [OXE + R * Ux, OYE + R * Uy], eC = [OXE + R * Vx, OYE + R * Vy];
+      const unit = sv(plE.s, "path", { d: `M ${eS[0]} ${eS[1]} A ${R} ${R} 0 0 0 ${eC[0]} ${eC[1]}`, fill: "none", stroke: "rgba(150,175,215,.6)", "stroke-width": 5, "stroke-dasharray": "14 12" }); fade(unit, at("E", "1"));
+      show(txt(plE.s, OXE - 52, OYE - 305, "LENGTH 1", MUTED, 40, "middle"), at("E", "1"), { opacity: 0 });
+      const lerp = (a, b, u) => a + (b - a) * u; const nm = { u: 0 };
+      tl.fromTo(nm, { u: 0 }, { u: 1, duration: 1.0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { eq.at(lerp(L0q, R, nm.u)); el2.at(lerp(L0l, R, nm.u)); ec.at(lerp(L0c, R, nm.u)); } }, at("E", "scale"));
+      pillC(E, "NORMALIZE", 285, at("E", "normalize"), { size: 40, h: 62, col: GOOD });
+      const dseg = line(plE.s, eS[0], eS[1], eC[0], eC[1], HOT, 6, "12 10"); fade(dseg, at("E", "141") - 0.3);
+      show(txt(plE.s, (eS[0] + eC[0]) / 2, (eS[1] + eC[1]) / 2 + 80, "1.41", HOT, 64, "middle"), at("E", "141"), { opacity: 0 });
+      show(txt(plE.s, eS[0] + 30, eS[1] + 45, "SHORT 0", GOOD, 38), at("E", "0"), { opacity: 0 }); show(txt(plE.s, eS[0] + 30, eS[1] + 95, "LONG 0", GOOD, 38), at("E", "0", 1), { opacity: 0 });
+      M.box(E, { x: 100, y: 1000, w: 880, h: 170, label: "OPENAI EMBEDDINGS", sub: "LENGTH 1 ALREADY", icon: "check", color: CYAN, size: 44, subsize: 38 }).show(at("E", "OpenAI"));
+      stamp(E, "SAME RANKING", 540, 1205, GOOD, at("E", "ranking"), 58);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: boundary, popularity ============
+      // diagram: F
+      pillC(F, "BOUNDARY", 205, P("F", 0), { size: 44, h: 68, col: ACC });
+      pillC(F, "EXAMPLE", 285, P("F", 0) + 0.1, { size: 34, h: 54, col: MUTED });
+      const plF = plane(F, 90, 330, 880, 800, 300, 760, 100); fade(plF.s, P("F", 0) + 0.1);
+      const fl = vec(plF.s, 300, 760, Ux, Uy, CYAN, 8), fsx = vec(plF.s, 300, 760, Ux, Uy, ACC, 15);
+      fl.grow(P("F", 0) + 0.3, 800, 0.8); fsx.grow(P("F", 0) + 0.6, 160, 0.4);
+      const fS = [300 + 160 * Ux, 760 + 160 * Uy], fL = [300 + 800 * Ux, 760 + 800 * Uy];
+      show(txt(plF.s, fS[0] - 30, fS[1] + 10, "FEW VIEWS", ACC, 44, "end"), at("F", "popularity") - 0.3, { opacity: 0 });
+      show(txt(plF.s, fL[0] - 60, fL[1] + 40, "MANY VIEWS", CYAN, 48, "end"), at("F", "popularity"), { opacity: 0 });
+      stamp(F, "KEEP LENGTH", 540, 1180, GOOD, at("F", "hatana"), 64);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: the interview answer ============
+      // diagram: G
+      pillC(G, "INTERVIEW ANSWER", 205, P("G", 0), { size: 36, h: 60 });
+      const gcard = (y, col, title, sub, t) => { const c = glass(G, 100, y, 880, 400, col, 28); el(c, `left:44px;top:60px;font:800 76px ${COD};color:${col}`, title); el(c, `left:44px;top:170px;font:700 44px ${COD};color:${TEXT}`, sub); return show(c, t, { opacity: 0, y: 20 }); };
+      const g1 = gcard(300, GOOD, "COSINE", "ANGLE = TOPIC", P("G", 0) + 0.1), g2 = gcard(760, HOT, "DISTANCE", "ANGLE + LENGTH", at("G", "distance") - 0.4);
+      const mini = (host, x, y, lens, angs) => { const s2 = svgAt(host, x, y, 360, 360); sv(s2, "circle", { cx: 50, cy: 320, r: 10, fill: TEXT });
+        const vs = lens.map((L, k) => { const a = angs[k] * Math.PI / 180; return vec(s2, 50, 320, Math.cos(a), -Math.sin(a), k ? CYAN : ACC, k ? 8 : 12); }); return { s2, vs, lens }; };
+      const m1 = mini(g1, 480, 20, [150, 290], [55, 30]); fade(m1.s2, P("G", 0) + 0.3); m1.vs.forEach((v, k) => v.grow(at("G", "direction") + k * 0.2, m1.lens[k], 0.5));
+      sv(m1.s2, "path", { d: `M ${50 + 90 * Math.cos(55 * Math.PI / 180)} ${320 - 90 * Math.sin(55 * Math.PI / 180)} A 90 90 0 0 1 ${50 + 90 * Math.cos(30 * Math.PI / 180)} ${320 - 90 * Math.sin(30 * Math.PI / 180)}`, fill: "none", stroke: GOOD, "stroke-width": 6 });
+      const m2 = mini(g2, 480, 20, [150, 290], [45, 45]); fade(m2.s2, at("G", "distance") - 0.2); m2.vs.forEach((v, k) => v.grow(at("G", "distance") + k * 0.2, m2.lens[k], 0.5));
+      const gap = sv(m2.s2, "g", {}); const q1 = [50 + 150 * Math.cos(Math.PI / 4), 320 - 150 * Math.sin(Math.PI / 4)], q2 = [50 + 290 * Math.cos(Math.PI / 4), 320 - 290 * Math.sin(Math.PI / 4)];
+      line(gap, q1[0] + 34, q1[1] + 34, q2[0] + 34, q2[1] + 34, HOT, 6, "10 8"); fade(gap, at("G", "penalizes"));
+      const gr1 = el(G, `left:90px;top:290px;width:900px;height:420px;border:5px solid ${GOOD};border-radius:34px`); show(gr1, at("G", "direction"), { opacity: 0 }, 0.3); gone(gr1, at("G", "distance") - 0.2);
+      const gr2 = el(G, `left:90px;top:750px;width:900px;height:420px;border:5px solid ${HOT};border-radius:34px`); show(gr2, at("G", "penalizes"), { opacity: 0 }, 0.3);
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: comment, follow ============
+      // diagram: H
+      pillC(H, "YOUR CALL", 205, P("H", 0), { size: 40, h: 68 });
+      const hs = svgAt(H, 90, 400, 880, 240); fade(hs, P("H", 0) + 0.1);
+      line(hs, 40, 150, 840, 150, "rgba(150,175,215,.25)", 3); sv(hs, "circle", { cx: 60, cy: 150, r: 11, fill: TEXT });
+      vec(hs, 60, 150, 1, 0, CYAN, 8).grow(P("H", 0) + 0.3, 740, 0.6); vec(hs, 60, 150, 1, 0, ACC, 15).grow(P("H", 0) + 0.4, 150, 0.4);
+      show(txt(hs, 60, 90, "SHORT", ACC, 44), P("H", 0) + 0.6, { opacity: 0 }); show(txt(hs, 800, 230, "REPEATED ×5", CYAN, 44, "end"), P("H", 0) + 0.7, { opacity: 0 });
+      tag(H, "SAME TOPIC?", 100, 300, 880, at("H", "topic"), TEXT, 64);
+      const hc = glass(H, 120, 740, 840, 520, CYAN, 28); show(hc, at("H", "Comment") - 0.1, { opacity: 0, y: 20 });
+      el(hc, `left:40px;top:24px;font:800 34px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT KARO");
+      M.pill(hc, "HAAN", at("H", "haan"), { x: 140, y: 100, kind: "out", size: 44 });
+      M.pill(hc, "NAHI", at("H", "nahi"), { x: 460, y: 100, kind: "out", size: 44 });
+      el(hc, `left:40px;top:220px;font:700 52px ${COD};color:${TEXT}`, "@ai.learnvora");
+      show(el(hc, `left:40px;top:300px;font:700 30px ${COD};letter-spacing:.08em;color:${ACC}`, "AI ENGINEER INTERVIEW"), at("H", "interview"), { opacity: 0, y: 8 }, 0.3);
+      const fp2 = el(hc, `left:500px;top:380px;width:290px;height:84px;border-radius:42px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 40px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fp2, at("H", "follow") - 0.4, { opacity: 0 });
+      tl.to(fp2, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("H", "follow")); tl.to(fp2, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("H", "follow") + 0.12);
+      M.fit(H, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
+      M.finish({ kw: { refund: "gold", cricket: "hot", cosine: "cyan", similarity: "cyan", direction: "good", distance: "gold", length: "gold", angle: "cyan", normalize: "good", openai: "cyan", popularity: "gold", jeet: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

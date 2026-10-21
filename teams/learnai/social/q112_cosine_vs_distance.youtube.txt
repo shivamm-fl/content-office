@@ -1,0 +1,9 @@
+Cosine vs distance: embeddings interview
+
+Interview mein poochha jata hai: embeddings compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi? Jawab: cosine similarity do vectors ki direction dekhti hai (baat ek hi hai ya nahi), distance length bhi ginta hai. Vectors ko length 1 par normalize karo to dono ka ranking same ho jata hai, aur OpenAI ke embeddings docs ke hisaab se unke embeddings pehle se length 1 ke hote hain. Is video mein ek invented word-count example hai (refund, payment, cricket) jisme distance galat note upar laata hai.
+
+Is video mein: cosine similarity, cosine vs euclidean distance, embedding similarity, normalize vectors, AI engineer interview questions.
+
+Sources:
+https://developers.openai.com/api/docs/guides/embeddings
+https://developers.google.com/machine-learning/clustering/dnn-clustering/supervised-similarity

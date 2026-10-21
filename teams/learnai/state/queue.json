@@ -896,38 +896,21 @@
       "track": "interview",
       "unit": "B2",
       "format": "concept",
+      "status": "planned",
       "title": "Interview: Embeddings ko compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi?",
       "one_idea": "Cosine similarity compares the direction of two embedding vectors (what they are about) and ignores their length, while plain distance also punishes a difference in length; when every vector is scaled to length 1 (as OpenAI's embeddings already are) the two give the same ranking.",
       "hook_type": "relatable_stake",
       "spoken_hook": "Refund search किया, cricket का note ऊपर आ गया!",
       "hook_formula": "search picks the wrong note by distance, then the interview question",
       "hook_source": "scriptwriter after growth-analyst read, 2026-10-22",
-      "visual_idea": "Frame 0: a search box 'refund payment' with three notes ranked by plain distance: cricket note ahead of the long refund note. Then arrows from the origin for the query, the short note, the 5x long note (same direction, longer) and the cricket note (different direction); an angle drawn between arrows; distance vs cosine table from the run; arrows squashed to length 1 and the ranking fixed; the interview answer card.",
-      "everyday_anchor": "Two people pointing the same way, one standing close, one far away: the direction is the same.",
-      "example": "EXAMPLE (invented word counts [refund, payment, cricket]), real run state/runs/q112_cosine_run.py: query [1,1,0]; short refund note [1,1,0] distance 0.00 cosine 1.00; same note repeated 5 times [5,5,0] distance 5.66 cosine 1.00; cricket note [0,0,1] distance 1.73 cosine 0.00. After scaling all to length 1: distance 0.00, 0.00 and 1.41, cosine unchanged.",
       "sources": [
         "https://developers.openai.com/api/docs/guides/embeddings",
         "https://developers.google.com/machine-learning/clustering/dnn-clustering/supervised-similarity"
       ],
-      "facts_to_verify": [
-        "OpenAI embeddings FAQ (fetched 2026-10-22): 'OpenAI embeddings are normalized to length 1', so cosine similarity can be computed slightly faster with a dot product and cosine similarity and Euclidean distance give identical rankings.",
-        "Google ML course (fetched 2026-10-22): cosine similarity focuses solely on the angle between vectors; the dot product is proportional to vector length; with lengths normalized to 1 the three measures are equivalent."
-      ],
       "length_target_s": 110,
       "cover_headline": "Cosine or distance for embeddings?",
       "thumb_text": "Cosine vs distance",
-      "keywords": [
-        "cosine similarity",
-        "cosine vs euclidean distance",
-        "embedding similarity",
-        "ai engineer interview questions"
-      ],
-      "trap": "Comparing vector lengths when only direction carries meaning.",
-      "caption_note": "Comment 1 or 2: the 5x longer refund note, is it the same topic? (answer: yes, in the caption)",
-      "studio_note": "The interview question must be spoken in full in the reel (owner correction 2026-10-21): Interviewer ने पूछा, embeddings compare करने के लिए cosine similarity क्यों, seedhi distance क्यों नहीं? Boundary: if vectors are already length 1 the ranking is identical, so either works (OpenAI); length matters only when it carries meaning (Google: dot product, popularity). Close to published course reel r07 (cosine similarity, 2026-10-12): keep a different picture (arrows from the origin and the distance trap, not the angle only).",
-      "script_file": "state/scripts/q112.txt",
-      "status": "planned",
-      "qa_passed": false
+      "folder": "q112_cosine_vs_distance"
     },
     {
       "id": "q113",
