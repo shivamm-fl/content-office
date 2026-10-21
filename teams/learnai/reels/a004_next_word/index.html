@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>An LLM is a next-word predictor</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="131" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="131" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="131" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="131" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "150 DAYS OF AI · DAY 4" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+
+      // ============ helpers ============
+      const grab = (host) => { const i0 = host.children.length; return () => [...host.children].slice(i0); };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (list, t) => list.forEach((d) => gone(d, t));
+      const txt = (host, text, x, y, w, t, col, size, align, font) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:${align || "center"};font:800 ${size || 36}px ${font || COD};letter-spacing:.04em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 58; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 36}px ${COD};letter-spacing:.12em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      // one label slot whose text changes on the spoken word: [[t, text, colour], ...]
+      const slot = (host, y, list, o) => { o = o || {}; return list.map(([t, text, col], i) => { const w = el(host, `left:0;top:${y}px;width:1080px;height:${o.h || 60}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${o.h || 60}px;padding:0 32px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 36}px ${COD};letter-spacing:.12em;color:${col};white-space:nowrap">${text}</div>`;
+        tl.set(w, { opacity: 0 }, 0); tl.set(w, { opacity: 1 }, t); if (i < list.length - 1) tl.set(w, { opacity: 0 }, list[i + 1][0]); tl.fromTo(w, { y: 10 }, { y: 0, duration: 0.3, ease: "power3.out", immediateRender: false }, t); return w; }); };
+      // word chips in a centred row (mono, fixed width per char so the row can be planned before the chips show)
+      const chipW = (word, size, pad) => Math.round(word.length * 0.6 * size + 2 * pad + 5);
+      const rowPos = (words, size, pad, gap, cx) => { const ws = words.map((w) => chipW(w, size, pad)); const total = ws.reduce((a, b) => a + b, 0) + gap * (words.length - 1); let x = cx - total / 2;
+        return ws.map((w) => { const r = { x: Math.round(x), w }; x += w + gap; return r; }); };
+      const chip = (host, word, x, y, w, size, col, filled) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${Math.round(size * 1.75)}px;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:14px;border:2.5px solid ${col};background:${ca(col, filled ? 0.24 : 0.10)};font:700 ${size}px ${COD};color:${TEXT};white-space:nowrap`, word);
+      // bar row: word label, bar (true length, px per percent), fraction and percent that appear on their spoken words
+      const barRow = (host, x, y, word, pct, k, n, scale, o) => { o = o || {}; const h = o.h || 76, fs = o.fs || 54;
+        const lab = el(host, `left:${x}px;top:${y}px;width:${o.lw || 200}px;height:${h}px;display:flex;align-items:center;font:700 ${fs}px ${COD};color:${TEXT}`, word);
+        const bar = el(host, `left:${x + (o.lw || 200) + 10}px;top:${y}px;width:${Math.round(pct * scale)}px;height:${h}px;border-radius:12px;background:${ca(CYAN, 0.85)};transform-origin:0 50%`);
+        const val = el(host, `left:${x + (o.lw || 200) + 34 + Math.round(pct * scale)}px;top:${y}px;height:${h}px;display:flex;align-items:center;font:700 ${o.vs || 44}px ${COD};color:${ACC};white-space:nowrap`, `<span class="f" style="color:${MUTED}">${k}/${n}</span><span class="p">&nbsp;= ${pct} %</span>`);
+        return { lab, bar, val, f: val.querySelector(".f"), p: val.querySelector(".p") }; };
+      const barTimes = (r, tLab, tBar, tFrac, tPct) => { show(r.lab, tLab, { opacity: 0, x: -20, y: 0 }); tl.set(r.bar, { opacity: 0, scaleX: 0 }, 0); tl.set(r.bar, { opacity: 1 }, tBar); tl.to(r.bar, { scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, tBar);
+        tl.set(r.val, { opacity: 0 }, 0); tl.set(r.val, { opacity: 1 }, tFrac); tl.set(r.p, { opacity: 0 }, 0); tl.set(r.p, { opacity: 1 }, tPct); };
+
+      // ============ A: the model writes word by word, the keyboard does the same ============
+      // diagram: A
+      M.hook(["ChatGPT kaise", "likhta hai?"], { size: 112, top: 230 });
+      const aP = glass(A, 90, 540, 900, 470, CYAN); show(aP, 0.05, { opacity: 0, y: 12 }, 0.3);
+      M.icon(A, "robot", 122, 566, 74, CYAN).show(0.05); txt(A, "CHATGPT", 212, 584, 400, 0.05, CYAN, 36, "left");
+      const aDots = txt(A, "• • •", 120, 700, 300, 0.1, MUTED, 56, "left"); gone(aDots, 1.95, 0.1);
+      const aW = ["The", "cat", "sat", "on", "the"], aPos = rowPos(aW.concat(["?"]), 52, 22, 14, 540);
+      aW.forEach((w, i) => show(chip(A, w, aPos[i].x, 690, aPos[i].w, 52, CYAN, false), 2.0 + i * 0.3, { opacity: 0, y: 16 }, 0.3));
+      show(chip(A, "?", aPos[5].x, 690, aPos[5].w, 52, ACC, true), 3.5, { opacity: 0, y: 16 }, 0.3);
+      const aC = ["mat", "sofa", "bed"], aCp = rowPos(aC, 40, 18, 16, 540);
+      aC.forEach((w, i) => show(chip(A, w, aCp[i].x, 790, aCp[i].w, 40, ACC, false), 3.6 + i * 0.2, { opacity: 0, y: 14 }, 0.3));
+      txt(A, "GUESSES", 90, 880, 900, 3.6, ACC, 34); txt(A, "WORD BY WORD", 90, 935, 900, 3.1, MUTED, 32);
+      const aK = glass(A, 90, 1090, 900, 220, MUTED); show(aK, 4.4, { opacity: 0, y: 24 });
+      txt(A, "PHONE KEYBOARD", 120, 1105, 500, 4.4, MUTED, 32, "left");
+      const kPos = rowPos(["the", "a", "and"], 52, 22, 20, 540);
+      ["the", "a", "and"].forEach((w, i) => show(chip(A, w, kPos[i].x, 1185, kPos[i].w, 52, CYAN, false), 4.8 + i * 0.2, { opacity: 0, y: 16 }, 0.3));
+      pillC(A, "SAME IDEA", 1020, 5.3, { col: ACC, size: 34 });
+      M.fit(A, { y: 500, h: 800 });
+
+      // ============ B: the keyboard guess, then ChatGPT = LLM ============
+      // diagram: B
+      const bPh = glass(B, 240, 330, 600, 880, MUTED, 56); show(bPh, 9.3, { opacity: 0, y: 24 });
+      const bG = show(el(B, `left:280px;top:395px;width:520px;font:700 70px ${LAT};color:${TEXT}`, 'Good<span style="color:' + ACC + '">|</span>'), 9.35, { opacity: 0, y: 12 });
+      const bStrip = glass(B, 270, 540, 540, 120, CYAN, 20); show(bStrip, 9.35, { opacity: 0, y: 12 });
+      const bKeys = ["morning", "night", "luck"], bkp = rowPos(bKeys, 34, 16, 14, 540);
+      const bKeyEls = bKeys.map((w, i) => show(chip(B, w, bkp[i].x, 560, bkp[i].w, 34, CYAN, false), at("B", w) , { opacity: 0, y: 10 }, 0.3));
+      const bKb = []; for (let r = 0; r < 3; r++) for (let c = 0; c < 8; c++) bKb.push(show(el(B, `left:${284 + c * 64}px;top:${720 + r * 100}px;width:56px;height:80px;border-radius:12px;background:${ca(MUTED, 0.30)}`), 9.4, { opacity: 0 }, 0.3));
+      const bGuess = pillC(B, "GUESSING", 250, at("B", "guess"), { col: ACC, size: 44, h: 70 });
+      tl.to(bStrip, { borderColor: ca(ACC, 0.95), duration: 0.25, immediateRender: false }, at("B", "guess"));
+      const phoneGrp = [bPh, bG, bStrip].concat(bKeyEls, bKb, [bGuess]);
+      goneAll(phoneGrp, 16.0);
+      const bBig = M.box(B, { x: 240, y: 330, w: 600, h: 280, label: "CHATGPT", icon: "robot", color: CYAN, size: 54 }); bBig.show(at("B", "ChatGPT"));
+      pillC(B, "LLM", 640, at("B", "LLM"), { col: ACC, size: 54, h: 84, pad: 50 });
+      pillC(B, "LARGE LANGUAGE MODEL", 740, at("B", "large"), { col: ACC, size: 40, h: 70 });
+      const bSm = M.box(B, { x: 60, y: 1010, w: 280, h: 200, label: "KEYBOARD", icon: "text", color: MUTED, size: 34 }); bSm.show(at("B", "bhi"));
+      const bBg = M.box(B, { x: 440, y: 950, w: 580, h: 320, label: "LLM", icon: "model", color: CYAN, size: 60 }); bBg.show(at("B", "bahut"));
+      M.arrow(B, { from: [345, 1110], to: [430, 1110], color: ACC, w: 8 }).show(at("B", "yahi"), 0.3);
+      pillC(B, "SAME JOB, BIGGER", 1300, at("B", "bade"), { col: ACC, size: 40, h: 70 });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: the toy model counts a tiny corpus ============
+      // diagram: C
+      slot(C, 195, [[S.C + 0.1, "TOY MODEL", ACC], [at("C", "LLM"), "NOT A REAL LLM", HOT], [at("C", "EXAMPLE"), "EXAMPLE", ACC]], { size: 38, h: 64 });
+      const cP = glass(C, 90, 330, 900, 780, CYAN); show(cP, S.C + 0.1, { opacity: 0, y: 12 });
+      txt(C, "8 SENTENCES", 120, 345, 500, S.C + 0.1, CYAN, 34, "left");
+      const corp = [["the cat ", "sat on the", "mat"], ["the cat ", "sat on the", "mat"], ["the dog ", "sat on the", "mat"], ["the cat ", "sat on the", "sofa"], ["the dog ", "sat on the", "sofa"], ["the cat ", "sat on the", "bed"], ["the cat ran to the ", "", "door"], ["the dog ran to the ", "", "park"]];
+      const cRows = corp.map((l, i) => { const r = show(el(C, `left:110px;top:${415 + i * 84}px;font:600 52px ${COD};color:${TEXT};white-space:pre`, `${l[0]}<span class="ctx">${l[1]}</span>${l[1] ? " " : ""}<span class="nx">${l[2]}</span>`), S.C + 0.3 + i * 0.12, { opacity: 0, y: 12 }, 0.3); return r; });
+      const t6 = at("C", "6"), tNext = at("C", "word");
+      cRows.forEach((r, i) => { if (i < 6) tl.to(r.querySelector(".ctx"), { color: ACC, duration: 0.3, immediateRender: false }, t6); else tl.to(r, { opacity: 0.3, duration: 0.3, immediateRender: false }, t6);
+        if (i < 6) tl.to(r.querySelector(".nx"), { color: CYAN, duration: 0.3, immediateRender: false }, tNext); });
+      slot(C, 1125, [[t6, "SEEN 6 TIMES", ACC], [at("C", "kaun"), "WHAT CAME NEXT?", CYAN]], { size: 36, h: 64 });
+      const cT = ["mat x3", "sofa x2", "bed x1"], cTp = rowPos(cT, 40, 18, 16, 540);
+      cT.forEach((w, i) => show(chip(C, w, cTp[i].x, 1210, cTp[i].w, 40, GOOD, false), at("C", "gin") + i * 0.2, { opacity: 0, y: 14 }, 0.3));
+      M.fit(C, { y: 170, h: 1130 });
+
+      // ============ D: the list of guesses with odds ============
+      // diagram: D
+      const dW = ["the", "cat", "sat", "on", "the"], dPos = rowPos(dW.concat(["?"]), 50, 20, 14, 540);
+      dW.forEach((w, i) => show(chip(D, w, dPos[i].x, 215, dPos[i].w, 50, CYAN, false), S.D + 0.1 + i * 0.15, { opacity: 0, y: 14 }, 0.3));
+      show(chip(D, "?", dPos[5].x, 215, dPos[5].w, 50, ACC, true), at("D", "hoga?".replace("?", "")), { opacity: 0, y: 14 }, 0.3);
+      const dP = glass(D, 70, 400, 940, 700, CYAN); show(dP, S.D + 1.0, { opacity: 0, y: 14 });
+      txt(D, "NEXT WORDS", 100, 418, 500, S.D + 1.0, CYAN, 34, "left");
+      txt(D, "ODDS = CHANCE", 560, 418, 420, at("D", "odds"), ACC, 34, "right");
+      const SC = 6.2;
+      const rMat = barRow(D, 100, 510, "mat", 50, 3, 6, SC), rSofa = barRow(D, 100, 640, "sofa", 33, 2, 6, SC), rBed = barRow(D, 100, 770, "bed", 17, 1, 6, SC);
+      barTimes(rMat, at("D", "mat"), at("D", "mat"), at("D", "3"), at("D", "50"));
+      barTimes(rSofa, at("D", "sofa"), at("D", "2"), at("D", "2"), at("D", "33"));
+      barTimes(rBed, at("D", "bed"), at("D", "1"), at("D", "1"), at("D", "17"));
+      const tSum = at("D", "milakar");
+      [[0, 50, 0.85], [50, 33, 0.6], [83, 17, 0.4]].forEach(([s0, w, al], i) => { const sg = el(D, `left:${100 + Math.round(s0 * 8.2)}px;top:930px;width:${Math.round(w * 8.2) - 4}px;height:70px;border-radius:10px;background:${ca(CYAN, al)};transform-origin:0 50%`);
+        tl.set(sg, { opacity: 0, scaleX: 0 }, 0); tl.set(sg, { opacity: 1 }, tSum + i * 0.15); tl.to(sg, { scaleX: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, tSum + i * 0.15); });
+      txt(D, "TOTAL = 100 %", 100, 1015, 820, at("D", "100"), ACC, 40, "left");
+      M.fit(D, { y: 170, h: 1130 });
+
+      // ============ E: list, pick, add, repeat ============
+      // diagram: E
+      const eSteps = [["1 LIST"], ["2 PICK"], ["3 ADD"]].map(([lab], i) => { const w = el(E, `left:${70 + i * 330}px;top:200px;width:300px;height:64px;display:flex;justify-content:center`);
+        w.innerHTML = `<div class="sp" style="display:flex;align-items:center;height:64px;padding:0 28px;border-radius:999px;border:2px solid ${ca(MUTED, 0.6)};background:${ca(MUTED, 0.08)};font:700 36px ${COD};letter-spacing:.1em;color:${MUTED};white-space:nowrap">${lab}</div>`;
+        show(w, 65.3, { opacity: 0, y: -10 }); return w.firstChild; });
+      const stepState = (i, t, col) => tl.to(eSteps[i], { borderColor: ca(col, 0.95), color: col, backgroundColor: ca(col, 0.12), duration: 0.2, immediateRender: false }, t);
+      stepState(0, 65.3, GOOD); stepState(1, at("E", "doosra"), ACC); stepState(1, at("E", "mainne"), GOOD); stepState(2, at("E", "teesra"), ACC);
+      const eP = glass(E, 90, 310, 900, 420, CYAN); show(eP, 65.3, { opacity: 0, y: 12 });
+      const eRows = [["mat", 50], ["sofa", 33], ["bed", 17]].map(([w, p], i) => { const lab = show(el(E, `left:130px;top:${350 + i * 120}px;width:170px;height:92px;display:flex;align-items:center;font:700 52px ${COD};color:${TEXT}`, w), 65.3, { opacity: 0 });
+        const bar = show(el(E, `left:290px;top:${350 + i * 120}px;width:${p * 6}px;height:92px;border-radius:12px;background:${ca(CYAN, 0.85)}`), 65.3, { opacity: 0 });
+        show(el(E, `left:${310 + p * 6}px;top:${350 + i * 120}px;height:92px;display:flex;align-items:center;font:700 44px ${COD};color:${ACC}`, p + " %"), 65.3, { opacity: 0 }); return { lab, bar }; });
+      tl.to(eRows[0].bar, { backgroundColor: ca(GOOD, 0.95), duration: 0.25, immediateRender: false }, at("E", "mat"));
+      tl.to(eP, { borderColor: ca(GOOD, 0.9), duration: 0.25, immediateRender: false }, at("E", "mat"));
+      const eW = ["the", "cat", "sat", "on", "the", "mat", "?"], ePos = rowPos(eW, 46, 20, 12, 540), eY = 900, eH = Math.round(46 * 1.75);
+      eW.slice(0, 5).forEach((w, i) => show(chip(E, w, ePos[i].x, eY, ePos[i].w, 46, CYAN, false), at("E", "teesra") + 0.2 + i * 0.1, { opacity: 0, y: 14 }, 0.3));
+      txt(E, "SENTENCE", 70, eY - 70, 400, at("E", "teesra") + 0.2, MUTED, 32, "left");
+      const mat = chip(E, "mat", ePos[5].x, eY, ePos[5].w, 46, ACC, true), mdx = 130 - ePos[5].x, mdy = 350 - eY;
+      tl.set(mat, { opacity: 0, x: mdx, y: mdy }, 0); tl.set(mat, { opacity: 1 }, at("E", "jod")); tl.to(mat, { x: 0, y: 0, duration: 0.8, ease: "power3.inOut", immediateRender: false }, at("E", "jod"));
+      const eArr = M.arrow(E, { from: [760, eY - 8], to: [760, 745], color: ACC, w: 8, label: "AGAIN" }); eArr.show(at("E", "naya"), 0.4); eArr.travel(at("E", "vaapas"), 1.4, ACC);
+      show(chip(E, "?", ePos[6].x, eY, ePos[6].w, 46, ACC, true), at("E", "ek-ek"), { opacity: 0, y: 14 }, 0.3);
+      stepState(0, at("E", "banao"), ACC); stepState(2, at("E", "banao"), MUTED); stepState(0, at("E", "chuno", 1), GOOD); stepState(1, at("E", "chuno", 1), ACC);
+      stepState(1, at("E", "jodo"), GOOD); stepState(2, at("E", "jodo"), ACC);
+      pillC(E, "LOOP", 1130, at("E", "loop"), { col: ACC, size: 40, h: 66 });
+      M.fit(E, { y: 170, h: 1130 });
+
+      // ============ F: real LLM = neural network + tokens ============
+      // diagram: F
+      const fB1 = M.box(F, { x: 140, y: 330, w: 800, h: 260, label: "COUNT TABLE", sub: "mat 3 · sofa 2 · bed 1", subsize: 40, icon: "numbers", color: CYAN, size: 46 }); fB1.show(S.F + 0.1);
+      const fX = M.icon(F, "cross", 800, 350, 120, HOT); fX.show(at("F", "nahi"));
+      const fB2 = M.box(F, { x: 140, y: 650, w: 800, h: 260, label: "NEURAL NETWORK", icon: "model", color: GOOD, size: 46 }); fB2.show(at("F", "neural"));
+      const fSl = slot(F, 975, [[at("F", "words"), "NOT WORDS", HOT], [at("F", "tokens"), "TOKENS", ACC]], { size: 40, h: 66 });
+      [fB1, fB2, fX].forEach((b) => b.hide(94.0)); goneAll(fSl, 94.0);
+      const f2 = grab(F);
+      const fP = glass(F, 90, 330, 900, 760, ACC); show(fP, at("F", "Token"), { opacity: 0, y: 14 });
+      txt(F, "TOKEN = PIECE", 120, 350, 600, at("F", "Token"), ACC, 38, "left"); txt(F, "EXAMPLE", 700, 354, 260, at("F", "Token"), MUTED, 30, "right");
+      const fRows = [["WORD", ["cat"], 95.3], ["SUBWORD", ["play", "ing"], at("F", "hissa")], ["CHARACTER", ["h", "i", "!"], at("F", "character")]];
+      fRows.forEach(([lab, ws, t], r) => { const y = 470 + r * 190; txt(F, lab, 120, y + 10, 340, at("F", "Token") + 0.4, MUTED, 38, "left");
+        const ps = rowPos(ws, 64, 26, 16, 0); const x0 = 470; ws.forEach((w, i) => show(chip(F, w, x0 + ps[i].x - ps[0].x, y, ps[i].w, 64, r === 0 ? CYAN : r === 1 ? CYAN : CYAN, false), t + i * 0.15, { opacity: 0, y: 14 }, 0.3)); });
+      goneAll(f2(), at("F", "lekin"));
+      const l1 = M.box(F, { x: 90, y: 330, w: 740, h: 190, label: "LIST OF ODDS", icon: "numbers", color: CYAN, size: 40 }); l1.show(at("F", "probabilities"));
+      const l2 = M.box(F, { x: 90, y: 580, w: 740, h: 190, label: "PICK ONE", icon: "check", color: GOOD, size: 40 }); l2.show(at("F", "chuno"));
+      const l3 = M.box(F, { x: 90, y: 830, w: 740, h: 190, label: "ADD IT", icon: "arrow", color: ACC, size: 40 }); l3.show(at("F", "jod"));
+      M.arrow(F, { from: [460, 525], to: [460, 575], color: MUTED, w: 6 }).show(at("F", "chuno"), 0.2);
+      M.arrow(F, { from: [460, 775], to: [460, 825], color: MUTED, w: 6 }).show(at("F", "jod"), 0.2);
+      const fRep = M.arrow(F, { from: [875, 925], to: [875, 425], color: ACC, w: 8, bend: 70, label: "REPEAT" }); fRep.show(at("F", "repeat"), 0.4);
+      slot(F, 1090, [[at("F", "kaam", 1), "SAME JOB", ACC]], { size: 38, h: 64 });
+      M.fit(F, { y: 170, h: 1130 });
+
+      // ============ G: most likely is not the same as true ============
+      // diagram: G
+      const gL = M.box(G, { x: 60, y: 380, w: 400, h: 440, label: "MOST LIKELY WORD", icon: "numbers", color: CYAN, size: 38 }); gL.show(S.G + 0.1);
+      const gT = M.box(G, { x: 620, y: 380, w: 400, h: 440, label: "TRUE FACT", icon: "check", color: ACC, size: 38 }); gT.show(S.G + 0.3);
+      const gNE = el(G, `left:475px;top:535px;width:130px;height:130px;border-radius:50%;border:5px solid ${HOT};background:${PANEL}`);
+      el(gNE, `left:30px;top:44px;width:70px;height:8px;border-radius:4px;background:${HOT}`); el(gNE, `left:30px;top:74px;width:70px;height:8px;border-radius:4px;background:${HOT}`); el(gNE, `left:14px;top:60px;width:102px;height:8px;border-radius:4px;background:${HOT};transform:rotate(-55deg)`);
+      show(gNE, at("G", "cheez"), { opacity: 0, scale: 0.8 });
+      const gM = M.box(G, { x: 340, y: 1040, w: 400, h: 200, label: "MODEL", icon: "model", color: CYAN, size: 44 }); gM.show(at("G", "Model"));
+      M.arrow(G, { from: [440, 1035], to: [260, 830], color: CYAN, w: 9 }).show(at("G", "likely", 1), 0.4);
+      M.arrow(G, { from: [640, 1035], to: [820, 830], color: HOT, w: 7, dash: true }).show(at("G", "nahi", 1), 0.4);
+      M.icon(G, "cross", 700, 900, 90, HOT).show(at("G", "sach"));
+      tl.to([gT.parts[0], gT.parts[1]], { opacity: 0.45, duration: 0.3, immediateRender: false }, at("G", "sach"));
+      show(chip(G, "mat 50 %", 100, 700, 320, 40, CYAN, true), at("G", "likely"), { opacity: 0, y: 14 }, 0.3);
+      show(chip(G, "sofa", 700, 700, 240, 40, ACC, true), at("G", "fact"), { opacity: 0, y: 14 }, 0.3);
+      pillC(G, "EXAMPLE", 300, at("G", "likely"), { col: MUTED, size: 34 });
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: recap, the question, comment and follow ============
+      // diagram: H
+      const hL = M.loop(H, { cx: 540, cy: 720, r: 270, nodes: [{ label: "LIST", color: CYAN, w: 300 }, { label: "PICK", color: GOOD, w: 300 }, { label: "ADD", color: ACC, w: 300 }] });
+      hL.show(S.H + 0.1, 0.25); hL.hide(118.3);
+      const hC = pillC(H, "+1 WORD", 690, S.H + 0.6, { col: ACC, size: 54, h: 90, pad: 40 }); gone(hC, 118.3);
+      const h2 = grab(H);
+      const hP = glass(H, 120, 330, 840, 300, CYAN); show(hP, 118.5, { opacity: 0, y: 12 });
+      const hR = [["mat", 50], ["sofa", 33], ["bed", 17]].map(([w, p], i) => { show(el(H, `left:150px;top:${352 + i * 90}px;width:150px;height:70px;display:flex;align-items:center;font:700 40px ${COD};color:${TEXT}`, w), 118.5, { opacity: 0 });
+        const b = show(el(H, `left:310px;top:${352 + i * 90}px;width:${p * 6}px;height:70px;border-radius:12px;background:${ca(CYAN, 0.85)}`), 118.5, { opacity: 0 }); return b; });
+      tl.to(hR[0], { backgroundColor: ca(GOOD, 0.95), duration: 0.25, immediateRender: false }, at("H", "upar"));
+      const hRuns = [0, 1, 2].map((i) => { const c = glass(H, 120 + i * 300, 760, 240, 230, GOOD, 20); show(c, at("H", "chune") + i * 0.25, { opacity: 0, y: 20 });
+        txt(H, "RUN " + (i + 1), 120 + i * 300, 780, 240, at("H", "chune") + i * 0.25, MUTED, 40); txt(H, "mat", 120 + i * 300, 860, 240, at("H", "chune") + i * 0.25, GOOD, 64); return c; });
+      const hA = M.arrow(H, { from: [540, 640], to: [540, 750], color: MUTED, w: 6 }); hA.show(at("H", "chune"), 0.2); hA.hide(124.6);
+      const hQ = pillC(H, "SAME?", 1040, at("H", "same"), { col: ACC, size: 48, h: 80, pad: 50 });
+      goneAll(h2(), 124.6);
+      const hCC = glass(H, 120, 330, 840, 560, CYAN); show(hCC, 124.8, { opacity: 0, y: 20 }); txt(H, "COMMENT", 150, 352, 500, 124.8, CYAN, 36, "left");
+      M.pill(H, "SAME", at("H", "SAME"), { x: 300, y: 450, kind: "out", size: 54 }); M.pill(H, "DIFFERENT", at("H", "DIFFERENT"), { x: 300, y: 590, kind: "out", size: 54 });
+      show(el(H, `left:150px;top:780px;width:780px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 30px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px;box-sizing:border-box`, "Add a comment..."), 125.2, { opacity: 0 });
+      txt(H, "150 DAYS OF AI", 60, 960, 960, at("H", "150"), ACC, 52);
+      const hF = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 400, y: 1070, kind: "acc", size: 40 });
+      tl.fromTo(hF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+      M.fit(H, { y: 170, h: 1130 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
+      M.finish({ kw: { guess: "gold", word: "gold", llm: "cyan", mat: "good", tokens: "gold", token: "gold", list: "cyan", likely: "cyan", same: "gold", different: "hot", sach: "good", odds: "gold", "percent.": "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

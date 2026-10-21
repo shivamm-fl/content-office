@@ -760,15 +760,14 @@
       "hook_type": "direct_question",
       "spoken_hook": "ChatGPT jawab kaise likhta hai? Ek ek word guess karke!",
       "hook_formula": "plain_question",
-      "hook_source": "hook-writer skill",
       "visual_idea": "The sentence 'the cat sat on the' with a ranked bar list of next-word guesses (mat 50 %, sofa 33 %, bed 17 %); the picked word is appended and the list rebuilds; a phone keyboard suggestion strip as the anchor; a label TOKEN = word piece.",
       "everyday_anchor": "The phone keyboard's next-word suggestions.",
-      "example": "EXAMPLE (toy counting model on an invented 8-sentence corpus, not a real LLM), real printed run state/runs/a004_next_word_run.py: after 'sat on the' seen 6 times: mat 3/6 = 50 %, sofa 2/6 = 33 %, bed 1/6 = 17 %. Say that a real LLM does the same with a neural network over a huge vocabulary of tokens; Google's crash course says LLMs assign probabilities to continuations and a token can be a word, subword or character.",
+      "example": "EXAMPLE (toy counting model on an invented 8-sentence corpus, not a real LLM), real printed run state/runs/a004_next_word_run.py: after 'sat on the' seen 6 times: mat 3/6 = 50 %, sofa 2/6 = 33 %, bed 1/6 = 17 %. A real LLM does the same with a neural network over tokens; Google's crash course says LLMs assign probabilities to continuations and a token can be a word, subword or character.",
       "sources": [
         "https://developers.google.com/machine-learning/crash-course/llm/transformers"
       ],
       "facts_to_verify": [
-        "Google ML Crash Course (fetched 2026-10-21): LLMs are autocomplete-style, assign probabilities to possible continuations; a token can be a word, subword or single character. Only the toy run's numbers are shown; the page's own example (3.1 % / 2.9 %) is for whole sentences and is not used."
+        "LLMs predict tokens and assign probabilities to continuations; a token can be a word, a subword or a single character (Google ML crash course, fetched 2026-10-21)."
       ],
       "length_target_s": 150,
       "cover_headline": "How ChatGPT really writes",

@@ -923,10 +923,10 @@
       "unit": "A3",
       "title": "An LLM is a next-word predictor: watch the guesses",
       "kind": "concept",
-      "topic": "An LLM writes by repeatedly making a list of possible next words with odds, picking one and adding it; the answer is built one word at a time.",
+      "topic": "An LLM writes by repeatedly listing possible next words with odds, picking one and appending it; a real LLM uses a neural network over tokens; the most likely word is not the same as a true fact.",
       "hook_formula": "plain_question",
       "hook_type": "direct_question",
-      "status": "planned",
+      "status": "built",
       "planned": "2026-10-21"
     },
     {

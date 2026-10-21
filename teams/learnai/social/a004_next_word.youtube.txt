@@ -1,0 +1,10 @@
+ChatGPT jawab kaise likhta hai? Next word prediction samjho
+
+LLM (large language model) ek ek word guess karke jawab banata hai: next words ki list odds ke saath banata hai, ek word chunta hai, use sentence mein jodta hai aur phir se puchta hai. Is video mein ek chhota toy counting model hai (example, invented 8 sentences, asli LLM nahi): "sat on the" ke baad mat 50 %, sofa 33 %, bed 17 %. Phir dekhte hain ki asli LLM mein count table ki jagah neural network hota hai aur wo tokens par kaam karta hai, aur token word, word ka hissa ya ek character ho sakta hai.
+
+Is video mein: next word prediction, LLM kya hai, probabilities, tokens, aur likely word aur sahi fact ka fark.
+
+Phone keyboard ka Good, morning, night, luck wala example aur toy model ke numbers hamare apne example hain, kisi source ka claim nahi. LLM probabilities assign karte hain aur token word, subword ya character ho sakta hai: ye Google ke ML crash course se.
+
+Sources:
+https://developers.google.com/machine-learning/crash-course/llm/transformers

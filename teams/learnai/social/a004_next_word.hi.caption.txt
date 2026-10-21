@@ -1,0 +1,19 @@
+Day 4/150: ChatGPT jawab kaise likhta hai? Ek ek word guess karke!
+
+Aapke phone ka keyboard bhi yahi karta hai: Good likho to morning, night, luck suggest karta hai. LLM (large language model) isi ko bahut bade level par karta hai.
+
+Hamne ek chhota toy counting model banaya (example, asli LLM nahi): 8 invented sentences, "sat on the" 6 baar aaya. Uske baad: mat 3/6 = 50 %, sofa 2/6 = 33 %, bed 1/6 = 17 %.
+
+Teen step: 1) next words ki list odds ke saath banao, 2) ek word chuno, 3) usse sentence mein jodo. Phir naya sentence wapas model ko jata hai. Is loop se jawab ek ek word karke banta hai.
+
+Asli LLM mein count table ki jagah neural network hota hai, aur wo tokens par kaam karta hai (token = text ka tukda: word, word ka hissa ya character). Kaam wahi: list, chuno, jodo.
+
+Yaad rakhna: sabse likely word aur sahi fact ek cheez nahi hai.
+
+Comment ka jawab: is toy model mein agar hamesha sabse upar wala word chuno, to same sentence har baar banega (SAME). Asli chatbots kabhi top word nahi bhi chunte, wo alag baat hai.
+
+Comment karo: SAME ya DIFFERENT?
+
+150 Days of AI ke liye follow karo.
+
+#AI #LLM #150DaysOfAI
