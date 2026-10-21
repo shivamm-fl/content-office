@@ -44,138 +44,138 @@
    "err",
    null,
    null,
-   8.0
+   7.4
   ],
   [
    "click",
    null,
    null,
-   11.5
+   11.1
   ],
   [
    "err",
    null,
    null,
-   14.7
+   14.3
   ],
   [
    "click",
    null,
    null,
-   18.2
+   17.8
   ],
   [
    "err",
    null,
    null,
-   33.6
+   40.4
   ],
   [
    "click",
    null,
    null,
-   38.3
+   45.1
   ],
   [
    "click",
    null,
    null,
-   39.5
+   46.3
   ],
   [
    "click",
    null,
    null,
-   40.2
+   47.0
   ],
   [
    "dip",
    null,
    null,
-   45.7
+   52.5
   ],
   [
    "err",
    null,
    null,
-   46.8
+   53.6
   ],
   [
    "click",
    null,
    null,
-   53.2
+   62.1
   ],
   [
    "ok",
    null,
    null,
-   59.3
+   68.2
   ],
   [
    "click",
    null,
    null,
-   65.7
+   74.6
   ],
   [
    "err",
    null,
    null,
-   72.0
+   80.9
   ],
   [
    "ok",
    null,
    null,
-   75.0
+   83.9
   ],
   [
    "click",
    null,
    null,
-   83.5
+   92.4
   ],
   [
    "ok",
    null,
    null,
-   85.6
+   94.5
   ],
   [
    "err",
    null,
    null,
-   89.0
+   97.9
   ],
   [
    "click",
    null,
    null,
-   101.4
+   110.3
   ],
   [
    "pop",
    null,
    null,
-   112.1
+   123.0
   ],
   [
    "save",
    null,
    null,
-   116.9
+   127.8
   ]
  ],
  "copy": {
   "hi": {
    "A": "@hook Chatbot ने fake research paper बताया, बिल्कुल confidently! || इसे कहते हैं hallucination, यानी model का confidently गलत fact बोल देना।",
-   "B": "तुम्हारा जवाब होना चाहिए: | model अगला likely word predict करता है, facts look up नहीं करता, | और training और grading guess करने वाले को reward देती है। || इसे ठीक करने के तीन तरीके हैं।",
-   "C": "पहले देखो, guess करना फ़ायदे का क्यों बन जाता है। || EXAMPLE, मान लो invented numbers: | model को जवाब पता नहीं, उसका top guess A है, | पर chance सिर्फ़ 30{thirty} percent। || यानी 70{seventy} percent वो गलत है, | फिर भी उसी confident tone में बोलेगा। || Grading: सही पर 1{one} number, गलत पर 0{zero}, खाली छोड़ने पर भी 0{zero}। || Guess का expected score 0.30{zero-point-three}, खाली का 0{zero}। | तो guess हमेशा जीतता है।",
+   "B": "Interview में यही पूछा जाता है: | model ने confidently गलत fact बोल दिया, | hallucination क्यों होती है, और तुम इसे कैसे कम करोगे? || तुम्हारा जवाब होना चाहिए: | model likely text बनाता है, facts look up नहीं करता, | और training और grading guess करने वाले को reward देती है। || इसे ठीक करने के तीन तरीके हैं।",
+   "C": "ये कोई छोटा bug नहीं है। | पहले देखो, guess करना फ़ायदे का क्यों बन जाता है। || EXAMPLE, मान लो invented numbers: | model को जवाब पता नहीं, उसका top guess A है, | पर chance सिर्फ़ 30{thirty} percent। || यानी 70{seventy} percent वो गलत है, | फिर भी उसी confident tone में बोलेगा। || Grading: सही पर 1{one} number, गलत पर 0{zero}, खाली छोड़ने पर भी 0{zero}। || Guess का expected score 0.30{zero-point-three}, खाली का 0{zero}। | तो guess हमेशा जीतता है।",
    "D": "पहला fix: RAG, यानी Retrieval-Augmented Generation। | पहले सवाल से जुड़े documents ढूँढो, फिर model के सामने रखकर जवाब लिखवाओ। || क्यों? क्योंकि तब model याद से नहीं, सामने रखे source से लिखता है।",
    "E": "दूसरा fix: model को “I don't know” बोलने दो। || वही example, पर अब गलत जवाब पर minus 1{one}। | Guess का score: 0.30{zero-point-three} गुणा 1{one}, और 0.70{zero-point-seven} गुणा minus 1{one}, | यानी minus 0.40{zero-point-four}। | खाली छोड़ने पर 0{zero}। | अब चुप रहना बेहतर है। || क्यों? क्योंकि जिसे guess पर सज़ा मिले, वो बिना पता किए नहीं बोलता।",
    "F": "तीसरा fix: output check करो। | Claims को source से match करो, और जहाँ गलती महँगी हो, वहाँ इंसान review करे। || क्यों? क्योंकि RAG hallucination कम करता है, zero नहीं।",
-   "G": "Interview में बोलो: || Hallucination happens because a language model predicts likely text rather than looking up facts, and training and grading often reward guessing over saying I don't know. I'd reduce it by grounding answers in retrieved sources, allowing the model to abstain, and verifying outputs.",
+   "G": "Interview में बोलो: || Hallucination happens because a language model produces likely text rather than looking up facts, and training and grading often reward guessing over saying I don't know. I'd reduce it by grounding answers in retrieved sources, allowing the model to abstain, and verifying outputs.",
    "H": "अब बताओ: | blank answer को 0{zero} marks दोगे, या गलत को minus? || Comment करो: ZERO या MINUS। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो!"
   }
  },

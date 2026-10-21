@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="119" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="130" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -39,9 +39,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="119" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="119" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="119" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="130" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="130" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="130" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -77,8 +77,8 @@
       // ============ A: chat with a confident fake paper, from frame 0 ============
       // diagram: A
       M.hook(["Chatbot ka", "fake paper!"], { size: 100, top: 215 });
-      pillC(A, "EXAMPLE", 175, 0.05, { size: 28, h: 46, col: MUTED });
-      const chat = fx(A, 40, 500, 1000, 760, CYAN); show(chat, 0.05, { opacity: 0, y: 12 });
+      pillC(A, "EXAMPLE", 175, 0.05, { size: 34, h: 54, col: MUTED });
+      const chat = fx(A, 40, 440, 1000, 800, CYAN); show(chat, 0.05, { opacity: 0, y: 12 });
       el(chat, `left:30px;top:20px;font:800 32px ${COD};letter-spacing:.12em;color:${CYAN}`, "CHATBOT");
       show(el(chat, `right:30px;top:90px;padding:20px 28px;border-radius:28px 28px 6px 28px;background:#26324A;font:600 46px ${LAT};white-space:nowrap`, "Give me a research paper"), 0.2, { opacity: 0, y: 12 });
       const bot = el(chat, `left:30px;top:250px;width:940px;padding:26px 30px;border-radius:28px 28px 28px 6px;background:${ca(CYAN, .14)};border:1.5px solid ${ca(CYAN, .6)}`,
@@ -86,31 +86,35 @@
       show(bot, at("A", "paper"), { opacity: 0, y: 20 });
       const fl = at("A", "galat"); tl.set(bot.querySelector(".ok"), { opacity: 0 }, fl); tl.set(bot.querySelector(".no"), { opacity: 1 }, fl);
       tl.to(bot, { borderColor: ca(HOT, .9), backgroundColor: ca(HOT, .12), duration: 0.2, immediateRender: false }, fl);
-      stamp(A, "MADE UP", 540, 1130, HOT, fl, 64);
-      pillC(A, "SOUNDS SURE", 1300, at("A", "confidently"), { size: 38, h: 66, col: ACC });
-      M.fit(A, { y: 460, h: 840 });
+      stamp(A, "MADE UP", 540, 1100, HOT, fl, 64);
+      pillC(A, "SOUNDS SURE", 1270, at("A", "confidently"), { size: 38, h: 66, col: ACC });
+      M.fit(A, { y: 430, h: 880 });
 
-      // ============ B: the answer card ============
+      // ============ B: the question, then the answer ============
       // diagram: B
-      pillC(B, "INTERVIEW QUESTION", 200, P("B", 0), { size: 34, h: 56 });
-      const nw = fx(B, 80, 290, 920, 360, VIOLET); show(nw, P("B", 0) + 0.15, { opacity: 0, y: 16 });
-      el(nw, `left:30px;top:20px;font:800 40px ${COD};letter-spacing:.08em;color:${VIOLET}`, "NEXT WORD");
-      show(el(nw, `left:30px;top:90px;font:600 46px ${COD};white-space:pre`, 'Paper: "Quantum <span style="color:#F2B544">▮</span>"'), at("B", "agla") - 0.2, { opacity: 0, y: 8 });
-      [["Dreams", 640, ACC], ["Models", 480, CYAN], ["Noise", 300, CYAN]].forEach(([w, bw, col], i) => { const y = 170 + i * 58;
-        show(el(nw, `left:30px;top:${y}px;width:200px;font:700 38px ${COD};color:${col}`, w), at("B", "likely") + i * 0.15, { opacity: 0, y: 8 });
-        show(el(nw, `left:250px;top:${y + 4}px;width:${bw}px;height:34px;border-radius:8px;background:${ca(col, .7)}`), at("B", "likely") + i * 0.15, { opacity: 0, y: 8 }); });
-      M.box(B, { x: 140, y: 700, w: 800, h: 200, label: "NO LOOKUP", sub: "NOT A DATABASE", icon: "cross", color: HOT, size: 52, subsize: 40 }).show(at("B", "look") - 0.2);
-      M.box(B, { x: 140, y: 940, w: 800, h: 200, label: "GUESS PAYS", sub: "TRAINING + GRADING", icon: "coin", color: ACC, size: 52, subsize: 40 }).show(at("B", "reward") - 0.4);
-      pillC(B, "3 FIXES", 1180, at("B", "teen") - 0.2, { size: 48, h: 80, col: GOOD });
-      [0, 1, 2].forEach((k) => M.pill(B, `${k + 1}`, at("B", "teen") + 0.2 + k * 0.2, { x: 360 + k * 180, y: 1280, kind: "out", size: 44 }));
+      const pq = pillC(B, "INTERVIEW QUESTION", 200, P("B", 0), { size: 34, h: 56 });
+      const qt = [
+        M.box(B, { x: 140, y: 310, w: 800, h: 210, label: "CONFIDENTLY WRONG", icon: "cross", color: HOT, size: 46 }),
+        M.box(B, { x: 140, y: 570, w: 800, h: 210, label: "WHY?", icon: "model", color: VIOLET, size: 64 }),
+        M.box(B, { x: 140, y: 830, w: 800, h: 210, label: "HOW TO REDUCE?", icon: "shield", color: GOOD, size: 52 })];
+      qt[0].show(P("B", 0) + 0.2); qt[1].show(at("B", "kyun") - 0.2); qt[2].show(at("B", "kam") - 0.3);
+      const tAns = at("B", "tumhara") - 0.1;
+      qt.forEach((b) => { b.parts.forEach((d) => gone(d, tAns)); }); gone(pq, tAns);
+      pillC(B, "YOUR ANSWER", 200, tAns + 0.3, { size: 34, h: 56, col: GOOD });
+      M.box(B, { x: 100, y: 310, w: 880, h: 250, label: "LIKELY TEXT", sub: "NOT A LOOKUP", icon: "model", color: VIOLET, size: 52, subsize: 36 }).show(tAns + 0.4);
+      M.box(B, { x: 100, y: 590, w: 880, h: 250, label: "NO LOOKUP", sub: "NOT A DATABASE", icon: "cross", color: HOT, size: 52, subsize: 36 }).show(tAns + 0.6);
+      M.box(B, { x: 100, y: 870, w: 880, h: 250, label: "GUESS PAYS", sub: "TRAINING + GRADING", icon: "coin", color: ACC, size: 52, subsize: 36 }).show(tAns + 0.8);
+      pillC(B, "3 FIXES", 1170, at("B", "teen") - 0.2, { size: 48, h: 80, col: GOOD });
+      [0, 1, 2].forEach((k) => M.pill(B, `${k + 1}`, at("B", "teen") + 0.2 + k * 0.2, { x: 360 + k * 180, y: 1270, kind: "out", size: 44 }));
       M.fit(B, { y: 200, h: 1100 });
 
       // ============ C: why guessing wins ============
       // diagram: C
-      pillC(C, "EXAMPLE", 200, P("C", 0), { size: 32, h: 52, col: MUTED });
+      const nb = pillC(C, "NOT A SMALL BUG", 600, P("C", 0) + 0.05, { size: 60, h: 100, col: HOT }); gone(nb, at("C", "pehle") - 0.1);
+      pillC(C, "EXAMPLE", 200, at("C", "pehle"), { size: 36, h: 58, col: MUTED });
       const dist = M.dist(C, { x: 60, y: 400, w: 960, h: 500, bars: [{ label: "A", p: 1, color: CYAN }, { label: "B", p: 0.83, color: CYAN }, { label: "C", p: 0.67, color: CYAN }, { label: "D", p: 0.5, color: CYAN }, { label: "E", p: 0.33, color: CYAN }] });
-      dist.show(P("C", 0) + 0.15);
-      const tg = tag(C, "MODEL'S GUESSES", 60, 1010, 960, P("C", 0) + 0.15, MUTED, 40);
+      dist.show(at("C", "pehle"));
+      const tg = tag(C, "MODEL'S GUESSES", 60, 1010, 960, at("C", "pehle"), MUTED, 40);
       dist.mark(at("C", "top"), 0, ACC);
       const t30 = tag(C, "30 %", 60, 330, 150, at("C", "30") - 0.1, ACC, 52);
       const tr = el(C, "left:60px;top:1090px;width:960px;height:130px"); show(tr, at("C", "yaani"), { opacity: 0 });
@@ -129,14 +133,14 @@
 
       // ============ D: RAG flow ============
       // diagram: D
-      pillC(D, "RAG", 200, P("D", 0), { size: 40, h: 64, col: GOOD });
-      M.box(D, { x: 240, y: 300, w: 600, h: 180, label: "QUESTION", icon: "user", color: ACC, size: 46 }).show(P("D", 0) + 0.1);
-      M.arrow(D, { from: [540, 485], to: [540, 575], color: ACC, w: 9 }).show(at("D", "documents") - 0.4, 0.3);
-      M.box(D, { x: 240, y: 580, w: 600, h: 180, label: "DOCUMENTS", icon: "doc", color: CYAN, size: 46 }).show(at("D", "documents"));
-      M.arrow(D, { from: [540, 765], to: [540, 855], color: CYAN, w: 9 }).show(at("D", "model") - 0.3, 0.3);
-      M.box(D, { x: 240, y: 860, w: 600, h: 180, label: "MODEL", sub: "SOURCE IN FRONT", icon: "model", color: VIOLET, size: 46, subsize: 40 }).show(at("D", "model"));
-      M.arrow(D, { from: [540, 1045], to: [540, 1135], color: GOOD, w: 9 }).show(at("D", "jawab") - 0.1, 0.3);
-      M.box(D, { x: 240, y: 1140, w: 600, h: 180, label: "ANSWER", icon: "check", color: GOOD, size: 46 }).show(at("D", "jawab"));
+      pillC(D, "RAG", 200, P("D", 0), { size: 44, h: 70, col: GOOD });
+      M.box(D, { x: 160, y: 290, w: 760, h: 200, label: "QUESTION", icon: "user", color: ACC, size: 46 }).show(P("D", 0) + 0.1);
+      M.arrow(D, { from: [540, 495], to: [540, 545], color: ACC, w: 9 }).show(at("D", "documents") - 0.4, 0.3);
+      M.box(D, { x: 160, y: 550, w: 760, h: 200, label: "DOCUMENTS", icon: "doc", color: CYAN, size: 46 }).show(at("D", "documents"));
+      M.arrow(D, { from: [540, 755], to: [540, 805], color: CYAN, w: 9 }).show(at("D", "model") - 0.3, 0.3);
+      M.box(D, { x: 160, y: 810, w: 760, h: 240, label: "MODEL", sub: "SOURCE IN FRONT", icon: "model", color: VIOLET, size: 46, subsize: 40 }).show(at("D", "model"));
+      M.arrow(D, { from: [540, 1055], to: [540, 1105], color: GOOD, w: 9 }).show(at("D", "jawab") - 0.1, 0.3);
+      M.box(D, { x: 160, y: 1110, w: 760, h: 200, label: "ANSWER", icon: "check", color: GOOD, size: 46 }).show(at("D", "jawab"));
       M.fit(D, { y: 200, h: 1100 });
 
       // ============ E: allow "I don't know" ============
@@ -166,29 +170,31 @@
       [[GOOD, "✓", "Author"], [GOOD, "✓", "Year"], [HOT, "✗", "Paper title"]].forEach(([col, mk, lab], i) => { const y = 80 + i * 112; const r = el(cp, `left:30px;top:${y}px;width:860px;height:92px`);
         r.innerHTML = `<div style="position:absolute;left:0;top:0;width:520px;height:92px;border-radius:14px;background:${ca(CYAN, .14)};border:1.5px solid ${ca(CYAN, .5)}"></div><div style="position:absolute;left:20px;top:20px;font:700 42px ${COD};color:${TEXT};white-space:nowrap">${lab}</div><div style="position:absolute;left:560px;top:30px;width:200px;height:30px;border-radius:8px;background:${i === 2 ? "transparent" : ca(MUTED, .5)};border:${i === 2 ? "2px dashed " + HOT : "none"}"></div><div style="position:absolute;left:790px;top:6px;font:800 66px ${COD};color:${col}">${mk}</div>`;
         show(r, P("F", 0) + 0.2 + i * 0.25, { opacity: 0, y: 12 }); });
-      M.box(F, { x: 190, y: 800, w: 700, h: 200, label: "HUMAN REVIEW", sub: "COSTLY MISTAKES", icon: "user", color: ACC, size: 46, subsize: 40 }).show(at("F", "insaan") - 0.2);
-      const trk = el(F, "left:90px;top:1090px;width:900px;height:84px;border-radius:14px;background:rgba(150,175,215,.12);border:1.5px solid rgba(150,175,215,.35)"); show(trk, at("F", "RAG") - 0.1, { opacity: 0 });
-      const fill = el(F, `left:90px;top:1090px;width:900px;height:84px;border-radius:14px;background:${ca(HOT, .6)};transform-origin:0 50%`); tl.set(fill, { opacity: 0, scaleX: 1 }, 0);
+      M.box(F, { x: 140, y: 790, w: 800, h: 250, label: "HUMAN REVIEW", sub: "COSTLY MISTAKES", icon: "user", color: ACC, size: 46, subsize: 40 }).show(at("F", "insaan") - 0.2);
+      const trk = el(F, "left:90px;top:1110px;width:900px;height:84px;border-radius:14px;background:rgba(150,175,215,.12);border:1.5px solid rgba(150,175,215,.35)"); show(trk, at("F", "RAG") - 0.1, { opacity: 0 });
+      const fill = el(F, `left:90px;top:1110px;width:900px;height:84px;border-radius:14px;background:${ca(HOT, .6)};transform-origin:0 50%`); tl.set(fill, { opacity: 0, scaleX: 1 }, 0);
       tl.to(fill, { opacity: 1, duration: 0.2, immediateRender: false }, at("F", "RAG") - 0.1); tl.to(fill, { scaleX: 0.25, duration: 0.8, ease: "power3.inOut", immediateRender: false }, at("F", "kam"));
-      tag(F, "HALLUCINATIONS", 90, 1190, 900, at("F", "RAG"), MUTED, 40);
-      stamp(F, "NOT ZERO", 540, 1255, HOT, at("F", "zero"), 58);
+      tag(F, "HALLUCINATIONS", 90, 1210, 900, at("F", "RAG"), MUTED, 40);
+      stamp(F, "NOT ZERO", 540, 1275, HOT, at("F", "zero"), 58);
       M.fit(F, { y: 200, h: 1100 });
 
       // ============ G: the interview answer ============
       // diagram: G
       pillC(G, "INTERVIEW ANSWER", 200, P("G", 0), { size: 36, h: 60 });
       M.box(G, { x: 140, y: 300, w: 800, h: 220, label: "PREDICTS TEXT", sub: "REWARDED FOR GUESSING", icon: "model", color: VIOLET, size: 52, subsize: 40 }).show(P("G", 0) + 0.1);
-      M.arrow(G, { from: [540, 525], to: [540, 595], color: GOOD, w: 9 }).show(at("G", "reduce") - 0.2, 0.3);
-      M.box(G, { x: 140, y: 600, w: 800, h: 190, label: "GROUND IN SOURCES", icon: "doc", color: CYAN, size: 46 }).show(at("G", "grounding") - 0.1);
-      M.box(G, { x: 140, y: 830, w: 800, h: 190, label: "ALLOW ABSTAIN", icon: "shield", color: GOOD, size: 46 }).show(at("G", "abstain") - 0.2);
-      M.box(G, { x: 140, y: 1060, w: 800, h: 190, label: "VERIFY OUTPUT", icon: "check", color: ACC, size: 46 }).show(at("G", "verifying") - 0.1);
+      M.arrow(G, { from: [540, 525], to: [540, 595], color: GOOD, w: 9 }).show(P("G", 0) + 0.35, 0.3);
+      M.box(G, { x: 140, y: 600, w: 800, h: 190, label: "GROUND IN SOURCES", icon: "doc", color: CYAN, size: 46 }).show(P("G", 0) + 0.45);
+      M.box(G, { x: 140, y: 830, w: 800, h: 190, label: "ALLOW ABSTAIN", icon: "shield", color: GOOD, size: 46 }).show(P("G", 0) + 0.65);
+      M.box(G, { x: 140, y: 1060, w: 800, h: 190, label: "VERIFY OUTPUT", icon: "check", color: ACC, size: 46 }).show(P("G", 0) + 0.85);
+      [[300, 220, "produces", "grounding", VIOLET], [600, 190, "grounding", "abstain", CYAN], [830, 190, "abstain", "verifying", GOOD], [1060, 190, "verifying", null, ACC]].forEach(([y, h, w1, w2, col]) => {
+        const rg = el(G, `left:130px;top:${y - 10}px;width:820px;height:${h + 20}px;border:5px solid ${col};border-radius:34px`); show(rg, at("G", w1) - 0.1, { opacity: 0 }, 0.3); if (w2) gone(rg, at("G", w2) - 0.1); });
       M.fit(G, { y: 200, h: 1100 });
 
       // ============ H: zero or minus? comment, follow ============
       // diagram: H
-      pillC(H, "YOUR CALL", 200, P("H", 0), { size: 38, h: 64 });
+      pillC(H, "YOUR CALL", 200, P("H", 0), { size: 40, h: 68 });
       M.box(H, { x: 60, y: 300, w: 450, h: 300, label: "BLANK", sub: "0 MARKS", icon: "doc", color: CYAN, size: 54, subsize: 42 }).show(P("H", 0) + 0.1);
-      M.box(H, { x: 570, y: 300, w: 450, h: 300, label: "WRONG", sub: "?", icon: "cross", color: HOT, size: 54, subsize: 52 }).show(at("H", "galat"));
+      M.box(H, { x: 570, y: 300, w: 450, h: 300, label: "WRONG", sub: "?", icon: "cross", color: HOT, size: 54, subsize: 52 }).show(P("H", 0) + 0.3);
       const hc = fx(H, 120, 700, 840, 560, CYAN); show(hc, at("H", "Comment") - 0.1, { opacity: 0, y: 20 });
       el(hc, `left:40px;top:24px;font:800 34px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT KARO");
       M.pill(hc, "ZERO", at("H", "ZERO"), { x: 140, y: 100, kind: "out", size: 44 });
