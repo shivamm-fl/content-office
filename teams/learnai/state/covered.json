@@ -980,11 +980,8 @@
       "unit": "B4",
       "title": "Interview: Vector database ki zaroorat kab nahi padti?",
       "kind": "question",
-      "topic": "Searching every stored vector (exact search) is simple and perfectly accurate, and a few thousand to some hundred thousand vectors are searched in milliseconds in memory, so a vector database or approximate index is needed only when the data, speed or number of users outgrow that; approximate indexes trade some recall for speed.",
-      "hook_formula": "interviewer_asked",
-      "hook_type": "interviewer_asked",
-      "status": "planned",
-      "planned": "2026-10-22"
+      "topic": "Exact in-memory search is enough for thousands to ~100k vectors; vector DB or approximate index only when data, speed or users outgrow it.",
+      "status": "built"
     }
   ]
 }

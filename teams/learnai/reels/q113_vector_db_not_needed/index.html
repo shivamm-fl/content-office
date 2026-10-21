@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Do you need a vector database?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="118.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="118.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="118.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="118.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const sh = (h, ...a) => { h.show(...a); return h; };
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const mono = (host, x, y, w, text, col, size, lh) => el(host, `left:${x}px;top:${y}px;width:${w}px;font:600 ${size || 30}px ${COD};color:${col || TEXT};white-space:pre;line-height:${lh || 1.2}`, text);
+      const tile = (w, h, text, col, size) => `<div style="width:${w}px;height:${h}px;border-radius:24px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.04em;color:${col}">${text}</div>`;
+      const tileEl = (host, x, y, w, h, text, col, t, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`, tile(w, h, text, col, size)), t, { opacity: 0, y: 20 });
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 34}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 54}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const bubble = (host, x, y, w, h, who, col, lines, t) => { const b = glass(host, x, y, w, h, col, 30);
+        el(b, `left:24px;top:16px;font:800 34px ${COD};letter-spacing:.12em;color:${col}`, who);
+        lines.forEach(([txt, c, sz], i) => el(b, `left:24px;top:${74 + i * 56}px;width:${w - 48}px;font:600 ${sz || 36}px ${COD};color:${c || TEXT};white-space:nowrap`, txt));
+        return show(b, t, { opacity: 0, y: 20 }); };
+
+      const fx = (host, x, y, w, h, col) => glass(host, x, y, w, h, col, 28);
+      const lineTile = (host, x, y, w, h, text, col, t, size) => tileEl(host, x, y, w, h, text, col, t, size);
+      // note-card shelf: cols x rows of small cards in one container
+      const shelf = (host, x, y, cols, rows, cw, ch, gap, col) => { const w = cols * cw + (cols - 1) * gap, h = rows * ch + (rows - 1) * gap;
+        const c = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`);
+        for (let r = 0; r < rows; r++) for (let k = 0; k < cols; k++) el(c, `left:${k * (cw + gap)}px;top:${r * (ch + gap)}px;width:${cw}px;height:${ch}px;border-radius:10px;border:2px solid ${ca(col, .6)};background:${ca(col, .10)}`);
+        return { c, w, h }; };
+      const bar = (host, x, y, w, h, col, t, dur) => { const b = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:6px;background:${ca(col, .8)};transform-origin:0 50%`);
+        tl.set(b, { opacity: 0 }, 0); tl.fromTo(b, { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: dur || 0.6, ease: "power3.out", immediateRender: false }, t); return b; };
+
+      // ============ A: shelf of note cards, a bar scans every card ============
+      // diagram: A
+      M.hook(["Vector DB", "ya nahi?"], { size: 104, top: 215 });
+      pillC(A, "INTERVIEW QUESTION", 450, 0.1, { size: 34, h: 56 });
+      const shA = shelf(A, 96, 560, 10, 5, 78, 100, 12, CYAN); show(shA.c, 0.05, { opacity: 0, y: 12 });
+      const swA = el(shA.c, `left:-8px;top:-8px;width:${shA.w + 16}px;height:116px;border-radius:14px;border:4px solid ${ACC};background:${ca(ACC, .16)}`);
+      tl.set(swA, { opacity: 0 }, 0); tl.set(swA, { opacity: 1 }, 1.2);
+      [0, 1, 2, 3, 4].forEach((r) => tl.to(swA, { y: r * 112, duration: 0.3, ease: "power2.inOut", immediateRender: false }, 1.2 + r * 0.45));
+      tag(A, "5,000 CHUNKS", 0, 1160, 1080, 0.3, ACC, 52);
+      tag(A, "SCAN ALL", 0, 1240, 1080, 1.0, CYAN, 56);
+      M.fit(A, { y: 440, h: 860 });
+
+      // ============ B: the short answer ============
+      // diagram: B
+      pillC(B, "YOUR ANSWER", 200, P("B", 0), { size: 34, h: 56, col: GOOD });
+      M.box(B, { x: 80, y: 290, w: 920, h: 300, label: "SMALL DATA", sub: "UP TO 100K", icon: "search", color: GOOD, size: 64, subsize: 44 }).show(P("B", 0) + 0.15);
+      M.box(B, { x: 80, y: 640, w: 920, h: 300, label: "VECTOR DB", sub: "WHEN IT GROWS", icon: "db", color: ACC, size: 64, subsize: 44 }).show(at("B", "database"));
+      tileEl(B, 80, 1000, 290, 170, "DATA", CYAN, at("B", "data", 1), 52);
+      tileEl(B, 395, 1000, 290, 170, "SPEED", VIOLET, at("B", "speed"), 52);
+      tileEl(B, 710, 1000, 290, 170, "USERS", HOT, at("B", "users"), 52);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: vector, vector database, the tempting answer, 5,000 measured ============
+      // diagram: C
+      const c1 = [];
+      c1.push(pillC(C, "VECTOR", 200, P("C", 0), { size: 44, h: 70, col: CYAN }));
+      c1.push(pillC(C, "EXAMPLE", 290, P("C", 0) + 0.2, { size: 30, h: 48, col: MUTED }));
+      c1.push(show(el(C, `left:140px;top:400px;width:800px;height:190px;border-radius:24px;border:2.5px solid ${ca(ACC, .85)};background:${ca(ACC, .10)};display:flex;align-items:center;justify-content:center;font:700 68px ${LAT}`, "refund policy"), P("C", 0) + 0.15, { opacity: 0, y: 20 }));
+      c1.push(sh(M.arrow(C, { from: [540, 600], to: [540, 710], color: CYAN, w: 10 }), at("C", "pakadne") - 0.2, 0.3));
+      const nums = ["0.12", "-0.40", "0.83", "0.05"];
+      const nr = el(C, "left:60px;top:730px;width:960px;height:170px");
+      nums.forEach((n, i) => el(nr, `left:${i * 240}px;top:0;width:220px;height:170px;border-radius:18px;border:2.5px solid ${ca(CYAN, .85)};background:${ca(CYAN, .12)};display:flex;align-items:center;justify-content:center;font:800 52px ${COD}`, n));
+      c1.push(show(nr, at("C", "numbers"), { opacity: 0, y: 20 }));
+      c1.push(tag(C, "LIST OF NUMBERS", 0, 940, 1080, at("C", "list"), CYAN, 44));
+      const t2 = at("C", "database") - 0.25; c1.forEach((d) => { if (d && d.hide) d.hide(t2); else if (d) gone(d, t2); });
+      // vector database: query -> db -> similar vectors
+      const ph2 = []; const p2 = pillC(C, "VECTOR DATABASE", 200, t2 + 0.2, { size: 40, h: 66, col: ACC });
+      ph2.push(sh(M.box(C, { x: 240, y: 320, w: 600, h: 190, label: "QUERY", icon: "search", color: ACC, size: 50 }), at("C", "query") - 0.3));
+      ph2.push(sh(M.arrow(C, { from: [540, 515], to: [540, 585], color: ACC, w: 9 }), at("C", "query"), 0.3));
+      ph2.push(sh(M.box(C, { x: 190, y: 590, w: 700, h: 210, label: "VECTOR DB", icon: "db", color: CYAN, size: 54 }), at("C", "database") + 0.1));
+      ph2.push(sh(M.arrow(C, { from: [540, 805], to: [540, 875], color: CYAN, w: 9 }), at("C", "vectors") - 0.4, 0.3));
+      ph2.push(sh(M.box(C, { x: 190, y: 880, w: 700, h: 210, label: "SIMILAR VECTORS", icon: "numbers", color: GOOD, size: 46 }), at("C", "vectors")));
+      const t3 = at("C", "Tempting") - 0.15;
+      // everything of phase 2 fades with its scene group: hide by a full-scene mask
+      ph2.push(p2); ph2.forEach((d) => { if (d.hide) d.hide(t3); else gone(d, t3); });
+      // tempting
+      const tp = pillC(C, "TEMPTING", 200, t3 + 0.2, { size: 44, h: 70, col: HOT });
+      const tt = el(C, `left:140px;top:520px;width:800px;height:240px;border-radius:28px;border:3px solid ${ca(HOT, .85)};background:${ca(HOT, .10)};display:flex;align-items:center;justify-content:center;font:800 62px ${COD};letter-spacing:.04em`, "RAG = VECTOR DB ?");
+      show(tt, at("C", "RAG") - 0.2, { opacity: 0, y: 20 });
+      // example
+      const t4 = at("C", "EXAMPLE") - 0.15; gone(tt, t4); gone(tp, t4);
+      pillC(C, "EXAMPLE", 200, t4 + 0.2, { size: 36, h: 58, col: MUTED });
+      const shC = shelf(C, 120, 290, 8, 4, 100, 110, 20, CYAN); show(shC.c, at("C", "5000") - 0.3, { opacity: 0, y: 16 });
+      tag(C, "5,000 CHUNKS", 0, 810, 1080, at("C", "5000"), ACC, 46);
+      const swC = el(shC.c, `left:-8px;top:-8px;width:${shC.w + 16}px;height:126px;border-radius:14px;border:4px solid ${ACC};background:${ca(ACC, .16)}`);
+      tl.set(swC, { opacity: 0 }, 0); tl.set(swC, { opacity: 1 }, at("C", "compare"));
+      [0, 1, 2, 3].forEach((r) => tl.to(swC, { y: r * 130, duration: 0.2, ease: "power2.inOut", immediateRender: false }, at("C", "compare") + r * 0.24));
+      const vr = el(C, "left:120px;top:910px;width:840px;height:90px");
+      ["0.12", "-0.40", "0.83", "0.05", "..."].forEach((n, i) => el(vr, `left:${i * 170}px;top:0;width:150px;height:90px;border-radius:14px;border:2px solid ${ca(CYAN, .8)};background:${ca(CYAN, .12)};display:flex;align-items:center;justify-content:center;font:800 34px ${COD}`, n));
+      show(vr, at("C", "384") - 0.2, { opacity: 0, y: 16 });
+      tag(C, "384 NUMBERS", 0, 1010, 1080, at("C", "384"), CYAN, 40);
+      tileEl(C, 100, 1090, 400, 150, "0.2 ms", GOOD, at("C", "02"), 58);
+      tileEl(C, 580, 1090, 400, 150, "8 MB", CYAN, at("C", "8"), 58);
+      stamp(C, "NO DB NEEDED", 540, 1280, GOOD, at("C", "nahi"), 56);
+      // phase-2/3 elements are removed with the scene wipe of the next phase: fade the VECTOR DATABASE group
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: exact search ============
+      // diagram: D
+      pillC(D, "EXACT SEARCH", 200, P("D", 0), { size: 44, h: 70, col: GOOD });
+      tileEl(D, 240, 300, 600, 90, "QUERY", ACC, P("D", 0) + 0.05, 44);
+      const rowsD = [0.35, 0.18, 0.62, 0.92, 0.27, 0.48];
+      rowsD.forEach((p, i) => { const y = 430 + i * 100; const r = fx(D, 100, y, 880, 84, CYAN);
+        el(r, `left:30px;top:20px;font:700 38px ${COD};color:${TEXT}`, `VECTOR ${i + 1}`);
+        const tw = at("D", "har") + i * 0.32; show(r, P("D", 0) + 0.1 + i * 0.05, { opacity: 0, y: 12 });
+        const b = bar(r, 290, 26, 540 * p, 32, p > 0.9 ? ACC : CYAN, tw, 0.35); r._b = b; r._p = p; });
+      const best = el(D, `left:92px;top:${430 + 3 * 100 - 8}px;width:896px;height:100px;border-radius:18px;border:4px solid ${GOOD}`);
+      show(best, at("D", "hamesha"), { opacity: 0, scale: 1.02 }, 0.3);
+      tag(D, "ALWAYS RIGHT", 0, 1050, 1080, at("D", "hamesha"), GOOD, 46);
+      tileEl(D, 100, 1130, 880, 140, "100,000 → 4.8 ms", ACC, at("D", "100000"), 56);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: where it breaks: true-scale bars ============
+      // diagram: E
+      const SC = 940;
+      const blocks = [
+        { title: "MEMORY MB", y: 230, vals: [8, 154, 1536], max: 1536, labs: ["8 MB", "154 MB", "1,536 MB"], key: ["", "", "1536"] },
+        { title: "SEARCH ms", y: 700, vals: [0.2, 4.8, 47.9], max: 47.9, labs: ["0.2 ms", "4.8 ms", "47.9 ms"], key: ["", "", "479"] }];
+      const sizes = ["5,000", "100,000", "1,000,000"];
+      blocks.forEach((bk, bi) => {
+        show(el(E, `left:70px;top:${bk.y}px;font:800 40px ${COD};letter-spacing:.1em;color:${bi ? CYAN : VIOLET}`, bk.title), P("E", 0) + 0.1 + bi * 0.1, { opacity: 0, y: 10 });
+        bk.vals.forEach((v, i) => { const y = bk.y + 70 + i * 120; const big = i === 2;
+          const tIn = i < 2 ? P("E", 0) + 0.05 + i * 0.1 + bi * 0.05 : (bi ? at("E", "search") : at("E", "1000000"));
+          const col = big ? HOT : (bi ? CYAN : VIOLET);
+          show(el(E, `left:70px;top:${y}px;font:700 38px ${COD};color:${big ? HOT : TEXT}`, sizes[i]), tIn, { opacity: 0, y: 10 });
+          show(el(E, `right:80px;top:${y}px;font:800 40px ${COD};color:${col}`, bk.labs[i]), big ? (bi ? at("E", "479") : at("E", "1536")) : tIn, { opacity: 0, y: 10 });
+          bar(E, 70, y + 56, Math.max(4, SC * v / bk.max), 34, col, tIn, big ? 1.0 : 0.5); }); });
+      tag(E, "10× DATA", 60, 1160, 460, at("E", "das"), ACC, 50);
+      tag(E, "≈ 10× TIME", 540, 1160, 480, at("E", "das", 1), HOT, 50);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: the index shortcut and recall ============
+      // diagram: F
+      pillC(F, "INDEX", 200, P("F", 0), { size: 44, h: 70, col: CYAN });
+      const mp = glass(F, 100, 290, 880, 600, CYAN, 24); show(mp, P("F", 0) + 0.1, { opacity: 0 });
+      const cl = [[190, 170], [600, 190], [400, 400]];
+      const dots = [[[110, 100], [200, 60], [250, 130], [90, 190], [160, 250], [200, 200], [130, 150], [60, 120]],
+        [[520, 110], [610, 80], [700, 130], [680, 230], [560, 250], [640, 300], [740, 200], [590, 170]],
+        [[420, 350], [480, 440], [380, 500], [300, 470], [450, 520], [520, 380], [350, 400], [320, 310]]];
+      const cirs = cl.map(([x, y]) => el(mp, `left:${x - 150}px;top:${y - 150}px;width:300px;height:300px;border-radius:50%;border:3px dashed ${ca(CYAN, .55)}`));
+      cirs.forEach((c) => show(c, P("F", 0) + 0.3, { opacity: 0 }));
+      const dEl = dots.map((g, gi) => g.map(([x, y], k) => { const d = el(mp, `left:${x - 11}px;top:${y - 11}px;width:22px;height:22px;border-radius:50%;background:${CYAN}`);
+        return show(d, P("F", 0) + 0.2 + (gi * 8 + k) * 0.02, { opacity: 0, scale: 0.5 }, 0.3); }));
+      const miss = dEl[2][7];
+      const qs = el(mp, `left:${300 - 20}px;top:${250 - 20}px;width:40px;height:40px;border-radius:50%;background:${ACC};border:4px solid #fff`);
+      show(qs, at("F", "sirf") - 0.2, { opacity: 0, scale: 0.4 }, 0.35);
+      show(el(mp, `left:318px;top:196px;font:800 36px ${COD};color:${ACC}`, "QUERY"), at("F", "sirf") - 0.1, { opacity: 0, y: 8 });
+      const tDim = at("F", "paas");
+      [1, 2].forEach((g) => { dEl[g].forEach((d) => tl.to(d, { opacity: 0.25, duration: 0.3, immediateRender: false }, tDim)); tl.to(cirs[g], { opacity: 0.25, duration: 0.3, immediateRender: false }, tDim); });
+      tl.to(cirs[0], { borderColor: ACC, duration: 0.3, immediateRender: false }, tDim);
+      const fastT = tag(F, "FAST", 0, 920, 1080, at("F", "tez"), GOOD, 44);
+      const apx = pillC(F, "APPROXIMATE", 985, at("F", "approximate"), { size: 40, h: 66, col: HOT });
+      const mr = el(mp, `left:${320 - 24}px;top:${310 - 24}px;width:48px;height:48px;border-radius:50%;border:4px solid ${HOT}`);
+      tl.set(mr, { opacity: 0 }, 0); tl.to(mr, { opacity: 1, duration: 0.25, immediateRender: false }, at("F", "chhoot"));
+      tl.to(miss, { opacity: 1, duration: 0.25, immediateRender: false }, at("F", "chhoot"));
+      show(el(mp, `left:370px;top:286px;font:800 36px ${COD};color:${HOT}`, "MISSED"), at("F", "chhoot"), { opacity: 0, x: -10 }, 0.3);
+      const tRec = at("F", "recall"); gone(apx, tRec - 0.1); gone(fastT, at("F", "approximate") - 0.1);
+      pillC(F, "RECALL", 940, tRec, { size: 44, h: 70, col: ACC });
+      const trow = (y, lab, rc, rcol, lcol, t) => { const r = fx(F, 100, y, 880, 100, lcol);
+        el(r, `left:30px;top:26px;font:800 42px ${COD};color:${lcol}`, lab); el(r, `right:30px;top:26px;font:800 42px ${COD};color:${rcol}`, rc); return show(r, t, { opacity: 0, y: 14 }); };
+      trow(1030, "EXACT", "FULL RECALL", GOOD, ACC, at("F", "Exact"));
+      trow(1150, "INDEX", "SOME LOST", HOT, CYAN, at("F", "index", 1));
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: the boundary ============
+      // diagram: G
+      pillC(G, "BOUNDARY", 200, P("G", 0), { size: 44, h: 70, col: ACC });
+      const gz = el(G, `left:100px;top:520px;width:680px;height:170px;border-radius:16px 0 0 16px;background:${ca(GOOD, .30)};border:2.5px solid ${GOOD};display:flex;align-items:center;justify-content:center;font:800 40px ${COD};color:${GOOD}`, "EXACT SCAN");
+      const gy = el(G, `left:780px;top:520px;width:200px;height:170px;border-radius:0 16px 16px 0;background:${ca(HOT, .25)};border:2.5px solid ${HOT};display:flex;align-items:center;justify-content:center;font:800 40px ${COD};color:${HOT}`, "INDEX");
+      show(gz, P("G", 0) + 0.2, { opacity: 0, x: -20 }); show(gy, at("G", "das"), { opacity: 0, x: 20 });
+      [[140, "5K"], [470, "100K"], [780, "1M"]].forEach(([x, l], i) => { show(el(G, `left:${x - 80}px;top:710px;width:160px;text-align:center;font:700 48px ${COD};color:${i == 2 ? HOT : TEXT}`, l), P("G", 0) + 0.3 + i * 0.1, { opacity: 0, y: 8 }); });
+      tag(G, "TYPICALLY ~1M", 100, 430, 880, P("G", 0) + 0.2, ACC, 52);
+      M.box(G, { x: 140, y: 860, w: 800, h: 300, label: "MANY USERS", sub: "AT ONCE", icon: "user", color: VIOLET, size: 64, subsize: 44 }).show(at("G", "kai"));
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: the interview answer ============
+      // diagram: H
+      pillC(H, "INTERVIEW ANSWER", 200, P("H", 0), { size: 40, h: 66, col: GOOD });
+      M.box(H, { x: 80, y: 300, w: 920, h: 310, label: "EXACT SEARCH", sub: "IN MEMORY", icon: "search", color: GOOD, size: 64, subsize: 44 }).show(P("H", 0) + 0.2);
+      M.box(H, { x: 80, y: 650, w: 920, h: 310, label: "ADD VECTOR DB", sub: "DATA · LATENCY · USERS", icon: "db", color: ACC, size: 58, subsize: 40 }).show(at("H", "add") - 0.3);
+      M.box(H, { x: 80, y: 1000, w: 920, h: 310, label: "SOME RECALL LOSS", sub: "ACCEPT IT", icon: "numbers", color: VIOLET, size: 56, subsize: 44 }).show(at("H", "accept") - 0.2);
+      M.fit(H, { y: 200, h: 1100 });
+
+      // ============ I: comment + follow ============
+      // diagram: I
+      M.box(I, { x: 190, y: 250, w: 700, h: 190, label: "5,000 CHUNKS", icon: "doc", color: CYAN, size: 50 }).show(P("I", 0) + 0.05);
+      M.arrow(I, { from: [540, 445], to: [540, 505], color: ACC, w: 9 }).show(P("I", 0) + 0.3, 0.3);
+      M.box(I, { x: 190, y: 510, w: 700, h: 190, label: "VECTOR DB ?", icon: "db", color: ACC, size: 50 }).show(P("I", 0) + 0.5);
+      const cc = fx(I, 120, 780, 840, 330, CYAN); show(cc, at("I", "YES") - 0.6, { opacity: 0, y: 20 });
+      el(cc, `left:30px;top:20px;font:800 34px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      M.pill(cc, "YES", at("I", "YES"), { x: 230, y: 95, kind: "out", size: 48 }); M.pill(cc, "NO", at("I", "NO"), { x: 580, y: 95, kind: "out", size: 48 });
+      show(el(cc, `left:36px;right:36px;bottom:34px;height:70px;border-radius:35px;border:1.5px solid rgba(150,175,215,.35);font:500 30px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("I", "YES") - 0.4, { opacity: 0 });
+      const fb = el(I, `left:370px;top:1170px;width:340px;height:90px;border-radius:45px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 42px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fb, at("I", "follow") - 0.4, { opacity: 0 });
+      tl.to(fb, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("I", "follow")); tl.to(fb, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("I", "follow") + 0.12);
+      M.fit(I, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I);
+      M.finish({ kw: { vector: "cyan", database: "gold", exact: "good", index: "cyan", recall: "gold", approximate: "hot", tootta: "hot", "0.2": "good", "4.8": "good", "47.9": "hot", yes: "good", no: "hot", chhoota: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

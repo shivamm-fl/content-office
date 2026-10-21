@@ -1,0 +1,11 @@
+Interviewer ne poocha: kis project mein vector database ki zaroorat nahi padti? Jawab: jahan data chhota hai.
+
+Vector yaani text ka matlab pakadne wali numbers ki list. Example (random vectors, 384 numbers each, numpy, meri machine par): 5,000 chunks ko query ke saath seedha compare karne mein 0.2 millisecond aur 8 MB memory. 100,000 vectors par 4.8 millisecond. 1,000,000 vectors par 1,536 MB aur 47.9 millisecond. Times machine ke hisaab se badalte hain.
+
+Teen step: 1) Exact search: har vector ko compare karo, simple hai aur jawab hamesha sahi. 2) Dekho kab tootta hai: data dus guna, to time bhi lagbhag dus guna. 3) Index: shortcut jo sirf paas wale vectors dekhta hai, tez hai par approximate, kabhi sabse sahi result chhoot sakta hai. Exact search mein recall poora, index mein speed ke badle thoda recall jata hai. Typically dus lakh vectors ke aaspas, ya jab kai users ek saath search karein, tab index ya vector database socho.
+
+Interview mein bolo: "For a few thousand to a hundred thousand vectors, I'd do exact search in memory, it's simple and fully accurate. I'd add a vector database only when data, latency or users outgrow that, and accept some recall loss."
+
+5,000 chunks, vector database chahiye? Comment karo YES ya NO. Jawab: NO. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #VectorDatabase

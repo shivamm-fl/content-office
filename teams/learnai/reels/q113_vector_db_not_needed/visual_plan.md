@@ -1,0 +1,16 @@
+# Visual plan q113: when you do NOT need a vector database (opposite angle of r09: scan-everything first, index later)
+
+Idea in one line: for thousands to ~100k vectors, compare the query with every vector in memory (exact, perfectly accurate, milliseconds); an index or vector database is for when data, speed or users outgrow that, and it costs some recall.
+The picture with the sound off: a shelf of note cards scanned by a sweeping bar; true-scale bars of memory and time growing 10x; a map where a shortcut skips the cluster that held the real nearest dot; a scale with an EXACT zone and an INDEX zone.
+
+| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes | Labels | Built with |
+|---|---|---|---|---|
+| A | interviewer: which project needs no vector DB? | From frame 0 a shelf of 50 note cards (the 5,000 chunks); a gold bar sweeps row by row over every card; hook text above. | INTERVIEW QUESTION, 5,000 CHUNKS, SCAN ALL | custom grid |
+| B | answer: small data; scan it; DB when data, speed, users grow | Box SMALL DATA (search icon) lands, box VECTOR DB (db icon) under it, three tiles DATA, SPEED, USERS land on their words. | YOUR ANSWER, SMALL DATA, UP TO 100K, VECTOR DB, DATA, SPEED, USERS | M.box, tiles |
+| C | what is a vector, a vector DB, the tempting RAG answer, 5,000 chunks measured | Drawn: a text card refund policy turns into a row of four number cells; query -> VECTOR DB -> similar vectors flow; tile RAG = VECTOR DB? with TEMPTING; then card grid with a sweep, a 384-number row, tiles 0.2 ms and 8 MB, stamp NO DB NEEDED. | VECTOR, QUERY, VECTOR DB, SIMILAR VECTORS, TEMPTING, EXAMPLE, 384 NUMBERS, 0.2 ms, 8 MB, NO DB NEEDED | custom + M.box |
+| D | step 1: exact search compares every vector; always right; 100k = 4.8 ms | QUERY tile on top, six vector rows; a similarity bar grows in each row in turn, the longest turns gold with ALWAYS RIGHT; tile 100,000 -> 4.8 ms. | EXACT SEARCH, QUERY, VECTOR 1-6, ALWAYS RIGHT | custom |
+| E | step 2: where it breaks: 1M = 1,536 MB, 47.9 ms, ten times | Two blocks of true-scale bars (MEMORY MB, SEARCH ms) for 5,000 / 100,000 / 1,000,000; the 1M bars grow to full width in red; tags 10x DATA, ~10x TIME. | MEMORY MB, SEARCH ms, 5,000, 100,000, 1,000,000, 10x DATA | custom bars |
+| F | step 3: index = shortcut, approximate, recall | A map of dots in three dashed clusters; query star lands in one cluster, others dim, only that cluster is searched; the true nearest dot in the next cluster is ringed red MISSED; RECALL table EXACT FULL vs INDEX SOME LOST. | INDEX, QUERY, APPROXIMATE, MISSED, RECALL, EXACT, FULL RECALL, SOME LOST | custom map |
+| G | boundary ~1M, or many users | A scale 5K / 100K / 1M with a green EXACT SCAN zone and an amber INDEX? zone, marker at ~1M; box MANY USERS lands. | BOUNDARY, EXACT SCAN, INDEX, TYPICALLY ~1M, MANY USERS | custom |
+| H | say in interview (English answer) | Three answer tiles land with the spoken clauses. | INTERVIEW ANSWER, EXACT SEARCH, ADD VECTOR DB, RECALL LOSS | M.box |
+| I | 5,000 chunks, vector DB? YES or NO; follow | CHUNKS box -> VECTOR DB? box; comment card with YES and NO pills; FOLLOW pill presses. | 5,000 CHUNKS, VECTOR DB ?, COMMENT, YES, NO, FOLLOW | M.box, custom |

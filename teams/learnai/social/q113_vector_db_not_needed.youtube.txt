@@ -1,0 +1,9 @@
+Vector database kab nahi chahiye? Interview jawab
+
+Interview mein poochha jata hai: kis project mein vector database ki zaroorat nahi padti? Jawab: jahan data chhota hai, exact search (har vector ko compare karna) simple hai aur jawab hamesha sahi aata hai. Index approximate hota hai: speed ke badle thoda recall jata hai (pgvector README, FAISS wiki). Is video ke numbers ek example run ke hain (random vectors, 384 numbers, numpy, ek machine par): 5,000 vectors 0.2 ms, 100,000 vectors 4.8 ms, 1,000,000 vectors 47.9 ms. Ye boundary typically hai, apni run ke hisaab se; machine badalne par times badlenge.
+
+Is video mein: vector database needed, faiss vs pgvector, brute force vector search, ai engineer interview questions.
+
+Sources:
+https://github.com/pgvector/pgvector
+https://github.com/facebookresearch/faiss/wiki/Faiss-indexes

@@ -1,0 +1,9 @@
+A: @hook Interviewer ने पूछा: किस project में vector database की ज़रूरत नहीं पड़ती?
+B: तुम्हारा जवाब होना चाहिए: | जहाँ data छोटा है। || लाख vectors तक सब कुछ सीधा check करो, | database तब, जब data, speed या users इससे आगे बढ़ें।
+C: Vector यानी text का मतलब पकड़ने वाली numbers की list। | Vector database यानी वो database, जो query से सबसे मिलते-जुलते vectors जल्दी ढूँढे। || Tempting जवाब: "RAG है, तो vector database लगाओ।" || EXAMPLE, random vectors: | मान लो 5,000{five-thousand} chunks, यानी documents के टुकड़े, हर एक के 384{three-eighty-four} numbers। | इस machine पर numpy से सबको query के साथ compare किया: 0.2{zero-point-two} millisecond, memory 8{eight} MB। | Database की ज़रूरत ही नहीं पड़ी।
+D: पहला step: exact search। || हर vector को query के साथ compare करो। | क्यों? क्योंकि ये simple है, और जवाब हमेशा सही आता है। | 100,000{one-lakh} vectors पर भी 4.8{four-point-eight} millisecond।
+E: दूसरा step: देखो कब ये टूटता है। || 1,000,000{ten-lakh} vectors पर 1,536{fifteen-thirty-six} MB, और एक search 47.9{forty-seven-point-nine} millisecond। || क्यों? क्योंकि हर search सारे vectors छूता है, data दस गुना, तो time भी लगभग दस गुना।
+F: तीसरा step: index। || Index यानी shortcut, जो सारे नहीं, सिर्फ़ पास वाले vectors देखता है। | तेज़ है, पर approximate: कभी सबसे सही result छूट सकता है। || मिले हुए सही results का हिस्सा recall है। | Exact search में recall पूरा, index में speed के बदले थोड़ा recall जाता है।
+G: Boundary: typically दस लाख vectors के आसपास, या जब कई users एक साथ search करें, तब सोचो।
+H: Interview में बोलो: || For a few thousand to a hundred thousand vectors, I'd do exact search in memory, it's simple and fully accurate. I'd add a vector database only when data, latency or users outgrow that, and accept some recall loss.
+I: अब बताओ: 5,000{five-thousand} chunks, | vector database चाहिए? || YES या NO comment करो! || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो!

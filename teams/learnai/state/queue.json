@@ -934,38 +934,25 @@
       "track": "interview",
       "unit": "B4",
       "format": "trade-off",
+      "status": "planned",
       "title": "Interview: Vector database ki zaroorat kab nahi padti?",
       "one_idea": "Searching every stored vector (exact search) is simple and perfectly accurate, and a few thousand to some hundred thousand vectors are searched in milliseconds in memory, so a vector database or approximate index is needed only when the data, speed or number of users outgrow that; approximate indexes trade some recall for speed.",
       "hook_type": "interviewer_asked",
       "spoken_hook": "Interviewer ने पूछा: किस project में vector database की ज़रूरत नहीं पड़ती?",
       "hook_formula": "interviewer_asked",
-      "visual_idea": "A shelf of 5,000 note cards searched by a hand scanning each card in 0.3 ms (real run); a growing bar of vectors 5,000 / 100,000 / 1,000,000 with memory in MB and search time in ms; two doors EXACT SCAN vs INDEX with a recall tag; the interview answer card.",
+      "visual_idea": "note-card shelf, growing vectors bar, two doors EXACT SCAN vs INDEX with recall tag, answer card",
       "everyday_anchor": "Finding a name in a 50-page notebook by reading every page versus building an index for a library.",
-      "example": "EXAMPLE (random vectors, 384 dimensions, float32; times are from the run machine and will differ), real run state/runs/q113_search_run.py: 5,000 vectors 8 MB, exact top-3 search 0.3 ms; 100,000 vectors 154 MB, 7.7 ms; 1,000,000 vectors 1,536 MB, 84.6 ms.",
+      "example": "EXAMPLE (random vectors, 384 dims, float32; times from the run machine), real run state/runs/q113_search_run.py: 5,000 vectors 8 MB 0.2 ms; 100,000 154 MB 4.8 ms; 1,000,000 1,536 MB 47.9 ms.",
       "sources": [
         "https://github.com/pgvector/pgvector",
         "https://github.com/facebookresearch/faiss/wiki/Faiss-indexes"
       ],
-      "facts_to_verify": [
-        "pgvector README (fetched 2026-10-22): by default exact nearest neighbor search with perfect recall; adding an index gives approximate search that trades some recall for speed.",
-        "FAISS wiki (fetched 2026-10-22): IndexFlatL2 / IndexFlatIP are exact brute-force search (all vectors compared with the query); IVF and HNSW indexes are non-exhaustive and lose the guarantee to find the nearest neighbour. Where the boundary sits (about a million vectors) is our own run, not a source: say 'typically' and 'on this run'."
-      ],
       "length_target_s": 110,
       "cover_headline": "Do you need a vector database?",
       "thumb_text": "Vector DB?",
-      "keywords": [
-        "vector database needed",
-        "faiss vs pgvector",
-        "brute force vector search",
-        "ai engineer interview questions"
-      ],
-      "trap": "Reaching for a vector database for a few thousand chunks that fit in memory.",
-      "caption_note": "Comment YES or NO: 5,000 chunks, do you need a vector database? (answer NO, in the caption)",
-      "studio_note": "Question spoken in full is the hook itself. Close to published course reel r09 (vector databases, 2026-10-12): this one is the opposite angle (when NOT to), keep a different picture.",
       "script_file": "state/scripts/q113.txt",
-      "status": "planned",
       "qa_passed": false,
-      "hook_source": "strategist, 2026-10-22 (hook-writer; growth-analyst standup)"
+      "hook_source": "strategist, 2026-10-22"
     }
   ]
 }
