@@ -1,13 +1,15 @@
-"""q113: brute-force nearest-neighbour search with numpy, no database. EXAMPLE: random vectors (not real text),
-384 dimensions (a common small embedding size). Timing is from this machine and will differ elsewhere."""
+"""q113: exact (brute-force) vector search in memory. EXAMPLE: random vectors, 384 dims, float32. Times are from the run machine."""
 import time, numpy as np
 rng = np.random.default_rng(0)
-for n in (5_000, 100_000, 1_000_000):
-    X = rng.standard_normal((n, 384), dtype=np.float32)
+D = 384
+q = rng.standard_normal(D).astype(np.float32); q /= np.linalg.norm(q)
+for n in (5000, 100000, 1000000):
+    X = rng.standard_normal((n, D)).astype(np.float32)
     X /= np.linalg.norm(X, axis=1, keepdims=True)
-    q = X[123] if n > 123 else X[0]
-    t = time.perf_counter()
-    for _ in range(5): top = np.argsort(-(X @ q))[:3]
-    ms = (time.perf_counter() - t) / 5 * 1000
-    print(f"{n:>9,} vectors: {X.nbytes/1e6:8.0f} MB in memory, exact top-3 search {ms:7.1f} ms, found id {top[0]} (asked 123)")
+    mb = X.nbytes / 1e6
+    best = 1e9
+    for _ in range(5):
+        t = time.perf_counter(); s = X @ q; top = np.argpartition(-s, 3)[:3]; top = top[np.argsort(-s[top])]
+        best = min(best, time.perf_counter() - t)
+    print(f"{n:>9,} vectors: {mb:7.0f} MB, exact top-3 search {best*1000:6.1f} ms, top ids {top.tolist()}")
     del X
