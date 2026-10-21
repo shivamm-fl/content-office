@@ -1,0 +1,3 @@
+model picks A with 30% odds -> wrong 70% of the time, in the same confident tone
+grading: right=+1, wrong=-0, 'I don't know'=0 -> expected score guessing 0.30 vs abstaining 0.00 -> guess
+grading: right=+1, wrong=-1, 'I don't know'=0 -> expected score guessing -0.40 vs abstaining 0.00 -> abstain

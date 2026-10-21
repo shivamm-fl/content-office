@@ -1,1312 +1,1314 @@
 {
- "about": "DRAFT (2026-10-18, for the owner's approval; not wired into any script): the ladder of 150 Days of AI on the LearnAI floor (@ai.learnvora, renamed from ig.learnai by the owner on 2026-10-18): one idea per day, in this order. Day titles are our own wording of concepts. The topic titles of roadmap.sh/ai-engineer are used only as a checklist, through roadmap/ai-engineer.json (every one of its 65 units appears here); roadmap.sh text is copyrighted and is never copied into reels, captions or this repo. Scripts, examples and numbers come from primary sources fetched in the session. The owner decides changes to this file. Revised 2026-10-19 on the owner's word: the four opening days (what an AI engineer does, the roles, AI vs ML vs DL, AI vs AGI) taught nothing a viewer could use, so the ladder opens with how a model learns. Four new days were added to phase S1 (train/validation/test, overfitting, pretraining, training vs inference), so the total stays 150 and Days 11 to 150 keep their numbers.",
- "rules": [
-  "Day N is item id a + N in three digits (Day 7 = a007) if the owner approves the prefix a (proposal 2026-10-18-learnvora-and-150-days-of-ai.md). Days are made in order; none is skipped without the owner.",
-  "Each reel is stand-alone: one idea, terms defined inside it, the day is only a label on the cover and in the caption. The script never says yesterday, kal, Part N or next video, and never points at another day or at a course reel.",
-  "A day is done when its reel is published (status done); in_progress when planned or built.",
-  "formats: concept, structure, pattern, demo, myth-bust, recap, and trade-off (X vs Y, which one when: a proposed addition, as on the System Design floor).",
-  "The series teaches the idea in one picture; the course track (r###) teaches the working version of the same unit (steps, a worked example, the trade-off). The same unit is never on both tracks within 7 days.",
-  "unit (optional): the unit of roadmap/ai-engineer.json the day belongs to. note (optional): the reel that already taught this idea; the planner takes a different angle (another format or picture), because rule 12 (60 days) is read for the angle, not the concept, on series days. Both keys are planner hints and may be dropped when the file is adopted."
- ],
- "phases": [
-  {
-   "id": "S1",
-   "title": "How a model learns and answers",
-   "days": [
+  "about": "DRAFT (2026-10-18, for the owner's approval; not wired into any script): the ladder of 150 Days of AI on the LearnAI floor (@ai.learnvora, renamed from ig.learnai by the owner on 2026-10-18): one idea per day, in this order. Day titles are our own wording of concepts. The topic titles of roadmap.sh/ai-engineer are used only as a checklist, through roadmap/ai-engineer.json (every one of its 65 units appears here); roadmap.sh text is copyrighted and is never copied into reels, captions or this repo. Scripts, examples and numbers come from primary sources fetched in the session. The owner decides changes to this file. Revised 2026-10-19 on the owner's word: the four opening days (what an AI engineer does, the roles, AI vs ML vs DL, AI vs AGI) taught nothing a viewer could use, so the ladder opens with how a model learns. Four new days were added to phase S1 (train/validation/test, overfitting, pretraining, training vs inference), so the total stays 150 and Days 11 to 150 keep their numbers.",
+  "rules": [
+    "Day N is item id a + N in three digits (Day 7 = a007) if the owner approves the prefix a (proposal 2026-10-18-learnvora-and-150-days-of-ai.md). Days are made in order; none is skipped without the owner.",
+    "Each reel is stand-alone: one idea, terms defined inside it, the day is only a label on the cover and in the caption. The script never says yesterday, kal, Part N or next video, and never points at another day or at a course reel.",
+    "A day is done when its reel is published (status done); in_progress when planned or built.",
+    "formats: concept, structure, pattern, demo, myth-bust, recap, and trade-off (X vs Y, which one when: a proposed addition, as on the System Design floor).",
+    "The series teaches the idea in one picture; the course track (r###) teaches the working version of the same unit (steps, a worked example, the trade-off). The same unit is never on both tracks within 7 days.",
+    "unit (optional): the unit of roadmap/ai-engineer.json the day belongs to. note (optional): the reel that already taught this idea; the planner takes a different angle (another format or picture), because rule 12 (60 days) is read for the angle, not the concept, on series days. Both keys are planner hints and may be dropped when the file is adopted."
+  ],
+  "phases": [
     {
-     "day": 1,
-     "title": "How a model learns: guess, measure the error, adjust",
-     "format": "demo",
-     "unit": "A3",
-     "status": "todo",
-     "reels": [],
-     "script": "docs-notes/pilot-script-day1.md"
+      "id": "S1",
+      "title": "How a model learns and answers",
+      "days": [
+        {
+          "day": 1,
+          "title": "How a model learns: guess, measure the error, adjust",
+          "format": "demo",
+          "unit": "A3",
+          "status": "todo",
+          "reels": [],
+          "script": "docs-notes/pilot-script-day1.md"
+        },
+        {
+          "day": 2,
+          "title": "Train, validation and test: three piles of data",
+          "format": "structure",
+          "unit": "A3",
+          "status": "todo",
+          "reels": [],
+          "script": "docs-notes/pilot-script-day2.md"
+        },
+        {
+          "day": 3,
+          "title": "Overfitting: when a model memorises instead of learning",
+          "format": "concept",
+          "unit": "A3",
+          "status": "in_progress",
+          "reels": [
+            "a003"
+          ]
+        },
+        {
+          "day": 4,
+          "title": "An LLM is a next-word predictor: watch the guesses",
+          "format": "demo",
+          "unit": "A3",
+          "note": "r03 (published) says this in words; show the guesses and their odds.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 5,
+          "title": "Pretraining: how an LLM first learns language from text",
+          "format": "concept",
+          "unit": "A3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 6,
+          "title": "Tokens: how text becomes numbers",
+          "format": "demo",
+          "unit": "A4",
+          "note": "q02 (published) answered what a token is, as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 7,
+          "title": "Why tokens decide your bill, your limits and some silly mistakes",
+          "format": "myth-bust",
+          "unit": "A4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 8,
+          "title": "Raw model vs chat model: why the first one cannot answer",
+          "format": "concept",
+          "unit": "A3",
+          "note": "r04 (published) is this idea; pick a different picture.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 9,
+          "title": "Training vs inference: learn once, answer a million times",
+          "format": "concept",
+          "unit": "A3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 10,
+          "title": "The kinds of AI model: text, image, audio, embedding",
+          "format": "structure",
+          "unit": "A5",
+          "note": "r05 (published) showed how a photo becomes tokens.",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 2,
-     "title": "Train, validation and test: three piles of data",
-     "format": "structure",
-     "unit": "A3",
-     "status": "todo",
-     "reels": [],
-     "script": "docs-notes/pilot-script-day2.md"
+      "id": "S2",
+      "title": "Inside an LLM",
+      "days": [
+        {
+          "day": 11,
+          "title": "A neural network in one picture: weights and layers",
+          "format": "structure",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 12,
+          "title": "Parameters: what 7B and 70B actually mean",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 13,
+          "title": "The transformer: the design behind every LLM",
+          "format": "structure",
+          "unit": "A3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 14,
+          "title": "Attention: how a word looks at the other words",
+          "format": "concept",
+          "unit": "A3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 15,
+          "title": "Is a bigger model always smarter? Where scale stops",
+          "format": "myth-bust",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 16,
+          "title": "The context window: the model's working memory",
+          "format": "concept",
+          "unit": "D1",
+          "note": "q03, q15, q16 (published) and q101 (built) cover it as interview questions.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 17,
+          "title": "Generation: one token at a time, in a loop",
+          "format": "demo",
+          "unit": "A3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 18,
+          "title": "Temperature: the randomness dial",
+          "format": "demo",
+          "unit": "C5",
+          "note": "q04 (published) answered whether temperature 0 gives the same output.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 19,
+          "title": "Top-k and top-p: trimming the shortlist of words",
+          "format": "demo",
+          "unit": "C6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 20,
+          "title": "Repetition penalties: how a model stops looping",
+          "format": "demo",
+          "unit": "C7",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 21,
+          "title": "Hallucination: why a fluent answer can be false",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 22,
+          "title": "Knowledge cutoff: why the model does not know today",
+          "format": "myth-bust",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 23,
+          "title": "Reasoning models: thinking before answering",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 24,
+          "title": "Recap: from text to tokens to the next word",
+          "format": "recap",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 3,
-     "title": "Overfitting: when a model memorises instead of learning",
-     "format": "concept",
-     "unit": "A3",
-     "status": "in_progress",
-     "reels": ["a003"]
+      "id": "S3",
+      "title": "Prompting that works",
+      "days": [
+        {
+          "day": 25,
+          "title": "Anatomy of a prompt: role, task, context, format",
+          "format": "structure",
+          "unit": "C1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 26,
+          "title": "Vague in, vague out: how to be specific",
+          "format": "pattern",
+          "unit": "C1",
+          "note": "r10 (released) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 27,
+          "title": "System prompt vs user prompt: who sets the rules",
+          "format": "concept",
+          "unit": "C2",
+          "note": "r11 (released) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 28,
+          "title": "Zero-shot vs few-shot: teach by example",
+          "format": "pattern",
+          "unit": "C3",
+          "note": "r12 (released) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 29,
+          "title": "Chain-of-thought: let the model show its steps",
+          "format": "pattern",
+          "unit": "C4",
+          "note": "r13 (built) and r15 (planned) are this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 30,
+          "title": "Delimiters and constraints: fence the instructions off",
+          "format": "pattern",
+          "unit": "C1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 31,
+          "title": "Structured output: getting valid JSON every time",
+          "format": "pattern",
+          "unit": "C8",
+          "note": "q10 and q19 (published) cover it as interview questions.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 32,
+          "title": "Prompt chaining: one big task as small steps",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 33,
+          "title": "Does asking 'are you sure?' make the answer better?",
+          "format": "myth-bust",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 34,
+          "title": "Streaming: why answers appear word by word",
+          "format": "concept",
+          "unit": "C9",
+          "note": "r14 (released) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 35,
+          "title": "Prompt caching: pay once for the long prefix",
+          "format": "concept",
+          "unit": "C10",
+          "note": "q12 (released) and e101 (built, generic track) cover it.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 36,
+          "title": "Prompts are code: version them and test them",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 4,
-     "title": "An LLM is a next-word predictor: watch the guesses",
-     "format": "demo",
-     "unit": "A3",
-     "note": "r03 (published) says this in words; show the guesses and their odds.",
-     "status": "todo",
-     "reels": []
+      "id": "S4",
+      "title": "Context engineering",
+      "days": [
+        {
+          "day": 37,
+          "title": "When the window fills up: what gets cut and what it costs",
+          "format": "demo",
+          "unit": "D1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 38,
+          "title": "Prompt engineering vs context engineering",
+          "format": "trade-off",
+          "unit": "D2",
+          "note": "r16 (planned) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 39,
+          "title": "What goes into the context: five sources",
+          "format": "structure",
+          "unit": "D3",
+          "note": "r101 (built) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 40,
+          "title": "Lost in the middle: why long context is not free",
+          "format": "myth-bust",
+          "unit": "D5",
+          "note": "q07 (published) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 41,
+          "title": "Compaction: shrink a long chat, keep the meaning",
+          "format": "pattern",
+          "unit": "D4",
+          "note": "r102 (built) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 42,
+          "title": "Memory: how an AI app remembers across chats",
+          "format": "structure",
+          "unit": "D6",
+          "note": "r104 (built) and q15 (published) cover it.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 43,
+          "title": "Short-term vs long-term memory in AI apps",
+          "format": "trade-off",
+          "unit": "D6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 44,
+          "title": "Context isolation and sharing: a clean window for each job",
+          "format": "pattern",
+          "unit": "D7",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 45,
+          "title": "Context failures: poisoning, distraction, confusion, clash",
+          "format": "concept",
+          "unit": "D5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 46,
+          "title": "Measuring context: is what you added helping?",
+          "format": "pattern",
+          "unit": "D5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 47,
+          "title": "Recap: context engineering on one page",
+          "format": "recap",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 5,
-     "title": "Pretraining: how an LLM first learns language from text",
-     "format": "concept",
-     "unit": "A3",
-     "status": "todo",
-     "reels": []
+      "id": "S5",
+      "title": "Embeddings and search",
+      "days": [
+        {
+          "day": 48,
+          "title": "Embeddings: meaning as a point on a map",
+          "format": "concept",
+          "unit": "B1",
+          "note": "q01 (published) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 49,
+          "title": "How an embedding model learns what is close",
+          "format": "concept",
+          "unit": "B2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 50,
+          "title": "Similarity: measuring closeness with cosine",
+          "format": "demo",
+          "unit": "B2",
+          "note": "r07 (published) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 51,
+          "title": "Keyword search vs semantic search",
+          "format": "trade-off",
+          "unit": "B3",
+          "note": "r08 (published) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 52,
+          "title": "Hybrid search: keywords and meaning together",
+          "format": "pattern",
+          "unit": "B3",
+          "note": "q20 (built) covers a case where embeddings miss an exact code.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 53,
+          "title": "Vector databases: finding the nearest of millions",
+          "format": "structure",
+          "unit": "B4",
+          "note": "r09 (published) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 54,
+          "title": "Why approximate search is fast: indexes for vectors",
+          "format": "structure",
+          "unit": "B4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 55,
+          "title": "Metadata filters: narrow first, then search",
+          "format": "pattern",
+          "unit": "E4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 56,
+          "title": "Reranking: a second, sharper look at the top results",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 6,
-     "title": "Tokens: how text becomes numbers",
-     "format": "demo",
-     "unit": "A4",
-     "note": "q02 (published) answered what a token is, as an interview question.",
-     "status": "todo",
-     "reels": []
+      "id": "S6",
+      "title": "RAG",
+      "days": [
+        {
+          "day": 57,
+          "title": "RAG in one picture: look it up, then answer",
+          "format": "concept",
+          "unit": "E1",
+          "note": "r103 (built) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 58,
+          "title": "Where RAG earns its place: four real uses",
+          "format": "concept",
+          "unit": "E1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 59,
+          "title": "RAG, fine-tuning or long context: which one when",
+          "format": "trade-off",
+          "unit": "E2",
+          "note": "q05 (published) and q101 (built) cover it as interview questions.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 60,
+          "title": "Chunking: why documents are cut into pieces",
+          "format": "pattern",
+          "unit": "E3",
+          "note": "q11 (same question, rejected) was never posted.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 61,
+          "title": "Chunk size and overlap: the trade-off",
+          "format": "trade-off",
+          "unit": "E3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 62,
+          "title": "Retrieval: from a question to the top chunks",
+          "format": "structure",
+          "unit": "E4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 63,
+          "title": "Query rewriting: fix the question before searching",
+          "format": "pattern",
+          "unit": "E4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 64,
+          "title": "Permission-aware retrieval: who may see which chunk",
+          "format": "concept",
+          "unit": "E4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 65,
+          "title": "The whole RAG pipeline, end to end",
+          "format": "structure",
+          "unit": "E5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 66,
+          "title": "Grounding and citations: show where the answer came from",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 67,
+          "title": "Does RAG stop hallucination? Where it still fails",
+          "format": "myth-bust",
+          "note": "q17 (published) covers one failure case as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 68,
+          "title": "Checking RAG: faithfulness and relevance",
+          "format": "concept",
+          "unit": "E6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 69,
+          "title": "RAG at scale: freshness, updates and cost",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 70,
+          "title": "Recap: the RAG map, from symptom to fix",
+          "format": "recap",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 7,
-     "title": "Why tokens decide your bill, your limits and some silly mistakes",
-     "format": "myth-bust",
-     "unit": "A4",
-     "status": "todo",
-     "reels": []
+      "id": "S7",
+      "title": "Tools and MCP",
+      "days": [
+        {
+          "day": 71,
+          "title": "Function calling: the model asks, your code runs",
+          "format": "concept",
+          "unit": "F1",
+          "note": "q08 (published) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 72,
+          "title": "A tool schema: how the model learns what a tool does",
+          "format": "structure",
+          "unit": "F1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 73,
+          "title": "The tool loop: call, result, answer",
+          "format": "structure",
+          "unit": "F1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 74,
+          "title": "MCP: one plug for many tools",
+          "format": "concept",
+          "unit": "F6",
+          "note": "q14 (released) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 75,
+          "title": "MCP hosts, clients and servers: who talks to whom",
+          "format": "structure",
+          "unit": "F6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 76,
+          "title": "MCP vs function calling: what actually differs",
+          "format": "trade-off",
+          "unit": "F6",
+          "note": "q14 (released) is this question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 77,
+          "title": "MCP transports: a local pipe or a remote link",
+          "format": "structure",
+          "unit": "F7",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 78,
+          "title": "The data layer of MCP: tools, resources and prompts",
+          "format": "structure",
+          "unit": "F7",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 79,
+          "title": "Building an MCP server, step by step",
+          "format": "pattern",
+          "unit": "F8",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 80,
+          "title": "Building an MCP client, step by step",
+          "format": "pattern",
+          "unit": "F9",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 81,
+          "title": "Agent skills: instructions loaded only when needed",
+          "format": "concept",
+          "note": "e103 (built, generic track) is about a skill.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 82,
+          "title": "Recap: model, tools, MCP: who does what",
+          "format": "recap",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 8,
-     "title": "Raw model vs chat model: why the first one cannot answer",
-     "format": "concept",
-     "unit": "A3",
-     "note": "r04 (published) is this idea; pick a different picture.",
-     "status": "todo",
-     "reels": []
+      "id": "S8",
+      "title": "Agents",
+      "days": [
+        {
+          "day": 83,
+          "title": "What an AI agent is: a loop around a model",
+          "format": "concept",
+          "unit": "F2",
+          "note": "r17 (planned) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 84,
+          "title": "Think, act, observe: the ReAct loop",
+          "format": "structure",
+          "unit": "F2",
+          "note": "r17 (planned) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 85,
+          "title": "Workflow or agent: who decides the next step?",
+          "format": "trade-off",
+          "unit": "F2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 86,
+          "title": "Where agents really work: four use cases",
+          "format": "concept",
+          "unit": "F3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 87,
+          "title": "Planning: turning a goal into steps",
+          "format": "pattern",
+          "unit": "F2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 88,
+          "title": "Stopping an agent: step limits, budgets, loop guards",
+          "format": "pattern",
+          "unit": "F5",
+          "note": "q102 (built) covers a looping agent.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 89,
+          "title": "An agent without a framework: the loop in plain code",
+          "format": "structure",
+          "unit": "F5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 90,
+          "title": "Multi-agent systems: when one agent is not enough",
+          "format": "concept",
+          "unit": "F4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 91,
+          "title": "Orchestrator and workers: a common multi-agent shape",
+          "format": "pattern",
+          "unit": "F4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 92,
+          "title": "Least privilege: what an agent may touch",
+          "format": "pattern",
+          "note": "q24 (built) and e102 (built, generic track) cover permissions and fail-closed checks.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 93,
+          "title": "Why an agent says 'done' when it is not",
+          "format": "myth-bust",
+          "note": "q18 (published) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 94,
+          "title": "Coding agents: how they read, edit and test code",
+          "format": "structure",
+          "unit": "F10",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 95,
+          "title": "Recap: the agent map",
+          "format": "recap",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 9,
-     "title": "Training vs inference: learn once, answer a million times",
-     "format": "concept",
-     "unit": "A3",
-     "status": "todo",
-     "reels": []
+      "id": "S9",
+      "title": "Evals: measuring AI",
+      "days": [
+        {
+          "day": 96,
+          "title": "Why 'it looks fine' is not a test: the case for evals",
+          "format": "myth-bust",
+          "unit": "G1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 97,
+          "title": "A golden set: the small test set that guides everything",
+          "format": "pattern",
+          "unit": "G1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 98,
+          "title": "Deterministic checks: tests that need no judge",
+          "format": "pattern",
+          "unit": "G1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 99,
+          "title": "Metrics in plain words: accuracy, precision, recall",
+          "format": "concept",
+          "unit": "G1",
+          "note": "q09 (published) covers evals as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 100,
+          "title": "LLM as a judge: a model grading a model",
+          "format": "pattern",
+          "unit": "G2",
+          "note": "q13 (released) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 101,
+          "title": "Human evals: when a person has to grade",
+          "format": "concept",
+          "unit": "G2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 102,
+          "title": "Regression tests: change the prompt, keep what worked",
+          "format": "pattern",
+          "unit": "G3",
+          "note": "q21 (built) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 103,
+          "title": "Adversarial testing: break it before users do",
+          "format": "pattern",
+          "unit": "G4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 104,
+          "title": "Benchmarks: what a leaderboard score does not tell you",
+          "format": "myth-bust",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 105,
+          "title": "Recap: an eval plan for a small AI app",
+          "format": "recap",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     },
     {
-     "day": 10,
-     "title": "The kinds of AI model: text, image, audio, embedding",
-     "format": "structure",
-     "unit": "A5",
-     "note": "r05 (published) showed how a photo becomes tokens.",
-     "status": "todo",
-     "reels": []
+      "id": "S10",
+      "title": "Safety, security and privacy",
+      "days": [
+        {
+          "day": 106,
+          "title": "Prompt injection: when the data gives the orders",
+          "format": "concept",
+          "unit": "D8",
+          "note": "q06 (published) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 107,
+          "title": "Indirect injection: instructions hidden in a page",
+          "format": "demo",
+          "unit": "D8",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 108,
+          "title": "Context security: what never goes into a prompt",
+          "format": "concept",
+          "unit": "D8",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 109,
+          "title": "Bias and fairness: how skewed data becomes skewed answers",
+          "format": "concept",
+          "unit": "G5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 110,
+          "title": "AI safety and ethics for builders",
+          "format": "concept",
+          "unit": "G6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 111,
+          "title": "Content moderation: filtering what goes in and out",
+          "format": "pattern",
+          "unit": "G6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 112,
+          "title": "Privacy: personal data in prompts and logs",
+          "format": "concept",
+          "unit": "G7",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 113,
+          "title": "Data classification: what may go to which model",
+          "format": "pattern",
+          "unit": "G7",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 114,
+          "title": "Jailbreaks: can a model be talked out of its rules?",
+          "format": "myth-bust",
+          "note": "q06 (published) asks whether injection can be stopped completely.",
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "S11",
+      "title": "Production: running AI for real users",
+      "days": [
+        {
+          "day": 115,
+          "title": "Monitoring: what to watch after launch",
+          "format": "concept",
+          "unit": "H1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 116,
+          "title": "Tracing: follow one request through every step",
+          "format": "structure",
+          "unit": "H2",
+          "note": "q103 and q104 (built) cover it as interview questions.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 117,
+          "title": "Logging for AI apps: what to record and what not",
+          "format": "pattern",
+          "unit": "H2",
+          "note": "q104 (built) covers it.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 118,
+          "title": "Cost: where the money goes in an AI app",
+          "format": "concept",
+          "unit": "H3",
+          "note": "q26 (built) and e104 (built, generic track) touch cost.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 119,
+          "title": "Latency: why the first word takes so long",
+          "format": "demo",
+          "unit": "H3",
+          "note": "q22 (planned) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 120,
+          "title": "Model routing: small model first, big model when needed",
+          "format": "pattern",
+          "unit": "H3",
+          "note": "q26 (built) covers it as an interview question.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 121,
+          "title": "Inference: what happens when you call the API",
+          "format": "structure",
+          "unit": "H4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 122,
+          "title": "OpenAI-compatible APIs: one shape, many providers",
+          "format": "concept",
+          "unit": "H5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 123,
+          "title": "Retries, timeouts, fallbacks: when the model API fails",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 124,
+          "title": "Open weights vs closed models: what 'open' really means",
+          "format": "myth-bust",
+          "unit": "A6",
+          "note": "r06 (published) is this idea.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 125,
+          "title": "Choosing a model: quality, cost and speed",
+          "format": "trade-off",
+          "unit": "A6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 126,
+          "title": "Self-hosting: when running your own model pays off",
+          "format": "trade-off",
+          "unit": "A6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 127,
+          "title": "Quantization: running a model on less hardware",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "S12",
+      "title": "Multimodal",
+      "days": [
+        {
+          "day": 128,
+          "title": "Multimodal AI: one model, many kinds of input",
+          "format": "concept",
+          "unit": "I1",
+          "note": "r05 (published) showed one multimodal case.",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 129,
+          "title": "Image understanding: how a model sees a photo",
+          "format": "structure",
+          "unit": "I2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 130,
+          "title": "Reading documents: from scanned page to text",
+          "format": "concept",
+          "unit": "I2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 131,
+          "title": "Image generation: from noise to picture",
+          "format": "demo",
+          "unit": "I3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 132,
+          "title": "Speech to text: how a voice becomes words",
+          "format": "concept",
+          "unit": "I4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 133,
+          "title": "Text to speech and audio: how words become a voice",
+          "format": "concept",
+          "unit": "I5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 134,
+          "title": "Voice agents: the pipeline from mic to speaker",
+          "format": "structure",
+          "unit": "I5",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 135,
+          "title": "Video understanding: frames, time and cost",
+          "format": "concept",
+          "unit": "I6",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 136,
+          "title": "Multimodal in practice: when it is worth the cost",
+          "format": "trade-off",
+          "unit": "I1",
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "S13",
+      "title": "Adapting models and applied AI",
+      "days": [
+        {
+          "day": 137,
+          "title": "Fine-tuning: teaching a model your style",
+          "format": "concept",
+          "unit": "E2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 138,
+          "title": "LoRA: fine-tuning without retraining everything",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 139,
+          "title": "Preference tuning: how chat models learn manners",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 140,
+          "title": "Distillation: a small model taught by a big one",
+          "format": "concept",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 141,
+          "title": "Recommendation systems: how a feed picks what you see",
+          "format": "structure",
+          "unit": "J1",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 142,
+          "title": "Anomaly detection: spotting the odd one out",
+          "format": "concept",
+          "unit": "J2",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 143,
+          "title": "Model hubs: where open models and datasets live",
+          "format": "concept",
+          "unit": "J3",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 144,
+          "title": "Three everyday LLM jobs: classify, extract, summarise",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        }
+      ]
+    },
+    {
+      "id": "S14",
+      "title": "Think like an AI engineer",
+      "days": [
+        {
+          "day": 145,
+          "title": "Reading an AI paper in ten minutes",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 146,
+          "title": "How to judge a new model release",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 147,
+          "title": "Hindi and Hinglish in LLMs: tokens, cost and quality",
+          "format": "demo",
+          "unit": "A4",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 148,
+          "title": "Design a RAG chatbot: the interview answer in one picture",
+          "format": "structure",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 149,
+          "title": "Your first AI project: scope, data, metric",
+          "format": "pattern",
+          "status": "todo",
+          "reels": []
+        },
+        {
+          "day": 150,
+          "title": "Recap: the AI engineer ladder, Day 1 to Day 150",
+          "format": "recap",
+          "status": "todo",
+          "reels": []
+        }
+      ]
     }
-   ]
-  },
-  {
-   "id": "S2",
-   "title": "Inside an LLM",
-   "days": [
-    {
-     "day": 11,
-     "title": "A neural network in one picture: weights and layers",
-     "format": "structure",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 12,
-     "title": "Parameters: what 7B and 70B actually mean",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 13,
-     "title": "The transformer: the design behind every LLM",
-     "format": "structure",
-     "unit": "A3",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 14,
-     "title": "Attention: how a word looks at the other words",
-     "format": "concept",
-     "unit": "A3",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 15,
-     "title": "Is a bigger model always smarter? Where scale stops",
-     "format": "myth-bust",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 16,
-     "title": "The context window: the model's working memory",
-     "format": "concept",
-     "unit": "D1",
-     "note": "q03, q15, q16 (published) and q101 (built) cover it as interview questions.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 17,
-     "title": "Generation: one token at a time, in a loop",
-     "format": "demo",
-     "unit": "A3",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 18,
-     "title": "Temperature: the randomness dial",
-     "format": "demo",
-     "unit": "C5",
-     "note": "q04 (published) answered whether temperature 0 gives the same output.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 19,
-     "title": "Top-k and top-p: trimming the shortlist of words",
-     "format": "demo",
-     "unit": "C6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 20,
-     "title": "Repetition penalties: how a model stops looping",
-     "format": "demo",
-     "unit": "C7",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 21,
-     "title": "Hallucination: why a fluent answer can be false",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 22,
-     "title": "Knowledge cutoff: why the model does not know today",
-     "format": "myth-bust",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 23,
-     "title": "Reasoning models: thinking before answering",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 24,
-     "title": "Recap: from text to tokens to the next word",
-     "format": "recap",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S3",
-   "title": "Prompting that works",
-   "days": [
-    {
-     "day": 25,
-     "title": "Anatomy of a prompt: role, task, context, format",
-     "format": "structure",
-     "unit": "C1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 26,
-     "title": "Vague in, vague out: how to be specific",
-     "format": "pattern",
-     "unit": "C1",
-     "note": "r10 (released) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 27,
-     "title": "System prompt vs user prompt: who sets the rules",
-     "format": "concept",
-     "unit": "C2",
-     "note": "r11 (released) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 28,
-     "title": "Zero-shot vs few-shot: teach by example",
-     "format": "pattern",
-     "unit": "C3",
-     "note": "r12 (released) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 29,
-     "title": "Chain-of-thought: let the model show its steps",
-     "format": "pattern",
-     "unit": "C4",
-     "note": "r13 (built) and r15 (planned) are this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 30,
-     "title": "Delimiters and constraints: fence the instructions off",
-     "format": "pattern",
-     "unit": "C1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 31,
-     "title": "Structured output: getting valid JSON every time",
-     "format": "pattern",
-     "unit": "C8",
-     "note": "q10 and q19 (published) cover it as interview questions.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 32,
-     "title": "Prompt chaining: one big task as small steps",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 33,
-     "title": "Does asking 'are you sure?' make the answer better?",
-     "format": "myth-bust",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 34,
-     "title": "Streaming: why answers appear word by word",
-     "format": "concept",
-     "unit": "C9",
-     "note": "r14 (released) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 35,
-     "title": "Prompt caching: pay once for the long prefix",
-     "format": "concept",
-     "unit": "C10",
-     "note": "q12 (released) and e101 (built, generic track) cover it.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 36,
-     "title": "Prompts are code: version them and test them",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S4",
-   "title": "Context engineering",
-   "days": [
-    {
-     "day": 37,
-     "title": "When the window fills up: what gets cut and what it costs",
-     "format": "demo",
-     "unit": "D1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 38,
-     "title": "Prompt engineering vs context engineering",
-     "format": "trade-off",
-     "unit": "D2",
-     "note": "r16 (planned) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 39,
-     "title": "What goes into the context: five sources",
-     "format": "structure",
-     "unit": "D3",
-     "note": "r101 (built) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 40,
-     "title": "Lost in the middle: why long context is not free",
-     "format": "myth-bust",
-     "unit": "D5",
-     "note": "q07 (published) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 41,
-     "title": "Compaction: shrink a long chat, keep the meaning",
-     "format": "pattern",
-     "unit": "D4",
-     "note": "r102 (built) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 42,
-     "title": "Memory: how an AI app remembers across chats",
-     "format": "structure",
-     "unit": "D6",
-     "note": "r104 (built) and q15 (published) cover it.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 43,
-     "title": "Short-term vs long-term memory in AI apps",
-     "format": "trade-off",
-     "unit": "D6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 44,
-     "title": "Context isolation and sharing: a clean window for each job",
-     "format": "pattern",
-     "unit": "D7",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 45,
-     "title": "Context failures: poisoning, distraction, confusion, clash",
-     "format": "concept",
-     "unit": "D5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 46,
-     "title": "Measuring context: is what you added helping?",
-     "format": "pattern",
-     "unit": "D5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 47,
-     "title": "Recap: context engineering on one page",
-     "format": "recap",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S5",
-   "title": "Embeddings and search",
-   "days": [
-    {
-     "day": 48,
-     "title": "Embeddings: meaning as a point on a map",
-     "format": "concept",
-     "unit": "B1",
-     "note": "q01 (published) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 49,
-     "title": "How an embedding model learns what is close",
-     "format": "concept",
-     "unit": "B2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 50,
-     "title": "Similarity: measuring closeness with cosine",
-     "format": "demo",
-     "unit": "B2",
-     "note": "r07 (published) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 51,
-     "title": "Keyword search vs semantic search",
-     "format": "trade-off",
-     "unit": "B3",
-     "note": "r08 (published) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 52,
-     "title": "Hybrid search: keywords and meaning together",
-     "format": "pattern",
-     "unit": "B3",
-     "note": "q20 (built) covers a case where embeddings miss an exact code.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 53,
-     "title": "Vector databases: finding the nearest of millions",
-     "format": "structure",
-     "unit": "B4",
-     "note": "r09 (published) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 54,
-     "title": "Why approximate search is fast: indexes for vectors",
-     "format": "structure",
-     "unit": "B4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 55,
-     "title": "Metadata filters: narrow first, then search",
-     "format": "pattern",
-     "unit": "E4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 56,
-     "title": "Reranking: a second, sharper look at the top results",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S6",
-   "title": "RAG",
-   "days": [
-    {
-     "day": 57,
-     "title": "RAG in one picture: look it up, then answer",
-     "format": "concept",
-     "unit": "E1",
-     "note": "r103 (built) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 58,
-     "title": "Where RAG earns its place: four real uses",
-     "format": "concept",
-     "unit": "E1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 59,
-     "title": "RAG, fine-tuning or long context: which one when",
-     "format": "trade-off",
-     "unit": "E2",
-     "note": "q05 (published) and q101 (built) cover it as interview questions.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 60,
-     "title": "Chunking: why documents are cut into pieces",
-     "format": "pattern",
-     "unit": "E3",
-     "note": "q11 (same question, rejected) was never posted.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 61,
-     "title": "Chunk size and overlap: the trade-off",
-     "format": "trade-off",
-     "unit": "E3",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 62,
-     "title": "Retrieval: from a question to the top chunks",
-     "format": "structure",
-     "unit": "E4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 63,
-     "title": "Query rewriting: fix the question before searching",
-     "format": "pattern",
-     "unit": "E4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 64,
-     "title": "Permission-aware retrieval: who may see which chunk",
-     "format": "concept",
-     "unit": "E4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 65,
-     "title": "The whole RAG pipeline, end to end",
-     "format": "structure",
-     "unit": "E5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 66,
-     "title": "Grounding and citations: show where the answer came from",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 67,
-     "title": "Does RAG stop hallucination? Where it still fails",
-     "format": "myth-bust",
-     "note": "q17 (published) covers one failure case as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 68,
-     "title": "Checking RAG: faithfulness and relevance",
-     "format": "concept",
-     "unit": "E6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 69,
-     "title": "RAG at scale: freshness, updates and cost",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 70,
-     "title": "Recap: the RAG map, from symptom to fix",
-     "format": "recap",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S7",
-   "title": "Tools and MCP",
-   "days": [
-    {
-     "day": 71,
-     "title": "Function calling: the model asks, your code runs",
-     "format": "concept",
-     "unit": "F1",
-     "note": "q08 (published) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 72,
-     "title": "A tool schema: how the model learns what a tool does",
-     "format": "structure",
-     "unit": "F1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 73,
-     "title": "The tool loop: call, result, answer",
-     "format": "structure",
-     "unit": "F1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 74,
-     "title": "MCP: one plug for many tools",
-     "format": "concept",
-     "unit": "F6",
-     "note": "q14 (released) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 75,
-     "title": "MCP hosts, clients and servers: who talks to whom",
-     "format": "structure",
-     "unit": "F6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 76,
-     "title": "MCP vs function calling: what actually differs",
-     "format": "trade-off",
-     "unit": "F6",
-     "note": "q14 (released) is this question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 77,
-     "title": "MCP transports: a local pipe or a remote link",
-     "format": "structure",
-     "unit": "F7",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 78,
-     "title": "The data layer of MCP: tools, resources and prompts",
-     "format": "structure",
-     "unit": "F7",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 79,
-     "title": "Building an MCP server, step by step",
-     "format": "pattern",
-     "unit": "F8",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 80,
-     "title": "Building an MCP client, step by step",
-     "format": "pattern",
-     "unit": "F9",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 81,
-     "title": "Agent skills: instructions loaded only when needed",
-     "format": "concept",
-     "note": "e103 (built, generic track) is about a skill.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 82,
-     "title": "Recap: model, tools, MCP: who does what",
-     "format": "recap",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S8",
-   "title": "Agents",
-   "days": [
-    {
-     "day": 83,
-     "title": "What an AI agent is: a loop around a model",
-     "format": "concept",
-     "unit": "F2",
-     "note": "r17 (planned) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 84,
-     "title": "Think, act, observe: the ReAct loop",
-     "format": "structure",
-     "unit": "F2",
-     "note": "r17 (planned) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 85,
-     "title": "Workflow or agent: who decides the next step?",
-     "format": "trade-off",
-     "unit": "F2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 86,
-     "title": "Where agents really work: four use cases",
-     "format": "concept",
-     "unit": "F3",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 87,
-     "title": "Planning: turning a goal into steps",
-     "format": "pattern",
-     "unit": "F2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 88,
-     "title": "Stopping an agent: step limits, budgets, loop guards",
-     "format": "pattern",
-     "unit": "F5",
-     "note": "q102 (built) covers a looping agent.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 89,
-     "title": "An agent without a framework: the loop in plain code",
-     "format": "structure",
-     "unit": "F5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 90,
-     "title": "Multi-agent systems: when one agent is not enough",
-     "format": "concept",
-     "unit": "F4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 91,
-     "title": "Orchestrator and workers: a common multi-agent shape",
-     "format": "pattern",
-     "unit": "F4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 92,
-     "title": "Least privilege: what an agent may touch",
-     "format": "pattern",
-     "note": "q24 (built) and e102 (built, generic track) cover permissions and fail-closed checks.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 93,
-     "title": "Why an agent says 'done' when it is not",
-     "format": "myth-bust",
-     "note": "q18 (published) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 94,
-     "title": "Coding agents: how they read, edit and test code",
-     "format": "structure",
-     "unit": "F10",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 95,
-     "title": "Recap: the agent map",
-     "format": "recap",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S9",
-   "title": "Evals: measuring AI",
-   "days": [
-    {
-     "day": 96,
-     "title": "Why 'it looks fine' is not a test: the case for evals",
-     "format": "myth-bust",
-     "unit": "G1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 97,
-     "title": "A golden set: the small test set that guides everything",
-     "format": "pattern",
-     "unit": "G1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 98,
-     "title": "Deterministic checks: tests that need no judge",
-     "format": "pattern",
-     "unit": "G1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 99,
-     "title": "Metrics in plain words: accuracy, precision, recall",
-     "format": "concept",
-     "unit": "G1",
-     "note": "q09 (published) covers evals as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 100,
-     "title": "LLM as a judge: a model grading a model",
-     "format": "pattern",
-     "unit": "G2",
-     "note": "q13 (released) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 101,
-     "title": "Human evals: when a person has to grade",
-     "format": "concept",
-     "unit": "G2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 102,
-     "title": "Regression tests: change the prompt, keep what worked",
-     "format": "pattern",
-     "unit": "G3",
-     "note": "q21 (built) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 103,
-     "title": "Adversarial testing: break it before users do",
-     "format": "pattern",
-     "unit": "G4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 104,
-     "title": "Benchmarks: what a leaderboard score does not tell you",
-     "format": "myth-bust",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 105,
-     "title": "Recap: an eval plan for a small AI app",
-     "format": "recap",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S10",
-   "title": "Safety, security and privacy",
-   "days": [
-    {
-     "day": 106,
-     "title": "Prompt injection: when the data gives the orders",
-     "format": "concept",
-     "unit": "D8",
-     "note": "q06 (published) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 107,
-     "title": "Indirect injection: instructions hidden in a page",
-     "format": "demo",
-     "unit": "D8",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 108,
-     "title": "Context security: what never goes into a prompt",
-     "format": "concept",
-     "unit": "D8",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 109,
-     "title": "Bias and fairness: how skewed data becomes skewed answers",
-     "format": "concept",
-     "unit": "G5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 110,
-     "title": "AI safety and ethics for builders",
-     "format": "concept",
-     "unit": "G6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 111,
-     "title": "Content moderation: filtering what goes in and out",
-     "format": "pattern",
-     "unit": "G6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 112,
-     "title": "Privacy: personal data in prompts and logs",
-     "format": "concept",
-     "unit": "G7",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 113,
-     "title": "Data classification: what may go to which model",
-     "format": "pattern",
-     "unit": "G7",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 114,
-     "title": "Jailbreaks: can a model be talked out of its rules?",
-     "format": "myth-bust",
-     "note": "q06 (published) asks whether injection can be stopped completely.",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S11",
-   "title": "Production: running AI for real users",
-   "days": [
-    {
-     "day": 115,
-     "title": "Monitoring: what to watch after launch",
-     "format": "concept",
-     "unit": "H1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 116,
-     "title": "Tracing: follow one request through every step",
-     "format": "structure",
-     "unit": "H2",
-     "note": "q103 and q104 (built) cover it as interview questions.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 117,
-     "title": "Logging for AI apps: what to record and what not",
-     "format": "pattern",
-     "unit": "H2",
-     "note": "q104 (built) covers it.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 118,
-     "title": "Cost: where the money goes in an AI app",
-     "format": "concept",
-     "unit": "H3",
-     "note": "q26 (built) and e104 (built, generic track) touch cost.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 119,
-     "title": "Latency: why the first word takes so long",
-     "format": "demo",
-     "unit": "H3",
-     "note": "q22 (planned) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 120,
-     "title": "Model routing: small model first, big model when needed",
-     "format": "pattern",
-     "unit": "H3",
-     "note": "q26 (built) covers it as an interview question.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 121,
-     "title": "Inference: what happens when you call the API",
-     "format": "structure",
-     "unit": "H4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 122,
-     "title": "OpenAI-compatible APIs: one shape, many providers",
-     "format": "concept",
-     "unit": "H5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 123,
-     "title": "Retries, timeouts, fallbacks: when the model API fails",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 124,
-     "title": "Open weights vs closed models: what 'open' really means",
-     "format": "myth-bust",
-     "unit": "A6",
-     "note": "r06 (published) is this idea.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 125,
-     "title": "Choosing a model: quality, cost and speed",
-     "format": "trade-off",
-     "unit": "A6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 126,
-     "title": "Self-hosting: when running your own model pays off",
-     "format": "trade-off",
-     "unit": "A6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 127,
-     "title": "Quantization: running a model on less hardware",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S12",
-   "title": "Multimodal",
-   "days": [
-    {
-     "day": 128,
-     "title": "Multimodal AI: one model, many kinds of input",
-     "format": "concept",
-     "unit": "I1",
-     "note": "r05 (published) showed one multimodal case.",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 129,
-     "title": "Image understanding: how a model sees a photo",
-     "format": "structure",
-     "unit": "I2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 130,
-     "title": "Reading documents: from scanned page to text",
-     "format": "concept",
-     "unit": "I2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 131,
-     "title": "Image generation: from noise to picture",
-     "format": "demo",
-     "unit": "I3",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 132,
-     "title": "Speech to text: how a voice becomes words",
-     "format": "concept",
-     "unit": "I4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 133,
-     "title": "Text to speech and audio: how words become a voice",
-     "format": "concept",
-     "unit": "I5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 134,
-     "title": "Voice agents: the pipeline from mic to speaker",
-     "format": "structure",
-     "unit": "I5",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 135,
-     "title": "Video understanding: frames, time and cost",
-     "format": "concept",
-     "unit": "I6",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 136,
-     "title": "Multimodal in practice: when it is worth the cost",
-     "format": "trade-off",
-     "unit": "I1",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S13",
-   "title": "Adapting models and applied AI",
-   "days": [
-    {
-     "day": 137,
-     "title": "Fine-tuning: teaching a model your style",
-     "format": "concept",
-     "unit": "E2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 138,
-     "title": "LoRA: fine-tuning without retraining everything",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 139,
-     "title": "Preference tuning: how chat models learn manners",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 140,
-     "title": "Distillation: a small model taught by a big one",
-     "format": "concept",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 141,
-     "title": "Recommendation systems: how a feed picks what you see",
-     "format": "structure",
-     "unit": "J1",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 142,
-     "title": "Anomaly detection: spotting the odd one out",
-     "format": "concept",
-     "unit": "J2",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 143,
-     "title": "Model hubs: where open models and datasets live",
-     "format": "concept",
-     "unit": "J3",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 144,
-     "title": "Three everyday LLM jobs: classify, extract, summarise",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  },
-  {
-   "id": "S14",
-   "title": "Think like an AI engineer",
-   "days": [
-    {
-     "day": 145,
-     "title": "Reading an AI paper in ten minutes",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 146,
-     "title": "How to judge a new model release",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 147,
-     "title": "Hindi and Hinglish in LLMs: tokens, cost and quality",
-     "format": "demo",
-     "unit": "A4",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 148,
-     "title": "Design a RAG chatbot: the interview answer in one picture",
-     "format": "structure",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 149,
-     "title": "Your first AI project: scope, data, metric",
-     "format": "pattern",
-     "status": "todo",
-     "reels": []
-    },
-    {
-     "day": 150,
-     "title": "Recap: the AI engineer ladder, Day 1 to Day 150",
-     "format": "recap",
-     "status": "todo",
-     "reels": []
-    }
-   ]
-  }
- ]
+  ]
 }

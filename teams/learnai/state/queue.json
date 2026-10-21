@@ -1,753 +1,865 @@
 {
-  "items": [
+ "items": [
+  {
+   "id": "e101",
+   "track": "generic",
+   "title": "Prompt caching se AI ka jawab badal jata hai? Aur lambi chat idle chhodo to?",
+   "format": "myth-bust",
+   "one_idea": "Prompt caching only reuses the already-processed prompt prefix and never changes the answer; Claude Code now also compacts a very long idle chat before its one-hour cache expires so your next message does not reprocess everything.",
+   "spoken_hook": "Prompt caching se AI ka jawab badal jata hai?",
+   "hook_type": "misconception_question",
+   "hook_10s": "AI interview mein pucha: caching se AI ka jawab badal jata hai? Nahi, jawab bilkul same rehta hai. Isme teen baatein hain. [frame 0: two identical answer bubbles joined by an equals sign]",
+   "hook_formula": "Misconception / interview-framed belief",
+   "hook_source": "hook_candidates",
+   "visual_idea": "A prompt block is stamped 'processed' and kept in a box with a ticking clock; two answer bubbles with and without the box come out identical; near the end of the clock a long chat shrinks to a short card before the box closes.",
+   "everyday_anchor": "You wait for a lift and the same chai order is remembered by the cafe so it is made faster, but it tastes the same.",
+   "example": "Label example: a 200K token chat idle ~54 minutes gets compacted (release note); cache read 0.1x, 5-min write 1.25x (docs).",
+   "sources": [
+    "https://code.claude.com/docs/en/changelog",
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
+   ],
+   "facts_to_verify": [
+    "v2.1.299 (14 Oct 2026): 200K+ token chat idle ~54 min is compacted before its one-hour cache expires",
+    "Caching has no effect on output generation; response is identical",
+    "cache read 0.1x, 5-minute write 1.25x, default 5-min lifetime",
+    "Idle compaction is stated for the terminal (Claude Code CLI) only"
+   ],
+   "length_target_s": 45,
+   "cover_headline": "Does prompt caching change the answer?",
+   "thumb_text": "Same Answer?",
+   "keywords": [
+    "prompt caching kya hai",
+    "claude code idle compaction",
+    "does caching change llm output"
+   ],
+   "notes": "Caveats: idle compaction is documented for the terminal only, do not generalize; release note says 54 min vs a one-hour cache while docs say default cache is 5 min (the 1-hour option is the one in play), explain or leave out; no savings percentage in sources, never claim one; do not say 'new' for caching itself. hook_type misconception_question is NOT yet allowed by validate_queue.py (see state/proposals/2026-10-17-misconception-question.md); validation fails on e101 until the owner approves.",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "e102",
+   "track": "generic",
+   "title": "Safety check crash hua, phir bhi AI ka kaam ho gaya: ab fail hone par block karo",
+   "format": "finding",
+   "one_idea": "A Claude Code hook is a small check that runs around an agent's action; with onFailure block, a check that crashes, times out or exits oddly now stops the action instead of letting it through (fail closed, not fail open).",
+   "spoken_hook": "Guard crash हुआ, फिर भी agent ने काम कर दिया।",
+   "hook_type": "surprising_fact",
+   "hook_10s": "Guard crash hua, phir bhi agent ne kaam kar diya. Aisa kyun hota hai? Teen halaat mein ab action rukta hai. [frame 0: a red cross on the guard while the door stays open]",
+   "hook_formula": "Surprising fact",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "Before/after of a door: guard check crashes and the door swings open; with onFailure block the same crash keeps the door locked.",
+   "everyday_anchor": "A UPI app's fraud check is down: should payments go through anyway or wait?",
+   "example": "Label example: a check that times out. No real numbers needed.",
+   "sources": [
+    "https://code.claude.com/docs/en/hooks",
+    "https://code.claude.com/docs/en/changelog"
+   ],
+   "facts_to_verify": [
+    "v2.1.295 (8 Oct 2026) added onFailure: block for command and HTTP hooks",
+    "a hook that cannot start, times out or exits with an unexpected code blocks the action instead of letting it through"
+   ],
+   "length_target_s": 35,
+   "cover_headline": "When the safety check crashes, block",
+   "thumb_text": "Fail Closed",
+   "keywords": [
+    "claude code hooks",
+    "onFailure block",
+    "agent safety check fail closed"
+   ],
+   "notes": "Caveats: vendor release note and docs only; advanced for beginners, so define 'hook' in one plain sentence; read the single-release page https://github.com/anthropics/claude-code/releases/tag/v2.1.295 again before scripting.",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "e103",
+   "track": "generic",
+   "title": "Ek line likho, agent poori machine ka exploded drawing bana de: anatomy skill",
+   "format": "demo",
+   "one_idea": "The anatomy agent skill turns one sentence into an interactive exploded-view drawing of a system, showing how a skill extends what a coding agent can do.",
+   "spoken_hook": "Ek line likhi, agent ne poori machine kholkar dikha di.",
+   "hook_type": "surprising_fact",
+   "hook_10s": "Ek line likhi, agent ne poori machine kholkar dikha di. Ye ek agent skill hai. Isse system samajhna aasan hota hai. Teen steps. [frame 0: one line of text beside a rate limiter drawn in exploded parts]",
+   "hook_formula": "Surprising fact",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "A one-line prompt on the left; on the right a rate limiter pulls apart into labelled parts that float apart in an exploded view.",
+   "everyday_anchor": "A mechanic's exploded parts diagram that finally shows how a gearbox fits together.",
+   "example": "Label example: 'explain how a token bucket rate limiter works' (the repo's own example prompt).",
+   "sources": [
+    "https://github.com/wheresryan22/anatomy",
+    "https://api.github.com/repos/wheresryan22/anatomy"
+   ],
+   "facts_to_verify": [
+    "repo created 2026-10-08, MIT, last push 2026-10-15",
+    "install command npx skills add wheresryan22/anatomy -g",
+    "README claims are the author's own; 3D mode is beta"
+   ],
+   "length_target_s": 35,
+   "cover_headline": "One sentence makes an exploded diagram",
+   "thumb_text": "Agent Skill",
+   "keywords": [
+    "claude skills kya hain",
+    "agent skill github",
+    "ai diagram generator"
+   ],
+   "notes": "Caveats: HELD pick, owner approved but ~14.9k stars in 9 days cannot be checked: never show a star count, say 'the author says'; all claims are the author's own; slow by design, needs Node 20.10+ and Chrome for checks, Codex sandbox may block its browser checks; not a chart library. Backup if it falls: Anthropic RCT https://www.anthropic.com/research/AI-assistance-coding-skills (29 Jan 2026, not a 14-day item).",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "r101",
+   "track": "course",
+   "title": "Context mein kya-kya jata hai? Context ke 5 sources",
+   "format": "concept",
+   "one_idea": "The context is everything the model sees when it answers: system prompt, tools, examples, message history and external data, and each source should stay lean.",
+   "spoken_hook": "Model ko jawab dene se pehle kya-kya dikhta hai?",
+   "hook_type": "direct_question",
+   "hook_10s": "Model ko jawab dene se pehle kya-kya dikhta hai? Ek window mein paanch cheezein. Aaj paanchon samajhte hain. [frame 0: an empty window frame with five labelled boxes outside]",
+   "hook_formula": "Direct question",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "Five boxes (system prompt, tools, examples, history, outside data) slide into one window frame and fill it up.",
+   "everyday_anchor": "Packing a school bag: only five things go in and the bag has limited space.",
+   "example": "Label example: a support chatbot with a system prompt, a tool and a chat history.",
+   "sources": [
+    "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+   ],
+   "facts_to_verify": [
+    "context sources: system prompts, tools, examples, message history, external data",
+    "bloated tool sets and long histories are common failures; context is a finite resource"
+   ],
+   "length_target_s": 40,
+   "cover_headline": "What goes into an AI's context?",
+   "thumb_text": "Five Sources",
+   "keywords": [
+    "context engineering kya hai",
+    "llm context sources",
+    "context window kya hota hai"
+   ],
+   "notes": "Caveat: Anthropic engineering post is guidance, not a measurement; q03 and q15 already cover the context window idea, keep this reel about the five sources.",
+   "status": "planned",
+   "qa_passed": false,
+   "unit": "D3"
+  },
+  {
+   "id": "r102",
+   "track": "course",
+   "title": "Context compaction kya hai? Lambi chat ko chhota kaise karte hain",
+   "format": "concept",
+   "one_idea": "Compaction summarises a conversation that is nearing the window limit and restarts a new window with the summary, while low-risk pruning drops redundant tool outputs.",
+   "spoken_hook": "Context compaction kya hota hai?",
+   "hook_type": "direct_question",
+   "hook_10s": "Context compaction kya hota hai? Lambi chat ko summary banakar chhota karna. Teen steps. [frame 0: a full window bar shrinking to a small summary card]",
+   "hook_formula": "Direct question",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "A filling window bar hits the limit, folds into a short summary card, and a fresh window opens holding only that card.",
+   "everyday_anchor": "Packing a long WhatsApp group chat into a three-line summary for someone who just joined.",
+   "example": "Label example: a 30-message chat compressed to a short summary.",
+   "sources": [
+    "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+   ],
+   "facts_to_verify": [
+    "compaction: summarising contents and reinitiating a new context window with the summary",
+    "low-risk pruning: discarding redundant tool outputs or messages",
+    "as context grows recall decreases (context rot)"
+   ],
+   "length_target_s": 40,
+   "cover_headline": "How does an AI shrink a long chat?",
+   "thumb_text": "Compaction",
+   "keywords": [
+    "context compaction kya hai",
+    "llm summarization memory",
+    "long chat context kaise manage kare"
+   ],
+   "notes": "Caveat: angle differs from q16 (sliding window, vector DB); summary can lose details, say so.",
+   "status": "planned",
+   "qa_passed": false,
+   "unit": "D4"
+  },
+  {
+   "id": "r103",
+   "track": "course",
+   "title": "RAG kya hai? AI ko apni notebook dekhne do",
+   "format": "concept",
+   "one_idea": "RAG retrieves relevant information from a knowledge base and adds it to the user's prompt, so the model answers from your documents.",
+   "spoken_hook": "RAG kya hai?",
+   "hook_type": "direct_question",
+   "hook_10s": "RAG kya hai? AI jawab dene se pehle apni notebook se sahi pages nikalta hai. Teen steps. [frame 0: a question beside a shelf of notebook pages]",
+   "hook_formula": "Direct question",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "A question goes to a shelf of pages, the three closest pages light up, slide into the prompt box and then the answer appears.",
+   "everyday_anchor": "Looking up the right page in your notes before answering an exam question.",
+   "example": "Label example: a company handbook split into pages.",
+   "sources": [
+    "https://arxiv.org/abs/2005.11401",
+    "https://www.anthropic.com/news/contextual-retrieval"
+   ],
+   "facts_to_verify": [
+    "RAG pairs a pretrained language model with an external retrieval component (Lewis et al.)",
+    "RAG retrieves relevant information from a knowledge base and appends it to the user's prompt",
+    "chunks turned into embeddings; most similar retrieved at runtime"
+   ],
+   "length_target_s": 40,
+   "cover_headline": "What is RAG? Explained simply",
+   "thumb_text": "RAG Explained",
+   "keywords": [
+    "rag kya hai",
+    "retrieval augmented generation hindi",
+    "rag kaise kaam karta hai"
+   ],
+   "notes": "Caveat: q05/q17/q20 already cover RAG trade-offs and failures; this reel is the plain definition. The paper abstract does not measure provenance or knowledge updates, do not claim it did.",
+   "status": "planned",
+   "qa_passed": false,
+   "unit": "E1"
+  },
+  {
+   "id": "q101",
+   "track": "interview",
+   "title": "Interview: Poora PDF context mein daal doon ya RAG banaun?",
+   "format": "question",
+   "one_idea": "If a knowledge base is under about 200,000 tokens you can put all of it in the prompt (with prompt caching); above that you retrieve chunks with RAG.",
+   "spoken_hook": "40 page का handbook, और उसने RAG बना दिया।",
+   "hook_type": "relatable_stake",
+   "hook_10s": "40 page ka handbook, aur usne RAG bana diya. Use RAG ki zaroorat hi nahi thi. Interview mein yahi poocha jata hai. Teen rules. [frame 0: a small handbook beside a huge machine]",
+   "hook_formula": "Relatable stake",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "A small stack of pages drops straight into the prompt box; a huge library will not fit and goes through a retrieval funnel instead.",
+   "everyday_anchor": "Carrying a thin notebook in your bag versus renting a whole library to read one chapter.",
+   "example": "Label example: a 40-page handbook (illustrative, not a measured number).",
+   "sources": [
+    "https://www.anthropic.com/news/contextual-retrieval"
+   ],
+   "facts_to_verify": [
+    "under 200,000 tokens you can include the whole knowledge base in the prompt, RAG not needed",
+    "prompt caching cuts latency by more than 2x and costs by up to 90% (Anthropic's own figures)"
+   ],
+   "length_target_s": 55,
+   "cover_headline": "Whole PDF in prompt or RAG?",
+   "thumb_text": "RAG or Prompt?",
+   "keywords": [
+    "rag vs long context",
+    "rag interview question",
+    "pdf prompt mein daalna ya rag"
+   ],
+   "notes": "Caveat: 200,000-token figure and caching savings are Anthropic's own; the 40-page handbook is an illustration, say 'maan lo'. Not a repeat of q03 (context rot) or q05 (RAG vs fine-tuning).",
+   "status": "planned",
+   "qa_passed": false,
+   "unit": "D1"
+  },
+  {
+   "id": "q102",
+   "track": "interview",
+   "title": "Interview: Agent loop mein fas gaya, ye kaise rokoge? (Onit job post)",
+   "format": "question",
+   "one_idea": "An agent needs stopping conditions such as a maximum number of iterations, ground truth from the environment at each step and human checkpoints.",
+   "spoken_hook": "Onit के AI Engineer job post में agent loops हैं। Loop में फँस जाए, तो कैसे रोकोगे?",
+   "hook_type": "company_specific",
+   "hook_10s": "Onit ke AI Engineer job post mein agent loops hain. Loop mein phans jaye, to kaise rokoge? Jawab teen rules mein hai. [frame 0: a looping arrow with a counter and a stop sign]",
+   "hook_formula": "Company specific",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "An agent circle repeats with a step counter; at the max count a stop sign cuts the loop and a human-check gate opens.",
+   "everyday_anchor": "A phone app stuck on a spinner that never ends until you force-close it.",
+   "example": "Label example: max 10 steps.",
+   "sources": [
+    "https://jobs.lever.co/onit/983d3c5d-55d7-4802-9865-80bf58c68bd4",
+    "https://www.anthropic.com/engineering/building-effective-agents"
+   ],
+   "facts_to_verify": [
+    "Onit AI Engineer job post (Pune) asks for experience with agent loops, tool interfaces, planning/replanning, memory/state and failure handling",
+    "stopping conditions such as a maximum number of iterations; ground truth from the environment at each step; pause for human feedback at checkpoints"
+   ],
+   "length_target_s": 55,
+   "cover_headline": "How do you stop a looping AI agent?",
+   "thumb_text": "Stop the Loop",
+   "keywords": [
+    "ai agent infinite loop",
+    "agent stopping conditions",
+    "ai engineer interview question"
+   ],
+   "notes": "Caveats: Onit page is a JOB POST, not an interview question and has no posting date and no About section: say 'job post', never 'interview mein pucha'; confirm company name on the Lever page before showing it; page never mentions stop conditions, those come from Anthropic's building-effective-agents post (guidance, gives no specific limit).",
+   "status": "planned",
+   "qa_passed": false,
+   "unit": "F5",
+   "company": "Onit",
+   "company_source": "https://jobs.lever.co/onit/983d3c5d-55d7-4802-9865-80bf58c68bd4"
+  },
+  {
+   "id": "q103",
+   "track": "interview",
+   "title": "Interview: Chatbot ne galat jawab diya, pata kaise chalega kyun?",
+   "format": "question",
+   "one_idea": "A trace records one request as nested spans, each with a name, start and end time, so you can see which step (retrieval, prompt, tool) went wrong or slow.",
+   "spoken_hook": "Interviewer ने पूछा: Production chatbot ne galat jawab diya, tumhe kaise pata chalega kyun?",
+   "hook_type": "interviewer_asked",
+   "hook_10s": "Interviewer ne poocha: production chatbot ne galat jawab diya, tumhe kaise pata chalega kyun? Sirf final jawab dekhna kaafi nahi. Trace chahiye. Teen cheezein. [frame 0: a wrong answer bubble with a question mark]",
+   "hook_formula": "Interviewer asked",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "One request drawn as a row of nested bars (retrieve, prompt, tool, answer); the bad step lights red so you see exactly where it broke.",
+   "everyday_anchor": "A courier tracking page that shows every stop, so you know where the parcel got stuck.",
+   "example": "Label example: retrieve, prompt, tool, answer as four spans.",
+   "sources": [
+    "https://opentelemetry.io/docs/concepts/signals/traces/"
+   ],
+   "facts_to_verify": [
+    "a trace shows the full path of a request",
+    "a span is one unit of work with name, start and end times and attributes",
+    "parent span IDs form a hierarchy"
+   ],
+   "length_target_s": 55,
+   "cover_headline": "How do you debug a wrong AI answer?",
+   "thumb_text": "Trace It",
+   "keywords": [
+    "llm observability",
+    "llm tracing kya hai",
+    "chatbot wrong answer debug interview"
+   ],
+   "notes": "Caveat: OpenTelemetry page defines tracing in general; the LLM-specific mapping (retrieval, prompt, tool as spans) is our illustration, label it as an example. Onit job post (https://jobs.lever.co/onit/5110cadf-965f-4597-ae95-7d4c000675d7) lists tracing but is not used as company hook here.",
+   "status": "planned",
+   "qa_passed": false,
+   "unit": "H2"
+  },
+  {
+   "id": "q104",
+   "track": "interview",
+   "unit": "H2",
+   "title": "Interview: Chatbot ne galat jawab diya, par kal ka kuch record nahi. Debug kaise karoge?",
+   "one_idea": "When an LLM app gives a wrong answer, the final answer alone cannot tell you why; a trace, one record of the whole request with each step's input, output, time and tokens, shows which step went wrong.",
+   "spoken_hook": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई?",
+   "hook_type": "interviewer_asked",
+   "hook_10s": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई? ज़्यादातर लोग सिर्फ़ आख़िरी जवाब देखते हैं। Interview में यही पकड़ा जाता है। इसकी तीन बातें हैं. [chat bubble with a wrong answer and a red cross]",
+   "hook_candidates": [
     {
-      "id": "e101",
-      "track": "generic",
-      "title": "Prompt caching se AI ka jawab badal jata hai? Aur lambi chat idle chhodo to?",
-      "format": "myth-bust",
-      "one_idea": "Prompt caching only reuses the already-processed prompt prefix and never changes the answer; Claude Code now also compacts a very long idle chat before its one-hour cache expires so your next message does not reprocess everything.",
-      "spoken_hook": "Prompt caching se AI ka jawab badal jata hai?",
-      "hook_type": "misconception_question",
-      "hook_10s": "AI interview mein pucha: caching se AI ka jawab badal jata hai? Nahi, jawab bilkul same rehta hai. Isme teen baatein hain. [frame 0: two identical answer bubbles joined by an equals sign]",
-      "hook_formula": "Misconception / interview-framed belief",
-      "hook_source": "hook_candidates",
-      "visual_idea": "A prompt block is stamped 'processed' and kept in a box with a ticking clock; two answer bubbles with and without the box come out identical; near the end of the clock a long chat shrinks to a short card before the box closes.",
-      "everyday_anchor": "You wait for a lift and the same chai order is remembered by the cafe so it is made faster, but it tastes the same.",
-      "example": "Label example: a 200K token chat idle ~54 minutes gets compacted (release note); cache read 0.1x, 5-min write 1.25x (docs).",
-      "sources": [
-        "https://code.claude.com/docs/en/changelog",
-        "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
-      ],
-      "facts_to_verify": [
-        "v2.1.299 (14 Oct 2026): 200K+ token chat idle ~54 min is compacted before its one-hour cache expires",
-        "Caching has no effect on output generation; response is identical",
-        "cache read 0.1x, 5-minute write 1.25x, default 5-min lifetime",
-        "Idle compaction is stated for the terminal (Claude Code CLI) only"
-      ],
-      "length_target_s": 45,
-      "cover_headline": "Does prompt caching change the answer?",
-      "thumb_text": "Same Answer?",
-      "keywords": [
-        "prompt caching kya hai",
-        "claude code idle compaction",
-        "does caching change llm output"
-      ],
-      "notes": "Caveats: idle compaction is documented for the terminal only, do not generalize; release note says 54 min vs a one-hour cache while docs say default cache is 5 min (the 1-hour option is the one in play), explain or leave out; no savings percentage in sources, never claim one; do not say 'new' for caching itself. hook_type misconception_question is NOT yet allowed by validate_queue.py (see state/proposals/2026-10-17-misconception-question.md); validation fails on e101 until the owner approves.",
-      "status": "planned",
-      "qa_passed": false
+     "text": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई?",
+     "hook_type": "interviewer_asked",
+     "formula": "The Verbatim Question"
     },
     {
-      "id": "e102",
-      "track": "generic",
-      "title": "Safety check crash hua, phir bhi AI ka kaam ho gaya: ab fail hone par block karo",
-      "format": "finding",
-      "one_idea": "A Claude Code hook is a small check that runs around an agent's action; with onFailure block, a check that crashes, times out or exits oddly now stops the action instead of letting it through (fail closed, not fail open).",
-      "spoken_hook": "Guard crash हुआ, फिर भी agent ने काम कर दिया।",
-      "hook_type": "surprising_fact",
-      "hook_10s": "Guard crash hua, phir bhi agent ne kaam kar diya. Aisa kyun hota hai? Teen halaat mein ab action rukta hai. [frame 0: a red cross on the guard while the door stays open]",
-      "hook_formula": "Surprising fact",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "Before/after of a door: guard check crashes and the door swings open; with onFailure block the same crash keeps the door locked.",
-      "everyday_anchor": "A UPI app's fraud check is down: should payments go through anyway or wait?",
-      "example": "Label example: a check that times out. No real numbers needed.",
-      "sources": [
-        "https://code.claude.com/docs/en/hooks",
-        "https://code.claude.com/docs/en/changelog"
-      ],
-      "facts_to_verify": [
-        "v2.1.295 (8 Oct 2026) added onFailure: block for command and HTTP hooks",
-        "a hook that cannot start, times out or exits with an unexpected code blocks the action instead of letting it through"
-      ],
-      "length_target_s": 35,
-      "cover_headline": "When the safety check crashes, block",
-      "thumb_text": "Fail Closed",
-      "keywords": [
-        "claude code hooks",
-        "onFailure block",
-        "agent safety check fail closed"
-      ],
-      "notes": "Caveats: vendor release note and docs only; advanced for beginners, so define 'hook' in one plain sentence; read the single-release page https://github.com/anthropics/claude-code/releases/tag/v2.1.295 again before scripting.",
-      "status": "planned",
-      "qa_passed": false
+     "text": "Chatbot ने गलत जवाब दिया, और log में सिर्फ़ वही जवाब है। अब गलती कहाँ ढूँढोगे?",
+     "hook_type": "relatable_stake",
+     "formula": "Stake"
     },
     {
-      "id": "e103",
-      "track": "generic",
-      "title": "Ek line likho, agent poori machine ka exploded drawing bana de: anatomy skill",
-      "format": "demo",
-      "one_idea": "The anatomy agent skill turns one sentence into an interactive exploded-view drawing of a system, showing how a skill extends what a coding agent can do.",
-      "spoken_hook": "Ek line likhi, agent ne poori machine kholkar dikha di.",
-      "hook_type": "surprising_fact",
-      "hook_10s": "Ek line likhi, agent ne poori machine kholkar dikha di. Ye ek agent skill hai. Isse system samajhna aasan hota hai. Teen steps. [frame 0: one line of text beside a rate limiter drawn in exploded parts]",
-      "hook_formula": "Surprising fact",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "A one-line prompt on the left; on the right a rate limiter pulls apart into labelled parts that float apart in an exploded view.",
-      "everyday_anchor": "A mechanic's exploded parts diagram that finally shows how a gearbox fits together.",
-      "example": "Label example: 'explain how a token bucket rate limiter works' (the repo's own example prompt).",
-      "sources": [
-        "https://github.com/wheresryan22/anatomy",
-        "https://api.github.com/repos/wheresryan22/anatomy"
-      ],
-      "facts_to_verify": [
-        "repo created 2026-10-08, MIT, last push 2026-10-15",
-        "install command npx skills add wheresryan22/anatomy -g",
-        "README claims are the author's own; 3D mode is beta"
-      ],
-      "length_target_s": 35,
-      "cover_headline": "One sentence makes an exploded diagram",
-      "thumb_text": "Agent Skill",
-      "keywords": [
-        "claude skills kya hain",
-        "agent skill github",
-        "ai diagram generator"
-      ],
-      "notes": "Caveats: HELD pick, owner approved but ~14.9k stars in 9 days cannot be checked: never show a star count, say 'the author says'; all claims are the author's own; slow by design, needs Node 20.10+ and Chrome for checks, Codex sandbox may block its browser checks; not a chart library. Backup if it falls: Anthropic RCT https://www.anthropic.com/research/AI-assistance-coding-skills (29 Jan 2026, not a 14-day item).",
-      "status": "planned",
-      "qa_passed": false
-    },
-    {
-      "id": "r101",
-      "track": "course",
-      "title": "Context mein kya-kya jata hai? Context ke 5 sources",
-      "format": "concept",
-      "one_idea": "The context is everything the model sees when it answers: system prompt, tools, examples, message history and external data, and each source should stay lean.",
-      "spoken_hook": "Model ko jawab dene se pehle kya-kya dikhta hai?",
-      "hook_type": "direct_question",
-      "hook_10s": "Model ko jawab dene se pehle kya-kya dikhta hai? Ek window mein paanch cheezein. Aaj paanchon samajhte hain. [frame 0: an empty window frame with five labelled boxes outside]",
-      "hook_formula": "Direct question",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "Five boxes (system prompt, tools, examples, history, outside data) slide into one window frame and fill it up.",
-      "everyday_anchor": "Packing a school bag: only five things go in and the bag has limited space.",
-      "example": "Label example: a support chatbot with a system prompt, a tool and a chat history.",
-      "sources": [
-        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
-      ],
-      "facts_to_verify": [
-        "context sources: system prompts, tools, examples, message history, external data",
-        "bloated tool sets and long histories are common failures; context is a finite resource"
-      ],
-      "length_target_s": 40,
-      "cover_headline": "What goes into an AI's context?",
-      "thumb_text": "Five Sources",
-      "keywords": [
-        "context engineering kya hai",
-        "llm context sources",
-        "context window kya hota hai"
-      ],
-      "notes": "Caveat: Anthropic engineering post is guidance, not a measurement; q03 and q15 already cover the context window idea, keep this reel about the five sources.",
-      "status": "planned",
-      "qa_passed": false,
-      "unit": "D3"
-    },
-    {
-      "id": "r102",
-      "track": "course",
-      "title": "Context compaction kya hai? Lambi chat ko chhota kaise karte hain",
-      "format": "concept",
-      "one_idea": "Compaction summarises a conversation that is nearing the window limit and restarts a new window with the summary, while low-risk pruning drops redundant tool outputs.",
-      "spoken_hook": "Context compaction kya hota hai?",
-      "hook_type": "direct_question",
-      "hook_10s": "Context compaction kya hota hai? Lambi chat ko summary banakar chhota karna. Teen steps. [frame 0: a full window bar shrinking to a small summary card]",
-      "hook_formula": "Direct question",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "A filling window bar hits the limit, folds into a short summary card, and a fresh window opens holding only that card.",
-      "everyday_anchor": "Packing a long WhatsApp group chat into a three-line summary for someone who just joined.",
-      "example": "Label example: a 30-message chat compressed to a short summary.",
-      "sources": [
-        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
-      ],
-      "facts_to_verify": [
-        "compaction: summarising contents and reinitiating a new context window with the summary",
-        "low-risk pruning: discarding redundant tool outputs or messages",
-        "as context grows recall decreases (context rot)"
-      ],
-      "length_target_s": 40,
-      "cover_headline": "How does an AI shrink a long chat?",
-      "thumb_text": "Compaction",
-      "keywords": [
-        "context compaction kya hai",
-        "llm summarization memory",
-        "long chat context kaise manage kare"
-      ],
-      "notes": "Caveat: angle differs from q16 (sliding window, vector DB); summary can lose details, say so.",
-      "status": "planned",
-      "qa_passed": false,
-      "unit": "D4"
-    },
-    {
-      "id": "r103",
-      "track": "course",
-      "title": "RAG kya hai? AI ko apni notebook dekhne do",
-      "format": "concept",
-      "one_idea": "RAG retrieves relevant information from a knowledge base and adds it to the user's prompt, so the model answers from your documents.",
-      "spoken_hook": "RAG kya hai?",
-      "hook_type": "direct_question",
-      "hook_10s": "RAG kya hai? AI jawab dene se pehle apni notebook se sahi pages nikalta hai. Teen steps. [frame 0: a question beside a shelf of notebook pages]",
-      "hook_formula": "Direct question",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "A question goes to a shelf of pages, the three closest pages light up, slide into the prompt box and then the answer appears.",
-      "everyday_anchor": "Looking up the right page in your notes before answering an exam question.",
-      "example": "Label example: a company handbook split into pages.",
-      "sources": [
-        "https://arxiv.org/abs/2005.11401",
-        "https://www.anthropic.com/news/contextual-retrieval"
-      ],
-      "facts_to_verify": [
-        "RAG pairs a pretrained language model with an external retrieval component (Lewis et al.)",
-        "RAG retrieves relevant information from a knowledge base and appends it to the user's prompt",
-        "chunks turned into embeddings; most similar retrieved at runtime"
-      ],
-      "length_target_s": 40,
-      "cover_headline": "What is RAG? Explained simply",
-      "thumb_text": "RAG Explained",
-      "keywords": [
-        "rag kya hai",
-        "retrieval augmented generation hindi",
-        "rag kaise kaam karta hai"
-      ],
-      "notes": "Caveat: q05/q17/q20 already cover RAG trade-offs and failures; this reel is the plain definition. The paper abstract does not measure provenance or knowledge updates, do not claim it did.",
-      "status": "planned",
-      "qa_passed": false,
-      "unit": "E1"
-    },
-    {
-      "id": "q101",
-      "track": "interview",
-      "title": "Interview: Poora PDF context mein daal doon ya RAG banaun?",
-      "format": "question",
-      "one_idea": "If a knowledge base is under about 200,000 tokens you can put all of it in the prompt (with prompt caching); above that you retrieve chunks with RAG.",
-      "spoken_hook": "40 page का handbook, और उसने RAG बना दिया।",
-      "hook_type": "relatable_stake",
-      "hook_10s": "40 page ka handbook, aur usne RAG bana diya. Use RAG ki zaroorat hi nahi thi. Interview mein yahi poocha jata hai. Teen rules. [frame 0: a small handbook beside a huge machine]",
-      "hook_formula": "Relatable stake",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "A small stack of pages drops straight into the prompt box; a huge library will not fit and goes through a retrieval funnel instead.",
-      "everyday_anchor": "Carrying a thin notebook in your bag versus renting a whole library to read one chapter.",
-      "example": "Label example: a 40-page handbook (illustrative, not a measured number).",
-      "sources": [
-        "https://www.anthropic.com/news/contextual-retrieval"
-      ],
-      "facts_to_verify": [
-        "under 200,000 tokens you can include the whole knowledge base in the prompt, RAG not needed",
-        "prompt caching cuts latency by more than 2x and costs by up to 90% (Anthropic's own figures)"
-      ],
-      "length_target_s": 55,
-      "cover_headline": "Whole PDF in prompt or RAG?",
-      "thumb_text": "RAG or Prompt?",
-      "keywords": [
-        "rag vs long context",
-        "rag interview question",
-        "pdf prompt mein daalna ya rag"
-      ],
-      "notes": "Caveat: 200,000-token figure and caching savings are Anthropic's own; the 40-page handbook is an illustration, say 'maan lo'. Not a repeat of q03 (context rot) or q05 (RAG vs fine-tuning).",
-      "status": "planned",
-      "qa_passed": false,
-      "unit": "D1"
-    },
-    {
-      "id": "q102",
-      "track": "interview",
-      "title": "Interview: Agent loop mein fas gaya, ye kaise rokoge? (Onit job post)",
-      "format": "question",
-      "one_idea": "An agent needs stopping conditions such as a maximum number of iterations, ground truth from the environment at each step and human checkpoints.",
-      "spoken_hook": "Onit के AI Engineer job post में agent loops हैं। Loop में फँस जाए, तो कैसे रोकोगे?",
-      "hook_type": "company_specific",
-      "hook_10s": "Onit ke AI Engineer job post mein agent loops hain. Loop mein phans jaye, to kaise rokoge? Jawab teen rules mein hai. [frame 0: a looping arrow with a counter and a stop sign]",
-      "hook_formula": "Company specific",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "An agent circle repeats with a step counter; at the max count a stop sign cuts the loop and a human-check gate opens.",
-      "everyday_anchor": "A phone app stuck on a spinner that never ends until you force-close it.",
-      "example": "Label example: max 10 steps.",
-      "sources": [
-        "https://jobs.lever.co/onit/983d3c5d-55d7-4802-9865-80bf58c68bd4",
-        "https://www.anthropic.com/engineering/building-effective-agents"
-      ],
-      "facts_to_verify": [
-        "Onit AI Engineer job post (Pune) asks for experience with agent loops, tool interfaces, planning/replanning, memory/state and failure handling",
-        "stopping conditions such as a maximum number of iterations; ground truth from the environment at each step; pause for human feedback at checkpoints"
-      ],
-      "length_target_s": 55,
-      "cover_headline": "How do you stop a looping AI agent?",
-      "thumb_text": "Stop the Loop",
-      "keywords": [
-        "ai agent infinite loop",
-        "agent stopping conditions",
-        "ai engineer interview question"
-      ],
-      "notes": "Caveats: Onit page is a JOB POST, not an interview question and has no posting date and no About section: say 'job post', never 'interview mein pucha'; confirm company name on the Lever page before showing it; page never mentions stop conditions, those come from Anthropic's building-effective-agents post (guidance, gives no specific limit).",
-      "status": "planned",
-      "qa_passed": false,
-      "unit": "F5",
-      "company": "Onit",
-      "company_source": "https://jobs.lever.co/onit/983d3c5d-55d7-4802-9865-80bf58c68bd4"
-    },
-    {
-      "id": "q103",
-      "track": "interview",
-      "title": "Interview: Chatbot ne galat jawab diya, pata kaise chalega kyun?",
-      "format": "question",
-      "one_idea": "A trace records one request as nested spans, each with a name, start and end time, so you can see which step (retrieval, prompt, tool) went wrong or slow.",
-      "spoken_hook": "Interviewer ने पूछा: Production chatbot ne galat jawab diya, tumhe kaise pata chalega kyun?",
-      "hook_type": "interviewer_asked",
-      "hook_10s": "Interviewer ne poocha: production chatbot ne galat jawab diya, tumhe kaise pata chalega kyun? Sirf final jawab dekhna kaafi nahi. Trace chahiye. Teen cheezein. [frame 0: a wrong answer bubble with a question mark]",
-      "hook_formula": "Interviewer asked",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "One request drawn as a row of nested bars (retrieve, prompt, tool, answer); the bad step lights red so you see exactly where it broke.",
-      "everyday_anchor": "A courier tracking page that shows every stop, so you know where the parcel got stuck.",
-      "example": "Label example: retrieve, prompt, tool, answer as four spans.",
-      "sources": [
-        "https://opentelemetry.io/docs/concepts/signals/traces/"
-      ],
-      "facts_to_verify": [
-        "a trace shows the full path of a request",
-        "a span is one unit of work with name, start and end times and attributes",
-        "parent span IDs form a hierarchy"
-      ],
-      "length_target_s": 55,
-      "cover_headline": "How do you debug a wrong AI answer?",
-      "thumb_text": "Trace It",
-      "keywords": [
-        "llm observability",
-        "llm tracing kya hai",
-        "chatbot wrong answer debug interview"
-      ],
-      "notes": "Caveat: OpenTelemetry page defines tracing in general; the LLM-specific mapping (retrieval, prompt, tool as spans) is our illustration, label it as an example. Onit job post (https://jobs.lever.co/onit/5110cadf-965f-4597-ae95-7d4c000675d7) lists tracing but is not used as company hook here.",
-      "status": "planned",
-      "qa_passed": false,
-      "unit": "H2"
-    },
-    {
-      "id": "q104",
-      "track": "interview",
-      "unit": "H2",
-      "title": "Interview: Chatbot ne galat jawab diya, par kal ka kuch record nahi. Debug kaise karoge?",
-      "one_idea": "When an LLM app gives a wrong answer, the final answer alone cannot tell you why; a trace, one record of the whole request with each step's input, output, time and tokens, shows which step went wrong.",
-      "spoken_hook": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई?",
-      "hook_type": "interviewer_asked",
-      "hook_10s": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई? ज़्यादातर लोग सिर्फ़ आख़िरी जवाब देखते हैं। Interview में यही पकड़ा जाता है। इसकी तीन बातें हैं. [chat bubble with a wrong answer and a red cross]",
-      "hook_candidates": [
-        {
-          "text": "Interviewer ने पूछा: AI app ने गलत जवाब दिया, तो आप कैसे पता लगाओगे कि गलती कहाँ हुई?",
-          "hook_type": "interviewer_asked",
-          "formula": "The Verbatim Question"
-        },
-        {
-          "text": "Chatbot ने गलत जवाब दिया, और log में सिर्फ़ वही जवाब है। अब गलती कहाँ ढूँढोगे?",
-          "hook_type": "relatable_stake",
-          "formula": "Stake"
-        },
-        {
-          "text": "Parcel टूटकर आया, तो tracking से पता चलता है कि कहाँ टूटा। AI app में ये कैसे करोगे?",
-          "hook_type": "relatable_stake",
-          "formula": "Everyday anchor"
-        }
-      ],
-      "hook_formula": "The Verbatim Question",
-      "hook_source": ".claude/skills/hook-writer",
-      "visual_idea": "A request travels as a line of boxes: question, search, tool call, model, answer. Each box shows a small timer and token count. The wrong answer is traced back, one box (the search) turns red while the others stay green.",
-      "everyday_anchor": "A courier parcel arrives damaged and the tracking page shows which hub dropped it, so you do not guess.",
-      "format": "question",
-      "example": "Labelled example: a refund chatbot answers 30 days, the trace shows the search step returned an old policy page.",
-      "sources": [
-        "https://langfuse.com/docs/observability/overview"
-      ],
-      "facts_to_verify": [
-        "A trace is a structured record of one request's lifecycle (LLM calls, retrieval steps, tool executions) with timing, inputs, outputs and metadata (Langfuse docs, a vendor definition; say 'tracing' as common practice, no numbers)."
-      ],
-      "length_target_s": 45,
-      "cover_headline": "Wrong AI answer? Trace every step",
-      "thumb_text": "TRACE IT",
-      "keywords": [
-        "llm observability interview",
-        "ai tracing kya hai",
-        "debug llm app",
-        "ai engineer interview questions",
-        "langfuse tracing"
-      ],
-      "status": "planned",
-      "qa_passed": false,
-      "office_note": "approved by the owner as q27 on 2026-10-17; renamed to q104 because office ids start at 101"
-    },
-    {
-      "id": "e104",
-      "track": "generic",
-      "title": "Chhota jawab padhne se bill kam hota hai? cc-stretch: click karo, jawab khulta hai",
-      "format": "myth-bust",
-      "one_idea": "cc-stretch is a Claude Code plugin that shows short replies where each linked phrase expands in place when clicked; you read less, but by the author's own statement you do not pay less, because each reply costs about the same tokens.",
-      "spoken_hook": "Jawab chhota padho, to kya bill bhi kam hoga?",
-      "hook_type": "misconception_question",
-      "hook_10s": "Jawab chhota padho, to kya bill bhi kam hoga? Nahi, bill wahi rehta hai. Par padhna bahut kam. Ek plugin, teen baatein. [frame 0: a long reply collapsing into a short card, a price tag staying the same]",
-      "hook_formula": "Misconception question",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "A long wall of reply text folds into one short card with a few underlined phrases; a click on a phrase opens a small box in place and a click on the arrow closes it, while a price tag beside it stays the same.",
-      "everyday_anchor": "A newspaper front page shows headlines and you open only the story you care about, though the whole paper was still printed.",
-      "example": "Label example: a long answer about a bug shown as three short lines with two clickable phrases. The author's own measure: default view was 17% of the words over 69 replies from four projects.",
-      "sources": [
-        "https://github.com/pro-vi/cc-stretch",
-        "https://api.github.com/repos/pro-vi/cc-stretch"
-      ],
-      "facts_to_verify": [
-        "repo created 2026-10-14, MIT license, not affiliated with Anthropic",
-        "install: /plugin install cc-stretch --marketplace pro-vi/cc-stretch, then /tui fullscreen (clicks need fullscreen terminal)",
-        "author claim: default view was 17% of the words over 69 replies from 4 projects; about two of three key points visible (author's own numbers)",
-        "author states: you read less, you do not pay less (similar token cost)",
-        "uses an early-access plugin API that changes between releases; Windows clicks reportedly not working yet"
-      ],
-      "length_target_s": 35,
-      "cover_headline": "Short replies that open when you click",
-      "thumb_text": "Read Less",
-      "keywords": [
-        "claude code plugin",
-        "cc-stretch",
-        "ai ka jawab chhota kaise padhein"
-      ],
-      "notes": "Caveats: all numbers are the author's own measure on his own replies, say 'author says'; never show a star count; plugin is early access and Claude Code only; do not claim savings in tokens or money (the page says none). Chosen over AirsupHQ/machine-skill (https://github.com/AirsupHQ/machine-skill, 296 stars, one-line to 3D simulation) because e103 anatomy skill is the same picture (one line to exploded diagram); machine-skill is the backup. Researcher-verified; facts re-fetched by the strategist 2026-10-18.",
-      "status": "planned",
-      "qa_passed": false
-    },
-    {
-      "id": "r104",
-      "track": "course",
-      "title": "Model pichli chat kyun bhool jata hai? AI ki memory notebook",
-      "format": "concept",
-      "one_idea": "The context window is a small, limited desk that gets cluttered as it fills; agent memory means writing notes to storage outside the window and reading them back when needed, and the memory tool is that notebook: a /memories folder your own app manages.",
-      "spoken_hook": "Model pichli chat kyun bhool jata hai?",
-      "hook_type": "direct_question",
-      "hook_10s": "Model pichli chat kyun bhool jata hai? Kyunki uski desk chhoti hai. Notebook se yaad rakhta hai. Teen steps. [frame 0: a small desk crowded with papers beside an empty notebook]",
-      "hook_formula": "Direct question",
-      "hook_source": "hook-writer skill",
-      "visual_idea": "A small desk fills with papers until it overflows; the model writes a note into a notebook shelf outside the desk, the desk is cleared, and a later question pulls the same note back onto the clean desk.",
-      "everyday_anchor": "You note an exam formula in your copy so you can clear your desk and find it again tomorrow.",
-      "example": "Label example: a coding agent writes 'user prefers Python, project uses pytest' to a notes file and reads it next session.",
-      "sources": [
-        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
-        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
-        "https://arxiv.org/abs/2310.08560"
-      ],
-      "facts_to_verify": [
-        "context is a finite resource; Anthropic names context rot as tokens grow (engineering post)",
-        "structured note-taking: the agent writes notes persisted outside the context window and pulls them back later (engineering post)",
-        "memory tool: client-side, a /memories directory your application manages; the model issues file commands, your app executes them (docs)",
-        "MemGPT abstract: manages memory tiers to give the appearance of extended context"
-      ],
-      "length_target_s": 40,
-      "cover_headline": "Why AI forgets and how memory fixes it",
-      "thumb_text": "AI Memory",
-      "keywords": [
-        "ai memory kya hai",
-        "llm memory notebook",
-        "agent memory tool"
-      ],
-      "notes": "Caveats: r101/r102 and q15/q16 cover the context window and compaction; this reel is only about notes kept outside the window. Memory tool is Anthropic-specific and client-side: say 'for example'; do not say the model stores it itself. Do not claim MemGPT numbers. Unit D6.",
-      "status": "planned",
-      "qa_passed": false,
-      "unit": "D6"
-    },
-    {
-      "id": "a001",
-      "track": "series",
-      "day": 1,
-      "unit": "A3",
-      "format": "demo",
-      "title": "How a model learns: forward pass, loss, gradient descent",
-      "one_idea": "A model learns by guessing, measuring how wrong the guess was (the loss) and nudging its weight against the gradient, repeated until it converges; the same loop trains an LLM.",
-      "hook_type": "direct_question",
-      "spoken_hook": "AI model seekhta kaise hai?",
-      "hook_formula": "plain_question",
-      "hook_source": "the owner's own wording of 2026-10-19: the plain question, a 0.6 s pause, then the basketball analogy as the first teaching line (the filler 'kya use ratwaya jaata hai? Bilkul nahi!' between the hook and the start was cut by the owner)",
-      "visual_idea": "A ball and hoop with four marks (shot, miss, understand, try again), then three cards hours to marks with one weight dial, a loss gauge, a loss curve with a dot sliding against the gradient arrow and a table of real runs, then the same run diverging with a larger step.",
-      "everyday_anchor": "Learning basketball: take a shot, miss, understand the mistake, try again.",
-      "example": "EXAMPLE (we ran it, Python 3.12): one weight w, marks = w x hours for 1, 2, 3 hours giving 2, 4, 6. Learning rate 0.1: w 1.867 and loss 0.083 after one update, w 2.0 after four. Learning rate 0.5: loss 18.667, 250.963, 3374.058 (diverges). Check question: marks 3, 6, 9 give w = 3.",
-      "sources": [
-        "https://en.wikipedia.org/wiki/Gradient_descent",
-        "https://en.wikipedia.org/wiki/Loss_function",
-        "https://en.wikipedia.org/wiki/Large_language_model",
-        "https://arxiv.org/abs/2005.14165"
-      ],
-      "facts_to_verify": [
-        "Every number on screen is from the real run printed in docs-notes/pilot-script-day1.md section 6; the claim 'billions of parameters' is the largest models (more than 100 billion, GPT-3 175 billion)."
-      ],
-      "length_target_s": 175,
-      "cover_headline": "How models actually learn",
-      "thumb_text": "How AI learns",
-      "keywords": [
-        "how do ai models learn",
-        "gradient descent explained",
-        "loss function",
-        "learning rate",
-        "ai engineer roadmap"
-      ],
-      "caption_note": "The answer to the check question is 3 (put it in the caption).",
-      "studio_note": "FINISHED COMPOSITION, VOICE ONLY (owner, 2026-10-19). The owner approved this reel as a Swara preview and wants it in his own voice. reels/a001_how_a_model_learns already holds the final spec.json (narration and 25 sound cues), script.txt and index.html (all the pictures, placed from the word timings of data.json, so they follow the new voice). Do NOT rewrite the script, do NOT redraw the pictures, do NOT run new_reel.py (the folder exists). Steps: (1) make_voice with the owner's voice (the default). (2) If the total is over 178 s raise spec.json \"pace\" from 1.26 toward 1.32 (at most 1.35) and run make_voice again; never cut words. (3) hyperframes check and snapshots at about 8 times to confirm the pictures still match the voice; only fix a picture if its label lands more than 0.5 s off the spoken word. (4) render_video. (5) render_cover(folder=\"a001_how_a_model_learns\", pill=\"AI\", headline=\"How models <em>actually learn</em>\"): the series cover with DAY 001 / 150. (6) social/a001_how_a_model_learns.hi.caption.txt exists: lint it with .claude/skills/ig-caption/caption.py. (7) studio_gate. Length may run up to 180 s (owner).",
-      "status": "planned",
-      "qa_passed": false
-    },
-    {
-      "id": "a002",
-      "track": "series",
-      "day": 2,
-      "unit": "A3",
-      "format": "structure",
-      "title": "Train, validation and test: three piles of data",
-      "one_idea": "Data is split into three piles with three jobs: the model learns from train, validation is how we choose between models, and the test pile is opened once at the end, because only data the model has never seen says how it will do on new data.",
-      "hook_type": "direct_question",
-      "spoken_hook": "Train, validation aur test data alag kyun rakhte hain?",
-      "hook_formula": "plain_question",
-      "hook_source": "the plain direct question (9 words), then the exam analogy as the first teaching line, no filler in between (owner's rule 8 of 2026-10-19)",
-      "visual_idea": "A textbook, a mock test and a final exam become three piles; a grid of 1,000 dots is cut into three blocks of true size (70, 15, 15 percent); a model that memorises scores 100 on train and 72 on validation; a second model scores 82 on both and wins on validation; the test pile opens once and shows 79; peeking at the test score and changing the model turns the green pile gold.",
-      "everyday_anchor": "Exam preparation: textbook practice, a mock test, then a final exam with questions you have never seen.",
-      "example": "EXAMPLE (we ran it, Python 3.12 and numpy, seed 36, 1,000 fake points, 700 train, 150 validation, 150 test): model 1 copies the closest training point: train 100 percent, validation 72, test 71. Model 2 averages 151 neighbours (picked by validation among 1, 5, 15, 51, 151): train 82, validation 82, test 79. Median of 200 seeds: 100, 73, 72 and 81, 81, 79. The 1,000 emails are only the story; the script says the data is fake.",
-      "sources": [
-        "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets",
-        "https://scikit-learn.org/stable/modules/cross_validation.html"
-      ],
-      "facts_to_verify": [
-        "Training, validation and test sets and their jobs; repeated use of the test set makes the model fit it (Google ML Crash Course, fetched 2026-10-19). A model that only repeats the labels it has seen scores perfectly and fails on new data; tuning on the test set lets knowledge of it leak into the model (scikit-learn, fetched 2026-10-19). Every accuracy on screen is from the real run printed in docs-notes/pilot-script-day2.md."
-      ],
-      "length_target_s": 146,
-      "cover_headline": "Train, validation, test: three piles of data",
-      "thumb_text": "Train Val Test",
-      "keywords": [
-        "train validation test split",
-        "why test set",
-        "validation set explained",
-        "overfitting basics",
-        "ai engineer roadmap"
-      ],
-      "caption_note": "The answer to the check question is: nahi (put it in the caption).",
-      "studio_note": "FINISHED REEL, DELIVER ONLY (owner, 2026-10-19). The owner approved this reel: video, voice (his own voice on Flash v2.5 at tempo 0.9), cover and caption. The runner restores reels/a002_train_validation_test_hi.mp4, its voice files and the phrase cache before you start. Do NOT rewrite the script, redraw the pictures, run new_reel.py, make_voice, render_video or render_cover: the video is made from exactly these files, and the gate refuses a video whose composition changed without a render. Steps: (1) check that reels/a002_train_validation_test_hi.mp4 is there; (2) lint social/a002_train_validation_test.hi.caption.txt with .claude/skills/ig-caption/caption.py (it passes); (3) studio_gate; (4) a short report. If the video is missing, stop and say so in the report, do not rebuild it.",
-      "status": "planned",
-      "qa_passed": false
-    },
-    {
-      "id": "q105",
-      "track": "interview",
-      "unit": "C6",
-      "title": "Interview: Temperature, Top-K aur Top-P ka difference batao",
-      "one_idea": "Top-K keeps a fixed count of the most probable next words, Top-P keeps the smallest set reaching a cumulative probability threshold, and Temperature reshapes the probability distribution.",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ne poocha: LLM mein Temperature, Top-K aur Top-P ka difference batao.",
-      "hook_formula": "The owner's interview command",
-      "hook_source": "the owner's own script of 2026-10-19, used word for word",
-      "visual_idea": "One next-word distribution for Aaj mausam bahut is cut at three for Top-K, accumulated to 90 percent for Top-P, and reshaped from sharp to flat for Temperature; NAMKEEN marks the tail.",
-      "example": "EXAMPLE: a toy run with invented scores for 8 words after 'Aaj mausam bahut' (state/runs/q105_toy_run.py, output in state/runs/q105_toy_run_output.txt): at T=1 ACHHA 36.7 %, GARAM 24.6 %, THANDA 16.5 %, NAMKEEN 0.6 %; top-k 3 leaves NAMKEEN out; top-p 0.9 keeps five words at T=1 and six at T=1.5; NAMKEEN is 0.015 % at T=0.5 and 1.874 % at T=1.5.",
-      "sources": [
-        "https://huggingface.co/docs/transformers/main_classes/text_generation"
-      ],
-      "length_target_s": 88.5,
-      "cover_headline": "Temperature, Top-K, Top-P: what's the difference?",
-      "thumb_text": "3 Controls",
-      "keywords": [
-        "temperature top k top p",
-        "llm sampling explained",
-        "ai engineer interview"
-      ],
-      "caption_note": "Use the owner's command hook unchanged; one comment ask about NAMKEEN, with the answer not shown in the reel.",
-      "status": "planned",
-      "qa_passed": false,
-      "facts_to_verify": [
-        "top_k: the number of highest probability vocabulary tokens kept for top-k filtering (Hugging Face GenerationConfig docs, fetched 2026-10-20)",
-        "top_p: only the smallest set of most probable tokens whose probabilities add up to top_p or higher are kept (same page)",
-        "temperature: the value used to modulate the next token probabilities (same page); sampling must be on (do_sample) for these to apply"
-      ]
-    },
-    {
-      "id": "q106",
-      "track": "interview",
-      "unit": "C3",
-      "title": "Interview: Prompt mein examples dene se model hamesha behtar hota hai?",
-      "one_idea": "Examples in a prompt show the model the shape of the answer and the allowed labels, so they usually help; but every example costs tokens on every request, a one-sided set or a bad order pulls the answer, and the only way to know is to measure with and without.",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ne poocha: prompt mein examples dene se model hamesha behtar jawab deta hai?",
-      "hook_formula": "interviewer_asked: one complete question of 11 words in plain words",
-      "hook_source": "hook-writer interviewer_asked; the question passes the Question quality test (one sentence, 11 words, no stacked question, no jargon beyond 'prompt', 'examples', 'model')",
-      "visual_idea": "The real classification prompt as a mono card under the hook from frame 0; it grows from 23 to 85 tokens when five examples are added (a real tiktoken count); two label chips feed a model box; three all-positive examples make a red ALWAYS POSITIVE? pill; a gauge from NEAR CHANCE to NEAR BEST swings with the examples and their order; three measuring runs (0, 3, 5 examples) on the same reviews.",
-      "everyday_anchor": "Showing a new hire a few solved tickets before the real one: a good set teaches the format, a one-sided set teaches a bad habit.",
-      "example": "EXAMPLE prompt (invented): 'Classify the review as positive or negative.' with up to five Review/Label pairs and the review 'The delivery was late and the box was damaged.' We ran tiktoken (o200k_base): 0 examples 23 tokens, 1 example 35, 3 examples 60, 5 examples 85; five examples add 62 tokens to every request, 62 million tokens over a million requests. No model result is shown or claimed.",
-      "sources": [
-        "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices",
-        "https://arxiv.org/abs/2102.09690",
-        "https://arxiv.org/abs/2202.12837",
-        "https://arxiv.org/abs/2005.14165",
-        "https://developers.openai.com/api/docs/guides/reasoning-best-practices",
-        "https://platform.claude.com/docs/en/about-claude/pricing"
-      ],
-      "facts_to_verify": [
-        "Examples steer output format, tone and structure; they should be relevant and diverse so the model does not pick up unintended patterns; 3 to 5 examples (Anthropic prompting best practices, fetched 2026-10-19).",
-        "GPT-3 few-shot accuracy depends on the prompt format, the training examples and their order, from near chance to near state of the art; the model is biased toward answers near the end of the prompt or common in pre-training data (Zhao et al., 'Calibrate Before Use', abstract, fetched 2026-10-19).",
-        "Randomly replacing the labels in the demonstrations barely hurts performance across 12 models; the label space, the distribution of the input text and the overall format of the demonstrations matter (Min et al., abstract, fetched 2026-10-19).",
-        "Reasoning models often do not need few-shot examples: try zero shot first, then few shot if needed; examples must align closely with the instructions (OpenAI reasoning best practices, fetched 2026-10-19).",
-        "Token counts are from tiktoken o200k_base on the exact prompt shown; other models tokenize differently. API usage is billed per token (Anthropic pricing page, fetched 2026-10-19)."
-      ],
-      "length_target_s": 122.5,
-      "cover_headline": "Do more examples always help?",
-      "thumb_text": "More examples?",
-      "keywords": [
-        "few shot prompting",
-        "how many examples in a prompt",
-        "in context learning",
-        "prompt engineering interview",
-        "ai engineer interview questions"
-      ],
-      "trap": "Adding examples blindly. Reframed after reading the sources: labels barely matter (Min et al.), so the trap is not 'a wrong example is copied'; it is cost on every request, a one-sided or badly ordered set that pulls the answer, and never measuring against the no-example prompt.",
-      "caption_note": "The answer to the check question is: positive (the model may lean toward positive when all three examples are positive). Put it in the caption.",
-      "status": "planned",
-      "qa_passed": false
-    },
-    {
-      "id": "q107",
-      "track": "interview",
-      "unit": "C6",
-      "title": "Interview: Temperature, top-k aur top-p teeno laga diye. Output pe kaun sa asar karta hai?",
-      "one_idea": "Temperature, top-k and top-p do three different jobs: top-k (by count) and top-p (by total chance) cut the list of next words, temperature only reshapes the chances of the words that are left, and changing one changes what another keeps.",
-      "hook_type": "relatable_stake",
-      "spoken_hook": "Chatbot ne bola: aaj mausam bahut namkin hai.",
-      "hook_formula": "stake_nonsense_output",
-      "hook_source": "the stake from frame 0 (the bot says something silly), then the interview question, then the answer first in one plain sentence (owner's rule 8 and his correction of 2026-10-19: no filler between the hook and the answer)",
-      "visual_idea": "A chat where the bot says the weather is salty, then one toy list of 8 candidate words drawn as bars with their real chances (NAMKIN 0.6 percent); temperature 1.5 flattens the bars and makes NAMKIN three times likelier without removing it; a cut line after word 3 (top-k) removes it; a running total stops at 90 percent after 5 words (top-p); the same top-p keeps 6 words once the bars are flatter.",
-      "everyday_anchor": "Choosing the next word like picking from a menu: top-k and top-p shorten the menu, temperature changes how strongly the menu favours the first items.",
-      "example": "EXAMPLE (we ran it, Python 3.12 and numpy, invented logits for 8 words after 'Aaj mausam bahut ...'): at T 1.0 ACHHA 36.7 percent and NAMKIN 0.6 percent; T 1.5 makes NAMKIN 1.9 percent (3.1 times) and removes nothing; top-k 3 keeps ACHHA, GARAM, THANDA (47.2, 31.6, 21.2 after renormalising) and NAMKIN is never drawn in 10,000 draws; top-p 0.9 adds 36.7, 61.4, 77.9, 88.9, 95.0 and keeps 5 words; T 0.5 gives ACHHA 56.3 percent, T 1.5 gives 28.8; top-p 0.9 keeps 5 words at T 1.0 and 6 words at T 1.5. Order of the stack in the run: temperature, then top-k, then top-p, then renormalise.",
-      "sources": [
-        "https://platform.claude.com/docs/en/api/messages",
-        "https://arxiv.org/abs/1904.09751",
-        "https://huggingface.co/blog/how-to-generate"
-      ],
-      "facts_to_verify": [
-        "Anthropic Messages API reference (fetched 2026-10-19): temperature is the amount of randomness injected into the response (default 1.0, range 0.0 to 1.0, closer to 0.0 for analytical tasks, closer to 1.0 for creative ones, not fully deterministic even at 0.0); top_k samples only from the top K options for each token to remove the long tail; top_p uses nucleus sampling: cumulative distribution in decreasing probability order, cut off once it reaches top_p. The same page marks all three as not settable on models released after Claude Opus 4.6 (not used in the reel).",
-        "Hugging Face 'How to generate text' (fetched 2026-10-19): lower temperature makes the softmax sharper; top-k keeps the K most likely next words and redistributes the probability mass among them; top-p picks from the smallest set of words whose cumulative probability exceeds p, so the set size changes with the distribution; top-p can be combined with top-k.",
-        "Holtzman et al., nucleus sampling (arXiv 1904.09751, fetched 2026-10-19): sampling from the dynamic nucleus of the distribution cuts the unreliable tail and avoids bland, repetitive likelihood-based text.",
-        "Every number on screen is from the seeded toy run in docs: toy_run.py (invented logits, labelled EXAMPLE); the claim 'top-p keeps more words when temperature is higher' is a result of that run and follows from flatter chances needing more words to reach p."
-      ],
-      "length_target_s": 127.5,
-      "cover_headline": "Temperature, top-k, top-p: who does what?",
-      "thumb_text": "Temp top-k top-p",
-      "keywords": [
-        "temperature top k top p",
-        "llm sampling parameters",
-        "nucleus sampling explained",
-        "ai engineer interview questions",
-        "top p vs temperature"
-      ],
-      "caption_note": "The answer to the check question is: badhte hain (put it in the caption).",
-      "status": "planned",
-      "qa_passed": false,
-      "cover_count": 1,
-      "trial": {
-        "tries": "the team's longer numbers-first version of question 001 on non-followers",
-        "of": "q105"
-      },
-      "variant_note": "Version B of the first interview question (q105): the team's own script, built first as a demo. Same question as q105, so its cover counts 001 like q105."
-    },
-    {
-      "id": "a003",
-      "track": "series",
-      "day": 3,
-      "unit": "A3",
-      "format": "demo",
-      "title": "Overfitting: zero error on training, 133 on new data",
-      "one_idea": "A flexible model can score zero error on its training points and still fail on new data because it memorised the noise; unseen data exposes it, and simpler models, more data and validation fix it, while a too-simple model underfits.",
-      "hook_type": "surprising_fact",
-      "spoken_hook": "Ek AI model ka training error zero hai, phir bhi naye questions par uski galti 133 hai!",
-      "hook_formula": "contradiction_curiosity",
-      "hook_source": "owner's script, 2026-10-20",
-      "visual_idea": "Training Error 0.00 vs New Data Error 133 on frame 0; exam-student analogy; a 10-point scatter with a straight line (0.87 / 1.04) and a wiggly curve through all points (0 / 133); the curve with 100 points (0.93 / 1.03); a straight line missing a curved pattern for underfitting.",
-      "everyday_anchor": "The student who memorises solved examples and fails when the question changes.",
-      "example": "EXAMPLE from the owner's own Python run: hidden rule y = 2x + 1 plus random noise, 10 training points; straight line train 0.87, new data 1.04; flexible curve train 0 and new data 133, actual y roughly 1 to 21; same curve with 100 points train 0.93, new data 1.03. The studio must re-run this (a script in state/runs) and show the real printed numbers; if they differ from the owner's, report it and do not change the script yourself.",
-      "sources": [
-        "https://developers.google.com/machine-learning/crash-course/overfitting/overfitting",
-        "https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html"
-      ],
-      "facts_to_verify": [
-        "Overfitting = low training error, high error on new data; underfitting = model too simple (scikit-learn example page, to be fetched by the researcher/studio). Every number on screen comes from the printed run."
-      ],
-      "length_target_s": 150,
-      "cover_headline": "Zero training error, still wrong?",
-      "thumb_text": "Overfitting",
-      "keywords": [
-        "overfitting explained",
-        "underfitting",
-        "train vs test error",
-        "ai engineer roadmap"
-      ],
-      "caption_note": "Comment question: model seekh raha hai ya ratta maar raha hai? (put it in the caption)",
-      "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. Length: the owner wants it as long as the teaching needs (up to 180 s); the first estimate is 150 to 175 s. If it renders over 180 s, report it, do not cut.",
-      "script_file": "state/scripts/a003.txt",
-      "status": "planned",
-      "qa_passed": false
-    },
-    {
-      "id": "q108",
-      "track": "interview",
-      "unit": "C3",
-      "title": "Interview: Chain-of-thought prompting hamesha performance badhata hai?",
-      "one_idea": "Chain-of-thought (step by step) prompting helps on multi-step problems, but on simple questions it only adds output tokens, latency and cost, and reasoning models already reason internally, so test both on your own examples.",
-      "hook_type": "relatable_stake",
-      "spoken_hook": "France ki capital poochhi… Bot ne teen lines mein jawab diya!",
-      "hook_formula": "bot over-explains a one-word answer, then the interview question",
-      "hook_source": "owner's script, 2026-10-20",
-      "visual_idea": "Chat that answers 'capital of France' in three lines vs one word; shop bill with 3 notebooks at 45, 2 pens at 12, paid 200: 135 + 24 = 159, change 41; Standard LLM vs Reasoning model; the interview answer card.",
-      "everyday_anchor": "A shop bill: writing the steps catches a calculation slip, but nobody needs steps to say Paris.",
-      "example": "EXAMPLE (invented, arithmetic checked: 3 x 45 = 135, 2 x 12 = 24, total 159, change 200 - 159 = 41). No model result is shown or claimed.",
-      "sources": [
-        "https://arxiv.org/abs/2201.11903"
-      ],
-      "facts_to_verify": [
-        "Chain-of-thought prompting (intermediate reasoning steps) improves arithmetic, commonsense and symbolic reasoning mainly in sufficiently large models (Wei et al., abstract, fetched 2026-10-20)."
-      ],
-      "length_target_s": 100,
-      "cover_headline": "Does step by step always help?",
-      "thumb_text": "Step by step?",
-      "keywords": [
-        "chain of thought prompting",
-        "think step by step",
-        "reasoning models",
-        "prompt engineering interview",
-        "ai engineer interview questions"
-      ],
-      "trap": "Adding 'think step by step' to every prompt without measuring.",
-      "caption_note": "Comment ALWAYS or TEST FIRST; the answer is TEST FIRST (put it in the caption).",
-      "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. ",
-      "script_file": "state/scripts/q108.txt",
-      "status": "planned",
-      "qa_passed": false,
-      "format": "trade-off"
-    },
-    {
-      "id": "q109",
-      "track": "interview",
-      "unit": "C3",
-      "title": "Interview: Developer aur user instruction mein takraav ho to AI kiski maane?",
-      "one_idea": "Developer instructions take precedence over conflicting user instructions, but a prompt is not a security boundary, so critical business rules such as a refund limit must be enforced in trusted backend code.",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: Developer की instruction और user के message में टकराव हो, तो AI किसका order follow करेगा?",
-      "hook_formula": "interviewer_asked (owner's wording; question runs longer than 16 words)",
-      "hook_source": "owner's script, 2026-10-20",
-      "visual_idea": "Interviewer question card; refund bot with a 500 rupee limit and a customer asking for 2,000; chain of command System > Developer > User; a code run where the model returns Approved and the backend prints Approved: False.",
-      "everyday_anchor": "A refund bot with a 500 rupee limit that a customer tries to talk past.",
-      "example": "EXAMPLE (invented): refund limit 500, request 2,000, model stub always says yes, backend check prints Approved: False. The studio runs a few lines of Python and shows the real output.",
-      "sources": [
-        "https://model-spec.openai.com/2025-02-12.html"
-      ],
-      "facts_to_verify": [
-        "OpenAI Model Spec chain of command (fetched 2026-10-20): when developer and user messages conflict, the developer messages have greater authority. The script says 'System instructions' in the owner's own wording; the spec's own name for the top level is 'platform'. Keep the owner's word in the script and voice and report the difference, do not change it."
-      ],
-      "length_target_s": 110,
-      "cover_headline": "Developer or user: who wins?",
-      "thumb_text": "Who wins?",
-      "keywords": [
-        "instruction hierarchy",
-        "developer vs user prompt",
-        "prompt injection",
-        "llm security interview",
-        "ai engineer interview questions"
-      ],
-      "trap": "Writing a business rule only in the prompt and trusting it.",
-      "caption_note": "Comment PROMPT or CODE; the answer is CODE (put it in the caption).",
-      "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. ",
-      "script_file": "state/scripts/q109.txt",
-      "status": "planned",
-      "qa_passed": false,
-      "format": "demo"
+     "text": "Parcel टूटकर आया, तो tracking से पता चलता है कि कहाँ टूटा। AI app में ये कैसे करोगे?",
+     "hook_type": "relatable_stake",
+     "formula": "Everyday anchor"
     }
-  ]
+   ],
+   "hook_formula": "The Verbatim Question",
+   "hook_source": ".claude/skills/hook-writer",
+   "visual_idea": "A request travels as a line of boxes: question, search, tool call, model, answer. Each box shows a small timer and token count. The wrong answer is traced back, one box (the search) turns red while the others stay green.",
+   "everyday_anchor": "A courier parcel arrives damaged and the tracking page shows which hub dropped it, so you do not guess.",
+   "format": "question",
+   "example": "Labelled example: a refund chatbot answers 30 days, the trace shows the search step returned an old policy page.",
+   "sources": [
+    "https://langfuse.com/docs/observability/overview"
+   ],
+   "facts_to_verify": [
+    "A trace is a structured record of one request's lifecycle (LLM calls, retrieval steps, tool executions) with timing, inputs, outputs and metadata (Langfuse docs, a vendor definition; say 'tracing' as common practice, no numbers)."
+   ],
+   "length_target_s": 45,
+   "cover_headline": "Wrong AI answer? Trace every step",
+   "thumb_text": "TRACE IT",
+   "keywords": [
+    "llm observability interview",
+    "ai tracing kya hai",
+    "debug llm app",
+    "ai engineer interview questions",
+    "langfuse tracing"
+   ],
+   "status": "planned",
+   "qa_passed": false,
+   "office_note": "approved by the owner as q27 on 2026-10-17; renamed to q104 because office ids start at 101"
+  },
+  {
+   "id": "e104",
+   "track": "generic",
+   "title": "Chhota jawab padhne se bill kam hota hai? cc-stretch: click karo, jawab khulta hai",
+   "format": "myth-bust",
+   "one_idea": "cc-stretch is a Claude Code plugin that shows short replies where each linked phrase expands in place when clicked; you read less, but by the author's own statement you do not pay less, because each reply costs about the same tokens.",
+   "spoken_hook": "Jawab chhota padho, to kya bill bhi kam hoga?",
+   "hook_type": "misconception_question",
+   "hook_10s": "Jawab chhota padho, to kya bill bhi kam hoga? Nahi, bill wahi rehta hai. Par padhna bahut kam. Ek plugin, teen baatein. [frame 0: a long reply collapsing into a short card, a price tag staying the same]",
+   "hook_formula": "Misconception question",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "A long wall of reply text folds into one short card with a few underlined phrases; a click on a phrase opens a small box in place and a click on the arrow closes it, while a price tag beside it stays the same.",
+   "everyday_anchor": "A newspaper front page shows headlines and you open only the story you care about, though the whole paper was still printed.",
+   "example": "Label example: a long answer about a bug shown as three short lines with two clickable phrases. The author's own measure: default view was 17% of the words over 69 replies from four projects.",
+   "sources": [
+    "https://github.com/pro-vi/cc-stretch",
+    "https://api.github.com/repos/pro-vi/cc-stretch"
+   ],
+   "facts_to_verify": [
+    "repo created 2026-10-14, MIT license, not affiliated with Anthropic",
+    "install: /plugin install cc-stretch --marketplace pro-vi/cc-stretch, then /tui fullscreen (clicks need fullscreen terminal)",
+    "author claim: default view was 17% of the words over 69 replies from 4 projects; about two of three key points visible (author's own numbers)",
+    "author states: you read less, you do not pay less (similar token cost)",
+    "uses an early-access plugin API that changes between releases; Windows clicks reportedly not working yet"
+   ],
+   "length_target_s": 35,
+   "cover_headline": "Short replies that open when you click",
+   "thumb_text": "Read Less",
+   "keywords": [
+    "claude code plugin",
+    "cc-stretch",
+    "ai ka jawab chhota kaise padhein"
+   ],
+   "notes": "Caveats: all numbers are the author's own measure on his own replies, say 'author says'; never show a star count; plugin is early access and Claude Code only; do not claim savings in tokens or money (the page says none). Chosen over AirsupHQ/machine-skill (https://github.com/AirsupHQ/machine-skill, 296 stars, one-line to 3D simulation) because e103 anatomy skill is the same picture (one line to exploded diagram); machine-skill is the backup. Researcher-verified; facts re-fetched by the strategist 2026-10-18.",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "r104",
+   "track": "course",
+   "title": "Model pichli chat kyun bhool jata hai? AI ki memory notebook",
+   "format": "concept",
+   "one_idea": "The context window is a small, limited desk that gets cluttered as it fills; agent memory means writing notes to storage outside the window and reading them back when needed, and the memory tool is that notebook: a /memories folder your own app manages.",
+   "spoken_hook": "Model pichli chat kyun bhool jata hai?",
+   "hook_type": "direct_question",
+   "hook_10s": "Model pichli chat kyun bhool jata hai? Kyunki uski desk chhoti hai. Notebook se yaad rakhta hai. Teen steps. [frame 0: a small desk crowded with papers beside an empty notebook]",
+   "hook_formula": "Direct question",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "A small desk fills with papers until it overflows; the model writes a note into a notebook shelf outside the desk, the desk is cleared, and a later question pulls the same note back onto the clean desk.",
+   "everyday_anchor": "You note an exam formula in your copy so you can clear your desk and find it again tomorrow.",
+   "example": "Label example: a coding agent writes 'user prefers Python, project uses pytest' to a notes file and reads it next session.",
+   "sources": [
+    "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+    "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+    "https://arxiv.org/abs/2310.08560"
+   ],
+   "facts_to_verify": [
+    "context is a finite resource; Anthropic names context rot as tokens grow (engineering post)",
+    "structured note-taking: the agent writes notes persisted outside the context window and pulls them back later (engineering post)",
+    "memory tool: client-side, a /memories directory your application manages; the model issues file commands, your app executes them (docs)",
+    "MemGPT abstract: manages memory tiers to give the appearance of extended context"
+   ],
+   "length_target_s": 40,
+   "cover_headline": "Why AI forgets and how memory fixes it",
+   "thumb_text": "AI Memory",
+   "keywords": [
+    "ai memory kya hai",
+    "llm memory notebook",
+    "agent memory tool"
+   ],
+   "notes": "Caveats: r101/r102 and q15/q16 cover the context window and compaction; this reel is only about notes kept outside the window. Memory tool is Anthropic-specific and client-side: say 'for example'; do not say the model stores it itself. Do not claim MemGPT numbers. Unit D6.",
+   "status": "planned",
+   "qa_passed": false,
+   "unit": "D6"
+  },
+  {
+   "id": "a001",
+   "track": "series",
+   "day": 1,
+   "unit": "A3",
+   "format": "demo",
+   "title": "How a model learns: forward pass, loss, gradient descent",
+   "one_idea": "A model learns by guessing, measuring how wrong the guess was (the loss) and nudging its weight against the gradient, repeated until it converges; the same loop trains an LLM.",
+   "hook_type": "direct_question",
+   "spoken_hook": "AI model seekhta kaise hai?",
+   "hook_formula": "plain_question",
+   "hook_source": "the owner's own wording of 2026-10-19: the plain question, a 0.6 s pause, then the basketball analogy as the first teaching line (the filler 'kya use ratwaya jaata hai? Bilkul nahi!' between the hook and the start was cut by the owner)",
+   "visual_idea": "A ball and hoop with four marks (shot, miss, understand, try again), then three cards hours to marks with one weight dial, a loss gauge, a loss curve with a dot sliding against the gradient arrow and a table of real runs, then the same run diverging with a larger step.",
+   "everyday_anchor": "Learning basketball: take a shot, miss, understand the mistake, try again.",
+   "example": "EXAMPLE (we ran it, Python 3.12): one weight w, marks = w x hours for 1, 2, 3 hours giving 2, 4, 6. Learning rate 0.1: w 1.867 and loss 0.083 after one update, w 2.0 after four. Learning rate 0.5: loss 18.667, 250.963, 3374.058 (diverges). Check question: marks 3, 6, 9 give w = 3.",
+   "sources": [
+    "https://en.wikipedia.org/wiki/Gradient_descent",
+    "https://en.wikipedia.org/wiki/Loss_function",
+    "https://en.wikipedia.org/wiki/Large_language_model",
+    "https://arxiv.org/abs/2005.14165"
+   ],
+   "facts_to_verify": [
+    "Every number on screen is from the real run printed in docs-notes/pilot-script-day1.md section 6; the claim 'billions of parameters' is the largest models (more than 100 billion, GPT-3 175 billion)."
+   ],
+   "length_target_s": 175,
+   "cover_headline": "How models actually learn",
+   "thumb_text": "How AI learns",
+   "keywords": [
+    "how do ai models learn",
+    "gradient descent explained",
+    "loss function",
+    "learning rate",
+    "ai engineer roadmap"
+   ],
+   "caption_note": "The answer to the check question is 3 (put it in the caption).",
+   "studio_note": "FINISHED COMPOSITION, VOICE ONLY (owner, 2026-10-19). The owner approved this reel as a Swara preview and wants it in his own voice. reels/a001_how_a_model_learns already holds the final spec.json (narration and 25 sound cues), script.txt and index.html (all the pictures, placed from the word timings of data.json, so they follow the new voice). Do NOT rewrite the script, do NOT redraw the pictures, do NOT run new_reel.py (the folder exists). Steps: (1) make_voice with the owner's voice (the default). (2) If the total is over 178 s raise spec.json \"pace\" from 1.26 toward 1.32 (at most 1.35) and run make_voice again; never cut words. (3) hyperframes check and snapshots at about 8 times to confirm the pictures still match the voice; only fix a picture if its label lands more than 0.5 s off the spoken word. (4) render_video. (5) render_cover(folder=\"a001_how_a_model_learns\", pill=\"AI\", headline=\"How models <em>actually learn</em>\"): the series cover with DAY 001 / 150. (6) social/a001_how_a_model_learns.hi.caption.txt exists: lint it with .claude/skills/ig-caption/caption.py. (7) studio_gate. Length may run up to 180 s (owner).",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "a002",
+   "track": "series",
+   "day": 2,
+   "unit": "A3",
+   "format": "structure",
+   "title": "Train, validation and test: three piles of data",
+   "one_idea": "Data is split into three piles with three jobs: the model learns from train, validation is how we choose between models, and the test pile is opened once at the end, because only data the model has never seen says how it will do on new data.",
+   "hook_type": "direct_question",
+   "spoken_hook": "Train, validation aur test data alag kyun rakhte hain?",
+   "hook_formula": "plain_question",
+   "hook_source": "the plain direct question (9 words), then the exam analogy as the first teaching line, no filler in between (owner's rule 8 of 2026-10-19)",
+   "visual_idea": "A textbook, a mock test and a final exam become three piles; a grid of 1,000 dots is cut into three blocks of true size (70, 15, 15 percent); a model that memorises scores 100 on train and 72 on validation; a second model scores 82 on both and wins on validation; the test pile opens once and shows 79; peeking at the test score and changing the model turns the green pile gold.",
+   "everyday_anchor": "Exam preparation: textbook practice, a mock test, then a final exam with questions you have never seen.",
+   "example": "EXAMPLE (we ran it, Python 3.12 and numpy, seed 36, 1,000 fake points, 700 train, 150 validation, 150 test): model 1 copies the closest training point: train 100 percent, validation 72, test 71. Model 2 averages 151 neighbours (picked by validation among 1, 5, 15, 51, 151): train 82, validation 82, test 79. Median of 200 seeds: 100, 73, 72 and 81, 81, 79. The 1,000 emails are only the story; the script says the data is fake.",
+   "sources": [
+    "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets",
+    "https://scikit-learn.org/stable/modules/cross_validation.html"
+   ],
+   "facts_to_verify": [
+    "Training, validation and test sets and their jobs; repeated use of the test set makes the model fit it (Google ML Crash Course, fetched 2026-10-19). A model that only repeats the labels it has seen scores perfectly and fails on new data; tuning on the test set lets knowledge of it leak into the model (scikit-learn, fetched 2026-10-19). Every accuracy on screen is from the real run printed in docs-notes/pilot-script-day2.md."
+   ],
+   "length_target_s": 146,
+   "cover_headline": "Train, validation, test: three piles of data",
+   "thumb_text": "Train Val Test",
+   "keywords": [
+    "train validation test split",
+    "why test set",
+    "validation set explained",
+    "overfitting basics",
+    "ai engineer roadmap"
+   ],
+   "caption_note": "The answer to the check question is: nahi (put it in the caption).",
+   "studio_note": "FINISHED REEL, DELIVER ONLY (owner, 2026-10-19). The owner approved this reel: video, voice (his own voice on Flash v2.5 at tempo 0.9), cover and caption. The runner restores reels/a002_train_validation_test_hi.mp4, its voice files and the phrase cache before you start. Do NOT rewrite the script, redraw the pictures, run new_reel.py, make_voice, render_video or render_cover: the video is made from exactly these files, and the gate refuses a video whose composition changed without a render. Steps: (1) check that reels/a002_train_validation_test_hi.mp4 is there; (2) lint social/a002_train_validation_test.hi.caption.txt with .claude/skills/ig-caption/caption.py (it passes); (3) studio_gate; (4) a short report. If the video is missing, stop and say so in the report, do not rebuild it.",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "q105",
+   "track": "interview",
+   "unit": "C6",
+   "title": "Interview: Temperature, Top-K aur Top-P ka difference batao",
+   "one_idea": "Top-K keeps a fixed count of the most probable next words, Top-P keeps the smallest set reaching a cumulative probability threshold, and Temperature reshapes the probability distribution.",
+   "hook_type": "interviewer_asked",
+   "spoken_hook": "Interviewer ne poocha: LLM mein Temperature, Top-K aur Top-P ka difference batao.",
+   "hook_formula": "The owner's interview command",
+   "hook_source": "the owner's own script of 2026-10-19, used word for word",
+   "visual_idea": "One next-word distribution for Aaj mausam bahut is cut at three for Top-K, accumulated to 90 percent for Top-P, and reshaped from sharp to flat for Temperature; NAMKEEN marks the tail.",
+   "example": "EXAMPLE: a toy run with invented scores for 8 words after 'Aaj mausam bahut' (state/runs/q105_toy_run.py, output in state/runs/q105_toy_run_output.txt): at T=1 ACHHA 36.7 %, GARAM 24.6 %, THANDA 16.5 %, NAMKEEN 0.6 %; top-k 3 leaves NAMKEEN out; top-p 0.9 keeps five words at T=1 and six at T=1.5; NAMKEEN is 0.015 % at T=0.5 and 1.874 % at T=1.5.",
+   "sources": [
+    "https://huggingface.co/docs/transformers/main_classes/text_generation"
+   ],
+   "length_target_s": 88.5,
+   "cover_headline": "Temperature, Top-K, Top-P: what's the difference?",
+   "thumb_text": "3 Controls",
+   "keywords": [
+    "temperature top k top p",
+    "llm sampling explained",
+    "ai engineer interview"
+   ],
+   "caption_note": "Use the owner's command hook unchanged; one comment ask about NAMKEEN, with the answer not shown in the reel.",
+   "status": "planned",
+   "qa_passed": false,
+   "facts_to_verify": [
+    "top_k: the number of highest probability vocabulary tokens kept for top-k filtering (Hugging Face GenerationConfig docs, fetched 2026-10-20)",
+    "top_p: only the smallest set of most probable tokens whose probabilities add up to top_p or higher are kept (same page)",
+    "temperature: the value used to modulate the next token probabilities (same page); sampling must be on (do_sample) for these to apply"
+   ]
+  },
+  {
+   "id": "q106",
+   "track": "interview",
+   "unit": "C3",
+   "title": "Interview: Prompt mein examples dene se model hamesha behtar hota hai?",
+   "one_idea": "Examples in a prompt show the model the shape of the answer and the allowed labels, so they usually help; but every example costs tokens on every request, a one-sided set or a bad order pulls the answer, and the only way to know is to measure with and without.",
+   "hook_type": "interviewer_asked",
+   "spoken_hook": "Interviewer ne poocha: prompt mein examples dene se model hamesha behtar jawab deta hai?",
+   "hook_formula": "interviewer_asked: one complete question of 11 words in plain words",
+   "hook_source": "hook-writer interviewer_asked; the question passes the Question quality test (one sentence, 11 words, no stacked question, no jargon beyond 'prompt', 'examples', 'model')",
+   "visual_idea": "The real classification prompt as a mono card under the hook from frame 0; it grows from 23 to 85 tokens when five examples are added (a real tiktoken count); two label chips feed a model box; three all-positive examples make a red ALWAYS POSITIVE? pill; a gauge from NEAR CHANCE to NEAR BEST swings with the examples and their order; three measuring runs (0, 3, 5 examples) on the same reviews.",
+   "everyday_anchor": "Showing a new hire a few solved tickets before the real one: a good set teaches the format, a one-sided set teaches a bad habit.",
+   "example": "EXAMPLE prompt (invented): 'Classify the review as positive or negative.' with up to five Review/Label pairs and the review 'The delivery was late and the box was damaged.' We ran tiktoken (o200k_base): 0 examples 23 tokens, 1 example 35, 3 examples 60, 5 examples 85; five examples add 62 tokens to every request, 62 million tokens over a million requests. No model result is shown or claimed.",
+   "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices",
+    "https://arxiv.org/abs/2102.09690",
+    "https://arxiv.org/abs/2202.12837",
+    "https://arxiv.org/abs/2005.14165",
+    "https://developers.openai.com/api/docs/guides/reasoning-best-practices",
+    "https://platform.claude.com/docs/en/about-claude/pricing"
+   ],
+   "facts_to_verify": [
+    "Examples steer output format, tone and structure; they should be relevant and diverse so the model does not pick up unintended patterns; 3 to 5 examples (Anthropic prompting best practices, fetched 2026-10-19).",
+    "GPT-3 few-shot accuracy depends on the prompt format, the training examples and their order, from near chance to near state of the art; the model is biased toward answers near the end of the prompt or common in pre-training data (Zhao et al., 'Calibrate Before Use', abstract, fetched 2026-10-19).",
+    "Randomly replacing the labels in the demonstrations barely hurts performance across 12 models; the label space, the distribution of the input text and the overall format of the demonstrations matter (Min et al., abstract, fetched 2026-10-19).",
+    "Reasoning models often do not need few-shot examples: try zero shot first, then few shot if needed; examples must align closely with the instructions (OpenAI reasoning best practices, fetched 2026-10-19).",
+    "Token counts are from tiktoken o200k_base on the exact prompt shown; other models tokenize differently. API usage is billed per token (Anthropic pricing page, fetched 2026-10-19)."
+   ],
+   "length_target_s": 122.5,
+   "cover_headline": "Do more examples always help?",
+   "thumb_text": "More examples?",
+   "keywords": [
+    "few shot prompting",
+    "how many examples in a prompt",
+    "in context learning",
+    "prompt engineering interview",
+    "ai engineer interview questions"
+   ],
+   "trap": "Adding examples blindly. Reframed after reading the sources: labels barely matter (Min et al.), so the trap is not 'a wrong example is copied'; it is cost on every request, a one-sided or badly ordered set that pulls the answer, and never measuring against the no-example prompt.",
+   "caption_note": "The answer to the check question is: positive (the model may lean toward positive when all three examples are positive). Put it in the caption.",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "q107",
+   "track": "interview",
+   "unit": "C6",
+   "title": "Interview: Temperature, top-k aur top-p teeno laga diye. Output pe kaun sa asar karta hai?",
+   "one_idea": "Temperature, top-k and top-p do three different jobs: top-k (by count) and top-p (by total chance) cut the list of next words, temperature only reshapes the chances of the words that are left, and changing one changes what another keeps.",
+   "hook_type": "relatable_stake",
+   "spoken_hook": "Chatbot ne bola: aaj mausam bahut namkin hai.",
+   "hook_formula": "stake_nonsense_output",
+   "hook_source": "the stake from frame 0 (the bot says something silly), then the interview question, then the answer first in one plain sentence (owner's rule 8 and his correction of 2026-10-19: no filler between the hook and the answer)",
+   "visual_idea": "A chat where the bot says the weather is salty, then one toy list of 8 candidate words drawn as bars with their real chances (NAMKIN 0.6 percent); temperature 1.5 flattens the bars and makes NAMKIN three times likelier without removing it; a cut line after word 3 (top-k) removes it; a running total stops at 90 percent after 5 words (top-p); the same top-p keeps 6 words once the bars are flatter.",
+   "everyday_anchor": "Choosing the next word like picking from a menu: top-k and top-p shorten the menu, temperature changes how strongly the menu favours the first items.",
+   "example": "EXAMPLE (we ran it, Python 3.12 and numpy, invented logits for 8 words after 'Aaj mausam bahut ...'): at T 1.0 ACHHA 36.7 percent and NAMKIN 0.6 percent; T 1.5 makes NAMKIN 1.9 percent (3.1 times) and removes nothing; top-k 3 keeps ACHHA, GARAM, THANDA (47.2, 31.6, 21.2 after renormalising) and NAMKIN is never drawn in 10,000 draws; top-p 0.9 adds 36.7, 61.4, 77.9, 88.9, 95.0 and keeps 5 words; T 0.5 gives ACHHA 56.3 percent, T 1.5 gives 28.8; top-p 0.9 keeps 5 words at T 1.0 and 6 words at T 1.5. Order of the stack in the run: temperature, then top-k, then top-p, then renormalise.",
+   "sources": [
+    "https://platform.claude.com/docs/en/api/messages",
+    "https://arxiv.org/abs/1904.09751",
+    "https://huggingface.co/blog/how-to-generate"
+   ],
+   "facts_to_verify": [
+    "Anthropic Messages API reference (fetched 2026-10-19): temperature is the amount of randomness injected into the response (default 1.0, range 0.0 to 1.0, closer to 0.0 for analytical tasks, closer to 1.0 for creative ones, not fully deterministic even at 0.0); top_k samples only from the top K options for each token to remove the long tail; top_p uses nucleus sampling: cumulative distribution in decreasing probability order, cut off once it reaches top_p. The same page marks all three as not settable on models released after Claude Opus 4.6 (not used in the reel).",
+    "Hugging Face 'How to generate text' (fetched 2026-10-19): lower temperature makes the softmax sharper; top-k keeps the K most likely next words and redistributes the probability mass among them; top-p picks from the smallest set of words whose cumulative probability exceeds p, so the set size changes with the distribution; top-p can be combined with top-k.",
+    "Holtzman et al., nucleus sampling (arXiv 1904.09751, fetched 2026-10-19): sampling from the dynamic nucleus of the distribution cuts the unreliable tail and avoids bland, repetitive likelihood-based text.",
+    "Every number on screen is from the seeded toy run in docs: toy_run.py (invented logits, labelled EXAMPLE); the claim 'top-p keeps more words when temperature is higher' is a result of that run and follows from flatter chances needing more words to reach p."
+   ],
+   "length_target_s": 127.5,
+   "cover_headline": "Temperature, top-k, top-p: who does what?",
+   "thumb_text": "Temp top-k top-p",
+   "keywords": [
+    "temperature top k top p",
+    "llm sampling parameters",
+    "nucleus sampling explained",
+    "ai engineer interview questions",
+    "top p vs temperature"
+   ],
+   "caption_note": "The answer to the check question is: badhte hain (put it in the caption).",
+   "status": "planned",
+   "qa_passed": false,
+   "cover_count": 1,
+   "trial": {
+    "tries": "the team's longer numbers-first version of question 001 on non-followers",
+    "of": "q105"
+   },
+   "variant_note": "Version B of the first interview question (q105): the team's own script, built first as a demo. Same question as q105, so its cover counts 001 like q105."
+  },
+  {
+   "id": "a003",
+   "track": "series",
+   "day": 3,
+   "unit": "A3",
+   "format": "demo",
+   "title": "Overfitting: zero error on training, 133 on new data",
+   "one_idea": "A flexible model can score zero error on its training points and still fail on new data because it memorised the noise; unseen data exposes it, and simpler models, more data and validation fix it, while a too-simple model underfits.",
+   "hook_type": "surprising_fact",
+   "spoken_hook": "Ek AI model ka training error zero hai, phir bhi naye questions par uski galti 133 hai!",
+   "hook_formula": "contradiction_curiosity",
+   "hook_source": "owner's script, 2026-10-20",
+   "visual_idea": "Training Error 0.00 vs New Data Error 133 on frame 0; exam-student analogy; a 10-point scatter with a straight line (0.87 / 1.04) and a wiggly curve through all points (0 / 133); the curve with 100 points (0.93 / 1.03); a straight line missing a curved pattern for underfitting.",
+   "everyday_anchor": "The student who memorises solved examples and fails when the question changes.",
+   "example": "EXAMPLE from the owner's own Python run: hidden rule y = 2x + 1 plus random noise, 10 training points; straight line train 0.87, new data 1.04; flexible curve train 0 and new data 133, actual y roughly 1 to 21; same curve with 100 points train 0.93, new data 1.03. The studio must re-run this (a script in state/runs) and show the real printed numbers; if they differ from the owner's, report it and do not change the script yourself.",
+   "sources": [
+    "https://developers.google.com/machine-learning/crash-course/overfitting/overfitting",
+    "https://scikit-learn.org/stable/auto_examples/model_selection/plot_underfitting_overfitting.html"
+   ],
+   "facts_to_verify": [
+    "Overfitting = low training error, high error on new data; underfitting = model too simple (scikit-learn example page, to be fetched by the researcher/studio). Every number on screen comes from the printed run."
+   ],
+   "length_target_s": 150,
+   "cover_headline": "Zero training error, still wrong?",
+   "thumb_text": "Overfitting",
+   "keywords": [
+    "overfitting explained",
+    "underfitting",
+    "train vs test error",
+    "ai engineer roadmap"
+   ],
+   "caption_note": "Comment question: model seekh raha hai ya ratta maar raha hai? (put it in the caption)",
+   "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. Length: the owner wants it as long as the teaching needs (up to 180 s); the first estimate is 150 to 175 s. If it renders over 180 s, report it, do not cut.",
+   "script_file": "state/scripts/a003.txt",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "q108",
+   "track": "interview",
+   "unit": "C3",
+   "title": "Interview: Chain-of-thought prompting hamesha performance badhata hai?",
+   "one_idea": "Chain-of-thought (step by step) prompting helps on multi-step problems, but on simple questions it only adds output tokens, latency and cost, and reasoning models already reason internally, so test both on your own examples.",
+   "hook_type": "relatable_stake",
+   "spoken_hook": "France ki capital poochhi… Bot ne teen lines mein jawab diya!",
+   "hook_formula": "bot over-explains a one-word answer, then the interview question",
+   "hook_source": "owner's script, 2026-10-20",
+   "visual_idea": "Chat that answers 'capital of France' in three lines vs one word; shop bill with 3 notebooks at 45, 2 pens at 12, paid 200: 135 + 24 = 159, change 41; Standard LLM vs Reasoning model; the interview answer card.",
+   "everyday_anchor": "A shop bill: writing the steps catches a calculation slip, but nobody needs steps to say Paris.",
+   "example": "EXAMPLE (invented, arithmetic checked: 3 x 45 = 135, 2 x 12 = 24, total 159, change 200 - 159 = 41). No model result is shown or claimed.",
+   "sources": [
+    "https://arxiv.org/abs/2201.11903"
+   ],
+   "facts_to_verify": [
+    "Chain-of-thought prompting (intermediate reasoning steps) improves arithmetic, commonsense and symbolic reasoning mainly in sufficiently large models (Wei et al., abstract, fetched 2026-10-20)."
+   ],
+   "length_target_s": 100,
+   "cover_headline": "Does step by step always help?",
+   "thumb_text": "Step by step?",
+   "keywords": [
+    "chain of thought prompting",
+    "think step by step",
+    "reasoning models",
+    "prompt engineering interview",
+    "ai engineer interview questions"
+   ],
+   "trap": "Adding 'think step by step' to every prompt without measuring.",
+   "caption_note": "Comment ALWAYS or TEST FIRST; the answer is TEST FIRST (put it in the caption).",
+   "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. ",
+   "script_file": "state/scripts/q108.txt",
+   "status": "planned",
+   "qa_passed": false,
+   "format": "trade-off"
+  },
+  {
+   "id": "q109",
+   "track": "interview",
+   "unit": "C3",
+   "title": "Interview: Developer aur user instruction mein takraav ho to AI kiski maane?",
+   "one_idea": "Developer instructions take precedence over conflicting user instructions, but a prompt is not a security boundary, so critical business rules such as a refund limit must be enforced in trusted backend code.",
+   "hook_type": "interviewer_asked",
+   "spoken_hook": "Interviewer ने पूछा: Developer की instruction और user के message में टकराव हो, तो AI किसका order follow करेगा?",
+   "hook_formula": "interviewer_asked (owner's wording; question runs longer than 16 words)",
+   "hook_source": "owner's script, 2026-10-20",
+   "visual_idea": "Interviewer question card; refund bot with a 500 rupee limit and a customer asking for 2,000; chain of command System > Developer > User; a code run where the model returns Approved and the backend prints Approved: False.",
+   "everyday_anchor": "A refund bot with a 500 rupee limit that a customer tries to talk past.",
+   "example": "EXAMPLE (invented): refund limit 500, request 2,000, model stub always says yes, backend check prints Approved: False. The studio runs a few lines of Python and shows the real output.",
+   "sources": [
+    "https://model-spec.openai.com/2025-02-12.html"
+   ],
+   "facts_to_verify": [
+    "OpenAI Model Spec chain of command (fetched 2026-10-20): when developer and user messages conflict, the developer messages have greater authority. The script says 'System instructions' in the owner's own wording; the spec's own name for the top level is 'platform'. Keep the owner's word in the script and voice and report the difference, do not change it."
+   ],
+   "length_target_s": 110,
+   "cover_headline": "Developer or user: who wins?",
+   "thumb_text": "Who wins?",
+   "keywords": [
+    "instruction hierarchy",
+    "developer vs user prompt",
+    "prompt injection",
+    "llm security interview",
+    "ai engineer interview questions"
+   ],
+   "trap": "Writing a business rule only in the prompt and trusting it.",
+   "caption_note": "Comment PROMPT or CODE; the answer is CODE (put it in the caption).",
+   "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. ",
+   "script_file": "state/scripts/q109.txt",
+   "status": "planned",
+   "qa_passed": false,
+   "format": "demo"
+  },
+  {
+   "id": "a004",
+   "track": "series",
+   "day": 4,
+   "unit": "A3",
+   "format": "demo",
+   "title": "An LLM is a next-word predictor: watch the guesses",
+   "one_idea": "An LLM writes by repeatedly making a list of possible next words with odds, picking one and adding it; the answer is built one word at a time.",
+   "hook_type": "direct_question",
+   "spoken_hook": "ChatGPT jawab kaise likhta hai? Ek ek word guess karke!",
+   "hook_formula": "plain_question",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "The sentence 'the cat sat on the' with a ranked bar list of next-word guesses (mat 50 %, sofa 33 %, bed 17 %); the picked word is appended and the list rebuilds; a phone keyboard suggestion strip as the anchor; a label TOKEN = word piece.",
+   "everyday_anchor": "The phone keyboard's next-word suggestions.",
+   "example": "EXAMPLE (toy counting model on an invented 8-sentence corpus, not a real LLM), real printed run state/runs/a004_next_word_run.py: after 'sat on the' seen 6 times: mat 3/6 = 50 %, sofa 2/6 = 33 %, bed 1/6 = 17 %. Say that a real LLM does the same with a neural network over a huge vocabulary of tokens; Google's crash course says LLMs assign probabilities to continuations and a token can be a word, subword or character.",
+   "sources": [
+    "https://developers.google.com/machine-learning/crash-course/llm/transformers"
+   ],
+   "facts_to_verify": [
+    "Google ML Crash Course (fetched 2026-10-21): LLMs are autocomplete-style, assign probabilities to possible continuations; a token can be a word, subword or single character. Only the toy run's numbers are shown; the page's own example (3.1 % / 2.9 %) is for whole sentences and is not used."
+   ],
+   "length_target_s": 150,
+   "cover_headline": "How ChatGPT really writes",
+   "thumb_text": "Next word",
+   "keywords": [
+    "next word prediction",
+    "how llm works",
+    "tokens explained",
+    "ai engineer roadmap"
+   ],
+   "caption_note": "Comment question: agar hamesha top guess chune, to jawab har baar same aayega? (answer in caption)",
+   "script_file": "state/scripts/a004.txt",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "q110",
+   "track": "interview",
+   "unit": "A3",
+   "format": "concept",
+   "title": "Interview: Model ne confidently galat fact bol diya. Hallucination kyun hoti hai, aur kaise kam karoge?",
+   "one_idea": "A model predicts likely next words and does not look facts up, and training and benchmark grading that reward guessing over saying 'I don't know' make it answer confidently anyway; you reduce it by grounding answers in retrieved sources (RAG), allowing 'I don't know', and checking outputs.",
+   "hook_type": "relatable_stake",
+   "spoken_hook": "Chatbot ne fake research paper bataya, bilkul confidently!",
+   "hook_formula": "chatbot confidently wrong, then the interview question",
+   "hook_source": "hook-writer skill",
+   "visual_idea": "Chat showing a confident answer with a made-up paper title; five candidate answers with odds (A 30 % ... E 10 %) and the top pick being wrong 70 % of the time; grading table (right +1, wrong 0 or -1, I don't know 0) flipping guess to abstain; RAG: question + retrieved page -> answer; the interview answer card.",
+   "everyday_anchor": "An exam where a blank answer scores 0 and a wrong answer also scores 0: you always guess.",
+   "example": "EXAMPLE (invented odds), real run state/runs/q110_halluc_run.py: top guess A at 30 % is wrong 70 % of the time; with right +1 / wrong 0 / blank 0 expected score of guessing 0.30 vs 0.00, with wrong -1 it is -0.40, so abstain. No real model output is shown or claimed.",
+   "sources": [
+    "https://arxiv.org/abs/2509.04664",
+    "https://arxiv.org/abs/2005.11401"
+   ],
+   "facts_to_verify": [
+    "Kalai, Nachum, Vempala, Zhang, Why Language Models Hallucinate (arXiv 2509.04664, fetched 2026-10-21): hallucinations persist because training and evaluation procedures reward guessing over acknowledging uncertainty; most benchmarks penalise uncertain answers.",
+    "Lewis et al., RAG (arXiv 2005.11401, fetched 2026-10-21): pairing a pretrained model with a retriever over external documents gave more specific, diverse and factual language than a parametric-only baseline. Do not claim RAG removes hallucination.",
+    "openai.com article on the same paper returned 403: not used."
+   ],
+   "length_target_s": 110,
+   "cover_headline": "Why does AI make up facts?",
+   "thumb_text": "Why hallucinate?",
+   "keywords": [
+    "llm hallucination",
+    "why ai makes things up",
+    "reduce hallucination rag",
+    "ai engineer interview questions"
+   ],
+   "trap": "Calling it a bug to patch: the model predicts likely words, it does not look facts up.",
+   "caption_note": "Comment question: blank answer ko 0 marks do ya galat ko minus? (put the answer in the caption)",
+   "script_file": "state/scripts/q110.txt",
+   "status": "planned",
+   "qa_passed": false
+  },
+  {
+   "id": "q111",
+   "track": "interview",
+   "unit": "A6",
+   "format": "trade-off",
+   "title": "Interview: Open source model use karoge ya closed API? Decide kaise karoge?",
+   "one_idea": "Decide on data privacy and control, cost at your own request volume (an API is pay per use, self-hosting is a fixed server bill plus someone to run it) and the licence terms, not on benchmark scores alone; start with an API and move when volume or privacy demands it.",
+   "hook_type": "interviewer_asked",
+   "spoken_hook": "Interviewer ने पूछा: Open source model use karoge ya closed API? Decide kaise karoge?",
+   "hook_formula": "interviewer_asked",
+   "hook_source": "hook-writer skill; company_specific skipped, no fetched interview source",
+   "visual_idea": "Two doors OPEN MODEL (you run it) and API (they run it); a break-even line chart of monthly cost (API rising line vs flat server bill crossing at 120,000 requests); a licence card with 'Built with Meta Llama 3' and the 700 million users clause; Apache 2.0 card; the interview answer card.",
+   "everyday_anchor": "Taxi vs buying a car: a taxi is cheaper for a few trips, a car wins when you drive daily, but you pay for fuel, parking and servicing.",
+   "example": "EXAMPLE (invented prices, not real), real run state/runs/q111_cost_run.py: API Rs 0.5 per request vs GPU server Rs 60,000 per month fixed: 20,000 requests Rs 10,000 vs 60,000; 120,000 requests Rs 60,000 vs 60,000 (break-even); 500,000 requests Rs 250,000 vs 60,000.",
+   "sources": [
+    "https://dev.meta.ai/llama/llama3/license/",
+    "https://www.apache.org/licenses/LICENSE-2.0",
+    "https://developers.openai.com/api/docs/guides/your-data"
+   ],
+   "facts_to_verify": [
+    "Meta Llama 3 licence (fetched 2026-10-21): a licensee whose products exceeded 700 million monthly active users in the month before the Llama 3 release (18 April 2024) must request a licence from Meta; derived works must prominently display 'Built with Meta Llama 3'. So 'open weights' is not the same as open source.",
+    "Apache 2.0 (fetched): commercial use, modification and redistribution allowed, with notices kept, plus a patent grant.",
+    "OpenAI API docs (fetched): data sent to the API is not used to train OpenAI models unless you opt in; abuse-monitoring logs kept up to 30 days by default. Say 'the vendor's policy decides', do not generalise to all APIs."
+   ],
+   "length_target_s": 110,
+   "cover_headline": "Open model or paid API?",
+   "thumb_text": "Open vs API",
+   "keywords": [
+    "open source vs closed llm",
+    "llama vs gpt api",
+    "self host llm cost",
+    "ai engineer interview questions"
+   ],
+   "trap": "Picking on benchmark scores alone instead of data privacy, cost at your volume and who runs it.",
+   "caption_note": "Comment API or OPEN: 20,000 requests a month, which one? (answer API, in the caption)",
+   "script_file": "state/scripts/q111.txt",
+   "status": "planned",
+   "qa_passed": false
+  }
+ ]
 }
