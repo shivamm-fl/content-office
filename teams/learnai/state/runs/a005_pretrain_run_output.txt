@@ -1,7 +1,7 @@
-vocabulary: 12 words, text: 53 words
-before reading anything: guess evenly, loss = 3.58 bits per word
-after reading 10 words: loss on the full text = 3.09 bits per word
-after reading 20 words: loss on the full text = 2.74 bits per word
-after reading 40 words: loss on the full text = 2.37 bits per word
-after reading 53 words: loss on the full text = 2.19 bits per word
-after reading all of it, what follows 'the': {'cat': 4, 'mat': 2, 'dog': 4, 'rug': 2, 'fish': 2, 'bone': 1, 'sofa': 1}
+words: 53 distinct: 12
+read  0 words: loss 3.58 bits (even guess among 12)
+read 10 words: loss 3.17
+read 20 words: loss 2.84
+read 40 words: loss 2.48
+read 53 words: loss 2.29
+after 'the': [('dog', 4), ('cat', 4), ('rug', 2), ('mat', 2), ('door', 2), ('park', 2), ('bed', 1)]

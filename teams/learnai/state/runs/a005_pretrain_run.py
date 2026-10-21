@@ -1,23 +1,25 @@
-"""a005: toy pretraining. EXAMPLE: tiny invented corpus, a counting next-word model (not a neural network).
-'Training' = read text, hide the next word, count; loss = average -log2(p(true next word)) over the text.
-Loss falls as the model reads more text. Real LLMs do the same job (predict next token) with a neural network."""
-import math
+"""a005: pretraining as 'guess the next word, the text is the answer sheet'. A tiny EXAMPLE corpus (invented, 53 words,
+12 distinct words). The toy model counts, for every word, which word came next in the text it has read so far
+(add-one smoothing so an unseen word still gets a small chance). Loss = average bits of surprise per word when the
+model guesses every next word of the whole text (lower = better guesses). Not a real LLM."""
+import math, json
 from collections import Counter, defaultdict
-corpus = ("the cat sat on the mat . the dog sat on the rug . the cat ate the fish . "
-          "the dog ate the bone . the cat sat on the sofa . the dog sat on the mat . "
-          "the cat ate the fish . the dog sat on the rug .").split()
-V = len(set(corpus))
-def loss(counts, text):
-    tot = 0; n = 0
+text = ("the dog sat on the rug the cat sat on the mat the cat ran to the door the dog sat on the bed "
+        "the cat sat on the rug the dog ran to the park the dog sat on the mat the cat ran to the park "
+        "cat ran to the door").split()
+V = sorted(set(text))
+def loss(n_read):
+    nxt = defaultdict(Counter)
+    for a, b in zip(text[:n_read], text[1:n_read]): nxt[a][b] += 1
+    bits = 0
     for a, b in zip(text, text[1:]):
-        c = counts[a]; p = (c[b] + 1) / (sum(c.values()) + V)   # +1 smoothing so unseen words are not zero
-        tot += -math.log2(p); n += 1
-    return tot / n
-counts = defaultdict(Counter)
-print(f"vocabulary: {V} words, text: {len(corpus)} words")
-print(f"before reading anything: guess evenly, loss = {math.log2(V):.2f} bits per word")
-for upto in (10, 20, 40, len(corpus)):
-    counts = defaultdict(Counter)
-    for a, b in zip(corpus[:upto], corpus[1:upto]): counts[a][b] += 1
-    print(f"after reading {upto:>2} words: loss on the full text = {loss(counts, corpus):.2f} bits per word")
-print("after reading all of it, what follows 'the':", dict(counts["the"]))
+        c = nxt[a]; bits += -math.log2((c[b] + 1) / (sum(c.values()) + len(V)))
+    return bits / (len(text) - 1)
+print("words:", len(text), "distinct:", len(V))
+out = {0: math.log2(len(V))}
+print(f"read  0 words: loss {out[0]:.2f} bits (even guess among {len(V)})")
+for n in (10, 20, 40, 53): out[n] = loss(n); print(f"read {n:2d} words: loss {out[n]:.2f}")
+nxt = defaultdict(Counter)
+for a, b in zip(text, text[1:]): nxt[a][b] += 1
+print("after 'the':", nxt["the"].most_common())
+json.dump({str(k): round(v, 4) for k, v in out.items()}, open("state/runs/a005_pretrain_run.json", "w"))
