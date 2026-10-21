@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Open model or paid API?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="123.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="123.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="123.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="123.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tile = (w, h, text, col, size) => `<div style="width:${w}px;height:${h}px;border-radius:24px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.04em;color:${col}">${text}</div>`;
+      const tileEl = (host, x, y, w, h, text, col, t, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`, tile(w, h, text, col, size)), t, { opacity: 0, y: 20 });
+      const tag = (host, text, x, y, w, t, col, size, al) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:${al || "center"};font:800 ${size || 36}px ${COD};letter-spacing:.08em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 54}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const ring = (host, x, y, w, h, col, t, rad) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border:5px solid ${col};border-radius:${rad || 30}px`), t, { opacity: 0 }, 0.25);
+      const strike = (host, x, y, w, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:8px;border-radius:4px;background:${HOT};transform-origin:0 50%`); tl.set(d, { opacity: 0, scaleX: 0 }, 0); tl.to(d, { opacity: 1, scaleX: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t); return d; };
+      const bar = (host, x, y, w, h, col, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;background:${ca(col, 0.85)};transform-origin:0 50%`); tl.set(d, { opacity: 0, scaleX: 0 }, 0); tl.to(d, { opacity: 1, scaleX: 1, duration: 0.7, ease: "power3.out", immediateRender: false }, t); return d; };
+      const dimIn = (d, t0, tL, base) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, y: 20 }, { opacity: base, y: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, t0); tl.to(d, { opacity: 1, duration: 0.3, ease: "power2.out", immediateRender: false }, tL); return d; };
+      const hideBox = (b, t) => b.hide(t);
+
+      // ============ A: the question, two doors from frame 0 ============
+      // diagram: A
+      M.hook(["Open model", "or API?"], { size: 104, top: 240 });
+      gone(pillC(M.$("#cam"), "INTERVIEW QUESTION", 175, 0.05, { size: 28, h: 46 }), S.B - 0.05, 0.2);
+      const dOpen = M.box(A, { x: 60, y: 540, w: 450, h: 480, label: "OPEN MODEL", sub: "YOU RUN IT", icon: "chip", isize: 150, color: CYAN, size: 42, subsize: 38 }); dOpen.show(0.1);
+      const dApi = M.box(A, { x: 570, y: 540, w: 450, h: 480, label: "API", sub: "THEY RUN IT", icon: "cloud", isize: 150, color: ACC, size: 56, subsize: 38 }); dApi.show(0.2);
+      const rO = ring(A, 52, 532, 466, 496, CYAN, at("A", "Open")); gone(rO, at("A", "closed") - 0.1);
+      const rA = ring(A, 562, 532, 466, 496, ACC, at("A", "closed")); gone(rA, at("A", "decide") - 0.1);
+      show(el(A, `left:470px;top:1040px;width:140px;text-align:center;font:800 150px ${COD};color:${HOT};line-height:1`, "?"), at("A", "decide"), { opacity: 0, scale: 0.7 });
+      pillC(A, "HOW TO CHOOSE", 1230, at("A", "kaise"), { size: 42, h: 72, col: GOOD });
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: three things, not benchmarks; start with API ============
+      // diagram: B
+      const bm = tileEl(B, 140, 230, 800, 130, "BENCHMARK SCORE", MUTED, P("B", 0) + 0.1, 46);
+      const bmS = strike(B, 150, 290, 780, at("B", "nahi"));
+      const c1 = M.box(B, { x: 140, y: 430, w: 800, h: 220, label: "DATA PRIVACY", sub: "WHO SEES DATA", icon: "lock", color: CYAN, size: 50, subsize: 38 }); c1.show(at("B", "data"));
+      const c2 = M.box(B, { x: 140, y: 690, w: 800, h: 220, label: "COST AT VOLUME", sub: "BILL PER MONTH", icon: "coin", color: ACC, size: 50, subsize: 38 }); c2.show(at("B", "request"));
+      const c3 = M.box(B, { x: 140, y: 950, w: 800, h: 220, label: "LICENCE", sub: "WHAT YOU MAY DO", icon: "doc", color: VIOLET, size: 50, subsize: 38 }); c3.show(at("B", "licence"));
+      const tB = at("B", "shuru") - 0.25;
+      gone(bm, tB); gone(bmS, tB); [c1, c2, c3].forEach((b) => b.hide(tB));
+      const sA = M.box(B, { x: 290, y: 340, w: 500, h: 230, label: "START: API", icon: "cloud", color: ACC, size: 48 }); sA.show(at("B", "shuru"));
+      M.arrow(B, { from: [540, 575], to: [540, 835], color: MUTED, w: 10, label: "VOLUME / PRIVACY", size: 38 }).show(at("B", "volume", 1), 0.4);
+      const sH = M.box(B, { x: 290, y: 840, w: 500, h: 230, label: "LATER: SELF-HOST", icon: "chip", color: CYAN, size: 40 }); sH.show(at("B", "self-host"));
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: what each means, then the 20,000-request example ============
+      // diagram: C
+      const k1 = M.box(C, { x: 140, y: 300, w: 800, h: 230, label: "CLOSED API", sub: "PAY PER REQUEST", icon: "cloud", color: ACC, size: 52, subsize: 40 }); k1.show(at("C", "Closed"));
+      const k2 = M.box(C, { x: 140, y: 700, w: 800, h: 230, label: "OPEN MODEL", sub: "YOUR SERVER", icon: "chip", color: CYAN, size: 52, subsize: 40 }); k2.show(at("C", "Open"));
+      const fr = stamp(C, "FREE?", 540, 580, HOT, at("C", "free"), 60);
+      const tC = at("C", "API", 1) - 0.25;
+      k1.hide(tC); k2.hide(tC); gone(fr, tC);
+      pillC(C, "EXAMPLE", 215, at("C", "EXAMPLE"), { size: 36, h: 60, col: MUTED });
+      const pr1 = M.box(C, { x: 60, y: 320, w: 460, h: 250, label: "Rs 0.5", sub: "PER REQUEST", icon: "coin", color: ACC, size: 54, subsize: 36 }); pr1.show(at("C", "API", 1));
+      const pr2 = M.box(C, { x: 560, y: 320, w: 460, h: 250, label: "Rs 60,000", sub: "PER MONTH", icon: "chip", color: CYAN, size: 46, subsize: 36 }); pr2.show(at("C", "GPU"));
+      pillC(C, "20,000 REQUESTS", 640, at("C", "20000"), { size: 44, h: 76, col: TEXT });
+      tag(C, "API", 60, 765, 300, at("C", "API", 2), ACC, 40, "left");
+      const baA = bar(C, 60, 815, 160, 110, ACC, at("C", "API", 2));
+      tag(C, "Rs 10,000", 250, 842, 500, at("C", "10000"), ACC, 50, "left");
+      tag(C, "SERVER", 60, 960, 300, at("C", "60000", 1) - 0.3, CYAN, 40, "left");
+      const baS = bar(C, 60, 1010, 960, 110, CYAN, at("C", "60000", 1));
+      tag(C, "Rs 60,000", 100, 1037, 600, at("C", "60000", 1) + 0.3, "#0B1220", 50, "left");
+      stamp(C, "6x COSTLIER", 540, 1160, HOT, at("C", "6"), 56);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: privacy ============
+      // diagram: D
+      pillC(D, "PRIVACY", 215, P("D", 0), { size: 40, h: 64, col: CYAN });
+      const dd = M.box(D, { x: 340, y: 310, w: 400, h: 200, label: "YOUR DATA", icon: "doc", color: CYAN, size: 40 }); dd.show(at("D", "privacy"));
+      const dar = M.arrow(D, { from: [540, 515], to: [540, 625], color: MUTED, w: 10 }); dar.show(at("D", "vendor") - 0.1, 0.3); dar.travel(at("D", "paas"), 0.6, CYAN);
+      const dv = M.box(D, { x: 340, y: 630, w: 400, h: 200, label: "VENDOR", icon: "cloud", color: ACC, size: 44 }); dv.show(at("D", "vendor"));
+      const dc = glass(D, 60, 890, 960, 380, ACC, 28); show(dc, at("D", "jaise"));
+      const dct = tag(D, "OPENAI API DOCS", 100, 910, 880, at("D", "OpenAI"), ACC, 36, "left");
+      const dr1 = dimIn(el(D, `left:100px;top:1000px;width:880px;font:700 48px ${COD};color:${GOOD};white-space:nowrap`, "✓ TRAINING: OFF"), at("D", "OpenAI") + 0.3, at("D", "training"), 0.3);
+      const dr2 = dimIn(el(D, `left:100px;top:1100px;width:880px;font:700 48px ${COD};color:${ACC};white-space:nowrap`, "◔ LOGS: 30 DAYS"), at("D", "OpenAI") + 0.3, at("D", "abuse"), 0.3);
+      const dsrc = show(el(D, `left:100px;top:1200px;font:600 30px ${COD};color:${MUTED};white-space:nowrap`, "Source: OpenAI API docs"), at("D", "jaise") + 0.3, { opacity: 0 });
+      const tD = at("D", "Self-host") - 0.25;
+      [dd, dv].forEach((b) => b.hide(tD)); dar.hide(tD); [dc, dct, dr1, dr2, dsrc].forEach((d) => gone(d, tD));
+      const dsv = M.box(D, { x: 240, y: 520, w: 600, h: 330, label: "YOUR SERVER", sub: "DATA INSIDE", icon: "lock", color: GOOD, size: 52, subsize: 40 }); dsv.show(at("D", "Self-host"));
+      stamp(D, "STAYS INSIDE", 540, 930, GOOD, at("D", "bahar"), 56);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: the break-even chart (the real run) ============
+      // diagram: E
+      pillC(E, "EXAMPLE", 215, P("E", 0), { size: 36, h: 60, col: MUTED });
+      const NS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(NS, "svg"); svg.setAttribute("viewBox", "60 300 960 900"); svg.setAttribute("width", "960"); svg.setAttribute("height", "900");
+      svg.style.cssText = "position:absolute;left:60px;top:300px;overflow:visible"; E.appendChild(svg);
+      const sv = (tg, at_, par) => { const e = document.createElementNS(NS, tg); Object.keys(at_).forEach((k) => e.setAttribute(k, at_[k])); (par || svg).appendChild(e); return e; };
+      const X0 = 170, XE = 960, Y0 = 1060, YT = 420, YS = 906.4, XB = 359.6;
+      const panelE = glass(E, 60, 300, 960, 900, CYAN, 28); show(panelE, P("E", 0) + 0.1, { opacity: 0 }); E.appendChild(svg);
+      const axis = sv("path", { d: `M${X0} ${YT - 20}V${Y0}H${XE + 20}`, fill: "none", stroke: MUTED, "stroke-width": 3 });
+      const txt = (s, x, y, col, size, anchor) => { const t_ = sv("text", { x, y, fill: col, "font-size": size, "font-weight": 800, "text-anchor": anchor || "start" }); t_.setAttribute("font-family", "JetBrains Mono, monospace"); t_.textContent = s; return t_; };
+      const yl = txt("Rs / MONTH", 110, 372, MUTED, 34), xl = txt("REQUESTS / MONTH", 565, 1160, MUTED, 34, "middle");
+      [axis, yl, xl].forEach((n) => { tl.set(n, { opacity: 0 }, 0); tl.to(n, { opacity: 1, duration: 0.4, immediateRender: false }, P("E", 0) + 0.2); });
+      const drawLine = (d, len, col, t0, dur) => { const p = sv("path", { d, fill: "none", stroke: col, "stroke-width": 9, "stroke-linecap": "round", "stroke-dasharray": len, "stroke-dashoffset": len });
+        tl.set(p, { opacity: 0 }, 0); tl.set(p, { opacity: 1 }, t0); tl.fromTo(p, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: dur, ease: "none", immediateRender: false }, t0); return p; };
+      drawLine(`M${X0} ${YS}H${XE}`, XE - X0, CYAN, at("E", "cost"), 0.9);
+      const apiLen = Math.hypot(XE - X0, Y0 - YT);
+      drawLine(`M${X0} ${Y0}L${XE} ${YT}`, apiLen, ACC, at("E", "120000"), 3.2);
+      const pt = (x, y, col, t, r) => { const c = sv("circle", { cx: x, cy: y, r: r || 15, fill: col, stroke: "#0B1220", "stroke-width": 4 }); tl.set(c, { opacity: 0 }, 0); tl.to(c, { opacity: 1, duration: 0.25, immediateRender: false }, t); return c; };
+      const lbl = (s, x, y, col, size, t, anchor) => { const n = txt(s, x, y, col, size, anchor); tl.set(n, { opacity: 0 }, 0); tl.to(n, { opacity: 1, duration: 0.3, immediateRender: false }, t); return n; };
+      const tBE = at("E", "break-even");
+      pt(XB, YS, TEXT, tBE); lbl("BREAK-EVEN", 390, 968, TEXT, 40, tBE);
+      const gd = sv("path", { d: `M${XB} ${YS}V${Y0}`, stroke: TEXT, "stroke-width": 3, "stroke-dasharray": "10 10", fill: "none" }); tl.set(gd, { opacity: 0 }, 0); tl.to(gd, { opacity: 0.7, duration: 0.3, immediateRender: false }, tBE);
+      lbl("120,000", XB, 1112, TEXT, 38, tBE, "middle");
+      lbl("500,000", XE, 1112, TEXT, 38, at("E", "500000"), "end");
+      pt(XE, YT, ACC, at("E", "250000") - 0.3); lbl("250,000", 930, 400, ACC, 42, at("E", "250000"), "end");
+      pt(XE, YS, CYAN, at("E", "60000", 1) - 0.3); lbl("60,000", 930, 874, CYAN, 42, at("E", "60000", 1), "end");
+      lbl("API", 760, 470, ACC, 44, at("E", "API"), "end");
+      lbl("SERVER", 940, 970, CYAN, 40, at("E", "server"), "end");
+      lbl("PER REQUEST", 760, 516, ACC, 36, at("E", "bill"), "end");
+      lbl("FIXED", 940, 1016, CYAN, 36, at("E", "fixed"), "end");
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: licence ============
+      // diagram: F
+      pillC(F, "LICENCE", 215, P("F", 0), { size: 40, h: 64, col: VIOLET });
+      const ow = M.box(F, { x: 60, y: 330, w: 440, h: 300, label: "OPEN WEIGHTS", sub: "YOU CAN DOWNLOAD", icon: "model", color: CYAN, size: 40, subsize: 36 }); ow.show(P("F", 0) + 0.3);
+      const os = M.box(F, { x: 580, y: 330, w: 440, h: 300, label: "OPEN SOURCE", sub: "LICENCE RULES", icon: "doc", color: VIOLET, size: 40, subsize: 36 }); os.show(at("F", "source"));
+      const ne = show(el(F, `left:500px;top:420px;width:80px;text-align:center;font:800 100px ${COD};color:${HOT};line-height:1`, "≠"), at("F", "nahi"), { opacity: 0, scale: 0.7 });
+      const tF = at("F", "Llama") - 0.25;
+      ow.hide(tF); os.hide(tF); gone(ne, tF);
+      const lc = glass(F, 60, 330, 960, 440, CYAN, 28); show(lc, at("F", "Llama"));
+      const lct = tag(F, "LLAMA 3 LICENCE", 100, 350, 880, at("F", "Llama"), CYAN, 40, "left");
+      const lcu = tag(F, "MONTHLY USERS", 100, 425, 880, at("F", "licence", 1), MUTED, 34, "left");
+      const lbar = el(F, `left:100px;top:490px;width:880px;height:70px;border-radius:14px;border:2.5px solid ${ca(MUTED, 0.6)}`); show(lbar, at("F", "700") - 0.2, { opacity: 0 });
+      const lf1 = bar(F, 100, 490, 660, 70, CYAN, at("F", "700")), lf2 = el(F, `left:760px;top:490px;width:220px;height:70px;border-radius:0 14px 14px 0;background:${ca(HOT, 0.85)}`);
+      show(lf2, at("F", "users"), { opacity: 0 }, 0.3);
+      const lmk = el(F, `left:758px;top:470px;width:6px;height:110px;background:${TEXT}`); show(lmk, at("F", "700"), { opacity: 0 }, 0.2);
+      tag(F, "700 MILLION", 420, 585, 560, at("F", "million"), TEXT, 42, "right");
+      stamp(F, "ASK META", 540, 665, ACC, at("F", "Meta"), 52);
+      const ac = glass(F, 60, 810, 960, 260, GOOD, 28); show(ac, at("F", "Apache"));
+      tag(F, "APACHE 2.0", 100, 840, 880, at("F", "Apache"), GOOD, 40, "left");
+      const ach = M.icon(F, "check", 110, 925, 100, GOOD); ach.show(at("F", "commercial"));
+      tag(F, "COMMERCIAL USE", 240, 945, 740, at("F", "commercial"), TEXT, 52, "left");
+      pillC(F, "COSTLY TO SWITCH", 1130, at("F", "mahnga"), { size: 46, h: 80, col: HOT });
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: the interview answer ============
+      // diagram: G
+      pillC(G, "INTERVIEW ANSWER", 215, P("G", 0), { size: 36, h: 60 });
+      dimIn(el(G, "left:140px;top:310px;width:800px;height:120px", tile(800, 120, "DATA PRIVACY", CYAN, 48)), P("G", 0) + 0.3, at("G", "data"), 0.3);
+      dimIn(el(G, "left:140px;top:450px;width:800px;height:120px", tile(800, 120, "COST AT VOLUME", ACC, 48)), P("G", 0) + 0.3, at("G", "cost"), 0.3);
+      dimIn(el(G, "left:140px;top:590px;width:800px;height:120px", tile(800, 120, "LICENCE", VIOLET, 48)), P("G", 0) + 0.3, at("G", "licence"), 0.3);
+      const gb = tileEl(G, 140, 760, 800, 110, "BENCHMARKS ALONE", MUTED, at("G", "not"), 44);
+      strike(G, 150, 810, 780, at("G", "benchmarks"));
+      const g1 = M.box(G, { x: 60, y: 940, w: 440, h: 240, label: "START: API", icon: "cloud", color: ACC, size: 40 }); g1.show(at("G", "start"));
+      M.arrow(G, { from: [505, 1060], to: [575, 1060], color: MUTED, w: 10 }).show(at("G", "move"), 0.3);
+      const g2 = M.box(G, { x: 580, y: 940, w: 440, h: 240, label: "SELF-HOST", icon: "chip", color: CYAN, size: 42 }); g2.show(at("G", "move"));
+      pillC(G, "FIXED COST WORTH IT", 1230, at("G", "justifies"), { size: 38, h: 70, col: GOOD });
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: your case? comment, follow ============
+      // diagram: H
+      pillC(H, "YOUR CASE", 215, P("H", 0), { size: 38, h: 64 });
+      const hcase = glass(H, 60, 320, 960, 280, ACC, 28); show(hcase, P("H", 0) + 0.1, { opacity: 0, y: 20 });
+      el(hcase, `left:0;top:44px;width:960px;text-align:center;font:800 112px ${COD};color:${ACC}`, "20,000");
+      el(hcase, `left:0;top:190px;width:960px;text-align:center;font:700 46px ${COD};color:${TEXT}`, "REQUESTS / MONTH");
+      const hA = M.box(H, { x: 60, y: 680, w: 440, h: 300, label: "API", icon: "cloud", color: ACC, size: 60 }); hA.show(at("H", "API"));
+      const hO = M.box(H, { x: 580, y: 680, w: 440, h: 300, label: "OPEN", icon: "chip", color: CYAN, size: 60 }); hO.show(at("H", "OPEN"));
+      show(el(H, `left:500px;top:780px;width:80px;text-align:center;font:800 100px ${COD};color:${HOT};line-height:1`, "?"), at("H", "OPEN"), { opacity: 0, scale: 0.7 });
+      const hc = glass(H, 120, 1060, 840, 230, CYAN, 30); show(hc, at("H", "Comment"), { opacity: 0, y: 20 });
+      el(hc, `left:40px;top:26px;font:700 52px ${COD};color:${TEXT}`, "@ai.learnvora");
+      show(el(hc, `left:40px;top:100px;font:700 30px ${COD};letter-spacing:.08em;color:${ACC}`, "AI ENGINEER INTERVIEW"), at("H", "interview"), { opacity: 0, y: 8 }, 0.3);
+      const fpl = el(hc, `left:520px;top:70px;width:290px;height:84px;border-radius:42px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 40px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fpl, at("H", "follow") - 0.4, { opacity: 0 });
+      tl.to(fpl, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("H", "follow")); tl.to(fpl, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("H", "follow") + 0.12);
+      M.fit(H, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
+      M.finish({ kw: { open: "cyan", api: "gold", privacy: "cyan", cost: "gold", licence: "violet", benchmark: "hot", benchmarks: "hot", free: "hot", "break-even": "good", "6": "hot", fixed: "cyan", "700": "gold", meta: "gold", apache: "good", comment: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

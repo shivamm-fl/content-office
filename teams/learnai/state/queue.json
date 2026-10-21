@@ -822,24 +822,19 @@
       "track": "interview",
       "unit": "A6",
       "format": "trade-off",
+      "status": "planned",
       "title": "Interview: Open source model use karoge ya closed API? Decide kaise karoge?",
       "one_idea": "Decide on data privacy and control, cost at your own request volume (an API is pay per use, self-hosting is a fixed server bill plus someone to run it) and the licence terms, not on benchmark scores alone; start with an API and move when volume or privacy demands it.",
       "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: Open source model use karoge ya closed API? Decide kaise karoge?",
+      "spoken_hook": "Interviewer ने पूछा: Open source model use करोगे या closed API, ये decide कैसे करोगे?",
       "hook_formula": "interviewer_asked",
-      "hook_source": "hook-writer skill; company_specific skipped, no fetched interview source",
       "visual_idea": "Two doors OPEN MODEL (you run it) and API (they run it); a break-even line chart of monthly cost (API rising line vs flat server bill crossing at 120,000 requests); a licence card with 'Built with Meta Llama 3' and the 700 million users clause; Apache 2.0 card; the interview answer card.",
-      "everyday_anchor": "Taxi vs buying a car: a taxi is cheaper for a few trips, a car wins when you drive daily, but you pay for fuel, parking and servicing.",
-      "example": "EXAMPLE (invented prices, not real), real run state/runs/q111_cost_run.py: API Rs 0.5 per request vs GPU server Rs 60,000 per month fixed: 20,000 requests Rs 10,000 vs 60,000; 120,000 requests Rs 60,000 vs 60,000 (break-even); 500,000 requests Rs 250,000 vs 60,000.",
+      "everyday_anchor": "Taxi vs buying a car.",
+      "example": "EXAMPLE (invented prices), real run state/runs/q111_cost_run.py: API Rs 0.5 per request vs GPU server Rs 60,000 per month fixed: 20,000 requests Rs 10,000 vs 60,000; 120,000 requests Rs 60,000 vs 60,000 (break-even); 500,000 requests Rs 250,000 vs 60,000.",
       "sources": [
         "https://dev.meta.ai/llama/llama3/license/",
         "https://www.apache.org/licenses/LICENSE-2.0",
         "https://developers.openai.com/api/docs/guides/your-data"
-      ],
-      "facts_to_verify": [
-        "Meta Llama 3 licence (fetched 2026-10-21): a licensee whose products exceeded 700 million monthly active users in the month before the Llama 3 release (18 April 2024) must request a licence from Meta; derived works must prominently display 'Built with Meta Llama 3'. So 'open weights' is not the same as open source.",
-        "Apache 2.0 (fetched): commercial use, modification and redistribution allowed, with notices kept, plus a patent grant.",
-        "OpenAI API docs (fetched): data sent to the API is not used to train OpenAI models unless you opt in; abuse-monitoring logs kept up to 30 days by default. Say 'the vendor's policy decides', do not generalise to all APIs."
       ],
       "length_target_s": 110,
       "cover_headline": "Open model or paid API?",
@@ -852,9 +847,7 @@
       ],
       "trap": "Picking on benchmark scores alone instead of data privacy, cost at your volume and who runs it.",
       "caption_note": "Comment API or OPEN: 20,000 requests a month, which one? (answer API, in the caption)",
-      "script_file": "state/scripts/q111.txt",
-      "status": "planned",
-      "qa_passed": false
+      "script_file": "state/scripts/q111.txt"
     }
   ]
 }

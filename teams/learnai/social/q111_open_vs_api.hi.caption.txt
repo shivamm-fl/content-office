@@ -1,0 +1,13 @@
+Interviewer ne poocha: open source model use karoge ya closed API, ye decide kaise karoge?
+
+Jawab: benchmark score se nahi, teen cheezon se: data privacy, request volume par cost, aur licence. Shuru API se karo, volume ya privacy majboor kare, tab self-host karo.
+
+Cost ka example (invented prices): API 0.5 rupye per request, GPU server 60,000 rupye mahina fixed. 20,000 requests par API 10,000, server 60,000. 120,000 requests par dono 60,000: yahi break-even hai. 500,000 par API 250,000, server phir bhi 60,000.
+
+Privacy: OpenAI ki API docs ke hisaab se data default mein training mein use nahi hota, par abuse logs 30 din tak reh sakte hain. Licence: Llama 3 mein 700 million monthly users se badi company ko Meta se alag licence leni padti hai; Apache 2.0 mein commercial use allowed hai.
+
+Interview mein bolo: "I'd decide on data privacy, cost at our request volume, and licence terms, not benchmarks alone. I'd start with an API, and move to a self-hosted open model when volume or privacy justifies the fixed cost."
+
+Mahine ke 20,000 requests hon, to API ya OPEN? Comment karo. Jawab: API.
+
+#AI #AIInterview #LLM
