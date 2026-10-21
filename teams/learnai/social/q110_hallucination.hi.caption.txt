@@ -1,0 +1,13 @@
+Chatbot ne fake research paper bataya, bilkul confidently! Interview mein poochha jata hai: model ne confidently galat fact bol diya, hallucination kyun hoti hai aur kaise kam karoge?
+
+Jawab: model agla likely word predict karta hai, facts look up nahi karta. Aur training aur grading guess karne wale ko reward deti hai.
+
+Example (invented numbers): model ka top guess A sirf 30 percent sahi hai, yaani 70 percent galat. Sahi par 1, galat par 0, khaali par 0 ho, to guess ka expected score 0.30 aur khaali ka 0: guess hamesha jeetta hai. Galat par minus 1 kar do, to guess ka score minus 0.40 ho jata hai aur chup rehna behtar hai.
+
+Teen fix: 1) RAG, yaani pehle documents dhoondho, phir model ke saamne rakhkar jawab likhvao. 2) Model ko "I don't know" bolne do. 3) Output check karo, aur jahan galti mahngi ho wahan insaan review kare. RAG hallucination kam karta hai, zero nahi.
+
+Interview mein bolo: "Hallucination happens because a language model predicts likely text rather than looking up facts, and training and grading often reward guessing over saying I don't know. I'd reduce it by grounding answers in retrieved sources, allowing the model to abstain, and verifying outputs."
+
+Blank answer ko 0 marks dete ho, ya galat ko minus? Comment karo ZERO ya MINUS. Jawab: MINUS, tab chup rehna guess se behtar ho jata hai.
+
+#AI #AIInterview #LLM

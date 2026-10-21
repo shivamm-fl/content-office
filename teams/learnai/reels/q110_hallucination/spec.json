@@ -1,0 +1,184 @@
+{
+ "tts": "owner",
+ "voice": "hi-IN-SwaraNeural",
+ "pace": 1.26,
+ "audio": "v2",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 0.9,
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 4,
+  "B": 4,
+  "C": 4,
+  "D": 4,
+  "E": 4,
+  "F": 4,
+  "G": 4,
+  "H": 4
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   null,
+   null,
+   1.9
+  ],
+  [
+   "err",
+   null,
+   null,
+   8.0
+  ],
+  [
+   "click",
+   null,
+   null,
+   11.5
+  ],
+  [
+   "err",
+   null,
+   null,
+   14.7
+  ],
+  [
+   "click",
+   null,
+   null,
+   18.2
+  ],
+  [
+   "err",
+   null,
+   null,
+   33.6
+  ],
+  [
+   "click",
+   null,
+   null,
+   38.3
+  ],
+  [
+   "click",
+   null,
+   null,
+   39.5
+  ],
+  [
+   "click",
+   null,
+   null,
+   40.2
+  ],
+  [
+   "dip",
+   null,
+   null,
+   45.7
+  ],
+  [
+   "err",
+   null,
+   null,
+   46.8
+  ],
+  [
+   "click",
+   null,
+   null,
+   53.2
+  ],
+  [
+   "ok",
+   null,
+   null,
+   59.3
+  ],
+  [
+   "click",
+   null,
+   null,
+   65.7
+  ],
+  [
+   "err",
+   null,
+   null,
+   72.0
+  ],
+  [
+   "ok",
+   null,
+   null,
+   75.0
+  ],
+  [
+   "click",
+   null,
+   null,
+   83.5
+  ],
+  [
+   "ok",
+   null,
+   null,
+   85.6
+  ],
+  [
+   "err",
+   null,
+   null,
+   89.0
+  ],
+  [
+   "click",
+   null,
+   null,
+   101.4
+  ],
+  [
+   "pop",
+   null,
+   null,
+   112.1
+  ],
+  [
+   "save",
+   null,
+   null,
+   116.9
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "@hook Chatbot ने fake research paper बताया, बिल्कुल confidently! || इसे कहते हैं hallucination, यानी model का confidently गलत fact बोल देना।",
+   "B": "तुम्हारा जवाब होना चाहिए: | model अगला likely word predict करता है, facts look up नहीं करता, | और training और grading guess करने वाले को reward देती है। || इसे ठीक करने के तीन तरीके हैं।",
+   "C": "पहले देखो, guess करना फ़ायदे का क्यों बन जाता है। || EXAMPLE, मान लो invented numbers: | model को जवाब पता नहीं, उसका top guess A है, | पर chance सिर्फ़ 30{thirty} percent। || यानी 70{seventy} percent वो गलत है, | फिर भी उसी confident tone में बोलेगा। || Grading: सही पर 1{one} number, गलत पर 0{zero}, खाली छोड़ने पर भी 0{zero}। || Guess का expected score 0.30{zero-point-three}, खाली का 0{zero}। | तो guess हमेशा जीतता है।",
+   "D": "पहला fix: RAG, यानी Retrieval-Augmented Generation। | पहले सवाल से जुड़े documents ढूँढो, फिर model के सामने रखकर जवाब लिखवाओ। || क्यों? क्योंकि तब model याद से नहीं, सामने रखे source से लिखता है।",
+   "E": "दूसरा fix: model को “I don't know” बोलने दो। || वही example, पर अब गलत जवाब पर minus 1{one}। | Guess का score: 0.30{zero-point-three} गुणा 1{one}, और 0.70{zero-point-seven} गुणा minus 1{one}, | यानी minus 0.40{zero-point-four}। | खाली छोड़ने पर 0{zero}। | अब चुप रहना बेहतर है। || क्यों? क्योंकि जिसे guess पर सज़ा मिले, वो बिना पता किए नहीं बोलता।",
+   "F": "तीसरा fix: output check करो। | Claims को source से match करो, और जहाँ गलती महँगी हो, वहाँ इंसान review करे। || क्यों? क्योंकि RAG hallucination कम करता है, zero नहीं।",
+   "G": "Interview में बोलो: || Hallucination happens because a language model predicts likely text rather than looking up facts, and training and grading often reward guessing over saying I don't know. I'd reduce it by grounding answers in retrieved sources, allowing the model to abstain, and verifying outputs.",
+   "H": "अब बताओ: | blank answer को 0{zero} marks दोगे, या गलत को minus? || Comment करो: ZERO या MINUS। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो!"
+  }
+ },
+ "hook_type": "relatable_stake",
+ "prime": "सुनो, ये बहुत interesting है!"
+}

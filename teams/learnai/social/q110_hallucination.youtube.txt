@@ -1,0 +1,9 @@
+AI jhooth kyun bolta hai? Hallucination interview jawab
+
+Interview mein poochha jata hai: model ne confidently galat fact bol diya, hallucination kyun hoti hai aur kaise kam karoge? Jawab: model agla likely word predict karta hai aur facts look up nahi karta, aur training aur grading ke tareeke guess karne ko reward dete hain (Kalai et al., "Why Language Models Hallucinate"). Kam karne ke teen tareeke: RAG se jawab source par tikao, model ko "I don't know" bolne do, aur output check karo. Is video mein invented numbers ka ek chhota example hai: top guess 30 percent sahi, galat par minus 1 ho to guess ka score minus 0.40.
+
+Is video mein: llm hallucination, why ai makes things up, reduce hallucination rag, ai engineer interview questions.
+
+Sources:
+https://arxiv.org/abs/2509.04664
+https://arxiv.org/abs/2005.11401

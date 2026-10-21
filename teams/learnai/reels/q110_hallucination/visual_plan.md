@@ -1,0 +1,15 @@
+# Visual plan q110: hallucination (stake hook on a picture, chat from frame 0)
+
+Idea in one line: a model picks likely words and guessing is rewarded, so it answers confidently even when unsure; fix = ground in sources, allow "I don't know", check outputs.
+The picture with the sound off: a chat with a confident fake paper title that gets stamped MADE UP; a 30/70 right/wrong bar; a grading table whose WRONG cell flips from 0 to -1 and flips guess into abstain; a RAG flow; a claim-vs-source check.
+
+| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes | Labels | Built with |
+|---|---|---|---|---|
+| A | chatbot gave a fake paper, confident | From frame 0 a chat panel: user bubble asks for a paper, bot bubble answers with a paper title and a green tick; on "galat" the tick flips to a red cross and a MADE UP stamp lands on the bubble. EXAMPLE pill (invented title). | CHATBOT, EXAMPLE, MADE UP | custom chat (recipe 1) |
+| B | answer: predicts words, no lookup, guessing rewarded, 3 fixes | Three stacked tiles land on their words: NEXT WORD (model icon), NO LOOKUP (cross icon), GUESS PAYS (coin icon); then three numbered chips 1 2 3 on "teen". | INTERVIEW QUESTION, NEXT WORD, NO LOOKUP, GUESS PAYS, 3 FIXES | M.box, pills |
+| C | top guess 30 % right, 70 % wrong; grading 1/0/0; guess score 0.30 vs 0 | Five answer bars A-E (A 30 % highest), A turns gold on "top guess"; a 100 % bar below splits 30 gold / 70 red; bars fade, a grading table RIGHT +1, WRONG 0, BLANK 0 pops row by row; two result tiles GUESS 0.30 and BLANK 0, stamp GUESS WINS. | EXAMPLE, A..E, RIGHT +1, WRONG 0, BLANK 0, GUESS WINS | M.dist + custom |
+| D | fix 1 RAG: find documents, put before model | Vertical flow QUESTION -> DOCUMENTS -> MODEL -> ANSWER; each box lands on its word, arrows draw; stamp SOURCE NOT MEMORY at the end. | RAG, QUESTION, DOCUMENTS, MODEL, ANSWER | M.box, M.arrow |
+| E | fix 2: allow I don't know; wrong = -1 | Table again but WRONG cell flips 0 -> -1 (red) on "minus"; the sum 0.30x1 + 0.70x-1 types in line by line to -0.40; tiles GUESS -0.40 (red) and BLANK 0 (green); ring on BLANK and stamp ABSTAIN. | I DON'T KNOW, WRONG -1, GUESS -0.40, BLANK 0, ABSTAIN | custom |
+| F | fix 3: check output; RAG lowers, not zero | Three claim rows match to source (two green ticks, one red cross with no source); HUMAN REVIEW box; a bar shrinks but never reaches zero, stamp NOT ZERO. | CHECK OUTPUT, CLAIM, SOURCE, HUMAN REVIEW, NOT ZERO | custom + M.box |
+| G | interview answer | Cause box (PREDICTS TEXT) on top, three fix boxes under it land on grounding, abstain, verifying. | INTERVIEW ANSWER, PREDICTS TEXT, GROUND IN SOURCES, ALLOW ABSTAIN, VERIFY OUTPUT | M.box |
+| H | zero or minus? comment, follow | Two boxes BLANK / WRONG with question mark; comment card with ZERO and MINUS pills; handle with FOLLOW pill pressing. | BLANK, WRONG, ZERO, MINUS, FOLLOW | M.box, custom |
