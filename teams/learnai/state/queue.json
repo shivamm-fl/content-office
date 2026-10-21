@@ -781,7 +781,8 @@
       "caption_note": "Comment question: agar hamesha top guess chune, to jawab har baar same aayega? (answer in caption)",
       "script_file": "state/scripts/a004.txt",
       "status": "planned",
-      "qa_passed": false
+      "qa_passed": false,
+      "hook_source": "strategist, backfilled 2026-10-22"
     },
     {
       "id": "q110",
@@ -814,7 +815,10 @@
       "caption_note": "Comment question: blank answer ko 0 marks do ya galat ko minus? (put the answer in the caption)",
       "script_file": "state/scripts/q110.txt",
       "status": "planned",
-      "qa_passed": false
+      "qa_passed": false,
+      "facts_to_verify": [
+        "arXiv 2509.04664: training and benchmark grading reward guessing over saying 'I don't know' (abstract); arXiv 2005.11401: RAG, retrieval-augmented generation (abstract). Fetched in the planning session of 2026-10-21."
+      ]
     },
     {
       "id": "q111",
@@ -846,7 +850,122 @@
       ],
       "trap": "Picking on benchmark scores alone instead of data privacy, cost at your volume and who runs it.",
       "caption_note": "Comment API or OPEN: 20,000 requests a month, which one? (answer API, in the caption)",
-      "script_file": "state/scripts/q111.txt"
+      "script_file": "state/scripts/q111.txt",
+      "hook_source": "strategist, backfilled 2026-10-22",
+      "facts_to_verify": [
+        "Llama 3 licence 700 million monthly active users clause; Apache 2.0 allows commercial use; OpenAI API data not used for training by default, abuse logs up to 30 days (pages listed in sources, fetched 2026-10-21)."
+      ]
+    },
+    {
+      "id": "a005",
+      "track": "series",
+      "day": 5,
+      "unit": "A3",
+      "format": "concept",
+      "title": "Pretraining: how an LLM first learns language from text",
+      "one_idea": "Pretraining is training a model from scratch on a huge pile of raw text with one task, guess the next word; nobody labels anything, the text itself is the answer sheet, and the error falls as it reads more.",
+      "hook_type": "direct_question",
+      "spoken_hook": "ChatGPT ने language कैसे सीखी? बहुत सारा text पढ़कर!",
+      "hook_formula": "plain_question",
+      "visual_idea": "A sentence 'the dog sat on the ___' with the last word hidden; the model's guess bars, then the hidden word revealed and the error shown as one number; a loss line falling from 3.58 to 2.19 as the text pile grows (10, 20, 40, 53 words); a pile of books labelled RAW TEXT, no labels; a label PRETRAINED = raw text predictor.",
+      "everyday_anchor": "Fill-in-the-blank practice: a student who has read a lot of text gets better at guessing the missing word, with the answer printed on the next line.",
+      "example": "EXAMPLE (toy counting model on an invented 53-word corpus with 12 distinct words, not a real LLM), real run state/runs/a005_pretrain_run.py: loss before reading 3.58 bits per word (even guess among 12 words); after 10 words 3.09; 20 words 2.74; 40 words 2.37; all 53 words 2.19. A real LLM does the same job with a neural network over tokens and trillions of words.",
+      "sources": [
+        "https://huggingface.co/learn/llm-course/chapter1/4"
+      ],
+      "facts_to_verify": [
+        "Hugging Face LLM course (fetched 2026-10-22): 'Pretraining is the act of training a model from scratch: the weights are randomly initialized' and the training starts without any prior knowledge; trained on large amounts of raw text in a self-supervised fashion; next-word prediction (from the n previous words) is given as an example objective. Fine-tuning is the training done after pretraining, supervised, on human-annotated labels. Do not say 'trillions of words' or name any real model's data size in the reel: not verified."
+      ],
+      "length_target_s": 150,
+      "cover_headline": "How an LLM first learns language",
+      "thumb_text": "Pretraining",
+      "keywords": [
+        "pretraining explained",
+        "how llm learns language",
+        "self supervised learning",
+        "ai engineer roadmap"
+      ],
+      "caption_note": "Comment question: pretraining mein text ko labels kisne diye? (answer: kisi ne nahi, agla word hi answer hai; put it in the caption)",
+      "script_file": "state/scripts/a005.txt",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-22 (hook-writer; growth-analyst standup)"
+    },
+    {
+      "id": "q112",
+      "track": "interview",
+      "unit": "B2",
+      "format": "concept",
+      "title": "Interview: Embeddings ko compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi?",
+      "one_idea": "Cosine similarity compares the direction of two embedding vectors (what they are about) and ignores their length, while plain distance also punishes a difference in length; when every vector is scaled to length 1 (as OpenAI's embeddings already are) the two give the same ranking.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Refund search किया, cricket का note ऊपर आ गया!",
+      "hook_formula": "search picks the wrong note by distance, then the interview question",
+      "hook_source": "scriptwriter after growth-analyst read, 2026-10-22",
+      "visual_idea": "Frame 0: a search box 'refund payment' with three notes ranked by plain distance: cricket note ahead of the long refund note. Then arrows from the origin for the query, the short note, the 5x long note (same direction, longer) and the cricket note (different direction); an angle drawn between arrows; distance vs cosine table from the run; arrows squashed to length 1 and the ranking fixed; the interview answer card.",
+      "everyday_anchor": "Two people pointing the same way, one standing close, one far away: the direction is the same.",
+      "example": "EXAMPLE (invented word counts [refund, payment, cricket]), real run state/runs/q112_cosine_run.py: query [1,1,0]; short refund note [1,1,0] distance 0.00 cosine 1.00; same note repeated 5 times [5,5,0] distance 5.66 cosine 1.00; cricket note [0,0,1] distance 1.73 cosine 0.00. After scaling all to length 1: distance 0.00, 0.00 and 1.41, cosine unchanged.",
+      "sources": [
+        "https://developers.openai.com/api/docs/guides/embeddings",
+        "https://developers.google.com/machine-learning/clustering/dnn-clustering/supervised-similarity"
+      ],
+      "facts_to_verify": [
+        "OpenAI embeddings FAQ (fetched 2026-10-22): 'OpenAI embeddings are normalized to length 1', so cosine similarity can be computed slightly faster with a dot product and cosine similarity and Euclidean distance give identical rankings.",
+        "Google ML course (fetched 2026-10-22): cosine similarity focuses solely on the angle between vectors; the dot product is proportional to vector length; with lengths normalized to 1 the three measures are equivalent."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Cosine or distance for embeddings?",
+      "thumb_text": "Cosine vs distance",
+      "keywords": [
+        "cosine similarity",
+        "cosine vs euclidean distance",
+        "embedding similarity",
+        "ai engineer interview questions"
+      ],
+      "trap": "Comparing vector lengths when only direction carries meaning.",
+      "caption_note": "Comment 1 or 2: the 5x longer refund note, is it the same topic? (answer: yes, in the caption)",
+      "studio_note": "The interview question must be spoken in full in the reel (owner correction 2026-10-21): Interviewer ने पूछा, embeddings compare करने के लिए cosine similarity क्यों, seedhi distance क्यों नहीं? Boundary: if vectors are already length 1 the ranking is identical, so either works (OpenAI); length matters only when it carries meaning (Google: dot product, popularity). Close to published course reel r07 (cosine similarity, 2026-10-12): keep a different picture (arrows from the origin and the distance trap, not the angle only).",
+      "script_file": "state/scripts/q112.txt",
+      "status": "planned",
+      "qa_passed": false
+    },
+    {
+      "id": "q113",
+      "track": "interview",
+      "unit": "B4",
+      "format": "trade-off",
+      "title": "Interview: Vector database ki zaroorat kab nahi padti?",
+      "one_idea": "Searching every stored vector (exact search) is simple and perfectly accurate, and a few thousand to some hundred thousand vectors are searched in milliseconds in memory, so a vector database or approximate index is needed only when the data, speed or number of users outgrow that; approximate indexes trade some recall for speed.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: किस project में vector database की ज़रूरत नहीं पड़ती?",
+      "hook_formula": "interviewer_asked",
+      "visual_idea": "A shelf of 5,000 note cards searched by a hand scanning each card in 0.3 ms (real run); a growing bar of vectors 5,000 / 100,000 / 1,000,000 with memory in MB and search time in ms; two doors EXACT SCAN vs INDEX with a recall tag; the interview answer card.",
+      "everyday_anchor": "Finding a name in a 50-page notebook by reading every page versus building an index for a library.",
+      "example": "EXAMPLE (random vectors, 384 dimensions, float32; times are from the run machine and will differ), real run state/runs/q113_search_run.py: 5,000 vectors 8 MB, exact top-3 search 0.3 ms; 100,000 vectors 154 MB, 7.7 ms; 1,000,000 vectors 1,536 MB, 84.6 ms.",
+      "sources": [
+        "https://github.com/pgvector/pgvector",
+        "https://github.com/facebookresearch/faiss/wiki/Faiss-indexes"
+      ],
+      "facts_to_verify": [
+        "pgvector README (fetched 2026-10-22): by default exact nearest neighbor search with perfect recall; adding an index gives approximate search that trades some recall for speed.",
+        "FAISS wiki (fetched 2026-10-22): IndexFlatL2 / IndexFlatIP are exact brute-force search (all vectors compared with the query); IVF and HNSW indexes are non-exhaustive and lose the guarantee to find the nearest neighbour. Where the boundary sits (about a million vectors) is our own run, not a source: say 'typically' and 'on this run'."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Do you need a vector database?",
+      "thumb_text": "Vector DB?",
+      "keywords": [
+        "vector database needed",
+        "faiss vs pgvector",
+        "brute force vector search",
+        "ai engineer interview questions"
+      ],
+      "trap": "Reaching for a vector database for a few thousand chunks that fit in memory.",
+      "caption_note": "Comment YES or NO: 5,000 chunks, do you need a vector database? (answer NO, in the caption)",
+      "studio_note": "Question spoken in full is the hook itself. Close to published course reel r09 (vector databases, 2026-10-12): this one is the opposite angle (when NOT to), keep a different picture.",
+      "script_file": "state/scripts/q113.txt",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-22 (hook-writer; growth-analyst standup)"
     }
   ]
 }

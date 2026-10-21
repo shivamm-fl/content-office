@@ -41,3 +41,9 @@ Do: make the first line one complete question or scenario; keep interview reels 
 
 ## 2026-10-20 (owner correction: series reels are read on likes, saves, shares, follows and watch time, not skip rate)
 a001 (series day 1, 172.5 s, n=1 so a hint): 47 likes, 30 saves (2.34 per 100 reach), 9 shares (0.7 per 100 reach), 87 total interactions on 1,742 views / 1,284 reach, average watch 18.0 s, the longest on the grid (next: q16 17.7 s). Saves per reach are in the top 5 of 47 reels. Follows are not in insights.json, so none are quoted. Read: a001 did great on this measure; the 67 % skip is not held against it. Judge a002 and a003 the same way.
+
+## 2026-10-22 (growth analyst, standup for a005, q112, q113)
+Numbers in: q105 (n=1) 2,959 views, 59.6 % skip, 22.6 s watch, 4.13 saves per 100 reach, 16 shares, the best of the week. Stake hooks q107 and q108 (n=2): skip 54.2 and 58.2 %, watch 18.0 and 17.1 s, but 157 s q108 holds only 11 % of its length. Asked hooks q103, q104, q105, q106, q109 (n=5): median skip 59.6 %. Stake and asked are within 3 points: keep both, retire neither.
+a002 (n=1 for day 2): 754 views, 66.3 % skip, 11.4 s watch, 2.05 saves and 0.17 shares per 100 reach, below a001 (2,010 views, 20.3 s, 10 shares). a003 shows 0 everywhere (posted 14:52 UTC yesterday, not synced); q109 is hours old (392 views). Follows and trial non-follower splits are not in insights.json, so none are quoted.
+Do: q112 and q113 take one stake and one asked hook, each with the full question spoken in the reel; keep 90 to 130 s. a005: ask the day-2 question again, lead with a concrete scene, watch saves and shares not skip.
+Experiments: q108 stake test met its bar (hold 41.8 % vs 41 %, watch 17.1 s vs 12 s) on n=1, closeable as a hint; q107 trial (T01) and q110/q111 stay open.

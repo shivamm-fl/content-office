@@ -949,6 +949,42 @@
       "kind": "question",
       "topic": "Open model vs closed API: decide on data privacy, cost at your request volume and licence terms, not benchmarks alone.",
       "status": "built"
+    },
+    {
+      "id": "a005",
+      "track": "series",
+      "unit": "A3",
+      "title": "Pretraining: how an LLM first learns language from text",
+      "kind": "concept",
+      "topic": "Pretraining is training a model from scratch on a huge pile of raw text with one task, guess the next word; nobody labels anything, the text itself is the answer sheet, and the error falls as it reads more.",
+      "hook_formula": "plain_question",
+      "hook_type": "direct_question",
+      "status": "planned",
+      "planned": "2026-10-22"
+    },
+    {
+      "id": "q112",
+      "track": "interview",
+      "unit": "B2",
+      "title": "Interview: Embeddings ko compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi?",
+      "kind": "question",
+      "topic": "Cosine similarity compares the direction of two embedding vectors (what they are about) and ignores their length, while plain distance also punishes a difference in length; when every vector is scaled to length 1 (as OpenAI's embeddings already are) the two give the same ranking.",
+      "hook_formula": "search picks the wrong note by distance, then the interview question",
+      "hook_type": "relatable_stake",
+      "status": "planned",
+      "planned": "2026-10-22"
+    },
+    {
+      "id": "q113",
+      "track": "interview",
+      "unit": "B4",
+      "title": "Interview: Vector database ki zaroorat kab nahi padti?",
+      "kind": "question",
+      "topic": "Searching every stored vector (exact search) is simple and perfectly accurate, and a few thousand to some hundred thousand vectors are searched in milliseconds in memory, so a vector database or approximate index is needed only when the data, speed or number of users outgrow that; approximate indexes trade some recall for speed.",
+      "hook_formula": "interviewer_asked",
+      "hook_type": "interviewer_asked",
+      "status": "planned",
+      "planned": "2026-10-22"
     }
   ]
 }

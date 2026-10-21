@@ -1,0 +1,9 @@
+A: Interviewer ne poocha: Kis project mein vector database ki zaroorat nahi padti?
+B: Tumhara jawab hona chahiye: | jahan data chhota hai. || Lakh vectors tak sab kuch seedha check karo, | database tab, jab data, speed ya users isse aage badhein.
+C: Vector yaani text ka matlab pakadne wali numbers ki list. | Vector database yaani wo database, jo query se sabse milte-julte vectors jaldi dhoondhe. || Tempting jawab: "RAG hai, to vector database lagao." || EXAMPLE, random vectors: | maan lo 5,000 chunks, yaani documents ke tukde, har ek ke 384 numbers. | Is machine par numpy se sabko query ke saath compare kiya: 0.3 millisecond, memory 8 MB. | Database ki zaroorat hi nahi padi.
+D: Pehla step: exact search. || Har vector ko query ke saath compare karo. | Kyun? Kyunki ye simple hai, aur jawab hamesha sahi aata hai. | 100,000 vectors par bhi 7.7 millisecond.
+E: Doosra step: dekho kab ye tootta hai. || 1,000,000 vectors par 1,536 MB, aur ek search 84.6 millisecond. || Kyun? Kyunki har search saare vectors chhoota hai, data das guna, to time bhi lagbhag das guna.
+F: Teesra step: index. || Index yaani shortcut, jo saare nahi, sirf paas wale vectors dekhta hai. | Tez hai, par approximate: kabhi sabse sahi result chhoot sakta hai. || Mile hue sahi results ka hissa recall hai. | Exact search mein recall poora, index mein speed ke badle thoda recall jaata hai.
+G: Boundary: typically das lakh vectors ke aaspaas, ya jab kai users ek saath search karein, tab socho.
+H: Interview mein bolo: || For a few thousand to a hundred thousand vectors, I'd do exact search in memory, it's simple and fully accurate. I'd add a vector database only when data, latency or users outgrow that, and accept some recall loss.
+I: Ab batao: 5,000 chunks, | vector database chahiye? || YES ya NO comment karo! || Roz ek naya interview sawal, poore jawab ke saath, follow kar lo!
