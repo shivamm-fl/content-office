@@ -76,6 +76,64 @@
         "dns tcp http kya hai hindi",
         "how a website loads explained"
       ]
+    },
+    {
+      "id": "s004",
+      "track": "series",
+      "day": 4,
+      "unit": "P1",
+      "title": "DNS: naam se machine ka address kaise milta hai",
+      "format": "component",
+      "one_idea": "DNS (Domain Name System) turns a name like example.com into the IP address of a machine: your device checks its own memory (cache) first, then asks a resolver, which asks the root, then the .com (TLD) servers, then the domain's own (authoritative) server, and every answer is cached for a limited time (TTL).",
+      "spoken_hook": "Phone को google.com का address पता ही नहीं होता।",
+      "hook_type": "surprising_fact",
+      "hook_formula": "surprising_fact: the viewer's own phone does not know the address of the site it opens (MDN: the browser asks DNS when its local cache does not know the IP)",
+      "hook_source": "hook-writer surprising_fact; sourced on MDN What is a domain name",
+      "hook_10s": "Phone को google.com का address पता ही नहीं होता। उसे सिर्फ़ नाम पता है, और machine तक पहुँचने के लिए number चाहिए। यह number DNS देता है। देखते हैं, एक नाम से number तक कितने चरणों में पहुँचते हैं। [frame 0: a phone with 'google.com' on one side, a server rack on the other, a question mark on the gap]",
+      "hook_candidates": [
+        {
+          "text": "Phone को google.com का address पता ही नहीं होता।",
+          "formula": "surprising_fact"
+        },
+        {
+          "text": "Website का नाम तो याद है, पर machine का address कौन बताता है?",
+          "formula": "direct_question"
+        },
+        {
+          "text": "एक नाम के पीछे चार servers की chain चलती है।",
+          "formula": "surprising_fact (needs the 4-server chain shown in the next lines)"
+        }
+      ],
+      "visual_idea": "A phone with a name label on the left, a server rack on the right with an IP number on it; between them a ladder of four boxes (resolver, root, TLD, authoritative) lights up one by one, each handing the next a pointer, and the final IP number flies back to the phone; a small clock chip on the cache copy counts down.",
+      "everyday_anchor": "Phone contacts: you tap a name, not a number; the phone book turns the name into a number. If your own contacts do not have it, you ask a directory service that asks a chain of offices.",
+      "example": "EXAMPLE: example.com resolves to 93.184.216.34 (use the shown value only if run in the build with dig/nslookup and its real output on screen; otherwise show a labelled EXAMPLE address).",
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Glossary/DNS",
+        "https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_domain_name",
+        "https://www.rfc-editor.org/rfc/rfc1034",
+        "https://aws.amazon.com/route53/what-is-dns/"
+      ],
+      "facts_to_verify": [
+        "DNS is a hierarchical and decentralized naming system; its most prominent job is translating a domain name to an IP address, called a DNS lookup (MDN Glossary DNS, fetched).",
+        "Browser first asks the computer's local DNS cache; if it does not know, it asks a DNS server (MDN What is a domain name, fetched).",
+        "Resolver forwards to a root name server, the .com (TLD) server answers with the domain's name servers, the authoritative server returns the IP, and the resolver caches it for a time (AWS Route 53 what-is-dns, fetched).",
+        "TTL is a time limit on how long a record may be kept in a cache (RFC 1034 section 3.6, fetched). Do not state typical TTL values or any number of seconds without a new fetch.",
+        "A resolver is a program that gets information from name servers on behalf of clients (RFC 1034 section 2.4, fetched).",
+        "Catch: changes to a record reach every cache only after the old copies expire, so an update can take time (MDN What is a domain name, fetched). Say 'some time', not hours.",
+        "Cloudflare learning pages returned 403 this session and are NOT used. Run dig or nslookup in the build if showing real output. No company-specific claim, no query-time number."
+      ],
+      "length_target_s": 120,
+      "cover_headline": "How a Name Finds a Machine",
+      "thumb_text": "DNS Kaise Chalta?",
+      "keywords": [
+        "dns kaise kaam karta hai",
+        "what is dns in hindi",
+        "dns lookup explained",
+        "dns resolver root tld authoritative",
+        "dns ttl cache kya hai"
+      ],
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }

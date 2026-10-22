@@ -10,3 +10,6 @@ Planned Day 2 (s002, concept, P1) in roadmap order with hook type direct_questio
 
 ## 2026-10-20 (planner, Day 3)
 Planned Day 3 (s003, concept, P1) in roadmap order with hook type relatable_stake (the rotation after interviewer_asked and direct_question), using the viewer's own habit of leaving a slow site as the stake and no invented abandon statistic; the next line then states the problem (several steps, each costs time) and the reel walks the path. Sources are three MDN pages the strategist fetched itself; no own numbers exist yet, so no performance claim is made.
+
+## 2026-10-22 (planner, Day 4)
+Planned Day 4 (s004, component, P1) in roadmap order with hook type surprising_fact (not used on Days 1 to 3, which were interviewer_asked, direct_question, relatable_stake); the fact is that the phone does not know the site's address and must ask (MDN), so it is sourced and the viewer is in it. Day 3 only named the DNS lookup as one step; this day stands alone and teaches the resolver, root, TLD, authoritative chain, the cache and TTL. Sources are MDN (two pages), RFC 1034 and the AWS Route 53 page, all fetched by the strategist; Cloudflare returned 403 and is not used. No own numbers exist yet, so no performance claim is made.
