@@ -1,4 +1,4 @@
-Day 4/150: Array mein 10 lakh wala element ek step mein kaise milta hai?
+Day 4/150: Array mein 10 lakh wala element turant kaise milta hai?
 
 Array ke elements memory mein ek ke baad ek, bina gap ke, barabar size ke dibbon mein rakhe hote hain. Isliye address ek hi calculation se nikal aata hai: start plus index times size. Maan lo har element 4 bytes ka hai (example), to index 0 start par, index 1 start se 4 bytes aage, index 2 start se 8 bytes aage. Array kitna bhi bada ho, kisi bhi index tak ek calculation lagti hai.
 

@@ -1,4 +1,4 @@
-Arrays in Memory Explained in Hinglish: Why Reading Is 1 Step
+Arrays in Memory Explained in Hinglish: Why Reading Is Instant
 
 An array keeps its elements in one unbroken block of memory, each the same size. So the address of element i is start + i x size: one multiplication and one addition, however large the array is. Example: with 4 bytes per element, index 0 is at start + 0, index 1 at start + 4, index 2 at start + 8 (4 bytes is an example size; it depends on the element type). The price: inserting in the middle makes every element after it move one place. In a Python 3.12 run (counts, not seconds), inserting in the middle of an array of 1000000 items shifts 500000 items, and of 2000000 items shifts 1000000.
 
