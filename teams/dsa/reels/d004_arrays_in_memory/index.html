@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="42" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="130" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -33,6 +33,14 @@
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
         <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,19 +49,193 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="42" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="42" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="42" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="130" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="130" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="130" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A"], tag: "DSA" });   // order = scene ids from spec.json
-      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
-      const { tl, S, P, Ed, W } = M;
-      // ===== build beats + timeline here (API lists: top of kit/motion.js and kit/viz.js). M.hook([...]) first, then one picture per beat as planned in visual_plan.md. =====
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "DSA 004/150" });
+      Viz.install(M);
+      const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n); const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const $s = (k) => M.$("#s" + k);
+      const A = $s("A"), B = $s("B"), C = $s("C"), D = $s("D"), E = $s("E"), F = $s("F"), G = $s("G"), H = $s("H"), I = $s("I");
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const stamp = (host, txt, x, y, col, t) => { const d = el(host, `left:${x}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.96);font:700 52px var(--code);color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, from.toLocaleString("en-US")); const o = { v: from };
+        show(d, segs[0][0] - 0.3, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const grow = (d, t, dur) => { tl.set(d, { scaleX: 0 }, 0); tl.to(d, { scaleX: 1, duration: dur || 0.6, ease: "power3.out", immediateRender: false }, t); return d; };
 
-      M.finish();   // LAST: captions
-      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+      // diagram: A  (hook: a row of memory boxes, a pointer jumps straight to the last box; the crawling magnifier is crossed out)
+      M.hook(["ELEMENT #10 LAKH", "ONE STEP?"], { size: 88, top: 250 });
+      const pa = panel(A, 60, 500, 960, 700, CYAN, "MEMORY"); show(pa, 0.05);
+      const aX = [30, 200, 370, 760], aT = ["0", "1", "2", "999,999"];
+      const aB = aX.map((x, i) => { const t = tile(pa, x, 250, 170, 230, aT[i], i === 3 ? ACC : CYAN, i === 3 ? 38 : 64); show(t, 0.1 + i * 0.06); return t; });
+      show(lab(pa, "left:545px;top:330px;width:200px", "· · ·", "#B8C4DC", 72), 0.3);
+      const ptr = el(pa, "left:60px;top:120px;width:110px;font:800 110px var(--code);color:" + ACC + ";text-align:center", "▼"); show(ptr, 0.35, { opacity: 0 });
+      tl.to(ptr, { x: 730, duration: 0.4, ease: "power3.inOut", immediateRender: false }, at("A", "ek"));
+      ring(aB[3], at("A", "ek") + 0.35, ACC);
+      const mag = M.icon(pa, "search", 60, 520, 150, HOT); mag.show(0.5);
+      tl.to(mag.el, { x: 330, duration: 1.4, ease: "none", immediateRender: false }, 0.6);
+      const crs = M.icon(pa, "cross", 390, 520, 150, HOT); crs.show(at("A", "step"));
+      M.pill(A, "1 STEP", at("A", "kaise"), { x: 340, y: 1250, w: 400, kind: "acc", size: 64 });
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B  (equal boxes, one after another, no gap, in memory)
+      const b0 = ST.B;
+      M.pill(B, "EXAMPLE", b0 + 0.1, { x: 760, y: 215, w: 260, kind: "out", size: 34 });
+      const pb = panel(B, 60, 300, 960, 700, CYAN, "MEMORY"); show(pb, b0 + 0.05);
+      const BV = [7, 3, 9, 4, 8, 2, 5, 1, 6, 0, 3, 9];
+      const bT = BV.map((v, i) => { const t = tile(pb, 40 + (i % 4) * 220, 90 + Math.floor(i / 4) * 195, 220, 195, String(v), CYAN, 72); show(t, b0 + 0.25 + i * 0.12, { opacity: 0, x: -30 }); return t; });
+      M.pill(B, "NO GAP", at("B", "gaip"), { x: 70, y: 1050, w: 420, kind: "acc", size: 54 });
+      M.pill(B, "EQUAL SIZE", at("B", "barabar"), { x: 520, y: 1050, w: 500, kind: "acc", size: 54 });
+      bT.forEach((t, i) => ring(t, at("B", "barabar") + 0.2 + i * 0.03, ACC));
+      bT.forEach((t, i) => tl.to(t, { borderColor: M.ca(CYAN, .55), backgroundColor: M.ca(CYAN, .12), duration: 0.3, immediateRender: false }, at("B", "dibbon") + 0.1));
+      const ch = M.icon(B, "chip", 440, 1160, 200, CYAN); ch.show(at("B", "Memory"));
+      M.pill(B, "DATA LIVES HERE", at("B", "data"), { x: 230, y: 1390, w: 620, kind: "out", size: 50 });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C  (cinema row: count to seat 40, do not ask at every seat)
+      const c0 = ST.C;
+      M.pill(C, "CINEMA HALL", c0 + 0.1, { x: 300, y: 215, w: 480, kind: "out", size: 46 });
+      const scr = el(C, `left:80px;top:330px;width:920px;height:110px;border-radius:14px;background:${M.ca(CYAN, .18)};border:2px solid ${M.ca(CYAN, .5)};font:700 46px var(--code);color:#B8C4DC;display:flex;align-items:center;justify-content:center`, "SCREEN"); show(scr, c0 + 0.1);
+      const sX = [50, 230, 410, 800], sT = ["1", "2", "3", "40"];
+      const seats = sX.map((x, i) => { const t = tile(C, x, 640, 170, 200, sT[i], CYAN, 72); show(t, at("C", "seeten") + i * 0.12); return t; });
+      show(lab(C, "left:600px;top:700px;width:200px", "· · ·", "#B8C4DC", 72), at("C", "seeten") + 0.3);
+      ring(seats[3], at("C", "40"), ACC);
+      const ppl = M.icon(C, "user", 800, 480, 170, ACC); ppl.show(at("C", "baithna"));
+      [0, 1, 2].forEach((i) => M.pill(C, "?", at("C", "poochhte") + i * 0.1, { x: sX[i] + 35, y: 520, w: 100, kind: "out", size: 64 }));
+      [0, 1, 2].forEach((i) => ring(seats[i], at("C", "ginte") + i * 0.15, GOOD));
+      const arr = M.arrow(C, { from: [200, 900], to: [880, 900], color: GOOD, w: 14, bend: 150 }); arr.show(at("C", "seedhe"), 0.4);
+      ring(seats[3], at("C", "pahunch"), GOOD);
+      M.pill(C, "COUNT, NOT SEARCH", at("C", "seedhe"), { x: 150, y: 1090, w: 780, kind: "acc", size: 56 });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D  (scattered: crawl 10 lakh steps; array: each box has an address and an index)
+      const d0 = ST.D;
+      const pArr = panel(D, 60, 300, 960, 460, GOOD, "ARRAY"); show(pArr, d0 + 0.1);
+      const dB = aX.map((x, i) => tile(pArr, x + 5, 190, 150, 150, aT[i], i === 3 ? ACC : GOOD, i === 3 ? 30 : 48));
+      dB.forEach((t, i) => show(t, d0 + 0.2 + i * 0.05));
+      show(lab(pArr, "left:505px;top:230px;width:200px", "· · ·", "#B8C4DC", 56), d0 + 0.3);
+      ring(dB[3], at("D", "aakhiri"), ACC);
+      lab(pArr, "left:0;width:960px;top:80px", "ADDRESS", ACC, 36); const adr = pArr.lastChild; tl.set(adr, { opacity: 0 }, 0); tl.to(adr, { opacity: 1, duration: 0.3, immediateRender: false }, at("D", "address"));
+      const pins = aX.map((x) => { const p = el(pArr, `left:${x + 5 + 50}px;top:130px;width:50px;font:800 52px var(--code);color:${ACC};text-align:center`, "▼"); tl.set(p, { opacity: 0 }, 0); tl.to(p, { opacity: 1, duration: 0.3, immediateRender: false }, at("D", "address") + 0.1); return p; });
+      lab(pArr, "left:0;width:960px;top:380px", "INDEX FROM 0", CYAN, 36); const idl = pArr.lastChild; tl.set(idl, { opacity: 0 }, 0); tl.to(idl, { opacity: 1, duration: 0.3, immediateRender: false }, at("D", "index"));
+      const pSc = panel(D, 60, 800, 960, 490, HOT, "SCATTERED"); dimIn(pSc, d0 + 0.1, 0.75); lit(pSc, at("D", "alag-alag") - 0.2); dim(pSc, at("D", "Array") - 0.1, 0.6);
+      const scP = [[50, 90], [370, 170], [660, 90], [160, 250], [560, 260], [740, 200]];
+      const scT = scP.map(([x, y], i) => tile(pSc, x, y, 130, 100, String(7 + i * 3), HOT, 44));
+      scT.forEach((t, i) => ring(t, at("D", "ek-ek") + i * 0.18, HOT));
+      counter(pSc, "left:0;width:960px;top:395px", 0, [[at("D", "10", 1), at("D", "tak") - 0.1, 1000000]], HOT, 60);
+      dim(pArr, at("D", "alag-alag") - 0.2, 0.6); lit(pArr, at("D", "Array") - 0.1);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E  (three steps: start known, size x index, add to start)
+      const e0 = ST.E;
+      const k1 = M.pill(E, "STEP 1/3", at("E", "pahla"), { x: 390, y: 215, w: 300, kind: "acc", size: 44 });
+      const k2 = M.pill(E, "STEP 2/3", at("E", "doosra"), { x: 390, y: 215, w: 300, kind: "acc", size: 44 });
+      const k3 = M.pill(E, "STEP 3/3", at("E", "teesra"), { x: 390, y: 215, w: 300, kind: "acc", size: 44 });
+      tl.to(k1, { opacity: 0, duration: 0.15, immediateRender: false }, at("E", "doosra") - 0.05);
+      tl.to(k2, { opacity: 0, duration: 0.15, immediateRender: false }, at("E", "teesra") - 0.05);
+      const pe = panel(E, 60, 300, 960, 320, CYAN, "ARRAY"); show(pe, e0 + 0.1);
+      const eB = [0, 1, 2, 3, 4].map((i) => { const t = tile(pe, 55 + i * 170, 145, 170, 150, String(i), CYAN, 54); show(t, e0 + 0.2 + i * 0.05); return t; });
+      const stp = el(pe, "left:55px;top:68px;width:170px;font:800 34px var(--code);color:" + ACC + ";text-align:center", "START ▼"); show(stp, at("E", "shuru"), { opacity: 0 });
+      const pc2 = panel(E, 60, 670, 960, 580, ACC, "ADDRESS OF INDEX 3"); show(pc2, e0 + 0.3);
+      const r1 = tile(pc2, 40, 90, 880, 120, "", GOOD, 50); r1.style.justifyContent = "space-between"; r1.style.padding = "0 40px"; r1.innerHTML = `<span>START</span><span style="color:${GOOD}">KNOWN ✓</span>`; show(r1, at("E", "pehle"));
+      const r2 = tile(pc2, 40, 235, 880, 120, "", CYAN, 50); r2.style.justifyContent = "space-between"; r2.style.padding = "0 40px"; r2.innerHTML = `<span>SIZE</span><span style="color:${ACC}">4 BYTES</span>`; show(r2, at("E", "4"));
+      M.pill(E, "EXAMPLE", at("E", "4"), { x: 780, y: 215, w: 240, kind: "out", size: 30 });
+      const r3 = tile(pc2, 40, 380, 880, 120, "", CYAN, 50); r3.style.justifyContent = "space-between"; r3.style.padding = "0 40px"; r3.innerHTML = `<span>INDEX × SIZE</span><span style="color:${ACC}">3 × 4 = 12</span>`; show(r3, at("E", "multiply"));
+      const r4 = tile(pc2, 40, 380, 880, 120, "", ACC, 50); r4.style.justifyContent = "space-between"; r4.style.padding = "0 40px"; r4.innerHTML = `<span>START + 12</span><span style="color:${GOOD}">▶ INDEX 3</span>`; show(r4, at("E", "jod"));
+      tl.set(r3, { opacity: 0 }, at("E", "jod") - 0.02);
+      tl.to(r3, { opacity: 0, duration: 0.01, immediateRender: false }, at("E", "jod") - 0.02);
+      ring(eB[3], at("E", "jod") + 0.2, GOOD);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F  (formula, then distance from start for index 0, 1, 2)
+      const f0 = ST.F;
+      const pf = panel(F, 60, 300, 960, 190, ACC, "ADDRESS ="); show(pf, at("F", "address"));
+      show(el(pf, `left:0;width:960px;top:88px;text-align:center;font:800 62px var(--code);color:#E8EDF6`, "start + index × size"), at("F", "address") + 0.3);
+      const pz = panel(F, 60, 540, 960, 560, CYAN, "DISTANCE FROM START"); dimIn(pz, f0 + 0.1, 1);
+      const fB = [0, 1, 2].map((i) => { const t = tile(pz, 60 + i * 220, 100, 220, 150, String(i), CYAN, 54); show(t, f0 + 0.2 + i * 0.05); return t; });
+      el(pz, `left:56px;top:280px;width:4px;height:230px;background:${ACC}`);
+      const barDefs = [[14, "+0", 0, "0", 1], [220, "+4", 1, "4", 0], [440, "+8", 2, "8", 0]];
+      barDefs.forEach(([w, txt, i, word, nth]) => {
+        const y = 300 + i * 80;
+        grow(el(pz, `left:60px;top:${y}px;width:${w}px;height:50px;border-radius:8px;background:${ACC};transform-origin:0 50%`), at("F", word, nth), 0.4);
+        show(el(pz, `left:${68 + w}px;top:${y + 2}px;font:800 40px var(--code);color:${ACC};white-space:nowrap`, txt + " BYTES"), at("F", word, nth) + 0.2);
+        ring(fB[i], at("F", word, nth), GOOD);
+      });
+      M.pill(F, "1 MULTIPLY", at("F", "multiplication"), { x: 90, y: 1150, w: 420, kind: "out", size: 44 });
+      M.pill(F, "1 ADD", at("F", "addition"), { x: 570, y: 1150, w: 300, kind: "out", size: 44 });
+      stamp(F, "ONE CALCULATION", 540, 1250, GOOD, at("F", "calculation"));
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G  (insert in the middle: everything behind it slides one place; 5 lakh moves)
+      const g0 = ST.G;
+      const slotRow = (host, y, col, newT, moveT, sh, lbl) => {
+        const p = panel(host, 60, y, 960, 330, col, lbl);
+        for (let i = 0; i < 7; i++) el(p, `left:${25 + i * 130}px;top:150px;width:130px;height:130px;border-radius:14px;border:2px dashed ${M.ca(col, .4)}`);
+        const its = [0, 1, 2, 3, 4, 5].map((i) => { const t = tile(p, 25 + i * 130, 150, 130, 130, sh(i), col, 48); show(t, g0 + 0.2 + i * 0.05); return t; });
+        const nw = tile(p, 25 + 3 * 130, 66, 130, 76, "NEW", ACC, 38); tl.set(nw, { opacity: 0, borderColor: M.ca(ACC, .9), backgroundColor: M.ca(ACC, .3) }, 0);
+        tl.to(nw, { opacity: 1, duration: 0.3, immediateRender: false }, newT);
+        [3, 4, 5].forEach((i) => tl.to(its[i], { x: 130, duration: 0.5, ease: "power3.inOut", immediateRender: false }, moveT + (i - 3) * 0.06));
+        tl.to(nw, { y: 84, height: 130, duration: 0.45, ease: "power3.out", immediateRender: false }, moveT + 0.3);
+        return p;
+      };
+      M.pill(G, "EXAMPLE", at("G", "maan"), { x: 780, y: 215, w: 240, kind: "out", size: 30 });
+      const pCin = slotRow(G, 300, CYAN, at("G", "baithao"), at("G", "khiskenge", 0), (i) => "S" + (i + 1), "CINEMA");
+      const pAr = slotRow(G, 670, GOOD, at("G", "daalna"), at("G", "aage"), (i) => String([7, 3, 9, 4, 8, 2][i]), "ARRAY");
+      dim(pCin, at("G", "Array") - 0.1, 0.6); dimIn(pAr, g0 + 0.1, 0.75); lit(pAr, at("G", "Array") - 0.1);
+      M.pill(G, "NO GAP", at("G", "gaip"), { x: 60, y: 1030, w: 280, kind: "acc", size: 40 });
+      M.pill(G, "10 LAKH ELEMENTS", at("G", "10"), { x: 370, y: 1030, w: 650, kind: "acc", size: 44 });
+      lab(G, "left:60px;top:1130px;width:960px", "ELEMENTS MOVE", HOT, 44); show(G.lastChild, at("G", "5") - 0.2, { opacity: 0 });
+      counter(G, "left:60px;top:1185px;width:960px", 0, [[at("G", "5") + 0.1, at("G", "aage") + 0.1, 500000]], HOT, 92);
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H  (read = 1 step, insert grows, same reason: a block without gaps, equal size)
+      const h0 = ST.H;
+      const pR = panel(H, 60, 300, 960, 230, GOOD, "READ"); dimIn(pR, h0 + 0.1, 0.6); lit(pR, at("H", "padhna") - 0.1);
+      show(el(pR, `left:0;width:960px;top:100px;text-align:center;font:800 84px var(--code);color:${GOOD}`, "1 STEP"), at("H", "ek", 0));
+      const pI = panel(H, 60, 580, 960, 300, HOT, "INSERT IN MIDDLE"); dimIn(pI, h0 + 0.1, 0.6); lit(pI, at("H", "beech") - 0.1);
+      el(pI, `left:50px;top:120px;width:860px;height:60px;border-radius:10px;border:2px solid ${M.ca(HOT, .5)}`);
+      grow(el(pI, `left:50px;top:120px;width:860px;height:60px;border-radius:10px;background:${HOT};transform-origin:0 50%`), at("H", "badhta"), 0.8);
+      show(lab(pI, "left:0;width:960px;top:205px", "GROWS WITH SIZE", HOT, 42), at("H", "badhta") + 0.2);
+      const pS = panel(H, 60, 930, 960, 330, ACC, "SAME REASON"); dimIn(pS, h0 + 0.1, 0.6); lit(pS, at("H", "donon") - 0.1);
+      const hB = [0, 1, 2, 3, 4, 5].map((i) => tile(pS, 30 + i * 150, 100, 150, 110, String(i), ACC, 44)); hB.forEach((t, i) => show(t, h0 + 0.2 + i * 0.03));
+      M.pill(pS, "NO GAP", at("H", "gaip"), { x: 60, y: 235, w: 330, kind: "acc", size: 40 });
+      M.pill(pS, "EQUAL SIZE", at("H", "barabar"), { x: 430, y: 235, w: 470, kind: "acc", size: 40 });
+      hB.forEach((t, i) => ring(t, at("H", "block") + i * 0.04, ACC));
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I  (check question: the second half of the array moves; 10 lakh -> 500,000; 20 lakh -> ?; comment + follow)
+      const i0 = ST.I;
+      const rI = (y, t, v, col, vsize) => { const p = panel(I, 60, y, 960, 380, col, t); show(p, i0 + 0.1);
+        for (let k = 0; k < 8; k++) { const half = k >= 4; const c = tile(p, 40 + k * 110, 90, 110, 110, "", half ? col : CYAN, 30); show(c, i0 + 0.2 + k * 0.03); }
+        show(el(p, `left:480px;top:70px;width:4px;height:150px;background:${ACC}`), i0 + 0.5);
+        show(lab(p, "left:300px;top:222px;width:380px", "MIDDLE", ACC, 34), i0 + 0.5);
+        show(el(p, `left:0;width:960px;top:268px;text-align:center;font:800 ${vsize || 64}px var(--code);color:${col};white-space:nowrap`, v), i0 + 0.3); return p; };
+      rI(240, "10 LAKH ARRAY · INSERT", "500,000 MOVE", GOOD);
+      const q20 = rI(650, "20 LAKH ARRAY · INSERT", "?", HOT, 80); tl.set(q20, { opacity: 0 }, 0); tl.to(q20, { opacity: 1, duration: 0.45, immediateRender: false }, at("I", "20"));
+      const q2 = panel(I, 60, 1050, 960, 270, CYAN, "COMMENT KARO"); show(q2, at("I", "Comment"));
+      show(el(q2, "left:40px;right:40px;top:120px;height:100px;border-radius:50px;border:1.5px solid rgba(150,175,215,.35);font:500 44px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("I", "Comment") + 0.2, { opacity: 0 });
+      const fb = M.pill(I, "+  FOLLOW", at("I", "follow") - 0.4, { x: 300, y: 1380, w: 480, kind: "acc", size: 60 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("I", "follow"));
+      M.fit(I, { y: 200, h: 1150, maxScale: 1.3 });
+
+      ["B","C","D","E","F","G","H","I"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { array: "cyan", memory: "cyan", gaip: "hot", barabar: "gold", address: "gold", index: "gold", size: "gold", multiplication: "gold", addition: "gold", khiskenge: "hot", "10": "gold", "5": "gold", "20": "gold", padhna: "good" } });
+      window.__timelines["main"] = tl;
     </script>
   </body>
 </html>
