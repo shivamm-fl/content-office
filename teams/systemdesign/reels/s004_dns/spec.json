@@ -1,0 +1,94 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 5,
+    "B": 5,
+    "C": 5,
+    "D": 5,
+    "E": 5,
+    "F": 5,
+    "G": 5,
+    "H": 5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "C",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      3,
+      0
+    ],
+    [
+      "tick",
+      "F",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "G",
+      0,
+      -0.1
+    ],
+    [
+      "warn",
+      "G",
+      0,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Phone को google.com का address पता ही नहीं होता। || उसे सिर्फ़ नाम पता है, | और machine तक पहुँचने के लिए number चाहिए, | जिसे बोलते हैं IP address। || नाम से number ढूँढने का काम DNS करता है, | और इसके लिए एक के बाद एक कई जगह पूछा जाता है।",
+      "B": "Phone की contact list जैसा सोचो: | तुम नाम दबाते हो, | number phone ढूँढता है। || पहली जगह: अपनी ही memory। || Browser और computer के पास पहले मिले जवाबों की copy होती है, | इसे बोलते हैं cache। || मिल गया, | तो बात वहीं ख़त्म।",
+      "C": "न मिले, तो दूसरी जगह: resolver। || Resolver वो program है, | जो तुम्हारी तरफ़ से जवाब ढूँढता है। || वो पहले root server से पूछता है। || Root को पूरा address नहीं पता, | वो बस बताता है: | .com वाले server से पूछो।",
+      "D": ".com जैसे नाम के आख़िरी हिस्से को बोलते हैं TLD, | यानी top-level domain। || TLD server भी address नहीं देता, | वो बताता है कि इस domain की जानकारी किस server पर है।",
+      "E": "आख़िरी जगह: authoritative server। || Authoritative यानी domain का अपना server, | जिसके पास असली record रखा है। || वो IP address देता है, | जैसे EXAMPLE: | 93.184.216.34{ninety-three dot one-eighty-four dot two-sixteen dot thirty-four}। || Resolver ये phone को लौटा देता है।",
+      "F": "हर जवाब cache में रखा जाता है, | पर सिर्फ़ तय समय तक। || उस time limit को बोलते हैं TTL, | यानी time to live। || TTL ख़त्म, | तो नया जवाब पूछा जाता है।",
+      "G": "@emph इसलिए domain का address बदलो, | तो हर cache में पुरानी copy तब तक रहती है, | जब तक उसका TTL ख़त्म न हो। || बदलाव सबको दिखने में कुछ समय लगता है।",
+      "H": "Interview में ऐसे बोलना: | पहले cache, फिर resolver, | फिर root, TLD, authoritative, | और जवाब TTL तक cache में। || अब तुम बताओ: | address बदलने के बाद सबको नया address एक साथ क्यों नहीं दिखता? | Comment में लिखो।"
+    }
+  },
+  "hook_type": "surprising_fact",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

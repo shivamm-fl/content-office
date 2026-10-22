@@ -1,0 +1,15 @@
+Day 4/150: Phone ko google.com ka address pata hi nahi hota. Use sirf naam pata hai, number DNS dhoondhta hai.
+
+Pehle apni cache, phir resolver, phir root, TLD aur authoritative server se poochha jaata hai.
+
+1. Cache: pehle mile jawabon ki copy. Mil gaya, to baat khatam.
+2. Resolver: tumhari taraf se jawab dhoondhta hai, root server se poochta hai.
+3. Root aur TLD: ye address nahi dete, agla server batate hain.
+4. Authoritative server: domain ka apna server, wahi IP address deta hai.
+5. TTL: har jawab cache mein sirf tay samay tak rehta hai.
+
+Isliye domain ka address badlo, to purani copy TTL khatam hone tak cache mein rehti hai aur badlav sabko dikhne mein kuch samay lagta hai. (Picture mein 93.184.216.34 sirf ek example hai.)
+
+Sawal: address badalne ke baad sabko naya address ek saath kyun nahi dikhta? Apna jawab comment karo.
+
+#systemdesign #dns #backend

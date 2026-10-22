@@ -1,0 +1,9 @@
+How DNS Works in Hinglish: Name to IP Address (Day 4/150)
+
+DNS (Domain Name System) turns a domain name into an IP address. The browser first checks its local DNS cache; if the answer is not there, it asks a DNS server. A resolver asks a root server, then the .com TLD server, which replies with the domain's name servers, and the authoritative server returns the IP address; the resolver caches it for a time that the domain's owner sets (TTL). The IP address 93.184.216.34 and the example.com record are examples only. Explained with a phone contact-list analogy.
+
+Sources:
+https://developer.mozilla.org/en-US/docs/Glossary/DNS
+https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_domain_name
+https://aws.amazon.com/route53/what-is-dns/
+https://www.rfc-editor.org/rfc/rfc1034
