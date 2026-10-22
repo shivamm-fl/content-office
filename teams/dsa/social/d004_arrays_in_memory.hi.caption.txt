@@ -1,0 +1,9 @@
+Day 4/150: Array mein 10 lakh wala element ek step mein kaise milta hai?
+
+Array ke elements memory mein ek ke baad ek, bina gap ke, barabar size ke dibbon mein rakhe hote hain. Isliye address ek hi calculation se nikal aata hai: start plus index times size. Maan lo har element 4 bytes ka hai (example), to index 0 start par, index 1 start se 4 bytes aage, index 2 start se 8 bytes aage. Array kitna bhi bada ho, kisi bhi index tak ek calculation lagti hai.
+
+Iski ek keemat hai: beech mein naya element daalo, to uske baad wale sab elements ek jagah aage khiskenge, kyunki dibbe bina gap ke rehne chahiye. Maine Python mein 10 lakh items ke array par chalaya: beech mein daalne par 5 lakh elements khiske.
+
+Ab tum batao: 20 lakh ke array mein beech mein daalo, to kitne elements khiskenge? Pehle comment mein apna guess likho. Answer: 10 lakh elements khiskenge, aur index 15 lakh padhna phir bhi 1 step hai.
+
+#dsa #array #codinginterview
