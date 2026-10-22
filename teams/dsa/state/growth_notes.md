@@ -17,3 +17,6 @@ No own numbers exist yet (n=0 reels with insights), so this is a script read, no
 
 ## 2026-10-20 (planner)
 Planned Day 3 (d003, concept, space complexity and the time-space trade-off): hook type relatable_stake to rotate away from d001 interviewer_asked and d002 surprising_fact, so three types now run side by side; no own numbers yet. Running example: duplicate check among 10 lakh numbers, about 5 hundred billion pair steps with no extra memory vs 10 lakh steps with a set (about 4x a list's memory), counts run by the researcher; the Python-set O(1) claim is unverified (wiki.python.org 404) and is kept out as a fact.
+
+## 2026-10-22 (planner)
+Planned Day 4 (d004, structure, how arrays sit in memory): hook type direct_question, the one of the five types not yet tested, so four types now run side by side; no own numbers yet. Running example: 10 lakh ints, index to byte offset is i x size and a middle insert shifts 5 lakh elements, counts run by the strategist (researcher re-check pending); the Python-list-holds-references claim was not fetched and is kept out.

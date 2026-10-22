@@ -119,6 +119,65 @@
       "caption_note": "Day 3/150 caption. Check answer: 20 lakh numbers with the set method take 20 lakh steps.",
       "script_notes": "Owner approved the script as written on 2026-10-21; keep wording. Header tag DSA 003/150.",
       "status": "planned",
+      "qa_passed": false,
+      "hook_source": "owner-approved script 2026-10-21; hook kept as written (relatable_stake, memory_buys_speed)"
+    },
+    {
+      "id": "d004",
+      "track": "series",
+      "day": 4,
+      "unit": "P1",
+      "format": "structure",
+      "title": "Arrays: memory mein kaise rakhe jaate hain",
+      "one_idea": "An array keeps its elements in one unbroken block of memory, each the same size, so the computer finds element i with one calculation (start + i x size), which makes reading any element one step, while inserting in the middle must shift every element after it (about 5 lakh moves in a 10 lakh array).",
+      "hook_type": "direct_question",
+      "spoken_hook": "Array में दस लाखवाँ element, एक step में कैसे?",
+      "hook_formula": "one_step_question",
+      "hook_source": "direct_question is the one of the five types not yet tested (d001 interviewer_asked, d002 surprising_fact, d003 relatable_stake; company_specific needs a fetched company page we do not have); the answer lands in the very next line, no filler. hookscore 30.0 WEAK (Hinglish, calibrated on English), no DEALBREAKER seen.",
+      "hook_10s": "Array में दस लाखवाँ element, एक step में कैसे? क्योंकि memory में array के सारे boxes एक के बाद एक, बराबर size के रखे होते हैं। एक छोटा हिसाब लगाओ और address मिल जाता है। [frame 0: a long row of equal boxes numbered 0, 1, 2 ... with a pointer jumping straight to the last box]",
+      "hook_candidates": [
+        {
+          "formula": "one_step_question",
+          "hook": "Array में दस लाखवाँ element, एक step में कैसे?"
+        },
+        {
+          "formula": "no_search_question",
+          "hook": "Array में element बिना ढूँढे कैसे मिल जाता है?"
+        },
+        {
+          "formula": "cost_contrast",
+          "hook": "Array से पढ़ना एक step, बीच में डालना पाँच लाख।"
+        }
+      ],
+      "visual_idea": "A long row of equal memory boxes with addresses 0, 4, 8, 12 ... and a pointer that jumps straight to box 999,999 by one multiplication (start + i x size) while a magnifier crawling box by box is crossed out; then a new value inserted in the middle makes the boxes after it slide right one by one with a move counter reaching 5,00,000.",
+      "everyday_anchor": "A row of lockers or seats in a cinema hall numbered in order: seat 40 is found by counting 40 seats from the first, you do not search each seat; but squeezing one new person into the middle makes everyone after them move one seat.",
+      "example": "EXAMPLE (strategist ran it, researcher re-ran it 2026-10-22 with identical output, Python 3.12, counts not seconds): array('i') of 1000000 ints: itemsize 4 bytes; byte offset of index 0 is 0, index 1 is 4, index 2 is 8, index 999999 is 3999996 (offset = i x itemsize, base address aside); reading any index is 1 calculation; inserting in the middle of 1000000 items shifts 500000 elements, of 2000000 items shifts 1000000 (doubling data doubles the moves). The 4-byte int size is the printed itemsize on this machine, not a law; say 'for example 4 bytes'.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Array_(data_structure)",
+        "https://en.wikipedia.org/wiki/Dynamic_array",
+        "https://docs.python.org/3/library/array.html"
+      ],
+      "facts_to_verify": [
+        "Address of element i = base + i x element size: Wikipedia array page gives 2000 + (i x 4) for 4-byte ints; say 'for example 4 bytes', itemsize depends on the machine (Python array docs).",
+        "Access O(1): Wikipedia (array: constant time store and select; dynamic array: indexing Theta(1)). Insert or delete in the middle O(n): Wikipedia dynamic array table. The page says plain static arrays do not allow insertion, so say 'inserting makes the elements after it move', as an array-like list does.",
+        "Python list is an array of references, so its boxes hold addresses, not the numbers themselves: NOT fetched this session (wiki.python.org TimeComplexity page gave only a redirect and its prose 'a list is represented as an array'); keep it out or say 'a typical list' only.",
+        "Do not say actual memory addresses or bytes from a real run on screen as a fact; offsets from the start are the formula. No seconds on screen.",
+        "Do not claim anything about how a particular language lays out multi-dimensional arrays.",
+        "CONFIRMED 2026-10-22 (researcher): Wikipedia Array page: elements same size, contiguous memory, address 2000 + (i x 4), select/store constant time; Dynamic array page: indexing Theta(1), insert/delete at arbitrary position Theta(n); Python array docs: itemsize is machine-dependent ('i' minimum 2 bytes, 4 here). Shift counts are n minus middle index by definition (array.insert moves the tail), not timed."
+      ],
+      "length_target_s": 120,
+      "cover_headline": "How arrays really sit in memory",
+      "thumb_text": "Array in memory",
+      "keywords": [
+        "array in memory hindi",
+        "array kaise store hota hai",
+        "array access o(1) kyu",
+        "array data structure for coding interview",
+        "array insertion o(n) kyu"
+      ],
+      "caption_note": "Day 4/150 caption. Check answer: in a 20 lakh array, inserting in the middle moves 10 lakh elements; reading index 15 lakh is still 1 step.",
+      "script_notes": "Structure day. Hook is direct_question; the very next line must teach (the boxes are in one row, equal size, so a small calculation gives the address). Nothing between hook and that line. Define memory, address, index, contiguous in one plain sentence each. Header tag DSA 004/150. Independently re-checked by the researcher 2026-10-22 (sources fetched, example re-run, output matches).",
+      "status": "planned",
       "qa_passed": false
     }
   ]
