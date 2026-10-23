@@ -1,6 +1,6 @@
-ChatGPT ne language kaise seekhi? Pretraining samjho
+ChatGPT ko pretrain karte vaqt labels kisne lagaye?
 
-Pretraining ka matlab hai model ko shuru se train karna, bahut saare raw text par, ek hi kaam ke saath: agla word guess karo. Kisi insaan ko labels nahi lagane padte, text khud answer sheet hai. Is video mein ek chhota toy counting model chalta hai (example, invented 53 words ka text, 12 alag words, asli LLM nahi): guess ki galti, yaani loss, 3.58 se 2.29 tak girta hai jaise model zyada text padhta hai. Phir dekhte hain ki asli LLM mein neural network aur tokens hote hain, aur pretraining ke baad fine-tuning kyun aati hai.
+Pretraining mein koi human labeler nahi hota: model text ka agla word chhupakar guess karta hai, aur text khud hi answer key hai. Is video mein ek chhota toy counting model chalta hai (example, invented 53 words ka text, 12 unique words, asli LLM nahi): loss, yaani error score, 3.58 se 2.19 tak girta hai jaise model zyada text padhta hai. Phir dekhte hain ki real LLM mein billions of transformer parameters hote hain, aur helpful assistant banane ke liye human labels baad mein fine-tuning mein aate hain.
 
 Is video mein: pretraining kya hai, self-supervised learning, loss, next word prediction, fine-tuning.
 

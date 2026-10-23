@@ -1,17 +1,15 @@
-Day 5/150: ChatGPT ne language kaise seekhi? Bahut saara text padhkar!
+Day 5/150: Interviewer ne poocha: ChatGPT ko pretrain karte vaqt dataset par labels kisne lagaye?
 
-Is seekhne ko pretraining kehte hain: model ko shuru se train karo, ek bahut bade raw text par, ek hi kaam ke saath: agla word guess karo. Shuru mein uske numbers (weights) random hote hain.
+Zyaadatar log bolte hain humans, aur yahi reject hote hain. Pretraining mein koi human labeler nahi hota: text khud hi answer key hai.
 
-Hamne ek chhota toy counting model chalaya (example, asli LLM nahi): hamara banaya 53 words ka text, 12 alag words. Chaar step: 1) agla word chhupao, 2) model guess kare, 3) asli word kholo aur guess ki galti naapo (is score ko loss kehte hain), 4) model apne numbers thode badle.
+Mechanism simple hai: sentence ka agla word chhupa do ("the dog sat on the...") aur model ko guess karne do. Hamne ek chhota toy model chalaya (example, asli LLM nahi): 53 words ka text, 12 unique words. Shuru mein weights random hote hain, to 12 words par equal probability aur loss (error score) 3.58.
 
-Loss 3.58 se shuru hua. 10 words padhne ke baad 3.17, 20 ke baad 2.84, 40 ke baad 2.48, poora text padhne par 2.29. Jitna zyada padha, guess utna behtar. Loss zero nahi hua, kyunki "the" ke baad kai words sahi ho sakte hain.
+Phir cycle: guess, real word reveal, loss calculate, weights update. 10 words ke baad loss 3.09, 20 par 2.74, 40 par 2.37, poora text padhne ke baad 2.19. Loss zero kabhi nahi hota, kyunki ek word ke baad kai options valid hote hain.
 
-Asli LLM mein count table ki jagah neural network hota hai aur wo tokens (text ke tukde) par chalta hai. Pretraining ke baad model bas text aage badhana jaanta hai; sawal-jawab wala assistant banane ke liye baad mein fine-tuning hoti hai, insaano ke labels wale examples se.
+Real LLM mein counting table ki jagah billions of transformer parameters hote hain, par rule wahi hai: next token predict karo, loss calculate karo, weights adjust karo. Is stage par model sirf text complete karna jaanta hai; helpful assistant banane ke liye human labels baad mein fine-tuning mein aate hain.
 
-Jawab: pretraining mein text ko labels kisi ne nahi diye. Agla word hi answer hai, text khud answer sheet hai.
+Comment karo: pretraining mein labels kisne diye? HUMAN ya KISI NE NAHI?
 
-Comment karo: pretraining mein text ko labels kisne diye? HUMAN ya KISI NE NAHI?
-
-150 Days of AI ke liye follow karo.
+150 Days of AI prep ke liye follow karo.
 
 #AI #LLM #150DaysOfAI
