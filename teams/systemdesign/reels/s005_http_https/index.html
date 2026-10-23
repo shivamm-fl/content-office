@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>HTTP aur HTTPS: padlock asal mein kya karta hai</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="113" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="113" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="113" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="113" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "SYSTEM DESIGN · DAY 005 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H] = ["A","B","C","D","E","F","G","H"].map((k) => M.$("#s" + k));
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const kick = (host, txt, t) => show(el(host, `left:0;width:1080px;text-align:center;top:196px;font:700 46px var(--code);letter-spacing:.14em;color:${ACC}`, txt), t, { opacity: 0, y: 0 });
+      const lab = (host, x, y, w, col, txt, t, size) => show(el(host, `left:${x}px;width:${w}px;text-align:center;top:${y}px;font:600 ${size || 38}px var(--code);letter-spacing:.06em;color:${col};white-space:nowrap`, txt), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const recolor = (d, t, col, bg) => tl.to(d, bg === null ? { borderColor: M.ca(col, 0.95), duration: 0.25, immediateRender: false } : { borderColor: M.ca(col, 0.95), backgroundColor: M.ca(col, bg || 0.14), duration: 0.25, immediateRender: false }, t);
+      Viz.ICONS.phone = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="17" y="4" width="30" height="56" rx="7"/><path d="M28 52h8"/></g>`;
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      const PW = "password=abc123", NOISE = "7f#Kq9@Zx2!pL4";
+      // a postcard: opaque card with mono text; returns {c, t}
+      const card = (host, x, y, w, h, txt, size, col, tag) => { const c = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;border:3px solid ${M.ca(col || ACC, 0.9)};background:#16203A`);
+        if (tag) el(c, `left:0;width:${w}px;text-align:center;top:16px;font:700 30px var(--code);letter-spacing:.14em;color:${ACC}`, tag);
+        const t = el(c, `left:0;width:${w}px;text-align:center;top:${tag ? (h + 30) / 2 - size * 0.5 : (h - size * 1.2) / 2}px;font:700 ${size}px var(--code);color:#E8EDF6;white-space:nowrap`, txt); return { c, t }; };
+      // phone on top, server at the bottom, a dashed wire between
+      const frame = (host, py, ph, sy, sh, t, wireFrom, wireTo) => {
+        const p = M.box(host, { x: 340, y: py, w: 400, h: ph, label: "PHONE", icon: "phone", color: ACC, size: 48, isize: 80 }); p.show(t);
+        const s = M.box(host, { x: 340, y: sy, w: 400, h: sh, label: "SERVER", icon: "server", color: CYAN, size: 48, isize: 80 }); s.show(t + 0.05);
+        const w = M.arrow(host, { from: [540, wireFrom], to: [540, wireTo], color: "#8592AD", w: 8, dash: true }); w.show(t + 0.1, 0.3); return { p, s, w }; };
+      const lockedBox = (host, t) => { const b = el(host, `left:270px;top:450px;width:540px;height:300px;border-radius:30px;border:5px solid ${CYAN};background:${M.ca(CYAN, 0.1)}`); show(b, t, { opacity: 0, scale: 0.9 });
+        const lk = M.icon(host, "lock", 735, 395, 100, CYAN); lk.show(t + 0.1); return { b, lk }; };
+
+      // ===== A: café WiFi, anyone in the middle can read or change it =====
+      // diagram: A
+      M.hook(["Interviewer ne poocha:", "padlock kya check", "karta hai?"], { size: 80, top: 230 });
+      frame(A, 470, 180, 1120, 180, 0.05, 655, 1115);
+      const aC = card(A, 320, 690, 440, 200, "BANK PASSWORD", 36, ACC, "LOGIN");
+      show(aC.c, at("A", "tum"), { opacity: 0, y: -30 });
+      tl.to(aC.c, { y: 120, duration: 1.4, ease: "power1.inOut", immediateRender: false }, at("A", "password"));
+      const aEye = M.icon(A, "eye", 830, 780, 130, "#8592AD"); aEye.show(at("A", "baitha"));
+      lab(A, 780, 925, 230, "#8592AD", "CAFE WIFI", at("A", "baitha"), 36);
+      tl.to(aEye.el, { opacity: 1, duration: 0.01, immediateRender: false }, at("A", "baitha"));
+      recolor(aC.c, at("A", "padh", 0), HOT, null);
+      M.pill(A, "EDIT", at("A", "badal"), { x: 870, y: 700, kind: "out", size: 40 });
+      const aL = M.icon(A, "lock", 110, 780, 140, GOOD); aL.show(at("A", "Padlock"));
+      [1, 2, 3].forEach((k) => M.pill(A, String(k), at("A", "teen") + (k - 1) * 0.18, { x: 50 + (k - 1) * 80, y: 960, kind: "out", size: 34 }));
+      M.fit(A, { y: 540, h: 760 });
+
+      // ===== B: request and response =====
+      // diagram: B
+      kick(B, "REQUEST · RESPONSE", M.S.B + 0.1);
+      const fb = frame(B, 250, 200, 1090, 200, M.S.B + 0.15, 455, 1085);
+      const arD = M.arrow(B, { from: [240, 460], to: [240, 1085], color: ACC, w: 10 }); arD.show(at("B", "request", 0) - 0.3, 0.3);
+      const arU = M.arrow(B, { from: [840, 1085], to: [840, 460], color: GOOD, w: 10 }); arU.show(at("B", "response", 0) - 0.3, 0.3);
+      const rq = card(B, 130, 480, 220, 120, "REQUEST", 32, ACC); show(rq.c, at("B", "request", 0), { opacity: 0, y: 0 });
+      tl.to(rq.c, { y: 440, duration: 1.1, ease: "power2.inOut", immediateRender: false }, at("B", "request", 0) + 0.3); gone(rq.c, at("B", "Server"));
+      const rs = card(B, 730, 900, 220, 120, "RESPONSE", 30, GOOD); show(rs.c, at("B", "response", 0), { opacity: 0, y: 0 });
+      tl.to(rs.c, { y: -400, duration: 1.2, ease: "power2.inOut", immediateRender: false }, at("B", "response", 0) + 0.3); gone(rs.c, at("B", "status") - 0.2);
+      stamp(B, "200 OK", 540, 640, GOOD, at("B", "200"), 56, 360);
+      stamp(B, "HTTP", 540, 860, ACC, at("B", "HTTP"), 60, 360);
+      M.fit(B);
+
+      // ===== C: plain text postcard, readable and editable =====
+      // diagram: C
+      kick(C, "HTTP = PLAIN TEXT", M.S.C + 0.1);
+      frame(C, 250, 190, 1110, 190, M.S.C + 0.15, 445, 1105);
+      const cc = card(C, 190, 560, 640, 340, PW, 46, ACC, "POSTCARD"); show(cc.c, at("C", "HTTP"), { opacity: 0, y: 0 });
+      const cc2 = el(cc.c, `left:0;width:640px;text-align:center;top:260px;font:700 36px var(--code);color:${HOT};white-space:nowrap`, "plain text"); tl.set(cc2, { opacity: 0 }, 0);
+      tl.to(cc2, { opacity: 1, duration: 0.3, immediateRender: false }, at("C", "saaf"));
+      const cc3 = el(cc.c, `left:0;width:640px;text-align:center;top:${(340 + 30) / 2 - 23}px;font:700 46px var(--code);color:${HOT};white-space:nowrap`, "password=evil99"); tl.set(cc3, { opacity: 0 }, 0);
+      [0, 1, 2].forEach((k) => { const e = M.icon(C, "eye", 880, 500 + k * 190, 110, "#8592AD"); e.show(at("C", "haathon") + k * 0.2); tl.to(e.el, { opacity: 1, duration: 0.01, immediateRender: false }, at("C", "haathon") + k * 0.2); });
+      M.pill(C, "EXAMPLE", at("C", "EXAMPLE"), { x: 395, y: 470, kind: "out", size: 44 });
+      stamp(C, "READABLE", 510, 960, HOT, at("C", "padh", 1), 56, 440);
+      tl.to(cc.t, { opacity: 0, duration: 0.01, immediateRender: false }, at("C", "badal")); tl.to(cc3, { opacity: 1, duration: 0.15, immediateRender: false }, at("C", "badal") + 0.05);
+      recolor(cc.c, at("C", "padh", 1), HOT, null);
+      M.fit(C);
+
+      // ===== D: the locked box = TLS =====
+      // diagram: D
+      kick(D, "HTTPS = HTTP + TLS", M.S.D + 0.1);
+      frame(D, 250, 190, 1110, 190, M.S.D + 0.15, 445, 1105);
+      const dc = card(D, 320, 520, 440, 180, PW, 36, ACC); show(dc.c, M.S.D + 0.25, { opacity: 0, y: 0 });
+      const dbx = lockedBox(D, at("D", "locked"));
+      stamp(D, "TLS", 540, 775, ACC, at("D", "TLS", 0), 60, 220);
+      [["ENCRYPTION", "lock"], ["IDENTITY", "user"], ["TAMPER", "shield"]].forEach(([nm, ic], i) => { const b = M.box(D, { x: 60 + i * 325, y: 880, w: 310, h: 190, label: nm, icon: ic, color: CYAN, size: 36, isize: 64 }); b.show(at("D", "teen", 1) + i * 0.25); });
+      M.fit(D);
+
+      // ===== E: encryption =====
+      // diagram: E
+      kick(E, "1 · ENCRYPTION", M.S.E + 0.1);
+      frame(E, 250, 190, 1110, 190, M.S.E + 0.15, 445, 1105);
+      const ec = card(E, 320, 520, 440, 180, PW, 36, ACC); show(ec.c, M.S.E + 0.2, { opacity: 0, y: 0 });
+      const en = el(ec.c, `left:0;width:440px;text-align:center;top:${(180 - 43) / 2}px;font:700 36px var(--code);color:${CYAN};white-space:nowrap`, NOISE); tl.set(en, { opacity: 0 }, 0);
+      lockedBox(E, M.S.E + 0.3);
+      tl.to(ec.t, { opacity: 0, duration: 0.2, immediateRender: false }, at("E", "scramble")); tl.to(en, { opacity: 1, duration: 0.2, immediateRender: false }, at("E", "scramble"));
+      const eEye = M.icon(E, "eye", 110, 850, 130, "#8592AD"); eEye.show(at("E", "wale")); tl.to(eEye.el, { opacity: 1, duration: 0.01, immediateRender: false }, at("E", "wale"));
+      lab(E, 60, 990, 230, "#8592AD", "CAFE WIFI", at("E", "wale"), 36);
+      const e1 = card(E, 330, 850, 440, 130, "abc123", 56, HOT); show(e1.c, at("E", "abc123"), { opacity: 0, y: 0 }); gone(e1.c, at("E", "sirf") - 0.1);
+      const e2 = card(E, 330, 850, 440, 130, NOISE, 36, CYAN); show(e2.c, at("E", "sirf"), { opacity: 0, y: 0 });
+      stamp(E, "RANDOM NOISE", 540, 1000, ACC, at("E", "noise"), 44, 520);
+      M.fit(E);
+
+      // ===== F: identity, the certificate =====
+      // diagram: F
+      kick(F, "2 · IDENTITY", M.S.F + 0.1);
+      const fP = M.box(F, { x: 60, y: 250, w: 300, h: 220, label: "PHONE", icon: "phone", color: ACC, size: 44, isize: 80 }); fP.show(M.S.F + 0.15);
+      const fAd = panel(F, 410, 250, 580, 220, CYAN, null); show(fAd, M.S.F + 0.2);
+      el(fAd, `left:0;width:580px;text-align:center;top:28px;font:600 34px var(--code);letter-spacing:.08em;color:#8592AD`, "ADDRESS BAR");
+      el(fAd, `left:0;width:580px;text-align:center;top:100px;font:700 52px var(--code);color:#E8EDF6`, "example.com");
+      const fFake = M.box(F, { x: 60, y: 560, w: 400, h: 220, label: "FAKE", icon: "server", color: HOT, size: 48, isize: 80 }); fFake.show(at("F", "nakli"));
+      const fFa = M.arrow(F, { from: [210, 555], to: [210, 475], color: HOT, w: 8, dash: true }); fFa.show(at("F", "nakli") + 0.3, 0.3);
+      const fS = M.box(F, { x: 60, y: 900, w: 380, h: 250, label: "REAL SERVER", icon: "server", color: CYAN, size: 40, isize: 80 }); fS.show(M.S.F + 0.25);
+      const fCert = show(panel(F, 500, 870, 490, 300, ACC, "CERTIFICATE"), at("F", "certificate"));
+      const fKey = M.icon(F, "lock", 530, 980, 110, ACC); fKey.show(at("F", "chaabi"));
+      show(el(F, `left:660px;top:1010px;font:700 54px var(--code);color:${ACC}`, "="), at("F", "baandhta") - 0.3, { opacity: 0, y: 0 });
+      show(el(F, `left:710px;top:1018px;font:700 36px var(--code);color:#E8EDF6;white-space:nowrap`, "example.com"), at("F", "domain"), { opacity: 0, y: 0 });
+      const fUp = M.arrow(F, { from: [745, 865], to: [745, 480], color: GOOD, w: 10 }); fUp.show(at("F", "Browser") - 0.1, 0.3); fUp.travel(at("F", "Browser") + 0.2, 0.9, GOOD);
+      const fOk = M.icon(F, "check", 900, 330, 80, GOOD); fOk.show(at("F", "examplecom"));
+      recolor(fAd, at("F", "examplecom"), GOOD, 0.14);
+      tl.to([fFake.el, fFake.parts[1], fFa.path || fFake.el], { opacity: 0.25, duration: 0.3, immediateRender: false }, at("F", "examplecom"));
+      M.fit(F);
+
+      // ===== G: tamper detection =====
+      // diagram: G
+      kick(G, "3 · TAMPER SEAL", M.S.G + 0.1);
+      frame(G, 250, 190, 1110, 190, M.S.G + 0.15, 445, 1105);
+      const gc = card(G, 320, 520, 440, 180, PW, 36, ACC); show(gc.c, M.S.G + 0.2, { opacity: 0, y: 0 });
+      const gc3 = el(gc.c, `left:0;width:440px;text-align:center;top:${(180 - 43) / 2}px;font:700 36px var(--code);color:${HOT};white-space:nowrap`, "password=evil99"); tl.set(gc3, { opacity: 0 }, 0);
+      lockedBox(G, M.S.G + 0.3);
+      const gEye = M.icon(G, "eye", 860, 480, 130, "#8592AD"); gEye.show(at("G", "chupke")); tl.to(gEye.el, { opacity: 1, duration: 0.01, immediateRender: false }, at("G", "chupke"));
+      lab(G, 810, 625, 230, "#8592AD", "CAFE WIFI", at("G", "chupke"), 36);
+      const gAr = M.arrow(G, { from: [905, 540], to: [820, 600], color: HOT, w: 8, dash: true }); gAr.show(at("G", "badla") - 0.2, 0.2);
+      // the seal: whole, then two halves that split
+      const seal = el(G, `left:480px;top:700px;width:120px;height:120px;border-radius:60px;border:5px solid ${ACC};background:#2a2a14`); show(seal, at("G", "seal", 0), { opacity: 0, scale: 0.6 });
+      const sIc = M.icon(G, "shield", 505, 725, 70, ACC); sIc.show(at("G", "seal", 0) + 0.1);
+      const hl = el(G, `left:480px;top:700px;width:60px;height:120px;border-radius:60px 0 0 60px;border:5px solid ${HOT};border-right:0;background:rgba(232,89,107,.15)`);
+      const hr = el(G, `left:540px;top:700px;width:60px;height:120px;border-radius:0 60px 60px 0;border:5px solid ${HOT};border-left:0;background:rgba(232,89,107,.15)`);
+      tl.set([hl, hr], { opacity: 0 }, 0);
+      tl.to(gc.t, { opacity: 0, duration: 0.15, immediateRender: false }, at("G", "badla")); tl.to(gc3, { opacity: 1, duration: 0.15, immediateRender: false }, at("G", "badla"));
+      tl.to([seal, sIc.el], { opacity: 0, duration: 0.1, immediateRender: false }, at("G", "tootti"));
+      tl.to([hl, hr], { opacity: 1, duration: 0.1, immediateRender: false }, at("G", "tootti"));
+      tl.to(hl, { x: -26, y: 14, rotation: -14, duration: 0.5, ease: "power3.out", immediateRender: false }, at("G", "tootti"));
+      tl.to(hr, { x: 26, y: 14, rotation: 14, duration: 0.5, ease: "power3.out", immediateRender: false }, at("G", "tootti"));
+      stamp(G, "TAMPERED", 540, 850, HOT, at("G", "tootti") + 0.2, 52, 440);
+      stamp(G, "CAUGHT", 540, 960, GOOD, at("G", "pakda"), 52, 440);
+      M.fit(G);
+
+      // ===== H: look for https, the three jobs =====
+      // diagram: H
+      kick(H, "CHECK THE ADDRESS", M.S.H + 0.1);
+      const hb = show(panel(H, 90, 280, 900, 190, CYAN, null), M.S.H + 0.15);
+      const hLk = M.icon(H, "lock", 125, 325, 100, "#8592AD"); hLk.show(M.S.H + 0.2);
+      el(hb, `left:200px;top:56px;font:700 58px var(--code);color:#E8EDF6;white-space:nowrap`, '<span class="hs">https</span>://example.com');
+      tl.to(hb.querySelector(".hs"), { color: GOOD, duration: 0.3, immediateRender: false }, at("H", "https"));
+      const hLk2 = M.icon(H, "lock", 125, 325, 100, GOOD); hLk2.show(at("H", "https"));
+      [["ENCRYPTION", "lock"], ["IDENTITY", "user"], ["TAMPER CHECK", "shield"]].forEach(([nm, ic], i) => { const y = 530 + i * 220;
+        const r = el(H, `left:90px;top:${y}px;width:900px;height:190px;border-radius:24px;border:3px solid ${M.ca(CYAN, 0.6)};background:${M.ca(CYAN, 0.08)}`); show(r, at("H", "padlock") + i * 0.1, { opacity: 0, y: 14 });
+        const ic1 = M.icon(H, ic, 125, y + 45, 100, CYAN); ic1.show(at("H", "padlock") + i * 0.1);
+        show(el(H, `left:270px;top:${y + 55}px;font:800 62px var(--lat);color:#E8EDF6;white-space:nowrap`, nm), at("H", "padlock") + i * 0.1, { opacity: 0, y: 14 });
+        const ok = M.icon(H, "check", 830, y + 45, 100, GOOD); ok.show(at("H", "teen") + i * 0.3); });
+      show(el(H, "left:90px;top:1190px;width:900px;height:110px;border-radius:55px;border:2px solid rgba(169,182,208,.6);font:500 44px var(--code);color:#C3CCDE;display:flex;align-items:center;padding:0 40px;box-sizing:border-box", "Add a comment..."), at("H", "Comment"), { opacity: 0, y: 0 });
+      M.fit(H);
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
+      M.finish({ kw: { password: "hot", padlock: "gold", postcard: "gold", encryption: "cyan", identity: "cyan", certificate: "cyan", tamper: "hot", tls: "gold", seal: "good", noise: "gold", https: "good", http: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

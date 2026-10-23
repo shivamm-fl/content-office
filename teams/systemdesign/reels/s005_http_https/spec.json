@@ -1,0 +1,117 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 5,
+    "B": 5,
+    "C": 5,
+    "D": 5,
+    "E": 5,
+    "F": 5,
+    "G": 5,
+    "H": 5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "C",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      2,
+      0
+    ],
+    [
+      "lock",
+      "D",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      2,
+      0
+    ],
+    [
+      "tick",
+      "F",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "F",
+      4,
+      0
+    ],
+    [
+      "tick",
+      "G",
+      0,
+      0
+    ],
+    [
+      "dip",
+      "G",
+      3,
+      -0.1
+    ],
+    [
+      "ok",
+      "G",
+      3,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: HTTPS में padlock असल में क्या check करता है? || Café के WiFi पर तुम bank का password डालते हो। | बीच में बैठा कोई भी उसे पढ़ सकता है, | या बदल सकता है। || Padlock इसी problem को तीन तरीके से रोकता है।",
+      "B": "पहले देखो, padlock के बिना क्या होता है। || Website खोलते हो, | तो browser एक request भेजता है, | यानी \"मुझे ये page दो\"। || Server जवाब में response भेजता है: | page, और एक status code, जैसे 200{दोसौ}, यानी सब ठीक। || इस request और response के नियम को बोलते हैं HTTP।",
+      "C": "HTTP में सब साफ़ text में जाता है, | postcard की तरह। || Postcard जितने हाथों से गुज़रता है, | सब उसे पढ़ सकते हैं। || EXAMPLE: | login request में लिखा है password=abc123। || Café WiFi का मालिक उसे सीधा पढ़ लेता है, | और चाहे तो बदल भी देता है।",
+      "D": "HTTPS में यही postcard एक locked box के अंदर जाता है। || ये box बनाता है TLS, | यानी वो नियम, जिनसे browser और server की बातचीत सुरक्षित होती है। || और TLS तीन काम करता है।",
+      "E": "पहला: encryption। || मतलब message को scramble करना, | कि रास्ते में कोई पढ़ न सके। || Café वाले को abc123 की जगह सिर्फ़ random noise दिखता है।",
+      "F": "दूसरा: identity। || बीच में कोई नकली server भी खड़ा हो सकता है। || इसलिए server अपना certificate दिखाता है। || Certificate एक digital ID card है, | जो server की चाबी को domain के नाम से बांधता है। || Browser check करता है कि ये सच में example.com ही है।",
+      "G": "तीसरा: tamper detection। || Tamper यानी चुपके से बदलना। || Box पर seal समझो। || रास्ते में message बदला, | तो seal टूटती है, | और बदलाव पकड़ा जाता है।",
+      "H": "इसलिए password डालने से पहले address में https देखो। || अब तुम बताओ: | padlock कौन से तीन काम करता है? | Comment में लिखो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

@@ -1,0 +1,15 @@
+# Visual plan: s005 HTTP aur HTTPS
+
+Idea in one line: HTTP is a postcard anyone can read and change; HTTPS puts it in a locked box that does three jobs: hide it, prove who sent it, and show if it was touched.
+The picture that explains it with the sound off: phone on top, server at the bottom, a wire between them; a postcard (the message) travels down the wire. A café-WiFi eye reads and edits it. Then the postcard sits in a locked box, shows random noise to the eye, the server shows an ID card the phone checks, and a seal on the box breaks when a hand touches it. (Vertical layout instead of left/right, so the picture is big on a phone.)
+
+| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes | Labels | Built with |
+|---|---|---|---|---|
+| A | Café WiFi, password, anyone reads or changes it; padlock stops it three ways | Phone and server with a wire; a bank-password card slides down; an eye at the café WiFi turns red and reads it, an EDIT tag appears; a green lock and three small numbered pills answer it | PHONE, SERVER, CAFE WIFI, EDIT | M.box, M.arrow, M.icon, custom card |
+| B | Request goes, response with status 200 comes back, rules = HTTP | A REQUEST card slides down the left arrow, a RESPONSE card slides up the right arrow, a green 200 OK stamp lands in the middle, then an HTTP stamp | REQUEST, RESPONSE, 200 OK, HTTP | M.box, M.arrow, custom cards, stamp |
+| C | HTTP is plain text like a postcard; password=abc123; wifi owner reads and edits | One big postcard shows password=abc123 in readable mono text; three red eyes read along its side; READABLE stamp; the text is edited to another value | POSTCARD, EXAMPLE, READABLE | custom card, M.icon eye, stamp |
+| D | HTTPS: the postcard goes into a locked box, built by TLS; TLS does three jobs | The postcard sits inside a box outline with a lock icon; TLS label; then three cards pop below: encryption, identity, tamper | TLS, ENCRYPTION, IDENTITY, TAMPER | custom box, M.icon lock, M.box |
+| E | Encryption: scramble so nobody can read; café sees noise | Lock box with the postcard; the readable text flips to scrambled characters; the eye first sees abc123 then the random noise | NOISE, CAFE WIFI | custom, M.icon |
+| F | Identity: a fake server can stand in the middle; the real one shows a certificate that ties its key to the domain; browser checks | Fake red server tries to reach the phone; real server beside a CERTIFICATE card (key = example.com); a green arrow carries it up to the address bar; check lands on example.com, fake fades | FAKE, CERTIFICATE, example.com | M.box, M.arrow, panel |
+| G | Tamper detection: a seal on the box; if the message changes the seal breaks | Locked box with a gold seal; the eye pushes an edit in, the text turns red, the seal splits into two halves, TAMPERED stamp then CAUGHT | CAFE WIFI, TAMPERED, CAUGHT | custom seal halves, stamps |
+| H | Check https before the password; which three jobs? comment | Address bar with a lock turning green on https; three rows (encryption, identity, tamper) tick off; comment bar | HTTPS, 3 rows, ticks | custom rows, M.icon |

@@ -1,0 +1,8 @@
+HTTP vs HTTPS in Hinglish: What the Padlock Really Checks (Day 5/150)
+
+HTTP is the request and response a browser and a server exchange, in plain text. HTTPS is HTTP carried over TLS. TLS gives three things: encryption (data in transit cannot be read), authentication (the server proves it is the domain through a certificate that binds its public key to the domain name) and integrity (tampering in transit is detected). The password=abc123 login request and the example.com address are examples only. Explained with a postcard and locked box analogy.
+
+Sources:
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview
+https://developer.mozilla.org/en-US/docs/Glossary/HTTPS
+https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security

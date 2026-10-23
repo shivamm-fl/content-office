@@ -1,0 +1,15 @@
+Day 5/150: Interviewer ne poocha: HTTPS mein padlock asal mein kya check karta hai?
+
+Café ke WiFi par password daalo, to beech ka koi use padh ya badal sakta hai.
+
+HTTP plain text hota hai, postcard ki tarah. HTTPS wahi HTTP hai, bas TLS ke andar. TLS teen kaam karta hai:
+
+1. Encryption: message scramble hota hai, raaste mein koi padh nahi sakta.
+2. Identity: server certificate dikhata hai, jo uski key ko domain ke naam se bandhta hai.
+3. Tamper detection: raaste mein kuch badla, to pakda jaata hai.
+
+(password=abc123 sirf ek example hai.)
+
+Sawal: padlock kaun se teen kaam karta hai? Apna jawab comment karo.
+
+#systemdesign #https #backend
