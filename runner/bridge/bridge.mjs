@@ -48,10 +48,16 @@ async function identityHeaders() {
   const url = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
   const tok = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
   if (!url || !tok) throw new Error("no OIDC: the job needs `permissions: id-token: write`");
-  const r = await fetch(`${url}&audience=${encodeURIComponent(process.env.OIDC_AUDIENCE || "content-office")}`, {
-    headers: { Authorization: `Bearer ${tok}` },
-  });
-  if (!r.ok) throw new Error(`OIDC token request failed: ${r.status}`);
+  // GitHub's token service answers 5xx now and then (run_mvkzz3rf3JK1Lg0: 503): retry before failing the whole run
+  let r;
+  for (let attempt = 1; ; attempt++) {
+    r = await fetch(`${url}&audience=${encodeURIComponent(process.env.OIDC_AUDIENCE || "content-office")}`, {
+      headers: { Authorization: `Bearer ${tok}` },
+    }).catch(() => null);
+    if (r?.ok || attempt >= 5 || (r && r.status < 500 && r.status !== 429)) break;
+    await new Promise((res) => setTimeout(res, 2000 * attempt));
+  }
+  if (!r?.ok) throw new Error(`OIDC token request failed: ${r ? r.status : "network"}`);
   const { value } = await r.json();
   return { Authorization: `Bearer ${value}` };
 }
