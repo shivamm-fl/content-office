@@ -1,0 +1,9 @@
+Day 5/150: String ka ek letter badalne gaye, to error kyun aaya?
+
+String ko index se padhna array jaisa aasaan hai: index 0 par pehla letter. Par Python mein string immutable hai, yaani ek letter usi jagah badla nahi jaa sakta. s[0] = "j" likhne par TypeError aata hai. Jello chahiye to nayi string banani padti hai, aur purani hello waisi hi rehti hai.
+
+Iski keemat dekho: loop mein plus se string banao, to har plus poori maujuda string ki nayi copy banata hai. 1000 letters par model ke hisab se 500500 letters ki copying, 10 lakh par lagbhag 500 arab. Join sab letters ko bas ek baar copy karta hai: 1000. Ye ginti ka model hai, asli time nahi, aur baat Python ki hai.
+
+Ab tum batao: 2000 letters ki string plus se banao, to model ke hisab se kitne letters copy honge? Pehle comment mein apna guess likho. Answer: 2001000 letters, jabki join mein sirf 2000.
+
+#dsa #strings #codinginterview
