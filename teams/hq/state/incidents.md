@@ -2,6 +2,16 @@
 
 One dated entry per incident: what happened, root cause (proved or inferred), the fix, status. No secrets, no conversations. Newest first.
 
+## 2026-10-23: systemdesign runs failed (producer desk run_mvkzz3rf3JK1Lg0, studio s005 run_mvl0yc4gaxRwCrY)
+
+**Symptom**: the work day's desk run ended "failure" after 2 minutes; the s005 studio run was marked "runner did not start" after 30 minutes.
+
+**Root causes (proved from the GitHub logs)**: (1) desk: `bridge failed: OIDC token request failed: 503`, GitHub's token service had a transient error and the bridge did not retry. (2) studio: `The action 'Studio tools' has timed out after 20 minutes`; `runner/scripts/studio_tools.sh` had no time limit on apt, pip and `npm install -g`, so the job never reached the bridge and the office declared the run dead. **Inferred, not proved**: which of the three installs hung (the log has no timestamps per step).
+
+**Fix**: proposal: OIDC request retried up to 5 times on 5xx/429/network; each install in studio_tools.sh limited and retried once. The queued re-run of s005 (run_mvl222nuxGhJwmo) is separate and was not touched.
+
+**Status**: proposed, not merged.
+
 ## 2026-10-20: a003, q108, q109 built wrong (LearnAI work day)
 
 **Symptom**: the work day's three reels were built from texts the owner had not approved, built twice or three times (paid voice and renders wasted), and a003's rework came back on the scriptwriter's old script.
