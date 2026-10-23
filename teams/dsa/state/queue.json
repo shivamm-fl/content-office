@@ -159,6 +159,67 @@
       "script_notes": "Header tag DSA 004/150.",
       "status": "planned",
       "qa_passed": false
+    },
+    {
+      "id": "d005",
+      "track": "series",
+      "day": 5,
+      "unit": "P1",
+      "format": "structure",
+      "title": "Strings: array jaisi, par badal nahi sakte",
+      "one_idea": "A string is a row of characters you read by index from 0 like an array, but in Python it is immutable (a character cannot be changed in place; a change makes a brand-new string), so building a long string with + in a loop copies the growing string every time (model: 1000 appends copy 500500 characters, 10 lakh appends about 5 hundred billion) while one join copies each character once.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "String का एक letter बदलने गया, तो error क्यों आया?",
+      "hook_formula": "wrong_way_first",
+      "hook_source": "wrong_way_first is the untested formula of the five-type set: company_specific has no fetched interview page (the Oracle Java docs page only says Java strings are constant), so the best untested variant is the tempting wrong way (s[0]='j') failing for real. Plain words only, no unexplained term; the next line teaches at once. Hookscore pending the scriptwriter (Hinglish lines score low; only a DEALBREAKER matters).",
+      "hook_10s": "String का एक letter बदलने गया, error आ गया। मान लो s = \"hello\" है। s[0] में \"j\" लिखो, तो Python बोलता है TypeError: string में item assignment नहीं होता। [frame 0: five letter boxes h e l l o numbered 0 to 4, a pencil on box 0 with a red cross and the real error line under it]",
+      "hook_candidates": [
+        {
+          "hook": "String का एक letter बदलने गया, error आ गया।",
+          "formula": "wrong_way_first"
+        },
+        {
+          "hook": "String में पाँचवाँ letter पढ़ना आसान, बदलना नामुमकिन क्यों?",
+          "formula": "contrast_question"
+        },
+        {
+          "hook": "दस लाख बार + लगाया, और code अटक गया।",
+          "formula": "cost_shock"
+        }
+      ],
+      "visual_idea": "Five touching letter boxes h e l l o with index 0 to 4 under them, a pointer jumping straight to box 4 to read it; a pencil swinging at box 0 is blocked with a red cross and the real error line; then a NEW row j e l l o is drawn beside the old row (old row stays) to show a change makes a copy; then a staircase of rows growing one letter at a time, each step re-copying the whole row with a copy counter climbing to 500500 for 1000 appends, against one single row filled left to right with a counter of 1000.",
+      "everyday_anchor": "A printed wedding card: a typo cannot be fixed on the card, you reprint a whole new card; reprinting the full card for every added name is slow, so you collect all the names and print once.",
+      "example": "EXAMPLE (researcher ran it 2026-10-23, Python 3.12.3, counts not seconds): s='hello'; s[0] is 'h', s[4] is 'o'; s[0]='j' raises TypeError: 'str' object does not support item assignment; 'j'+s[1:] gives 'jello' as a new string. Copy-count MODEL (each + copies the whole current string, n(n+1)/2): n=1000 -> 500500 vs join 1000; n=100000 -> 5000050000 vs 100000; n=1000000 -> 500000500000 vs 1000000. It is a model, not a measured CPython time.",
+      "sources": [
+        "https://docs.python.org/3/library/stdtypes.html",
+        "https://docs.python.org/3/reference/datamodel.html",
+        "https://docs.python.org/3/faq/design.html",
+        "https://en.wikipedia.org/wiki/String_(computer_science)",
+        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html"
+      ],
+      "facts_to_verify": [
+        "Confirmed by researcher 2026-10-23: Python docs call str an immutable sequence of Unicode code points; Wikipedia says strings are typically implemented as arrays (say 'often an array' and 'sequence indexed from 0 like an array'); never say Python stores a str as an array.",
+        "Python FAQ gives two reasons for immutability: storage fixed at creation (performance) and strings as elemental as numbers. Do NOT say the FAQ says it is for dict keys; the hash-must-not-change point is from the datamodel page and is optional.",
+        "stdtypes docs: repeated concatenation of immutable sequences has quadratic runtime cost, use str.join. Do NOT claim CPython's += optimisation exists or not, slice cost, memory layout, UTF-8 vs fixed width, ids.",
+        "Label every immutability statement 'in Python'; Java strings are also constant (Java docs); other languages differ, so never say 'all languages'.",
+        "Copy counts are a labelled model (EXAMPLE pill); the builder re-runs the code and shows the real printed output; no seconds on screen.",
+        "Numbers spoken in Hindi words with braces, e.g. 10{दस} लाख, 500{पाँच सौ} अरब; the hook has no unexplained term."
+      ],
+      "length_target_s": 150,
+      "cover_headline": "Why you cannot change a string",
+      "thumb_text": "Strings immutable",
+      "keywords": [
+        "string immutable in python hindi",
+        "strings are immutable kyu hote hain",
+        "string concatenation time complexity",
+        "python string join vs plus",
+        "string array interview question"
+      ],
+      "caption_note": "Day 5/150 caption. Check answer: build a 2000-letter string with + in a loop: the model copies 2001000 characters, join copies 2000. Said for Python; the count is a model.",
+      "script_notes": "Header tag DSA 005/150. Python-specific claims are labelled Python. Teach order: read by index (array-like) -> change fails -> new string -> why (fixed storage, FAQ) -> + in a loop copies again and again -> join. First teaching line follows the hook at once; no filler.",
+      "status": "planned",
+      "qa_passed": false,
+      "script_file": "state/scripts/d005.txt"
     }
   ]
 }

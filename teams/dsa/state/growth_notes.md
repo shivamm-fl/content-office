@@ -20,3 +20,6 @@ Planned Day 3 (d003, concept, space complexity and the time-space trade-off): ho
 
 ## 2026-10-22 (planner)
 Planned Day 4 (d004, structure, how arrays sit in memory): hook type direct_question, the one of the five types not yet tested, so four types now run side by side; no own numbers yet. Running example: 10 lakh ints, index to byte offset is i x size and a middle insert shifts 5 lakh elements, counts run by the strategist (researcher re-check pending); the Python-list-holds-references claim was not fetched and is kept out.
+
+## 2026-10-23 (planner)
+Planned Day 5 (d005, structure, strings as array-like and immutable): hook type relatable_stake with the untested formula wrong_way_first (company_specific has no fetched interview page), so the hook is the real error a beginner meets when changing a letter; no own numbers yet. Running example: s[0]='j' raises TypeError, and a copy-count model for building a string with + (1000 appends: 500500 copies vs 1000 for join), run by the researcher; Python-only claims are labelled, the dict-key reason and CPython += optimisation are kept out as unverified.
