@@ -1,0 +1,14 @@
+Day 6/150: Call mein awaaz katti hai, par download mein kyun nahi?
+
+Internet par packet kho sakta hai. Tab do hi raaste hain: khoya tukda dobara bhejkar intzaar karo, ya chhodkar aage badho.
+
+TCP pehle connection set karta hai, har packet ko number deta hai aur khoya packet dobara bhejta hai. File poori aur sahi order mein aati hai, bas thodi der se.
+UDP koi taiyari nahi karta, packet bhejta hai aur dobara nahi bhejta. Isliye kisi ek tukde ke intzaar mein baaki cheez nahi rukti.
+
+Faisla ek sawal se: der se aaya purana tukda kya ab bhi kaam ka hai? File mein haan, to TCP. Live call mein nahi, to UDP.
+
+(10 packets aur 20 millisecond ke numbers sirf example hain. HTTP/3 UDP ke upar bana hai, isliye har website TCP par nahi hai.)
+
+Sawal: live video call ke liye TCP ya UDP? Apna jawab comment karo.
+
+#systemdesign #tcp #backend

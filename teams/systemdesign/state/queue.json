@@ -10,27 +10,8 @@
       "one_idea": "TCP sets up a connection and resends lost data so everything arrives complete and in order, at the cost of waiting; UDP just sends and never resends, so it is lighter and nothing waits for a lost piece, which suits live calls and quick lookups; the axis that decides is whether a late old piece is still worth anything.",
       "spoken_hook": "Call में आवाज़ कटती है, पर download में क्यों नहीं?",
       "hook_type": "direct_question",
-      "hook_formula": "direct_question: everyday moment (a call that breaks up vs a download that never does) as one short question; shape 1 of the niche table",
-      "hook_source": "hook-writer direct_question; least recently used of the last five reels (Day 2 is the oldest single use)",
-      "hook_10s": "Call में आवाज़ कटती है, पर download में क्यों नहीं? दोनों में packets, यानी data के छोटे टुकड़े, रास्ते में खो सकते हैं। TCP खोया टुकड़ा दोबारा भेजता है, UDP आगे बढ़ जाता है। सवाल: कब रुकना सही, कब नहीं? [frame 0: two lanes of small squares travelling from phone to phone; in the top lane one square drops off and a red gap shows in a voice waveform, in the bottom lane the same square is sent again and a file bar fills completely]",
-      "hook_candidates": [
-        {
-          "formula": "direct_question",
-          "text": "Call में आवाज़ कटती है, पर download में क्यों नहीं?"
-        },
-        {
-          "formula": "relatable_stake",
-          "text": "Video call अटक गया, पर उसी WiFi पर file पूरी आई।"
-        },
-        {
-          "formula": "interviewer_asked",
-          "text": "Interviewer ने पूछा: TCP और UDP में से live video call के लिए कौन सा चुनोगे?"
-        }
-      ],
-      "problem_line": "Internet पर packets खो सकते हैं, तो हर बार दो ही रास्ते हैं: खोया टुकड़ा दोबारा भेजकर इंतज़ार करो, या छोड़कर आगे बढ़ो। गलत चुना तो file अधूरी आती है या call अटकती है।",
-      "visual_idea": "Two lanes of small squares (packets) run from a sender box to a receiver box. Lane one (TCP): a handshake of three arrows first, numbered squares, a lost square flashes missing, the receiver sends a back-arrow, the square is sent again and the lane waits until the row is complete and in order, a file bar fills. Lane two (UDP): no handshake, squares just stream, one drops and a small gap shows in a voice waveform while the stream keeps moving. Finally a two-row table of icons (page, file, DNS lookup versus call, live video) slides into the matching lane.",
-      "everyday_anchor": "A registered courier parcel that is signed for, and re-sent if it is lost, versus shouting a sentence across a phone call: if you miss a word, nobody repeats it because the talk has moved on.",
-      "example": "EXAMPLE (invented): a 10-piece file loses piece 4 on the way. TCP resends piece 4 and the file is complete, a little later; a UDP call that loses 20 ms of voice just has a tiny gap and keeps going.",
+      "hook_formula": "direct_question: everyday moment (a call that breaks up vs a download that never does) as one short question",
+      "hook_source": "hook-writer direct_question",
       "sources": [
         "https://www.rfc-editor.org/rfc/rfc9293.html",
         "https://www.rfc-editor.org/rfc/rfc768",
@@ -39,28 +20,9 @@
         "https://www.rfc-editor.org/rfc/rfc9000.html",
         "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Evolution_of_HTTP"
       ],
-      "facts_to_verify": [
-        "TCP connection is set up with a three-way handshake SYN, SYN-ACK, ACK (RFC 9293 s3.5) - verified by researcher.",
-        "TCP provides a reliable, in-order, byte-stream service (RFC 9293 s2.2); bytes carry sequence numbers and are acknowledged (s3.4); TCP uses retransmission to ensure delivery (s3.8) - verified.",
-        "UDP: delivery and duplicate protection are not guaranteed; it gives apps a way to send messages with a minimum of protocol mechanism (RFC 768) - verified. Say 'no delivery guarantee'; do not quote 'connectionless' or 'no ordering' as RFC wording.",
-        "UDP header has four fields (ports, length, checksum) = 8 bytes (RFC 768, derived) - verified.",
-        "DNS queries: UDP is the recommended method for standard queries, lower overhead and better performance (RFC 1035 s4.2); do not state the 512-byte limit as today's limit - verified.",
-        "HTTP/1.1 and HTTP/2 run over TCP; HTTP/3 uses QUIC, which is carried in UDP datagrams (MDN Evolution of HTTP; RFC 9000 s1) - verified. Do not say 'all websites use TCP'.",
-        "Real-time audio/video: RTP is typically run on top of UDP and does not itself guarantee timely delivery (RFC 3550 s1) - say 'real-time calls commonly use RTP, usually over UDP'.",
-        "Do NOT claim 'UDP is faster' as a flat statement, nothing about games, no speed numbers, no 'always'; say UDP waits for nothing and has less to do. Do not explain congestion control or flow control beyond one clause.",
-        "Define 'packet' in plain words once; at most three terms: packet, TCP, UDP."
-      ],
       "length_target_s": 120,
       "cover_headline": "TCP vs UDP: Reliable or Fast?",
       "thumb_text": "TCP ya UDP?",
-      "keywords": [
-        "tcp vs udp difference in hindi",
-        "tcp aur udp mein kya fark hai",
-        "tcp vs udp system design interview",
-        "three way handshake kya hai",
-        "video call mein udp kyon use hota hai"
-      ],
-      "why_it_should_work": "Everyone has had a call break up while a download finished; direct_question gets its second use (Day 2 was the first, no own numbers yet) and the next line states the problem (resend and wait, or skip and move on).",
       "status": "planned",
       "qa_passed": false
     }

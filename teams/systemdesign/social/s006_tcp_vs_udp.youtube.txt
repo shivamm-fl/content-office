@@ -1,0 +1,9 @@
+TCP vs UDP in Hinglish: Reliable or Fast? (Day 6/150)
+
+TCP sets up a connection with a three-way handshake and gives applications a reliable, in-order byte stream by using sequence numbers, acknowledgments and retransmission. UDP is a simple datagram protocol in which delivery and duplicate protection are not guaranteed, so a lost packet is not resent and later data does not wait for it. The deciding question is whether a late, old piece is still useful: a file needs every piece (TCP), a live call does not (UDP). Real-time audio and video are commonly carried by RTP, usually over UDP. HTTP/1.1 and HTTP/2 run over TCP, while HTTP/3 uses QUIC over UDP, so not every website runs on TCP. The 10-packet file and the 20 ms of lost voice are invented examples. Explained with a registered parcel and a spoken sentence.
+
+Sources:
+https://www.rfc-editor.org/rfc/rfc9293.html
+https://www.rfc-editor.org/rfc/rfc768
+https://www.rfc-editor.org/rfc/rfc3550.html
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Evolution_of_HTTP

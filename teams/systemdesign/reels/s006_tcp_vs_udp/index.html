@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>TCP vs UDP: reliable ya fast, kab kaun</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="115" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="115" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="115" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="115" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "SYSTEM DESIGN · DAY 006 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H] = ["A","B","C","D","E","F","G","H"].map((k) => M.$("#s" + k));
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const kick = (host, txt, t, col) => show(el(host, `left:0;width:1080px;text-align:center;top:196px;font:700 46px var(--code);letter-spacing:.14em;color:${col || ACC}`, txt), t, { opacity: 0, y: 0 });
+      const lab = (host, x, y, w, col, txt, t, size) => show(el(host, `left:${x}px;width:${w}px;text-align:center;top:${y}px;font:600 ${size || 38}px var(--code);letter-spacing:.06em;color:${col};white-space:nowrap`, txt), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const recolor = (d, t, col, bg) => tl.to(d, bg === null ? { borderColor: M.ca(col, 0.95), duration: 0.25, immediateRender: false } : { borderColor: M.ca(col, 0.95), backgroundColor: M.ca(col, bg || 0.14), duration: 0.25, immediateRender: false }, t);
+      Viz.ICONS.phone = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="17" y="4" width="30" height="56" rx="7"/><path d="M28 52h8"/></g>`;
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      // a numbered packet square (opaque so lines under it are hidden)
+      const pk = (host, x, y, n, col, s) => { const S = s || 84; return el(host, `left:${x}px;top:${y}px;width:${S}px;height:${S}px;border-radius:14px;border:4px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${Math.round(S * 0.5)}px var(--code);color:#E8EDF6`, String(n)); };
+      const fly = (d, t, dx, dy, dur) => tl.to(d, { x: dx, y: dy, duration: dur || 0.9, ease: "power1.inOut", immediateRender: false }, t);
+      // sequence-diagram frame: two boxes and two dashed lifelines
+      const seq = (host, t, y0, hh) => { const y = y0 || 250;
+        const s = M.box(host, { x: 80, y, w: 400, h: 150, label: "SENDER", icon: "server", color: ACC, size: 48, isize: 72 }); s.show(t);
+        const r = M.box(host, { x: 600, y, w: 400, h: 150, label: "RECEIVER", icon: "phone", color: CYAN, size: 48, isize: 72 }); r.show(t + 0.05);
+        [280, 800].forEach((x) => { const l = el(host, `left:${x - 2}px;top:${y + 155}px;width:4px;height:${hh || 850}px;background:${GREY};opacity:.55`); show(l, t + 0.1, { opacity: 0, y: 0 }); }); return { s, r }; };
+
+      // ===== A: hook, packets, lost one, two ways =====
+      // diagram: A
+      M.hook(["Call mein awaaz katti hai,", "par download mein nahi?"], { size: 80, top: 230 });
+      const aS = M.box(A, { x: 300, y: 500, w: 480, h: 170, label: "SENDER", icon: "server", color: ACC, size: 50, isize: 76 }); aS.show(0.05);
+      const aR = M.box(A, { x: 300, y: 1110, w: 480, h: 170, label: "RECEIVER", icon: "phone", color: CYAN, size: 50, isize: 76 }); aR.show(0.1);
+      M.arrow(A, { from: [540, 675], to: [540, 1105], color: GREY, w: 8, dash: true }).show(0.15, 0.3);
+      [0, 1, 2, 3, 4].forEach((i) => { const p = pk(A, 490, 690, i + 1, ACC, 100); const t0 = at("A", "packets") + i * 0.45; tl.set(p, { opacity: 0 }, 0);
+        tl.fromTo(p, { opacity: 0, y: 0 }, { opacity: 1, y: i === 2 ? 160 : 320, duration: i === 2 ? 0.9 : 1.3, ease: "none", immediateRender: false }, t0);
+        if (i === 2) { tl.to(p, { borderColor: M.ca(HOT, 0.95), duration: 0.2, immediateRender: false }, at("A", "kho")); tl.to(p, { x: 170, duration: 0.5, ease: "power2.in", immediateRender: false }, at("A", "kho")); gone(p, at("A", "kho") + 0.2); }
+        else gone(p, t0 + 1.3); });
+      M.pill(A, "RESEND", at("A", "do"), { x: 30, y: 830, kind: "acc", size: 50 });
+      M.pill(A, "SKIP", at("A", "ya"), { x: 800, y: 830, kind: "out", size: 50 });
+      const aDoc = M.icon(A, "doc", 70, 1070, 170, HOT); aDoc.show(at("A", "adhuri"));
+      lab(A, 20, 1260, 290, HOT, "HALF FILE", at("A", "adhuri"), 42);
+      const aMic = M.icon(A, "mic", 850, 1070, 170, HOT); aMic.show(at("A", "atakti"));
+      lab(A, 780, 1260, 290, HOT, "STUCK CALL", at("A", "atakti"), 42);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: TCP, signed parcel, handshake, numbered packets =====
+      // diagram: B
+      kick(B, "TCP", M.S.B + 0.1, CYAN);
+      seq(B, M.S.B + 0.15, 270, 880);
+      const bPar = el(B, `left:380px;top:620px;width:320px;height:180px;border-radius:16px;border:3px solid ${ACC};background:#16203A;display:flex;align-items:center;justify-content:center;font:700 52px var(--code);color:#E8EDF6`, "PARCEL");
+      show(bPar, at("B", "parcel"), { opacity: 0, y: 0 });
+      const bSg = stamp(B, "SIGNED", 540, 850, GOOD, at("B", "signature"), 58, 360);
+      gone(bPar, at("B", "bhejne")); gone(bSg, at("B", "bhejne"));
+      const hs = [["SYN", [290, 600], [790, 700], ACC], ["SYN-ACK", [790, 820], [290, 920], CYAN], ["ACK", [290, 1040], [790, 1140], ACC]];
+      const hsEls = [];
+      hs.forEach(([nm, f, t2, col], i) => { const tt = at("B", "3") + i * 0.9;
+        const a = M.arrow(B, { from: f, to: t2, color: col, w: 10 }); a.show(tt, 0.4);
+        const l = lab(B, 390, f[1] - 70, 300, col, nm, tt, 46); hsEls.push(a, l); });
+      const bRdy = stamp(B, "READY", 540, 1200, GOOD, at("B", "taiyar"), 56, 340);
+      gone(bRdy, at("B", "phir") + 0.1);
+      hsEls.forEach((h) => (h.hide ? h.hide(at("B", "phir") - 0.1) : gone(h, at("B", "phir") - 0.1)));
+      [0, 1, 2].forEach((i) => { const y = 520 + i * 230; const p = pk(B, 225, y, i + 1, CYAN, 110); const t0 = at("B", "packet") + i * 0.5;
+        tl.set(p, { opacity: 0 }, 0); tl.fromTo(p, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.2, immediateRender: false }, t0);
+        fly(p, t0 + 0.2, 520, 60, 0.9);
+        const ck = M.icon(B, "check", 890, y + 75, 90, GOOD); ck.show(at("B", "receiver") + 0.2 + i * 0.4); });
+      lab(B, 760, 1230, 300, GOOD, "GOT IT", at("B", "batata"), 48);
+      M.fit(B);
+
+      // ===== C: example, 10 packets, #4 lost and resent =====
+      // diagram: C
+      kick(C, "TCP · 10 PACKETS", M.S.C + 0.1, CYAN);
+      M.pill(C, "EXAMPLE", at("C", "EXAMPLE"), { x: 390, y: 270, kind: "out", size: 48 });
+      lab(C, 60, 380, 400, GREY, "SENDER", M.S.C + 0.2, 44);
+      lab(C, 60, 1080, 400, GREY, "RECEIVER", M.S.C + 0.2, 44);
+      const X = (i) => 75 + i * 94;
+      const cSlots = [], cTop = [];
+      for (let i = 0; i < 10; i++) {
+        const sl = el(C, `left:${X(i)}px;top:880px;width:88px;height:88px;border-radius:14px;border:3px dashed ${M.ca(GREY, 0.6)};box-sizing:border-box`); show(sl, M.S.C + 0.25 + i * 0.04, { opacity: 0, y: 0 }); cSlots.push(sl);
+        const sq = pk(C, X(i), 450, i + 1, ACC, 88); show(sq, M.S.C + 0.3 + i * 0.05, { opacity: 0, y: 0 }); cTop.push(sq); }
+      const sendT = at("C", "packet", 0) + 0.2;
+      for (let i = 0; i < 10; i++) {
+        const g = cTop[i]; const t0 = sendT + (i < 3 ? i * 0.15 : (i + 1) * 0.15);
+        if (i === 3) { fly(g, t0 + 0.1, 0, 200, 0.8); tl.to(g, { borderColor: M.ca(HOT, 0.95), duration: 0.2, immediateRender: false }, at("C", "kho")); gone(g, at("C", "kho") + 0.3); }
+        else fly(g, t0 + 0.1, 0, 430, 0.9); }
+      const cMiss = lab(C, X(3) - 80, 985, 280, HOT, "MISSING 4", at("C", "kho") + 0.3, 42);
+      const cBack = M.arrow(C, { from: [X(3) + 44, 870], to: [X(3) + 44, 560], color: HOT, w: 8, dash: true }); cBack.show(at("C", "TCP"), 0.4);
+      cBack.hide(at("C", "dobara") + 0.3); gone(cMiss, at("C", "dobara") + 0.3);
+      const re = pk(C, X(3), 450, 4, ACC, 88); tl.set(re, { opacity: 0 }, 0);
+      tl.fromTo(re, { opacity: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, at("C", "dobara"));
+      fly(re, at("C", "dobara") + 0.1, 0, 430, 0.8);
+      const cDone = stamp(C, "COMPLETE", 540, 1150, GOOD, at("C", "poori"), 56, 440);
+      cSlots.forEach((s, i) => tl.to(s, { borderColor: M.ca(GOOD, 0.9), duration: 0.3, immediateRender: false }, at("C", "order") + i * 0.05));
+      const cClk = M.icon(C, "clock", 740, 1060, 120, ACC); cClk.show(at("C", "der"));
+      lab(C, 820, 1085, 200, ACC, "LATE", at("C", "der"), 46);
+      M.fit(C);
+
+      // ===== D: UDP, sentence with a missing word, no setup, no resend =====
+      // diagram: D
+      kick(D, "UDP", M.S.D + 0.1, ACC);
+      const dChat = M.icon(D, "chat", 60, 420, 170, CYAN); dChat.show(M.S.D + 0.3);
+      const words = ["MEET", "ME", "AT", "FIVE"]; const dW = [];
+      words.forEach((w, i) => { const c = el(D, `left:${260 + i * 190}px;top:430px;width:${i === 3 ? 180 : 170}px;height:110px;border-radius:16px;border:3px solid ${M.ca(CYAN, 0.8)};background:#16203A;display:flex;align-items:center;justify-content:center;font:700 46px var(--code);color:#E8EDF6`, w);
+        show(c, M.S.D + 0.5 + i * 0.3, { opacity: 0, y: 14 }); dW.push(c); });
+      const dGap = el(D, `left:${260 + 2 * 190}px;top:430px;width:170px;height:110px;border-radius:16px;border:3px dashed ${M.ca(HOT, 0.8)};box-sizing:border-box`); tl.set(dGap, { opacity: 0 }, 0);
+      tl.to(dW[2], { borderColor: M.ca(HOT, 0.95), duration: 0.2, immediateRender: false }, at("D", "chhoot")); gone(dW[2], at("D", "chhoot") + 0.4);
+      tl.to(dGap, { opacity: 1, duration: 0.2, immediateRender: false }, at("D", "chhoot") + 0.4);
+      const dNR = stamp(D, "NOBODY REPEATS", 540, 640, HOT, at("D", "dohrata"), 52, 680);
+      const dGrp = [dChat.el, ...dW, dGap, dNR]; tl.to(dGrp, { opacity: 0, duration: 0.3, immediateRender: false }, at("D", "UDP", 1) - 0.4);
+      seq(D, at("D", "UDP", 1) - 0.1, 330, 800);
+      const gh = [[[290, 640], [790, 730]], [[790, 820], [290, 910]], [[290, 1000], [790, 1090]]];
+      const ghEls = gh.map(([f, t2]) => M.arrow(D, { from: f, to: t2, color: GREY, w: 8, dash: true }));
+      ghEls.forEach((a, i) => a.show(at("D", "taiyari") - 0.5 + i * 0.12, 0.2));
+      const dX = M.icon(D, "cross", 410, 770, 260, HOT); dX.show(at("D", "nahi", 1));
+      const dNS = stamp(D, "NO SETUP", 540, 505, HOT, at("D", "nahi", 1) + 0.1, 54, 420);
+      ghEls.forEach((a) => a.hide(at("D", "bhejta", 0) - 0.2)); dX.hide(at("D", "bhejta", 0) - 0.2); gone(dNS, at("D", "bhejta", 0) - 0.2);
+      [0, 1, 2, 3].forEach((i) => { const y = 600 + i * 130; const p = pk(D, 232, y, i + 1, ACC, 96); const t0 = at("D", "bhejta", 0) + i * 0.45;
+        tl.set(p, { opacity: 0 }, 0); tl.fromTo(p, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.15, immediateRender: false }, t0);
+        if (i === 2) { fly(p, t0 + 0.15, 260, 40, 0.5); tl.to(p, { borderColor: M.ca(HOT, 0.95), duration: 0.2, immediateRender: false }, at("D", "kho")); tl.to(p, { opacity: 0, y: 150, duration: 0.5, ease: "power2.in", immediateRender: false }, at("D", "kho") + 0.2); }
+        else fly(p, t0 + 0.15, 520, 40, 0.8); });
+      lab(D, 350, 1130, 380, ACC, "KEEPS MOVING", at("D", "rukta"), 44);
+      stamp(D, "NO RESEND", 540, 1200, HOT, at("D", "dobara", 1), 50, 440);
+      M.fit(D);
+
+      // ===== E: voice waveform, tiny gap vs waiting =====
+      // diagram: E
+      kick(E, "LIVE CALL", M.S.E + 0.1, CYAN);
+      M.pill(E, "EXAMPLE", at("E", "EXAMPLE"), { x: 390, y: 270, kind: "out", size: 48 });
+      const HS = [100, 190, 140, 260, 170, 290, 200, 150, 270, 120, 220, 170, 260, 140];
+      const BX = (i) => 74 + i * 66;
+      const wave = (cy, col, t, gapCol) => HS.map((h, i) => { const b = i === 6 ? el(E, `left:${BX(i)}px;top:${cy - h / 2}px;width:48px;height:${h}px;border-radius:10px;border:3px dashed ${M.ca(gapCol, 0.9)};box-sizing:border-box`) : el(E, `left:${BX(i)}px;top:${cy - h / 2}px;width:48px;height:${h}px;border-radius:10px;background:${col}`); show(b, t + i * 0.04, { opacity: 0, y: 0 }); return b; });
+      lab(E, 60, 360, 300, ACC, "UDP", M.S.E + 0.3, 54);
+      const uB = wave(640, ACC, M.S.E + 0.35, GREY);
+      tl.to(uB[6], { borderColor: M.ca(HOT, 0.95), duration: 0.2, immediateRender: false }, at("E", "kho"));
+      lab(E, BX(6) - 20, 360, 260, HOT, "20 MS", at("E", "millisecond"), 50);
+      const uP = el(E, `left:60px;top:470px;width:6px;height:340px;background:#E8EDF6;border-radius:3px`); show(uP, at("E", "call", 0), { opacity: 0, y: 0 });
+      tl.fromTo(uP, { x: 0 }, { x: 930, duration: 5.8, ease: "none", immediateRender: false }, at("E", "call", 0));
+      gone(uP, at("E", "gayi") + 6.2);
+      lab(E, 60, 880, 300, CYAN, "TCP", at("E", "yahan"), 54);
+      const tB = wave(1140, CYAN, at("E", "yahan") + 0.1, HOT);
+      const tP = el(E, `left:60px;top:970px;width:6px;height:340px;background:#E8EDF6;border-radius:3px`); show(tP, at("E", "yahan") + 0.5, { opacity: 0, y: 0 });
+      tl.fromTo(tP, { x: 0 }, { x: 410, duration: 1.1, ease: "none", immediateRender: false }, at("E", "TCP", 0) + 0.3);
+      const eClk = M.icon(E, "clock", BX(6) + 70, 870, 100, ACC); eClk.show(at("E", "intzar"));
+      lab(E, BX(6) + 190, 885, 220, ACC, "WAIT", at("E", "intzar"), 48);
+      tl.to(tB.slice(7), { opacity: 0.25, duration: 0.4, immediateRender: false }, at("E", "baad"));
+      M.fit(E);
+
+      // ===== F: the deciding question =====
+      // diagram: F
+      kick(F, "STILL USEFUL?", M.S.F + 0.1, ACC);
+      const fP = pk(F, 240, 290, "?", GREY, 210); show(fP, M.S.F + 0.3, { opacity: 0, y: 0 });
+      const fClk = M.icon(F, "clock", 500, 330, 140, ACC); fClk.show(M.S.F + 0.5);
+      lab(F, 140, 520, 620, GREY, "OLD + LATE", M.S.F + 0.6, 52);
+      const rowY = [650, 980];
+      const row = (y, ic, nm, ok, col, st, tt, tOk, tSt) => {
+        const r = el(F, `left:60px;top:${y}px;width:960px;height:290px;border-radius:24px;border:3px solid ${M.ca(col, 0.55)};background:${M.ca(col, 0.07)}`); show(r, tt, { opacity: 0, y: 14 });
+        const i1 = M.icon(F, ic, 100, y + 65, 160, col); i1.show(tt);
+        show(el(F, `left:290px;top:${y + 100}px;font:800 80px var(--lat);color:#E8EDF6;white-space:nowrap`, nm), tt, { opacity: 0, y: 10 });
+        const mk = M.icon(F, ok ? "check" : "cross", 540, y + 75, 140, ok ? GOOD : HOT); mk.show(tOk);
+        stamp(F, st, 850, y + 95, col, tSt, 72, 260); };
+      row(rowY[0], "doc", "FILE", true, CYAN, "TCP", at("F", "File"), at("F", "to", 3), at("F", "TCP", 0));
+      row(rowY[1], "mic", "CALL", false, ACC, "UDP", at("F", "Call"), at("F", "bekar"), at("F", "UDP"));
+      M.fit(F);
+
+      // ===== G: where each one shows up =====
+      // diagram: G
+      kick(G, "WHERE YOU SEE THEM", M.S.G + 0.1, ACC);
+      const gT = show(panel(G, 60, 290, 960, 440, CYAN, "TCP"), M.S.G + 0.2, { opacity: 0, y: 0 });
+      const gU = show(panel(G, 60, 790, 960, 440, ACC, "UDP"), M.S.G + 0.25, { opacity: 0, y: 0 });
+      M.box(G, { x: 100, y: 410, w: 380, h: 280, label: "WEB PAGE", icon: "globe", color: CYAN, size: 50, isize: 100 }).show(at("G", "web"));
+      M.box(G, { x: 560, y: 410, w: 380, h: 280, label: "FILE", icon: "doc", color: CYAN, size: 50, isize: 100 }).show(at("G", "file"));
+      M.box(G, { x: 100, y: 910, w: 380, h: 280, label: "LIVE CALL", icon: "mic", color: ACC, size: 50, isize: 100 }).show(at("G", "live"));
+      const gW = M.box(G, { x: 560, y: 910, w: 380, h: 280, label: "HTTP/3", icon: "globe", color: ACC, size: 50, isize: 100 }); gW.show(at("G", "HTTP/3"));
+      stamp(G, "NOT ALL WEBSITES", 540, 1270, HOT, at("G", "website"), 50, 720);
+      M.fit(G);
+
+      // ===== H: rule, comment, follow =====
+      // diagram: H
+      kick(H, "REMEMBER", M.S.H + 0.1, ACC);
+      const hr1 = el(H, `left:60px;top:290px;width:960px;height:240px;border-radius:24px;border:3px solid ${M.ca(CYAN, 0.6)};background:${M.ca(CYAN, 0.08)}`); show(hr1, M.S.H + 0.25, { opacity: 0, y: 14 });
+      const hI1 = M.icon(H, "doc", 90, 340, 140, CYAN); hI1.show(M.S.H + 0.3);
+      for (let i = 0; i < 5; i++) { const q = el(H, `left:${260 + i * 82}px;top:365px;width:70px;height:70px;border-radius:12px;background:${CYAN}`); show(q, M.S.H + 0.5 + i * 0.1, { opacity: 0, y: 0 }); }
+      stamp(H, "TCP", 850, 380, CYAN, at("H", "TCP", 0), 64, 260);
+      lab(H, 250, 455, 520, "#E8EDF6", "EVERY PIECE", at("H", "har"), 46);
+      const hr2 = el(H, `left:60px;top:570px;width:960px;height:240px;border-radius:24px;border:3px solid ${M.ca(ACC, 0.6)};background:${M.ca(ACC, 0.08)}`); show(hr2, at("H", "purana"), { opacity: 0, y: 14 });
+      const hI2 = M.icon(H, "mic", 90, 620, 140, ACC); hI2.show(at("H", "purana"));
+      [70, 120, 90, 0, 110].forEach((h, i) => { const q = h ? el(H, `left:${260 + i * 82}px;top:${665 - h / 2}px;width:60px;height:${h}px;border-radius:10px;background:${ACC}`) : el(H, `left:${260 + i * 82}px;top:630px;width:60px;height:70px;border-radius:10px;border:3px dashed ${M.ca(GREY, 0.8)};box-sizing:border-box`); show(q, at("H", "purana") + i * 0.08, { opacity: 0, y: 0 }); });
+      stamp(H, "UDP", 850, 660, ACC, at("H", "UDP", 0), 64, 260);
+      lab(H, 250, 750, 520, "#E8EDF6", "OLD = USELESS", at("H", "bekar"), 46);
+      const cc = panel(H, 80, 880, 920, 500, CYAN, "COMMENT KARO"); show(cc, at("H", "ab") - 0.3, { opacity: 0, y: 14 });
+      const cam = M.icon(cc, "camera", 130, 110, 150, CYAN); cam.show(at("H", "video"));
+      lab(cc, 300, 140, 560, "#E8EDF6", "LIVE VIDEO CALL?", at("H", "video"), 46);
+      M.pill(cc, "TCP", at("H", "TCP", 1), { x: 220, y: 275, kind: "out", size: 56 });
+      M.pill(cc, "UDP", at("H", "UDP", 1), { x: 560, y: 275, kind: "out", size: 56 });
+      show(el(cc, "left:40px;right:40px;top:400px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.5);font:500 36px var(--code);color:#C3CCDE;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("H", "Comment"), { opacity: 0 });
+      const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 400, y: 1420, kind: "acc", size: 44 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+      M.fit(H);
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
+      M.finish({ kw: { packets: "gold", packet: "gold", TCP: "cyan", UDP: "gold", parcel: "gold", signature: "good", dobara: "cyan", kho: "hot", gap: "hot", bekar: "hot", purana: "gold", tukda: "gold", HTTP: "gold", live: "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
