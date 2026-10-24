@@ -1,6 +1,6 @@
 Python Strings Are Immutable: Why + in a Loop Is Slow
 
-A string is a row of characters you read by index from 0, like an array. In Python it is immutable: s[0] = "j" raises TypeError: 'str' object does not support item assignment, and a change builds a brand-new string. Building a long string with + in a loop copies the growing string each time. As a counting model (not a measured time), 1000 appends copy 500500 characters and 1000000 appends copy 500000500000, while one str.join copies each character once. This is Python only; other languages differ.
+A string is a row of characters you read by index from 0, like an array. In Python it is immutable: s[0] = "j" raises TypeError: 'str' object does not support item assignment, and a change builds a brand-new string. Building a long string with + in a loop copies the growing string each time. As a counting model (not a measured time), 1000 appends copy 500500 characters and 1000000 appends copy 500000500000, while one str.join copies each character once. This reel covers Python only.
 
 Sources:
 https://docs.python.org/3/library/stdtypes.html

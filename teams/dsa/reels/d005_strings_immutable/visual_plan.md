@@ -17,3 +17,6 @@ The picture that explains it with the sound off: boxes h e l l o with indexes, a
 | J | Check: 2000 letters with +? comment, follow | 2000 LETTERS card with + loop and a red ? COPIES; COMMENT card; FOLLOW pill presses | 2000 LETTERS, ? COPIES, COMMENT KARO, + FOLLOW | recipe 11 |
 
 Facts: Python docs say str is an immutable sequence and repeated concatenation is quadratic (fetched 2026-10-23). Counts are a model (n(n+1)/2); the TypeError line is the real output of our run (Python 3.12).
+
+
+FIX 2026-10-24 (owner's script revision): scenes A, B, E, F, G redrawn for the reviewers' note. A and B: a gold j tries to land on box 0 and is bounced (box 0 stays visible); E: the changed letter h is ringed red and the same hello -> jello rows tie the card to the string; F: rows of 1, 2, 3, 4 letters with a running TOTAL 1, 3, 6, 10 and the loop line s = s + letter; G: the staircase of steps under 1 + 2 + 3 + ... + 1000 with the formula.
