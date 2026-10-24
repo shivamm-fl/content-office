@@ -1,23 +1,9 @@
 A: @hook Interviewer ने पूछा: “RAG में search सिर्फ़ 2024{twenty-twenty-four} के documents में करनी है। Ensure कैसे करोगे कि 2022{twenty-twenty-two} का document result में न आए?”
-B: सिर्फ़ similarity search पर भरोसा मत करो। Search से पहले या search के साथ metadata filter लगाओ। लेकिन एक technical catch है, जो interview में तुम्हें stand out करा सकता है।
-C: Imagine करो, company की leave policy के दो documents हैं: 2022{twenty-twenty-two} और 2024{twenty-twenty-four} के।
-Employee पूछता है, “इस साल कितनी leaves मिलेंगी?”
-दोनों documents का text similar है। अगर retriever 2022{twenty-twenty-two} वाली policy उठा ले, तो AI confidently पुरानी information बता सकता है।
-Problem सिर्फ़ AI की नहीं है। गलत document retrieve हुआ, तो answer भी गलत हो सकता है।
-D: Step one: documents को metadata दो।
-Metadata मतलब document के बारे में extra information, जैसे "year: 2024{twenty-twenty-four}", "department: HR", या "language: English"।
-इससे system document की relevance के साथ उसकी eligibility भी check कर सकता है।
-E: Step two: query के साथ filter लगाओ।
-Example: "year = 2024{twenty-twenty-four}"।
-अब retrieval को सिर्फ़ उन documents में search करना चाहिए जो requested year के filter को satisfy करते हैं।
-याद रखो, metadata filter और semantic similarity अलग काम करते हैं। Filter बताता है कौन से documents eligible हैं; similarity बताती है कौन से eligible documents question से relevant हैं।
-F: अब important catch: approximate vector search।
-Approximate index, जैसे HNSW, पूरे database को exhaustively check करने के बजाय selected candidates explore करता है।
-कुछ pgvector query plans में filtering index scan के बाद apply होती है। अगर scan से 40{forty} candidates आए और filter सिर्फ़ 10{ten} percent को match करे, तो average expectation roughly 4{four} matching rows की होगी।
-ये illustration है, guaranteed output नहीं। Actual result index, data और query plan पर depend करेगा।
-G: तो narrow filter में required results कम मिल रहे हों, तो क्या करोगे?
-Exact search use कर सकते हो, जहाँ matching dataset पर exhaustive comparison होता है। या pgvector के iterative scans configure कर सकते हो, ताकि index और candidates explore करे।
-Trade-off याद रखो: better recall के लिए extra computation लग सकती है।
+B: सिर्फ़ similarity search पर भरोसा मत करो। | Search से पहले या search के साथ metadata filter लगाओ। | लेकिन एक technical catch है, जो interview में तुम्हें stand out करा सकता है।
+C: Imagine करो, company की leave policy के दो documents हैं: 2022{twenty-twenty-two} और 2024{twenty-twenty-four} के। | Employee पूछता है, “इस साल कितनी leaves मिलेंगी?” | दोनों documents का text similar है। | अगर retriever 2022{twenty-twenty-two} वाली policy उठा ले, | तो AI confidently पुरानी information बता सकता है। | Problem सिर्फ़ AI की नहीं है। | गलत document retrieve हुआ, तो answer भी गलत हो सकता है।
+D: Step one: documents को metadata दो। | Metadata मतलब document के बारे में extra information, जैसे “year: 2024{twenty-twenty-four}”, “department: HR”, या “language: English”। | इससे system document की relevance के साथ उसकी eligibility भी check कर सकता है।
+E: Step two: query के साथ filter लगाओ। | Example: “year = 2024{twenty-twenty-four}”। | अब retrieval को सिर्फ़ उन documents में search करना चाहिए जो requested year के filter को satisfy करते हैं। | याद रखो, metadata filter और semantic similarity अलग काम करते हैं। | Filter बताता है कौन से documents eligible हैं; | similarity बताती है कौन से eligible documents question से relevant हैं।
+F: अब important catch: approximate vector search। | Approximate index, जैसे HNSW, पूरे database को exhaustively check करने के बजाय selected candidates explore करता है। | कुछ pgvector query plans में filtering index scan के बाद apply होती है। | अगर scan से 40{forty} candidates आए और filter सिर्फ़ 10{ten} percent को match करे, | तो average expectation roughly 4{four} matching rows की होगी। | ये illustration है, guaranteed output नहीं। | Actual result index, data और query plan पर depend करेगा।
+G: तो narrow filter में required results कम मिल रहे हों, तो क्या करोगे? | Exact search use कर सकते हो, जहाँ matching dataset पर exhaustive comparison होता है। | या pgvector के iterative scans configure कर सकते हो, ताकि index और candidates explore करे। | Trade-off याद रखो: better recall के लिए extra computation लग सकती है।
 H: Interview में बोलो: “I would filter documents using metadata such as year, then rank the eligible documents by similarity. With approximate indexes, I would validate filtered recall and consider exact search or iterative scans for selective filters.”
-I: Quick test: 40{forty} candidates हैं और filter 10{ten} percent match करता है। Average expectation कितनी matching rows की है? Comment करो!
-रोज़ एक practical AI engineering interview question के लिए follow कर लो।
+I: Quick test: 40{forty} candidates हैं और filter 10{ten} percent match करता है। | Average expectation कितनी matching rows की है? | Comment करो! || रोज़ एक practical AI engineering interview question के लिए follow कर लो।
