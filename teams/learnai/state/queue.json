@@ -950,7 +950,7 @@
       "title": "Tokens: how text becomes numbers",
       "one_idea": "A model never sees letters: a tokenizer cuts text into pieces called tokens (whole words, word parts or punctuation), looks each piece up in a fixed vocabulary and hands the model only the matching numbers; the numbers turn back into text at the end.",
       "hook_type": "direct_question",
-      "spoken_hook": "ChatGPT को 'namaste dost' कैसे दिखता है?",
+      "spoken_hook": "ChatGPT को तुम्हारा “namaste dost” समझ कैसे आता है?",
       "hook_formula": "plain_question",
       "visual_idea": "A chat bubble 'namaste dost' on the left; scissors cut it into three coloured tiles (nam | aste | dost); each tile drops into a vocabulary shelf and comes out with its number (12682, 5642, 49415); the number row goes into a model box, then the same numbers flow back into tiles and text. A second row repeats it for 'Hello world' (2 tiles) and 'strawberry' (3 tiles).",
       "everyday_anchor": "A railway ticket counter: you say your station, the clerk gives a number-coded ticket, and the system only ever reads the numbers.",
@@ -975,7 +975,9 @@
       "caption_note": "Growth note 2026-10-24: open on the one concrete scene (the message splitting into tiles), no jargon in line 1, 120 to 150 s.",
       "status": "planned",
       "qa_passed": false,
-      "hook_source": "strategist, 2026-10-24"
+      "hook_source": "strategist, 2026-10-24",
+      "script_file": "state/scripts/a006.txt",
+      "script_locked": true
     },
     {
       "id": "q114",
@@ -985,7 +987,7 @@
       "title": "Interview: Retrieval mein metadata filter kab lagaoge aur kyun?",
       "one_idea": "When the question already names a product, date or language, filter the search by that metadata so the model only sees the right documents; but with an approximate vector index the filter can run after the index scan and leave few or no rows, so use an exact search, a better index setting (pgvector iterative scans) or filter first.",
       "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: Search सिर्फ़ 2024 के documents में करनी हो, तो क्या करोगे?",
+      "spoken_hook": "Interviewer ने पूछा: “RAG में search सिर्फ़ 2024 के documents में करनी है। Ensure कैसे करोगे कि 2022 का document result में न आए?”",
       "hook_formula": "interviewer_asked",
       "visual_idea": "A shelf of document cards tagged 2022, 2023, 2024; a question card says 2024 only; first the search ignores the tags and the answer card comes from a 2022 document (wrong), then a FILTER gate keeps only 2024 cards and the right card is picked; last, a narrow 40-card candidate strip is filtered after the scan and only 4 cards survive, with a bar showing 10 percent.",
       "everyday_anchor": "Looking for a shirt in a shop: you first pick the size and colour shelf, instead of checking every shirt in the shop.",
@@ -1011,7 +1013,9 @@
       "caption_note": "Growth note 2026-10-24: full question spoken, 95 to 120 s, keep the ending.",
       "status": "planned",
       "qa_passed": false,
-      "hook_source": "strategist, 2026-10-24"
+      "hook_source": "strategist, 2026-10-24",
+      "script_file": "state/scripts/q114.txt",
+      "script_locked": true
     },
     {
       "id": "q115",
@@ -1020,11 +1024,9 @@
       "format": "question",
       "title": "Interview: Top 5 chunks mil gaye, phir bhi sahi chunk 4th pe tha. Reranker kya karta hai?",
       "one_idea": "The first search is cheap and fast, so it finds candidates but its order is rough; a reranker reads the question together with each candidate and scores them again, so the right one moves to the top. It is slower, so it runs only on the short list, not on millions of documents.",
-      "hook_type": "company_specific",
-      "company": "Cohere",
-      "company_source": "https://docs.cohere.com/docs/rerank-overview",
-      "spoken_hook": "Cohere search का चौथा जवाब पहले कैसे लाता है?",
-      "hook_formula": "company_specific",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "RAG में correct answer search के fourth number पर आए, तो उसे first position पर कौन लाएगा?",
+      "hook_formula": "interviewer_asked",
       "visual_idea": "A question card on top; five answer cards in a column in search order with the right card at slot 4 highlighted; a RERANK box reads the question and each card as a pair and gives a score tag to each; the cards slide into the new order with the right one now first; a funnel on the side shows millions to a short list to a re-ordered list.",
       "everyday_anchor": "A recruiter's first CV screen picks 20 resumes by keywords, then reads each of the 20 carefully and puts the best one on top.",
       "trap": "Trusting the first retrieval order: the cheap search finds candidates, a second model orders them.",
@@ -1051,7 +1053,9 @@
       "caption_note": "Growth note 2026-10-24: no jargon in line 1; full question spoken, 95 to 120 s, keep the ending. Fallback if the owner dislikes the company hook: relatable_stake.",
       "status": "planned",
       "qa_passed": false,
-      "hook_source": "strategist, 2026-10-24"
+      "hook_source": "strategist, 2026-10-24",
+      "script_file": "state/scripts/q115.txt",
+      "script_locked": true
     }
   ]
 }

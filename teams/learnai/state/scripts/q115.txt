@@ -1,10 +1,23 @@
-A: @hook Cohere search का चौथा जवाब पहले कैसे लाता है?
-B: Interviewer ने पूछा: | RAG में search से top 5{five} chunks आए, | सही chunk चौथे नंबर पर था, | तो reranker क्या करता है? || RAG यानी AI जवाब देने से पहले अपने documents में search करता है, | chunk यानी document का एक छोटा टुकड़ा।
-C: तुम्हारा जवाब होना चाहिए: | reranker पहली search के candidates को सवाल के साथ पढ़कर दोबारा score देता है, | और सही chunk ऊपर आ जाता है। || तीन बातें हैं, एक-एक करके देखते हैं।
-D: EXAMPLE, invented scenario, कोई measured number नहीं: | सवाल है “refund कितने दिन में मिलेगा?” || Search ने 5{five} chunks दिए, | refund policy वाला सही chunk चौथे पर। || AI को सिर्फ़ ऊपर के 2{two} chunks भेजे, | तो सही chunk गया ही नहीं, | और जवाब गलत।
-E: पहला step: पहली search, जिसे retriever कहते हैं। | ये सस्ती और तेज़ है, | इसलिए लाखों documents से candidates निकाल लेती है। || पर ये सवाल और chunk को साथ पढ़ती नहीं, | इसीलिए order rough है।
-F: दूसरा step: reranker। | वो सवाल और हर chunk को एक साथ पढ़ता है, | और हर pair को score देता है। || Cohere का Rerank यही करता है: | query और documents दो, | relevance score के साथ ranked list वापस। || Score जितना ज़्यादा, chunk उतना सही जवाब। | ये क्यों काम करता है? क्योंकि सवाल और chunk साथ पढ़े गए।
-G: तीसरा step: score से sort करो, | और ऊपर के दो chunks ही AI को भेजो।
-H: एक boundary: reranker slow है, क्योंकि हर pair अलग पढ़ना पड़ता है। | इसलिए सिर्फ़ छोटी shortlist पर चलाओ, | जैसे 100{one-hundred} candidates, | लाखों documents पर नहीं।
-I: Interview में बोलो: || A reranker re-scores the retriever's candidates by reading the query and each document together. It is slower, so I run it only on a short list.
-J: अब बताओ: तुम AI को top कितने chunks भेजते हो, | 3{three}, 5{five} या 10{ten}? || Comment करो! || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो!
+A: @hook RAG में correct answer search के fourth number पर आए, तो उसे first position पर कौन लाएगा? Reranker! लेकिन ये करता क्या है, और normal search से different कैसे है?
+B: पहले RAG समझो। RAG में AI answer generate करने से पहले relevant documents retrieve करता है। Document का छोटा piece chunk कहलाता है।
+अब मान लो search ने top 5{five} chunks दिए, लेकिन refund policy वाला correct chunk fourth position पर है।
+अगर तुम सिर्फ़ top 2{two} chunks AI को भेजोगे, तो correct information AI तक पहुँचेगी ही नहीं।
+C: इस problem को solve करने के लिए reranker use करते हैं। ये initial search के results को दोबारा evaluate करता है और relevance के basis पर उनकी ranking change कर सकता है।
+चलो, तीन steps में समझते हैं।
+D: Example: customer पूछता है, “Refund कितने दिन में मिलेगा?”
+Initial search को पाँच chunks मिले। Refund policy वाला chunk fourth position पर है, क्योंकि बाकी chunks में refund से related words तो हैं, लेकिन exact question का answer नहीं।
+ये एक illustrative example है, benchmark result नहीं।
+E: Step one: retriever।
+Retriever millions of documents में से एक shortlist निकालता है। ये fast और scalable होता है, इसलिए पहले broad search के लिए useful है।
+लेकिन initial ranking perfect होना ज़रूरी नहीं।
+F: Step two: reranker।
+अब Cohere Rerank जैसे model को question और हर candidate chunk साथ में दिया जाता है।
+Example: question है, “Refund कितने दिन में मिलेगा?” एक chunk refund eligibility बताता है, दूसरा processing time। Reranker assess करता है कि question का answer किस chunk में ज़्यादा directly मिलता है।
+फिर हर candidate को relevance score मिलता है और ranking दोबारा बन सकती है।
+G: Step three: top results select करो।
+अगर refund policy वाला chunk fourth से first position पर आ गया, तो अब वो top 2{two} में आ सकता है और final answer के लिए AI तक पहुँच सकता है।
+लेकिन guarantee नहीं है कि reranker हर बार correct chunk को first लाएगा।
+H: एक practical trade-off: reranking में extra model computation और latency लगती है। इसलिए पहले retriever से limited candidates निकालो, फिर उन्हें rerank करो। कितने candidates रखने हैं, ये latency budget और retrieval quality पर depend करता है।
+I: Interview में बोलो: “A retriever generates a candidate shortlist. A reranker scores each query-document pair more carefully and reorders the candidates before the final context is selected.”
+J: अब बताओ: अगर search का correct result fourth position पर है, तो क्या सिर्फ़ top 3{three} chunks भेजना safe है? Comment में answer दो।
+ऐसे practical RAG concepts और interview answers के लिए follow कर लो।
