@@ -1,18 +1,9 @@
-A: @hook ChatGPT को तुम्हारा “namaste dost” समझ कैसे आता है? क्या AI भी हमारी तरह words पढ़ता है? नहीं! Model को text directly नहीं, numbers के form में दिया जाता है। और ये conversion करता है tokenizer।
-B: एक railway ticket counter imagine करो। तुम destination बताते हो, clerk ticket पर एक code देता है। System उस code से काम करता है, पूरा conversation पढ़कर नहीं। Tokenizer भी text को छोटे pieces में convert करता है, जिन्हें tokens कहते हैं।
-C: अब तीन possible methods सोचो।
-पहला, हर letter को एक number दो। Problem? एक word के लिए भी बहुत सारे numbers।
-दूसरा, हर पूरे word का अलग number बनाओ। लेकिन कल कोई नया word आ गया, तो vocabulary में उसकी entry कहाँ से लाओगे?
-इसलिए practical solution है: words को छोटे pieces में तोड़ना।
-D: Example देखो। "namaste dost" को एक tokenizer "nam", "aste" और " dost" जैसे तीन tokens में divide कर सकता है।
-ध्यान दो, space भी token का part हो सकता है। Token पूरा word, word का piece, या punctuation भी हो सकता है।
-E: अब next step: हर token को एक ID मिलती है।
-इस list को vocabulary कहते हैं। जैसे college में हर student का roll number होता है, वैसे हर token की अपनी ID होती है।
-मैंने "cl100k_base" encoding के साथ OpenAI का "tiktoken" use किया। इस example में "nam", "aste" और " dost" की IDs respectively 12682{twelve-thousand-six-hundred-eighty-two}, 5642{five-thousand-six-hundred-forty-two} और 49415{forty-nine-thousand-four-hundred-fifteen} हैं।
-ये IDs इसी encoding के example हैं, universal numbers नहीं।
-F: अब model को text के बदले token IDs मिलती हैं। Model इन IDs को अपनी internal representations में convert करके process करता है, और generation के वक़्त नए token IDs predict करता है। Tokenizer उन IDs को text में decode करता है।
-G: एक important बात: token और word same नहीं हैं। "strawberry" जैसे word को भी tokenizer multiple pieces में तोड़ सकता है। हर word एक token होगा, ऐसा कोई rule नहीं।
-और अलग tokenizer same text को अलग तरह से divide कर सकते हैं।
-H: Interview में याद रखो: tokenizer text को tokens में split करता है, हर token को ID देता है, और model token IDs के through text process और generate करता है।
-I: अब challenge: अगर एक word में 12{twelve} letters हैं, तो क्या model को exactly 12{twelve} numbers मिलेंगे? Comment में answer दो।
-AI को simple language में समझने के लिए follow कर लो।
+A: @hook ChatGPT को तुम्हारा “namaste dost” समझ कैसे आता है? || क्या AI भी हमारी तरह words पढ़ता है? | नहीं! || Model को text directly नहीं, | numbers के form में दिया जाता है। | और ये conversion करता है tokenizer।
+B: एक railway ticket counter imagine करो। || तुम destination बताते हो, | clerk ticket पर एक code देता है। | System उस code से काम करता है, | पूरा conversation पढ़कर नहीं। || Tokenizer भी text को छोटे pieces में convert करता है, | जिन्हें tokens कहते हैं।
+C: अब तीन possible methods सोचो। || पहला, | हर letter को एक number दो। | Problem? | एक word के लिए भी बहुत सारे numbers। || दूसरा, | हर पूरे word का अलग number बनाओ। | लेकिन कल कोई नया word आ गया, | तो vocabulary में उसकी entry कहाँ से लाओगे? || इसलिए practical solution है: | words को छोटे pieces में तोड़ना।
+D: Example देखो। | "namaste dost" को एक tokenizer | "nam", "aste" और " dost" जैसे तीन tokens में divide कर सकता है। || ध्यान दो, | space भी token का part हो सकता है। || Token पूरा word, | word का piece, | या punctuation भी हो सकता है।
+E: अब next step: | हर token को एक ID मिलती है। || इस list को vocabulary कहते हैं। | जैसे college में हर student का roll number होता है, | वैसे हर token की अपनी ID होती है। || मैंने "cl100k_base{C-L-one-hundred-K-base}" encoding के साथ OpenAI का "tiktoken" use किया। || इस example में "nam", "aste" और " dost" की IDs respectively 12682{twelve-thousand-six-hundred-eighty-two}, | 5642{five-thousand-six-hundred-forty-two} | और 49415{forty-nine-thousand-four-hundred-fifteen} हैं। || ये IDs इसी encoding के example हैं, | universal numbers नहीं।
+F: अब model को text के बदले token IDs मिलती हैं। || Model इन IDs को अपनी internal representations में convert करके process करता है, | और generation के वक़्त नए token IDs predict करता है। || Tokenizer उन IDs को text में decode करता है।
+G: एक important बात: | token और word same नहीं हैं। || "strawberry" जैसे word को भी tokenizer multiple pieces में तोड़ सकता है। | हर word एक token होगा, | ऐसा कोई rule नहीं। || और अलग tokenizer same text को अलग तरह से divide कर सकते हैं।
+H: Interview में याद रखो: || tokenizer text को tokens में split करता है, | हर token को ID देता है, | और model token IDs के through text process और generate करता है।
+I: अब challenge: | अगर एक word में 12{twelve} letters हैं, | तो क्या model को exactly 12{twelve} numbers मिलेंगे? | Comment में answer दो। || AI को simple language में समझने के लिए | follow कर लो।
