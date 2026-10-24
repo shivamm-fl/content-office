@@ -1,0 +1,10 @@
+A: Cohere search ka chautha jawab pehle kaise lata hai?
+B: Interviewer ne poocha: RAG mein search se top 5 chunks aaye, sahi chunk chauthe number par tha, to reranker kya karta hai? RAG yaani AI jawab dene se pehle apne documents mein search karta hai, chunk yaani document ka ek chhota tukda.
+C: Tumhara jawab hona chahiye: reranker pehli search ke candidates ko sawal ke saath padhkar dobara score deta hai, aur sahi chunk upar aa jaata hai. Teen baatein hain, ek-ek karke dekhte hain.
+D: EXAMPLE, invented scenario, koi measured number nahi: sawal hai "refund kitne din mein milega?" Search ne 5 chunks diye, refund policy wala sahi chunk chauthe par. AI ko sirf upar ke 2 chunks bheje, to sahi chunk gaya hi nahi, aur jawab galat.
+E: Pehla step: pehli search, jise retriever kehte hain. Ye sasti aur tez hai, isliye lakhon documents se candidates nikal leti hai. Par ye sawal aur chunk ko saath padhti nahi, isiliye order rough hai.
+F: Doosra step: reranker. Wo sawal aur har chunk ko ek saath padhta hai, aur har pair ko score deta hai. Cohere ka Rerank yahi karta hai: query aur documents do, relevance score ke saath ranked list wapas. Score jitna zyada, chunk utna sahi jawab. Ye kyun kaam karta hai? Kyunki sawal aur chunk saath padhe gaye.
+G: Teesra step: score se sort karo, aur upar ke do chunks hi AI ko bhejo.
+H: Ek boundary: reranker slow hai, kyunki har pair alag padhna padta hai. Isliye sirf chhoti shortlist par chalao, jaise 100 candidates, lakhon documents par nahi.
+I: Interview mein bolo: A reranker re-scores the retriever's candidates by reading the query and each document together. It is slower, so I run it only on a short list.
+J: Ab batao: tum AI ko top kitne chunks bhejte ho, 3, 5 ya 10? Comment karo! Roz ek naya interview sawal, poore jawab ke saath, follow kar lo!

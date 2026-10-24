@@ -47,3 +47,9 @@ Numbers in: q105 (n=1) 2,959 views, 59.6 % skip, 22.6 s watch, 4.13 saves per 10
 a002 (n=1 for day 2): 754 views, 66.3 % skip, 11.4 s watch, 2.05 saves and 0.17 shares per 100 reach, below a001 (2,010 views, 20.3 s, 10 shares). a003 shows 0 everywhere (posted 14:52 UTC yesterday, not synced); q109 is hours old (392 views). Follows and trial non-follower splits are not in insights.json, so none are quoted.
 Do: q112 and q113 take one stake and one asked hook, each with the full question spoken in the reel; keep 90 to 130 s. a005: ask the day-2 question again, lead with a concrete scene, watch saves and shares not skip.
 Experiments: q108 stake test met its bar (hold 41.8 % vs 41 %, watch 17.1 s vs 12 s) on n=1, closeable as a hint; q107 trial (T01) and q110/q111 stay open.
+
+## 2026-10-24 (growth analyst, standup for a006, q114, q115)
+Numbers: asked hooks q109, q111, q113 (n=3) median skip 54.8 %, watch 17.5, 18.3, 10.5 s. Stake hooks q108, q110, q112 (n=3) median skip 60 %; q112 (cricket note above refund note, "cosine similarity" in line 1, 125.5 s, 354 views) is the worst: 79.3 % skip, 6.8 s, 0 shares. Gap is 5 points, under the 10 needed: retire nothing. q113 (118.5 s) 919 views, 8.8 % retention, weaker than q111 (14.8 %).
+Series: a003 1,530 views, 12.4 s, 7 shares (best since a001); a004 (131 s, "ek ek word guess") 483 views, 65.7 % skip, 10.7 s, 1.38 saves per 100 reach; a005 has no data yet (posted 16:37 UTC yesterday).
+Do: a006 opens with one concrete scene, no jargon in line 1, 120 to 150 s. q114, q115: asked hook with the full question, 95 to 120 s; no jargon in a stake hook. Ending unchanged (check question, follow).
+Owner decision: none needed.

@@ -979,6 +979,30 @@
       "kind": "question",
       "topic": "Exact in-memory search is enough for thousands to ~100k vectors; vector DB or approximate index only when data, speed or users outgrow it.",
       "status": "built"
+    },
+    {
+      "id": "a006",
+      "track": "series",
+      "title": "Tokens: how text becomes numbers",
+      "kind": "concept",
+      "topic": "A model never sees letters: a tokenizer cuts text into pieces called tokens (whole words, word parts or punctuation), looks each piece up in a fixed vocabulary and hands the model only the matching numbers; the numbers turn back into text at the end.",
+      "status": "planned"
+    },
+    {
+      "id": "q114",
+      "track": "interview",
+      "title": "Interview: Retrieval mein metadata filter kab lagaoge aur kyun?",
+      "kind": "question",
+      "topic": "When the question already names a product, date or language, filter the search by that metadata so the model only sees the right documents; but with an approximate vector index the filter can run after the index scan and leave few or no rows, so use an exact search, a better index setting (pgvector iterative scans) or filter first.",
+      "status": "planned"
+    },
+    {
+      "id": "q115",
+      "track": "interview",
+      "title": "Interview: Top 5 chunks mil gaye, phir bhi sahi chunk 4th pe tha. Reranker kya karta hai?",
+      "kind": "question",
+      "topic": "The first search is cheap and fast, so it finds candidates but its order is rough; a reranker reads the question together with each candidate and scores them again, so the right one moves to the top. It is slower, so it runs only on the short list, not on millions of documents.",
+      "status": "planned"
     }
   ]
 }

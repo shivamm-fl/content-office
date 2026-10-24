@@ -1,0 +1,9 @@
+A: Interviewer ne poocha: Search sirf 2024 ke documents mein karni ho, to kya karoge?
+B: Tumhara jawab hona chahiye: | search se pehle documents ko metadata se filter karo, | yaani har document par lage year, product ya language se. || Par ek jaal hai, | teen step mein dekhte hain.
+C: Maan lo HR ke documents hain, 2022 aur 2024 ki leave policy. | Employee poochta hai: is saal kitni chhuttiyan milti hain? || Retrieval yaani jawab se pehle documents mein se sabse milta hua hissa dhoondhna. | Dono policy ka text lagbhag same hai, | to 2022 wala hissa nikal aaya. || EXAMPLE: | usmein 12 chhuttiyan likhi hain, asal mein 18 hain. | Model ne confidently galat jawab diya.
+D: Pehla step: har document par metadata lagao. || Metadata yaani document ke baare mein extra tag: year, product, language. | Kyun? Kyunki text padhkar saal ka andaza nahi lagta.
+E: Doosra step: search ke saath filter lagao, year equals 2024. || Kyun? Kyunki model ko sirf sahi documents dikhenge.
+F: Teesra step: check karo ki filter ke baad rows bache ya nahi. || Approximate index yaani shortcut: ye saare documents nahi, sirf 40 candidates dekhta hai. | pgvector mein filter unhi par baad mein lagta hai. || Agar sahi documents sirf 10 percent hain, | to 40 mein se bachte hain 4 rows. || Meri 1000 searches ki simulation mein, | 14 baar zero bache.
+G: Boundary: ye tab hota hai jab filter narrow ho. || Tab exact search karo, | yaani saare matching rows seedhe check karo. | Ya iterative scan on karo, | yaani index tab tak aage scan kare, jab tak rows poore na milen.
+H: Interview mein bolo: || I'd filter on metadata like year before ranking, so the model only sees the right documents. With pgvector's approximate index the filter runs after the scan, so for a narrow filter I'd use exact search or iterative scans.
+I: Ab batao: 40 candidates aur 10 percent filter, | to kitne rows bachenge? | Comment karo! || Roz ek naya interview sawal, poore jawab ke saath, follow kar lo!

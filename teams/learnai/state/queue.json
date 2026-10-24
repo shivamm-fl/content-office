@@ -940,6 +940,118 @@
       "script_file": "state/scripts/q113.txt",
       "qa_passed": false,
       "hook_source": "strategist, 2026-10-22"
+    },
+    {
+      "id": "a006",
+      "track": "series",
+      "day": 6,
+      "unit": "A4",
+      "format": "demo",
+      "title": "Tokens: how text becomes numbers",
+      "one_idea": "A model never sees letters: a tokenizer cuts text into pieces called tokens (whole words, word parts or punctuation), looks each piece up in a fixed vocabulary and hands the model only the matching numbers; the numbers turn back into text at the end.",
+      "hook_type": "direct_question",
+      "spoken_hook": "ChatGPT को 'namaste dost' कैसे दिखता है?",
+      "hook_formula": "plain_question",
+      "visual_idea": "A chat bubble 'namaste dost' on the left; scissors cut it into three coloured tiles (nam | aste | dost); each tile drops into a vocabulary shelf and comes out with its number (12682, 5642, 49415); the number row goes into a model box, then the same numbers flow back into tiles and text. A second row repeats it for 'Hello world' (2 tiles) and 'strawberry' (3 tiles).",
+      "everyday_anchor": "A railway ticket counter: you say your station, the clerk gives a number-coded ticket, and the system only ever reads the numbers.",
+      "example": "EXAMPLE (real run, OpenAI tiktoken, encoding cl100k_base, state/runs/a006_tokens_run.py): vocabulary 100,277 tokens. 'Hello world' = 2 tokens [9906, 1917]; 'namaste dost' = 3 tokens nam|aste|' dost' [12682, 5642, 49415]; 'unbelievable' = 3 tokens un|belie|vable [359, 32898, 24694]; 'strawberry' = 3 tokens str|aw|berry [496, 675, 15717]. decode of the ids returns the exact text. Ids belong to this encoding only; other models cut differently.",
+      "sources": [
+        "https://huggingface.co/learn/llm-course/chapter2/4",
+        "https://github.com/openai/tiktoken"
+      ],
+      "facts_to_verify": [
+        "HF LLM course (fetched 2026-10-24): tokenizer splits text into words, word parts or punctuation, each token gets an integer ID from a vocabulary; subword keeps frequent words whole and splits rare ones; a tokenizer must use the vocabulary the model was pretrained with.",
+        "tiktoken README (fetched 2026-10-24): language models see a sequence of numbers (tokens); encode/decode round-trips; cl100k_base is shown as the GPT-4 encoder. Token ids and splits are from cl100k_base only; do not say every model cuts the same."
+      ],
+      "length_target_s": 135,
+      "cover_headline": "How text becomes numbers",
+      "thumb_text": "Tokens",
+      "keywords": [
+        "what is a token in ai",
+        "tokenization explained",
+        "how chatgpt reads text",
+        "ai engineer roadmap"
+      ],
+      "caption_note": "Growth note 2026-10-24: open on the one concrete scene (the message splitting into tiles), no jargon in line 1, 120 to 150 s.",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-24"
+    },
+    {
+      "id": "q114",
+      "track": "interview",
+      "unit": "E4",
+      "format": "question",
+      "title": "Interview: Retrieval mein metadata filter kab lagaoge aur kyun?",
+      "one_idea": "When the question already names a product, date or language, filter the search by that metadata so the model only sees the right documents; but with an approximate vector index the filter can run after the index scan and leave few or no rows, so use an exact search, a better index setting (pgvector iterative scans) or filter first.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Search सिर्फ़ 2024 के documents में करनी हो, तो क्या करोगे?",
+      "hook_formula": "interviewer_asked",
+      "visual_idea": "A shelf of document cards tagged 2022, 2023, 2024; a question card says 2024 only; first the search ignores the tags and the answer card comes from a 2022 document (wrong), then a FILTER gate keeps only 2024 cards and the right card is picked; last, a narrow 40-card candidate strip is filtered after the scan and only 4 cards survive, with a bar showing 10 percent.",
+      "everyday_anchor": "Looking for a shirt in a shop: you first pick the size and colour shelf, instead of checking every shirt in the shop.",
+      "trap": "Searching the whole index when the user's question already says which product, date or language it is about.",
+      "example": "EXAMPLE (state/runs/q114_filter_run.py): pgvector README: with an approximate index the filter is applied after the index scan; a condition matching 10 % of rows with default hnsw.ef_search 40 leaves about 4 rows (40 x 0.10 = 4.0). Our toy simulation of 1000 searches (random 10 % tags, 40 candidates): average 4.05 rows left, min 0, max 12, 14 searches returned 0 rows.",
+      "sources": [
+        "https://github.com/pgvector/pgvector",
+        "https://www.sbert.net/examples/applications/retrieve_rerank/README.html"
+      ],
+      "facts_to_verify": [
+        "pgvector README (fetched 2026-10-24): 'With approximate indexes, filtering is applied after the index is scanned'; 10 % matching rows with HNSW and ef_search 40 gives about 4 rows on average; exact indexes work well for conditions that match a low percentage of rows; iterative index scans scan more of the index when needed.",
+        "Say 'pgvector' when quoting this; other databases handle filters differently."
+      ],
+      "length_target_s": 105,
+      "cover_headline": "When do you filter retrieval?",
+      "thumb_text": "Metadata Filter",
+      "keywords": [
+        "metadata filter rag",
+        "vector search filter",
+        "rag interview question",
+        "ai engineer interview"
+      ],
+      "caption_note": "Growth note 2026-10-24: full question spoken, 95 to 120 s, keep the ending.",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-24"
+    },
+    {
+      "id": "q115",
+      "track": "interview",
+      "unit": "E5",
+      "format": "question",
+      "title": "Interview: Top 5 chunks mil gaye, phir bhi sahi chunk 4th pe tha. Reranker kya karta hai?",
+      "one_idea": "The first search is cheap and fast, so it finds candidates but its order is rough; a reranker reads the question together with each candidate and scores them again, so the right one moves to the top. It is slower, so it runs only on the short list, not on millions of documents.",
+      "hook_type": "company_specific",
+      "company": "Cohere",
+      "company_source": "https://docs.cohere.com/docs/rerank-overview",
+      "spoken_hook": "Cohere search का चौथा जवाब पहले कैसे लाता है?",
+      "hook_formula": "company_specific",
+      "visual_idea": "A question card on top; five answer cards in a column in search order with the right card at slot 4 highlighted; a RERANK box reads the question and each card as a pair and gives a score tag to each; the cards slide into the new order with the right one now first; a funnel on the side shows millions to a short list to a re-ordered list.",
+      "everyday_anchor": "A recruiter's first CV screen picks 20 resumes by keywords, then reads each of the 20 carefully and puts the best one on top.",
+      "trap": "Trusting the first retrieval order: the cheap search finds candidates, a second model orders them.",
+      "example": "EXAMPLE (invented scenario, no measured numbers): five chunks returned for a refund question, the right chunk at position 4; after reranking it is at position 1. The only figures spoken come from the sbert doc (retriever gets about 100 candidates) and are attributed to it.",
+      "sources": [
+        "https://docs.cohere.com/docs/rerank-overview",
+        "https://www.sbert.net/examples/applications/retrieve_rerank/README.html"
+      ],
+      "facts_to_verify": [
+        "Cohere Rerank docs (fetched 2026-10-24): takes a query and a list of documents and orders them by semantic relevance, returns a ranked list with an index and a relevance score. The page does NOT say anything about first-stage retrieval or two-stage pipelines: say only what it says about Cohere; the two-stage idea is sbert's.",
+        "Sentence-Transformers retrieve and re-rank page (fetched 2026-10-24): a retriever returns a large list (e.g. 100 hits), a cross-encoder scores each candidate against the query; scoring thousands or millions of pairs would be slow, so the cross-encoder runs only on the candidates.",
+        "Company claim is only that Cohere offers a Rerank API; no claim that Cohere asks this interview question."
+      ],
+      "length_target_s": 105,
+      "cover_headline": "What does a reranker do?",
+      "thumb_text": "Reranker",
+      "keywords": [
+        "reranker explained",
+        "rag reranking",
+        "cohere rerank",
+        "rag interview question",
+        "ai engineer interview"
+      ],
+      "caption_note": "Growth note 2026-10-24: no jargon in line 1; full question spoken, 95 to 120 s, keep the ending. Fallback if the owner dislikes the company hook: relatable_stake.",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-24"
     }
   ]
 }

@@ -1,0 +1,10 @@
+A: @hook Cohere search का चौथा जवाब पहले कैसे लाता है?
+B: Interviewer ने पूछा: | RAG में search से top 5{five} chunks आए, | सही chunk चौथे नंबर पर था, | तो reranker क्या करता है? || RAG यानी AI जवाब देने से पहले अपने documents में search करता है, | chunk यानी document का एक छोटा टुकड़ा।
+C: तुम्हारा जवाब होना चाहिए: | reranker पहली search के candidates को सवाल के साथ पढ़कर दोबारा score देता है, | और सही chunk ऊपर आ जाता है। || तीन बातें हैं, एक-एक करके देखते हैं।
+D: EXAMPLE, invented scenario, कोई measured number नहीं: | सवाल है “refund कितने दिन में मिलेगा?” || Search ने 5{five} chunks दिए, | refund policy वाला सही chunk चौथे पर। || AI को सिर्फ़ ऊपर के 2{two} chunks भेजे, | तो सही chunk गया ही नहीं, | और जवाब गलत।
+E: पहला step: पहली search, जिसे retriever कहते हैं। | ये सस्ती और तेज़ है, | इसलिए लाखों documents से candidates निकाल लेती है। || पर ये सवाल और chunk को साथ पढ़ती नहीं, | इसीलिए order rough है।
+F: दूसरा step: reranker। | वो सवाल और हर chunk को एक साथ पढ़ता है, | और हर pair को score देता है। || Cohere का Rerank यही करता है: | query और documents दो, | relevance score के साथ ranked list वापस। || Score जितना ज़्यादा, chunk उतना सही जवाब। | ये क्यों काम करता है? क्योंकि सवाल और chunk साथ पढ़े गए।
+G: तीसरा step: score से sort करो, | और ऊपर के दो chunks ही AI को भेजो।
+H: एक boundary: reranker slow है, क्योंकि हर pair अलग पढ़ना पड़ता है। | इसलिए सिर्फ़ छोटी shortlist पर चलाओ, | जैसे 100{one-hundred} candidates, | लाखों documents पर नहीं।
+I: Interview में बोलो: || A reranker re-scores the retriever's candidates by reading the query and each document together. It is slower, so I run it only on a short list.
+J: अब बताओ: तुम AI को top कितने chunks भेजते हो, | 3{three}, 5{five} या 10{ten}? || Comment करो! || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो!
