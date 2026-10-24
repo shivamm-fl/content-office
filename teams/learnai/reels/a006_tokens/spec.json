@@ -1,0 +1,157 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      null,
+      null,
+      9.11
+    ],
+    [
+      "err",
+      null,
+      null,
+      6.37
+    ],
+    [
+      "click",
+      null,
+      null,
+      18.84
+    ],
+    [
+      "err",
+      null,
+      null,
+      34.15
+    ],
+    [
+      "dip",
+      null,
+      null,
+      45.2
+    ],
+    [
+      "err",
+      null,
+      null,
+      44.15
+    ],
+    [
+      "ok",
+      null,
+      null,
+      48.3
+    ],
+    [
+      "slice",
+      null,
+      null,
+      52.77
+    ],
+    [
+      "slice",
+      null,
+      null,
+      53.8
+    ],
+    [
+      "click",
+      null,
+      null,
+      86.18
+    ],
+    [
+      "click",
+      null,
+      null,
+      88.52
+    ],
+    [
+      "click",
+      null,
+      null,
+      90.7
+    ],
+    [
+      "ok",
+      null,
+      null,
+      112.4
+    ],
+    [
+      "pop",
+      null,
+      null,
+      126.7
+    ],
+    [
+      "pop",
+      null,
+      null,
+      143.4
+    ],
+    [
+      "pop",
+      null,
+      null,
+      146.1
+    ],
+    [
+      "save",
+      null,
+      null,
+      151.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook ChatGPT को तुम्हारा “namaste dost” समझ कैसे आता है? || क्या AI भी हमारी तरह words पढ़ता है? | नहीं! || Model को text directly नहीं, | numbers के form में दिया जाता है। | और ये conversion करता है tokenizer।",
+      "B": "एक railway ticket counter imagine करो। || तुम destination बताते हो, | clerk ticket पर एक code देता है। | System उस code से काम करता है, | पूरा conversation पढ़कर नहीं। || Tokenizer भी text को छोटे pieces में convert करता है, | जिन्हें tokens कहते हैं।",
+      "C": "अब तीन possible methods सोचो। || पहला, | हर letter को एक number दो। | Problem? | एक word के लिए भी बहुत सारे numbers। || दूसरा, | हर पूरे word का अलग number बनाओ। | लेकिन कल कोई नया word आ गया, | तो vocabulary में उसकी entry कहाँ से लाओगे? || इसलिए practical solution है: | words को छोटे pieces में तोड़ना।",
+      "D": "Example देखो। | \"namaste dost\" को एक tokenizer | \"nam\", \"aste\" और \" dost\" जैसे तीन tokens में divide कर सकता है। || ध्यान दो, | space भी token का part हो सकता है। || Token पूरा word, | word का piece, | या punctuation भी हो सकता है।",
+      "E": "अब next step: | हर token को एक ID मिलती है। || इस list को vocabulary कहते हैं। | जैसे college में हर student का roll number होता है, | वैसे हर token की अपनी ID होती है। || मैंने \"cl100k_base{C-L-one-hundred-K-base}\" encoding के साथ OpenAI का \"tiktoken\" use किया। || इस example में \"nam\", \"aste\" और \" dost\" की IDs respectively 12682{twelve-thousand-six-hundred-eighty-two}, | 5642{five-thousand-six-hundred-forty-two} | और 49415{forty-nine-thousand-four-hundred-fifteen} हैं। || ये IDs इसी encoding के example हैं, | universal numbers नहीं।",
+      "F": "अब model को text के बदले token IDs मिलती हैं। || Model इन IDs को अपनी internal representations में convert करके process करता है, | और generation के वक़्त नए token IDs predict करता है। || Tokenizer उन IDs को text में decode करता है।",
+      "G": "एक important बात: | token और word same नहीं हैं। || \"strawberry\" जैसे word को भी tokenizer multiple pieces में तोड़ सकता है। | हर word एक token होगा, | ऐसा कोई rule नहीं। || और अलग tokenizer same text को अलग तरह से divide कर सकते हैं।",
+      "H": "Interview में याद रखो: || tokenizer text को tokens में split करता है, | हर token को ID देता है, | और model token IDs के through text process और generate करता है।",
+      "I": "अब challenge: | अगर एक word में 12{twelve} letters हैं, | तो क्या model को exactly 12{twelve} numbers मिलेंगे? | Comment में answer दो। || AI को simple language में समझने के लिए | follow कर लो।"
+    }
+  },
+  "hook_type": "direct_question",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

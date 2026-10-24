@@ -1,0 +1,15 @@
+Day 6/150: ChatGPT ko tumhara "namaste dost" samajh kaise aata hai?
+
+AI words nahi padhta. Model ko text nahi, numbers diye jaate hain, aur ye conversion tokenizer karta hai.
+
+Railway ticket counter jaisa socho: tum destination batate ho, clerk code wala ticket deta hai. Tokenizer text ko chhote pieces mein todta hai, jinhen tokens kehte hain. Token poora word, word ka piece ya punctuation ho sakta hai, aur space bhi token ka part ho sakta hai.
+
+Phir har token ko vocabulary se ek ID milti hai. Hamne OpenAI ka tiktoken (encoding cl100k_base) chalaya: "namaste dost" teen tokens bana, nam, aste aur dost, IDs 12682, 5642, 49415. Ye IDs sirf isi encoding ke example hain. Model ko ye IDs milti hain, aur tokenizer unhe wapas text mein decode karta hai.
+
+Token aur word same nahi hote: "strawberry" bhi kai pieces mein toot sakta hai, aur alag tokenizer same text ko alag tarah se kaat sakte hain.
+
+Challenge: agar ek word mein 12 letters hain, to kya model ko exactly 12 numbers milenge? Comment mein batao.
+
+AI ko simple language mein samajhne ke liye follow karo.
+
+#AI #LLM #150DaysOfAI

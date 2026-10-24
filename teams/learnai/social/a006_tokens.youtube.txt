@@ -1,0 +1,11 @@
+Tokens: text numbers kaise banta hai
+
+AI model text nahi padhta, sirf numbers dekhta hai. Is video mein dekhte hain ki tokenizer text ko tokens mein kaise todta hai, vocabulary se har token ko ID kaise milti hai, aur model ke baad ye IDs wapas text kaise banti hain. Real run: OpenAI ka tiktoken, encoding cl100k_base, "namaste dost" = teen tokens, IDs 12682, 5642, 49415 (sirf isi encoding ke example).
+
+Is video mein: token kya hota hai, tokenization, vocabulary, token ID, token aur word ka fark, tokenizer interview ke liye.
+
+Token ID aur splits hamare apne tiktoken run se hain (cl100k_base), alag models alag tarah se kaat sakte hain. Tokenizer ka kaam (text ko words, word parts ya punctuation mein todna, har token ko vocabulary se integer ID dena) Hugging Face LLM course se hai.
+
+Sources:
+https://huggingface.co/learn/llm-course/chapter2/4
+https://github.com/openai/tiktoken

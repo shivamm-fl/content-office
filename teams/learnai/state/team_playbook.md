@@ -22,6 +22,8 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 - 2026-10-22 (q113): `M.box(...).show()` and `M.arrow(...).show()` return nothing, so keep the handle in a variable (`const h = M.box(...); h.show(t)`) when you want `h.hide(t)` later. When the voice's example numbers must be real, run the measurement yourself and use the printed numbers: the script's numbers did not reproduce on the run machine (0.2 / 4.8 / 47.9 ms, not 0.3 / 7.7 / 84.6). Start a scene's first picture on its first spoken word: q113 scene I showed ~1 s of empty frame.
 - 2026-10-24 (q114): A long scene with phases (card, chat, stamps) needs one `data-nofit` full-canvas container per phase (`grp`), shown and faded on spoken words; `M.fit` measures only elements with a size, so call it only in scenes without containers. The template has just `#sA`: add a `<div class="beat" id="sX">` per scene or every `M.$` target is null. Put mini-animations (cells) where they do not overlap the sub-label text.
 
+- 2026-10-24 (a006): `M.icon`/`M.box` kinds that do not exist (e.g. "hat") silently draw a star: check `Viz.ICONS` first. Put the "?" placeholder under a value `gone()` when the real value lands, or the layout check flags overlapping text. Keep EXAMPLE pills clear of other labels (they collided with scissors and a section title).
+
 ## Packager
 
 ## Growth analyst
