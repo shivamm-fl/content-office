@@ -1,62 +1,66 @@
 {
   "items": [
     {
-      "id": "s005",
+      "id": "s006",
       "track": "series",
-      "day": 5,
+      "day": 6,
       "unit": "P1",
-      "title": "HTTP aur HTTPS: padlock asal mein kya karta hai",
-      "format": "concept",
-      "one_idea": "HTTP is the plain-text request and response a browser and a server exchange; HTTPS is the same HTTP carried inside TLS, which gives three things: encryption (nobody on the way can read it), a certificate that proves the server is really that domain, and tamper detection (any change on the way is noticed).",
-      "spoken_hook": "Interviewer ने पूछा: HTTPS में padlock असल में क्या check करता है?",
-      "hook_type": "interviewer_asked",
-      "hook_formula": "interviewer_asked: Interviewer ने पूछा opener with one self-contained question (second data point for the LearnAI carry-over test; Day 1 was the first)",
-      "hook_source": "hook-writer interviewer_asked; no company named, so company_specific is not used (no company page fetched)",
-      "hook_10s": "Interviewer ने पूछा: HTTPS में padlock असल में क्या check करता है? सोचो, तुम café के WiFi पर password डाल रहे हो। बीच में कोई भी उसे पढ़ सकता है। Padlock इसी का जवाब है, और ये एक नहीं, तीन काम करता है। [frame 0: a phone and a server rack with a padlock between them; a postcard with the password written in plain letters travels along the line and a stranger's hand reads it]",
+      "title": "TCP vs UDP: reliable ya fast, kab kaun",
+      "format": "trade-off",
+      "one_idea": "TCP sets up a connection and resends lost data so everything arrives complete and in order, at the cost of waiting; UDP just sends and never resends, so it is lighter and nothing waits for a lost piece, which suits live calls and quick lookups; the axis that decides is whether a late old piece is still worth anything.",
+      "spoken_hook": "Call में आवाज़ कटती है, पर download में क्यों नहीं?",
+      "hook_type": "direct_question",
+      "hook_formula": "direct_question: everyday moment (a call that breaks up vs a download that never does) as one short question; shape 1 of the niche table",
+      "hook_source": "hook-writer direct_question; least recently used of the last five reels (Day 2 is the oldest single use)",
+      "hook_10s": "Call में आवाज़ कटती है, पर download में क्यों नहीं? दोनों में packets, यानी data के छोटे टुकड़े, रास्ते में खो सकते हैं। TCP खोया टुकड़ा दोबारा भेजता है, UDP आगे बढ़ जाता है। सवाल: कब रुकना सही, कब नहीं? [frame 0: two lanes of small squares travelling from phone to phone; in the top lane one square drops off and a red gap shows in a voice waveform, in the bottom lane the same square is sent again and a file bar fills completely]",
       "hook_candidates": [
         {
-          "formula": "interviewer_asked",
-          "text": "Interviewer ने पूछा: HTTPS में padlock असल में क्या check करता है?"
-        },
-        {
           "formula": "direct_question",
-          "text": "Browser का padlock असल में क्या करता है?"
+          "text": "Call में आवाज़ कटती है, पर download में क्यों नहीं?"
         },
         {
           "formula": "relatable_stake",
-          "text": "Café के WiFi पर तुम्हारा password कोई भी पढ़ सकता है।"
+          "text": "Video call अटक गया, पर उसी WiFi पर file पूरी आई।"
+        },
+        {
+          "formula": "interviewer_asked",
+          "text": "Interviewer ने पूछा: TCP और UDP में से live video call के लिए कौन सा चुनोगे?"
         }
       ],
-      "problem_line": "Café ke WiFi pe bank ka password daalte ho, aur beech ke raaste mein koi bhi use padh sakta hai ya badal sakta hai. Padlock isi problem ko teen tareeke se rokta hai.",
-      "visual_idea": "A phone on the left and a server rack on the right with a line between them. First a plain postcard with the password in readable letters travels along the line and a hand in the middle reads and edits it; the postcard is crossed out. Then the same postcard goes inside a locked box (encryption), the server shows an ID card that the phone checks (certificate), and a sealed tag on the box breaks if the hand touches it (tamper detection); the padlock icon in the address bar lights as the three checks tick off.",
-      "everyday_anchor": "Sending a cheque or a parcel by courier: a plain postcard can be read by every hand it passes through; a sealed, locked box with the sender's ID checked at the door and a tamper seal is what HTTPS adds.",
-      "example": "EXAMPLE: login on a shop site: the request carries 'password=abc123' (invented). Over HTTP the café WiFi owner could read it; over HTTPS the same bytes look like random noise to them.",
+      "problem_line": "Internet पर packets खो सकते हैं, तो हर बार दो ही रास्ते हैं: खोया टुकड़ा दोबारा भेजकर इंतज़ार करो, या छोड़कर आगे बढ़ो। गलत चुना तो file अधूरी आती है या call अटकती है।",
+      "visual_idea": "Two lanes of small squares (packets) run from a sender box to a receiver box. Lane one (TCP): a handshake of three arrows first, numbered squares, a lost square flashes missing, the receiver sends a back-arrow, the square is sent again and the lane waits until the row is complete and in order, a file bar fills. Lane two (UDP): no handshake, squares just stream, one drops and a small gap shows in a voice waveform while the stream keeps moving. Finally a two-row table of icons (page, file, DNS lookup versus call, live video) slides into the matching lane.",
+      "everyday_anchor": "A registered courier parcel that is signed for, and re-sent if it is lost, versus shouting a sentence across a phone call: if you miss a word, nobody repeats it because the talk has moved on.",
+      "example": "EXAMPLE (invented): a 10-piece file loses piece 4 on the way. TCP resends piece 4 and the file is complete, a little later; a UDP call that loses 20 ms of voice just has a tiny gap and keeps going.",
       "sources": [
-        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
-        "https://developer.mozilla.org/en-US/docs/Glossary/HTTPS",
-        "https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security"
+        "https://www.rfc-editor.org/rfc/rfc9293.html",
+        "https://www.rfc-editor.org/rfc/rfc768",
+        "https://www.rfc-editor.org/rfc/rfc1035.html",
+        "https://www.rfc-editor.org/rfc/rfc3550.html",
+        "https://www.rfc-editor.org/rfc/rfc9000.html",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Evolution_of_HTTP"
       ],
       "facts_to_verify": [
-        "HTTP is a client-server protocol: the client (browser) always starts the request, the server answers; messages are requests and responses (MDN HTTP Overview) - verified.",
-        "A request has a method (GET, POST), a path and headers; a response has a status code (such as 200) and usually a body (MDN HTTP Overview) - verified.",
-        "HTTP can run over a TLS-encrypted TCP connection; HTTPS is the encrypted version of HTTP and uses TLS to encrypt all communication between client and server (MDN Glossary HTTPS) - verified.",
-        "TLS gives encryption (data cannot be read in transit), integrity (an attacker cannot secretly modify data without detection) and authentication (the server proves it is who it claims; on the web servers usually authenticate to clients, clients usually do not) (MDN TLS) - verified.",
-        "The server's digital certificate holds a digitally signed copy of its public key and binds the key to the domain name, so the browser knows it is really talking to e.g. example.com (MDN TLS) - verified.",
-        "TLS defends against a manipulator-in-the-middle who can read and modify traffic (MDN TLS) - verified.",
-        "Say only: HTTPS hides the content, not the fact that you visited the site's address; do not claim this without a source, so leave it out unless the builder fetches one.",
-        "Do not say how the TLS handshake or key exchange works, no cipher names, no version numbers, no percentage of sites on HTTPS, no browser's padlock wording (browsers have changed it); keep HTTP request/response to method, path, status code only."
+        "TCP connection is set up with a three-way handshake SYN, SYN-ACK, ACK (RFC 9293 s3.5) - verified by researcher.",
+        "TCP provides a reliable, in-order, byte-stream service (RFC 9293 s2.2); bytes carry sequence numbers and are acknowledged (s3.4); TCP uses retransmission to ensure delivery (s3.8) - verified.",
+        "UDP: delivery and duplicate protection are not guaranteed; it gives apps a way to send messages with a minimum of protocol mechanism (RFC 768) - verified. Say 'no delivery guarantee'; do not quote 'connectionless' or 'no ordering' as RFC wording.",
+        "UDP header has four fields (ports, length, checksum) = 8 bytes (RFC 768, derived) - verified.",
+        "DNS queries: UDP is the recommended method for standard queries, lower overhead and better performance (RFC 1035 s4.2); do not state the 512-byte limit as today's limit - verified.",
+        "HTTP/1.1 and HTTP/2 run over TCP; HTTP/3 uses QUIC, which is carried in UDP datagrams (MDN Evolution of HTTP; RFC 9000 s1) - verified. Do not say 'all websites use TCP'.",
+        "Real-time audio/video: RTP is typically run on top of UDP and does not itself guarantee timely delivery (RFC 3550 s1) - say 'real-time calls commonly use RTP, usually over UDP'.",
+        "Do NOT claim 'UDP is faster' as a flat statement, nothing about games, no speed numbers, no 'always'; say UDP waits for nothing and has less to do. Do not explain congestion control or flow control beyond one clause.",
+        "Define 'packet' in plain words once; at most three terms: packet, TCP, UDP."
       ],
-      "length_target_s": 130,
-      "cover_headline": "What the HTTPS Padlock Really Checks",
-      "thumb_text": "Padlock Kya Karta?",
+      "length_target_s": 120,
+      "cover_headline": "TCP vs UDP: Reliable or Fast?",
+      "thumb_text": "TCP ya UDP?",
       "keywords": [
-        "http vs https kya hai",
-        "https kaise kaam karta hai hindi",
-        "padlock kya hota hai browser mein",
-        "what is tls ssl certificate explained",
-        "http https difference system design"
+        "tcp vs udp difference in hindi",
+        "tcp aur udp mein kya fark hai",
+        "tcp vs udp system design interview",
+        "three way handshake kya hai",
+        "video call mein udp kyon use hota hai"
       ],
-      "why_it_should_work": "Interviewer opener gets its second test (Day 1 was the only other one, no own numbers yet); the café-WiFi stake is something every viewer has done.",
+      "why_it_should_work": "Everyone has had a call break up while a download finished; direct_question gets its second use (Day 2 was the first, no own numbers yet) and the next line states the problem (resend and wait, or skip and move on).",
       "status": "planned",
       "qa_passed": false
     }
