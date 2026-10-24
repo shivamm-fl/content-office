@@ -1,0 +1,9 @@
+Reranker kya karta hai? RAG interview jawab
+
+Interview mein poochha jata hai: RAG mein correct answer search ke fourth number par aaye, to use first position par kaun layega? Jawab: reranker. Retriever millions of documents mein se ek shortlist nikalta hai (fast, par order rough). Reranker question aur har candidate chunk ko saath mein padhkar relevance score deta hai aur ranking dobara banata hai (Cohere Rerank query aur documents leta hai aur relevance_score ke saath sorted list wapas deta hai). Cross-encoder ko har pair par alag forward pass chahiye, isliye wo sirf retriever ki shortlist par chalta hai. Refund wala example illustrative hai, benchmark nahi. Guarantee nahi ki correct chunk har baar first aayega.
+
+Is video mein: reranker explained, rag reranking, cohere rerank, rag interview question, ai engineer interview.
+
+Sources:
+https://docs.cohere.com/docs/rerank-overview
+https://www.sbert.net/examples/applications/retrieve_rerank/README.html

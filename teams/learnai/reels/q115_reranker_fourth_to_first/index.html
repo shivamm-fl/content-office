@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Reranker: moving the right chunk to first</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="160.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div><div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="160.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="160.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="160.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI"), J = M.$("#sJ");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 48}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const tileEl = (host, x, y, w, h, text, col, t, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:24px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;font:800 ${size || 44}px ${COD};letter-spacing:.04em;color:${col}`, text), t, { opacity: 0, y: 20 });
+      const paint = (c, col, t) => { tl.to(c.d, { borderColor: ca(col, 0.95), backgroundColor: ca(col, 0.16), duration: 0.25, ease: "power2.out", immediateRender: false }, t);
+        tl.to(c.b, { color: col, backgroundColor: ca(col, 0.28), duration: 0.25, immediateRender: false }, t); };
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.35 : op, duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const moveTo = (d, t, dx, dy, dur) => tl.to(d, { x: dx || 0, y: dy || 0, duration: dur || 0.7, ease: "power3.inOut", immediateRender: false }, t);
+      const dashed = (host, x, y, w, col, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:0;border-top:5px dashed ${col}`);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, transformOrigin: "0 50%", duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      // a chunk card: rank badge (old, new) + title
+      const card = (host, x, y, w, h, rank, title, col, size) => { col = col || CYAN;
+        const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:22px;border:2.5px solid ${ca(col, 0.55)};background:${ca(col, 0.08)}`);
+        const b = el(d, `left:18px;top:${(h - 76) / 2}px;width:76px;height:76px;border-radius:38px;background:${ca(col, 0.18)};font:800 38px ${COD};color:${col}`);
+        const o = el(b, `left:0;right:0;top:0;line-height:76px;text-align:center`, "#" + rank);
+        const n = el(b, `left:0;right:0;top:0;line-height:76px;text-align:center;opacity:0`, "");
+        el(d, `left:116px;top:0;height:${h}px;display:flex;align-items:center;font:700 ${size || 40}px ${LAT};color:${TEXT};white-space:nowrap`, title);
+        return { d, b, o, n, x, y, w, h }; };
+      const newRank = (c, txt, t) => { c.n.textContent = "#" + txt; tl.set(c.n, { opacity: 0 }, 0); tl.to(c.o, { opacity: 0, duration: 0.2, immediateRender: false }, t); tl.to(c.n, { opacity: 1, duration: 0.2, immediateRender: false }, t); };
+      const NAMES = ["Refund eligibility", "Refund form steps", "Refund vs exchange", "Refund processing time", "Refund to gift card"];
+      const list = (host, x, y, w, h, gap, t0, each, size) => NAMES.map((nm, i) => { const c = card(host, x, y + i * (h + gap), w, h, i + 1, nm, CYAN, size); show(c.d, t0 + i * each, { opacity: 0, y: 22 }); return c; });
+
+      // ============ A: hook, five chunks in search order, #4 climbs to #1 ============
+      // diagram: A
+      M.hook(["#4 ko #1", "kaun layega?"], { size: 112, top: 215 });
+      const cA = list(A, 110, 560, 860, 130, 14, 0.15, 0.1, 40);
+      paint(cA[3], ACC, at("A", "fourth") - 0.1);
+      pillC(A, "RERANK", 1292, at("A", "Reranker") - 0.1, { size: 40, h: 62, col: GOOD });
+      const slot = 144;
+      [0, 1, 2].forEach((i) => moveTo(cA[i].d, at("A", "Reranker") + 0.1, 0, slot, 0.8));
+      moveTo(cA[3].d, at("A", "Reranker") + 0.1, 0, -3 * slot, 0.8);
+      newRank(cA[3], "1", at("A", "Reranker") + 0.7);
+      [0, 1, 2].forEach((i) => newRank(cA[i], String(i + 2), at("A", "Reranker") + 0.7));
+      paint(cA[3], GOOD, at("A", "Reranker") + 0.8);
+      M.fit(A, { y: 460, h: 880 });
+
+      // ============ B: RAG flow, chunk, then top 5 with the cutoff at top 2 ============
+      // diagram: B
+      const bQ = M.box(B, { x: 120, y: 230, w: 520, h: 200, label: "QUESTION", icon: "user", color: CYAN, size: 52 }); bQ.show(P("B", 0) + 0.05);
+      const bS = M.box(B, { x: 120, y: 580, w: 520, h: 250, label: "SEARCH", sub: "DOCUMENTS", icon: "search", color: ACC, size: 56, subsize: 40 }); bS.show(at("B", "documents") - 0.3);
+      const bA = M.box(B, { x: 120, y: 980, w: 520, h: 200, label: "AI ANSWER", icon: "robot", color: GOOD, size: 52 }); bA.show(P("B", 0) + 0.5);
+      const bar1 = M.arrow(B, { from: [380, 435], to: [380, 575], color: CYAN, w: 10 }); bar1.show(at("B", "answer") + 0.5, 0.3);
+      const bar2 = M.arrow(B, { from: [380, 835], to: [380, 975], color: ACC, w: 10 }); bar2.show(at("B", "retrieve") - 0.2, 0.3);
+      const chunkB = card(B, 690, 640, 330, 130, "", "CHUNK", ACC, 46); chunkB.b.style.display = "none"; show(chunkB.d, at("B", "chunk") - 0.1, { opacity: 0, x: -40 });
+      const t19 = at("B", "ab") - 0.35;
+      [bQ, bS, bA, bar1, bar2].forEach((h) => h.hide(t19)); gone(chunkB.d, t19);
+      const cB = list(B, 60, 250, 640, 150, 16, at("B", "top") - 0.2, 0.1, 38);
+      paint(cB[3], ACC, at("B", "correct") - 0.1);
+      const aiB = M.box(B, { x: 790, y: 250, w: 230, h: 260, label: "AI", icon: "robot", color: CYAN, size: 56 }); aiB.show(at("B", "top") + 0.4);
+      dashed(B, 40, 250 + 2 * 166 - 8, 700, HOT, at("B", "top", 2) - 0.1);
+      tag(B, "TOP 2", 750, 250 + 2 * 166 - 8 - 30, 300, at("B", "top", 2), HOT, 52);
+      M.arrow(B, { from: [700, 325], to: [785, 350], color: CYAN, w: 9 }).show(at("B", "bhejoge") - 0.2, 0.3);
+      M.arrow(B, { from: [700, 491], to: [785, 430], color: CYAN, w: 9 }).show(at("B", "bhejoge") - 0.1, 0.3);
+      stamp(B, "NOT SENT", 380, 1110, HOT, at("B", "pahunchegi"), 58);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: old order -> RERANKER -> new order, three steps ============
+      // diagram: C
+      const chips = (host, y, t0, each) => [1, 2, 3, 4, 5].map((r, i) => { const d = el(host, `left:${133 + i * 166}px;top:${y}px;width:150px;height:150px;border-radius:24px;border:2.5px solid ${ca(CYAN, 0.55)};background:${ca(CYAN, 0.10)};display:flex;align-items:center;justify-content:center;font:800 64px ${COD};color:${CYAN}`, String(r)); show(d, t0 + i * each, { opacity: 0, y: 18 }); return d; });
+      tag(C, "SEARCH ORDER", 0, 240, 1080, P("C", 0) + 0.05, MUTED, 44);
+      const oc = chips(C, 310, P("C", 0) + 0.1, 0.06);
+      tl.to(oc[3], { borderColor: ca(ACC, 0.95), backgroundColor: ca(ACC, 0.18), color: ACC, duration: 0.25, immediateRender: false }, at("C", "problem"));
+      M.box(C, { x: 190, y: 560, w: 700, h: 230, label: "RERANKER", sub: "SCORES EACH", icon: "gear", color: GOOD, size: 60, subsize: 38 }).show(P("C", 0) + 0.5);
+      M.arrow(C, { from: [540, 470], to: [540, 555], color: CYAN, w: 9 }).show(P("C", 0) + 0.7, 0.3);
+      M.arrow(C, { from: [540, 795], to: [540, 880], color: GOOD, w: 9 }).show(P("C", 0) + 0.9, 0.3);
+      tag(C, "NEW ORDER", 0, 900, 1080, P("C", 0) + 1.0, MUTED, 44);
+      const nc = chips(C, 970, P("C", 0) + 1.0, 0.06);
+      const slotX = 166, tm = at("C", "ranking");
+      [0, 1, 2].forEach((i) => moveTo(nc[i], tm, slotX, 0, 0.7));
+      moveTo(nc[3], tm, -3 * slotX, 0, 0.7);
+      tl.to(nc[3], { borderColor: ca(GOOD, 0.95), backgroundColor: ca(GOOD, 0.2), color: GOOD, duration: 0.25, immediateRender: false }, tm + 0.6);
+      ["RETRIEVE", "RERANK", "SELECT"].forEach((s, i) => { const d = el(C, `left:${85 + i * 310}px;top:1170px;width:290px;height:110px;border-radius:20px;border:2.5px solid ${ca(ACC, 0.7)};background:${ca(ACC, 0.10)};display:flex;align-items:center;justify-content:center;font:800 38px ${COD};color:${ACC}`, `${i + 1} · ${s}`); show(d, at("C", "teen") + i * 0.3, { opacity: 0, y: 18 }); });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: the refund example ============
+      // diagram: D
+      pillC(D, "EXAMPLE", 200, P("D", 0) + 0.05, { size: 42, h: 66, col: ACC });
+      const bar = glass(D, 110, 300, 860, 120, ACC, 60); show(bar, P("D", 0) + 0.3, { opacity: 0, y: 16 });
+      M.icon(D, "search", 140, 330, 60, ACC).show(P("D", 0) + 0.4);
+      el(bar, `left:96px;top:0;height:120px;display:flex;align-items:center;font:700 44px ${LAT};white-space:nowrap`, "Refund kitne din mein milega?");
+      const cD = list(D, 110, 460, 860, 130, 14, at("D", "Initial") - 0.3, 0.12, 40);
+      paint(cD[3], ACC, at("D", "fourth") - 0.1);
+      [0, 1, 2, 3, 4].forEach((i) => { const w = el(cD[i].d, `right:24px;top:14px;font:800 34px ${COD};color:${CYAN};white-space:nowrap`, "WORDS ✓"); show(w, at("D", "related") + i * 0.08, { opacity: 0 });
+        const a = el(cD[i].d, `right:24px;top:70px;font:800 34px ${COD};color:${i === 3 ? GOOD : HOT};white-space:nowrap`, i === 3 ? "ANSWER ✓" : "ANSWER ✗"); show(a, at("D", "exact") + i * 0.08, { opacity: 0 }); });
+      [0, 1, 2, 4].forEach((i) => dim(cD[i].d, at("D", "exact") + 0.6, 0.5));
+      tl.to(cD[3].d, { borderColor: ca(GOOD, 0.95), backgroundColor: ca(GOOD, 0.16), duration: 0.3, immediateRender: false }, at("D", "exact"));
+      tl.to(cD[3].b, { color: GOOD, backgroundColor: ca(GOOD, 0.28), duration: 0.3, immediateRender: false }, at("D", "exact"));
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: step one, retriever: millions of documents -> shortlist ============
+      // diagram: E
+      pillC(E, "STEP 1 · RETRIEVER", 200, P("E", 0) + 0.05, { size: 42, h: 66, col: CYAN });
+      const picks = [2, 7, 11, 15, 18]; const tiles = [];
+      for (let r = 0; r < 4; r++) for (let k = 0; k < 5; k++) { const t = el(E, `left:${83 + k * 186}px;top:${300 + r * 136}px;width:170px;height:120px;border-radius:16px;border:2px solid ${ca(CYAN, 0.5)};background:${ca(CYAN, 0.08)}`);
+        el(t, `left:22px;top:24px;width:126px;height:10px;border-radius:5px;background:${ca(CYAN, 0.45)}`); el(t, `left:22px;top:52px;width:100px;height:10px;border-radius:5px;background:${ca(CYAN, 0.3)}`); el(t, `left:22px;top:80px;width:112px;height:10px;border-radius:5px;background:${ca(CYAN, 0.3)}`);
+        tiles.push(t); }
+      tl.set(tiles, { opacity: 0 }, 0); tl.fromTo(tiles, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.3, stagger: 0.03, ease: "power3.out", immediateRender: false }, P("E", 0) + 0.3);
+      tag(E, "MILLIONS", 0, 850, 1080, at("E", "millions"), CYAN, 48);
+      picks.forEach((i, k) => tl.to(tiles[i], { borderColor: ca(ACC, 0.95), backgroundColor: ca(ACC, 0.22), duration: 0.25, immediateRender: false }, at("E", "shortlist") + k * 0.08));
+      const chE = [1, 2, 3, 4, 5].map((r, i) => { const d = el(E, `left:${133 + i * 166}px;top:1030px;width:150px;height:130px;border-radius:20px;border:2.5px solid ${ca(ACC, 0.8)};background:${ca(ACC, 0.14)};display:flex;align-items:center;justify-content:center;font:800 56px ${COD};color:${ACC}`, String(r)); show(d, at("E", "shortlist") + 0.2 + i * 0.08, { opacity: 0, y: -24 }); return d; });
+      tag(E, "SHORTLIST", 0, 950, 1080, at("E", "shortlist") + 0.1, ACC, 48);
+      M.icon(E, "bolt", 300, 855, 56, ACC).show(at("E", "fast")); tag(E, "FAST", 620, 850, 300, at("E", "fast"), ACC, 48);
+      tl.to(chE[3], { borderColor: ca(HOT, 0.95), backgroundColor: ca(HOT, 0.2), color: HOT, duration: 0.25, immediateRender: false }, at("E", "perfect"));
+      tag(E, "ROUGH ORDER", 0, 1190, 1080, at("E", "perfect") - 0.2, HOT, 52);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: step two, the reranker reads question + chunk together ============
+      // diagram: F
+      pillC(F, "STEP 2 · RERANKER", 200, P("F", 0) + 0.05, { size: 38, h: 62, col: GOOD });
+      M.box(F, { x: 150, y: 700, w: 780, h: 260, label: "RERANKER", sub: "COHERE RERANK", icon: "gear", color: GOOD, size: 60, subsize: 38 }).show(P("F", 0) + 0.15);
+      const fq = glass(F, 110, 280, 860, 120, ACC, 60); show(fq, P("F", 0) + 0.4, { opacity: 0, y: 16 });
+      el(fq, `left:0;right:0;top:0;height:120px;display:flex;align-items:center;justify-content:center;font:700 44px ${LAT};white-space:nowrap`, "Refund kitne din mein milega?");
+      const cf1 = card(F, 70, 490, 450, 150, "1", "Eligibility", CYAN, 42), cf2 = card(F, 560, 490, 450, 150, "4", "Processing time", CYAN, 38);
+      show(cf1.d, at("F", "eligibility") - 0.3, { opacity: 0, y: 18 }); show(cf2.d, at("F", "processing") - 0.3, { opacity: 0, y: 18 });
+      M.arrow(F, { from: [295, 404], to: [295, 486], color: ACC, w: 8 }).show(at("F", "eligibility") - 0.2, 0.25);
+      M.arrow(F, { from: [785, 404], to: [785, 486], color: ACC, w: 8 }).show(at("F", "processing") - 0.2, 0.25);
+      M.arrow(F, { from: [295, 644], to: [400, 696], color: CYAN, w: 8 }).show(at("F", "eligibility") + 0.2, 0.25);
+      M.arrow(F, { from: [785, 644], to: [680, 696], color: CYAN, w: 8 }).show(at("F", "processing") + 0.2, 0.25);
+      const sb = (x, hgt, col, t) => { const d = el(F, `left:${x}px;top:${1300 - hgt}px;width:230px;height:${hgt}px;border-radius:14px 14px 0 0;background:${ca(col, 0.75)};transform-origin:50% 100%`); tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 1, scaleY: 0 }, { opacity: 1, scaleY: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, t); return d; };
+      const tScore = at("F", "score");
+      tag(F, "SCORE", 0, 1000, 1080, tScore - 0.3, MUTED, 44);
+      M.arrow(F, { from: [540, 965], to: [540, 1000], color: GOOD, w: 8 }).show(tScore - 0.4, 0.2);
+      sb(170, 130, HOT, tScore); sb(680, 230, GOOD, tScore + 0.15);
+      tag(F, "#2", 170, 1310, 230, at("F", "dobara"), HOT, 56); tag(F, "#1", 680, 1310, 230, at("F", "dobara"), GOOD, 56);
+      tag(F, "ELIGIBILITY", 120, 1385, 330, at("F", "score"), MUTED, 36); tag(F, "PROCESSING", 630, 1385, 330, at("F", "score"), MUTED, 36);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: step three, select; the gold card moves 4 -> 1, top 2 go to the AI ============
+      // diagram: G
+      pillC(G, "STEP 3 · SELECT", 200, P("G", 0) + 0.05, { size: 38, h: 62, col: ACC });
+      const cG = list(G, 60, 300, 640, 116, 14, P("G", 0) + 0.1, 0.05, 36);
+      paint(cG[3], ACC, P("G", 0) + 0.7);
+      const gs = 130, tg = at("G", "first");
+      [0, 1, 2].forEach((i) => moveTo(cG[i].d, tg - 0.2, 0, gs, 0.7)); moveTo(cG[3].d, tg - 0.2, 0, -3 * gs, 0.7);
+      newRank(cG[3], "1", tg + 0.4); [0, 1, 2].forEach((i) => newRank(cG[i], String(i + 2), tg + 0.4));
+      paint(cG[3], GOOD, tg + 0.5);
+      dashed(G, 40, 300 + 2 * 130 - 7, 700, HOT, at("G", "top", 2) - 0.1);
+      tag(G, "TOP 2", 760, 300 + 2 * 130 + 20, 280, at("G", "top", 2), HOT, 42);
+      const aiG = M.box(G, { x: 790, y: 300, w: 230, h: 230, label: "AI", icon: "robot", color: CYAN, size: 52 }); aiG.show(at("G", "top", 2) + 0.2);
+      M.arrow(G, { from: [700, 360], to: [785, 400], color: GOOD, w: 8 }).show(at("G", "final") - 0.1, 0.3);
+      M.arrow(G, { from: [700, 490], to: [785, 470], color: CYAN, w: 8 }).show(at("G", "final"), 0.3);
+      aiG.glow(at("G", "pahunch"), GOOD);
+      tag(G, "?", 590, 300 + 20, 80, at("G", "guarantee") - 0.2, ACC, 72); stamp(G, "NO GUARANTEE", 380, 1010, ACC, at("G", "guarantee"), 64);
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: the trade-off, rerank only a limited shortlist ============
+      // diagram: H
+      M.box(H, { x: 140, y: 560, w: 800, h: 220, label: "RERANKER", sub: "SLOWER", icon: "clock", color: ACC, size: 64, subsize: 44 }).show(P("H", 0) + 0.1);
+      M.box(H, { x: 140, y: 230, w: 800, h: 190, label: "RETRIEVER", sub: "FAST", icon: "bolt", color: CYAN, size: 60, subsize: 40 }).show(at("H", "retriever") - 0.2);
+      M.arrow(H, { from: [540, 425], to: [540, 555], color: ACC, w: 10 }).show(at("H", "limited") - 0.1, 0.3);
+      tag(H, "LIMITED", 580, 470, 300, at("H", "limited"), ACC, 44);
+      tileEl(H, 140, 830, 380, 120, "COMPUTE ↑", HOT, at("H", "computation") - 0.1, 44);
+      tileEl(H, 560, 830, 380, 120, "LATENCY ↑", HOT, at("H", "latency") - 0.1, 44);
+      tileEl(H, 140, 1010, 380, 130, "BUDGET", HOT, at("H", "budget") - 0.1, 48);
+      show(el(H, `left:520px;top:1010px;width:40px;height:130px;display:flex;align-items:center;justify-content:center;font:800 56px ${COD};color:${MUTED}`, "⇄"), at("H", "quality"), { opacity: 0 });
+      tileEl(H, 560, 1010, 380, 130, "QUALITY", GOOD, at("H", "quality") - 0.1, 48);
+      M.fit(H, { y: 200, h: 1100 });
+
+      // ============ I: the interview line, shortlist -> score each pair -> reorder -> context ============
+      // diagram: I
+      pillC(I, "SAY THIS", 200, P("I", 0) + 0.05, { size: 42, h: 66, col: GOOD });
+      tag(I, "SHORTLIST", 60, 275, 600, at("I", "shortlist"), ACC, 46);
+      const scores = [0.35, 0.2, 0.5, 0.95, 0.3]; const order = [3, 2, 0, 4, 1];   // new slot of each row index
+      const rows = scores.map((s, i) => { const y0 = 340 + i * 130; const row = el(I, `left:60px;top:${y0}px;width:740px;height:110px`);
+        el(row, `left:0;top:0;width:100px;height:100px;border-radius:50px;border:2.5px solid ${ca(ACC, 0.9)};background:${ca(ACC, 0.14)};display:flex;align-items:center;justify-content:center;font:800 46px ${COD};color:${ACC}`, "Q");
+        el(row, `left:112px;top:0;width:50px;height:100px;display:flex;align-items:center;justify-content:center;font:800 44px ${COD};color:${MUTED}`, "+");
+        el(row, `left:172px;top:0;width:150px;height:100px;border-radius:20px;border:2.5px solid ${ca(CYAN, 0.8)};background:${ca(CYAN, 0.10)};display:flex;align-items:center;justify-content:center;font:800 44px ${COD};color:${CYAN}`, "D" + (i + 1));
+        el(row, `left:350px;top:30px;width:390px;height:40px;border-radius:20px;background:${ca(MUTED, 0.15)}`);
+        const f = el(row, `left:350px;top:30px;width:${390 * s}px;height:40px;border-radius:20px;background:${ca(i === 3 ? GOOD : CYAN, 0.85)};transform-origin:0 50%`);
+        tl.set(f, { opacity: 0 }, 0); tl.fromTo(f, { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, at("I", "carefully") + i * 0.1);
+        show(row, P("I", 0) + 0.3 + i * 0.15, { opacity: 0, y: 18 }); return row; });
+      rows.forEach((r, i) => moveTo(r, at("I", "reorders"), 0, (order[i] - i) * 130, 0.8));
+      dashed(I, 40, 340 + 2 * 130 - 12, 780, HOT, at("I", "context") - 0.1);
+      tag(I, "CONTEXT", 810, 600, 240, at("I", "context"), HOT, 36);
+      const aiI = M.box(I, { x: 840, y: 340, w: 190, h: 230, label: "AI", icon: "robot", color: CYAN, size: 48 }); aiI.show(at("I", "context") - 0.1);
+      M.arrow(I, { from: [790, 400], to: [835, 430], color: GOOD, w: 8 }).show(at("I", "selected") - 0.1, 0.3);
+      M.arrow(I, { from: [790, 530], to: [835, 500], color: CYAN, w: 8 }).show(at("I", "selected"), 0.3);
+      M.fit(I, { y: 200, h: 1100 });
+
+      // ============ J: close, top 3 safe? comment + follow ============
+      // diagram: J
+      const jc = chips(J, 260, P("J", 0) + 0.1, 0.06);
+      tl.to(jc[3], { borderColor: ca(ACC, 0.95), backgroundColor: ca(ACC, 0.2), color: ACC, duration: 0.25, immediateRender: false }, at("J", "fourth"));
+      const cut = el(J, "left:632px;top:230px;width:0;height:210px;border-left:5px dashed " + HOT); tl.set(cut, { opacity: 0 }, 0); tl.to(cut, { opacity: 1, duration: 0.3, immediateRender: false }, at("J", "top"));
+      tag(J, "TOP 3", 133, 465, 480, at("J", "top"), HOT, 52);
+      tag(J, "SAFE?", 0, 540, 1080, at("J", "safe") - 0.3, ACC, 64);
+      const cc = glass(J, 120, 680, 840, 330, CYAN); show(cc, at("J", "safe") + 0.2, { opacity: 0, y: 20 });
+      el(cc, `left:30px;top:20px;font:800 38px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      M.pill(cc, "YES", at("J", "Comment"), { x: 230, y: 95, kind: "out", size: 52 }); M.pill(cc, "NO", at("J", "Comment") + 0.3, { x: 580, y: 95, kind: "out", size: 52 });
+      show(el(cc, `left:36px;right:36px;bottom:34px;height:70px;border-radius:35px;border:1.5px solid rgba(150,175,215,.35);font:500 30px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("J", "safe") + 0.4, { opacity: 0 });
+      const fbt = el(J, `left:370px;top:1100px;width:340px;height:90px;border-radius:45px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 42px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fbt, at("J", "follow") - 0.4, { opacity: 0 });
+      tl.to(fbt, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("J", "follow")); tl.to(fbt, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("J", "follow") + 0.12);
+      M.fit(J, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I); M.wipe(S.J);
+      M.finish({ kw: { reranker: "gold", fourth: "hot", first: "good", chunk: "cyan", chunks: "cyan", retriever: "cyan", score: "gold", latency: "hot", top: "gold", guarantee: "hot", refund: "cyan", comment: "gold", follow: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

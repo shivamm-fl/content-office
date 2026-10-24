@@ -1,0 +1,11 @@
+Interviewer ne poocha: RAG mein correct answer search ke fourth number par aaye, to use first position par kaun layega? Jawab: reranker.
+
+RAG mein AI answer dene se pehle relevant documents retrieve karta hai, aur document ke chhote piece ko chunk kehte hain. Maan lo search ne top 5 chunks diye, par refund policy wala correct chunk fourth position par hai. Sirf top 2 chunks AI ko gaye, to correct information us tak pahunchegi hi nahi. Ye ek illustrative example hai, benchmark result nahi.
+
+Teen steps: 1) Retriever millions of documents mein se ek shortlist nikalta hai, fast hai par ranking perfect nahi hoti. 2) Reranker (jaise Cohere Rerank) question aur har candidate chunk ko saath mein padhta hai aur har ek ko relevance score deta hai. 3) Naye order se top results select karo. Guarantee nahi hai ki reranker har baar correct chunk ko first layega. Trade-off: reranking mein extra computation aur latency lagti hai, isliye retriever se limited candidates nikalo aur sirf unhe rerank karo.
+
+Interview mein bolo: "A retriever generates a candidate shortlist. A reranker scores each query-document pair more carefully and reorders the candidates before the final context is selected."
+
+Correct result fourth position par ho, to kya sirf top 3 chunks bhejna safe hai? Comment mein YES ya NO likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #RAG

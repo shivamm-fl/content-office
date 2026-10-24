@@ -1,0 +1,17 @@
+# Visual plan: q115 reranker (rules: docs-notes/diagram-first-visuals.md)
+
+Idea in one line: the cheap first search finds candidates in a rough order; a reranker reads the question with each candidate, scores it again and the right chunk moves to the top.
+The picture that explains it with the sound off: ONE set of five chunk cards in search order with the right card at slot 4 (gold); a RERANKER box re-scores and the gold card slides to slot 1, across the "top 2" cutoff.
+
+| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes (at least six words) | On-screen labels (1-3 words each) | Built with (helper names or custom) |
+|---|---|---|---|---|
+| A | Hook: 4th result, who brings it to 1st? Reranker! | Five chunk cards in search order from frame 0, card 4 turns gold on "fourth", then slides to slot 1 on "Reranker" while the others shift down | #4 ko #1 kaun layega?, RERANK | custom card list (card helper) |
+| B | RAG, chunk, top 5, top 2 cutoff | Flow QUESTION, DOCS search, AI with a small CHUNK piece pulled out; then five cards, dashed cutoff after card 2, two arrows to an AI box, gold card 4 stays below the line and is stamped NOT SENT | QUESTION, SEARCH, AI, CHUNK, TOP 2, NOT SENT | M.box + M.arrow + card helper |
+| C | Reranker re-evaluates, three steps | Row of five numbered chips (old order) into a RERANKER box and out as a second row where the gold chip jumps from slot 4 to slot 1; three step tiles appear below | SEARCH ORDER, RERANKER, NEW ORDER, RETRIEVE, RERANK, SELECT | custom chips + M.box |
+| D | Example: refund question, chunk 4 is the answer | A search bar with the customer question and an EXAMPLE pill, five refund chunk cards; the four look-alikes dim, card 4 gets a green ring and "REAL ANSWER" | EXAMPLE, REAL ANSWER | search bar + card helper |
+| E | Step one retriever: millions to shortlist, fast, order rough | A grid of 42 small document tiles (millions), five turn gold, a row of five chips below is the shortlist, FAST with a bolt, then ROUGH ORDER tag | STEP 1 RETRIEVER, FAST, SHORTLIST, ROUGH ORDER | tile grid + M.icon |
+| F | Step two: question + each chunk read together, scored | Question card linked to two chunk cards (eligibility, processing time) into a RERANKER box; two score bars grow, the processing bar tall and green, rank badges swap to #2 and #1 | QUESTION, RERANKER, SCORE, #1 | custom + M.box |
+| G | Step three: select top results, no guarantee | Cards in old order; gold card slides from 4 to 1, dashed top 2 line, two arrows into an AI box which turns green; then a NO GUARANTEE stamp | STEP 3 SELECT, TOP 2, AI, NO GUARANTEE | card helper + M.box |
+| H | Trade-off: extra computation and latency, limit candidates | Two stacked boxes RETRIEVER (bolt, fast) and RERANKER (clock, slow); an arrow labelled LIMITED between them; two tiles LATENCY and QUALITY with a balance sign | RETRIEVER, RERANKER, LIMITED, LATENCY, QUALITY | M.box + M.arrow |
+| I | Interview line: shortlist, score each pair, reorder | Five rows of query chip + document chip with score bars filling; rows then sort by score into a new order with a dashed context line | SAY THIS, SHORTLIST, REORDERED, CONTEXT | custom rows |
+| J | Close: is top 3 safe? comment | Five chips with a red dashed cut after 3 and the gold chip just below it; a COMMENT card with YES and NO pills; FOLLOW pill presses | TOP 3, COMMENT, YES, NO, FOLLOW | custom + pills |

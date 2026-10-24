@@ -24,6 +24,8 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 
 - 2026-10-24 (a006): `M.icon`/`M.box` kinds that do not exist (e.g. "hat") silently draw a star: check `Viz.ICONS` first. Put the "?" placeholder under a value `gone()` when the real value lands, or the layout check flags overlapping text. Keep EXAMPLE pills clear of other labels (they collided with scissors and a section title).
 
+- 2026-10-24 (q115): `M.W` matches the caption token case-sensitively ("Reranker", "Cohere", "Comment" capitalised in the voice text). For a list that re-orders, draw ONE card list and move the cards with `tl.to(y)` (badge swaps old/new rank); the same objects across scenes teach better than new boxes. Show a scene's first picture at its first phrase, not on the key word, or the opening seconds are empty.
+
 ## Packager
 
 ## Growth analyst
