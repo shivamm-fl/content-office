@@ -210,25 +210,9 @@
       "hook_type": "direct_question",
       "spoken_hook": "दस लाख में एक नाम, सीधे कैसे मिलता है?",
       "hook_formula": "plain_topic_question",
-      "hook_source": "untested formula; payoff in the first line, plain words, no term used before it is explained (learnings 2026-10-22). Run hookscore on the Roman form.",
-      "hook_10s": "दस लाख में एक नाम, सीधे कैसे मिलता है? मान लो एक list में दस लाख नाम हैं, और आखिरी नाम चाहिए, तो एक-एक करके दस लाख बार देखना पड़ेगा। Hash map में वही नाम सीधे उसकी जगह पर मिलता है। [frame 0: a long row of tiny name tiles with one arrow jumping straight to a single tile]",
-      "hook_candidates": [
-        {
-          "hook": "दस लाख नामों में एक नाम, सीधे मिल जाता है।",
-          "formula": "plain_payoff_fact"
-        },
-        {
-          "hook": "Dictionary में दस लाख में से एक key इतनी जल्दी कैसे मिलती है?",
-          "formula": "topic_question"
-        },
-        {
-          "hook": "Interviewer ने पूछा: hash map में lookup तेज़ क्यों होता है?",
-          "formula": "interviewer_question"
-        }
-      ],
-      "visual_idea": "A row of 8 numbered slot boxes. A key tile goes through a small hash box, comes out as a slot number and drops straight into that slot, with a counter showing 1 jump; beside it a list row where a pointer walks tile by tile with a counter climbing to 1000000. Then two keys landing in the same slot (EXAMPLE key mod 8) shown as a small clash, marked as the reason it is average, not always.",
-      "everyday_anchor": "A school or office locker room: the locker number is worked out from your roll number, so you walk straight to your locker instead of opening every locker to find your bag.",
-      "example": "EXAMPLE (labelled): 10 lakh names in a list, last name needs 1000000 comparisons (run), dict needs one lookup (run). Toy hash: key mod 8, so 10 and 18 both go to slot 2, 3 and 27 both go to slot 3 (invented, not Python's real hash). Word count with a dict and a list used as key raising TypeError unhashable were run.",
+      "hook_source": "plain topic question, no term used before it is explained (learnings 2026-10-22)",
+      "everyday_anchor": "School locker room: locker number comes from your roll number, so you walk straight to your locker.",
+      "example": "EXAMPLE (labelled): 10 lakh names in a list, last name needs 1000000 comparisons (run), dict needs one lookup (run). Toy hash: key mod 8, so 10 and 18 both go to slot 2, 3 and 27 both go to slot 3 (invented). A list as key raises TypeError unhashable (run).",
       "sources": [
         "https://docs.python.org/3/faq/design.html",
         "https://docs.python.org/3/glossary.html",
@@ -236,12 +220,7 @@
         "https://en.wikipedia.org/wiki/Hash_table"
       ],
       "facts_to_verify": [
-        "Say average O(1), never worst case O(1); worst case can be O(n) with many collisions (Wikipedia Hash table).",
-        "Python dict is a resizable hash table; O(1) retrieval assumes distinct hash codes (Python design FAQ).",
-        "Keys must be hashable; a list as key raises TypeError unhashable (run it, show real output).",
-        "Run the 10 lakh list scan vs dict lookup and show the real counts; no fixed timings.",
-        "Toy mod 8 hash is labelled EXAMPLE, not how Python hashes.",
-        "Kept out as unverified: Python dict worst-case number, resize and load-factor thresholds. Optional: fetch https://docs.python.org/3/builtins/time-complexity.html for the dict row."
+        "Say average O(1), never worst case O(1)."
       ],
       "length_target_s": 150,
       "cover_headline": "How a hash map finds in O(1)",
@@ -252,8 +231,8 @@
         "hash function kya hai hindi",
         "hash table dsa hinglish"
       ],
-      "caption_note": "Day 6/150 caption. Check answer: 10 lakh names, last one: list scan 1000000 comparisons, dict one lookup on average. Average, not guaranteed; collisions slow it. Python only. Closing check asks 20 lakh names: answer 2000000 comparisons for the list.",
-      "script_notes": "Header tag DSA 006/150. Numbers in Hindi words (दस लाख). Define hash function and key in one plain sentence each; nothing between hook and first teaching line. No O(1) worst-case claim; name collisions as the reason it is average, without teaching collision handling (that is Day 7).",
+      "caption_note": "Day 6/150 caption. Check answer: 20 lakh names, last one: list scan 2000000 comparisons; dict about one lookup on average. Average, not guaranteed; collisions slow it. Python only.",
+      "script_notes": "Header tag DSA 006/150.",
       "status": "planned",
       "qa_passed": false,
       "script_file": "state/scripts/d006.txt"

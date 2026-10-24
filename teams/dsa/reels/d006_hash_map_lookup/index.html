@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Hash map: lookup O(1) kaise ho jaata hai</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="139.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="139.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="139.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="139.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J"], tag: "DSA 006/150" });
+      Viz.install(M);
+      const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n); const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const $s = (k) => M.$("#s" + k);
+      const A = $s("A"), B = $s("B"), C = $s("C"), D = $s("D"), E = $s("E"), F = $s("F"), G = $s("G"), H = $s("H"), I = $s("I"), J = $s("J");
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const stamp = (host, txt, x, y, col, t) => { const d = el(host, `left:${x}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.96);font:700 52px var(--code);color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, from.toLocaleString("en-US")); const o = { v: from };
+        show(d, segs[0][0] - 0.3, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const grow = (d, t, dur) => { tl.set(d, { scaleX: 0 }, 0); tl.to(d, { scaleX: 1, duration: dur || 0.6, ease: "power3.out", immediateRender: false }, t); return d; };
+      const fly = (d, t, x, y, dur) => tl.to(d, { x, y, duration: dur || 0.6, ease: "power3.inOut", immediateRender: false }, t);
+      const SX = (i) => 36 + i * 112;  // slot x inside a 960 wide panel (tile 104 wide)
+      const slotRow = (host, y, items, col, h, idxCol, t0) => items.map((c, i) => { const t = tile(host, SX(i), y, 104, h, c, col, 44); show(t, t0 + i * 0.05, { opacity: 0, y: 20 });
+        if (idxCol) show(lab(host, `left:${SX(i)}px;top:${y + h + 6}px;width:104px`, String(i), idxCol, 40), t0 + i * 0.05 + 0.1, { opacity: 0 }); return t; });
+      const ITEMS = ["R", "N", "K", "S", "M", "A", "T", "P"];
+      const NAMES = ["Asha", "Ravi", "Neha", "Imran", "Sita"];
+
+      // diagram: A  (hook: a crowd of names; one is hit straight)
+      M.hook(["10 LAKH NAMES,", "FIND ONE?"], { size: 88, top: 250 });
+      const pa = panel(A, 80, 520, 920, 640, CYAN, "NAMES"); show(pa, 0.05);
+      const aT = []; for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) { const i = r * 5 + c; const t = tile(pa, 40 + c * 168, 90 + r * 150, 156, 124, i === 14 ? "?" : NAMES[(i * 2) % 5], i === 14 ? ACC : CYAN, 38); show(t, 0.1 + i * 0.03, { opacity: 0, y: 14 }); aT.push(t); }
+      lab(pa, "left:0;width:920px;top:560px", "· · ·", "#B8C4DC", 60); show(pa.lastChild, 0.6);
+      const ad = el(pa, "left:716px;top:-22px;width:156px;font:800 90px var(--code);color:" + ACC + ";text-align:center", "▼"); show(ad, at("A", "seedhe") - 0.2, { opacity: 0 });
+      tl.to(ad, { y: 470, duration: 0.6, ease: "power3.inOut", immediateRender: false }, at("A", "seedhe"));
+      ring(aT[14], at("A", "seedhe") + 0.5, ACC);
+      M.pill(A, "DIRECT", at("A", "kaise"), { x: 340, y: 1210, w: 400, kind: "acc", size: 56 });
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B  (locker room: roll number leads straight to one locker)
+      const b0 = ST.B;
+      const pb = panel(B, 60, 230, 960, 1010, CYAN, "LOCKER ROOM"); show(pb, b0 + 0.1);
+      const roll = tile(pb, 330, 90, 300, 130, "ROLL 6", ACC, 56); show(roll, at("B", "roll") - 0.2);
+      show(lab(pb, "left:330px;top:215px;width:300px", "▼", ACC, 64), at("B", "number"), { opacity: 0 });
+      const lk = []; for (let i = 0; i < 8; i++) { const x = 40 + (i % 4) * 225, y = 330 + Math.floor(i / 4) * 300;
+        const t = tile(pb, x, y, 205, 230, String(i + 1), CYAN, 76); show(t, b0 + 0.2 + i * 0.05, { opacity: 0, y: 14 }); lk.push(t); }
+      ring(lk[5], at("B", "nikalta"), GOOD);
+      const me = el(pb, "left:40px;top:560px;width:205px;font:800 70px var(--code);color:" + GOOD + ";text-align:center", "▲"); show(me, at("B", "seedhe"), { opacity: 0 });
+      lk.forEach((t, i) => { if (i !== 5) dim(t, at("B", "kholkar"), 0.35); });
+      M.pill(pb, "NOT ALL", at("B", "kholkar"), { x: 330, y: 905, w: 300, kind: "acc", size: 46 });
+      M.pill(B, "HASH MAP", at("B", "Hash"), { x: 340, y: 1280, w: 400, kind: "acc", size: 56 });
+      M.fit(B, { y: 200, h: 1150 });
+
+      // diagram: C  (list scans 1,000,000; dict jumps once)
+      const c0 = ST.C;
+      M.pill(C, "REAL RUN", at("C", "mainne"), { x: 380, y: 205, w: 320, kind: "out", size: 38 });
+      const pl = panel(C, 60, 280, 960, 560, HOT, "LIST"); show(pl, c0 + 0.1);
+      const cT = NAMES.map((n, i) => { const t = tile(pl, 40 + i * 180, 90, 168, 120, n, CYAN, 36); show(t, c0 + 0.2 + i * 0.05, { opacity: 0, y: 14 }); return t; });
+      const cp = el(pl, "left:40px;top:215px;width:168px;font:800 60px var(--code);color:" + HOT + ";text-align:center", "▲"); show(cp, at("C", "List"), { opacity: 0 });
+      tl.to(cp, { x: 720, duration: 1.6, ease: "none", immediateRender: false }, at("C", "List") + 0.3);
+      counter(pl, "left:0;width:960px;top:300px", 0, [[at("C", "compare"), at("C", "comparisons") + 0.9, 1000000]], HOT, 120);
+      show(lab(pl, "left:0;width:960px;top:450px", "COMPARISONS", HOT, 44), at("C", "comparisons") - 0.2);
+      const pd = panel(C, 60, 890, 960, 400, GOOD, "DICT"); dimIn(pd, c0 + 0.1, 0.4); lit(pd, at("C", "Dictionary"));
+      const dk = tile(pd, 60, 130, 220, 120, "Neha", ACC, 44); const dar = lab(pd, "left:290px;top:140px;width:140px", "→", GOOD, 80);
+      const ds = tile(pd, 440, 130, 220, 120, "slot 7", GOOD, 44); tl.set(ds, { opacity: 0 }, 0); tl.set(dar, { opacity: 0 }, 0);
+      tl.to([dar, ds], { opacity: 1, duration: 0.4, immediateRender: false }, at("C", "sirf"));
+      show(lab(pd, "left:0;width:960px;top:290px", "1 LOOKUP", GOOD, 54), at("C", "lookup"), { opacity: 0 });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D  (key -> hash function -> slot number -> slot)
+      const d0 = ST.D;
+      show(lab(D, "left:60px;top:230px;width:960px", "KEY", ACC, 46), at("D", "key"), { opacity: 0 });
+      const k1 = tile(D, 380, 290, 320, 120, "Asha", ACC, 56); show(k1, at("D", "key"));
+      const ar1 = lab(D, "left:380px;top:420px;width:320px", "▼", "#B8C4DC", 64); show(ar1, at("D", "function"), { opacity: 0 });
+      const hf = tile(D, 190, 500, 700, 170, "HASH FUNCTION", CYAN, 60); show(hf, at("D", "hash"));
+      ring(hf, at("D", "function", 1), CYAN);
+      const ar2 = lab(D, "left:380px;top:680px;width:320px", "▼", "#B8C4DC", 64); show(ar2, at("D", "slot"), { opacity: 0 });
+      const num = tile(D, 440, 760, 200, 130, "5", ACC, 80); show(num, at("D", "nanbar", 1));
+      show(lab(D, "left:60px;top:920px;width:960px", "SLOT", GOOD, 46), at("D", "Slot"), { opacity: 0 });
+      const dpa = panel(D, 40, 980, 1000, 300, GOOD, null);
+      const dS = ITEMS.map((c, i) => { const t = tile(dpa, 36 + i * 118, 60, 108, 130, "", GOOD, 44); t.style.opacity = 0; tl.to(t, { opacity: 1, duration: 0.3, immediateRender: false }, at("D", "Slot") + i * 0.04);
+        show(lab(dpa, `left:${36 + i * 118}px;top:200px;width:108px`, String(i), ACC, 40), at("D", "Slot") + 0.2, { opacity: 0 }); return t; });
+      show(dpa, d0 + 0.1, { opacity: 0 }); ring(dS[5], at("D", "khaana"), GOOD);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E  (three steps; the middle slots are skipped)
+      const e0 = ST.E;
+      const ek = tile(E, 60, 280, 280, 120, "Asha", ACC, 52); show(ek, e0 + 0.15);
+      const eh = tile(E, 400, 270, 380, 140, "HASH", CYAN, 56); show(eh, e0 + 0.15);
+      show(lab(E, "left:340px;top:290px;width:60px", "→", "#B8C4DC", 56), e0 + 0.2, { opacity: 0 });
+      tl.to(ek, { x: 400, duration: 0.5, ease: "power3.inOut", immediateRender: false }, at("E", "daalo"));
+      tl.to(ek, { opacity: 0, duration: 0.2, immediateRender: false }, at("E", "daalo") + 0.5);
+      const en = tile(E, 820, 280, 200, 120, "5", ACC, 72); tl.set(en, { opacity: 0 }, 0); tl.to(en, { opacity: 1, duration: 0.4, immediateRender: false }, at("E", "nikal"));
+      M.pill(E, "1  HASH", at("E", "pahla"), { x: 60, y: 440, w: 280, kind: "acc", size: 40 });
+      const epa = panel(E, 40, 560, 1000, 480, GOOD, "SLOTS"); show(epa, e0 + 0.15);
+      const eS = ITEMS.map((c, i) => { const t = tile(epa, 36 + i * 118, 130, 108, 140, c, GOOD, 52); show(t, e0 + 0.25 + i * 0.04, { opacity: 0, y: 14 });
+        show(lab(epa, `left:${36 + i * 118}px;top:285px;width:108px`, String(i), ACC, 40), e0 + 0.3 + i * 0.04, { opacity: 0 }); return t; });
+      const jp = el(epa, `left:${36 + 5 * 118}px;top:60px;width:108px;font:800 70px var(--code);color:${ACC};text-align:center`, "▼"); show(jp, at("E", "seedhe"), { opacity: 0 });
+      tl.fromTo(jp, { x: -5 * 118 }, { x: 0, duration: 0.5, ease: "power3.inOut", immediateRender: false }, at("E", "seedhe"));
+      eS.forEach((t, i) => { if (i !== 5) dim(t, at("E", "jagah"), 0.25); });
+      ring(eS[5], at("E", "jagah"), GOOD);
+      M.pill(E, "2  JUMP", at("E", "doosra"), { x: 390, y: 440, w: 280, kind: "acc", size: 40 });
+      show(lab(epa, "left:0;width:1000px;top:380px", "SKIPPED", "#B8C4DC", 44), at("E", "beech"), { opacity: 0 });
+      const pick = tile(E, 40 + 36 + 5 * 118, 1080, 108, 130, "A", GOOD, 52); show(pick, at("E", "utha"), { opacity: 0, y: -20 });
+      M.pill(E, "3  PICK UP", at("E", "teesra"), { x: 720, y: 440, w: 280, kind: "acc", size: 40 });
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F  (toy hash: key divided by 8, remainder is the slot)
+      const f0 = ST.F;
+      M.pill(F, "EXAMPLE", f0 + 0.1, { x: 780, y: 215, w: 240, kind: "out", size: 30 });
+      const pfc = panel(F, 60, 290, 960, 480, ACC, "TOY HASH"); show(pfc, f0 + 0.1);
+      show(lab(pfc, "left:0;width:960px;top:120px", "KEY ÷ 8", "#E8EDF6", 110), at("F", "bhaag"), { opacity: 0 });
+      show(lab(pfc, "left:0;width:960px;top:260px", "REMAINDER", ACC, 70), at("F", "bache"), { opacity: 0 });
+      show(lab(pfc, "left:0;width:960px;top:350px", "= SLOT", GOOD, 90), at("F", "slot"), { opacity: 0 });
+      const fpa = panel(F, 40, 830, 1000, 300, GOOD, null);
+      ITEMS.forEach((c, i) => { const t = tile(fpa, 36 + i * 118, 60, 108, 130, "", GOOD, 44); show(t, at("F", "slot") + i * 0.05, { opacity: 0 });
+        show(lab(fpa, `left:${36 + i * 118}px;top:200px;width:108px`, String(i), ACC, 40), at("F", "slot") + 0.2, { opacity: 0 }); });
+      show(fpa, f0 + 0.1, { opacity: 0 }); dimIn(fpa, f0 + 0.1, 0.5); lit(fpa, at("F", "slot"));
+      M.pill(F, "NOT PYTHON'S", at("F", "Python"), { x: 290, y: 1190, w: 500, kind: "acc", size: 46 });
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G  (10 and 18 -> slot 2; 3 and 27 -> slot 3: collisions)
+      const g0 = ST.G;
+      M.pill(G, "EXAMPLE", g0 + 0.1, { x: 780, y: 215, w: 240, kind: "out", size: 30 });
+      const gp = panel(G, 40, 290, 1000, 860, GOOD, null); show(gp, g0 + 0.1);
+      const gS = ITEMS.map((c, i) => { const t = tile(gp, 36 + i * 118, 40, 108, 130, "", GOOD, 44); show(t, g0 + 0.15 + i * 0.04, { opacity: 0 });
+        show(lab(gp, `left:${36 + i * 118}px;top:180px;width:108px`, String(i), ACC, 40), g0 + 0.25, { opacity: 0 }); return t; });
+      const eq = (txt, t, col) => show(lab(gp, "left:0;width:1000px;top:690px", txt, col || "#E8EDF6", 80), t, { opacity: 0 });
+      const gE = [eq("10 ÷ 8 → 2", at("G", "10", 0)), eq("18 ÷ 8 → 2", at("G", "18", 0)), eq("3 ÷ 8 → 3", at("G", "3", 0)), eq("27 ÷ 8 → 3", at("G", "27"))];
+      const hideAt = [at("G", "18", 0), at("G", "3", 0), at("G", "27"), at("G", "collision") - 0.2]; hideAt.forEach((v, i) => { hideAt[i] = v - 0.05; });
+      gE.forEach((d, i) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, hideAt[i]));
+      const chip = (txt, slot, row, tIn, col) => { const c = tile(gp, 36 + slot * 118, 520 + 0, 108, 90, txt, col || ACC, 44);
+        tl.set(c, { opacity: 0, y: 0 }, 0); tl.to(c, { opacity: 1, duration: 0.25, immediateRender: false }, tIn);
+        tl.to(c, { y: -230 + row * 100 + 0, duration: 0.6, ease: "power3.inOut", immediateRender: false }, tIn + 0.3); return c; };
+      // chips start at y 520 (under the slot row) and rise to just below their slot (y 230 / 330)
+      const ch = [chip("10", 2, 0, at("G", "10", 1)), chip("18", 2, 1, at("G", "18", 1)), chip("3", 3, 0, at("G", "3", 1)), chip("27", 3, 1, at("G", "27"))];
+      ch.forEach((c, i) => { gsap.set(c, { x: 0 }); });
+      [ch[1], ch[3]].forEach((c, i) => ring(c, at("G", "collision"), HOT));
+      [gS[2], gS[3]].forEach((t) => ring(t, at("G", "collision"), HOT));
+      stamp(gp, "COLLISION", 500, 790, HOT, at("G", "collision"));
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H  (average O(1): flat line against a rising list line; not guaranteed)
+      const h0 = ST.H;
+      const ph = panel(H, 60, 230, 960, 620, GOOD, "AVERAGE O(1)"); show(ph, h0 + 0.1);
+      el(ph, "left:110px;top:90px;width:4px;height:430px;background:#8FA3C8"); el(ph, "left:110px;top:516px;width:780px;height:4px;background:#8FA3C8");
+      lab(ph, "left:20px;top:60px;width:200px", "STEPS", "#B8C4DC", 38); lab(ph, "left:600px;top:540px;width:300px", "NAMES →", "#B8C4DC", 38);
+      const lr = el(ph, "left:114px;top:512px;width:760px;height:10px;border-radius:5px;background:" + HOT + ";transform-origin:0 50%"); tl.set(lr, { rotation: -26 }, 0); grow(lr, at("H", "lookup") - 0.4, 0.5);
+      lab(ph, "left:560px;top:130px;width:200px", "LIST", HOT, 44); show(ph.lastChild, at("H", "lookup"), { opacity: 0 });
+      const lg = el(ph, "left:114px;top:420px;width:760px;height:10px;border-radius:5px;background:" + GOOD + ";transform-origin:0 50%"); grow(lg, at("H", "average"), 0.8);
+      lab(ph, "left:540px;top:360px;width:300px", "HASH MAP", GOOD, 44); show(ph.lastChild, at("H", "average", 0) + 0.4, { opacity: 0 });
+      const pg = panel(H, 60, 900, 960, 380, HOT, "NOT GUARANTEED"); dimIn(pg, h0 + 0.1, 0.4); lit(pg, at("H", "par"));
+      const piles = [0, 1, 2, 3, 4].map((i) => { const t = tile(pg, 408, 70, 144, 52, ["10", "18", "26", "34", "42"][i], HOT, 34); tl.set(t, { opacity: 0, y: 0 }, 0); tl.to(t, { opacity: 1, y: i * 58, duration: 0.3, immediateRender: false }, at("H", "collision") + i * 0.2); return t; });
+      show(lab(pg, "left:600px;top:150px;width:340px", "SLOW", HOT, 54), at("H", "kai"), { opacity: 0 });
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I  (hashable keys; a list key raises TypeError because it can change)
+      const i0 = ST.I;
+      const pi = panel(I, 60, 230, 960, 400, HOT, "PYTHON"); show(pi, i0 + 0.1);
+      show(el(pi, "left:40px;top:90px;width:880px;font:700 46px var(--code);color:#E8EDF6;white-space:nowrap", '{[1, 2]: "x"}'), at("I", "banao"));
+      const er = el(pi, `left:40px;top:190px;width:880px;padding:20px 24px;border:3px solid ${HOT};border-radius:14px;background:${M.ca(HOT, .14)};font:700 42px var(--code);color:${HOT};line-height:1.35`, "TypeError: unhashable type: 'list'"); show(er, at("I", "TypeError"), { opacity: 0, scale: 1.05 });
+      const pw = panel(I, 40, 690, 1000, 560, ACC, "LIST CAN CHANGE"); dimIn(pw, i0 + 0.1, 0.4); lit(pw, at("I", "wajah"));
+      const iS = ITEMS.map((c, i) => { const t = tile(pw, 36 + i * 118, 270, 108, 130, i === 2 ? "x" : "", GOOD, 52); show(t, i0 + 0.3, { opacity: 0 });
+        show(lab(pw, `left:${36 + i * 118}px;top:410px;width:108px`, String(i), ACC, 40), i0 + 0.3, { opacity: 0 }); return t; });
+      const ik = tile(pw, 36 + 2 * 118 - 16, 80, 140, 80, "[1,2]", CYAN, 38); show(ik, at("I", "list", 1), { opacity: 0 });
+      const ia = lab(pw, `left:${36 + 2 * 118}px;top:165px;width:108px`, "▼", GOOD, 64); show(ia, at("I", "list", 1) + 0.2, { opacity: 0 });
+      const tx = 3 * 118; tl.to(ik, { x: tx, duration: 0.6, ease: "power3.inOut", immediateRender: false }, at("I", "badal"));
+      tl.to(ia, { x: tx, duration: 0.6, ease: "power3.inOut", immediateRender: false }, at("I", "badal"));
+      tl.to(ik, { color: ACC, borderColor: ACC, duration: 0.2, immediateRender: false }, at("I", "badal"));
+      show(lab(pw, `left:${36 + 5 * 118 - 50}px;top:480px;width:210px`, "? EMPTY", HOT, 40), at("I", "badal") + 0.7, { opacity: 0 });
+      dim(iS[2], at("I", "kho"), 0.3);
+      M.pill(I, "LOST", at("I", "kho"), { x: 400, y: 1290, w: 280, kind: "acc", size: 48 });
+      M.fit(I, { y: 200, h: 1100 });
+
+      // diagram: J  (check question; comment + follow)
+      const j0 = ST.J;
+      const pq = panel(J, 60, 250, 960, 470, HOT, "20 LAKH NAMES · LIST"); show(pq, j0 + 0.1);
+      NAMES.forEach((n, i) => show(tile(pq, 40 + i * 180, 110, 168, 120, n, CYAN, 36), j0 + 0.2 + i * 0.05));
+      show(lab(pq, "left:0;width:960px;top:280px", "? COMPARISONS", HOT, 80), at("J", "kitne"));
+      const q2 = panel(J, 60, 770, 960, 300, CYAN, "COMMENT KARO"); show(q2, at("J", "Comment"));
+      show(el(q2, "left:40px;right:40px;top:130px;height:100px;border-radius:50px;border:1.5px solid rgba(150,175,215,.35);font:500 44px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("J", "Comment") + 0.2, { opacity: 0 });
+      const fb = M.pill(J, "+  FOLLOW", at("J", "follow") - 0.4, { x: 300, y: 1130, w: 480, kind: "acc", size: 56 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("J", "follow"));
+      M.fit(J, { y: 200, h: 1100, maxScale: 1.2 });
+
+      ["B","C","D","E","F","G","H","I","J"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { hash: "cyan", key: "gold", slot: "good", locker: "gold", collision: "hot", list: "hot", Dictionary: "good", lookup: "good", average: "gold", TypeError: "hot", unhashable: "hot", "1000000": "hot", comparisons: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

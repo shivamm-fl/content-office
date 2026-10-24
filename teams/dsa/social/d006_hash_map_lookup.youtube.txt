@@ -1,0 +1,9 @@
+How a Hash Map Finds Items in O(1) on Average (Python)
+
+A hash map runs the key through a hash function to get a slot number and jumps straight to that slot, so on average a lookup does not scan the items, while a list compares one by one. In our own Python run, finding the last of 1000000 names in a list took 1000000 comparisons. Average O(1) is not a guarantee: collisions (two keys in one slot) slow it, and in the worst case lookup can be O(n). The mod 8 hash in the video is a made-up example, not how Python hashes. A list cannot be a key: Python raises TypeError: unhashable type: 'list'.
+
+Sources:
+https://docs.python.org/3/faq/design.html
+https://docs.python.org/3/glossary.html
+https://docs.python.org/3/reference/datamodel.html
+https://en.wikipedia.org/wiki/Hash_table

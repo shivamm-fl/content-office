@@ -1,0 +1,9 @@
+Day 6/150: Das lakh mein ek naam, seedhe kaise milta hai?
+
+Hash map har cheez ek key se rakhta hai. Hash function key ko slot number mein badal deta hai, aur lookup seedha usi slot par jaata hai. List ek-ek naam compare karti hai: 10 lakh naam, aakhiri naam, 1000000 comparisons (maine Python mein chalaya). Dictionary mein wahi naam ek lookup mein mil gaya.
+
+Chhota example (sirf example, Python aise hash nahi karta): key ko 8 se bhaag do, jo bache wahi slot. 10 aur 18 dono slot 2 par aate hain, ye collision hai. Isiliye lookup average O(1) hai, har baar ki guarantee nahi. List ko key banao to TypeError: unhashable type list aata hai, kyunki list badal sakti hai.
+
+Ab tum batao: list mein 20 lakh naam hon, aakhiri naam dhoondhna ho, to kitne comparisons lagenge? Pehle comment mein apna guess likho. Answer: 2000000 comparisons, jabki dictionary mein average ek lookup. Baat Python ki hai.
+
+#dsa #hashmap #codinginterview
