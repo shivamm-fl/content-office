@@ -1,0 +1,8 @@
+RAG mein metadata filter kab lagate hain? Interview jawab
+
+Interview mein poochha jata hai: RAG mein search sirf 2024 ke documents mein karni hai, to 2022 ka document result mein aane se kaise rokoge? Jawab: documents par metadata (year, department, language) lagao aur search ke saath filter lagao. Catch: pgvector README ke hisaab se approximate index ke saath filter index scan ke baad apply hota hai, isliye narrow filter par kam rows bachti hain. README ka example: 10 percent match karne wali condition, default ef_search 40, to lagbhag 4 rows (illustration, guaranteed output nahi). Fix: exact search ya iterative scans, trade-off extra computation.
+
+Is video mein: metadata filter rag, vector search filter, rag interview question, ai engineer interview.
+
+Sources:
+https://github.com/pgvector/pgvector

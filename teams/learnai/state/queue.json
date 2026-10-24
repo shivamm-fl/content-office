@@ -992,7 +992,7 @@
       "visual_idea": "A shelf of document cards tagged 2022, 2023, 2024; a question card says 2024 only; first the search ignores the tags and the answer card comes from a 2022 document (wrong), then a FILTER gate keeps only 2024 cards and the right card is picked; last, a narrow 40-card candidate strip is filtered after the scan and only 4 cards survive, with a bar showing 10 percent.",
       "everyday_anchor": "Looking for a shirt in a shop: you first pick the size and colour shelf, instead of checking every shirt in the shop.",
       "trap": "Searching the whole index when the user's question already says which product, date or language it is about.",
-      "example": "EXAMPLE (state/runs/q114_filter_run.py): pgvector README: with an approximate index the filter is applied after the index scan; a condition matching 10 % of rows with default hnsw.ef_search 40 leaves about 4 rows (40 x 0.10 = 4.0). Our toy simulation of 1000 searches (random 10 % tags, 40 candidates): average 4.05 rows left, min 0, max 12, 14 searches returned 0 rows.",
+      "example": "EXAMPLE (pgvector README): with an approximate index the filter is applied after the index scan; a condition matching 10 % of rows with default ef_search 40 leaves about 4 rows. Illustration, not a guaranteed output.",
       "sources": [
         "https://github.com/pgvector/pgvector",
         "https://www.sbert.net/examples/applications/retrieve_rerank/README.html"
@@ -1001,7 +1001,7 @@
         "pgvector README (fetched 2026-10-24): 'With approximate indexes, filtering is applied after the index is scanned'; 10 % matching rows with HNSW and ef_search 40 gives about 4 rows on average; exact indexes work well for conditions that match a low percentage of rows; iterative index scans scan more of the index when needed.",
         "Say 'pgvector' when quoting this; other databases handle filters differently."
       ],
-      "length_target_s": 105,
+      "length_target_s": 125,
       "cover_headline": "When do you filter retrieval?",
       "thumb_text": "Metadata Filter",
       "keywords": [
@@ -1014,8 +1014,8 @@
       "status": "planned",
       "qa_passed": false,
       "hook_source": "strategist, 2026-10-24",
-      "script_file": "state/scripts/q114.txt",
-      "script_locked": true
+      "script_locked": true,
+      "script_file": "state/scripts/q114.txt"
     },
     {
       "id": "q115",

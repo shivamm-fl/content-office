@@ -1,0 +1,11 @@
+Interviewer ne poocha: RAG mein search sirf 2024 ke documents mein karni hai, 2022 ka document result mein na aaye, ye kaise ensure karoge?
+
+Jawab: sirf similarity search par bharosa mat karo, metadata filter lagao (year, department, language jaise tags). Filter batata hai kaun se documents eligible hain, similarity batati hai kaun se eligible documents question se relevant hain.
+
+Catch: approximate index (jaise HNSW) poora database nahi, sirf selected candidates dekhta hai. pgvector README ke hisaab se kuch query plans mein filter index scan ke baad lagta hai. Example (illustration, guaranteed output nahi): 40 candidates aaye aur filter sirf 10 percent match kare, to average 4 rows bachengi.
+
+Fix: exact search, ya pgvector ke iterative scans. Trade-off: better recall ke liye extra computation.
+
+Quick test: 40 candidates aur 10 percent filter, average kitni matching rows? Comment karo! Roz ek practical AI engineering interview question ke liye follow karo.
+
+#AI #AIInterview #RAG

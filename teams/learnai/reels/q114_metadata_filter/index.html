@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>When do you filter retrieval?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="163" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="163" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="163" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="163" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const dim = (d, t, op) => { tl.to(d, { opacity: op, duration: 0.3, ease: "power2.out", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tile = (w, h, text, col, size) => `<div style="width:${w}px;height:${h}px;border-radius:24px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;text-align:center;font:800 ${size || 48}px ${COD};letter-spacing:.04em;color:${TEXT}">${text}</div>`;
+      const tileEl = (host, x, y, w, h, text, col, t, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`, tile(w, h, text, col, size)), t, { opacity: 0, y: 20 });
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 34}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 54}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const ring = (host, x, y, w, h, col, t, rad) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 20}px;border:5px solid ${col}`), t, { opacity: 0, scale: 1.04 }, 0.3);
+      const grp = (host) => { const g = el(host, "left:0;top:0;width:1080px;height:1920px"); g.setAttribute("data-nofit", ""); return g; };
+      const docCard = (host, x, y, w, h, yr, col, t, ys) => { const c = glass(host, x, y, w, h, col, 18);
+        el(c, `left:20px;top:10px;font:800 ${ys || 44}px ${COD};color:${col}`, yr);
+        [0, 1, 2].forEach((i) => el(c, `left:20px;top:${Math.round(h * 0.45 + i * h * 0.16)}px;width:${Math.round((w - 40) * (i === 2 ? 0.6 : 1))}px;height:${Math.max(8, Math.round(h * 0.07))}px;border-radius:5px;background:${ca(TEXT, 0.22)}`));
+        return show(c, t, { opacity: 0, y: 20 }); };
+      const strip = (host, x, y, cols, rows, cw, ch, gap, col, t, each) => { const out = [];
+        for (let r = 0; r < rows; r++) for (let k = 0; k < cols; k++) { const c = el(host, `left:${x + k * (cw + gap)}px;top:${y + r * (ch + gap)}px;width:${cw}px;height:${ch}px;border-radius:10px;border:2.5px solid ${ca(col, 0.7)};background:${ca(col, 0.12)}`);
+          show(c, t + (r * cols + k) * each, { opacity: 0, scale: 0.8 }, 0.25); out.push(c); }
+        return out; };
+      const paint = (c, col, t) => tl.to(c, { borderColor: ca(col, 0.95), backgroundColor: ca(col, 0.45), duration: 0.25, immediateRender: false }, t);
+      const HITS = [5, 14, 22, 37];
+
+      // ============ A: shelf of dated documents, 2024 kept, 2022 blocked ============
+      // diagram: A
+      M.hook(["2024 ONLY", "block 2022"], { size: 112, top: 215 });
+      const yrs = ["2022", "2023", "2024"]; const rowEls = [];
+      yrs.forEach((yr, r) => { const col = r === 2 ? CYAN : MUTED; const row = [];
+        [0, 1, 2].forEach((k) => row.push(docCard(A, 100 + k * 300, 480 + r * 205, 280, 170, yr, col, 0.05 + (r * 3 + k) * 0.06)));
+        rowEls.push(row); });
+      ring(A, 84, 468 + 2 * 205, 912, 194, GOOD, at("A", "2024"));
+      ring(A, 84, 468, 912, 194, HOT, at("A", "2022"));
+      rowEls[0].forEach((c) => dim(c, at("A", "2022") + 0.4, 0.35));
+      stamp(A, "NOT 2022", 540, 1110, HOT, at("A", "result"), 58);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: the short answer ============
+      // diagram: B
+      pillC(B, "YOUR ANSWER", 200, P("B", 0), { size: 36, h: 58, col: GOOD });
+      M.box(B, { x: 80, y: 300, w: 920, h: 250, label: "SIMILARITY ONLY", icon: "search", color: MUTED, size: 54 }).show(at("B", "similarity") - 0.1);
+      M.icon(B, "cross", 856, 360, 110, HOT).show(at("B", "mat"));
+      M.box(B, { x: 80, y: 610, w: 920, h: 250, label: "METADATA FILTER", icon: "shield", color: GOOD, size: 54 }).show(at("B", "metadata"));
+      M.box(B, { x: 80, y: 920, w: 920, h: 250, label: "CATCH", icon: "warn", color: ACC, size: 64 }).show(at("B", "catch"));
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: the wrong policy gets retrieved ============
+      // diagram: C
+      pillC(C, "EXAMPLE", 200, P("C", 0), { size: 30, h: 48, col: MUTED });
+      pillC(C, "LEAVE POLICY", 275, at("C", "leave"), { size: 40, h: 62, col: CYAN });
+      const c22 = docCard(C, 80, 380, 440, 360, "2022", MUTED, at("C", "documents"), 64);
+      const c24 = docCard(C, 560, 380, 440, 360, "2024", CYAN, at("C", "2024"), 64);
+      const bub = (host, x, y, w, h, txt, col, t, right) => { const b = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${right ? "28px 28px 6px 28px" : "28px 28px 28px 6px"};border:2px solid ${ca(col, .7)};background:${ca(col, .14)};display:flex;align-items:center;padding:0 30px;font:700 44px ${LAT};white-space:nowrap`, txt); return show(b, t, { opacity: 0, y: 18 }); };
+      bub(C, 300, 840, 700, 100, "Leaves this year?", CYAN, at("C", "saal"), true);
+      tag(C, "≈ SAME TEXT", 0, 765, 1080, at("C", "donon"), ACC, 44);
+      const pick = ring(C, 66, 366, 468, 388, HOT, at("C", "2022", 1), 24);
+      el(c22, `right:20px;top:14px;font:800 34px ${COD};color:${HOT}`, "PICKED"); tl.set(c22.lastChild, { opacity: 0 }, 0); tl.to(c22.lastChild, { opacity: 1, duration: 0.3, immediateRender: false }, at("C", "2022", 1));
+      dim(c24, at("C", "2022", 1) + 0.3, 0.35);
+      const bot = bub(C, 80, 970, 760, 100, 'AI: old info <span style="color:#E8596B;margin-left:14px">✗</span>', HOT, at("C", "confidently"), false);
+      stamp(C, "WRONG DOCUMENT", 540, 1110, HOT, at("C", "galat"), 50);
+      stamp(C, "WRONG ANSWER", 540, 1230, HOT, at("C", "answer"), 50);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: metadata on every document ============
+      // diagram: D
+      pillC(D, "STEP 1: METADATA", 200, P("D", 0), { size: 38, h: 62, col: ACC });
+      const dc = glass(D, 190, 300, 700, 330, CYAN, 24); show(dc, P("D", 0) + 0.1, { opacity: 0, y: 20 });
+      el(dc, `left:30px;top:22px;font:800 46px ${COD};color:${CYAN}`, "LEAVE POLICY");
+      [0, 1, 2, 3].forEach((i) => el(dc, `left:30px;top:${120 + i * 48}px;width:${i === 3 ? 380 : 640}px;height:14px;border-radius:7px;background:${ca(TEXT, .22)}`));
+      [["year: 2024", "year", ACC], ["department: HR", "department", CYAN], ["language: English", "language", VIOLET]].forEach(([txt, w, col], i) => {
+        const r = el(D, `left:190px;top:${680 + i * 105}px;width:700px;height:90px;border-radius:18px;border:2.5px solid ${ca(col, .85)};background:${ca(col, .10)};display:flex;align-items:center;padding:0 34px;font:700 46px ${COD};color:${TEXT}`, txt);
+        show(r, at("D", w), { opacity: 0, x: -40 }); });
+      tileEl(D, 100, 1040, 410, 130, "RELEVANT", CYAN, at("D", "relevance"), 44);
+      tileEl(D, 570, 1040, 410, 130, "ELIGIBLE ✓", GOOD, at("D", "eligibility"), 44);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: filter with the query ============
+      // diagram: E
+      const E1 = grp(E); tl.set(E1, { opacity: 0 }, 0); tl.set(E1, { opacity: 1 }, 0.01); gone(E1, at("E", "yaad") - 0.5, 0.3);
+      pillC(E1, "STEP 2: FILTER", 200, P("E", 0), { size: 38, h: 62, col: ACC });
+      const sb = glass(E1, 100, 300, 880, 110, CYAN, 55); show(sb, at("E", "query") - 0.1);
+      el(sb, `left:100px;top:22px;font:700 50px ${LAT};white-space:nowrap`, "leave policy");
+      sb.insertAdjacentHTML("beforeend", "");
+      M.icon(E1, "search", 124, 316, 78, CYAN).show(at("E", "query") - 0.1);
+      const fc = el(E1, `left:100px;top:440px;width:880px;height:110px;border-radius:55px;border:3px solid ${ACC};background:${ca(ACC, .12)};display:flex;align-items:center;justify-content:center;font:800 56px ${COD};color:${ACC}`, "year = 2024");
+      show(fc, at("E", "Example"), { opacity: 0, y: 16 });
+      const yl = ["2022", "2024", "2023", "2024", "2022", "2023"]; const ecs = [];
+      yl.forEach((yr, i) => { const c = docCard(E1, 80 + (i % 3) * 315, 620 + Math.floor(i / 3) * 235, 290, 205, yr, yr === "2024" ? CYAN : MUTED, at("E", "documents") + i * 0.1, 56); ecs.push(c); });
+      yl.forEach((yr, i) => { const x = 80 + (i % 3) * 315, y = 620 + Math.floor(i / 3) * 235;
+        if (yr === "2024") ring(E1, x - 8, y - 8, 306, 221, GOOD, at("E", "satisfy"), 22);
+        else { dim(ecs[i], at("E", "requested"), 0.2); const x2 = M.icon(E1, "cross", x + 90, y + 52, 110, HOT); x2.show(at("E", "requested") + 0.2); } });
+      const E2 = grp(E); tl.set(E2, { opacity: 0 }, 0); show(E2, at("E", "yaad") + 0.1, { opacity: 0 }, 0.3);
+      pillC(E2, "DIFFERENT JOBS", 200, at("E", "yaad") + 0.1, { size: 38, h: 62, col: MUTED });
+      M.box(E2, { x: 80, y: 320, w: 920, h: 330, label: "FILTER", sub: "ELIGIBLE?", icon: "shield", color: ACC, size: 70, subsize: 46 }).show(at("E", "metadata", 1));
+      M.box(E2, { x: 80, y: 710, w: 920, h: 330, label: "SIMILARITY", sub: "RELEVANT?", icon: "search", color: CYAN, size: 70, subsize: 46 }).show(at("E", "semantic"));
+      ring(E2, 66, 306, 948, 358, GOOD, at("E", "Filter"), 28);
+      ring(E2, 66, 696, 948, 358, GOOD, at("E", "similarity", 1), 28);
+
+      // ============ F: the approximate-index catch ============
+      // diagram: F
+      const F1 = grp(F); tl.set(F1, { opacity: 0 }, 0); tl.set(F1, { opacity: 1 }, 0.01); gone(F1, at("F", "pgvector") - 0.1, 0.3);
+      pillC(F1, "APPROXIMATE INDEX", 200, P("F", 0), { size: 40, h: 64, col: CYAN });
+      const dots = [];
+      for (let r = 0; r < 8; r++) for (let k = 0; k < 11; k++) { const d = el(F1, `left:${102 + k * 82}px;top:${300 + r * 82}px;width:56px;height:56px;border-radius:50%;background:${ca(CYAN, .28)}`);
+        show(d, P("F", 0) + 0.15 + (r * 11 + k) * 0.006, { opacity: 0, scale: 0.5 }, 0.3); dots.push(d); }
+      tag(F1, "HNSW", 0, 975, 1080, at("F", "HNSW"), ACC, 56);
+      const sw = el(F1, `left:84px;top:288px;width:912px;height:80px;border-radius:14px;border:4px solid ${HOT};background:${ca(HOT, .14)}`);
+      tl.set(sw, { opacity: 0 }, 0); tl.set(sw, { opacity: 1 }, at("F", "exhaustively"));
+      for (let r = 0; r < 8; r++) tl.to(sw, { y: r * 82, duration: 0.12, ease: "none", immediateRender: false }, at("F", "exhaustively") + r * 0.13);
+      tl.set(sw, { opacity: 0 }, at("F", "selected") - 0.15);
+      const selI = []; for (let r = 2; r < 5; r++) for (let k = 3; k < 7; k++) selI.push(r * 11 + k);
+      selI.forEach((i, n) => tl.to(dots[i], { backgroundColor: ca(CYAN, 1), duration: 0.25, immediateRender: false }, at("F", "selected") + n * 0.04));
+      ring(F1, 102 + 3 * 82 - 18, 300 + 2 * 82 - 18, 4 * 82 + 10, 3 * 82 + 10, ACC, at("F", "selected") + 0.3, 24);
+      tag(F1, "CANDIDATES", 0, 1060, 1080, at("F", "candidates"), CYAN, 52);
+      const F2 = grp(F); tl.set(F2, { opacity: 0 }, 0); show(F2, at("F", "pgvector") + 0.1, { opacity: 0 }, 0.3); gone(F2, at("F", "agar") - 0.45, 0.3);
+      pillC(F2, "PGVECTOR", 200, at("F", "pgvector") + 0.1, { size: 44, h: 66, col: ACC });
+      M.box(F2, { x: 100, y: 320, w: 880, h: 250, label: "1 INDEX SCAN", icon: "search", color: CYAN, size: 54 }).show(at("F", "scan") - 0.2);
+      M.arrow(F2, { from: [540, 580], to: [540, 690], color: ACC, w: 10 }).show(at("F", "baad") - 0.3, 0.3);
+      M.box(F2, { x: 100, y: 700, w: 880, h: 250, label: "2 FILTER", icon: "shield", color: ACC, size: 54 }).show(at("F", "baad"));
+      tag(F2, "AFTER SCAN", 0, 1010, 1080, at("F", "apply"), HOT, 60);
+      const F3 = grp(F); tl.set(F3, { opacity: 0 }, 0); show(F3, at("F", "agar") + 0.1, { opacity: 0 }, 0.3);
+      pillC(F3, "EXAMPLE", 200, at("F", "agar") + 0.1, { size: 36, h: 58, col: MUTED });
+      const sc = strip(F3, 95, 300, 10, 4, 80, 66, 10, CYAN, at("F", "40"), 0.02);
+      tag(F3, "40 CANDIDATES", 0, 625, 1080, at("F", "candidates", 1), ACC, 46);
+      const trk = glass(F3, 100, 710, 880, 56, null, 28); show(trk, at("F", "filter") - 0.1, { opacity: 0 });
+      const fill = el(F3, `left:100px;top:710px;width:88px;height:56px;border-radius:28px;background:${ca(GOOD, .85)};transform-origin:0 50%`);
+      tl.set(fill, { opacity: 0 }, 0); tl.fromTo(fill, { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, at("F", "10"));
+      tag(F3, "10%", 0, 775, 1080, at("F", "percent"), GOOD, 46);
+      sc.forEach((c, i) => { if (HITS.indexOf(i) >= 0) paint(c, GOOD, at("F", "match") + 0.1 + HITS.indexOf(i) * 0.12); else dim(c, at("F", "match") + 0.1, 0.18); });
+      tileEl(F3, 100, 850, 880, 110, "40 × 10% = 4", ACC, at("F", "average"), 56);
+      tileEl(F3, 100, 990, 880, 130, "≈ 4 ROWS", GOOD, at("F", "4"), 66);
+      tileEl(F3, 100, 1150, 880, 90, "NOT GUARANTEED", HOT, at("F", "guaranteed"), 44);
+      [["INDEX", "index", 2, 80], ["DATA", "data", 0, 395], ["QUERY PLAN", "plan", 0, 710]].forEach(([t, w, n, x]) => tileEl(F3, x, 1255, 290, 80, t, MUTED, at("F", w, n), 34));
+
+      // ============ G: the fixes ============
+      // diagram: G
+      const G1 = grp(G); tl.set(G1, { opacity: 0 }, 0); tl.set(G1, { opacity: 1 }, 0.01); gone(G1, at("G", "Exact") - 0.15, 0.3);
+      pillC(G1, "NARROW FILTER", 200, P("G", 0), { size: 40, h: 64, col: HOT });
+      for (let k = 0; k < 5; k++) { const s = el(G1, `left:${80 + k * 190}px;top:380px;width:170px;height:230px;border-radius:18px;border:3px dashed ${ca(MUTED, .7)}`); show(s, P("G", 0) + 0.1 + k * 0.05, { opacity: 0 }); }
+      const one = docCard(G1, 80, 380, 170, 230, "", GOOD, at("G", "kam"), 30);
+      tag(G1, "TOO FEW", 0, 680, 1080, at("G", "kam") + 0.1, HOT, 64);
+      tileEl(G1, 240, 800, 600, 110, "FIX?", ACC, at("G", "karoge"), 60);
+      const G2 = grp(G); tl.set(G2, { opacity: 0 }, 0); show(G2, at("G", "Exact") - 0.1, { opacity: 0 }, 0.3);
+      const opt = (y, col, icon, lab, sub, t) => { const c = glass(G2, 80, y, 920, 250, col, 28); show(c, t, { opacity: 0, y: 24 });
+        M.icon(G2, icon, 112, y + 60, 110, col).show(t + 0.1);
+        el(c, `left:170px;top:40px;font:800 56px ${LAT};white-space:nowrap`, lab);
+        el(c, `left:170px;top:125px;font:700 38px ${COD};color:${col};white-space:nowrap`, sub); return c; };
+      const o1 = opt(300, GOOD, "search", "EXACT SEARCH", "CHECK ALL MATCHES", at("G", "Exact"));
+      const o2 = opt(590, CYAN, "gear", "ITERATIVE SCAN", "SCAN MORE", at("G", "iterative"));
+      const cells1 = [0, 1, 2, 3, 4, 5].map((k) => show(el(G2, `left:${680 + k * 52}px;top:440px;width:44px;height:44px;border-radius:10px;border:2.5px solid ${ca(GOOD, .8)};background:${ca(GOOD, .12)}`), at("G", "exhaustive") - 0.2, { opacity: 0 }, 0.25));
+      cells1.forEach((c, k) => paint(c, GOOD, at("G", "exhaustive") + k * 0.18));
+      const cells2 = [0, 1, 2, 3, 4].map((k) => show(el(G2, `left:${620 + k * 70}px;top:730px;width:56px;height:56px;border-radius:10px;border:2.5px solid ${ca(CYAN, .8)};background:${ca(CYAN, .12)}`), at("G", "iterative") + 0.3, { opacity: 0 }, 0.25));
+      cells2.forEach((c, k) => paint(c, CYAN, at("G", "candidates") + k * 0.22));
+      pillC(G2, "TRADE-OFF", 890, at("G", "Trade-off"), { size: 40, h: 62, col: ACC });
+      tileEl(G2, 80, 990, 440, 150, "BETTER RECALL", GOOD, at("G", "better"), 38);
+      tileEl(G2, 560, 990, 440, 150, "MORE COMPUTE", HOT, at("G", "extra"), 38);
+
+      // ============ H: what to say ============
+      // diagram: H
+      pillC(H, "SAY THIS", 200, P("H", 0), { size: 38, h: 62, col: GOOD });
+      M.icon(H, "mic", 800, 192, 78, GOOD).show(P("H", 0));
+      [["1", "FILTER BY YEAR", ACC, "shield", "filter"], ["2", "RANK BY SIMILARITY", CYAN, "search", "rank"], ["3", "CHECK RECALL", VIOLET, "eye", "validate"], ["4", "EXACT / ITERATIVE", GOOD, "gear", "exact"]].forEach(([n, lab, col, ic, w], i) => {
+        const y = 300 + i * 215, t = at("H", w);
+        const c = glass(H, 80, y, 920, 185, col, 26); show(c, t - 0.1, { opacity: 0, y: 22 });
+        el(c, `left:28px;top:50px;width:84px;height:84px;border-radius:50%;background:${ca(col, .22)};border:3px solid ${col};display:flex;align-items:center;justify-content:center;font:800 48px ${COD}`, n);
+        el(c, `left:140px;top:52px;font:800 ${lab.length > 16 ? 50 : 56}px ${LAT};white-space:nowrap`, lab);
+        M.icon(H, ic, 880, y + 50, 84, col).show(t); });
+      M.fit(H, { y: 200, h: 1100 });
+
+      // ============ I: quick test and the close ============
+      // diagram: I
+      pillC(I, "QUICK TEST", 200, P("I", 0), { size: 40, h: 64, col: ACC });
+      const si = strip(I, 95, 310, 10, 4, 80, 66, 10, CYAN, at("I", "40") - 0.2, 0.02);
+      tag(I, "40 CANDIDATES", 0, 640, 1080, at("I", "40"), CYAN, 44);
+      tileEl(I, 100, 730, 880, 110, "FILTER = 10%", ACC, at("I", "10"), 56);
+      tileEl(I, 100, 880, 880, 150, "? ROWS", GOOD, at("I", "Average"), 80);
+      const cc = glass(I, 120, 1080, 840, 110, CYAN, 55); show(cc, at("I", "Comment"));
+      el(cc, `left:40px;top:30px;font:500 36px ${COD};color:#8592AD`, "Add a comment...");
+      const fb = M.pill(I, "+  FOLLOW", at("I", "follow") - 0.4, { x: 400, y: 1235, kind: "acc", size: 40 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("I", "follow"));
+      M.fit(I, { y: 200, h: 1100 });
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H); M.wipe(M.S.I);
+      M.finish({ kw: { "2024": "good", "2022": "hot", filter: "gold", metadata: "cyan", pgvector: "violet", exact: "good", iterative: "cyan", galat: "hot", similarity: "cyan", catch: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

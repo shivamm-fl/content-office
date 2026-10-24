@@ -994,7 +994,7 @@
       "title": "Interview: Retrieval mein metadata filter kab lagaoge aur kyun?",
       "kind": "question",
       "topic": "When the question already names a product, date or language, filter the search by that metadata so the model only sees the right documents; but with an approximate vector index the filter can run after the index scan and leave few or no rows, so use an exact search, a better index setting (pgvector iterative scans) or filter first.",
-      "status": "planned"
+      "status": "built"
     },
     {
       "id": "q115",
