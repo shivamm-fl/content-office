@@ -23,3 +23,6 @@ Planned Day 4 (d004, structure, how arrays sit in memory): hook type direct_ques
 
 ## 2026-10-23 (planner)
 Planned Day 5 (d005, structure, strings as array-like and immutable): hook type relatable_stake with the untested formula wrong_way_first (company_specific has no fetched interview page), so the hook is the real error a beginner meets when changing a letter; no own numbers yet. Running example: s[0]='j' raises TypeError, and a copy-count model for building a string with + (1000 appends: 500500 copies vs 1000 for join), run by the researcher; Python-only claims are labelled, the dict-key reason and CPython += optimisation are kept out as unverified.
+
+## 2026-10-24 (planner)
+Planned Day 6 (d006, structure, hash map lookup): hook type surprising_fact with a plain payoff line (10 lakh names found without searching), the least used of the last five alongside interviewer_asked and direct_question; no own numbers yet. Running example: 10 lakh list scan 1000000 comparisons vs one dict lookup, run by the researcher; claim kept to average O(1) with collisions named, and the Python worst-case number and resize thresholds kept out as unverified.
