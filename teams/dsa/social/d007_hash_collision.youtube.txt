@@ -1,0 +1,7 @@
+Hash Collision Explained: Chaining vs Open Addressing
+
+A hash collision is when two keys land in the same slot. Chaining keeps a small list in each slot; open addressing (for example linear probing) moves to the next free slot. In our toy mod 8 example (made-up keys, run in a small script), finding key 26 in a chain took 3 comparisons. If many keys pile into few slots, a lookup can take up to n steps: average lookup is O(1), worst case O(n), and O(1) holds when keys are spread across slots.
+
+Sources:
+https://en.wikipedia.org/wiki/Hash_table
+https://docs.python.org/3/faq/design.html

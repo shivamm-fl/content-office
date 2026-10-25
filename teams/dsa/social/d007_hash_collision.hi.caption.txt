@@ -1,0 +1,11 @@
+Day 7/150: Interviewer ne poocha: do naam ek hi jagah rakhne pade, to kya karoge?
+
+Jab do key ek hi slot par aa jaati hain, use collision kehte hain. Chhota example (sirf example): key ko 8 se bhaag do, jo bache wahi slot. 10, 18 aur 26 teeno slot 2 par aate hain.
+
+Pehla tarika chaining: har slot mein ek chhoti list. 26 ko dhoondhne mein 3 comparisons lage (maine chalakar dekha). Doosra tarika open addressing: ek slot mein ek hi cheez, slot bhara ho to agla khaali slot dekho, ise linear probing kehte hain.
+
+Agar bahut saari keys kuch hi slots mein jama ho jaayein (jaise 1000 keys, sab 8 ke gunaj), to ek lookup mein 1000 comparisons tak lag sakte hain. Isiliye hash map ka lookup average O(1) hai, worst case O(n). O(1) tabhi, jab keys slots mein phaili hon.
+
+Ab tum batao: hamari chaining wali table mein key 27 dhoondhni ho, to kitne comparisons lagenge? Comment mein likho. Answer: 2 comparisons, kyunki slot 3 ki list [3, 27] hai.
+
+#dsa #hashmap #codinginterview
