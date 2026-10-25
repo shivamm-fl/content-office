@@ -53,3 +53,10 @@ Numbers: asked hooks q109, q111, q113 (n=3) median skip 54.8 %, watch 17.5, 18.3
 Series: a003 1,530 views, 12.4 s, 7 shares (best since a001); a004 (131 s, "ek ek word guess") 483 views, 65.7 % skip, 10.7 s, 1.38 saves per 100 reach; a005 has no data yet (posted 16:37 UTC yesterday).
 Do: a006 opens with one concrete scene, no jargon in line 1, 120 to 150 s. q114, q115: asked hook with the full question, 95 to 120 s; no jargon in a stake hook. Ending unchanged (check question, follow).
 Owner decision: none needed.
+
+## 2026-10-25 (growth analyst, standup for a007, q116, q117)
+Numbers: a005 (98.5 s, asked-question opener, n=1 for the shape) 1,432 views, 54.1 % skip, 15.2 s watch, 15.4 % retention, 1.7 saves and 0.34 shares per 100 reach: best skip and best retention of the series so far (a001 66.6 %, a002 66.7 %, a003 69.2 %, a004 66.7 %), saves lower than a001 (2.5). q112 final (stake, cosine similarity in line 1): 483 views, 75 % skip, 9.4 s, 0.53 shares per 100 reach, worst of the stake hooks. q113 (asked) 1,354 views, 56.4 %, 11.1 s, 0.68 shares. q114 (asked, 163 s) 1,048 views, 57.3 %, 19.1 s, 2.25 saves per 100 reach. q115 (asked, 160.5 s) 185 views, hours old: 66 %, 13.2 s, hint only. a006 has no data yet (posted 15:14 UTC 24 Oct, not synced).
+Types: stake q108, q110, q112 (n=3) median skip 60.1 %; asked q109, q111, q113, q114 (n=4, q115 too early) median 57.8 %. Gap under 3 points: retire nothing. q112 alone is the outlier, and it is the one with jargon in line 1.
+Experiment q112: bar was hold above 41 % and watch above 12 s; it got 25 % hold and 9.4 s, so it missed on n=1. Close it as weak; the stake-on-a-picture idea had 2 of 3 passes (q108, q110), so keep it with no jargon in line 1.
+Do: a007 (tokens bill/limits myth-bust) open with the concrete bill or cut-off scene, ~100 s like a005 rather than 130 to 150 s; watch saves and shares. q116 and q117 take the asked hook with the full question; q117 ("prompt vs context engineering") has jargon risk, so open with the scene, define both terms in the first teaching lines; aim 95 to 125 s, since 160 s reels (q114, q115) hold only 8 to 12 %.
+Owner decision: none needed.

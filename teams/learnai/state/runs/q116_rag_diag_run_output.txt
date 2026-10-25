@@ -1,0 +1,11 @@
+'How many days does a refund take after return?': top2=['c1', 'c2'] gold=c1 gold_retrieved=True answer=ok
+'Will shipping cost me anything?': top2=['c1', 'c2'] gold=c5 gold_retrieved=False answer=wrong
+'Can I get cash for my gift card?': top2=['c3', 'c2'] gold=c3 gold_retrieved=True answer=wrong
+'Is delivery free for me as a premium member?': top2=['c5', 'c2'] gold=c5 gold_retrieved=True answer=ok
+'How do I stop an order I just placed?': top2=['c4', 'c5'] gold=c4 gold_retrieved=True answer=ok
+'What is the minimum order for free delivery?': top2=['c5', 'c1'] gold=c5 gold_retrieved=True answer=wrong
+retrieval hit rate (gold in top 2): 5/6
+wrong answers: 3
+ -> RETRIEVAL problem (right chunk never reached the model) | Will shipping cost me anything?
+ -> GENERATION problem (right chunk was there) | Can I get cash for my gift card?
+ -> GENERATION problem (right chunk was there) | What is the minimum order for free delivery?

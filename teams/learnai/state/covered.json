@@ -1003,6 +1003,42 @@
       "kind": "question",
       "topic": "The first search is cheap and fast, so it finds candidates but its order is rough; a reranker reads the question together with each candidate and scores them again, so the right one moves to the top. It is slower, so it runs only on the short list, not on millions of documents.",
       "status": "built"
+    },
+    {
+      "id": "a007",
+      "track": "series",
+      "unit": "A4",
+      "title": "Why tokens decide your bill, your limits and some silly mistakes",
+      "kind": "concept",
+      "topic": "Myth: AI is billed and limited by words. Truth: the bill and the limit are counted in tokens, input and output both, and the same meaning can cost very different token counts (measured example: one sentence is 10 tokens in English, 14 in Roman Hinglish, 42 in Devanagari Hindi), so count tokens, not words, before you budget.",
+      "hook_formula": "plain_question",
+      "hook_type": "direct_question",
+      "status": "planned",
+      "planned": "2026-10-25"
+    },
+    {
+      "id": "q116",
+      "track": "interview",
+      "unit": "E6",
+      "title": "Interview: RAG ka jawab galat aaya. Retrieval kharab hai ya generation, kaise pakdoge?",
+      "kind": "question",
+      "topic": "Do not judge only the final answer: for each wrong answer first look at the chunks that were retrieved. If the right chunk is not among them, retrieval failed; if it is there and the answer is still wrong, generation failed. Measure the two parts separately (RAGAS has separate metrics for each part), then fix only the failing part.",
+      "hook_formula": "concrete wrong answer, then the interview question",
+      "hook_type": "relatable_stake",
+      "status": "planned",
+      "planned": "2026-10-25"
+    },
+    {
+      "id": "q117",
+      "track": "interview",
+      "unit": "D2",
+      "title": "Interview: Prompt engineering aur context engineering mein asli fark kya hai?",
+      "kind": "question",
+      "topic": "Prompt engineering is choosing the words of the instruction; context engineering is choosing everything the model sees when it answers (instructions, documents, tool results, history) and keeping only what helps. If the model lacks the information, rewording the prompt will not fix it.",
+      "hook_formula": "interviewer_asked",
+      "hook_type": "interviewer_asked",
+      "status": "planned",
+      "planned": "2026-10-25"
     }
   ]
 }

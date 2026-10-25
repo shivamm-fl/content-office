@@ -1056,6 +1056,117 @@
       "hook_source": "strategist, 2026-10-24",
       "script_file": "state/scripts/q115.txt",
       "script_locked": true
+    },
+    {
+      "id": "a007",
+      "track": "series",
+      "day": 7,
+      "unit": "A4",
+      "format": "myth-bust",
+      "title": "Why tokens decide your bill, your limits and some silly mistakes",
+      "one_idea": "Myth: AI is billed and limited by words. Truth: the bill and the limit are counted in tokens, input and output both, and the same meaning can cost very different token counts (measured example: one sentence is 10 tokens in English, 14 in Roman Hinglish, 42 in Devanagari Hindi), so count tokens, not words, before you budget.",
+      "hook_type": "direct_question",
+      "spoken_hook": "Same sentence हिंदी में लिखा, bill 4 गुना क्यों?",
+      "hook_formula": "plain_question",
+      "trap": "Counting words to guess the cost and the limit.",
+      "visual_idea": "Two receipts side by side for the same refund message: ENGLISH and HINDI. The sentence is cut into coloured tiles (10 tiles vs 42 tiles). A meter fills tile by tile for the bill and for a context-window bar; the reply tiles also fill the same bar (input plus output). Last card: a checklist of three mistakes (count words, forget the reply, assume every model cuts the same).",
+      "everyday_anchor": "A courier charging by weight of the parcel, not by the number of items inside.",
+      "example": "EXAMPLE (measured token counts, tiktoken cl100k_base, real run state/runs/a007_token_bill_run.py output in a007_token_bill_run_output.txt): English 'Please send me the refund status of my order.' 9 words, 10 tokens; Roman Hinglish 'Kripya mere order ka refund status bhejiye.' 7 words, 14 tokens; Devanagari 8 words, 42 tokens. INVENTED round numbers for the lesson: Rs 1 per 1,000 tokens, 10,000 messages a day gives Rs 100 / Rs 140 / Rs 420; an 8,000-token window holds 800 / 571 / 190 such messages. Counts belong to this tokenizer only.",
+      "sources": [
+        "https://developers.openai.com/api/docs/pricing",
+        "https://platform.claude.com/docs/en/docs/about-claude/pricing",
+        "https://platform.claude.com/docs/en/docs/build-with-claude/context-windows",
+        "https://huggingface.co/learn/llm-course/chapter2/4",
+        "https://github.com/openai/tiktoken"
+      ],
+      "facts_to_verify": [
+        "Researcher (fetched 2026-10-25): API pricing pages price input and output tokens separately (OpenAI and Anthropic); Claude context-windows doc: the window is counted in tokens. Say only these.",
+        "Do NOT cite the OpenAI help article 4936856 (403 for the researcher). The claim that Devanagari costs more tokens is only our own measured example; say 'in this tokenizer, this sentence'.",
+        "Say only 'different models use different tokenizers'; no price number of any real model is spoken."
+      ],
+      "length_target_s": 135,
+      "cover_headline": "Tokens decide your AI bill",
+      "thumb_text": "Token bill",
+      "keywords": [
+        "ai token cost",
+        "chatgpt token limit",
+        "token vs word",
+        "ai engineer roadmap"
+      ],
+      "caption_note": "Growth note 2026-10-24: open on the one concrete scene, no jargon in line 1, 120 to 150 s; a006 already taught what a token is, so do not re-teach tiles and ids: start from the bill. Judge on saves and shares.",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-25"
+    },
+    {
+      "id": "q116",
+      "track": "interview",
+      "unit": "E6",
+      "format": "question",
+      "title": "Interview: RAG ka jawab galat aaya. Retrieval kharab hai ya generation, kaise pakdoge?",
+      "one_idea": "Do not judge only the final answer: for each wrong answer first look at the chunks that were retrieved. If the right chunk is not among them, retrieval failed; if it is there and the answer is still wrong, generation failed. Measure the two parts separately (RAGAS has separate metrics for each part), then fix only the failing part.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Bot ने refund का गलत जवाब दिया, कसूर किसका?",
+      "hook_formula": "concrete wrong answer, then the interview question",
+      "trap": "Judging only the final answer instead of checking whether the right chunk was retrieved.",
+      "visual_idea": "A support bot bubble with a wrong refund answer; a two-box pipeline SEARCH then ANSWER with a magnifier on the chunks between them; a table of six test questions with a tick or cross in two columns (RIGHT CHUNK FOUND, ANSWER OK); the 5/6 hit-rate bar; a fork card: chunk missing = fix search, chunk present = fix prompt or model.",
+      "everyday_anchor": "A student fails an open-book exam: was the right page not opened, or was it opened and misread?",
+      "example": "EXAMPLE (invented shop documents, toy word-overlap search; counts computed by real run state/runs/q116_rag_diag_run.py, output q116_rag_diag_run_output.txt): 6 test questions, right chunk in the top 2 for 5 of 6; 3 wrong answers: 1 retrieval problem, 2 generation problems.",
+      "sources": [
+        "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/",
+        "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/context_recall/",
+        "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/faithfulness/"
+      ],
+      "facts_to_verify": [
+        "Researcher (fetched 2026-10-25): RAGAS has four metrics (context recall, context precision, faithfulness, answer relevancy). Say only 'RAGAS has separate metrics for each part'; do not define the four beyond what the pages say."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "RAG wrong: search or answer?",
+      "thumb_text": "RAG debug",
+      "keywords": [
+        "rag evaluation",
+        "rag wrong answer",
+        "retrieval vs generation",
+        "ai engineer interview"
+      ],
+      "caption_note": "Growth note 2026-10-24: no jargon in a stake hook, full question spoken in the reel, 95 to 120 s, keep the ending.",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-25"
+    },
+    {
+      "id": "q117",
+      "track": "interview",
+      "unit": "D2",
+      "format": "question",
+      "title": "Interview: Prompt engineering aur context engineering mein asli fark kya hai?",
+      "one_idea": "Prompt engineering is choosing the words of the instruction; context engineering is choosing everything the model sees when it answers (instructions, documents, tool results, history) and keeping only what helps. If the model lacks the information, rewording the prompt will not fix it.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Prompt engineering और context engineering में असली फ़र्क क्या है?",
+      "hook_formula": "interviewer_asked",
+      "trap": "Rewording the prompt when the model lacks the information it needs.",
+      "visual_idea": "One question card 'What is my refund status?'. First the model gets only a polished instruction and answers wrongly; a prompt-wording dial turned many times changes nothing. Then a context box fills with labelled cards (RULES, ORDER DATA, POLICY, LAST 2 MESSAGES) and the answer card turns right; a small trash bin removes an old irrelevant card.",
+      "everyday_anchor": "Briefing a new employee: a perfectly worded task is useless if you do not hand over the order file.",
+      "example": "EXAMPLE (invented, no numbers): refund question answered wrongly with a reworded prompt, rightly once the order record and policy are put in the context.",
+      "sources": [
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+      ],
+      "facts_to_verify": [
+        "Researcher (fetched 2026-10-25): Anthropic's engineering post discusses context engineering as curating all tokens given to the model, as the next step after prompt engineering. Say 'Anthropic describes it as ...' only if the line is quoted from the page; never say Anthropic coined it."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Prompt vs context engineering",
+      "thumb_text": "Context?",
+      "keywords": [
+        "context engineering",
+        "prompt engineering vs context engineering",
+        "ai engineer interview",
+        "llm interview question"
+      ],
+      "caption_note": "Growth note 2026-10-24: asked hook with the full question, 95 to 120 s, keep the ending. Fallback company_specific hook not used: Anthropic page supports describing, not coining.",
+      "status": "planned",
+      "qa_passed": false,
+      "hook_source": "strategist, 2026-10-25"
     }
   ]
 }

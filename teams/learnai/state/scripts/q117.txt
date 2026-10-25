@@ -1,0 +1,9 @@
+A: @hook Interviewer ने पूछा: Prompt engineering और context engineering में असली फ़र्क क्या है?
+B: तुम्हारा जवाब होना चाहिए: prompt engineering यानी instruction के words चुनना, और context engineering यानी model को जवाब देते वक़्त जो कुछ भी दिखता है, वो सब चुनना। तीन steps में देखते हैं।
+C: मान लो एक support chatbot है, ये example है। Customer पूछता है, “मेरा refund कहाँ है?” Model को बस इतना मिला है: “तुम helpful support agent हो।” वो अंदाज़े से गलत जवाब देता है। तुम prompt को 10{दस} बार reword करते हो, फिर भी जवाब वही गलत। क्योंकि model के पास order की information है ही नहीं।
+D: पहला step, prompt। यानी instruction के words: model का role क्या है, जवाब किस format में दे। ये बताता है कि करना क्या है।
+E: दूसरा step, context। यानी जवाब देते वक़्त model को जो कुछ दिखता है: rules, order का record, refund policy, tool का result और पिछले 2{two} messages। इनमें क्या जाएगा, ये चुनना context engineering है। अब वही सवाल order record और policy के साथ जाता है, और जवाब सही आता है, क्योंकि information सामने है।
+F: तीसरा step, जो काम का नहीं उसे निकालो। Model एक बार में सीमित text पढ़ सकता है, इसे context window कहते हैं। पुराने irrelevant messages वहाँ जगह घेरते हैं और ध्यान भटकाते हैं, इसलिए सिर्फ़ वही रखो जो इस सवाल में काम आए।
+G: एक boundary: अगर information model के पास पहले से है और जवाब बस गलत format में आ रहा है, तो prompt ठीक करना ही सही है।
+H: Interview में बोलो: “Prompt engineering is wording the instruction. Context engineering is choosing everything the model sees. If the model lacks information, rewording will not fix it.”
+I: अब बताओ: तुम्हारे chatbot का आख़िरी गलत जवाब prompt की वजह से था या information की कमी से? Comment में लिखो, prompt या context। रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।

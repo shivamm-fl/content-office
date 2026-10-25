@@ -1,0 +1,14 @@
+A: @hook Bot ने refund का गलत जवाब दिया, कसूर किसका?
+B: Interviewer यही पूछता है: RAG का जवाब गलत आए, तो कैसे पकड़ोगे कि गलती retrieval की है या generation की?
+RAG यानी bot पहले अपने documents में search करता है, फिर जो मिला उससे जवाब लिखता है। Search retrieval है, जवाब लिखना generation। Document का टुकड़ा chunk है।
+C: तुम्हारा जवाब: final answer मत देखो, पहले देखो कि search ने कौन से chunks दिए। सही chunk नहीं मिला, तो retrieval फेल। मिला फिर भी जवाब गलत, तो generation फेल। 3{three} steps हैं।
+D: मान लो shop के bot को 6{six} test questions दिए, और 3{तीन} जवाब गलत आए। सीधे prompt बदलोगे, पर गलती search की थी, तो कुछ नहीं बदलेगा, क्योंकि model को सही जानकारी मिली ही नहीं।
+E: पहला step: हर गलत जवाब के लिए वो chunks निकालो जो model को भेजे गए थे, क्योंकि model सिर्फ़ वही पढ़ता है जो उसे मिलता है।
+F: दूसरा step: हर question का सही chunk पहले से तय रखो, और देखो वो top 2{two} में आया या नहीं।
+6{six} में से 5{five} बार आया।
+"Shipping free है?" में सही chunk आया ही नहीं, तो वो retrieval की गलती थी। "Gift card का cash मिलेगा?" में सही chunk था, फिर भी जवाब गलत, तो वो generation की गलती थी।
+3{तीन} गलत जवाबों में 1{एक} retrieval की निकली, 2{दो} generation की।
+G: तीसरा step: सिर्फ़ वही हिस्सा ठीक करो जो फेल हुआ। Retrieval फेल तो search या chunking बदलो, generation फेल तो prompt या model, क्योंकि गलत जगह fix करोगे तो जवाब वैसे ही रहेंगे। RAGAS में दोनों हिस्सों के लिए अलग-अलग metrics होते हैं।
+H: सावधानी: ये तभी चलता है जब हर test question का सही chunk तुमने पहले से तय किया हो।
+I: Interview में बोलो: "मैं final answer नहीं, पहले retrieved chunks देखता हूँ। सही chunk नहीं मिला तो retrieval ठीक करता हूँ, मिला फिर भी जवाब गलत तो generation।"
+J: तुम्हारे bot की आख़िरी गलती किसकी थी? Comment में R लिखो retrieval के लिए, G लिखो generation के लिए। रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।

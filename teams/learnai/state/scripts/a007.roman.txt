@@ -1,0 +1,13 @@
+A: Tumhara wahi message Hindi mein, to bill 4 guna kyun?
+B: AI ka bill words se nahi, tokens se banta hai. Token yaani text ka wo chhota tukda, jo model padhta hai.
+C: Courier wala parcel ka weight ginta hai, andar kitni cheezein hain ye nahi. AI bhi aise hi chalta hai.
+D: Maine ek refund message ek tokenizer mein chalaya: "Please send me the refund status of my order." Nau words, aur 10 tokens.
+E: Wahi baat Devanagari Hindi mein: aath words, par 42 tokens. Words lagbhag barabar, tokens chaar guna. Ye count isi tokenizer aur isi sentence ka hai.
+F: Maan lo 1,000 tokens ka ek rupaya hai. Ye sirf example hai, real price nahi.
+G: Roz 10,000 aise messages: English mein 100 rupaye, Devanagari mein 420 rupaye. Words ginkar budget banate, to dono barabar lagte.
+H: Ab teen baatein. Pehli, bill: input ke tokens gine jaate hain aur AI ke output ke bhi, aur dono ka rate alag hota hai.
+I: Doosri, limit: model ek baar mein jitna text rakh sakta hai, use context window kehte hain. Ye bhi tokens mein ginti jaati hai, aur prompt aur reply dono isi mein baithte hain.
+J: Maan lo window 8,000 tokens ki hai. English ke aise 800 messages aate hain, Devanagari ke sirf 190.
+K: Teesri: har model ka tokenizer alag ho sakta hai, to ye counts badal jaayenge. Budget se pehle usi model mein tokens gino.
+L: To teen galtiyaan yaad rakho: words ginna, reply bhool jaana, aur maan lena ki har model ek jaisa kaatta hai.
+M: Ab tum batao: Hinglish ka 14 tokens wala message, 10,000 baar bheja, to bill kitna? Comment mein likho, sahi jawab caption mein hai. Roz ek AI idea ke liye follow kar lo.
