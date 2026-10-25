@@ -33,3 +33,9 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 - 2026-10-20: Put one line in `state/experiments.md` before a trial reel goes out (what is new, what we look at), read it 72 hours later, and call a few hundred views promising or weak, never proof.
 
 ## Community manager
+
+## Motion Designer: a007 notes (2026-10-25)
+- `M.W` strips punctuation from the caption words and the number commas ("1,000" is "1000"): look up `"bill"`, `"order"`, `"10000"`, never `"bill:"` or `"10,000"`.
+- To show a size ratio honestly, draw equal frames with grid cells of true relative area (a 4.2x token cost = 2.05x side) instead of counting out hundreds of tiles.
+- Devanagari token pieces are byte fragments and cannot be shown as text: use blank coloured tiles for them, and real text only for English pieces.
+- Do not name a scene `M`: it clashes with the `M` kit object; call the element `M_`.

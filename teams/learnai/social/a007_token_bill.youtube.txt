@@ -1,0 +1,14 @@
+AI bill words nahi, tokens se banta hai
+
+AI ka bill aur limit words se nahi, tokens se gine jaate hain, input aur output dono. Is video mein dekhte hain ki ek hi refund message English mein 10 tokens, Roman Hinglish mein 14 aur Devanagari Hindi mein 42 tokens kyun banta hai, bill aur context window par iska kya asar padta hai, aur budget banate waqt kaun si teen galtiyan nahi karni chahiye.
+
+Is video mein: token kya hota hai, token vs word, AI token cost, context window, tokenizer, input aur output tokens.
+
+Token counts hamare apne tiktoken run se hain (cl100k_base, ek sentence), alag models alag tarah se kaat sakte hain. Rs 1 per 1,000 tokens sirf example price hai, real price nahi. Bill mein input aur output tokens ke alag rate, aur context window mein prompt aur reply dono ka tokens mein ginna, OpenAI aur Anthropic ke docs se hai.
+
+Sources:
+https://developers.openai.com/api/docs/pricing
+https://platform.claude.com/docs/en/docs/about-claude/pricing
+https://platform.claude.com/docs/en/docs/build-with-claude/context-windows
+https://huggingface.co/learn/llm-course/chapter2/4
+https://github.com/openai/tiktoken

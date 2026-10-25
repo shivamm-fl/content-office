@@ -1063,15 +1063,17 @@
       "day": 7,
       "unit": "A4",
       "format": "myth-bust",
+      "status": "planned",
       "title": "Why tokens decide your bill, your limits and some silly mistakes",
       "one_idea": "Myth: AI is billed and limited by words. Truth: the bill and the limit are counted in tokens, input and output both, and the same meaning can cost very different token counts (measured example: one sentence is 10 tokens in English, 14 in Roman Hinglish, 42 in Devanagari Hindi), so count tokens, not words, before you budget.",
       "hook_type": "direct_question",
-      "spoken_hook": "Same sentence हिंदी में लिखा, bill 4 गुना क्यों?",
+      "spoken_hook": "तुम्हारा वही message हिंदी में, तो bill 4{चार} गुना क्यों?",
       "hook_formula": "plain_question",
+      "hook_source": "scriptwriter, 2026-10-25",
       "trap": "Counting words to guess the cost and the limit.",
-      "visual_idea": "Two receipts side by side for the same refund message: ENGLISH and HINDI. The sentence is cut into coloured tiles (10 tiles vs 42 tiles). A meter fills tile by tile for the bill and for a context-window bar; the reply tiles also fill the same bar (input plus output). Last card: a checklist of three mistakes (count words, forget the reply, assume every model cuts the same).",
+      "visual_idea": "Two receipts side by side for the same refund message: ENGLISH and HINDI. Sentence cut into coloured tiles (10 vs 42). Meters fill for bill and context window; reply tiles also fill the window. Last card: three mistakes.",
       "everyday_anchor": "A courier charging by weight of the parcel, not by the number of items inside.",
-      "example": "EXAMPLE (measured token counts, tiktoken cl100k_base, real run state/runs/a007_token_bill_run.py output in a007_token_bill_run_output.txt): English 'Please send me the refund status of my order.' 9 words, 10 tokens; Roman Hinglish 'Kripya mere order ka refund status bhejiye.' 7 words, 14 tokens; Devanagari 8 words, 42 tokens. INVENTED round numbers for the lesson: Rs 1 per 1,000 tokens, 10,000 messages a day gives Rs 100 / Rs 140 / Rs 420; an 8,000-token window holds 800 / 571 / 190 such messages. Counts belong to this tokenizer only.",
+      "example": "EXAMPLE (measured, tiktoken cl100k_base, state/runs/a007_token_bill_run.py): English 9 words 10 tokens; Roman Hinglish 7 words 14 tokens; Devanagari 8 words 42 tokens. INVENTED: Rs 1 per 1,000 tokens, 10,000 messages a day = Rs 100 / 140 / 420; 8,000-token window holds 800 / 571 / 190 messages.",
       "sources": [
         "https://developers.openai.com/api/docs/pricing",
         "https://platform.claude.com/docs/en/docs/about-claude/pricing",
@@ -1079,12 +1081,7 @@
         "https://huggingface.co/learn/llm-course/chapter2/4",
         "https://github.com/openai/tiktoken"
       ],
-      "facts_to_verify": [
-        "Researcher (fetched 2026-10-25): API pricing pages price input and output tokens separately (OpenAI and Anthropic); Claude context-windows doc: the window is counted in tokens. Say only these.",
-        "Do NOT cite the OpenAI help article 4936856 (403 for the researcher). The claim that Devanagari costs more tokens is only our own measured example; say 'in this tokenizer, this sentence'.",
-        "Say only 'different models use different tokenizers'; no price number of any real model is spoken."
-      ],
-      "length_target_s": 135,
+      "length_target_s": 125,
       "cover_headline": "Tokens decide your AI bill",
       "thumb_text": "Token bill",
       "keywords": [
@@ -1092,11 +1089,7 @@
         "chatgpt token limit",
         "token vs word",
         "ai engineer roadmap"
-      ],
-      "caption_note": "Growth note 2026-10-24: open on the one concrete scene, no jargon in line 1, 120 to 150 s; a006 already taught what a token is, so do not re-teach tiles and ids: start from the bill. Judge on saves and shares.",
-      "status": "planned",
-      "qa_passed": false,
-      "hook_source": "strategist, 2026-10-25"
+      ]
     },
     {
       "id": "q116",

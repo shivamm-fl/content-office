@@ -1,0 +1,19 @@
+Day 7/150: Tumhara wahi message Hindi mein, to AI ka bill 4 guna kyun?
+
+AI ka bill aur limit words se nahi, tokens se bante hain. Token text ka chhota tukda hai jo model padhta hai, aur bill mein input aur output dono ke tokens gine jaate hain, dono ka rate alag hota hai.
+
+Courier parcel ka weight gindta hai, andar kitni cheezen hain ye nahi. AI bhi aise hi chalta hai.
+
+Hamne ek refund message OpenAI ke tiktoken (cl100k_base) mein chalaya. English: 9 words, 10 tokens. Roman Hinglish: 7 words, 14 tokens. Devanagari Hindi: 8 words, 42 tokens. Ye counts isi tokenizer aur isi sentence ke hain.
+
+Example price (sirf example, real price nahi): Rs 1 per 1,000 tokens. Roz 10,000 messages par English Rs 100, Devanagari Rs 420. Context window bhi tokens mein gini jaati hai, aur prompt aur reply dono usi mein baithte hain. 8,000 tokens ki window mein English ke 800 messages aate hain, Devanagari ke 190.
+
+Teen galtiyan: words ginna, reply bhool jaana, aur maan lena ki har model ek jaisa kaatta hai. Budget se pehle usi model mein tokens gino.
+
+Jawab: 14 tokens x 10,000 = 140,000 tokens = Rs 140 (example price par).
+
+Ab tum batao: Hinglish ka 14 tokens wala message 10,000 baar bheja, to bill kitna? Comment mein likho.
+
+Roz ek AI idea ke liye follow karo.
+
+#AI #LLM #150DaysOfAI

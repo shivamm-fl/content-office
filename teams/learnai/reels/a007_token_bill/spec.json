@@ -1,0 +1,109 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5,
+    "K": 2.5,
+    "L": 2.5,
+    "M": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "D",
+      0,
+      0.3
+    ],
+    [
+      "err",
+      "E",
+      0,
+      0.2
+    ],
+    [
+      "tick",
+      "G",
+      0,
+      0.3
+    ],
+    [
+      "pop",
+      "H",
+      0,
+      0.6
+    ],
+    [
+      "click",
+      "I",
+      0,
+      0.3
+    ],
+    [
+      "warn",
+      "J",
+      0,
+      0.8
+    ],
+    [
+      "pop",
+      "L",
+      0,
+      0.5
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook तुम्हारा वही message हिंदी में, तो bill 4{चार} गुना क्यों?",
+      "B": "@emph AI का bill words से नहीं, tokens से बनता है। || Token यानी text का वो छोटा टुकड़ा, जो model पढ़ता है।",
+      "C": "Courier वाला parcel का weight गिनता है, अंदर कितनी चीज़ें हैं ये नहीं। | AI भी ऐसे ही चलता है।",
+      "D": "मैंने एक refund message एक tokenizer में चलाया: \"Please send me the refund status of my order.\" | नौ words, और 10{ten} tokens।",
+      "E": "वही बात Devanagari हिंदी में: आठ words, पर 42{forty-two} tokens। || Words लगभग बराबर, tokens चार गुना। | ये count इसी tokenizer और इसी sentence का है।",
+      "F": "मान लो 1,000{one-thousand} tokens का एक रुपया है। | ये सिर्फ़ example है, real price नहीं।",
+      "G": "रोज़ 10,000{ten-thousand} ऐसे messages: English में 100{सौ} रुपये, Devanagari में 420{चार-सौ-बीस} रुपये। | Words गिनकर budget बनाते, तो दोनों बराबर लगते।",
+      "H": "अब तीन बातें। || पहली, bill: input के tokens गिने जाते हैं और AI के output के भी, और दोनों का rate अलग होता है।",
+      "I": "दूसरी, limit: model एक बार में जितना text रख सकता है, उसे context window कहते हैं। | ये भी tokens में गिनी जाती है, और prompt और reply दोनों इसी में बैठते हैं।",
+      "J": "मान लो window 8,000{eight-thousand} tokens की है। | English के ऐसे 800{eight-hundred} messages आते हैं, Devanagari के सिर्फ़ 190{one-ninety}।",
+      "K": "तीसरी: हर model का tokenizer अलग हो सकता है, तो ये counts बदल जाएँगे। | Budget से पहले उसी model में tokens गिनो।",
+      "L": "@emph तो तीन गलतियाँ याद रखो: words गिनना, reply भूल जाना, और मान लेना कि हर model एक जैसा काटता है।",
+      "M": "अब तुम बताओ: Hinglish का 14{fourteen} tokens वाला message, 10,000{ten-thousand} बार भेजा, तो bill कितना? Comment में लिखो, सही जवाब caption में है। || रोज़ एक AI idea के लिए follow कर लो।"
+    }
+  },
+  "hook_type": "direct_question",
+  "prime": "सुनो, ये बहुत interesting है!"
+}
