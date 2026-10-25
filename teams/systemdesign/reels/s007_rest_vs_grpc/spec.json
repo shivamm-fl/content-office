@@ -1,0 +1,111 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 4,
+    "B": 4,
+    "C": 4,
+    "D": 4,
+    "E": 4,
+    "F": 4,
+    "G": 4,
+    "H": 4,
+    "I": 4,
+    "J": 4
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "C",
+      2,
+      0
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "E",
+      0,
+      0
+    ],
+    [
+      "dip",
+      "H",
+      1,
+      -0.1
+    ],
+    [
+      "ok",
+      "H",
+      2,
+      0.3
+    ],
+    [
+      "warn",
+      "I",
+      1,
+      0
+    ],
+    [
+      "save",
+      "J",
+      1,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Servers की बातचीत गलत चुनी, तो पूरा app अटकेगा। || आपका app अंदर से कई छोटे servers में बँटा है, | हर server का एक ही काम। || Order करते ही Orders server, Payments server को call करता है। || इसके दो तरीके हैं, REST और gRPC, | और चुनना इस पर है कि call करने वाला कौन है।",
+      "B": "पहले REST। || ये plain HTTP पर चलता है, | और ऐसा text भेजता है जिसे इंसान भी पढ़ ले। || हर चीज़ का एक नाम होता है, | उसे बोलते हैं resource।",
+      "C": "EXAMPLE: | Orders को payment की status चाहिए। || वो भेजता है GET payments/42{forty-two}, | और जवाब में आम तौर पर JSON text आता है। || ये साधारण भाषा की चिट्ठी है, | इसलिए हर browser, हर tool, हर partner इसे बिना कुछ सीखे पढ़ लेता है।",
+      "D": "दूसरा तरीका gRPC। || यहाँ दोनों servers के बीच एक contract file होती है, | नाम .proto। || उसमें लिखा होता है कि कौन से functions हैं, | और data कैसा दिखेगा।",
+      "E": "EXAMPLE: | अब Orders सीधे GetPayment(42{forty-two}) call करता है, | जैसे अपने ही code का function हो। || जवाब compact binary में आता है, | आम तौर पर JSON text से छोटा।",
+      "F": "ये दो offices जैसा है, | जिन्होंने छपा हुआ form और shorthand तय कर लिया। || Form छोटे बनते हैं, | पर form guide के बिना कोई और उन्हें पढ़ नहीं सकता।",
+      "G": "gRPC में streaming भी है: | एक call के जवाब में टुकड़े एक के बाद एक बहते रहते हैं।",
+      "H": "तो फ़ैसला एक सवाल से होता है: | call करने वाला कौन है? || बाहर वाले, | जैसे browser, mobile app, partner, तो REST। || आपके अपने services, और दोनों तरफ़ आपका control, तो gRPC। || और अगर data लगातार बहना चाहिए, तो gRPC का फ़ायदा है।",
+      "I": "एक बात ध्यान रखना। || Browser को gRPC के लिए आम तौर पर gRPC-Web और बीच में proxy चाहिए। || इसलिए public API आम तौर पर REST रखते हैं, | और अंदर की बातचीत gRPC।",
+      "J": "@emph याद रखो: | बाहर वाले caller, तो REST। || अपने services, तो gRPC। || अब तुम बताओ: | mobile app server से बात करे, तो REST या gRPC? | Comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

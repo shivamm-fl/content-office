@@ -1,0 +1,15 @@
+Day 7/150: Servers ki baatchit galat chuni, to poora app atkega.
+
+Orders server ko Payments server se payment ki status chahiye. Iske do tarike hain: REST aur gRPC.
+
+REST plain HTTP par chalta hai aur aisa text bhejta hai jise insaan bhi padh le. Har browser, tool aur partner ise bina kuch seekhe use kar leta hai.
+gRPC mein dono servers ke beech ek .proto contract file hoti hai, jisme functions aur data ka shape likha hota hai. Jawab compact binary mein aata hai, aam taur par JSON text se chhota, aur streaming bhi milti hai.
+
+Faisla ek sawal se: call karne wala kaun hai? Bahar wale (browser, mobile app, partner) to REST. Apne services, aur dono taraf aapka control, to gRPC.
+Browser ko gRPC ke liye aam taur par gRPC-Web aur beech mein proxy chahiye, isliye public API aam taur par REST aur andar ki baatchit gRPC.
+
+(GET payments/42 aur GetPayment(42) sirf example hain.)
+
+Sawal: mobile app server se baat kare, to REST ya gRPC? Apna jawab comment karo.
+
+#systemdesign #grpc #backend

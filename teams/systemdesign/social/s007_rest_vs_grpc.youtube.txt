@@ -1,0 +1,13 @@
+REST vs gRPC in Hinglish: Which One When? (Day 7/150)
+
+REST is commonly used to mean an HTTP API that can be called with standard web libraries and tools; a GET request asks for a representation of a resource. gRPC defines services and their methods in a .proto contract file, uses protocol buffers as its default message format, carries calls over HTTP/2, and supports streaming (server, client and bidirectional). Protocol buffers are described as smaller and faster than JSON. Browsers reach gRPC services through gRPC-Web, which in the official tutorial goes through an Envoy proxy. The deciding question is who is calling: outside callers such as browsers, mobile apps and partners suit REST; your own services, where you control both sides, suit gRPC. The GET /payments/42 and GetPayment(42) calls are invented examples. Explained with a plain letter and two offices with a printed form and shorthand.
+
+Sources:
+https://grpc.io/docs/what-is-grpc/introduction/
+https://grpc.io/docs/what-is-grpc/core-concepts/
+https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md
+https://grpc.io/docs/platforms/web/basics/
+https://protobuf.dev/overview/
+https://www.rfc-editor.org/rfc/rfc9113.html
+https://developer.mozilla.org/en-US/docs/Glossary/REST
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods

@@ -101,5 +101,22 @@
   "hook_type": "direct_question",
   "format": "trade-off",
   "title": "TCP vs UDP: reliable ya fast, kab kaun"
+ },
+ "s007": {
+  "status": "built",
+  "track": "series",
+  "folder": "reels/s007_rest_vs_grpc",
+  "mp4": "reels/s007_rest_vs_grpc_hi.mp4",
+  "duration_s": 124.0,
+  "cover": "brand/covers/s007_rest_vs_grpc.png",
+  "caption": "social/s007_rest_vs_grpc.hi.caption.txt",
+  "published": false,
+  "qa_passed": false,
+  "hook_formula": "relatable_stake: the stake first, no interview preamble; the choice is named in the next line",
+  "hook_source": "hook-writer relatable_stake",
+  "hook_score": 30,
+  "hook_type": "relatable_stake",
+  "format": "trade-off",
+  "title": "REST vs gRPC: ek server doosre server ko kaise bulaye"
  }
 }

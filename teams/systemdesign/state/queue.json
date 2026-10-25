@@ -10,27 +10,9 @@
       "one_idea": "REST and gRPC are two ways for one server to call another: REST sends readable text over plain HTTP to named resources and works with every tool and browser; gRPC calls a named function from a shared contract file, sends compact binary, and supports streaming; the axis that decides is who is calling (anyone, including browsers and outside partners, versus your own services that you control on both sides).",
       "spoken_hook": "Servers की बातचीत गलत चुनी, तो पूरा app अटकेगा।",
       "hook_type": "relatable_stake",
-      "hook_formula": "relatable_stake: the stake first (the wrong way for servers to talk drags the whole app), no interview preamble; the choice is named in the next line",
-      "hook_source": "hook-writer relatable_stake; least used of the last six reels (Day 3 is its only use; Day 1, 5 interviewer_asked and Day 2, 6 direct_question are used twice, Day 4 surprising_fact once)",
-      "hook_10s": "Servers की बातचीत गलत चुनी, तो पूरा app अटकेगा। Order करते ही एक server दूसरे server को call करता है, और इसके दो आम तरीके हैं: REST और gRPC। एक सबसे आसान, दूसरा अपनों के बीच तेज़। कब कौन सा? [frame 0: two server boxes with an arrow between them carrying a readable text card on the top arrow and a small dense block of dots on the bottom arrow, an app phone icon above showing a spinner]",
-      "hook_candidates": [
-        {
-          "formula": "relatable_stake",
-          "text": "Servers की बातचीत गलत चुनी, तो पूरा app अटकेगा।"
-        },
-        {
-          "formula": "interviewer_asked",
-          "text": "Interviewer ने पूछा: दो internal services आपस में बात करें, तो REST लोगे या gRPC?"
-        },
-        {
-          "formula": "direct_question",
-          "text": "एक server दूसरे server को call कैसे करता है?"
-        }
-      ],
-      "problem_line": "आपका एक app अंदर से कई छोटे servers में बँटा होता है, और वो हर request पर एक-दूसरे को call करते हैं। उस call का तरीका गलत चुना तो या तो बाहर वालों के लिए इस्तेमाल करना मुश्किल, या अंदर वाली हर call ज़रूरत से भारी।",
-      "visual_idea": "Two server boxes, Orders and Payments. Top lane (REST): an arrow labelled with a small request card 'GET /orders/42' travels to Payments and comes back as a readable text card with fields; a phone, a browser and a partner box can all plug into the same arrow. Bottom lane (gRPC): a shared contract sheet sits between both servers, a function-call arrow 'GetOrder(42)' goes across as a compact block of dots, and the answer streams back as a row of small blocks one after another. Last, two boxes 'outside callers' and 'your own services' slide to the matching lane.",
-      "everyday_anchor": "Sending a letter in plain language that anyone at any post office can read (REST), versus two offices that agreed on a fixed printed form and a shorthand code, so their forms are short and quick but nobody else can read them without the form guide (gRPC).",
-      "example": "EXAMPLE (invented): the Orders service needs an order's status from the Payments service. With REST it sends GET /payments/42 and reads a JSON text reply; with gRPC it calls GetPayment(42) from a shared contract file and gets a compact binary reply. No speed numbers are claimed.",
+      "hook_formula": "relatable_stake: the stake first, no interview preamble; the choice is named in the next line",
+      "hook_source": "hook-writer relatable_stake",
+      "visual_idea": "Two server boxes, Orders and Payments. Top lane REST, bottom lane gRPC, then callers slide to the matching lane.",
       "sources": [
         "https://grpc.io/docs/what-is-grpc/introduction/",
         "https://grpc.io/docs/what-is-grpc/core-concepts/",
@@ -41,27 +23,9 @@
         "https://developer.mozilla.org/en-US/docs/Glossary/REST",
         "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods"
       ],
-      "facts_to_verify": [
-        "REST = a group of architecture design constraints; a resource is transferred via standardized client/server interactions; in everyday use a 'REST API' means an HTTP service callable with standard web libraries and tools, and does not always follow every REST constraint (MDN Glossary REST) - fetched. Do not claim REST must use JSON; say 'usually JSON' only as 'commonly', or label it an example.",
-        "HTTP methods: GET retrieves a resource representation, POST submits and often changes state, PUT replaces, DELETE deletes (MDN HTTP Methods) - fetched. The page does not define 'idempotent'; if used, define it in one plain sentence or drop it.",
-        "gRPC: a client calls a method on a server on another machine as if it were a local object; services are defined in .proto files; protocol buffers are both its interface definition language and its message format; clients and servers can be written in different supported languages; code is generated with protoc and a gRPC plugin; the client has a stub with the same methods (grpc.io introduction) - fetched.",
-        "gRPC has four method kinds: unary, server streaming, client streaming, bidirectional streaming; clients can set a deadline (grpc.io core concepts) - fetched. Show at most unary and one streaming kind.",
-        "gRPC is carried over HTTP/2 framing (gRPC PROTOCOL-HTTP2.md, fetched). HTTP/2 allows multiple concurrent exchanges on one connection and compresses header fields; binary message framing (RFC 9113 abstract and intro, section 5) - fetched. Say it in one clause; do not teach HTTP/2.",
-        "Protocol Buffers: a language-neutral, platform-neutral mechanism for serializing structured data; the page says it is 'like JSON, except smaller and faster'; messages cannot be fully interpreted without the .proto file; new fields can be added without breaking old code (protobuf.dev overview) - fetched. Say 'compact binary, usually smaller than JSON text'; do NOT give any 'N times faster' or size number.",
-        "Browsers: gRPC-Web is the route from browsers, and the grpc.io example puts a proxy (Envoy) in between; the page does not say flatly that browsers cannot call gRPC. Say 'browsers typically need gRPC-Web and a proxy'.",
-        "Do NOT claim 'gRPC is faster' flatly, nothing about any company using one or the other, no numbers. Axis = who calls (outside, unknown callers vs your own services on both sides) and whether you need streaming.",
-        "Define in plain words once: REST, gRPC, contract file (.proto). At most three terms; mention JSON and HTTP/2 only as one-clause asides. Define 'service' as one small server doing one job."
-      ],
-      "length_target_s": 120,
+      "length_target_s": 130,
       "cover_headline": "REST vs gRPC: Which One When?",
       "thumb_text": "REST ya gRPC?",
-      "keywords": [
-        "rest vs grpc difference in hindi",
-        "rest aur grpc mein kya fark hai",
-        "rest vs grpc system design interview",
-        "grpc kya hai hindi",
-        "microservices communication rest vs grpc"
-      ],
       "status": "planned",
       "qa_passed": false
     }
