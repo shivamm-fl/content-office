@@ -236,6 +236,62 @@
       "status": "planned",
       "qa_passed": false,
       "script_file": "state/scripts/d006.txt"
+    },
+    {
+      "id": "d007",
+      "track": "series",
+      "day": 7,
+      "unit": "P1",
+      "format": "structure",
+      "title": "Hash collision: do key ek hi slot par aa jaayein toh",
+      "one_idea": "A collision is two keys landing in the same slot; chaining keeps a small list in each slot and open addressing probes to the next free slot, and when many keys pile into few slots a lookup walks a long chain or probe run, so the average O(1) slows toward O(n).",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: दो नाम एक ही जगह रखने पड़ें, तो क्या करोगे?",
+      "hook_formula": "interviewer_asked_plain_question",
+      "hook_source": "least used type of the last six (d001 only); question uses no term before it is explained (learnings 2026-10-22); no staged opener, first teaching line follows at once",
+      "hook_10s": "Interviewer ने पूछा: दो नाम एक ही जगह रखने पड़ें, तो क्या करोगे? मान लो आठ खाने की अलमारी है, और दस और अठारह दोनों का खाना दो नंबर निकला। इसे collision कहते हैं, और इसके दो हल हैं। [frame 0: row of 8 empty boxes numbered 0 to 7, two keys 10 and 18 sliding toward box 2]",
+      "hook_candidates": [
+        {
+          "text": "Interviewer ने पूछा: दो नाम एक ही जगह रखने पड़ें, तो क्या करोगे?",
+          "formula": "interviewer_asked_plain_question"
+        },
+        {
+          "text": "दो चाबियाँ, एक ही खाना। अब क्या?",
+          "formula": "plain_topic_question"
+        },
+        {
+          "text": "हैश मैप में दो key टकरा जाएँ, तो लुकअप धीमा क्यों हो जाता है?",
+          "formula": "payoff_question"
+        }
+      ],
+      "visual_idea": "A row of 8 numbered boxes. Key 10 drops into box 2, then 18 arrives at the same box and a clash marker shows. Fix 1: a small list hangs under box 2 and 18 joins it. Fix 2: 18 slides right into the next empty box. Finally a table where all keys fall into one box, and a pointer walks a long list one by one while a spread-out table needs one hop.",
+      "everyday_anchor": "Society post-box wall: flat 2 gets two parcels; either keep both in a tray at flat 2's box (chaining) or put the second in the next empty box down the row (probing).",
+      "example": "EXAMPLE (invented keys, toy hash key mod 8, run): keys 10,18,26,3,27,5. Chaining table: slot 2=[10,18,26], slot 3=[3,27], slot 5=[5]; finding 26 takes 3 comparisons. Open addressing with linear probing (step +1): 10->slot 2, 18->slot 3 (2 tries), 26->slot 4 (3 tries), 3->slot 5 (3 tries), 27->slot 6 (4 tries), 5->slot 7 (3 tries). Worst case EXAMPLE: 1000 keys all multiples of 8 land in one slot, longest chain 1000; 1000 spread keys in 1000 slots, average chain 1.0.",
+      "code_run_output": "chain [[], [], [10, 18, 26], [3, 27], [], [5], [], []]\nprobe table [None, None, 10, 18, 26, 3, 27, 5], tries {10:1, 18:2, 26:3, 3:3, 27:4, 5:3}\nchain lookup 26 compares: 3\nworst: 1000 keys mod 8==0 -> longest chain 1000\n1000 random keys, 1000 slots -> average chain 1.0 (longest 5)",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Hash_table",
+        "https://docs.python.org/3/faq/design.html"
+      ],
+      "facts_to_verify": [
+        "Collision definition, separate chaining (a list of key-value pairs per slot) and open addressing (entries stored in the bucket array itself, resolved by probing; linear probing step usually 1): Wikipedia Hash table, fetched 2026-10-25.",
+        "Average lookup is independent of table size in a well-dimensioned table; worst-case search is O(n); open addressing degrades badly as load factor approaches 1 and loops forever on a full table (Wikipedia). Say average O(1), worst case O(n), never O(1) guaranteed.",
+        "Python-only, label it: CPython dicts are resizable hash tables and the O(1) claim assumes keys have different hash values (docs.python.org design FAQ). Do not claim how CPython resolves collisions, its probe sequence or resize thresholds: not on a fetched page.",
+        "Re-run the toy mod-8 chaining and linear probing code and show its real output; the numbers are EXAMPLE, not a real library.",
+        "Day 6 taught hash function and slot: define key, slot and hash function again in one plain sentence each; do not say yesterday or Part."
+      ],
+      "length_target_s": 150,
+      "cover_headline": "Hash collision: two keys, one slot",
+      "thumb_text": "Hash collision",
+      "keywords": [
+        "hash collision kya hota hai hindi",
+        "chaining vs open addressing hinglish",
+        "linear probing explained hindi",
+        "hash table collision handling dsa"
+      ],
+      "caption_note": "Day 7/150 caption. Check answer: in the toy table 26 takes 3 comparisons in chaining; probing needs 3 tries. Many keys in one slot makes lookup O(n); average O(1) holds only when keys spread out.",
+      "script_notes": "Header tag DSA 007/150. Numbers in Hindi words with brace, e.g. 10{दस}. No staged opener; first teaching line right after the question.",
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }

@@ -26,3 +26,6 @@ Planned Day 5 (d005, structure, strings as array-like and immutable): hook type 
 
 ## 2026-10-24 (planner)
 Planned Day 6 (d006, structure, hash map lookup): hook type surprising_fact with a plain payoff line (10 lakh names found without searching), the least used of the last five alongside interviewer_asked and direct_question; no own numbers yet. Running example: 10 lakh list scan 1000000 comparisons vs one dict lookup, run by the researcher; claim kept to average O(1) with collisions named, and the Python worst-case number and resize thresholds kept out as unverified.
+
+## 2026-10-25 (planner)
+Planned Day 7 (d007, structure, hash collisions with chaining vs open addressing): hook type interviewer_asked, the least used of the last six (only d001), as a plain question with no undefined term; no own numbers yet. Running example: toy key mod 8 table, 26 found in 3 comparisons by chaining, probing tries 1 to 4, and 1000 same-slot keys give a chain of 1000 vs average 1.0 when spread, run by the planner; claims kept to Wikipedia (average vs O(n) worst case) and the Python FAQ (O(1) assumes distinct hashes), CPython collision method kept out as unfetched.
