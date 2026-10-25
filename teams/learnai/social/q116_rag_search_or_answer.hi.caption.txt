@@ -1,0 +1,13 @@
+Interviewer ne poocha: RAG ka jawab galat aaye, to kaise pakdoge ki galti retrieval ki hai ya generation ki?
+
+Final answer mat dekho, pehle dekho ki search ne kaun se chunks diye. Sahi chunk nahi mila, to retrieval fail. Mila phir bhi jawab galat, to generation fail.
+
+Teen steps: 1) Har galat jawab ke liye woh chunks nikalo jo model ko bheje gaye the. 2) Har question ka sahi chunk pehle se tay rakho aur dekho woh top 2 mein aaya ya nahi. 3) Sirf wahi hissa theek karo jo fail hua: retrieval fail to search ya chunking, generation fail to prompt ya model.
+
+Example (invented shop documents, measured nahi): 6 test questions mein se 5 mein sahi chunk top 2 mein aaya. 3 galat jawabon mein 1 retrieval ki galti thi, 2 generation ki.
+
+Interview mein bolo: "Main final answer nahi, pehle retrieved chunks dekhta hoon. Sahi chunk nahi mila to retrieval theek karta hoon, mila phir bhi jawab galat to generation."
+
+Tumhare bot ki aakhiri galti kiski thi? Comment mein R likho retrieval ke liye, G likho generation ke liye. Roz ek naya interview sawal, poore jawab ke saath, follow karo.
+
+#AI #AIInterview #RAG

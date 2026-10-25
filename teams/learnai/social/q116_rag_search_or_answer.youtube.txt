@@ -1,0 +1,8 @@
+RAG ka galat jawab: retrieval ya generation? Interview answer
+
+Interview mein poochha jata hai: RAG ka jawab galat aaye, to kaise pakdoge ki galti retrieval ki hai ya generation ki? Jawab: final answer nahi, pehle retrieved chunks dekho. Sahi chunk nahi mila to retrieval fail, mila phir bhi jawab galat to generation fail, aur sirf fail hua hissa theek karo. Ragas docs RAG ke liye alag metrics ginate hain (context precision, context recall, faithfulness, response relevancy). Video ka shop example invented hai, measured benchmark nahi.
+
+Is video mein: rag evaluation, rag wrong answer, retrieval vs generation, ai engineer interview.
+
+Sources:
+https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/

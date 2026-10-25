@@ -1104,23 +1104,20 @@
       "unit": "E6",
       "format": "question",
       "title": "Interview: RAG ka jawab galat aaya. Retrieval kharab hai ya generation, kaise pakdoge?",
-      "one_idea": "Do not judge only the final answer: for each wrong answer first look at the chunks that were retrieved. If the right chunk is not among them, retrieval failed; if it is there and the answer is still wrong, generation failed. Measure the two parts separately (RAGAS has separate metrics for each part), then fix only the failing part.",
+      "one_idea": "Do not judge only the final answer: for each wrong answer first look at the chunks that were retrieved. If the right chunk is not among them, retrieval failed; if it is there and the answer is still wrong, generation failed. Fix only the failing part.",
       "hook_type": "relatable_stake",
       "spoken_hook": "Bot ने refund का गलत जवाब दिया, कसूर किसका?",
-      "hook_formula": "concrete wrong answer, then the interview question",
       "trap": "Judging only the final answer instead of checking whether the right chunk was retrieved.",
-      "visual_idea": "A support bot bubble with a wrong refund answer; a two-box pipeline SEARCH then ANSWER with a magnifier on the chunks between them; a table of six test questions with a tick or cross in two columns (RIGHT CHUNK FOUND, ANSWER OK); the 5/6 hit-rate bar; a fork card: chunk missing = fix search, chunk present = fix prompt or model.",
+      "visual_idea": "A support bot bubble with a wrong refund answer; a two-box pipeline SEARCH then ANSWER with a magnifier on the chunks between them; a table of six test questions with a tick or cross in two columns; the 5/6 hit-rate bar; a fork card.",
       "everyday_anchor": "A student fails an open-book exam: was the right page not opened, or was it opened and misread?",
-      "example": "EXAMPLE (invented shop documents, toy word-overlap search; counts computed by real run state/runs/q116_rag_diag_run.py, output q116_rag_diag_run_output.txt): 6 test questions, right chunk in the top 2 for 5 of 6; 3 wrong answers: 1 retrieval problem, 2 generation problems.",
+      "example": "EXAMPLE (invented shop documents, toy word-overlap search): 6 test questions, right chunk in the top 2 for 5 of 6; 3 wrong answers: 1 retrieval problem, 2 generation problems.",
       "sources": [
-        "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/",
-        "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/context_recall/",
-        "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/faithfulness/"
+        "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/"
       ],
       "facts_to_verify": [
-        "Researcher (fetched 2026-10-25): RAGAS has four metrics (context recall, context precision, faithfulness, answer relevancy). Say only 'RAGAS has separate metrics for each part'; do not define the four beyond what the pages say."
+        "Ragas metrics page (fetched 2026-10-25): lists Context Precision and Context Recall as retrieval metrics and Faithfulness and Response Relevancy as generation metrics for RAG. The reel's numbers are an invented example and says so."
       ],
-      "length_target_s": 110,
+      "length_target_s": 115,
       "cover_headline": "RAG wrong: search or answer?",
       "thumb_text": "RAG debug",
       "keywords": [
@@ -1129,10 +1126,7 @@
         "retrieval vs generation",
         "ai engineer interview"
       ],
-      "caption_note": "Growth note 2026-10-24: no jargon in a stake hook, full question spoken in the reel, 95 to 120 s, keep the ending.",
-      "status": "planned",
-      "qa_passed": false,
-      "hook_source": "strategist, 2026-10-25"
+      "status": "planned"
     },
     {
       "id": "q117",
