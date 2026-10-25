@@ -1,9 +1,3 @@
-English: 9 words, 45 characters, 10 tokens | Please send me the refund status of my order.
-Hinglish (Roman): 7 words, 43 characters, 14 tokens | Kripya mere order ka refund status bhejiye.
-Hindi (Devanagari): 8 words, 42 characters, 42 tokens | कृपया मेरे ऑर्डर के रिफंड का स्टेटस भेजिए।
-English: 10 tokens x 10000 requests = 100000 tokens = Rs 100
-Hinglish (Roman): 14 tokens x 10000 requests = 140000 tokens = Rs 140
-Hindi (Devanagari): 42 tokens x 10000 requests = 420000 tokens = Rs 420
-English: 800 such messages fit in a 8000-token window (prompt and reply share it)
-Hinglish (Roman): 571 such messages fit in a 8000-token window (prompt and reply share it)
-Hindi (Devanagari): 190 such messages fit in a 8000-token window (prompt and reply share it)
+English: 'Please send me the refund status of my order.': 9 words, 10 tokens, Rs 100 per 10,000 messages at Rs 1 per 1,000 tokens, 800 messages in an 8,000-token window
+Roman Hinglish: 'Kripya mere order ka refund status bhejiye.': 7 words, 14 tokens, Rs 140 per 10,000 messages at Rs 1 per 1,000 tokens, 571 messages in an 8,000-token window
+Devanagari Hindi: 'कृपया मेरे ऑर्डर के रिफंड की स्थिति भेजिए।': 8 words, 42 tokens, Rs 420 per 10,000 messages at Rs 1 per 1,000 tokens, 190 messages in an 8,000-token window
