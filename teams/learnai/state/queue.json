@@ -1142,8 +1142,8 @@
       "title": "Interview: Prompt engineering aur context engineering mein asli fark kya hai?",
       "one_idea": "Prompt engineering is choosing the words of the instruction; context engineering is choosing everything the model sees when it answers (instructions, documents, tool results, history) and keeping only what helps. If the model lacks the information, rewording the prompt will not fix it.",
       "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: Prompt engineering और context engineering में असली फ़र्क क्या है?",
       "hook_formula": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Prompt engineering और context engineering में असली फ़र्क क्या है?",
       "trap": "Rewording the prompt when the model lacks the information it needs.",
       "visual_idea": "One question card 'What is my refund status?'. First the model gets only a polished instruction and answers wrongly; a prompt-wording dial turned many times changes nothing. Then a context box fills with labelled cards (RULES, ORDER DATA, POLICY, LAST 2 MESSAGES) and the answer card turns right; a small trash bin removes an old irrelevant card.",
       "everyday_anchor": "Briefing a new employee: a perfectly worded task is useless if you do not hand over the order file.",
@@ -1151,10 +1151,7 @@
       "sources": [
         "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
       ],
-      "facts_to_verify": [
-        "Researcher (fetched 2026-10-25): Anthropic's engineering post discusses context engineering as curating all tokens given to the model, as the next step after prompt engineering. Say 'Anthropic describes it as ...' only if the line is quoted from the page; never say Anthropic coined it."
-      ],
-      "length_target_s": 110,
+      "length_target_s": 115,
       "cover_headline": "Prompt vs context engineering",
       "thumb_text": "Context?",
       "keywords": [
@@ -1163,10 +1160,7 @@
         "ai engineer interview",
         "llm interview question"
       ],
-      "caption_note": "Growth note 2026-10-24: asked hook with the full question, 95 to 120 s, keep the ending. Fallback company_specific hook not used: Anthropic page supports describing, not coining.",
-      "status": "planned",
-      "qa_passed": false,
-      "hook_source": "strategist, 2026-10-25"
+      "status": "planned"
     }
   ]
 }

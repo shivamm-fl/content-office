@@ -1031,14 +1031,10 @@
     {
       "id": "q117",
       "track": "interview",
-      "unit": "D2",
       "title": "Interview: Prompt engineering aur context engineering mein asli fark kya hai?",
       "kind": "question",
-      "topic": "Prompt engineering is choosing the words of the instruction; context engineering is choosing everything the model sees when it answers (instructions, documents, tool results, history) and keeping only what helps. If the model lacks the information, rewording the prompt will not fix it.",
-      "hook_formula": "interviewer_asked",
-      "hook_type": "interviewer_asked",
-      "status": "planned",
-      "planned": "2026-10-25"
+      "topic": "Prompt engineering is choosing the words of the instruction; context engineering is choosing everything the model sees and keeping only what helps.",
+      "status": "built"
     }
   ]
 }
