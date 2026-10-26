@@ -1,297 +1,63 @@
 {
-  "items": [
+ "items": [
+  {
+   "id": "d008",
+   "track": "series",
+   "day": 8,
+   "unit": "P1",
+   "format": "problem",
+   "title": "Two Sum: do number jinka jod target ho, ek pass mein",
+   "one_idea": "Two Sum: for each number ask whether its partner (target minus the number) was already seen; a hash map answers that in one step, so one pass over the list replaces checking every pair.",
+   "hook_type": "direct_question",
+   "spoken_hook": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें?",
+   "hook_formula": "find_the_pair_question",
+   "hook_source": "direct_question: the problem itself as a plain question, no term used before it is explained (owner 2026-10-22); hookscore to run on the Roman form in the script step",
+   "hook_10s": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें? List है 5, 1, 12, 3, 8. हर जोड़ी जाँचो तो 10{दस} checks लगते हैं, पर एक तरीका सिर्फ़ 5{पाँच} steps में बता देता है। [frame 0: five cells 5 1 12 3 8 in a row, a gold chip 11 above; two cells glow-free highlighted by a bracket joining 3 and 8]",
+   "hook_candidates": [
     {
-      "id": "d001",
-      "track": "series",
-      "day": 1,
-      "unit": "P1",
-      "format": "concept",
-      "title": "DSA kya hai aur interview mein kaise use hota hai",
-      "one_idea": "DSA is two things, a data structure (how data is organised) and an algorithm (the steps that use it), and an interview checks whether your steps still work when the data is huge: 10 lakh sorted names take up to 1,000,000 checks one by one but about 20 with halving.",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: 10 लाख names में एक name, 20 steps में कैसे ढूँढोगे?",
-      "hook_formula": "stopwatch_question",
-      "hook_source": "carried-over LearnAI hypothesis, first DSA test; hookscore 46.5 WEAK, no DEALBREAKER",
-      "visual_idea": "A long row of name tiles with a magnifier moving one tile at a time and a step counter climbing toward 1,000,000, crossed out in red; then the same row halved again and again, the counter stopping at 20; chips DATA STRUCTURE (the row) and ALGORITHM (the halving moves) land on the objects when named.",
-      "everyday_anchor": "Finding one contact among 10 lakh saved numbers: sorted list opened in the middle like a dictionary.",
-      "example": "EXAMPLE (researcher ran it): 10 lakh sorted ints, target last: one-by-one 1000000 comparisons (worst case), halving 20. Printed: 1000000 20 True. Counts, not seconds.",
-      "sources": [
-        "https://xlinux.nist.gov/dads/HTML/algorithm.html",
-        "https://en.wikipedia.org/wiki/Data_structure",
-        "https://amazon.jobs/content/en/how-we-hire/sde-iii-interview-prep",
-        "https://wiki.python.org/moin/TimeComplexity"
-      ],
-      "facts_to_verify": [
-        "Run both searches on 1,000,000 sorted ints and show real printed counts (1000000 and 20).",
-        "Amazon claim only: its page says learn how to approach data structures and algorithms in your interview; no claim about all companies, no claim about why.",
-        "The why-interviews-ask line is labelled as our own reasoning.",
-        "Halving needs a SORTED list; said on screen."
-      ],
-      "length_target_s": 105,
-      "cover_headline": "What is DSA and why interviews ask it",
-      "thumb_text": "DSA explained",
-      "keywords": [
-        "what is dsa",
-        "dsa kya hai hindi",
-        "dsa for coding interview",
-        "data structures and algorithms in hinglish",
-        "why dsa is asked in interviews"
-      ],
-      "caption_note": "Answer to the check question: 22 steps (40 lakh names), put it in the caption.",
-      "status": "planned",
-      "qa_passed": false
+     "formula": "find_the_pair_question",
+     "text": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें?"
     },
     {
-      "id": "d002",
-      "track": "series",
-      "day": 2,
-      "unit": "P1",
-      "format": "concept",
-      "title": "Big-O: steps ka growth, seconds nahi",
-      "one_idea": "Big-O says how the number of steps grows when the input grows: one-by-one search grows in step with the data (10 lakh to 20 lakh names is 10 lakh to 20 lakh steps), halving adds one step, checking every pair quadruples when data doubles.",
-      "hook_type": "surprising_fact",
-      "spoken_hook": "10{दस} लाख names search करने हैं।",
-      "hook_formula": "double_data_one_step",
-      "hook_source": "owner-written script 2026-10-19; kept as written (lint hook check FAIL is a heuristic, owner wording wins)",
-      "visual_idea": "Two rows of name tiles, counters 10 lakh to 20 lakh vs 20 to 21; pair-lines quadruple; chips land on counters.",
-      "everyday_anchor": "Finding one contact among your saved numbers.",
-      "example": "EXAMPLE (ran it, counts not seconds): linear 1,000,000 and 2,000,000; halving 20 and 21 (target last); pairs 499,500 at n=1,000 and 1,999,000 at n=2,000; 40 lakh names: halving 22.",
-      "sources": [
-        "https://en.wikipedia.org/wiki/Big_O_notation",
-        "https://en.wikipedia.org/wiki/Binary_search",
-        "https://wiki.python.org/moin/TimeComplexity"
-      ],
-      "facts_to_verify": [
-        "Run all counts again and show the real printed output on screen.",
-        "Steps, not seconds is our own framing.",
-        "Halving needs a SORTED list; say it on screen.",
-        "Do NOT put a time in seconds on screen."
-      ],
-      "length_target_s": 120,
-      "cover_headline": "Big-O explained in plain words",
-      "thumb_text": "Big-O simple",
-      "keywords": [
-        "big o notation in hindi",
-        "time complexity kya hai",
-        "big o explained simply",
-        "time complexity for coding interview",
-        "o(n) o(log n) kya hai"
-      ],
-      "script_notes": "OWNER WROTE THIS SCRIPT: keep wording; shorten only by deleting whole lines. Header tag: DSA 002/150.",
-      "caption_note": "Day 2/150 caption. Answer: 22 steps (40 lakh names, halving). Put it in the caption.",
-      "status": "planned",
-      "qa_passed": false
+     "formula": "cost_of_checking_everything",
+     "text": "पाँच करोड़ जोड़ियाँ जाँचने की जगह, दस हज़ार numbers में सिर्फ़ दस हज़ार steps।"
     },
     {
-      "id": "d003",
-      "track": "series",
-      "day": 3,
-      "unit": "P1",
-      "format": "concept",
-      "title": "Space complexity: memory dekar time bachana",
-      "one_idea": "Space complexity says how much extra memory an algorithm needs as the input grows, and the time-space trade-off is paying memory to save steps: finding a duplicate among 10 lakh numbers takes about 5 hundred billion pair checks with no extra memory, but 10 lakh steps if you spend memory on a set.",
-      "hook_type": "relatable_stake",
-      "spoken_hook": "Code अटक रहा था, memory बढ़ाते ही चल गया।",
-      "hook_formula": "memory_buys_speed",
-      "visual_idea": "Two lanes: pair lines vs a set shelf; step and memory bars swap sizes.",
-      "everyday_anchor": "A shopkeeper who keeps a price list on the wall instead of recalculating every price at the counter.",
-      "example": "EXAMPLE (ran it, Python 3.12, counts not seconds): n(n-1)/2 = 499999500000 pair checks for 10 lakh ints (n=1000: 499500; n=2000: 1999000); set: 1000000 steps; getsizeof list 8000056 B vs set 33554648 B = about 4x (container only).",
-      "sources": [
-        "https://en.wikipedia.org/wiki/Space_complexity",
-        "https://en.wikipedia.org/wiki/Space%E2%80%93time_tradeoff",
-        "https://docs.python.org/3/library/sys.html#sys.getsizeof",
-        "https://en.wikipedia.org/wiki/Hash_table"
-      ],
-      "facts_to_verify": [
-        "Do not claim set lookup is O(1) as a Python fact.",
-        "Show real printed counts; no exact bytes or seconds on screen.",
-        "Say the set costs O(n) to build and O(n) memory."
-      ],
-      "length_target_s": 130,
-      "cover_headline": "Spend memory, save time: space complexity",
-      "thumb_text": "Space vs time",
-      "keywords": [
-        "space complexity in hindi",
-        "time space tradeoff kya hai",
-        "space complexity explained simply",
-        "space complexity for coding interview"
-      ],
-      "caption_note": "Day 3/150 caption. Check answer: 20 lakh numbers with the set method take 20 lakh steps.",
-      "script_notes": "Owner approved the script as written on 2026-10-21; keep wording. Header tag DSA 003/150.",
-      "status": "planned",
-      "qa_passed": false,
-      "hook_source": "owner-approved script 2026-10-21; hook kept as written (relatable_stake, memory_buys_speed)"
-    },
-    {
-      "id": "d004",
-      "track": "series",
-      "day": 4,
-      "unit": "P1",
-      "format": "structure",
-      "title": "Arrays: memory mein kaise rakhe jaate hain",
-      "one_idea": "An array keeps its elements in one unbroken block of memory, each the same size, so the computer finds element i with one calculation (start + i x size), which makes reading any element one step, while inserting in the middle must shift every element after it (about 5 lakh moves in a 10 lakh array).",
-      "hook_type": "direct_question",
-      "spoken_hook": "Array में दस लाखवाँ element, एक step में कैसे?",
-      "hook_formula": "one_step_question",
-      "hook_source": "direct_question is the one of the five types not yet tested; hookscore 30.0 WEAK (Hinglish), no DEALBREAKER.",
-      "visual_idea": "A long row of equal memory boxes with offsets 0, 4, 8 ... and a pointer jumping straight to box 999,999 by one multiplication while a crawling magnifier is crossed out; then a new value inserted in the middle makes the boxes after it slide right with a move counter reaching 5,00,000.",
-      "everyday_anchor": "Cinema hall seats numbered in order: seat 40 is found by counting, not searching; squeezing one person into the middle moves everyone after them.",
-      "example": "EXAMPLE (strategist ran it, researcher re-ran it 2026-10-22, Python 3.12, counts not seconds): array('i') of 1000000 ints: itemsize 4 bytes; byte offset of index 0 is 0, 1 is 4, 2 is 8, 999999 is 3999996; inserting in the middle of 1000000 items shifts 500000, of 2000000 shifts 1000000. 4 bytes is this machine's itemsize; say 'for example 4 bytes'.",
-      "sources": [
-        "https://en.wikipedia.org/wiki/Array_(data_structure)",
-        "https://en.wikipedia.org/wiki/Dynamic_array",
-        "https://docs.python.org/3/library/array.html"
-      ],
-      "facts_to_verify": [
-        "Confirmed by researcher 2026-10-22. Do not claim Python list internals, real addresses, or seconds. Say 'inserting makes the elements after it move'."
-      ],
-      "length_target_s": 150,
-      "cover_headline": "How arrays really sit in memory",
-      "thumb_text": "Array in memory",
-      "keywords": [
-        "array in memory hindi",
-        "array kaise store hota hai",
-        "array access o(1) kyu",
-        "array data structure for coding interview",
-        "array insertion o(n) kyu"
-      ],
-      "caption_note": "Day 4/150 caption. Check answer: in a 20 lakh array, inserting in the middle moves 10 lakh elements; reading index 15 lakh is still 1 step.",
-      "script_notes": "Header tag DSA 004/150.",
-      "status": "planned",
-      "qa_passed": false
-    },
-    {
-      "id": "d005",
-      "track": "series",
-      "day": 5,
-      "unit": "P1",
-      "format": "structure",
-      "title": "Strings: array jaisi, par badal nahi sakte",
-      "one_idea": "A string is a row of characters you read by index from 0 like an array, but in Python it is immutable, so building a long string with + in a loop copies the growing string every time (model: 1000 appends copy 500500 characters) while one join copies each character once.",
-      "hook_type": "direct_question",
-      "spoken_hook": "String का सिर्फ़ एक letter बदलने गए, और Python ने error दे दिया। आख़िर क्यों?",
-      "hook_formula": "owner_script",
-      "hook_source": "owner's own script (2026-10-24 revise)",
-      "visual_idea": "letter boxes with index, blocked assignment, new row beside old, staircase of copies vs one join row.",
-      "everyday_anchor": "A typo on a printed wedding card cannot be fixed on the card; you have to reprint a whole new card.",
-      "example": "EXAMPLE: s='hello'; s[0]='j' raises TypeError; 1000 appends model 500500 vs join 1000; 1000000 -> 500000500000.",
-      "sources": [
-        "https://docs.python.org/3/library/stdtypes.html",
-        "https://docs.python.org/3/reference/datamodel.html",
-        "https://docs.python.org/3/faq/design.html",
-        "https://en.wikipedia.org/wiki/String_(computer_science)",
-        "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html"
-      ],
-      "facts_to_verify": [
-        "Python only; copy counts are a labelled model."
-      ],
-      "length_target_s": 120,
-      "cover_headline": "Why you cannot change a string",
-      "thumb_text": "Strings immutable",
-      "keywords": [
-        "string immutable in python hindi",
-        "python string join vs plus"
-      ],
-      "caption_note": "Day 5/150 caption. Check answer: 2000-letter string with + in a loop: model copies 2001000 characters, join copies 2000. Python only; count is a model.",
-      "script_notes": "Header tag DSA 005/150. Python-specific claims labelled Python.",
-      "status": "planned",
-      "qa_passed": false,
-      "script_file": "state/scripts/d005.txt",
-      "script_locked": true
-    },
-    {
-      "id": "d006",
-      "track": "series",
-      "day": 6,
-      "unit": "P1",
-      "format": "structure",
-      "title": "Hash map: lookup O(1) kaise ho jaata hai",
-      "one_idea": "A hash map runs the key through a hash function to get a slot number and jumps straight to that slot, so on average a lookup does not scan the items (average O(1), not a guarantee), while a list must compare one by one.",
-      "hook_type": "direct_question",
-      "spoken_hook": "दस लाख में एक नाम, सीधे कैसे मिलता है?",
-      "hook_formula": "plain_topic_question",
-      "hook_source": "plain topic question, no term used before it is explained (learnings 2026-10-22)",
-      "everyday_anchor": "School locker room: locker number comes from your roll number, so you walk straight to your locker.",
-      "example": "EXAMPLE (labelled): 10 lakh names in a list, last name needs 1000000 comparisons (run), dict needs one lookup (run). Toy hash: key mod 8, so 10 and 18 both go to slot 2, 3 and 27 both go to slot 3 (invented). A list as key raises TypeError unhashable (run).",
-      "sources": [
-        "https://docs.python.org/3/faq/design.html",
-        "https://docs.python.org/3/glossary.html",
-        "https://docs.python.org/3/reference/datamodel.html",
-        "https://en.wikipedia.org/wiki/Hash_table"
-      ],
-      "facts_to_verify": [
-        "Say average O(1), never worst case O(1)."
-      ],
-      "length_target_s": 150,
-      "cover_headline": "How a hash map finds in O(1)",
-      "thumb_text": "Hash map O(1)",
-      "keywords": [
-        "hash map kaise kaam karta hai hindi",
-        "python dictionary lookup O(1) explained",
-        "hash function kya hai hindi",
-        "hash table dsa hinglish"
-      ],
-      "caption_note": "Day 6/150 caption. Check answer: 20 lakh names, last one: list scan 2000000 comparisons; dict about one lookup on average. Average, not guaranteed; collisions slow it. Python only.",
-      "script_notes": "Header tag DSA 006/150.",
-      "status": "planned",
-      "qa_passed": false,
-      "script_file": "state/scripts/d006.txt"
-    },
-    {
-      "id": "d007",
-      "track": "series",
-      "day": 7,
-      "unit": "P1",
-      "format": "structure",
-      "title": "Hash collision: do key ek hi slot par aa jaayein toh",
-      "one_idea": "A collision is two keys landing in the same slot; chaining keeps a small list in each slot and open addressing probes to the next free slot, and when many keys pile into few slots a lookup walks a long chain or probe run, so the average O(1) slows toward O(n).",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: दो नाम एक ही जगह रखने पड़ें, तो क्या करोगे?",
-      "hook_formula": "interviewer_asked_plain_question",
-      "hook_source": "least used type of the last six (d001 only); question uses no term before it is explained (learnings 2026-10-22); no staged opener, first teaching line follows at once",
-      "hook_10s": "Interviewer ने पूछा: दो नाम एक ही जगह रखने पड़ें, तो क्या करोगे? मान लो आठ खाने की अलमारी है, और दस और अठारह दोनों का खाना दो नंबर निकला। इसे collision कहते हैं, और इसके दो हल हैं। [frame 0: row of 8 empty boxes numbered 0 to 7, two keys 10 and 18 sliding toward box 2]",
-      "hook_candidates": [
-        {
-          "text": "Interviewer ने पूछा: दो नाम एक ही जगह रखने पड़ें, तो क्या करोगे?",
-          "formula": "interviewer_asked_plain_question"
-        },
-        {
-          "text": "दो चाबियाँ, एक ही खाना। अब क्या?",
-          "formula": "plain_topic_question"
-        },
-        {
-          "text": "हैश मैप में दो key टकरा जाएँ, तो लुकअप धीमा क्यों हो जाता है?",
-          "formula": "payoff_question"
-        }
-      ],
-      "visual_idea": "A row of 8 numbered boxes. Key 10 drops into box 2, then 18 arrives at the same box and a clash marker shows. Fix 1: a small list hangs under box 2 and 18 joins it. Fix 2: 18 slides right into the next empty box. Finally a table where all keys fall into one box, and a pointer walks a long list one by one while a spread-out table needs one hop.",
-      "everyday_anchor": "Society post-box wall: flat 2 gets two parcels; either keep both in a tray at flat 2's box (chaining) or put the second in the next empty box down the row (probing).",
-      "example": "EXAMPLE (invented keys, toy hash key mod 8, run): keys 10,18,26,3,27,5. Chaining table: slot 2=[10,18,26], slot 3=[3,27], slot 5=[5]; finding 26 takes 3 comparisons. Open addressing with linear probing (step +1): 10->slot 2, 18->slot 3 (2 tries), 26->slot 4 (3 tries), 3->slot 5 (3 tries), 27->slot 6 (4 tries), 5->slot 7 (3 tries). Worst case EXAMPLE: 1000 keys all multiples of 8 land in one slot, longest chain 1000; 1000 spread keys in 1000 slots, average chain 1.0.",
-      "code_run_output": "chain [[], [], [10, 18, 26], [3, 27], [], [5], [], []]\nprobe table [None, None, 10, 18, 26, 3, 27, 5], tries {10:1, 18:2, 26:3, 3:3, 27:4, 5:3}\nchain lookup 26 compares: 3\nworst: 1000 keys mod 8==0 -> longest chain 1000\n1000 random keys, 1000 slots -> average chain 1.0 (longest 5)",
-      "sources": [
-        "https://en.wikipedia.org/wiki/Hash_table",
-        "https://docs.python.org/3/faq/design.html"
-      ],
-      "facts_to_verify": [
-        "Collision definition, separate chaining (a list of key-value pairs per slot) and open addressing (entries stored in the bucket array itself, resolved by probing; linear probing step usually 1): Wikipedia Hash table, fetched 2026-10-25.",
-        "Average lookup is independent of table size in a well-dimensioned table; worst-case search is O(n); open addressing degrades badly as load factor approaches 1 and loops forever on a full table (Wikipedia). Say average O(1), worst case O(n), never O(1) guaranteed.",
-        "Python-only, label it: CPython dicts are resizable hash tables and the O(1) claim assumes keys have different hash values (docs.python.org design FAQ). Do not claim how CPython resolves collisions, its probe sequence or resize thresholds: not on a fetched page.",
-        "Re-run the toy mod-8 chaining and linear probing code and show its real output; the numbers are EXAMPLE, not a real library.",
-        "Day 6 taught hash function and slot: define key, slot and hash function again in one plain sentence each; do not say yesterday or Part."
-      ],
-      "length_target_s": 150,
-      "cover_headline": "Hash collision: two keys, one slot",
-      "thumb_text": "Hash collision",
-      "keywords": [
-        "hash collision kya hota hai hindi",
-        "chaining vs open addressing hinglish",
-        "linear probing explained hindi",
-        "hash table collision handling dsa"
-      ],
-      "caption_note": "Day 7/150 caption. Check answer: in the toy table 26 takes 3 comparisons in chaining; probing needs 3 tries. Many keys in one slot makes lookup O(n); average O(1) holds only when keys spread out.",
-      "script_notes": "Header tag DSA 007/150. Numbers in Hindi words with brace, e.g. 10{दस}. No staged opener; first teaching line right after the question.",
-      "status": "planned",
-      "qa_passed": false
+     "formula": "interviewer_asked",
+     "text": "Interviewer ने पूछा: list में कौन-से दो number जुड़कर दिया हुआ target बनाते हैं?"
     }
-  ]
+   ],
+   "visual_idea": "A row of five cells (5 1 12 3 8) with a target chip 11. Brute force: arcs link every pair one after another with a counter climbing to 10, then crossed out in red. Then a walking pointer visits each cell; a small two-column table (number, index) fills one row per step, and at cell 8 an arrow computes 11 minus 8 equals 3, jumps to the table row for 3 and the two cells get joined by a bracket.",
+   "everyday_anchor": "At a wedding buffet two friends want plates that together cost exactly 11 rupees of coupons; instead of trying every friend with every friend, you note each person's coupon in a notebook as they walk by and ask whether the missing amount is already written there.",
+   "example": "EXAMPLE list [5, 1, 12, 3, 8] with target 11; answer indices [3, 4] (3 + 8). Run: brute force 10 checks, one pass 5 steps. For 10,000 numbers: 49,995,000 pair checks (all pairs) vs 10,000 steps.",
+   "pattern": "complement lookup with a hash map (remember what you have seen; ask for the partner in one step)",
+   "pattern_signal": "For every item you need to know if a matching partner already exists somewhere earlier in the data: that is a lookup question, so a hash map fits.",
+   "beats": "hook and problem 10s; brute force pairs crossed out with run counts 14s; pattern, signal and insight (target minus x is the partner) 18s; code in 4 sub-steps with real output 38s; complexity O(n) time O(n) space plus the trap (look before you store, so a number never pairs with itself, [3,3] target 6) 18s; check yourself and follow 10s",
+   "check_question": "List [2, 7, 11, 15], target 26: which indices? (answer [2,3], 11 + 15; in the caption)",
+   "format_length_note": "problem day, about 110 s",
+   "sources": [
+    "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0000-0099/0001.Two%20Sum/README_EN.md",
+    "https://en.wikipedia.org/wiki/Hash_table"
+   ],
+   "facts_to_verify": [
+    "Problem paraphrase from the doocs mirror of the LeetCode Two Sum statement (leetcode.com itself returned 403 to WebFetch this session): array of integers and a target, return the indices of two entries summing to target; exactly one answer; same element not used twice; any index order; 2 to 10^4 elements; values -10^9 to 10^9. Re-check against the problem page if it becomes reachable.",
+    "Hash table one-pass solution: O(n) time, O(n) space, check the partner before inserting the current number (doocs page, fetched).",
+    "Average O(1) lookup and worst case O(n) for a hash table (Wikipedia Hash table complexity table, fetched); say 'average O(1)', never promise worst case.",
+    "Run the code and show its real output: brute force on [5,1,12,3,8] target 11 -> ([3, 4], 10 checks); one pass -> [3, 4] after 5 steps; [3,3] target 6 -> [0, 1]; n=10000 all pairs = 49995000 (run this session by the strategist, builder re-runs).",
+    "Interview-company claims: none made; do not say which company asks Two Sum."
+   ],
+   "length_target_s": 110,
+   "cover_headline": "Two Sum in one pass",
+   "thumb_text": "Two Sum",
+   "keywords": [
+    "two sum",
+    "two sum hash map",
+    "two sum leetcode hindi",
+    "two sum one pass",
+    "hash map interview question"
+   ],
+   "status": "planned",
+   "qa_passed": false
+  }
+ ]
 }

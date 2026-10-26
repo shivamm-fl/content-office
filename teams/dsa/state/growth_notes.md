@@ -29,3 +29,6 @@ Planned Day 6 (d006, structure, hash map lookup): hook type surprising_fact with
 
 ## 2026-10-25 (planner)
 Planned Day 7 (d007, structure, hash collisions with chaining vs open addressing): hook type interviewer_asked, the least used of the last six (only d001), as a plain question with no undefined term; no own numbers yet. Running example: toy key mod 8 table, 26 found in 3 comparisons by chaining, probing tries 1 to 4, and 1000 same-slot keys give a chain of 1000 vs average 1.0 when spread, run by the planner; claims kept to Wikipedia (average vs O(n) worst case) and the Python FAQ (O(1) assumes distinct hashes), CPython collision method kept out as unfetched.
+
+## 2026-10-26 (planner)
+Planned Day 8 (d008, problem, Two Sum): hook type direct_question, the least used of the seven built days (only d004; company_specific has no fetched interview page), as the problem itself in one plain question with no undefined term; no own numbers yet. Running example: [5, 1, 12, 3, 8] target 11, brute force 10 checks vs hash-map one pass 5 steps, and 49,995,000 pair checks vs 10,000 steps for 10,000 numbers, all run by the planner; the LeetCode page returned 403, so the problem is paraphrased from the doocs mirror (fetched) and the average O(1) claim from Wikipedia, with no company claim made.
