@@ -1,9 +1,5 @@
-# EXAMPLE (invented): a chatbot with no memory design resends the whole history each turn.
-turn_words=25   # assumed words per user+bot turn
-facts=["name Riya","vegetarian","prefers Hindi"]  # what is worth remembering
-sent=0
-for t in range(1,31):
-    sent+=turn_words*t   # turn t resends t turns
-    if t in (1,10,20,30): print("turn",t,"words sent this turn",turn_words*t,"cumulative",sent)
-mem_words=sum(len(f.split()) for f in facts)
-print("with memory: facts",len(facts),"=",mem_words,"words + last 2 turns",2*turn_words,"=",mem_words+2*turn_words,"words per turn at any turn")
+# q119 EXAMPLE (invented): 25 words per turn, 3 stored facts = 5 words total.
+W=25; FACTS=5; KEEP=2
+for t in (1,5,10,30):
+    full=W*t; mem=min(t,KEEP)*W+FACTS
+    print(f"turn {t:>2}: resend all = {full:>3} words | memory = {mem} words")
