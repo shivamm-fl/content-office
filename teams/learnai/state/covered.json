@@ -1030,6 +1030,42 @@
       "kind": "question",
       "topic": "Prompt engineering is choosing the words of the instruction; context engineering is choosing everything the model sees and keeping only what helps.",
       "status": "built"
+    },
+    {
+      "id": "a008",
+      "track": "series",
+      "unit": "A3",
+      "title": "Raw model vs chat model: why the first one cannot answer",
+      "kind": "concept",
+      "topic": "A raw (pretrained, base) model only continues text, so a question gets more text that looks like it, often more questions; a chat model is the same kind of model trained further on conversations (instruction tuning and human feedback) and fed the chat in a template with roles, so it replies as the assistant.",
+      "hook_formula": "plain_question on a concrete scene",
+      "hook_type": "direct_question",
+      "status": "planned",
+      "planned": "2026-10-26"
+    },
+    {
+      "id": "q118",
+      "track": "interview",
+      "unit": "D4",
+      "title": "Interview: Lambi chat ko chhota karna hai: truncate karoge ya summarise?",
+      "kind": "question",
+      "topic": "Truncating keeps only the newest messages and silently drops the oldest, which is where the user often stated the one fact that matters; summarising compresses the old part into a short note that keeps such facts, at the cost of one extra model call and possible loss of detail. Typical answer: summarise (or pin key facts) the old part, keep the last few messages word for word, and truncate only when the old messages carry nothing needed.",
+      "hook_formula": "concrete wrong outcome, then the interview question",
+      "hook_type": "relatable_stake",
+      "status": "planned",
+      "planned": "2026-10-26"
+    },
+    {
+      "id": "q119",
+      "track": "interview",
+      "unit": "D6",
+      "title": "Interview: Chatbot ko pichli baatein yaad rakhni hain. Memory kaise design karoge?",
+      "kind": "question",
+      "topic": "The model is stateless, so memory is something the app builds: short-term memory is the recent turns resent each call; long-term memory is a small set of chosen facts stored outside the chat (a database or file) and put back into the context when relevant. Design means deciding what is worth remembering, where it is stored, and when it is retrieved, instead of storing and resending everything.",
+      "hook_formula": "interviewer_asked",
+      "hook_type": "interviewer_asked",
+      "status": "planned",
+      "planned": "2026-10-26"
     }
   ]
 }

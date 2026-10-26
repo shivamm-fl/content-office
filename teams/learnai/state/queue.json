@@ -1148,6 +1148,122 @@
         "llm interview question"
       ],
       "status": "planned"
+    },
+    {
+      "id": "a008",
+      "track": "series",
+      "day": 8,
+      "unit": "A3",
+      "format": "concept",
+      "status": "planned",
+      "title": "Raw model vs chat model: why the first one cannot answer",
+      "one_idea": "A raw (pretrained, base) model only continues text, so a question gets more text that looks like it, often more questions; a chat model is the same kind of model trained further on conversations (instruction tuning and human feedback) and fed the chat in a template with roles, so it replies as the assistant.",
+      "hook_type": "direct_question",
+      "spoken_hook": "सवाल पूछा, AI ने और सवाल लिख दिए, क्यों?",
+      "hook_formula": "plain_question on a concrete scene",
+      "hook_source": "strategist, 2026-10-26",
+      "trap": "Thinking every language model is built to answer; the raw model just continues whatever text it is given.",
+      "visual_idea": "Frame 0: a text box with the question 'What is the capital of India?' and the model's output appearing below it as three more questions in the same style (a worksheet continuing itself). Then a 'text so far' strip with a cursor: the raw model adds the next likely lines. Second picture: the same question wrapped in labelled USER and ASSISTANT slots, the model fills the ASSISTANT slot with the answer. Last card: base and instruct as two buttons on the same engine, with a small TRAINED ON CHATS tag. Different from r04 (which showed pretraining to RLHF as a pipeline).",
+      "everyday_anchor": "A friend you ask 'what is the capital of India?' who, instead of answering, keeps writing the next question of the quiz paper, because that is what they have read most.",
+      "example": "EXAMPLE (illustrative, labelled as such; no numbers shown): a raw model given the line 'What is the capital of India?' continues with similar quiz lines. Real, sourced contrast: Qwen2.5-7B base card says do not use base models for conversation; Qwen2.5-7B-Instruct uses a chat template with a system and a user message. No measured number is shown (no model could be run on the run machine), so none is spoken.",
+      "sources": [
+        "https://huggingface.co/docs/transformers/main/en/chat_templating",
+        "https://huggingface.co/Qwen/Qwen2.5-7B",
+        "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct",
+        "https://arxiv.org/abs/2203.02155",
+        "https://ar5iv.labs.arxiv.org/html/2203.02155"
+      ],
+      "facts_to_verify": [
+        "HF chat_templating docs (fetched 2026-10-26): all causal LMs, chat-trained or not, continue a sequence of tokens; base models are pretrained on a huge corpus then fine-tuned for chat on message-formatted data; roles are user, assistant, system; Mistral-7B-Instruct and Zephyr are both tuned from the Mistral-7B base; without the assistant-start tokens a model may continue the user's message instead of replying.",
+        "Qwen2.5-7B card: 'We do not recommend using base language models for conversations'; the Instruct card is instruction-tuned and uses apply_chat_template.",
+        "InstructGPT (arXiv 2203.02155): next-token prediction on web pages is a different objective from following instructions helpfully and safely; RLHF-tuned 1.3B InstructGPT preferred over 175B GPT-3. The paper's GPT-3 'eat socks after meditating' example is a real output but its figure number was unclear: do not cite a figure number, and the 'more questions' scene is an illustration, say 'example'. OpenAI's own post returned 403, not used."
+      ],
+      "length_target_s": 120,
+      "cover_headline": "Raw model vs chat model",
+      "thumb_text": "Raw vs chat",
+      "keywords": [
+        "base model vs chat model",
+        "raw llm vs instruct model",
+        "why chatgpt answers questions",
+        "ai engineer roadmap"
+      ]
+    },
+    {
+      "id": "q118",
+      "track": "interview",
+      "unit": "D4",
+      "format": "question",
+      "title": "Interview: Lambi chat ko chhota karna hai: truncate karoge ya summarise?",
+      "one_idea": "Truncating keeps only the newest messages and silently drops the oldest, which is where the user often stated the one fact that matters; summarising compresses the old part into a short note that keeps such facts, at the cost of one extra model call and possible loss of detail. Typical answer: summarise (or pin key facts) the old part, keep the last few messages word for word, and truncate only when the old messages carry nothing needed.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "पहले मैसेज में peanut allergy बताई, बॉट भूल गया।",
+      "hook_formula": "concrete wrong outcome, then the interview question",
+      "hook_source": "strategist, 2026-10-26",
+      "trap": "Cutting the oldest messages and losing the one fact the user stated first.",
+      "visual_idea": "A 12-bubble chat stack with a budget line; the oldest bubbles slide off the top (TRUNCATE) and the first bubble, with a red allergy tag, goes with them; the bot's later reply is wrong. Then the same stack: the old bubbles fold into one note card (SUMMARY) holding the allergy tag, plus the last 4 bubbles; the reply is right. Word counters on the two options.",
+      "everyday_anchor": "Tearing off the first pages of a notebook to make room, when the phone number you need was written on page one.",
+      "example": "EXAMPLE (invented chat, words stand in for tokens), run in state/runs/q118_trim_run.py. Real output (state/runs/q118_trim_run_output.txt): total 78 words, 12 messages. TRUNCATE with a budget of 60 words keeps 9 messages (57 words); first message kept? False; allergy fact kept? False. SUMMARISE: summary 14 words + last 4 messages = 38 words; allergy kept? True.",
+      "sources": [
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+        "https://docs.langchain.com/oss/python/langgraph/add-memory",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://arxiv.org/abs/2307.03172"
+      ],
+      "facts_to_verify": [
+        "Anthropic post (fetched 2026-10-26): compaction = summarising a conversation nearing the context limit and continuing with the summary; context rot: recall decreases as tokens grow (paraphrase).",
+        "LangChain docs: trimming keeps the last N tokens and 'you may lose information from culling of the message queue'; summarisation condenses earlier history with a model and carries the summary forward.",
+        "Claude memory-tool page: compaction summarises older context; memory preserves what must survive summarisation.",
+        "Lost in the Middle (arXiv 2307.03172): performance is highest when the relevant info is at the start or the end and drops in the middle (U-shaped, 2023 models). Do NOT say models forget early info; it supports only 'position matters'. Optional, may be left out."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Truncate or summarise long chats?",
+      "thumb_text": "Truncate?",
+      "keywords": [
+        "llm chat history truncate vs summarize",
+        "long conversation context management",
+        "conversation summary memory",
+        "ai engineer interview"
+      ]
+    },
+    {
+      "id": "q119",
+      "track": "interview",
+      "unit": "D6",
+      "format": "question",
+      "title": "Interview: Chatbot ko pichli baatein yaad rakhni hain. Memory kaise design karoge?",
+      "one_idea": "The model is stateless, so memory is something the app builds: short-term memory is the recent turns resent each call; long-term memory is a small set of chosen facts stored outside the chat (a database or file) and put back into the context when relevant. Design means deciding what is worth remembering, where it is stored, and when it is retrieved, instead of storing and resending everything.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Chatbot को पिछली बातें याद रखनी हैं, memory कैसे design करोगे?",
+      "hook_formula": "interviewer_asked",
+      "hook_source": "strategist, 2026-10-26",
+      "trap": "Storing and resending every message forever instead of choosing what is worth remembering.",
+      "visual_idea": "A chat where each new turn drags the whole earlier stack into the request box, a size bar growing turn by turn (10, 20, 30). Then a split: SHORT-TERM card (last 2 turns) and a LONG-TERM shelf of three fact cards (name, vegetarian, Hindi); a retrieve arrow drops only the relevant fact card into the request. Request bar stays flat.",
+      "everyday_anchor": "A shopkeeper who does not re-read the whole ledger for every customer but keeps a small card for each regular: name, usual order, language.",
+      "example": "EXAMPLE (invented: 25 words per turn, 3 stored facts), run in state/runs/q119_memory_run.py. Real output (state/runs/q119_memory_run_output.txt): resending all history: turn 1 sends 25 words, turn 10 sends 250, turn 20 sends 500, turn 30 sends 750 (cumulative 11625 words by turn 30). With memory: 3 facts = 5 words + last 2 turns 50 words = 55 words per turn at any turn.",
+      "sources": [
+        "https://developers.openai.com/api/docs/guides/conversation-state",
+        "https://platform.claude.com/docs/en/api/messages",
+        "https://docs.langchain.com/oss/python/langgraph/add-memory",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
+        "https://arxiv.org/abs/2310.08560"
+      ],
+      "facts_to_verify": [
+        "OpenAI conversation-state page (fetched 2026-10-26): each text generation request is independent and stateless; with previous_response_id all previous input tokens in the chain are billed as input tokens.",
+        "Claude Messages API: the API supports stateless multi-turn conversations; prior turns go in the messages parameter.",
+        "LangChain/LangGraph docs: short-term memory tracks a multi-turn conversation per thread; long-term memory stores user- or app-specific data across conversations.",
+        "Claude memory tool: stores and retrieves information across conversations in memory files, client-side, just-in-time retrieval instead of loading everything; lists size caps, expiry and sensitive-data duties.",
+        "MemGPT (arXiv 2310.08560): virtual context management with memory tiers, paraphrase level; do not state more than that. Optional.",
+        "Note: ai-course q15 (stateless chat, published 2026-10-15) and q16 (long chat, sliding window / summary) cover nearby ideas; this reel's angle is designing what to remember, with a long-term store."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Design memory for a chatbot",
+      "thumb_text": "Chat memory",
+      "keywords": [
+        "chatbot memory design",
+        "llm long term memory",
+        "short term vs long term memory ai",
+        "ai engineer interview"
+      ]
     }
   ]
 }

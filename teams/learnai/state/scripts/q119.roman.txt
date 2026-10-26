@@ -1,0 +1,10 @@
+A: Interviewer ne poocha: Chatbot ko pichhli baatein yaad rakhni hain, memory kaise design karoge?
+B: Tumhara jawab: sab kuch yaad mat rakho, chuno ki kya yaad rakhna hai. Haal ki baatein har baar bhejo, aur zaroori facts chat ke bahar rakhkar, kaam ke waqt wapas daalo. Teen steps mein dekhte hain.
+C: Pehle ye jaano: model ko pichhli baat yaad nahi rehti, har call nayi shuru hoti hai. Ise stateless kehte hain, to yaad rakhna tumhare app ka kaam hai.
+D: Sabse aasan tareeka: har baar poori history bhej do. Maan lo har turn mein 25 words hain, ye example hai. Turn 1 par 25 words jaate hain, turn 10 par 250 words, aur turn 30 par 750 words. Yaani har naye turn par bill badhta hai, aur context window bharti jaati hai.
+E: Pehla step, short-term memory. Sirf aakhri 2 turns bhejo, yaani 50 words, kyunki fauran ki baat judi rehni chahiye.
+F: Doosra step, long-term memory. Yaani chune hue facts jo baar-baar kaam aate hain, aur jinhe chat ke bahar, database ya file mein rakhte hain. Maan lo teen cards hain: naam, vegetarian, aur Hindi mein baat. Kul 5 words. "thanks" jaisi baatein nahi rakhte, kyunki unse aage kuch nahi badalta.
+G: Teesra step, retrieve, yaani zaroorat par wapas nikalna. User poochhe, "Aaj dinner mein kya banaun?" To vegetarian wala card request mein jaata hai. Teeno cards daalo to 5 aur 50 milakar 55 words, aur turn 30 par bhi 55, 750 nahi.
+H: Boundary: agar chat chhoti hai, maan lo paanch turns ki, to poori history bhejna theek hai. Memory system tab banao jab baatcheet lambi chale, ya user kal phir laute.
+I: Interview mein bolo: "The model is stateless, so memory is something the app builds. I resend only recent turns, store chosen facts outside the chat, and retrieve the relevant ones, so the request size stays flat."
+J: Tumhare chatbot ko sabse pehle kya yaad rakhna chahiye, naam ya bhasha? Comment mein ek word likho. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.

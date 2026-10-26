@@ -1,0 +1,10 @@
+A: Sawaal poocha, AI ne aur sawaal likh diye, kyon?
+B: Maan lo tumne dost se poocha, "Bharat ki capital kya hai?" Aur woh jawab dene ki jagah quiz paper ka agla sawaal likhne laga, kyunki usne sabse zyada wahi padha hai. Ek raw model aisa hi dost hai.
+C: Raw model, jise base model bhi kehte hain, ka ek hi kaam hai: jo text mila, uske aage ka text likhna. Usne internet ka bahut text padhkar seekha ki agla word kya aayega. Ise pretraining kehte hain.
+D: Us text mein quiz sheets bhi thin. To "What is the capital of India?" ke baad sabse likely text hai, aur sawaal. Maan lo raw model ne likha: "What is the capital of Pakistan? What is the capital of China?" Ye sirf example hai. Galti model ki nahi, use jawab dena sikhaya hi nahi gaya.
+E: To chat model kaise banta hai? Usi model se, teen steps mein. Pehla step, instruction tuning. Yaani model ko aage aur train karo, aise examples par jahan ek sawaal ke baad ek achha jawab hai. Kyunki ab "sawaal ke baad jawab" sabse likely pattern ban jaata hai.
+F: Doosra step, human feedback. Model ek sawaal ke kai jawab likhta hai, log batate hain kaun sa behtar hai, aur model usi taraf dhalta hai. Asar bada hai: 1.3 billion parameters wala tuned model, logon ko 175 billion wale raw GPT-3 se zyada pasand aaya. Parameters yaani model ke andar ke seekhe hue numbers.
+G: Teesra step, chat template. Model ko sab kuch text ki tarah milta hai, to chat ko roles ke saath likhte hain: system, user, assistant. Jaise: "USER: Bharat ki capital kya hai? ASSISTANT:" Aur model assistant wali jagah bharta hai. Ye marker na ho, to model user ka hi message aage badha sakta hai.
+H: Ek catch: chat model koi alag machine nahi hai. Mistral-7B-Instruct aur Zephyr, dono ek hi base model, Mistral-7B, se bane hain. Woh ab bhi agla word hi guess karta hai, bas jawab wala text ab sabse likely hai.
+I: To model chunte waqt naam dekho. Instruct ya chat likha hai, to sawaal-jawab ke liye wahi lo.
+J: Ab tum batao: base model ko sirf "Good morning" doge, to woh kya karega? Comment mein likho, sahi jawab caption mein hai. Roz ek AI idea ke liye follow kar lo.

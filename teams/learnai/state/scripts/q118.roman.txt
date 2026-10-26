@@ -1,0 +1,11 @@
+A: Pehle message mein peanut allergy batayi, bot bhool gaya.
+B: Interview mein yahi poocha jaata hai: lambi chat chhoti karni ho, to kya karoge, truncate ya summarise?
+C: Tumhara jawab: purane hisse ko summarise karo, yaani uska chhota note banao, aur aakhri kuch messages word for word rakho. Truncate, yaani sabse purane messages kaat dena, aam taur par tabhi jab unmein kaam ka kuch na ho. Teen steps mein dekhte hain.
+D: Model ek baar mein seemit text padh sakta hai, ise context window kehte hain. Maan lo 12 messages ki chat hai, ye example hai, kul 78 words, aur window mein sirf 60 words aate hain.
+E: Truncate mein sabse purane messages hatte hain, 9 messages bachte hain, 57 words. Pehla message gaya, aur usi mein allergy thi. Ab bot ko woh pata hi nahi.
+F: Pehla step, purane hisse ka summary banao. Jaise: order 4471, peanut allergy, UPI se paid. Aisa poora note sirf 14 words ka hai. Kyunki summary mein woh facts bachte hain jo aage kaam aayenge.
+G: Doosra step, aakhri 4 messages word for word rakho, kyunki user ka abhi ka sawaal unhin mein hai. Summary aur ye 4 messages milakar 38 words, limit se neeche, aur allergy bachi hui.
+H: Teesra step, allergy jaise fact ko pin karo, yaani summary mein alag line mein har baar dobara likho. Kyunki summary ki summary bante-bante chhoti detail kho jaati hai.
+I: Boundary: summary ke liye ek extra model call lagti hai, aur exact detail galat ho sakti hai. Isliye agar purane messages mein bas "hi, hello" hai, to truncate sasta aur theek hai.
+J: Interview mein bolo: "Truncation silently drops the oldest messages, where the user often says the one fact that matters. I summarise the old part, pin key facts, and keep the last few messages word for word."
+K: Tumhara chatbot abhi truncate karta hai ya summarise? Comment mein likho, T ya S. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.
