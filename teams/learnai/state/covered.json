@@ -1046,13 +1046,12 @@
     {
       "id": "q118",
       "track": "interview",
-      "unit": "D4",
       "title": "Interview: Lambi chat ko chhota karna hai: truncate karoge ya summarise?",
       "kind": "question",
-      "topic": "Truncating keeps only the newest messages and silently drops the oldest, which is where the user often stated the one fact that matters; summarising compresses the old part into a short note that keeps such facts, at the cost of one extra model call and possible loss of detail. Typical answer: summarise (or pin key facts) the old part, keep the last few messages word for word, and truncate only when the old messages carry nothing needed.",
+      "topic": "Truncating drops the oldest messages and can lose the one fact the user said first; summarising folds the old part into a short note that keeps it, at the cost of one extra model call and possible lost detail; keep the last few messages word for word.",
       "hook_formula": "concrete wrong outcome, then the interview question",
       "hook_type": "relatable_stake",
-      "status": "planned",
+      "status": "built",
       "planned": "2026-10-26"
     },
     {

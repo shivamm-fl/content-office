@@ -1,0 +1,11 @@
+Pehle message mein peanut allergy batayi, bot bhool gaya. Interview mein poochha jata hai: lambi chat chhoti karni ho to truncate karoge ya summarise? Jawab: purane hisse ka chhota note (summary) banao, aakhiri kuch messages word for word rakho, aur truncate sirf tab jab purane messages mein kaam ka kuch na ho.
+
+Example invented hai, words tokens ki jagah hain. 12 messages ki chat, kul 78 words, window mein sirf 60 aate hain. Truncate mein 9 messages bachte hain aur allergy wala pehla message chala jata hai. Summary (14 words) aur last 4 messages milake 38 words hote hain, aur allergy bachi rehti hai.
+
+Teen steps: 1) Purane hisse ka summary banao. 2) Aakhiri 4 messages word for word rakho. 3) Allergy jaise fact ko pin karo, taaki summary ki summary mein detail na khoye. Boundary: summary ke liye extra model call lagti hai aur detail galat ho sakti hai, isliye purane messages mein bas "hi, hello" ho to truncate theek hai.
+
+Interview mein bolo: "Truncation silently drops the oldest messages, where the user often says the one fact that matters. I summarise the old part, pin key facts, and keep the last few messages word for word."
+
+Tumhara chatbot abhi truncate karta hai ya summarise? Comment mein likho: T ya S. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #LLM

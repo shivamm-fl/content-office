@@ -1,0 +1,9 @@
+Truncate vs summarise: long chat memory
+
+Interview mein poochha jata hai: lambi chat chhoti karni ho to truncate karoge ya summarise? Truncate sabse purane messages hata deta hai, aur wahi jagah hai jahan user ne aksar zaroori baat pehle bata di hoti hai. Summarise purane hisse ko chhote note mein badalta hai (Anthropic ke article mein ise compaction kaha gaya hai: context limit ke paas pahunchi conversation ka summary). LangChain ke docs ke hisaab se messages hatane se information khoyi ja sakti hai, aur purane messages ko summary se replace karna ek tareeka hai. Chat ka example invented hai, words tokens ki jagah hain.
+
+Is video mein: truncate vs summarise, conversation summary memory, context window, ai engineer interview, llm chat history.
+
+Sources:
+https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+https://docs.langchain.com/oss/python/langgraph/add-memory

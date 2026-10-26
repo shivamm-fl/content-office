@@ -1,0 +1,144 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3,
+    "J": 3,
+    "K": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "A",
+      0,
+      0
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "click",
+      "C",
+      0,
+      0
+    ],
+    [
+      "click",
+      "D",
+      0,
+      0
+    ],
+    [
+      "click",
+      "E",
+      0,
+      0
+    ],
+    [
+      "err",
+      "E",
+      2,
+      0
+    ],
+    [
+      "click",
+      "F",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "F",
+      3,
+      0
+    ],
+    [
+      "click",
+      "G",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "G",
+      1,
+      0
+    ],
+    [
+      "lock",
+      "H",
+      1,
+      0
+    ],
+    [
+      "warn",
+      "I",
+      1,
+      0
+    ],
+    [
+      "save",
+      "J",
+      0,
+      0.5
+    ],
+    [
+      "pop",
+      "K",
+      2,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook पहले मैसेज में peanut allergy बताई, बॉट भूल गया।",
+      "B": "Interview में यही पूछा जाता है: लंबी chat छोटी करनी हो, तो क्या करोगे, truncate या summarise?",
+      "C": "तुम्हारा जवाब: पुराने हिस्से को summarise करो, यानी उसका छोटा note बनाओ, और आख़िरी कुछ messages word for word रखो। | Truncate, यानी सबसे पुराने messages काट देना, आम तौर पर तभी जब उनमें काम का कुछ न हो। || तीन steps में देखते हैं।",
+      "D": "Model एक बार में सीमित text पढ़ सकता है, इसे context window कहते हैं। | मान लो 12{twelve} messages की chat है, ये example है, कुल 78{seventy-eight} words, और window में सिर्फ़ 60{sixty} words आते हैं।",
+      "E": "Truncate में सबसे पुराने messages हटते हैं, 9{nine} messages बचते हैं, 57{fifty-seven} words। || पहला message गया, और उसी में allergy थी। | अब bot को वो पता ही नहीं।",
+      "F": "पहला step, पुराने हिस्से का summary बनाओ। | जैसे: order 4471{four-four-seven-one}, peanut allergy, UPI से paid। | ऐसा पूरा note सिर्फ़ 14{fourteen} words का है। | क्योंकि summary में वो facts बचते हैं जो आगे काम आएँगे।",
+      "G": "दूसरा step, आख़िरी 4{four} messages word for word रखो, क्योंकि user का अभी का सवाल उन्हीं में है। | Summary और ये 4{four} messages मिलाकर 38{thirty-eight} words, limit से नीचे, और allergy बची हुई।",
+      "H": "तीसरा step, allergy जैसे fact को pin करो, यानी summary में अलग line में हर बार दोबारा लिखो। | क्योंकि summary की summary बनते-बनते छोटी detail खो जाती है।",
+      "I": "Boundary: summary के लिए एक extra model call लगती है, और exact detail गलत हो सकती है। | इसलिए अगर पुराने messages में बस “hi, hello” है, तो truncate सस्ता और ठीक है।",
+      "J": "@emph Interview में बोलो: “Truncation silently drops the oldest messages, where the user often says the one fact that matters. I summarise the old part, pin key facts, and keep the last few messages word for word.”",
+      "K": "तुम्हारा chatbot अभी truncate करता है या summarise? | Comment में लिखो, T या S। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

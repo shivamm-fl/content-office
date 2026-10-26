@@ -1200,20 +1200,14 @@
       "hook_formula": "concrete wrong outcome, then the interview question",
       "hook_source": "strategist, 2026-10-26",
       "trap": "Cutting the oldest messages and losing the one fact the user stated first.",
-      "visual_idea": "A 12-bubble chat stack with a budget line; the oldest bubbles slide off the top (TRUNCATE) and the first bubble, with a red allergy tag, goes with them; the bot's later reply is wrong. Then the same stack: the old bubbles fold into one note card (SUMMARY) holding the allergy tag, plus the last 4 bubbles; the reply is right. Word counters on the two options.",
-      "everyday_anchor": "Tearing off the first pages of a notebook to make room, when the phone number you need was written on page one.",
-      "example": "EXAMPLE (invented chat, words stand in for tokens), run in state/runs/q118_trim_run.py. Real output (state/runs/q118_trim_run_output.txt): total 78 words, 12 messages. TRUNCATE with a budget of 60 words keeps 9 messages (57 words); first message kept? False; allergy fact kept? False. SUMMARISE: summary 14 words + last 4 messages = 38 words; allergy kept? True.",
+      "visual_idea": "A 12-bubble chat stack with a budget line; the oldest bubbles slide off the top (TRUNCATE) and the first bubble, with a red allergy tag, goes with them; the bot's later reply is wrong. Then the old bubbles fold into one note card (SUMMARY) holding the allergy tag, plus the last 4 bubbles; the reply is right. Word counters on the two options.",
+      "everyday_anchor": "Tearing off the first pages of a notebook to make room, when the phone number you need was on page one.",
+      "example": "EXAMPLE (invented chat, words stand in for tokens), real run output in state/runs/q118_trim_run_output.txt: total 78 words, 12 messages. TRUNCATE budget 60 keeps 9 messages (57 words), allergy lost. SUMMARISE: summary 14 words + last 4 messages = 38 words, allergy kept.",
       "sources": [
         "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
         "https://docs.langchain.com/oss/python/langgraph/add-memory",
         "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
         "https://arxiv.org/abs/2307.03172"
-      ],
-      "facts_to_verify": [
-        "Anthropic post (fetched 2026-10-26): compaction = summarising a conversation nearing the context limit and continuing with the summary; context rot: recall decreases as tokens grow (paraphrase).",
-        "LangChain docs: trimming keeps the last N tokens and 'you may lose information from culling of the message queue'; summarisation condenses earlier history with a model and carries the summary forward.",
-        "Claude memory-tool page: compaction summarises older context; memory preserves what must survive summarisation.",
-        "Lost in the Middle (arXiv 2307.03172): performance is highest when the relevant info is at the start or the end and drops in the middle (U-shaped, 2023 models). Do NOT say models forget early info; it supports only 'position matters'. Optional, may be left out."
       ],
       "length_target_s": 110,
       "cover_headline": "Truncate or summarise long chats?",
@@ -1223,7 +1217,8 @@
         "long conversation context management",
         "conversation summary memory",
         "ai engineer interview"
-      ]
+      ],
+      "status": "planned"
     },
     {
       "id": "q119",
