@@ -16,3 +16,4 @@ No rules yet. The first two weeks are a baseline.
 - 2026-10-22 (d004): The hook must be a plain question a beginner understands at once. Never use a term such as "one step" in the hook before the reel has explained it; clarity comes before everything else.
 - 2026-10-26 (d008): The audience is working software engineers and developers, not beginners: keep the register technical, use engineering terms (sum, complement, brute force, time complexity), and do not use everyday analogies such as food, cupboards or buffets to explain a coding idea.
 - 2026-10-26 (d008): Say the plain English technical word the developer audience uses (for example "sum", not a Hindi word like "jod") and name a problem by its standard name in the hook ("Two Sum problem").
+- 2026-10-26 (d008): When the owner is unhappy with a script and asks to see it, show the rewritten script for approval before building; the owner may reply with their own full script, which is then built word for word.
