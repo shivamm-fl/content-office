@@ -1,0 +1,16 @@
+Day 8/150: Sawal pucha, AI ne aur sawal likh diye, kyun?
+
+Raw (base) model ka ek hi kaam hai: jo text mila, uske aage ka text likhna. Quiz sheet jaisa text padha hai, to "What is the capital of India?" ke baad wo aur sawal likh deta hai. Ye sirf example hai.
+
+Chat model usi model se banta hai, teen steps mein:
+1. Instruction tuning: sawal ke baad achha jawab wale examples par aur training.
+2. Human feedback: log kai jawabon mein se behtar chunte hain, model us taraf dhalta hai.
+3. Chat template: system, user, assistant roles, aur assistant wali jagah model jawab bharta hai.
+
+Chat model koi alag mashin nahi hai: Mistral-7B-Instruct aur Zephyr dono Mistral-7B base se bane hain. Sawal-jawab ke liye Instruct ya chat wala model lo.
+
+Ab tum batao: base model ko sirf "Good morning" doge, to wo kya karega? Comment mein likho. Sahi jawab: wo bas aage ka text likh dega (koi aur line ya paragraph), chat model ki tarah "Good morning!" kehkar jawab dene ki guarantee nahi hai.
+
+Roz ek AI idea ke liye follow karo.
+
+#AI #LLM #150DaysOfAI

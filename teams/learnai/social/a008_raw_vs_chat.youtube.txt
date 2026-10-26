@@ -1,0 +1,12 @@
+Raw model vs chat model: AI sawal ka jawab kyun nahi deta
+
+Raw (base) model sirf text ke aage ka text likhta hai, isliye sawal ke baad wo aur sawal likh sakta hai. Is video mein dekhte hain ki chat model usi model se teen steps mein kaise banta hai: instruction tuning, human feedback aur chat template, aur Mistral-7B-Instruct aur Zephyr ek hi base model se kaise bane hain.
+
+Is video mein: base model vs chat model, instruction tuning, human feedback (RLHF), chat template, pretraining, raw LLM vs instruct model.
+
+Example sirf example hai: "What is the capital of Pakistan?" jaisa output ek illustration hai, kisi asli model ka run nahi. 1.3B tuned model ka 175B GPT-3 se zyada pasand aana InstructGPT paper ka result hai. Chat templates ke roles (system, user, assistant) aur Mistral-7B-Instruct aur Zephyr ka ek hi base model se banna Hugging Face docs se hai.
+
+Sources:
+https://huggingface.co/docs/transformers/main/en/chat_templating
+https://huggingface.co/Qwen/Qwen2.5-7B
+https://arxiv.org/abs/2203.02155

@@ -1163,20 +1163,14 @@
       "hook_formula": "plain_question on a concrete scene",
       "hook_source": "strategist, 2026-10-26",
       "trap": "Thinking every language model is built to answer; the raw model just continues whatever text it is given.",
-      "visual_idea": "Frame 0: a text box with the question 'What is the capital of India?' and the model's output appearing below it as three more questions in the same style (a worksheet continuing itself). Then a 'text so far' strip with a cursor: the raw model adds the next likely lines. Second picture: the same question wrapped in labelled USER and ASSISTANT slots, the model fills the ASSISTANT slot with the answer. Last card: base and instruct as two buttons on the same engine, with a small TRAINED ON CHATS tag. Different from r04 (which showed pretraining to RLHF as a pipeline).",
-      "everyday_anchor": "A friend you ask 'what is the capital of India?' who, instead of answering, keeps writing the next question of the quiz paper, because that is what they have read most.",
-      "example": "EXAMPLE (illustrative, labelled as such; no numbers shown): a raw model given the line 'What is the capital of India?' continues with similar quiz lines. Real, sourced contrast: Qwen2.5-7B base card says do not use base models for conversation; Qwen2.5-7B-Instruct uses a chat template with a system and a user message. No measured number is shown (no model could be run on the run machine), so none is spoken.",
+      "visual_idea": "A question box whose continuation is three more questions; USER/ASSISTANT slots; base and instruct as two buttons on the same engine.",
+      "everyday_anchor": "A friend you ask 'what is the capital of India?' who keeps writing the next question of the quiz paper.",
+      "example": "EXAMPLE (illustrative, labelled as such; no numbers shown).",
       "sources": [
         "https://huggingface.co/docs/transformers/main/en/chat_templating",
         "https://huggingface.co/Qwen/Qwen2.5-7B",
         "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct",
-        "https://arxiv.org/abs/2203.02155",
-        "https://ar5iv.labs.arxiv.org/html/2203.02155"
-      ],
-      "facts_to_verify": [
-        "HF chat_templating docs (fetched 2026-10-26): all causal LMs, chat-trained or not, continue a sequence of tokens; base models are pretrained on a huge corpus then fine-tuned for chat on message-formatted data; roles are user, assistant, system; Mistral-7B-Instruct and Zephyr are both tuned from the Mistral-7B base; without the assistant-start tokens a model may continue the user's message instead of replying.",
-        "Qwen2.5-7B card: 'We do not recommend using base language models for conversations'; the Instruct card is instruction-tuned and uses apply_chat_template.",
-        "InstructGPT (arXiv 2203.02155): next-token prediction on web pages is a different objective from following instructions helpfully and safely; RLHF-tuned 1.3B InstructGPT preferred over 175B GPT-3. The paper's GPT-3 'eat socks after meditating' example is a real output but its figure number was unclear: do not cite a figure number, and the 'more questions' scene is an illustration, say 'example'. OpenAI's own post returned 403, not used."
+        "https://arxiv.org/abs/2203.02155"
       ],
       "length_target_s": 120,
       "cover_headline": "Raw model vs chat model",
@@ -1186,7 +1180,8 @@
         "raw llm vs instruct model",
         "why chatgpt answers questions",
         "ai engineer roadmap"
-      ]
+      ],
+      "script_file": "state/scripts/a008.txt"
     },
     {
       "id": "q118",

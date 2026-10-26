@@ -1034,14 +1034,9 @@
     {
       "id": "a008",
       "track": "series",
-      "unit": "A3",
       "title": "Raw model vs chat model: why the first one cannot answer",
-      "kind": "concept",
-      "topic": "A raw (pretrained, base) model only continues text, so a question gets more text that looks like it, often more questions; a chat model is the same kind of model trained further on conversations (instruction tuning and human feedback) and fed the chat in a template with roles, so it replies as the assistant.",
-      "hook_formula": "plain_question on a concrete scene",
-      "hook_type": "direct_question",
-      "status": "planned",
-      "planned": "2026-10-26"
+      "status": "built",
+      "date": "2026-10-26"
     },
     {
       "id": "q118",

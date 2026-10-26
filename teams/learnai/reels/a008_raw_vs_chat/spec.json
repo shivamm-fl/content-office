@@ -1,0 +1,111 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      1,
+      0
+    ],
+    [
+      "err",
+      "D",
+      1,
+      0.3
+    ],
+    [
+      "click",
+      "E",
+      2,
+      0
+    ],
+    [
+      "click",
+      "F",
+      1,
+      0
+    ],
+    [
+      "click",
+      "G",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "G",
+      3,
+      0.2
+    ],
+    [
+      "dip",
+      "H",
+      0,
+      -0.1
+    ],
+    [
+      "ok",
+      "I",
+      1,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook सवाल पूछा, AI ने और सवाल लिख दिए, क्यों?",
+      "B": "मान लो तुमने दोस्त से पूछा, “भारत की capital क्या है?” | और वो जवाब देने की जगह quiz paper का अगला सवाल लिखने लगा, क्योंकि उसने सबसे ज़्यादा वही पढ़ा है। || एक raw model ऐसा ही दोस्त है।",
+      "C": "Raw model, जिसे base model भी कहते हैं, का एक ही काम है: जो text मिला, उसके आगे का text लिखना। | उसने इंटरनेट का बहुत text पढ़कर सीखा कि अगला word क्या आएगा। | इसे pretraining कहते हैं।",
+      "D": "उस text में quiz sheets भी थीं। | तो “What is the capital of India?” के बाद सबसे likely text है, और सवाल। || मान लो raw model ने लिखा: “What is the capital of Pakistan? What is the capital of China?” | ये सिर्फ़ example है। | गलती model की नहीं, उसे जवाब देना सिखाया ही नहीं गया।",
+      "E": "तो chat model कैसे बनता है? | उसी model से, तीन steps में। || पहला step, instruction tuning। | यानी model को आगे और train करो, ऐसे examples पर जहाँ एक सवाल के बाद एक अच्छा जवाब है। | क्योंकि अब “सवाल के बाद जवाब” सबसे likely pattern बन जाता है।",
+      "F": "दूसरा step, human feedback। | Model एक सवाल के कई जवाब लिखता है, लोग बताते हैं कौन सा बेहतर है, और model उसी तरफ़ ढलता है। | असर बड़ा है: 1.3{one-point-three} billion parameters वाला tuned model, लोगों को 175{one-seventy-five} billion वाले raw GPT-3 से ज़्यादा पसंद आया। | Parameters यानी model के अंदर के सीखे हुए numbers।",
+      "G": "तीसरा step, chat template। | Model को सब कुछ text की तरह मिलता है, तो chat को roles के साथ लिखते हैं: system, user, assistant। | जैसे: “USER: भारत की capital क्या है? ASSISTANT:” | और model assistant वाली जगह भरता है। | ये marker न हो, तो model user का ही message आगे बढ़ा सकता है।",
+      "H": "@emph एक catch: chat model कोई अलग मशीन नहीं है। | Mistral-7B-Instruct और Zephyr, दोनों एक ही base model, Mistral-7B, से बने हैं। | वो अब भी अगला word ही guess करता है, बस जवाब वाला text अब सबसे likely है।",
+      "I": "तो model चुनते वक़्त नाम देखो। | Instruct या chat लिखा है, तो सवाल-जवाब के लिए वही लो।",
+      "J": "अब तुम बताओ: base model को सिर्फ़ “Good morning” दोगे, तो वो क्या करेगा? | Comment में लिखो, सही जवाब caption में है। || रोज़ एक AI idea के लिए follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
