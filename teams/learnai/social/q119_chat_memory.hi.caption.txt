@@ -1,0 +1,11 @@
+Interviewer ne poocha: Chatbot ko pichli baatein yaad rakhni hain, memory kaise design karoge? Jawab: sab kuch yaad mat rakho, chuno ki kya yaad rakhna hai.
+
+Model stateless hota hai, har call nayi shuru hoti hai, isliye yaad rakhna tumhare app ka kaam hai. Maan lo har turn mein 25 words hain (ye example hai). Poori history bhejo to turn 30 par 750 words jaate hain aur bill badhta hai.
+
+Teen steps: 1) Short-term: sirf aakhiri 2 turns bhejo, yaani 50 words. 2) Long-term: chune hue facts (naam, vegetarian, Hindi) chat ke bahar database ya file mein rakho, kul 5 words. 3) Retrieve: zarurat par sahi card request mein daalo. Ab turn 30 par bhi 55 words, 750 nahi. Boundary: chat chhoti hai (paanch turns) to poori history bhejna theek hai.
+
+Interview mein bolo: "The model is stateless, so memory is something the app builds. I resend only recent turns, store chosen facts outside the chat, and retrieve the relevant ones, so the request size stays flat."
+
+Tumhare chatbot ko sabse pehle kya yaad rakhna chahiye, naam ya bhasha? Comment mein ek word likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #ChatbotMemory

@@ -1058,14 +1058,10 @@
     {
       "id": "q119",
       "track": "interview",
-      "unit": "D6",
       "title": "Interview: Chatbot ko pichli baatein yaad rakhni hain. Memory kaise design karoge?",
       "kind": "question",
-      "topic": "The model is stateless, so memory is something the app builds: short-term memory is the recent turns resent each call; long-term memory is a small set of chosen facts stored outside the chat (a database or file) and put back into the context when relevant. Design means deciding what is worth remembering, where it is stored, and when it is retrieved, instead of storing and resending everything.",
-      "hook_formula": "interviewer_asked",
-      "hook_type": "interviewer_asked",
-      "status": "planned",
-      "planned": "2026-10-26"
+      "topic": "Chatbot memory design: the model is stateless; short-term = recent turns resent, long-term = chosen facts stored outside the chat and retrieved when relevant.",
+      "status": "built"
     }
   ]
 }

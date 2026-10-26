@@ -39,3 +39,5 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 - To show a size ratio honestly, draw equal frames with grid cells of true relative area (a 4.2x token cost = 2.05x side) instead of counting out hundreds of tiles.
 - Devanagari token pieces are byte fragments and cannot be shown as text: use blank coloured tiles for them, and real text only for English pieces.
 - Do not name a scene `M`: it clashes with the `M` kit object; call the element `M_`.
+
+- 2026-10-26 (q119): A card that moves out of one panel into another must be created after the target panel or get `style.zIndex`, or the glass panel hides it. For a "size stays flat" idea, true-scale bars (25 vs 750 words, 55 vs 750) with a counter beat a table; a tile strip (30 turns) shows "history" before the bars appear.

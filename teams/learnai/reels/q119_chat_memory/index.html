@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Design memory for a chatbot</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="122" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+      <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div><div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="122" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="122" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="122" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI"), J = M.$("#sJ");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 48}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const paint = (d, col, t, fill) => tl.to(d, { borderColor: ca(col, 0.95), backgroundColor: ca(col, fill == null ? 0.16 : fill), duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const moveTo = (d, t, dx, dy, dur) => tl.to(d, { x: dx || 0, y: dy || 0, duration: dur || 0.7, ease: "power3.inOut", immediateRender: false }, t);
+      // a labelled card: icon at left, label (and a small sub) at right
+      const lcard = (host, x, y, w, h, label, col, t, o) => { o = o || {}; const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:20px;border:2.5px solid ${ca(col, 0.6)};background:${ca(col, 0.08)}`);
+        if (o.icon) M.icon(d, o.icon, 20, (h - 52) / 2, 52, col).show(t);
+        const l = el(d, `left:${o.icon ? 90 : 0}px;right:0;top:0;height:${h}px;display:flex;align-items:center;${o.icon ? "" : "justify-content:center;"}font:800 ${o.size || 38}px ${COD};letter-spacing:.05em;color:${col};white-space:nowrap`, label);
+        show(d, t, { opacity: 0, y: 18 }); return { d, l }; };
+      const chat = (host, x, y, w, h, text, col, t, mine) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${mine ? "30px 30px 6px 30px" : "30px 30px 30px 6px"};border:2px solid ${ca(col, 0.6)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:600 ${mine ? 44 : 44}px ${LAT};color:${TEXT};white-space:nowrap`, text); return show(d, t, { opacity: 0, y: 18 }); };
+
+      // ============ A: hook, a chat that forgets the name ============
+      // diagram: A
+      M.hook(["Chatbot", "Memory?"], { size: 124, top: 215 });
+      chat(A, 230, 560, 640, 110, "Mera naam Asha hai", CYAN, 0.1, true);
+      chat(A, 100, 700, 600, 110, "Namaste Asha!", CYAN, 0.4, false);
+      const aDiv = el(A, `left:100px;top:860px;width:880px;height:0;border-top:4px dashed ${ca(MUTED, 0.8)}`); show(aDiv, at("A", "yaad"), { opacity: 0 });
+      tag(A, "NEXT DAY", 100, 880, 880, at("A", "yaad"), MUTED, 40);
+      chat(A, 230, 960, 640, 110, "Dinner mein kya?", CYAN, at("A", "memory") - 0.2, true);
+      chat(A, 100, 1100, 700, 110, "Aapka naam kya hai? ✗", HOT, at("A", "design"), false);
+      tag(A, "FORGOT", 100, 1230, 880, at("A", "karoge"), HOT, 48);
+      M.fit(A, { y: 460, h: 880 });
+
+      // ============ B: the answer: recent turns + facts outside, both into the request ============
+      // diagram: B
+      pillC(B, "CHOOSE", 200, P("B", 0) + 0.05, { size: 40, h: 64, col: ACC });
+      lcard(B, 150, 330, 780, 140, "RECENT TURNS", CYAN, at("B", "haal") - 0.1, { icon: "chat", size: 40 });
+      M.arrow(B, { from: [540, 475], to: [540, 635], color: CYAN, w: 10 }).show(at("B", "bhejo"), 0.3);
+      M.box(B, { x: 280, y: 640, w: 520, h: 200, label: "REQUEST", icon: "doc", color: ACC, size: 52 }).show(P("B", 0) + 0.2);
+      lcard(B, 150, 1010, 780, 140, "FACTS · OUTSIDE", ACC, at("B", "facts") - 0.1, { icon: "db", size: 38 });
+      M.arrow(B, { from: [540, 1005], to: [540, 845], color: ACC, w: 10 }).show(at("B", "vaapas"), 0.3);
+      ["1 · SHORT", "2 · LONG", "3 · RETRIEVE"].forEach((s, i) => { const d = el(B, `left:${40 + i * 335}px;top:1210px;width:320px;height:90px;border-radius:20px;border:2.5px solid ${ca(ACC, 0.7)};background:${ca(ACC, 0.10)};display:flex;align-items:center;justify-content:center;font:800 32px ${COD};color:${ACC};white-space:nowrap`, s); show(d, at("B", "teen") + i * 0.3, { opacity: 0, y: 18 }); });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: stateless, two separate calls ============
+      // diagram: C
+      const cCard = (y, title, ut, bt, bcol, tU, tB) => { const g = glass(C, 100, y, 880, 330, CYAN); show(g, tU - 0.15, { opacity: 0, y: 18 });
+        el(g, `left:30px;top:16px;font:800 36px ${COD};letter-spacing:.1em;color:${CYAN}`, title);
+        chat(g, 300, 76, 540, 100, ut, CYAN, tU, true); chat(g, 40, 200, 540, 100, bt, bcol, tB, false); return g; };
+      const c1 = cCard(280, "CALL 1", "Mera naam Asha hai", "Namaste Asha!", CYAN, P("C", 0) + 0.1, P("C", 0) + 0.5);
+      const c2 = cCard(750, "CALL 2", "Mera naam kya hai?", "Pata nahi ✗", HOT, at("C", "yaad") - 0.3, at("C", "nahi"));
+      const cWall = tag(C, "NEW START", 100, 640, 880, at("C", "nayi"), MUTED, 40); gone(cWall, at("C", "stateless") - 0.1);
+      stamp(C, "STATELESS", 540, 640, HOT, at("C", "stateless"), 52);
+      M.box(C, { x: 240, y: 1130, w: 600, h: 170, label: "YOUR APP", sub: "MEMORY", icon: "gear", color: ACC, size: 50, subsize: 36 }).show(at("C", "app"));
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: resend everything: 25 -> 750 words, true scale ============
+      // diagram: D
+      pillC(D, "EXAMPLE", 190, at("D", "example") - 0.1, { size: 38, h: 60, col: ACC });
+      const dW = glass(D, 80, 330, 920, 640, CYAN); show(dW, P("D", 0) + 0.1, { opacity: 0, y: 18 });
+      el(dW, `left:0;right:0;top:14px;text-align:center;font:800 36px ${COD};letter-spacing:.1em;color:${CYAN}`, "CONTEXT WINDOW");
+      const dTiles = []; for (let i = 0; i < 30; i++) { const t = el(dW, `left:${30 + (i % 15) * 58}px;top:${76 + Math.floor(i / 15) * 58}px;width:50px;height:50px;border-radius:10px;border:2px solid ${ca(CYAN, 0.6)};background:${ca(CYAN, 0.12)}`); show(t, at("D", "history") + i * 0.025, { opacity: 0, scale: 0.8 }, 0.3); dTiles.push(t); }
+      tl.to(dTiles[0], { borderColor: ca(ACC, 1), backgroundColor: ca(ACC, 0.5), duration: 0.25, immediateRender: false }, at("D", "Turn"));
+      tl.to(dTiles[29], { borderColor: ca(ACC, 1), backgroundColor: ca(ACC, 0.5), duration: 0.25, immediateRender: false }, at("D", "30"));
+      const dBars = 840, dB1 = Math.round(dBars * 25 / 750);
+      const dl1 = el(dW, `left:40px;top:220px;font:800 38px ${COD};letter-spacing:.08em;color:${CYAN};white-space:nowrap`, "TURN 1"); show(dl1, at("D", "Turn"), { opacity: 0 });
+      const d1 = el(dW, `left:40px;top:280px;width:${dB1}px;height:90px;border-radius:12px;background:${ca(CYAN, 0.75)}`); show(d1, at("D", "Turn"), { opacity: 0, scaleX: 0.2 });
+      const d1v = el(dW, `left:${40 + dB1 + 20}px;top:292px;font:800 54px ${COD};color:${CYAN};white-space:nowrap`, "25"); show(d1v, at("D", "25", 1), { opacity: 0 });
+      const dl2 = el(dW, `left:40px;top:430px;font:800 38px ${COD};letter-spacing:.08em;color:${CYAN};white-space:nowrap`, "TURN 30"); show(dl2, at("D", "turn", 1), { opacity: 0 });
+      const d2 = el(dW, `left:40px;top:490px;width:${dB1}px;height:90px;border-radius:12px;background:${ca(CYAN, 0.75)}`); tl.set(d2, { opacity: 0 }, 0); tl.to(d2, { opacity: 1, duration: 0.2, immediateRender: false }, at("D", "turn", 1));
+      const d2v = el(dW, `right:50px;top:410px;font:800 64px ${COD};color:${ACC};white-space:nowrap;text-align:right`, "25"); show(d2v, at("D", "turn", 1), { opacity: 0 });
+      const du = { u: 0 }; tl.to(du, { u: 1, duration: 0.8, ease: "power2.out", immediateRender: false, onUpdate: () => { d2.style.width = Math.round(dB1 + (dBars - dB1) * du.u) + "px"; d2v.textContent = Math.round(25 + 725 * du.u); } }, at("D", "750"));
+      tl.to(d2, { backgroundColor: ca(HOT, 0.8), duration: 0.3, immediateRender: false }, at("D", "bill"));
+      M.icon(D, "coin", 180, 1020, 110, HOT).show(at("D", "bill"));
+      tag(D, "BILL ↑", 330, 1040, 300, at("D", "bill"), HOT, 60);
+      tl.to(dW, { borderColor: ca(HOT, 0.95), duration: 0.3, immediateRender: false }, at("D", "bharti"));
+      tag(D, "WINDOW FULL", 560, 1050, 440, at("D", "bharti"), HOT, 40);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: step 1, short-term = last 2 turns ============
+      // diagram: E
+      pillC(E, "STEP 1 · SHORT-TERM", 200, P("E", 0) + 0.05, { size: 40, h: 64, col: CYAN });
+      const eT = [26, 27, 28, 29, 30].map((n, i) => lcard(E, 100, 320 + i * 136, 620, 112, "TURN " + n, CYAN, P("E", 0) + 0.2 + i * 0.1, { icon: "chat", size: 38 }));
+      eT.slice(0, 3).forEach((c) => tl.to(c.d, { opacity: 0.3, duration: 0.4, immediateRender: false }, at("E", "2")));
+      eT.slice(3).forEach((c) => paint(c.d, ACC, at("E", "2")));
+      const eBr = el(E, `left:745px;top:${320 + 3 * 136}px;width:0;height:248px;border-right:6px solid ${ACC};border-radius:3px`); show(eBr, at("E", "2"), { opacity: 0 });
+      tag(E, "LAST 2", 770, 320 + 3 * 136 + 90, 260, at("E", "2"), ACC, 44);
+      M.arrow(E, { from: [410, 975], to: [410, 1045], color: ACC, w: 9 }).show(at("E", "50") - 0.2, 0.3);
+      lcard(E, 100, 1050, 880, 130, "REQUEST · 50 WORDS", ACC, at("E", "50") - 0.1, { icon: "doc", size: 40 });
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: step 2, long-term facts outside the chat ============
+      // diagram: F
+      pillC(F, "STEP 2 · LONG-TERM", 200, P("F", 0) + 0.05, { size: 40, h: 64, col: ACC });
+      const fP = glass(F, 80, 300, 920, 580, ACC); show(fP, P("F", 0) + 0.2, { opacity: 0, y: 18 });
+      M.icon(fP, "db", 30, 18, 62, ACC).show(P("F", 0) + 0.3);
+      el(fP, `left:110px;top:24px;font:800 36px ${COD};letter-spacing:.08em;color:${ACC};white-space:nowrap`, "OUTSIDE THE CHAT");
+      const fCards = [["NAME · ASHA", "naam", "user"], ["DIET · VEGETARIAN", "vegetarian", "check"], ["LANGUAGE · HINDI", "Hindi", "speaker"]].map(([s, w, ic], i) => lcard(fP, 30, 110 + i * 150, 860, 126, s, ACC, at("F", w) - 0.15, { icon: ic, size: 38 }));
+      const fTh = lcard(F, 100, 960, 600, 110, "THANKS", MUTED, at("F", "thanks") - 0.1, { size: 40 });
+      paint(fTh.d, HOT, at("F", "nahi"), 0.12);
+      tl.to(fTh.d, { x: 690, duration: 0.5, ease: "power3.in", immediateRender: false }, at("F", "nahi") + 0.25); tl.to(fTh.d, { opacity: 0, duration: 0.15, immediateRender: false }, at("F", "nahi") + 0.65);
+      const fBin = el(F, "left:830px;top:930px;width:130px;height:160px", `<svg viewBox="0 0 64 80" width="130" height="160"><g fill="none" stroke="${HOT}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 22h44M24 22v-8h16v8M14 22l4 50h28l4-50M26 34v28M38 34v28"/></g></svg>`);
+      show(fBin, at("F", "thanks") - 0.1, { opacity: 0 });
+      pillC(F, "5 WORDS", 1150, at("F", "5") - 0.1, { size: 44, h: 70, col: GOOD });
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: step 3, retrieve only the relevant card; then flat 55 vs 750 ============
+      // diagram: G
+      const g1 = [];
+      g1.push(pillC(G, "STEP 3 · RETRIEVE", 200, P("G", 0) + 0.05, { size: 40, h: 64, col: GOOD }));
+      g1.push(chat(G, 130, 300, 820, 110, "Aaj dinner mein kya banaun?", CYAN, at("G", "User") - 0.1, true));
+      const gS = glass(G, 80, 450, 920, 400, ACC); show(gS, P("G", 0) + 0.2, { opacity: 0, y: 18 }); g1.push(gS);
+      const gC = [["NAME · ASHA", 0], ["DIET · VEGETARIAN", 1], ["LANGUAGE · HINDI", 2]].map(([s, i]) => lcard(G, 130, 500 + i * 110, 820, 92, s, ACC, P("G", 0) + 0.3 + i * 0.1, { size: 36 })); gC.forEach((c) => g1.push(c.d));
+      const gR = glass(G, 100, 900, 880, 380, CYAN); show(gR, P("G", 0) + 0.3, { opacity: 0, y: 18 }); g1.push(gR);
+      g1.push(el(G, `left:130px;top:915px;font:800 36px ${COD};letter-spacing:.1em;color:${CYAN}`, "REQUEST")); tl.set(g1[g1.length - 1], { opacity: 0 }, 0); tl.to(g1[g1.length - 1], { opacity: 1, duration: 0.3, immediateRender: false }, P("G", 0) + 0.4);
+      const gL = lcard(G, 130, 1165, 820, 100, "LAST 2 TURNS", CYAN, P("G", 0) + 0.5, { size: 36 }); g1.push(gL.d);
+      gC[1].d.style.zIndex = 6; paint(gC[1].d, GOOD, at("G", "vegetarian"));
+      tl.to(gC[1].d, { y: 400, duration: 0.8, ease: "power3.inOut", immediateRender: false }, at("G", "card"));
+      const gSum = tag(G, "5 + 50 = 55", 520, 915, 450, at("G", "milakar") - 0.2, ACC, 40); g1.push(gSum);
+      [gC[0].d, gC[2].d].forEach((d) => paint(d, GOOD, at("G", "teenon")));
+      g1.forEach((d) => gone(d, at("G", "aur", 1) - 0.15, 0.3));
+      const gh1 = tag(G, "TURN 30 · RESEND ALL", 60, 340, 960, at("G", "turn"), HOT, 48);
+      const gb1 = el(G, "left:60px;top:420px;width:840px;height:220px;border-radius:14px;background:" + ca(HOT, 0.8)); show(gb1, at("G", "750"), { opacity: 0, scaleX: 0.3 }); gb1.style.transformOrigin = "0 50%";
+      el(G, `left:640px;top:470px;width:240px;text-align:right;font:800 110px ${COD};color:#fff;white-space:nowrap`, "750"); tl.set(G.lastElementChild, { opacity: 0 }, 0); tl.to(G.lastElementChild, { opacity: 1, duration: 0.3, immediateRender: false }, at("G", "750") + 0.2);
+      const gh2 = tag(G, "TURN 30 · MEMORY", 60, 760, 960, at("G", "55", 1) - 0.4, GOOD, 48);
+      const gb2 = el(G, `left:60px;top:840px;width:${Math.round(840 * 55 / 750)}px;height:220px;border-radius:14px;background:${ca(GOOD, 0.85)}`); show(gb2, at("G", "55", 1) - 0.2, { opacity: 0, scaleX: 0.3 }); gb2.style.transformOrigin = "0 50%";
+      el(G, `left:${60 + Math.round(840 * 55 / 750) + 24}px;top:880px;font:800 130px ${COD};color:${GOOD};white-space:nowrap`, "55"); tl.set(G.lastElementChild, { opacity: 0 }, 0); tl.to(G.lastElementChild, { opacity: 1, duration: 0.3, immediateRender: false }, at("G", "55", 1));
+      tag(G, "FLAT", 60, 1120, 960, at("G", "nahi"), GOOD, 110);
+      [gh1, gh2].forEach((d) => tl.set(d, { opacity: 0 }, 0));
+
+      // ============ H: boundary, a short chat can send everything ============
+      // diagram: H
+      pillC(H, "BOUNDARY", 200, P("H", 0) + 0.05, { size: 40, h: 64, col: ACC });
+      const hP1 = glass(H, 100, 300, 880, 380, GOOD); show(hP1, P("H", 0) + 0.2, { opacity: 0, y: 18 });
+      el(hP1, `left:30px;top:16px;font:800 36px ${COD};letter-spacing:.1em;color:${GOOD}`, "SHORT CHAT");
+      for (let i = 0; i < 8; i++) { if (i < 5) { lcard(hP1, 24 + i * 104, 100, 94, 130, "T" + (i + 1), CYAN, at("H", "paanch") - 0.2 + i * 0.08, { size: 30 }); } else { const s = el(hP1, `left:${24 + i * 104}px;top:100px;width:94px;height:130px;border-radius:16px;border:2.5px dashed ${ca(MUTED, 0.5)}`); show(s, P("H", 0) + 0.3, { opacity: 0 }); } }
+      stamp(hP1, "SEND ALL ✓", 440, 270, GOOD, at("H", "theek"), 48);
+      const hP2 = glass(H, 100, 760, 880, 480, ACC); show(hP2, at("H", "Memory") - 0.1, { opacity: 0, y: 18 });
+      el(hP2, `left:30px;top:16px;font:800 36px ${COD};letter-spacing:.1em;color:${ACC}`, "LONG CHAT");
+      for (let i = 0; i < 8; i++) { const r = el(hP2, `left:40px;top:${80 + i * 38}px;width:${260 + (i % 3) * 30}px;height:24px;border-radius:12px;background:${ca(CYAN, 0.55)}`); show(r, at("H", "lanbi") + i * 0.05, { opacity: 0, x: -20 }, 0.3); }
+      M.arrow(hP2, { from: [400, 210], to: [470, 210], color: ACC, w: 8 }).show(at("H", "kal") - 0.3, 0.3);
+      lcard(hP2, 480, 130, 370, 160, "MEMORY", ACC, at("H", "kal") - 0.2, { icon: "db", size: 40 });
+      pillC(hP2, "TOMORROW", 370, at("H", "kal"), { size: 40, h: 64, col: ACC });
+      M.fit(H, { y: 200, h: 1100 });
+
+      // ============ I: the interview line, four rows ============
+      // diagram: I
+      pillC(I, "SAY THIS", 200, P("I", 0) + 0.05, { size: 42, h: 66, col: ACC });
+      const iRows = [["STATELESS", "APP BUILDS MEMORY", "gear", CYAN, "stateless"], ["RECENT TURNS", "RESENT EACH CALL", "chat", CYAN, "resend"], ["STORE FACTS", "OUTSIDE THE CHAT", "db", ACC, "store"], ["RETRIEVE", "REQUEST STAYS FLAT", "search", GOOD, "retrieve"]];
+      const iB = iRows.map(([lab, sub, ic, col, w], i) => { const b = M.box(I, { x: 100, y: 310 + i * 240, w: 880, h: 200, label: lab, sub: sub, icon: ic, color: col, size: 54, subsize: 36 }); b.show(at("I", w) - 0.3); return b; });
+      M.fit(I, { y: 200, h: 1100 });
+
+      // ============ J: close, comment name or language, follow ============
+      // diagram: J
+      tag(J, "FIRST FACT?", 0, 260, 1080, P("J", 0) + 0.1, ACC, 60);
+      M.pill(J, "NAME?", at("J", "naam"), { x: 230, y: 380, kind: "out", size: 48 });
+      M.pill(J, "LANGUAGE?", at("J", "bhaasha"), { x: 560, y: 380, kind: "out", size: 48 });
+      const jC = glass(J, 120, 540, 840, 380, CYAN); show(jC, at("J", "Comment") - 0.2, { opacity: 0, y: 20 });
+      el(jC, `left:30px;top:20px;font:800 38px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      M.pill(jC, "NAME", at("J", "likho"), { x: 130, y: 105, kind: "out", size: 52 }); M.pill(jC, "LANGUAGE", at("J", "likho") + 0.25, { x: 420, y: 105, kind: "out", size: 52 });
+      show(el(jC, `left:36px;right:36px;bottom:34px;height:70px;border-radius:35px;border:1.5px solid rgba(150,175,215,.35);font:500 30px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("J", "Comment") + 0.1, { opacity: 0 });
+      const fbt = el(J, `left:370px;top:1030px;width:340px;height:90px;border-radius:45px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 42px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fbt, at("J", "follow") - 0.5, { opacity: 0 });
+      tl.to(fbt, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("J", "follow")); tl.to(fbt, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("J", "follow") + 0.12);
+      M.fit(J, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I); M.wipe(S.J);
+      M.finish({ kw: { memory: "gold", stateless: "hot", facts: "cyan", yaad: "cyan", retrieve: "good", bill: "hot", flat: "good", follow: "gold", comment: "gold", history: "cyan", vegetarian: "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

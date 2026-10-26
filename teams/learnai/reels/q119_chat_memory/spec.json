@@ -1,0 +1,117 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3,
+    "J": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "err",
+      "D",
+      3,
+      0
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "click",
+      "F",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "G",
+      2,
+      0
+    ],
+    [
+      "ok",
+      "G",
+      4,
+      0
+    ],
+    [
+      "click",
+      "H",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "J",
+      1,
+      0
+    ],
+    [
+      "save",
+      "J",
+      2,
+      0.5
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: | Chatbot को पिछली बातें याद रखनी हैं, | memory कैसे design करोगे?",
+      "B": "तुम्हारा जवाब: सब कुछ याद मत रखो, | चुनो कि क्या याद रखना है। | हाल की बातें हर बार भेजो, और ज़रूरी facts chat के बाहर रखकर, | काम के वक़्त वापस डालो। || तीन steps में देखते हैं।",
+      "C": "पहले ये जानो: | model को पिछली बात याद नहीं रहती, | हर call नई शुरू होती है। | इसे stateless कहते हैं, | तो याद रखना तुम्हारे app का काम है।",
+      "D": "सबसे आसान तरीका: | हर बार पूरी history भेज दो। | मान लो हर turn में 25{twenty-five} words हैं, | ये example है। | Turn 1{one} पर 25{twenty-five} words जाते हैं, | और turn 30{thirty} पर 750{seven-fifty} words। | यानी हर नए turn पर bill बढ़ता है, | और context window भरती जाती है।",
+      "E": "पहला step, short-term memory। | सिर्फ़ आख़िरी 2{two} turns भेजो, | यानी 50{fifty} words, | क्योंकि फ़ौरन की बात जुड़ी रहनी चाहिए।",
+      "F": "दूसरा step, long-term memory। | यानी चुने हुए facts जो बार-बार काम आते हैं, | और जिन्हें chat के बाहर, database या file में रखते हैं। | मान लो तीन cards हैं: | नाम, vegetarian, और Hindi में बात। | कुल 5{five} words। | “thanks” जैसी बातें नहीं रखते, | क्योंकि उनसे आगे कुछ नहीं बदलता।",
+      "G": "तीसरा step, retrieve, | यानी ज़रूरत पर वापस निकालना। | User पूछे, “आज dinner में क्या बनाऊँ?” | तो vegetarian वाला card request में जाता है। | तीनों cards डालो तो 5{five} और 50{fifty} मिलाकर 55{fifty-five} words, | और turn 30{thirty} पर भी 55{fifty-five}, 750{seven-fifty} नहीं।",
+      "H": "Boundary: | अगर chat छोटी है, मान लो पाँच turns की, | तो पूरी history भेजना ठीक है। | Memory system तब बनाओ जब बातचीत लंबी चले, | या user कल फिर लौटे।",
+      "I": "@emph Interview में बोलो: || “The model is stateless, so memory is something the app builds. | I resend only recent turns, store chosen facts outside the chat, | and retrieve the relevant ones, so the request size stays flat.”",
+      "J": "तुम्हारे chatbot को सबसे पहले क्या याद रखना चाहिए, नाम या भाषा? | Comment में एक word लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

@@ -1,0 +1,9 @@
+Chatbot memory kaise design karein: interview jawab
+
+Interview mein poochha jata hai: chatbot ko pichli baatein yaad rakhni hain, memory kaise design karoge? Jawab: model stateless hota hai (OpenAI ke docs ke hisaab se har text generation request independent aur stateless hai), isliye memory app banata hai: recent turns har baar bhejo, chune hue facts chat ke bahar rakho aur zarurat par wapas request mein daalo. Numbers (25 words per turn, 3 facts) invented example hain. Claude ka memory tool bhi isi tarah client-side kaam karta hai: Claude file operations maangta hai, aapka application unhe chalata hai.
+
+Is video mein: chatbot memory design, short term vs long term memory, llm memory, ai engineer interview.
+
+Sources:
+https://developers.openai.com/api/docs/guides/conversation-state
+https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool

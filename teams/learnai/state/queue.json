@@ -1231,29 +1231,15 @@
       "unit": "D6",
       "format": "question",
       "title": "Interview: Chatbot ko pichli baatein yaad rakhni hain. Memory kaise design karoge?",
-      "one_idea": "The model is stateless, so memory is something the app builds: short-term memory is the recent turns resent each call; long-term memory is a small set of chosen facts stored outside the chat (a database or file) and put back into the context when relevant. Design means deciding what is worth remembering, where it is stored, and when it is retrieved, instead of storing and resending everything.",
+      "one_idea": "The model is stateless, so memory is something the app builds: short-term memory is the recent turns resent each call; long-term memory is a small set of chosen facts stored outside the chat and put back into the context when relevant.",
       "hook_type": "interviewer_asked",
       "spoken_hook": "Interviewer ने पूछा: Chatbot को पिछली बातें याद रखनी हैं, memory कैसे design करोगे?",
       "hook_formula": "interviewer_asked",
       "hook_source": "strategist, 2026-10-26",
       "trap": "Storing and resending every message forever instead of choosing what is worth remembering.",
-      "visual_idea": "A chat where each new turn drags the whole earlier stack into the request box, a size bar growing turn by turn (10, 20, 30). Then a split: SHORT-TERM card (last 2 turns) and a LONG-TERM shelf of three fact cards (name, vegetarian, Hindi); a retrieve arrow drops only the relevant fact card into the request. Request bar stays flat.",
-      "everyday_anchor": "A shopkeeper who does not re-read the whole ledger for every customer but keeps a small card for each regular: name, usual order, language.",
-      "example": "EXAMPLE (invented: 25 words per turn, 3 stored facts), run in state/runs/q119_memory_run.py. Real output (state/runs/q119_memory_run_output.txt): resending all history: turn 1 sends 25 words, turn 10 sends 250, turn 20 sends 500, turn 30 sends 750 (cumulative 11625 words by turn 30). With memory: 3 facts = 5 words + last 2 turns 50 words = 55 words per turn at any turn.",
       "sources": [
         "https://developers.openai.com/api/docs/guides/conversation-state",
-        "https://platform.claude.com/docs/en/api/messages",
-        "https://docs.langchain.com/oss/python/langgraph/add-memory",
-        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool",
-        "https://arxiv.org/abs/2310.08560"
-      ],
-      "facts_to_verify": [
-        "OpenAI conversation-state page (fetched 2026-10-26): each text generation request is independent and stateless; with previous_response_id all previous input tokens in the chain are billed as input tokens.",
-        "Claude Messages API: the API supports stateless multi-turn conversations; prior turns go in the messages parameter.",
-        "LangChain/LangGraph docs: short-term memory tracks a multi-turn conversation per thread; long-term memory stores user- or app-specific data across conversations.",
-        "Claude memory tool: stores and retrieves information across conversations in memory files, client-side, just-in-time retrieval instead of loading everything; lists size caps, expiry and sensitive-data duties.",
-        "MemGPT (arXiv 2310.08560): virtual context management with memory tiers, paraphrase level; do not state more than that. Optional.",
-        "Note: ai-course q15 (stateless chat, published 2026-10-15) and q16 (long chat, sliding window / summary) cover nearby ideas; this reel's angle is designing what to remember, with a long-term store."
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool"
       ],
       "length_target_s": 110,
       "cover_headline": "Design memory for a chatbot",
@@ -1263,7 +1249,8 @@
         "llm long term memory",
         "short term vs long term memory ai",
         "ai engineer interview"
-      ]
+      ],
+      "status": "planned"
     }
   ]
 }
