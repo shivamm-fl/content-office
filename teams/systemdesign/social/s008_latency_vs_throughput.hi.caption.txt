@@ -1,0 +1,16 @@
+Day 8/150: Fast server bhi hazaron requests par atak sakta hai.
+
+Latency ek request ki deri hai, throughput ek second ya ghante mein nipti requests ki ginti. Dono alag number hain.
+
+College canteen mein ek chaay 2 minute mein banti hai: yeh latency. Counter ek ghante mein 60 / 2 = 30 cup deta hai: yeh throughput. Doosra counter khulne par latency wahi rehti hai, throughput dugna ho jata hai.
+Catch: har ghante 40 log aayein aur counter 30 hi de paye, to line badhti hai aur aakhiri aadmi ko 20 minute zyada rukna padta hai, jabki chaay ab bhi 2 minute mein ban rahi hai. Server mein aam taur par limit ke paas pahunchte hi latency chadhne lagti hai, kyunki requests line mein khadi intzar karti hain.
+
+Tune karte waqt pehle poochho: har jawab der se mil raha hai (latency) ya bheed mein requests atak rahi hain (throughput)?
+
+Quiz ka jawab: 2 milliseconds latency hai, kyunki yeh ek request ki deri hai.
+
+(Canteen ke saare numbers aur 2 ms / 500 requests per second sirf example hain.)
+
+Sawal: ek server 2 ms mein jawab deta hai par ek second mein sirf 500 requests le paata hai. To 2 ms kaun sa number hai? Comment karo.
+
+#systemdesign #latency #backend

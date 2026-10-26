@@ -1,0 +1,10 @@
+Latency vs Throughput in Hinglish: Fast ya Zyada? (Day 8/150)
+
+Latency is the delay of a single request or communication; throughput is how much work is delivered or completed per unit of time. They are different quantities, so a server can answer each request quickly and still be overloaded. As the load approaches the maximum throughput, queuing delay makes latency rise sharply (in a simulation with unlimited queues it grows without bound). The canteen numbers (2 minutes per cup, 30 cups per hour, 40 arrivals per hour) and the 2 ms / 500 requests per second quiz are invented examples, not measurements. Explained with a college canteen counter and its line.
+
+Sources:
+https://en.wikipedia.org/wiki/Throughput
+https://aws.amazon.com/what-is/latency/
+https://en.wikipedia.org/wiki/Latency_(engineering)
+https://en.wikipedia.org/wiki/Little%27s_law
+https://en.wikipedia.org/wiki/Network_performance

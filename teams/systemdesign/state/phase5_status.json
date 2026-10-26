@@ -118,5 +118,22 @@
   "hook_type": "relatable_stake",
   "format": "trade-off",
   "title": "REST vs gRPC: ek server doosre server ko kaise bulaye"
+ },
+ "s008": {
+  "status": "built",
+  "track": "series",
+  "folder": "reels/s008_latency_vs_throughput",
+  "mp4": "reels/s008_latency_vs_throughput_hi.mp4",
+  "duration_s": 115.5,
+  "cover": "brand/covers/s008_latency_vs_throughput.png",
+  "caption": "social/s008_latency_vs_throughput.hi.caption.txt",
+  "published": false,
+  "qa_passed": false,
+  "hook_formula": "surprising_fact: a short claim that corrects a belief (fast per request means it handles many); the problem is stated in plain words in the next line",
+  "hook_source": "hook-writer surprising_fact",
+  "hook_score": 30,
+  "hook_type": "surprising_fact",
+  "format": "concept",
+  "title": "Latency vs throughput: ek request kitni der, aur ek second mein kitni"
  }
 }

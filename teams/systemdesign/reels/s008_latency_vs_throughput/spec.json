@@ -1,0 +1,111 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 4,
+    "B": 4,
+    "C": 4,
+    "D": 4,
+    "E": 4,
+    "F": 4,
+    "G": 4,
+    "H": 4,
+    "I": 4,
+    "J": 4
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "C",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "C",
+      2,
+      0
+    ],
+    [
+      "click",
+      "E",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      2,
+      0
+    ],
+    [
+      "err",
+      "G",
+      3,
+      0
+    ],
+    [
+      "dip",
+      "H",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "J",
+      3,
+      0
+    ],
+    [
+      "save",
+      "J",
+      5,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Fast server भी हज़ारों requests पर अटक सकता है। || हर request जल्दी निपटे, पर बहुत सारी एक साथ आएँ, तो line नहीं हटती। || College canteen से देखते हैं।",
+      "B": "EXAMPLE: | canteen में एक counter है, | और एक चाय बनने में 2{two} minutes लगते हैं। || आर्डर देने से कप हाथ में आने तक का ये इंतज़ार है latency।",
+      "C": "अब ये counter एक घंटे में कितने कप देगा? || 60{sixty} minutes को 2{two} minutes से भाग दो, | तो 30{तीस} कप। || एक घंटे में कितने कप निपटे, ये है throughput।",
+      "D": "तो दो अलग नंबर हैं। || Latency एक request की देरी है, | throughput एक घंटे या एक second में निपटी requests की गिनती है।",
+      "E": "अब दूसरा counter खोल दो। || चाय अब भी 2{two} minutes में बनती है, | तो latency वही रही। || पर दो counters, हर एक के 30{तीस} कप, तो कुल 60{साठ} कप एक घंटे में। || Throughput दुगना, latency जस की तस।",
+      "F": "Server में भी यही है। || Counter है server या worker, | और कप है एक request। || चाय तेज़ बने, तो latency घटती है। || Counters बढ़ें, तो throughput बढ़ता है।",
+      "G": "अब catch देखो। || मान लो हर घंटे 40{forty} लोग आ रहे हैं, | और counter सिर्फ़ 30{तीस} कप दे सकता है। || हर घंटे 10{दस} लोग ज़्यादा जमा होते हैं। || उन 10{दस} लोगों के 2{two} minutes जोड़ो, | तो आख़िरी आदमी 20{twenty} minutes ज़्यादा रुकता है। || चाय अब भी 2{two} minutes में बन रही है, | फिर भी wait लंबा हो गया।",
+      "H": "Server में आम तौर पर यही होता है: | limit के पास पहुँचते ही latency चढ़ने लगती है, | क्योंकि requests line में खड़ी इंतज़ार करती हैं।",
+      "I": "@emph इसलिए system tune करते समय पहले पूछो: | कौन सा नंबर सुधारना है? || Users को हर जवाब देर से मिल रहा है, तो latency। || भीड़ में requests अटक रही हैं, तो throughput।",
+      "J": "अब तुम बताओ: | एक server 2{two} milliseconds में जवाब देता है, | पर एक second में सिर्फ़ 500{five-hundred} requests ले पाता है। || तो 2{two} milliseconds कौन सा नंबर है? | Comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
