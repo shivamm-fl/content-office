@@ -1,31 +1,61 @@
 {
   "items": [
     {
-      "id": "s007",
+      "id": "s008",
       "track": "series",
-      "day": 7,
+      "day": 8,
       "unit": "P1",
-      "title": "REST vs gRPC: ek server doosre server ko kaise bulaye",
-      "format": "trade-off",
-      "one_idea": "REST and gRPC are two ways for one server to call another: REST sends readable text over plain HTTP to named resources and works with every tool and browser; gRPC calls a named function from a shared contract file, sends compact binary, and supports streaming; the axis that decides is who is calling (anyone, including browsers and outside partners, versus your own services that you control on both sides).",
-      "spoken_hook": "Servers की बातचीत गलत चुनी, तो पूरा app अटकेगा।",
-      "hook_type": "relatable_stake",
-      "hook_formula": "relatable_stake: the stake first, no interview preamble; the choice is named in the next line",
-      "hook_source": "hook-writer relatable_stake",
-      "visual_idea": "Two server boxes, Orders and Payments. Top lane REST, bottom lane gRPC, then callers slide to the matching lane.",
-      "sources": [
-        "https://grpc.io/docs/what-is-grpc/introduction/",
-        "https://grpc.io/docs/what-is-grpc/core-concepts/",
-        "https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md",
-        "https://grpc.io/docs/platforms/web/basics/",
-        "https://protobuf.dev/overview/",
-        "https://www.rfc-editor.org/rfc/rfc9113.html",
-        "https://developer.mozilla.org/en-US/docs/Glossary/REST",
-        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods"
+      "title": "Latency vs throughput: ek request kitni der, aur ek second mein kitni",
+      "format": "concept",
+      "one_idea": "Latency is how long one request takes from send to answer; throughput is how many requests get done per unit time; they are two different numbers, so a server can answer each request fast and still be overloaded, and the catch is that as load nears the limit, latency climbs.",
+      "spoken_hook": "Fast server भी हज़ारों requests पर अटक सकता है।",
+      "hook_type": "surprising_fact",
+      "hook_formula": "surprising_fact: a short claim that corrects a belief (fast per request means it handles many); the problem is stated in plain words in the next line, no definition between hook and answer",
+      "hook_source": "hook-writer surprising_fact",
+      "hook_10s": "Fast server भी हज़ारों requests पर अटक सकता है। हर request एक second में निपटे, फिर भी एक साथ दस हज़ार आ जाएँ तो? Speed दो तरह की होती है, और हम अक्सर एक ही नापते हैं। [frame 0: one canteen counter, one cup of tea moving across in 2 s, a queue of people waiting behind it]",
+      "hook_candidates": [
+        {
+          "formula": "surprising_fact",
+          "text": "Fast server भी हज़ारों requests पर अटक सकता है।"
+        },
+        {
+          "formula": "direct_question",
+          "text": "Server तेज़ है, तो फिर लोग इंतज़ार क्यों कर रहे हैं?"
+        },
+        {
+          "formula": "interviewer_asked",
+          "text": "Interviewer ने पूछा: latency और throughput में फ़र्क़ क्या है?"
+        }
       ],
-      "length_target_s": 130,
-      "cover_headline": "REST vs gRPC: Which One When?",
-      "thumb_text": "REST ya gRPC?",
+      "visual_idea": "A canteen counter with a queue. A stopwatch above one customer shows the wait for one cup (latency); a tally beside the counter shows cups per minute (throughput). A second counter slides in: the stopwatch stays the same, the tally doubles. Last, the queue grows and the stopwatch number climbs.",
+      "everyday_anchor": "A college canteen or chai counter at lunch: one cup takes the same time to make, but how many people you serve per hour depends on how many counters work at once.",
+      "example": "EXAMPLE (not measured): one counter, 2 minutes per cup = latency 2 min, throughput 30 cups per hour; two counters = latency still 2 min, throughput 60 cups per hour. Arithmetic: 60 / 2 = 30, 30 x 2 = 60.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Network_performance",
+        "https://aws.amazon.com/what-is/latency/",
+        "https://en.wikipedia.org/wiki/Throughput",
+        "https://en.wikipedia.org/wiki/Latency_(engineering)",
+        "https://en.wikipedia.org/wiki/Little%27s_law"
+      ],
+      "facts_to_verify": [
+        "Latency is the delay of communication/one request (AWS: network latency is the delay in network communication; Wikipedia: delay between sender and receiver)",
+        "Throughput is the actual rate at which messages are delivered per unit time; bandwidth is the maximum (Wikipedia Network performance and Throughput)",
+        "Latency and throughput are different quantities: the Latency (engineering) page says a trip's latency is independent of the throughput of the link",
+        "Catch: as a system nears its maximum load, queuing makes latency rise without bound (Wikipedia Throughput, asymptotic throughput section); say 'typically'",
+        "Optional one-line link: average items in the system = arrival rate x average time in system (Little's law page); only use if the script needs it",
+        "All canteen numbers are EXAMPLE with arithmetic on screen; no real company or measured number is claimed",
+        "Researcher was not asked (not on the roster this session); the builder re-checks the quoted lines on the pages"
+      ],
+      "length_target_s": 120,
+      "cover_headline": "Latency vs Throughput Explained",
+      "thumb_text": "Fast ya Zyada?",
+      "keywords": [
+        "latency vs throughput",
+        "latency aur throughput kya hai",
+        "system design basics hindi",
+        "latency vs bandwidth",
+        "throughput kya hota hai"
+      ],
       "status": "planned",
       "qa_passed": false
     }
