@@ -1,38 +1,39 @@
 {
-  "items": [
-    {
-      "id": "d008",
-      "track": "series",
-      "day": 8,
-      "unit": "P1",
-      "format": "problem",
-      "title": "Two Sum: do number jinka jod target ho, ek pass mein",
-      "one_idea": "Two Sum: for each number ask whether its partner (target minus the number) was already seen; a hash map answers that in one step, so one pass over the list replaces checking every pair.",
-      "hook_type": "direct_question",
-      "spoken_hook": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें?",
-      "hook_formula": "find_the_pair_question",
-      "hook_source": "direct_question: the problem itself as a plain question, no term used before it is explained (owner 2026-10-22); hookscore 44 WEAK, no DEALBREAKER",
-      "visual_idea": "Row of five cells (5 1 12 3 8), target chip 11; brute-force arcs with counter to 10; then a walking pointer and a seen table filling; at 8 the arrow 11-8=3 jumps to the table row for 3.",
-      "everyday_anchor": "Wedding buffet coupons notebook.",
-      "example": "EXAMPLE list [5,1,12,3,8] target 11; answer [3,4]. Brute force 10 checks, one pass 5 steps. EXAMPLE 10,000 numbers: 49,995,000 pair checks vs 10,000 steps.",
-      "pattern": "complement lookup with a hash map",
-      "check_question": "List [2,7,11,15], target 26: which indices? (answer [2,3], in the caption)",
-      "sources": [
-        "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0000-0099/0001.Two%20Sum/README_EN.md",
-        "https://en.wikipedia.org/wiki/Hash_table"
-      ],
-      "length_target_s": 150,
-      "cover_headline": "Two Sum in one pass",
-      "thumb_text": "Two Sum",
-      "keywords": [
-        "two sum",
-        "two sum hash map",
-        "two sum leetcode hindi",
-        "two sum one pass",
-        "hash map interview question"
-      ],
-      "status": "planned",
-      "qa_passed": false
-    }
-  ]
+ "items": [
+  {
+   "id": "d008",
+   "track": "series",
+   "day": 8,
+   "unit": "P1",
+   "format": "problem",
+   "title": "Two Sum: do number jinka jod target ho, ek pass mein",
+   "one_idea": "Two Sum: for each number ask whether its partner (target minus the number) was already seen; a hash map answers that in one step, so one pass over the list replaces checking every pair.",
+   "hook_type": "direct_question",
+   "spoken_hook": "Two Sum problem में brute force के O(n) squared checks को, O(n) में कैसे लाते हैं? एक hash map से!",
+   "hook_formula": "technical_payoff_question",
+   "hook_source": "direct_question: the problem itself as a plain question, no term used before it is explained (owner 2026-10-22); hookscore 44 WEAK, no DEALBREAKER",
+   "visual_idea": "Row of five cells (5 1 12 3 8), target chip 11; brute-force arcs with counter to 10; then a walking pointer and a seen table filling; at 8 the arrow 11-8=3 jumps to the table row for 3.",
+   "everyday_anchor": "Wedding buffet coupons notebook.",
+   "example": "EXAMPLE list [5,1,12,3,8] target 11; answer [3,4]. Brute force 10 checks, one pass 5 steps. EXAMPLE 10,000 numbers: 49,995,000 pair checks vs 10,000 steps.",
+   "pattern": "complement lookup with a hash map",
+   "check_question": "List [2,7,11,15], target 26: which indices? (answer [2,3], in the caption)",
+   "sources": [
+    "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0000-0099/0001.Two%20Sum/README_EN.md",
+    "https://en.wikipedia.org/wiki/Hash_table"
+   ],
+   "length_target_s": 150,
+   "cover_headline": "Two Sum in one pass",
+   "thumb_text": "Two Sum",
+   "keywords": [
+    "two sum",
+    "two sum hash map",
+    "two sum leetcode hindi",
+    "two sum one pass",
+    "hash map interview question"
+   ],
+   "status": "planned",
+   "qa_passed": false,
+   "script_locked": true
+  }
+ ]
 }

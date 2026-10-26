@@ -1,13 +1,13 @@
-Day 8/150: List mein do number, jinka jod 11 ho, kaise dhoondhein?
+Day 8/150: Two Sum problem mein brute force ke O(n squared) checks ko O(n) mein kaise laate hain? Ek hash map se!
 
-Do number ka jod target kehlata hai. Example list 5, 1, 12, 3, 8 aur target 11: jawab 3 aur 8, yaani index 3 aur 4.
+Array [5, 1, 12, 3, 8] aur target 11: un do numbers ke indices chahiye jinka sum 11 ho. Answer index 3 aur 4, kyunki 3 + 8 = 11. Ek hi element do baar use nahi kar sakte.
 
-Sabse seedha tarika har jodi jaanchna hai: sirf 5 numbers par 10 checks lage (maine chalakar dekha). 10,000 numbers par (sirf example) lagbhag 5 crore checks.
+Brute force mein har pair check hota hai: 5 elements par 10 pairs, aur 10,000 elements par lagbhag 5 crore pair comparisons (sirf example).
 
-Better tarika: har number ka partner nikalo (target minus number) aur dekho ki woh pehle aa chuka hai ya nahi. Iske liye hash map: key mein number, value mein uska index. Ek hi pass mein 5 steps mein jawab mil gaya. Time O(n), space O(n), dictionary lookup average O(1).
+Trick complement hai: complement = target - x. Hash map mein number ke saath uska index store karo aur dekho ki complement pehle aa chuka hai ya nahi. Time average O(n), extra space O(n), lookup average O(1). Hash map lookup ka worst case O(n) ho sakta hai, isliye strictly O(n) guarantee nahi hai.
 
-Trap: pehle partner dekho, uske baad hi number ko rakho. List 3, 3 aur target 6 par pehle rakh dete to ek hi number apna partner ban jaata.
+Edge case [3, 3], target 6: pehle complement check karo, phir current number store karo, warna ek hi element do baar use ho sakta hai.
 
-Ab tum batao: list 2, 7, 11, 15 aur target 26 ho, to kaun se do index? Comment mein likho. Answer: index 2 aur 3, kyunki 11 + 15 = 26.
+Ab tum batao: array [2, 7, 11, 15] aur target 26 ho, to kaun se do indices? Comment mein likho. Answer: index 2 aur 3, kyunki 11 + 15 = 26.
 
 #dsa #twosum #codinginterview

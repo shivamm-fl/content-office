@@ -1,17 +1,17 @@
-# Visual plan: d008 Two Sum (rules: docs-notes/diagram-first-visuals.md)
+# Visual plan: d008 Two Sum, owner's technical script (2026-10-26)
 
-Idea in one line: for each number, ask "is my partner (target minus me) already in the notebook?"; a hash map answers in one step, so one pass replaces checking every pair.
-The picture that explains it with the sound off: one row of five cells (5 1 12 3 8) with a target chip 11 that stays the same in every scene; first a web of 10 arcs between all pairs with a climbing counter, then a walking pointer and a two-column "seen" table that fills one row per step until 8 finds 3.
+Idea in one line: for each x compute complement = target - x and look it up in a hash map of numbers already seen; one pass replaces checking every pair.
+The picture: O(n²) to O(n) from frame 0, then one array row (5 1 12 3 8) with target 11 reused in every scene; a pair-arc web for brute force; the code revealed in three pieces; a dry run where the complement, a NOT IN MAP mark and the seen table update per element.
 
-| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes | On-screen labels | Built with |
+| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes | Labels | Built with |
 |---|---|---|---|---|
-| A | hook: two numbers that add to 11 | Row of five cells 5 1 12 3 8 on a panel from frame 0; a "? + ? = 11" strip appears on "kaise" | PAIR THAT ADDS TO 11, LIST, ? + ? = 11 | custom tiles |
-| B | list, target, answer, index | Cells appear on their numbers; TARGET 11 chip; cells 3 and 8 ring green; index numbers 0-4 under cells; answer [3, 4] | TARGET 11, INDEX, ANSWER | custom tiles |
-| C | check every pair, 10 checks, 5 crore | Ten arcs drawn one by one between all pairs under the row, counter climbs to 10; below, a red counter runs to 49,995,000 with an EXAMPLE pill and a TOO SLOW stamp | CHECKS, 10,000 NUMBERS, PAIR CHECKS | custom SVG arcs + counter |
-| D | partner = target minus number; hash map | Cell 8 rings gold, formula card 11 - 8 = 3, cell 3 rings green, "3 SEEN?" question; then a KEY / VALUE table with one row 3 -> 3 lighting up as INSTANT | PARTNER, 11 - 8 = 3, SEEN?, KEY, VALUE, INSTANT | custom tiles |
-| E | complement lookup pattern, signal | Four boxes in a vertical flow: ITEM x, PARTNER = T - x, SEEN BEFORE?, HASH MAP, arrows lighting in order | PATTERN, ITEM, SEEN BEFORE?, HASH MAP | M.box-like tiles |
-| F | four steps of the code | The real seven-line code; the active step's lines get a gold band, finished steps go grey; step badges 1-4 | CODE, 4 STEPS | custom code lines |
-| G | real run on 5 1 12 3 8 | Pointer walks under the cells; seen table gains rows 5, 1, 12, 3; at 8 the card 11 - 8 = 3 lights row 3, a bracket joins cells 3 and 8; STEPS counter reaches 5 | REAL RUN, KEY, INDEX, STEPS, [3, 4] | custom tiles + SVG bracket |
-| H | O(1) lookup, O(n) time and space | Three rows: LOOKUP O(1), TIME O(n) with a true-scale pair of bars (49,995,000 vs a sliver of 10,000), SPACE O(n) with a hash map box filling with tiles | LOOKUP, TIME, SPACE, ALL PAIRS, ONE PASS | custom bars + tiles |
-| I | the trap: look first, then store | LOOK then STORE flow; list [3, 3] target 6, seen row 3 -> 0 found by second 3, bracket, answer [0, 1]; below a red STORE FIRST panel where the 3 finds itself | 1 LOOK, 2 STORE, TARGET 6, STORE FIRST, ITSELF, WRONG | custom tiles |
-| J | quiz [2, 7, 11, 15] target 26, comment, follow | Four cells with indexes, TARGET 26 chip, "INDEX ?, ?"; comment box; FOLLOW pill presses on "follow" | TARGET 26, COMMENT KARO, + FOLLOW | custom + pill |
+| A | O(n²) to O(n) with a hash map | Red BRUTE FORCE O(n²) tile, arrow, green ONE PASS O(n) tile, HASH MAP tile lights | TWO SUM, O(n²) → O(n) | custom tiles |
+| B | array, target, indices, no reuse | Cells appear on their numbers, TARGET 11, indices 3 and 4 ring green, 3 + 8 = 11, NO REUSE stamp | ARRAY, TARGET 11, INDICES | custom tiles |
+| C | brute force, 10 pairs, O(n²), 10,000 elements | Ten arcs between all pairs with a counter to 10, O(n²) in red, EXAMPLE counter to 49,995,000, SKIP PAIRS? | PAIRS, O(n²), PAIR CHECKS | SVG arcs + counter |
+| D | complement = target - x, hash map, O(1) | Cell 8 rings, 11 − 8 = 3, cell 3 rings, 3 SEEN?, HASH MAP with KEY and VALUE row, LOOKUP O(1) avg | COMPLEMENT, KEY, VALUE | custom tiles |
+| E | pattern: required value, hash map | Four boxes in a vertical flow lighting in order, ending TWO SUM: COMPLEMENT | PATTERN, REQUIRED VALUE? | tiles |
+| F | three operations | Code appears in three pieces: complement line, lookup lines, insertion line, each with a gold band and a badge | CODE, 3 OPERATIONS | code lines |
+| G | dry run on 5 1 12 3 8 | Pointer walks, per step 11 − x = c and NOT IN MAP, seen table gains rows, at 8 row 3 lights, bracket and [3, 4], STEPS counter | DRY RUN, KEY, INDEX, STEPS | tiles + SVG |
+| H | complexity and worst case | BRUTE O(n²), HASH MAP O(n), O(n) space tiles, true-scale bars (EXAMPLE), WORST LOOKUP O(n) and NO STRICT O(n) | TIME, SPACE | tiles + bars |
+| I | edge case [3, 3], target 6 | 3 not in map yet, store 3 → 0, second 3 finds it, [0, 1], 1 LOOK then 2 STORE, red STORE FIRST panel | TARGET 6, SEEN, SAME ELEMENT | tiles |
+| J | quiz and follow | Array 2 7 11 15, TARGET 26, INDICES ? , ?, comment box, FOLLOW pill | COMMENT KARO | tiles + pill |
