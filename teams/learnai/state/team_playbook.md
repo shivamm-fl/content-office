@@ -40,4 +40,9 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 - Devanagari token pieces are byte fragments and cannot be shown as text: use blank coloured tiles for them, and real text only for English pieces.
 - Do not name a scene `M`: it clashes with the `M` kit object; call the element `M_`.
 
-- 2026-10-26 (q119): A card that moves out of one panel into another must be created after the target panel or get `style.zIndex`, or the glass panel hides it. For a "size stays flat" idea, true-scale bars (25 vs 750 words, 55 vs 750) with a counter beat a table; a tile strip (30 turns) shows "history" before the bars appear.
+## Motion Designer: a008 notes (2026-10-26)
+- `M.W` also strips the dot of a decimal: "1.3" is looked up as "13".
+- A scene with two phases (examples, then a to-scale comparison): keep each phase's elements in a list and `goneAll` them on the first word of the next phase, or the layout check reports overlapping text. Bars drawn with a label need both label and bar in the gone list.
+- A 1.3B vs 175B size claim is honest as a sliver (8 px) beside a full bar; label it, never stretch it.
+- Arrows must run beside, not through, a list of cards; put the target box under the list and the arrow in a free column. Role labels (SYSTEM, ASSISTANT) need a 260 px column or they collide with the slot.
+- 2026-10-26 (a008 fix): The mute reviewer rated a first build 1.2 because most scenes started on a near-empty frame and pictures were pills. Show each scene's main object at `S.X+0.05`, not on a spoken word, and prefer a mini demo (input bubble to output bubble, red for wrong, green for right) over a label pill. Show the same demo for base and tuned model side by side to teach the contrast.
