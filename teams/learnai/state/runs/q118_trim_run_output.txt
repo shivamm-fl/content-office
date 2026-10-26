@@ -1,5 +1,15 @@
-total words 78 messages 12
-TRUNCATE budget 60 kept messages 9 words 57
-first message kept? False
-allergy fact kept? False
-SUMMARISE: summary words 14 + last 4 messages = 38 words; allergy kept? True
+messages=12 total_words=78
+TRUNCATE budget 60: keeps 9 messages, 57 words, allergy kept=False
+SUMMARISE: summary=14 words + last 4 messages=24 words = 38, allergy kept=True
+1 U 10 Hi, order 4471 please, and I have a peanut allergy.
+2 B 6 Sure, noted. How will you pay?
+3 U 5 UPI, I will pay now.
+4 B 7 Great, which snack box do you want?
+5 U 7 The small box, delivered on Friday please.
+6 B 6 Small box, Friday delivery. Anything else?
+7 U 7 Add one fruit juice, that is all.
+8 B 6 Done, juice added to your order.
+9 U 7 Thanks. What is in my box now?
+10 B 6 Small snack box, one fruit juice.
+11 U 6 Okay, the box has nut bars.
+12 U 5 Is it safe for me?

@@ -1,29 +1,28 @@
-# EXAMPLE chat (invented). Budget counted in words (toy stand-in for tokens).
+"""q118: truncate vs summarise a long chat. Words stand in for tokens. The chat is INVENTED for teaching."""
 chat = [
- ("user","Mera order id 4471 hai, aur mujhe peanut se allergy hai."),
- ("bot","Note kar liya. Kaise madad karu?"),
- ("user","Delivery kab tak aayegi?"),
- ("bot","Aaj shaam 6 baje tak, tracking link bhej diya."),
- ("user","Thik hai, aur payment kaise hua tha?"),
- ("bot","UPI se, Rs 480 ka payment success tha."),
- ("user","Invoice mil sakta hai?"),
- ("bot","Haan, email par bhej diya."),
- ("user","Ek item badalna hai, kaise karu?"),
- ("bot","App mein Orders kholo aur Change item dabao."),
- ("user","Dessert mein kya options hain?"),
- ("bot","Brownie, kheer aur ice cream."),
+ ("U", "Hi, order 4471 please, and I have a peanut allergy."),
+ ("B", "Sure, noted. How will you pay?"),
+ ("U", "UPI, I will pay now."),
+ ("B", "Great, which snack box do you want?"),
+ ("U", "The small box, delivered on Friday please."),
+ ("B", "Small box, Friday delivery. Anything else?"),
+ ("U", "Add one fruit juice, that is all."),
+ ("B", "Done, juice added to your order."),
+ ("U", "Thanks. What is in my box now?"),
+ ("B", "Small snack box, one fruit juice."),
+ ("U", "Okay, the box has nut bars."),
+ ("U", "Is it safe for me?"),
 ]
-n=lambda m:len(m[1].split())
-total=sum(map(n,chat)); print("total words",total,"messages",len(chat))
-budget=60
-kept=[];used=0
-for m in reversed(chat):
-    if used+n(m)>budget: break
-    kept.insert(0,m);used+=n(m)
-print("TRUNCATE budget",budget,"kept messages",len(kept),"words",used)
-print("first message kept?",kept[0]==chat[0])
-print("allergy fact kept?",any("allergy" in m[1] for m in kept))
-summary="User: order 4471, peanut allergy. Delivery 6 pm, UPI Rs 480 paid, invoice emailed."
-last=chat[-4:]
-w=len(summary.split())+sum(map(n,last))
-print("SUMMARISE: summary words",len(summary.split()),"+ last 4 messages =",w,"words; allergy kept?","allergy" in summary)
+summary = "Order 4471. User has a peanut allergy. Paid by UPI. Small box, Friday delivery."
+BUDGET = 60
+wc = lambda s: len(s.split())
+total = sum(wc(t) for _, t in chat)
+print(f"messages={len(chat)} total_words={total}")
+kept = []; used = 0
+for who, t in reversed(chat):
+    if used + wc(t) > BUDGET: break
+    kept.insert(0, (who, t)); used += wc(t)
+print(f"TRUNCATE budget {BUDGET}: keeps {len(kept)} messages, {used} words, allergy kept={any('allergy' in t for _, t in kept)}")
+last4 = chat[-4:]; l4 = sum(wc(t) for _, t in last4)
+print(f"SUMMARISE: summary={wc(summary)} words + last 4 messages={l4} words = {wc(summary)+l4}, allergy kept={'allergy' in summary}")
+for i, (w, t) in enumerate(chat, 1): print(i, w, wc(t), t)
