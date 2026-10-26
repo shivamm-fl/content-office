@@ -1,0 +1,7 @@
+Two Sum Explained: One Pass with a Hash Map
+
+Two Sum: given a list of numbers and a target, find the two numbers that add up to the target and return their indices. Checking every pair is slow (10 checks on 5 numbers in our run; about 50 million pair checks for 10,000 numbers, an example). Instead, for each number look up its partner (target minus the number) in a hash map of numbers already seen, and store the number only after the check. One pass gives O(n) time and O(n) space, with average O(1) dictionary lookups.
+
+Sources:
+https://raw.githubusercontent.com/doocs/leetcode/main/solution/0000-0099/0001.Two%20Sum/README_EN.md
+https://en.wikipedia.org/wiki/Hash_table

@@ -1,63 +1,38 @@
 {
- "items": [
-  {
-   "id": "d008",
-   "track": "series",
-   "day": 8,
-   "unit": "P1",
-   "format": "problem",
-   "title": "Two Sum: do number jinka jod target ho, ek pass mein",
-   "one_idea": "Two Sum: for each number ask whether its partner (target minus the number) was already seen; a hash map answers that in one step, so one pass over the list replaces checking every pair.",
-   "hook_type": "direct_question",
-   "spoken_hook": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें?",
-   "hook_formula": "find_the_pair_question",
-   "hook_source": "direct_question: the problem itself as a plain question, no term used before it is explained (owner 2026-10-22); hookscore to run on the Roman form in the script step",
-   "hook_10s": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें? List है 5, 1, 12, 3, 8. हर जोड़ी जाँचो तो 10{दस} checks लगते हैं, पर एक तरीका सिर्फ़ 5{पाँच} steps में बता देता है। [frame 0: five cells 5 1 12 3 8 in a row, a gold chip 11 above; two cells glow-free highlighted by a bracket joining 3 and 8]",
-   "hook_candidates": [
+  "items": [
     {
-     "formula": "find_the_pair_question",
-     "text": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें?"
-    },
-    {
-     "formula": "cost_of_checking_everything",
-     "text": "पाँच करोड़ जोड़ियाँ जाँचने की जगह, दस हज़ार numbers में सिर्फ़ दस हज़ार steps।"
-    },
-    {
-     "formula": "interviewer_asked",
-     "text": "Interviewer ने पूछा: list में कौन-से दो number जुड़कर दिया हुआ target बनाते हैं?"
+      "id": "d008",
+      "track": "series",
+      "day": 8,
+      "unit": "P1",
+      "format": "problem",
+      "title": "Two Sum: do number jinka jod target ho, ek pass mein",
+      "one_idea": "Two Sum: for each number ask whether its partner (target minus the number) was already seen; a hash map answers that in one step, so one pass over the list replaces checking every pair.",
+      "hook_type": "direct_question",
+      "spoken_hook": "List में दो number, जिनका जोड़ 11{ग्यारह} हो, कैसे ढूँढें?",
+      "hook_formula": "find_the_pair_question",
+      "hook_source": "direct_question: the problem itself as a plain question, no term used before it is explained (owner 2026-10-22); hookscore 44 WEAK, no DEALBREAKER",
+      "visual_idea": "Row of five cells (5 1 12 3 8), target chip 11; brute-force arcs with counter to 10; then a walking pointer and a seen table filling; at 8 the arrow 11-8=3 jumps to the table row for 3.",
+      "everyday_anchor": "Wedding buffet coupons notebook.",
+      "example": "EXAMPLE list [5,1,12,3,8] target 11; answer [3,4]. Brute force 10 checks, one pass 5 steps. EXAMPLE 10,000 numbers: 49,995,000 pair checks vs 10,000 steps.",
+      "pattern": "complement lookup with a hash map",
+      "check_question": "List [2,7,11,15], target 26: which indices? (answer [2,3], in the caption)",
+      "sources": [
+        "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0000-0099/0001.Two%20Sum/README_EN.md",
+        "https://en.wikipedia.org/wiki/Hash_table"
+      ],
+      "length_target_s": 150,
+      "cover_headline": "Two Sum in one pass",
+      "thumb_text": "Two Sum",
+      "keywords": [
+        "two sum",
+        "two sum hash map",
+        "two sum leetcode hindi",
+        "two sum one pass",
+        "hash map interview question"
+      ],
+      "status": "planned",
+      "qa_passed": false
     }
-   ],
-   "visual_idea": "A row of five cells (5 1 12 3 8) with a target chip 11. Brute force: arcs link every pair one after another with a counter climbing to 10, then crossed out in red. Then a walking pointer visits each cell; a small two-column table (number, index) fills one row per step, and at cell 8 an arrow computes 11 minus 8 equals 3, jumps to the table row for 3 and the two cells get joined by a bracket.",
-   "everyday_anchor": "At a wedding buffet two friends want plates that together cost exactly 11 rupees of coupons; instead of trying every friend with every friend, you note each person's coupon in a notebook as they walk by and ask whether the missing amount is already written there.",
-   "example": "EXAMPLE list [5, 1, 12, 3, 8] with target 11; answer indices [3, 4] (3 + 8). Run: brute force 10 checks, one pass 5 steps. For 10,000 numbers: 49,995,000 pair checks (all pairs) vs 10,000 steps.",
-   "pattern": "complement lookup with a hash map (remember what you have seen; ask for the partner in one step)",
-   "pattern_signal": "For every item you need to know if a matching partner already exists somewhere earlier in the data: that is a lookup question, so a hash map fits.",
-   "beats": "hook and problem 10s; brute force pairs crossed out with run counts 14s; pattern, signal and insight (target minus x is the partner) 18s; code in 4 sub-steps with real output 38s; complexity O(n) time O(n) space plus the trap (look before you store, so a number never pairs with itself, [3,3] target 6) 18s; check yourself and follow 10s",
-   "check_question": "List [2, 7, 11, 15], target 26: which indices? (answer [2,3], 11 + 15; in the caption)",
-   "format_length_note": "problem day, about 110 s",
-   "sources": [
-    "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0000-0099/0001.Two%20Sum/README_EN.md",
-    "https://en.wikipedia.org/wiki/Hash_table"
-   ],
-   "facts_to_verify": [
-    "Problem paraphrase from the doocs mirror of the LeetCode Two Sum statement (leetcode.com itself returned 403 to WebFetch this session): array of integers and a target, return the indices of two entries summing to target; exactly one answer; same element not used twice; any index order; 2 to 10^4 elements; values -10^9 to 10^9. Re-check against the problem page if it becomes reachable.",
-    "Hash table one-pass solution: O(n) time, O(n) space, check the partner before inserting the current number (doocs page, fetched).",
-    "Average O(1) lookup and worst case O(n) for a hash table (Wikipedia Hash table complexity table, fetched); say 'average O(1)', never promise worst case.",
-    "Run the code and show its real output: brute force on [5,1,12,3,8] target 11 -> ([3, 4], 10 checks); one pass -> [3, 4] after 5 steps; [3,3] target 6 -> [0, 1]; n=10000 all pairs = 49995000 (run this session by the strategist, builder re-runs).",
-    "Interview-company claims: none made; do not say which company asks Two Sum."
-   ],
-   "length_target_s": 110,
-   "cover_headline": "Two Sum in one pass",
-   "thumb_text": "Two Sum",
-   "keywords": [
-    "two sum",
-    "two sum hash map",
-    "two sum leetcode hindi",
-    "two sum one pass",
-    "hash map interview question"
-   ],
-   "status": "planned",
-   "qa_passed": false
-  }
- ]
+  ]
 }

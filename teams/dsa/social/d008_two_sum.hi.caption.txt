@@ -1,0 +1,13 @@
+Day 8/150: List mein do number, jinka jod 11 ho, kaise dhoondhein?
+
+Do number ka jod target kehlata hai. Example list 5, 1, 12, 3, 8 aur target 11: jawab 3 aur 8, yaani index 3 aur 4.
+
+Sabse seedha tarika har jodi jaanchna hai: sirf 5 numbers par 10 checks lage (maine chalakar dekha). 10,000 numbers par (sirf example) lagbhag 5 crore checks.
+
+Better tarika: har number ka partner nikalo (target minus number) aur dekho ki woh pehle aa chuka hai ya nahi. Iske liye hash map: key mein number, value mein uska index. Ek hi pass mein 5 steps mein jawab mil gaya. Time O(n), space O(n), dictionary lookup average O(1).
+
+Trap: pehle partner dekho, uske baad hi number ko rakho. List 3, 3 aur target 6 par pehle rakh dete to ek hi number apna partner ban jaata.
+
+Ab tum batao: list 2, 7, 11, 15 aur target 26 ho, to kaun se do index? Comment mein likho. Answer: index 2 aur 3, kyunki 11 + 15 = 26.
+
+#dsa #twosum #codinginterview
