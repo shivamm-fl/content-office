@@ -1,0 +1,13 @@
+Day 9/150: Contains Duplicate problem, sorting ke bina ek loop mein solve!
+
+Array 4, 7, 1, 9, 7, 3 mein koi value do baar aayi hai? Trick: har value dekhte hue yaad rakho ki pehle kaun si value aa chuki hai.
+
+Brute force mein har value ko baaki sab se compare karna padta hai: is array mein 8 pair checks. 10,000 numbers par (sirf example) lagbhag 5 crore pair checks, yaani O(n) squared.
+
+Ek set banao, naam seen. Har value ke liye check karo ki wo seen mein hai ya nahi. Hai, to duplicate mil gaya, True return karo. Nahi hai, to seen mein add karo. Is array mein 5 steps mein True, ek bhi pair check nahi. Time O(n), extra space O(n); sorting mein O(n log n) lagta hai. Hash lookup ka worst case O(n) ho sakta hai, isliye yeh average case ki baat hai.
+
+Valid Anagram mein idea wahi hai: set ki jagah har character ki count rakho, ek hash map mein (Python ka Counter). listen aur silent mein e, i, l, n, s, t ki count ek-ek hai, to True. rat aur car mein t aur c alag hain, to False. Lowercase letters ke liye space sirf 26 counts ka.
+
+Ab tumhara turn: kya 3, 8, 3 mein duplicate hai? Aur aab tatha abb anagrams hain? Comment mein likho. Answer: 3, 8, 3 mein duplicate hai (yes), aab aur abb anagrams nahi hain (no).
+
+#dsa #containsduplicate #validanagram
