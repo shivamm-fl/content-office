@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Multi-agent or one agent</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="109" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="109" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="109" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="109" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 48}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const paint = (d, col, t, fill) => tl.to(d, { borderColor: ca(col, 0.95), backgroundColor: ca(col, fill == null ? 0.16 : fill), duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const moveTo = (d, t, dx, dy, dur) => tl.to(d, { x: dx || 0, y: dy || 0, duration: dur || 0.7, ease: "power3.inOut", immediateRender: false }, t);
+      // a labelled card: icon at left, label (and a small sub) at right
+      const lcard = (host, x, y, w, h, label, col, t, o) => { o = o || {}; const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:20px;border:2.5px solid ${ca(col, 0.6)};background:${ca(col, 0.08)}`);
+        if (o.icon) M.icon(d, o.icon, 20, (h - 52) / 2, 52, col).show(t);
+        const l = el(d, `left:${o.icon ? 90 : 0}px;right:0;top:0;height:${h}px;display:flex;align-items:center;${o.icon ? "" : "justify-content:center;"}font:800 ${o.size || 38}px ${COD};letter-spacing:.05em;color:${col};white-space:nowrap`, label);
+        show(d, t, { opacity: 0, y: 18 }); return { d, l }; };
+      const chat = (host, x, y, w, h, text, col, t, mine) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${mine ? "30px 30px 6px 30px" : "30px 30px 30px 6px"};border:2px solid ${ca(col, 0.6)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:600 ${mine ? 44 : 44}px ${LAT};color:${TEXT};white-space:nowrap`, text); return show(d, t, { opacity: 0, y: 18 }); };
+
+
+      const agent = (host, x, y, w, h, label, col, t, o) => { const b = M.box(host, Object.assign({ x, y, w, h, label, icon: "model", color: col, size: 40 }, o || {})); b.show(t); return b; };
+
+      // ============ A: hook, one or many ============
+      // diagram: A
+      M.hook(["One agent", "or many?"], { size: 112, top: 215 });
+      agent(A, 290, 520, 500, 190, "1 AGENT", VIOLET, 0.15, { size: 54 });
+      tag(A, "OR", 0, 760, 1080, 0.5, ACC, 64);
+      [0, 1, 2].forEach((i) => agent(A, 60 + i * 340, 880, 300, 170, "AGENT", CYAN, 0.7 + i * 0.15, { size: 46 }));
+      tag(A, "3 AGENTS", 0, 1090, 1080, 1.2, CYAN, 56);
+      M.fit(A, { y: 460, h: 740 });
+
+      // ============ B: start with one, split when parallel ============
+      // diagram: B
+      pillC(B, "START HERE", 200, P("B", 0) + 0.05, { size: 44, h: 70, col: GOOD });
+      agent(B, 260, 300, 560, 200, "1 AGENT", GOOD, P("B", 0) + 0.2, { size: 54 });
+      const bCk = M.icon(B, "check", 840, 340, 120, GOOD); bCk.show(at("B", "shuru") + 0.3);
+      const bT = lcard(B, 260, 640, 560, 120, "BIG TASK", ACC, P("B", 1) - 0.1, { size: 44 });
+      [0, 1, 2].forEach((i) => { M.arrow(B, { from: [540, 765], to: [200 + i * 340, 860], color: ACC, w: 8 }).show(at("B", "alag-alag") + 0.2 + i * 0.12, 0.3); });
+      [0, 1, 2].forEach((i) => agent(B, 60 + i * 340, 870, 300, 170, "AGENT", CYAN, at("B", "alag-alag") + 0.4 + i * 0.12, { size: 46 }));
+      tag(B, "SPLITS", 800, 670, 260, at("B", "alag-alag") + 0.1, ACC, 44);
+      pillC(B, "PARALLEL ⇉", 1110, at("B", "saath") + 0.1, { size: 46, h: 72, col: CYAN });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: tokens to true scale ============
+      // diagram: C
+      const c0m = agent(C, 240, 330, 600, 260, "MODEL", VIOLET, 0.05, { size: 66 }), c0g = M.icon(C, "gear", 440, 640, 200, ACC); c0g.show(0.4);
+      const c0t = [tag(C, "+ TOOLS", 0, 870, 1080, 0.4, ACC, 72), tag(C, "= AGENT", 0, 1020, 1080, 1.0, GOOD, 110)];
+      const c0end = P("C", 1) - 0.1; c0m.hide(c0end); c0g.hide(c0end); c0t.forEach((d) => gone(d, c0end));
+      pillC(C, "EXAMPLE", 200, P("C", 1) - 0.2, { size: 40, h: 64, col: ACC });
+      const cb = (lab, mult, num, y, col, t) => { const w = Math.round(660 * mult / 15);
+        tag(C, lab, 90, y - 62, 600, t, col, 40).style.textAlign = "left";
+        const bar = el(C, `left:90px;top:${y}px;width:${w}px;height:130px;border-radius:16px;border:2.5px solid ${ca(col, 0.9)};background:${ca(col, 0.25)}`);
+        tl.set(bar, { opacity: 0, transformOrigin: "0 50%" }, 0); tl.fromTo(bar, { opacity: 0, scaleX: 0.05 }, { opacity: 1, scaleX: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, t);
+        const n = el(C, `left:${90 + w + 20}px;top:${y}px;height:130px;display:flex;align-items:center;font:800 64px ${COD};color:${col};white-space:nowrap`, num); show(n, t + 0.3, { opacity: 0, x: -14 }); return bar; };
+      cb("CHAT · 1x", 1, "2000", 400, CYAN, P("C", 1));
+      cb("1 AGENT · 4x", 4, "8000", 650, ACC, P("C", 2));
+      cb("MANY AGENTS · 15x", 15, "30000", 900, HOT, P("C", 3));
+      tag(C, "ANTHROPIC DATA", 0, 1110, 1080, P("C", 4) + 0.1, MUTED, 44);
+      M.icon(C, "coin", 340, 1170, 110, HOT).show(at("C", "mahnga")); tag(C, "BILL ↑", 470, 1185, 300, at("C", "mahnga"), HOT, 64);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: does the work split? ============
+      // diagram: D
+      const dCols = [0, 1, 2];
+      gone(tag(D, "SPLITS?", 0, 760, 1080, P("D", 0) + 0.3, ACC, 110), at("D", "agents") - 0.2);
+      dCols.forEach((i) => { const x = 60 + i * 340;
+        lcard(D, x, 230, 300, 120, "FOLDER", CYAN, P("D", 0) + 0.05 + i * 0.1, { icon: "doc", size: 38 });
+        M.arrow(D, { from: [x + 150, 355], to: [x + 150, 435], color: ACC, w: 8 }).show(at("D", "agents") + i * 0.1, 0.3);
+        agent(D, x, 440, 300, 160, "AGENT", VIOLET, at("D", "agents") + 0.1 + i * 0.1, { size: 46 });
+        M.arrow(D, { from: [x + 150, 605], to: [x + 150, 685], color: GOOD, w: 8 }).show(at("D", "padhte") + i * 0.1, 0.3);
+        lcard(D, x, 690, 300, 110, "SUMMARY", GOOD, at("D", "padhte") + 0.15 + i * 0.1, { size: 36 }); });
+      const dW = [520, 760, 400];
+      dW.forEach((w, i) => { const b = el(D, `left:90px;top:${900 + i * 80}px;width:${w}px;height:56px;border-radius:12px;border:2.5px solid ${ca(i === 1 ? ACC : CYAN, 0.9)};background:${ca(i === 1 ? ACC : CYAN, 0.25)}`);
+        tl.set(b, { opacity: 0, transformOrigin: "0 50%" }, 0); tl.fromTo(b, { opacity: 0, scaleX: 0.05 }, { opacity: 1, scaleX: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, at("D", "saath") + i * 0.1); });
+      tag(D, "ALL AT ONCE", 90, 840, 700, at("D", "saath"), CYAN, 38).style.textAlign = "left";
+      tag(D, "TIME = LONGEST", 0, 1160, 1080, at("D", "lanbe") - 0.2, ACC, 56);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // ============ E: does it fit one window? ============
+      // diagram: E
+      const eFr = el(E, `left:240px;top:280px;width:600px;height:340px;border-radius:26px;border:4px solid ${ca(CYAN, 0.9)};background:${ca(CYAN, 0.07)}`);
+      show(eFr, P("E", 0) + 0.05);
+      [0, 1, 2, 3].forEach((i) => { const l = el(E, `left:280px;top:${330 + i * 62}px;width:${i === 3 ? 300 : 520}px;height:30px;border-radius:8px;background:${ca(CYAN, 0.4)}`); show(l, P("E", 0) + 0.3 + i * 0.12, { opacity: 0, x: -20 }); gone(l, at("E", "agar") - 0.1); });
+      tag(E, "ONE WINDOW", 240, 215, 600, P("E", 0) + 0.2, CYAN, 44);
+      const eBig = el(E, `left:180px;top:330px;width:720px;height:720px;border-radius:22px;border:3px solid ${ca(HOT, 0.9)};background:${ca(HOT, 0.14)};display:flex;align-items:center;justify-content:center;font:800 64px ${COD};color:${HOT}`, "BIG TASK");
+      show(eBig, at("E", "agar") - 0.1, { opacity: 0, y: 40 });
+      const eNo = tag(E, "DOES NOT FIT", 0, 1010, 1080, at("E", "agar") + 0.5, HOT, 60);
+      [eFr, eBig, eNo].forEach((d) => gone(d, at("E", "alag") - 0.2));
+      [0, 1, 2].forEach((i) => { const x = 60 + i * 340;
+        const w = el(E, `left:${x}px;top:420px;width:300px;height:380px;border-radius:22px;border:3.5px solid ${ca(CYAN, 0.9)};background:${ca(CYAN, 0.07)}`); show(w, at("E", "alag") + i * 0.15, { opacity: 0, y: 24 });
+        const c = el(E, `left:${x + 30}px;top:${520 + 0}px;width:240px;height:150px;border-radius:16px;border:2.5px solid ${ca(GOOD, 0.9)};background:${ca(GOOD, 0.16)};display:flex;align-items:center;justify-content:center;font:800 40px ${COD};color:${GOOD}`, "PART " + (i + 1)); show(c, at("E", "alag") + 0.3 + i * 0.15, { opacity: 0, y: 20 });
+        agent(E, x, 840, 300, 150, "AGENT", VIOLET, at("E", "agents") + i * 0.12, { size: 46 }); });
+      tag(E, "3 WINDOWS", 0, 1060, 1080, at("E", "agents") + 0.3, GOOD, 60);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: boundary ============
+      // diagram: F
+      pillC(F, "SHARED OR DEPENDENT = 1 AGENT", 200, P("F", 0) + 0.05, { size: 36, h: 64, col: GOOD });
+      const fI = [lcard(F, 100, 320, 880, 140, "SHARED CONTEXT", CYAN, P("F", 0) + 0.2, { icon: "doc", size: 44 }).d, lcard(F, 100, 520, 880, 140, "STEP B NEEDS STEP A", VIOLET, P("F", 0) + 0.8, { icon: "clock", size: 40 }).d];
+      fI.forEach((d) => gone(d, P("F", 1) - 0.1));
+      const f1 = agent(F, 240, 800, 600, 240, "1 AGENT", GOOD, P("F", 0) + 1.5, { size: 66 }); f1.hide(P("F", 1) - 0.1);
+      agent(F, 80, 320, 380, 170, "AGENT 1", VIOLET, P("F", 1) + 0.1, { size: 44 });
+      agent(F, 620, 320, 380, 170, "AGENT 2", CYAN, P("F", 1) + 0.25, { size: 44 });
+      const fX = M.icon(F, "cross", 470, 340, 140, HOT); fX.show(at("F", "dekhte"));
+      tag(F, "CAN'T SEE", 0, 520, 1080, at("F", "dekhte"), HOT, 52);
+      const fP = el(F, "left:140px;top:650px;width:800px;height:440px", `<svg viewBox="0 0 800 440" width="800" height="440"><rect x="3" y="3" width="794" height="434" rx="20" fill="none" stroke="${ca(MUTED, 0.8)}" stroke-width="5"/><line x1="400" y1="3" x2="400" y2="437" stroke="${ca(MUTED, 0.5)}" stroke-width="3" stroke-dasharray="14 12"/>
+        <path d="M30 170 L400 170" stroke="${VIOLET}" stroke-width="12" stroke-linecap="round" fill="none" id="fL1"/><path d="M400 320 L770 320" stroke="${CYAN}" stroke-width="12" stroke-linecap="round" fill="none" id="fL2"/>
+        <circle cx="200" cy="90" r="40" fill="${ca(VIOLET, 0.35)}"/><circle cx="600" cy="230" r="40" fill="${ca(CYAN, 0.35)}"/></svg>`);
+      show(fP, at("F", "tasvir"), { opacity: 0, y: 20 });
+      tag(F, "NO MATCH ✗", 0, 1130, 1080, at("F", "match"), HOT, 64);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: the interview line ============
+      // diagram: G
+      pillC(G, "SAY THIS", 200, 0.05, { size: 42, h: 66, col: ACC });
+      [["START", "1 AGENT", "model", GOOD, "start"], ["SPLITS", "PARALLEL", "gear", CYAN, "splits"], ["TOO BIG", "NEW WINDOW", "doc", VIOLET, "fit"], ["EXTRA AGENT", "COSTS TOKENS", "coin", ACC, "costs"], ["AGENTS", "CAN'T SEE", "cross", HOT, "decisions"]].forEach(([lab, sub, ic, col, w], i) => {
+        const x = i === 4 ? 290 : 60 + (i % 2) * 500, y = 310 + Math.floor(i / 2) * 330;
+        M.box(G, { x, y, w: 460, h: 290, label: lab, sub, icon: ic, color: col, size: 44, subsize: 40 }).show(i === 0 ? 0.3 : at("G", w) - 0.3); });
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: close ============
+      // diagram: H
+      tag(H, "1 OR MANY?", 0, 260, 1080, 0.05, ACC, 72);
+      const hC = glass(H, 120, 540, 840, 380, CYAN); show(hC, P("H", 0) + 0.3, { opacity: 0, y: 20 });
+      el(hC, `left:30px;top:20px;font:800 38px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      M.pill(hC, "1", at("H", "ek", 1), { x: 200, y: 105, kind: "out", size: 56 }); M.pill(hC, "MANY", at("H", "kai", 1), { x: 400, y: 105, kind: "out", size: 56 });
+      show(el(hC, `left:36px;right:36px;bottom:34px;height:70px;border-radius:35px;border:1.5px solid rgba(150,175,215,.35);font:500 30px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), P("H", 0) + 0.5, { opacity: 0 });
+      const fbt = el(H, `left:370px;top:1030px;width:340px;height:90px;border-radius:45px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 42px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fbt, at("H", "follow") - 0.5, { opacity: 0 });
+      tl.to(fbt, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("H", "follow")); tl.to(fbt, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("H", "follow") + 0.12);
+      M.fit(H, { y: 200, h: 1100 });
+
+      ["B","C","D","E","F","G","H"].forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { agent: "gold", agents: "gold", "Multi-agent": "gold", token: "cyan", tokens: "cyan", "15x": "hot", "4x": "gold", folders: "cyan", context: "cyan", window: "cyan", Boundary: "hot", match: "hot", costs: "hot", follow: "gold", comment: "gold", Comment: "gold" } });
+      window.__timelines["main"] = tl;
+
+    </script>
+  </body>
+</html>
