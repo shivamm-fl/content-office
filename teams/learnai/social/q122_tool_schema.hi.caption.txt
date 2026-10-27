@@ -1,0 +1,17 @@
+Tumne refund pucha, AI ne product search chala diya. Galti model ki nahi, tumhare likhe text ki thi.
+
+Interviewer ne poocha: Tool ka schema aise kaise likhoge ki model galat tool na chune?
+
+Jawab: model sirf wahi padhkar chunta hai jo tumne likha: tool ka naam, description aur parameters. Isliye har tool ka text saaf aur alag likho.
+
+1. Naam mein kaam likho (orders_get_status). Description mein likho ye kya karta hai, kab use karna hai aur kab nahi. Mota niyam: 3 se 4 sentences.
+2. Parameters ke naam saaf rakho (user nahi, user_id). Fixed options ke liye enum do.
+3. Tools kam rakho. Mota niyam: ek baar mein 20 se kam.
+
+Example (invented tool names): "search" aur "lookup", dono ka description "gets data", to chunav sikke jaisa ho jata hai.
+
+Boundary: schema kitna bhi achha ho, asli sawalon par chalakar dekho ki kaun sa tool chuna gaya.
+
+Tumhare app mein kitne tools hain, 5, 10 ya 20? Comment mein number likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #AIAgents

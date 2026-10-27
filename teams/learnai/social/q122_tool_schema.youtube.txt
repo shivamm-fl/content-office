@@ -1,0 +1,11 @@
+Tool schema kaise likhein ki AI galat tool na chune
+
+Interview mein poochha jata hai: tool ka schema aise kaise likhoge ki model galat tool na chune? Jawab: model sirf us text se tool chunta hai jo aapne likha hai: naam, description aur parameters. Isliye har tool ko alag naam do, description mein likho ye kya karta hai, kab use karna hai aur kab nahi, parameters ke naam saaf rakho, fixed values ke liye enum do aur tools kam rakho. Anthropic ke docs tool description ke liye kam se kam 3 se 4 sentences ka target dete hain, aur OpenAI ke docs ek turn ki shuruat mein 20 se kam functions rakhne ka target dete hain (dono guidance hain, kadi seema nahi). Tool names search aur lookup, orders_get_status aur order A17 invented examples hain, koi model run nahi dikhaya gaya.
+
+Is video mein: tool schema llm, function calling description, why ai picks wrong tool, ai engineer interview.
+
+Sources:
+https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools
+https://developers.openai.com/api/docs/guides/function-calling
+https://www.anthropic.com/engineering/writing-tools-for-agents
+https://www.anthropic.com/engineering/building-effective-agents

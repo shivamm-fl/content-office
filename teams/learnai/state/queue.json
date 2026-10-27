@@ -1380,11 +1380,10 @@
       ]
     },
     {
-      "track": "interview",
-      "format": "question",
-      "status": "planned",
       "id": "q122",
+      "track": "interview",
       "unit": "F1",
+      "format": "question",
       "title": "Interview: Tool ka schema aise likhoge ki model galat tool na chune. Kaise?",
       "one_idea": "The model picks a tool only from the text you wrote: its name, its description and its parameters. So give each tool a distinct name, a description of what it does, when to use it and when not to, name the parameters so they cannot be mixed up, use an enum where the choices are fixed, and keep the number of tools small.",
       "hook_type": "relatable_stake",
@@ -1392,19 +1391,11 @@
       "hook_formula": "relatable_stake",
       "hook_source": "scriptwriter, 2026-10-28 (plain words, no jargon in line 1)",
       "trap": "Vague tool names and descriptions: the model chooses from the text you wrote.",
-      "visual_idea": "Two tool cards on screen from frame 0, both named search and lookup with the one-line 'gets data', an arrow from a user message 'refund status of order 118' wavering and landing on the wrong card. Then the same two cards rewritten (orders_get_status with a 3-line description and an enum field, products_search_catalog) and the arrow lands on the right card; a final card shows the checklist of four fields.",
-      "everyday_anchor": "Two unlabeled switches on a wall: you press the wrong one until someone writes 'fan' and 'light' under them.",
-      "example": "EXAMPLE (invented tool names, no model run shown): tools 'search' and 'lookup' both described as 'gets data' versus 'orders_get_status' (what it returns, when to use it, when not) and 'catalog_search_products'. Numbers from sources only: Anthropic says aim for at least 3 to 4 sentences per tool description; OpenAI says aim for fewer than 20 functions available at the start of a turn.",
       "sources": [
         "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools",
         "https://developers.openai.com/api/docs/guides/function-calling",
         "https://www.anthropic.com/engineering/writing-tools-for-agents",
         "https://www.anthropic.com/engineering/building-effective-agents"
-      ],
-      "facts_to_verify": [
-        "Anthropic define-tools: detailed descriptions are the most important factor; at least 3 to 4 sentences; what, when and when not; consolidate; namespacing (fetched 2026-10-28)",
-        "OpenAI function calling: fewer than 20 functions at the start of a turn; enums; do not ask the model for values your code knows (fetched 2026-10-28)",
-        "Anthropic writing tools: unambiguous parameter names (user_id not user), namespacing, few well-designed tools (fetched 2026-10-28)"
       ],
       "length_target_s": 110,
       "cover_headline": "Write tool schemas AI picks right",
@@ -1414,7 +1405,8 @@
         "function calling description",
         "why ai picks wrong tool",
         "ai engineer interview"
-      ]
+      ],
+      "status": "planned"
     },
     {
       "track": "interview",
