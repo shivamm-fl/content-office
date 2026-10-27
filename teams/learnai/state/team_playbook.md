@@ -41,3 +41,5 @@ The team's living craft notes, by role: how a good hook, script, picture or capt
 - Do not name a scene `M`: it clashes with the `M` kit object; call the element `M_`.
 
 - 2026-10-26 (q119): A card that moves out of one panel into another must be created after the target panel or get `style.zIndex`, or the glass panel hides it. For a "size stays flat" idea, true-scale bars (25 vs 750 words, 55 vs 750) with a counter beat a table; a tile strip (30 turns) shows "history" before the bars appear.
+
+- 2026-10-27 (a009): For "numbers change vs numbers stay" (training vs inference) draw one chart function and use it twice: the model line is tweened through the real run states (`{w,b}` plain object, `onUpdate` sets the SVG line, gap segments, tile text and loss bar), so loss, line and tiles move together. Show the loss as vertical gap segments from dot to line. If the brief's run file is missing, reproduce the numbers by searching the settings (here x=1..5, w=b=0, lr 0.02, loss printed after the update) and save the script and output in `state/runs/`. Keep a pill like CHEAP out of the row of chips it describes; put a label under a grid, not inside it.

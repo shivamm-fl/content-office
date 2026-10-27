@@ -1,0 +1,14 @@
+start: w=0.00 b=0.00 loss 57.0000
+step 1: loss 15.8384 w=1.0000 b=0.2800
+step 2: loss 4.4167 w=1.5264 b=0.4288
+step 5: loss 0.1229 w=2.0251 b=0.5758
+step 10: loss 0.0274 w=2.1037 b=0.6120
+step 50: loss 0.0158 w=2.0817 b=0.7049
+step 100: loss 0.0080 w=2.0582 b=0.7898
+step 200: loss 0.0021 w=2.0295 b=0.8934
+step 500: loss 0.0000 w=2.0039 b=0.9861
+--- inference: weights locked ---
+x=10: prediction 21.0
+x=100: prediction 201.4
+x=50: prediction 101.2
+weights changed by inference: False

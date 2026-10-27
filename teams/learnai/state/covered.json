@@ -1060,13 +1060,9 @@
     {
       "id": "a009",
       "track": "series",
-      "unit": "A3",
       "title": "Training vs inference: learn once, answer a million times",
-      "kind": "concept",
-      "topic": "Training is the one slow, costly stage where a model's numbers (weights) are adjusted from data until its error is small; inference is every later use, where the trained model is only run on new input and its weights do not change. So an AI answering you is not learning from your message at that moment: learn once, answer many times.",
-      "hook_type": "direct_question",
-      "status": "planned",
-      "planned": "2026-10-27"
+      "status": "built",
+      "date": "2026-10-27"
     },
     {
       "id": "q120",

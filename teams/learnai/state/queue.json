@@ -1252,20 +1252,19 @@
       "title": "Training vs inference: learn once, answer a million times",
       "one_idea": "Training is the one slow, costly stage where a model's numbers (weights) are adjusted from data until its error is small; inference is every later use, where the trained model is only run on new input and its weights do not change. So an AI answering you is not learning from your message at that moment: learn once, answer many times.",
       "hook_type": "direct_question",
-      "spoken_hook": "ChatGPT जवाब देते समय क्या कुछ सीखता भी है?",
+      "spoken_hook": "ChatGPT{चैटजीपीटी} से 1{एक} सवाल पूछा, क्या वो तुमसे सीखा?",
       "hook_formula": "plain_question",
-      "hook_source": "strategist, 2026-10-27",
+      "hook_source": "scriptwriter, 2026-10-27 (concrete scene, growth-analyst read)",
       "trap": "Thinking the model learns from each chat while it answers.",
-      "visual_idea": "Left: a workshop with 5 dots and a line that is nudged step by step (loss number falling 15.84 to 0.0000), then a padlock closes on two numbers w and b. Right: a queue of users, each dropping an x into the locked box and getting a prediction; the padlocked numbers never change.",
+      "visual_idea": "Chat window with the typed question from frame 0. Then a workshop with 5 dots and a line nudged step by step (loss 15.84 to 0.0000), a padlock closes on w and b. Then a queue of users dropping x into the locked box and getting predictions; the padlocked numbers never change.",
       "everyday_anchor": "A student who studies for months before the exam (training), then answers every question in the exam hall without studying more (inference).",
-      "example": "EXAMPLE (tiny model, real run output in state/runs/a009_train_infer_run.txt): 5 points that follow y = 2x + 1; training by gradient descent, 500 steps: loss 15.8384 at step 1, 0.0274 at step 10, 0.0000 at step 500, w=2.00 b=0.99. Inference with fixed numbers: x=10 gives 21.0, x=20 gives 41.1, x=100 gives 201.4, weights unchanged afterwards. Real LLMs have billions of weights; this is a toy picture of the same two stages.",
+      "example": "EXAMPLE (tiny model, real run output in state/runs/a009_train_infer_run_output.txt): 5 points that follow y = 2x + 1; gradient descent, 500 steps: loss 15.8384 at step 1, 0.0274 at step 10, 0.0000 at step 500, w=2.00 b=0.99. Inference with fixed numbers: x=10 gives 21.0, x=100 gives 201.4, weights unchanged. Real LLMs have billions of weights; this is a toy picture of the same two stages.",
       "sources": [
         "https://blogs.nvidia.com/blog/difference-deep-learning-training-inference-ai/",
         "https://developers.google.com/machine-learning/crash-course/production-ml-systems/static-vs-dynamic-training",
         "https://huggingface.co/learn/llm-course/chapter1/4"
       ],
-      "source_notes": "NVIDIA: training adjusts weights over many iterations, compute-heavy; inference = trained model generates outputs on new data. Google MLCC: static training = train once offline, serve the same model. HF: pretraining needs huge data and long time. No fetched page says in so many words that weights do not change per request: say 'the trained model is reused as it is' (attribute to NVIDIA/Google); the toy run shows it directly.",
-      "length_target_s": 120,
+      "length_target_s": 125,
       "cover_headline": "Training vs inference in AI",
       "thumb_text": "Train vs run",
       "keywords": [
@@ -1274,11 +1273,7 @@
         "does chatgpt learn from chats",
         "ai engineer roadmap"
       ],
-      "facts_to_verify": [
-        "NVIDIA: training adjusts weights over many iterations; inference uses the trained model on new data",
-        "Google MLCC: static training = train once offline, serve the same model",
-        "Toy run output (state/runs/a009_train_infer_run.txt) is an example, not an LLM"
-      ]
+      "script_file": "state/scripts/a009.txt"
     },
     {
       "id": "q120",

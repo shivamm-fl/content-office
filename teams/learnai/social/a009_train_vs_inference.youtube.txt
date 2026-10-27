@@ -1,0 +1,12 @@
+Training vs inference: ChatGPT chat se seekhta hai?
+
+Training mein model ke numbers (weights) data se badle jaate hain, inference mein trained model bas naye input par chalta hai. Is video mein ek chhote toy model par dono stages dekhte hain: loss 15.84 se 0.0000 tak 500 steps, phir weights lock karke x = 10 aur x = 100 ke jawab.
+
+Is video mein: training vs inference, what is inference in AI, weights aur loss, kya ChatGPT chats se seekhta hai, static training.
+
+Toy model ka run hamara apna example hai, asli LLM nahi: loss, w, b aur x = 10, 100 ke jawab hamari apni chhoti calculation se hain (python script state/runs/a009_train_infer_run.py), kisi source page se nahi. Loss ka matlab (model ki galti ka number) ek standard definition hai. Asli models mein bahut zyada weights hote hain. Training mein weights ko kai iterations mein adjust karna aur inference mein seekhe hue model ko naye data par chalana NVIDIA ke page se hai. Static training (ek baar train karke wahi model serve karna) Google ke ML Crash Course se hai; dynamic training mein model baar-baar train hota hai, isliye 'ek baar' static case hai. NVIDIA ke hisaab se bade models ki training bahut compute leti hai aur inference zyada efficient hai. ChatGPT ka zikr kisi page mein nahi hai: 'wo message se nahi seekhta' inference ki definition se nikalta hai.
+
+Sources:
+https://blogs.nvidia.com/blog/difference-deep-learning-training-inference-ai/
+https://developers.google.com/machine-learning/crash-course/production-ml-systems/static-vs-dynamic-training
+https://huggingface.co/learn/llm-course/chapter1/4
