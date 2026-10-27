@@ -1,0 +1,15 @@
+Interviewer ne poocha: Agent ka loop, yaani think, act, observe, kya hota hai?
+
+Jawab: agent ek loop hai, smarter chatbot nahi.
+
+Model sochta hai (think), tool ka call maangta hai (act), tumhara app wo tool chalakar result wapas deta hai (observe), aur ye tab tak ghoomta hai jab tak kaam poora na ho. Model tool khud nahi chalata, wo sirf maangta hai.
+
+Example (invented order A17): turn 1 mein model lookup_order maangta hai, app chalata hai, result "shipped 2 days ago" aata hai. Turn 2 mein model jawab deta hai. Kul 2 model calls aur 1 tool run.
+
+Boundary: loop ko hamesha turn limit do (maan lo 5 turns), warna model atakkar tool maangta rahega aur bill badhta rahega.
+
+Interview mein bolo: "An agent is a loop. The model thinks, asks for a tool call, my app runs it and sends back the result, and this repeats until the model finishes or a turn limit stops it."
+
+Tumhare hisaab se ek agent ko kitne turns milne chahiye, 5, 10 ya 20? Comment mein ek number likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #AIAgents

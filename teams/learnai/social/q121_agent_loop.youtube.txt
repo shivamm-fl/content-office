@@ -1,0 +1,10 @@
+AI agent loop kya hota hai: think, act, observe
+
+Interview mein poochha jata hai: agent ka loop, yaani think, act, observe, kya hota hai? Jawab: agent ek loop hai. Model sochta hai, tool call maangta hai, aapka app wo tool chalakar result wapas bhejta hai, aur ye tab tak repeat hota hai jab tak model kaam poora na kar de ya turn limit na rok de. Anthropic ke hisaab se agents aam taur par LLMs hote hain jo environment ke feedback ke basis par tools use karte hain ek loop mein, aur maximum iterations jaisi stopping conditions rakhna common hai. Claude ke docs mein client tools ke liye app tool chalata hai aur tool_result wapas bhejta hai. Order A17 aur 5 turns ka limit invented example hain. ReAct paper (Yao et al.) reasoning aur actions ko interleave karne ka idea deta hai, uske results authors ke apne claims hain.
+
+Is video mein: ai agent loop, react agent think act observe, agent vs chatbot, ai engineer interview.
+
+Sources:
+https://www.anthropic.com/engineering/building-effective-agents
+https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview
+https://arxiv.org/abs/2210.03629

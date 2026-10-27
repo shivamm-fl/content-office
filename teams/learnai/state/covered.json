@@ -1078,12 +1078,12 @@
     {
       "id": "q121",
       "track": "interview",
-      "unit": "F2",
       "title": "Interview: Agent ka loop kya hota hai: think, act, observe?",
       "kind": "question",
-      "topic": "An agent is not a smarter chatbot but a loop: the model thinks about the goal, asks for a tool call (act), your app runs the tool and sends the result back (observe), and the loop repeats until the model decides it is done or a turn limit stops it.",
+      "topic": "An agent is a loop: the model thinks, asks for a tool call, the app runs it and returns the result, repeating until done or a turn limit stops it.",
+      "hook_formula": "interviewer_asked",
       "hook_type": "interviewer_asked",
-      "status": "planned",
+      "status": "built",
       "planned": "2026-10-27"
     }
   ]
