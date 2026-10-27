@@ -1,0 +1,14 @@
+Day 9/150: 10 lakh users hon, to peak requests per second kaise nikaloge?
+
+Back-of-envelope ka matlab hai gol numbers aur khula hisaab, taaki pata chale 700 requests per second chahiye ya 7 lakh.
+
+Step 1: users x requests per user = ek din ki requests. 10 lakh x 20 = 2 crore.
+Step 2: 86,400 seconds se bhaag do. 2 crore / 86,400 = lagbhag 231 requests per second (average).
+Step 3: peak factor lagao. 231 x 3 = lagbhag 700. Server peak ke liye banta hai, average ke liye nahi.
+Step 4: ek saath chal rahi requests = 700 x 0.2 second = lagbhag 140.
+
+(Saare numbers, 20 requests per user, 3x peak aur 0.2 second, sirf example hain.)
+
+Sawal: 1 crore users, har ek ki 10 requests roz. Average requests per second kitni? Comment karo.
+
+#systemdesign #backend #interviewprep

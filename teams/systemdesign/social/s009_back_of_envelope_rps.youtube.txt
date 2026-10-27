@@ -1,0 +1,8 @@
+Back-of-Envelope in Hinglish: Users se Requests Per Second (Day 9/150)
+
+Turn a user count into requests per second with round numbers and open arithmetic: users x requests per user, divided by 86,400 seconds in a day, gives the average; multiplying by a peak factor gives the load a server is sized for. Requests per second (queries per second) measures how many requests a system receives each second, and a high value signals when it may need to scale. Multiplying the arrival rate by the time each request spends in the system gives the average number of requests in flight at once (Little's law, L = lambda x W). All numbers (10 lakh users, 20 requests per user per day, 3x peak, 0.2 second per request) are invented examples, not measurements.
+
+Sources:
+https://en.wikipedia.org/wiki/Queries_per_second
+https://en.wikipedia.org/wiki/Requests_per_second
+https://en.wikipedia.org/wiki/Little%27s_law

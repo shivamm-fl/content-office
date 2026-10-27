@@ -1,0 +1,102 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 4,
+    "B": 4,
+    "C": 4,
+    "D": 4,
+    "E": 4,
+    "F": 4,
+    "G": 4,
+    "H": 4,
+    "I": 4
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      2,
+      0
+    ],
+    [
+      "dip",
+      "E",
+      5,
+      -0.1
+    ],
+    [
+      "ok",
+      "E",
+      3,
+      0
+    ],
+    [
+      "click",
+      "F",
+      3,
+      0
+    ],
+    [
+      "pop",
+      "I",
+      1,
+      0
+    ],
+    [
+      "save",
+      "I",
+      3,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: रोज़ 10{दस} लाख users हों, तो peak requests per second कैसे निकालोगे? || पहला step है, दिन भर की कुल requests निकालना। | Request यानी app का server से एक बार कुछ माँगना, जैसे feed खोलना।",
+      "B": "EXAMPLE: | एक app के 10{दस} लाख users रोज़ आते हैं। || हर user दिन में लगभग 20{twenty} requests भेजता है: | feed खोलना, refresh, like। || तो 10{दस} लाख users, हर एक की 20{twenty} requests, यानी 2{दो} करोड़ requests एक दिन में।",
+      "C": "पर ये नंबर server के काम का नहीं। || Server एक एक second का load झेलता है, दिन का कुल नहीं। || छोटा server लिया, तो भीड़ में बैठ जाएगा, | बहुत बड़ा लिया, तो पैसा बर्बाद। || इसलिए चाहिए RPS, यानी requests per second।",
+      "D": "दूसरा step: दिन भर को seconds में बाँटो। || एक दिन में 86,400{eighty-six-thousand-four-hundred} seconds होते हैं। || 2{दो} करोड़ को 86,400{eighty-six-thousand-four-hundred} से भाग दो, | तो लगभग 231{two-hundred-thirty-one} requests per second। || ये average है, यानी requests पूरे दिन बराबर आतीं, तब का नंबर।",
+      "E": "पर requests बराबर नहीं आतीं। || शाम को सब एक साथ app खोलते हैं, | रात को कोई नहीं। || तीसरा step: peak factor लगाओ, | यानी भीड़ के समय का load average से कितना गुना है। || मान लो 3{तीन} गुना। || 231{two-hundred-thirty-one} times 3{three}, यानी लगभग 700{seven-hundred} requests per second। || @emph Server इसी peak के लिए बनता है, average के लिए नहीं।",
+      "F": "चौथा step: एक ही पल में कितनी requests server के अंदर हैं। || मान लो एक request को निपटने में 0.2{point-two} second लगता है। || हर second 700{seven-hundred} नई आती हैं, | और हर एक 0.2{point-two} second रुकती है। || तो 700{seven-hundred} times 0.2{point-two}, यानी लगभग 140{one-hundred-forty} requests एक साथ चल रही हैं।",
+      "G": "ये सब अंदाज़ा है, सही नंबर नहीं। || Back-of-envelope का मतलब यही है: | गोल numbers, खुला हिसाब, ताकि पता चले कि 7{सात} सौ चाहिए या 7{सात} लाख।",
+      "H": "@emph याद रखो: | users times requests per user, divided by 86,400{eighty-six-thousand-four-hundred}, फिर times peak factor। || इसी से तय होता है कि एक server काफ़ी है या सौ।",
+      "I": "अब तुम बताओ: | 1{एक} करोड़ users, हर एक की 10{ten} requests रोज़। || Average requests per second कितनी? | Comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
