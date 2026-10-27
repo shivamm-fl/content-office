@@ -1,0 +1,120 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5,
+    "K": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "F",
+      0,
+      0.2
+    ],
+    [
+      "tick",
+      "F",
+      2,
+      0.3
+    ],
+    [
+      "ok",
+      "F",
+      3,
+      0.3
+    ],
+    [
+      "tick",
+      "H",
+      1,
+      0
+    ],
+    [
+      "click",
+      "H",
+      2,
+      0
+    ],
+    [
+      "dip",
+      "J",
+      0,
+      -0.1
+    ],
+    [
+      "save",
+      "K",
+      2,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook AI से फोटो माँगी, उसने सिर्फ लिखकर दे दिया, क्यों? || क्योंकि वो text model था। | AI model एक चीज़ नहीं होती, और ये उसके input और output से तय होता है।",
+      "B": "Mixer और toaster दोनों बिजली से चलते हैं, | पर mixer में bread toast नहीं होती। || AI में भी ऐसे ही 4{four} kinds हैं: | text, image, audio और embedding।",
+      "C": "पहला, text model। | Text अंदर, text बाहर। | तुम सवाल लिखते हो, वो जवाब लिखता है।",
+      "D": "दूसरा, image model। | अंदर लिखा हुआ prompt, बाहर picture। | फोटो इसी का काम है।",
+      "E": "तीसरा, audio model। | ये दो तरफ़ चलता है: | आवाज़ अंदर, transcript बाहर, इसे speech recognition कहते हैं। | या text अंदर, आवाज़ बाहर।",
+      "F": "चौथा, embedding model, और ये सबसे अलग है। | Embedding यानी text का numbers की list में बदला हुआ रूप, जो मतलब नापता है, words नहीं। || मान लो एक note में लिखा है \"refund\", और तुमने खोजा \"पैसे वापस\"। | Words एक भी नहीं मिलते, पर इनके numbers एक-दूसरे के पास बैठते हैं।",
+      "G": "एक असली number: OpenAI का text-embedding-3-small एक sentence को 1,536{fifteen-hundred-thirty-six} numbers में बदलता है। | ये vendor का अपना आँकड़ा है।",
+      "H": "अब देखो असली app में ये कैसे जुड़ते हैं। || User लिखता है \"पैसे वापस\"। | Embedding model सही note ढूँढता है, | और text model उससे जवाब लिखता है।",
+      "I": "इसलिए जो chatbot तुम्हें फोटो देता दिखता है, वो आम तौर पर पीछे किसी image model को बुला रहा होता है। | अकेला chat model सब नहीं कर सकता।",
+      "J": "@emph तो याद रखो: | अंदर क्या जाता है और बाहर क्या आता है, वही model की kind है।",
+      "K": "अब तुम बताओ: | Voice note को text में बदलना हो, तो कौन सा model चाहिए? | Comment में लिखो, जवाब caption में है। || रोज़ एक AI idea के लिए follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

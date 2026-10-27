@@ -1355,19 +1355,15 @@
       "hook_formula": "plain_question on a frustration the viewer knows",
       "hook_source": "strategist, 2026-10-28 (learning 2026-10-27: start from a frustration in plain words)",
       "trap": "Thinking every AI model is a chatbot that can do text, pictures and sound alike; each kind has its own input and output.",
-      "visual_idea": "Four boxes in a row, each a machine with an input slot and an output slot: text in, text out; prompt in, picture out; sound wave in, written transcript out (and text in, voice out); sentence in, a row of numbers out. A chat window first asks for a photo and gets only words back. A tiny app diagram at the end wires three of the boxes together.",
+      "visual_idea": "Four boxes in a row, each a machine with an input slot and an output slot. A chat window first asks for a photo and gets only words back. A tiny app diagram at the end wires three of the boxes together.",
       "everyday_anchor": "A kitchen with different appliances: the mixer, the toaster and the pressure cooker all run on electricity, but you cannot toast bread in the mixer.",
-      "example": "EXAMPLE (illustrative; no run needed). Four kinds by input and output: text to text; written prompt to image; audio to transcript (speech recognition) and text to speech; sentence to embedding, a vector of floating point numbers whose distance says how related two texts are. One number shown: OpenAI's text-embedding-3-small returns 1,536 numbers by default (OpenAI embeddings docs, vendor figure). A search box that finds a refund note for 'paise wapas' uses an embedding model to find it, and a text model to write the reply.",
+      "example": "EXAMPLE (illustrative). Four kinds by input and output. One number shown: OpenAI's text-embedding-3-small returns 1,536 numbers by default (OpenAI embeddings docs, vendor figure).",
       "sources": [
         "https://huggingface.co/tasks/text-generation",
         "https://huggingface.co/tasks/text-to-image",
         "https://huggingface.co/tasks/automatic-speech-recognition",
         "https://huggingface.co/tasks/sentence-similarity",
         "https://developers.openai.com/api/docs/guides/embeddings"
-      ],
-      "facts_to_verify": [
-        "Hugging Face tasks: text generation, text-to-image, automatic speech recognition, sentence similarity input and output (fetched 2026-10-28)",
-        "OpenAI embeddings: a vector (list) of floating point numbers, text-embedding-3-small default 1,536 dimensions, used for search, clustering, recommendations (fetched 2026-10-28)"
       ],
       "length_target_s": 120,
       "cover_headline": "The 4 kinds of AI model",

@@ -1,0 +1,15 @@
+Day 10/150: AI se photo maangi, usne sirf likhkar de diya, kyun?
+
+Kyunki wo text model tha. AI model ek cheez nahi hota: kya andar jaata hai aur kya bahar aata hai, wahi uski kind hai.
+1. Text model: text andar, text bahar.
+2. Image model: likha hua prompt andar, picture bahar.
+3. Audio model: awaaz andar, transcript bahar (speech recognition), ya text andar, awaaz bahar.
+4. Embedding model: text andar, numbers ki list bahar, jo matlab naapti hai, words nahi. OpenAI ka text-embedding-3-small ek sentence ko 1,536 numbers mein badalta hai (vendor ka apna figure).
+
+Asli app mein ye jud jaate hain: embedding model sahi note dhoondhta hai, text model jawab likhta hai. Isliye akela chat model sab nahi kar sakta.
+
+Ab tum batao: voice note ko text mein badalna ho, to kaun sa model chahiye? Comment mein likho, jawab caption mein hai: audio model (speech recognition).
+
+Roz ek AI idea ke liye follow karo.
+
+#AI #AIModels #150DaysOfAI
