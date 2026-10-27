@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="125.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="129" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="125.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="125.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="125.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="129" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="129" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="129" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -103,29 +103,30 @@
 
       // ============ A: hook: a chat, then the student ============
       // diagram: A
-      M.hook(["ChatGPT se 1 sawaal,", "kya wo seekha?"], { size: 88, top: 230 });
-      gl(A, 90, 480, 900, 340, CYAN, 28);
-      bub(A, "Explain AI simply", 360, 520, 590, 96, CYAN, null, { size: 42 });
-      const aDots = show(bub(A, "• • •", 130, 650, 190, 84, CYAN, null, { size: 44, wt: 700, tc: CYAN }), 0.3, { opacity: 0 });
+      M.hook(["100 baar samjhaya,", "phir bhi same galti?"], { size: 88, top: 230 });
+      gl(A, 90, 480, 900, 400, CYAN, 28);
+      bub(A, "No! Not like this", 390, 530, 560, 110, CYAN, null, { size: 46 });
+      const aDots = show(bub(A, "• • •", 130, 680, 190, 96, CYAN, null, { size: 44, wt: 700, tc: CYAN }), 0.3, { opacity: 0 });
       gone(aDots, 1.1);
-      show(bub(A, "Sure! AI is when...", 130, 650, 600, 84, GOOD, null, { size: 40, bg: ca(GOOD, 0.12) }), 1.15, { opacity: 0, y: 12 });
-      const aQ = pillAt(A, "LEARNED FROM ME?", 280, 750, at("A", "seekha") - 0.1, ACC, 34); 
-      const aOK = pillAt(A, "ALREADY LEARNED", 280, 750, at("A", "pehle"), GOOD, 34); gone(aQ, at("A", "pehle") - 0.05, 0.15);
-      const aC1 = gl(A, 90, 870, 400, 250, ACC, 24); show(aC1, at("A", "jaise") - 0.1, { opacity: 0, y: 20 });
-      M.icon(A, "book", 215, 890, 120, ACC).show(at("A", "jaise"));
-      txt(A, "STUDY", 90, 1030, 400, at("A", "mahinon"), ACC, 46);
-      M.arrow(A, { from: [500, 995], to: [580, 995], color: MUTED, w: 8 }).show(at("A", "phir"), 0.3);
-      const aC2 = gl(A, 590, 870, 400, 250, CYAN, 24); show(aC2, at("A", "exam") - 0.1, { opacity: 0, y: 20 });
-      M.icon(A, "doc", 730, 890, 120, CYAN).show(at("A", "exam"));
-      txt(A, "EXAM HALL", 590, 1030, 400, at("A", "hall"), CYAN, 46);
-      pillAt(A, "TRAINING", 130, 1150, at("A", "training"), ACC, 40);
-      pillAt(A, "INFERENCE", 600, 1150, at("A", "inference"), CYAN, 40);
-      M.fit(A, { y: 460, h: 840, maxScale: 1.25 });
+      show(bub(A, "Sorry! (same mistake)", 130, 680, 700, 96, GOOD, null, { size: 44, bg: ca(GOOD, 0.12) }), 1.15, { opacity: 0, y: 12 });
+      pillAt(A, "× 100", 130, 545, at("A", "100"), ACC, 40); const aQ = pillAt(A, "SAME MISTAKE", 250, 790, at("A", "same") - 0.1, HOT, 38); 
+      const aOK = pillAt(A, "LEARNED BEFORE", 250, 790, at("A", "pehle"), GOOD, 38); gone(aQ, at("A", "pehle") - 0.35, 0.2);
+      const aC1 = gl(A, 90, 920, 400, 290, ACC, 24); show(aC1, at("A", "jaise") - 0.1, { opacity: 0, y: 20 });
+      M.icon(A, "book", 205, 940, 140, ACC).show(at("A", "jaise"));
+      txt(A, "STUDY", 90, 1105, 400, at("A", "mahinon"), ACC, 52);
+      M.arrow(A, { from: [500, 1065], to: [580, 1065], color: MUTED, w: 8 }).show(at("A", "phir"), 0.3);
+      const aC2 = gl(A, 590, 920, 400, 290, CYAN, 24); show(aC2, at("A", "exam") - 0.1, { opacity: 0, y: 20 });
+      M.icon(A, "doc", 720, 940, 140, CYAN).show(at("A", "exam"));
+      txt(A, "EXAM HALL", 590, 1105, 400, at("A", "hall"), CYAN, 52);
+      pillAt(A, "TRAINING", 110, 1240, at("A", "training"), ACC, 44);
+      pillAt(A, "INFERENCE", 585, 1240, at("A", "inference"), CYAN, 44);
+      M.fit(A, { y: 460, h: 850, maxScale: 1.25 });
 
       // ============ B: the toy model ============
       // diagram: B
       pillAt(B, "EXAMPLE", 700, 245, S.B + 0.1, ACC, 34);
       const bC = makeChart(B, 300); bC.show(S.B + 0.05);
+      const bBox = M.box(B, { x: 280, y: 470, w: 520, h: 220, label: "TINY MODEL", icon: "model", color: CYAN, size: 44 }); bBox.show(S.B + 0.1); bBox.hide(at("B", "5") - 0.15);
       bC.pts.forEach((p, i) => tl.to(p, { opacity: 1, duration: 0.3, immediateRender: false }, at("B", "5") + i * 0.18));
       tl.to(bC.tgt, { opacity: 1, duration: 0.6, immediateRender: false }, at("B", "line"));
       txt(B, "y = 2x + 1", 560, 340, 300, at("B", "line") + 0.2, ACC, 40, "left");
@@ -199,7 +200,7 @@
       for (let r = 0; r < 2; r++) for (let c = 0; c < 6; c++) { const k = r * 6 + c;
         const ch = el(E, `left:${125 + c * 142}px;top:${690 + r * 85}px;width:120px;height:62px;box-sizing:border-box;border-radius:20px 20px 20px 6px;border:3px solid ${CYAN};background:${ca(CYAN, 0.18)}`);
         show(ch, at("E", "baar-baar") + k * 0.07, { opacity: 0, scale: 0.8 }, 0.25); }
-      pillAt(E, "CHEAP", 700, 600, at("E", "sasti"), CYAN, 34);
+      pillAt(E, "EFFICIENT", 640, 600, at("E", "efficient"), CYAN, 34);
       // the point
       dim([eT, eI], at("E", "isliye"), 0.25);
       const eU = bub(E, "YOUR MESSAGE", 90, 960, 400, 100, CYAN, at("E", "isliye"), { size: 38 });
@@ -231,24 +232,24 @@
 
       // ============ G: recap + challenge + close ============
       // diagram: G
-      const gA = gl(G, 90, 270, 430, 270, ACC, 24); show(gA, S.G + 0.1, { opacity: 0, y: 20 });
-      txt(G, "TRAINING", 90, 295, 430, at("G", "training"), ACC, 42);
-      show(tile(G, "w, b change", 120, 380, 370, 100, ACC, 36), at("G", "badalte"), { opacity: 0 });
-      const gB = gl(G, 560, 270, 430, 270, CYAN, 24); show(gB, at("G", "inference") - 0.1, { opacity: 0, y: 20 });
-      txt(G, "INFERENCE", 560, 295, 430, at("G", "inference"), CYAN, 42);
-      show(tile(G, "w, b locked", 590, 380, 370, 100, CYAN, 36), at("G", "inference") + 0.3, { opacity: 0 });
-      M.icon(G, "lock", 895, 285, 70, CYAN).show(at("G", "inference") + 0.3);
-      pillC(G, "CHALLENGE", 600, at("G", "batao"), { col: ACC, size: 40, h: 70, pad: 40 });
-      bub(G, "x = 50", 90, 700, 300, 100, MUTED, at("G", "50") - 0.1, { size: 46, font: COD, wt: 700 });
-      M.arrow(G, { from: [400, 750], to: [460, 750], color: MUTED, w: 7 }).show(at("G", "50"), 0.3);
-      show(tile(G, "× w + b", 470, 700, 250, 100, CYAN, 38), at("G", "50") + 0.2, { opacity: 0 });
-      M.arrow(G, { from: [730, 750], to: [790, 750], color: MUTED, w: 7 }).show(at("G", "lagbhag") - 0.1, 0.3);
-      bub(G, "?", 800, 700, 190, 100, ACC, at("G", "lagbhag"), { size: 64, wt: 800, tc: ACC, bg: ca(ACC, 0.16) });
-      show(tile(G, "w = ?", 90, 840, 300, 90, ACC, 42), at("G", "badlega"), { opacity: 0 });
-      const gC = gl(G, 90, 970, 900, 190, CYAN); show(gC, at("G", "Comment") - 0.1, { opacity: 0, y: 20 });
-      txt(G, "COMMENT", 120, 990, 400, at("G", "Comment"), CYAN, 40, "left");
-      show(el(G, `left:120px;top:1060px;width:840px;height:70px;border-radius:35px;border:1.5px solid rgba(150,175,215,.35);font:500 30px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px;box-sizing:border-box`, "Add a comment..."), at("G", "likho") - 0.1, { opacity: 0 });
-      const gF = M.pill(G, "+  FOLLOW", at("G", "follow") - 0.4, { x: 400, y: 1200, kind: "acc", size: 40 });
+      const gA = gl(G, 90, 270, 430, 300, ACC, 24); show(gA, S.G + 0.05, { opacity: 0, y: 20 });
+      txt(G, "TRAINING", 90, 300, 430, S.G + 0.1, ACC, 48);
+      show(tile(G, "w, b change", 115, 410, 380, 120, ACC, 40), at("G", "badalte"), { opacity: 0 });
+      const gB = gl(G, 560, 270, 430, 300, CYAN, 24); show(gB, S.G + 0.05, { opacity: 0, y: 20 });
+      txt(G, "INFERENCE", 560, 300, 430, S.G + 0.1, CYAN, 48);
+      show(tile(G, "w, b locked", 585, 410, 380, 120, CYAN, 40), at("G", "inference") + 0.3, { opacity: 0 });
+      M.icon(G, "lock", 890, 290, 80, CYAN).show(at("G", "inference") + 0.3);
+      pillC(G, "CHALLENGE", 640, at("G", "batao"), { col: ACC, size: 44, h: 80, pad: 44 });
+      bub(G, "x = 50", 90, 760, 300, 120, MUTED, at("G", "50") - 0.1, { size: 50, font: COD, wt: 700 });
+      M.arrow(G, { from: [400, 820], to: [460, 820], color: MUTED, w: 7 }).show(at("G", "50"), 0.3);
+      show(tile(G, "× w + b", 470, 760, 250, 120, CYAN, 42), at("G", "50") + 0.2, { opacity: 0 });
+      M.arrow(G, { from: [730, 820], to: [790, 820], color: MUTED, w: 7 }).show(at("G", "lagbhag") - 0.1, 0.3);
+      bub(G, "?", 800, 760, 190, 120, ACC, at("G", "lagbhag"), { size: 70, wt: 800, tc: ACC, bg: ca(ACC, 0.16) });
+      show(tile(G, "w = ?", 90, 920, 360, 110, ACC, 48), at("G", "badlega"), { opacity: 0 });
+      const gC = gl(G, 90, 1060, 900, 230, CYAN); show(gC, at("G", "Comment") - 0.1, { opacity: 0, y: 20 });
+      txt(G, "COMMENT", 120, 1080, 400, at("G", "Comment"), CYAN, 44, "left");
+      show(el(G, `left:120px;top:1170px;width:840px;height:90px;border-radius:45px;border:1.5px solid rgba(150,175,215,.45);font:500 36px ${COD};color:#A5B0C8;display:flex;align-items:center;padding:0 34px;box-sizing:border-box`, "Add a comment..."), at("G", "likho") - 0.1, { opacity: 0 });
+      const gF = M.pill(G, "+  FOLLOW", at("G", "follow") - 0.4, { x: 380, y: 1320, kind: "acc", size: 44 });
       tl.fromTo(gF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("G", "follow"));
       M.fit(G, { y: 240, h: 1100, maxScale: 1.2 });
 

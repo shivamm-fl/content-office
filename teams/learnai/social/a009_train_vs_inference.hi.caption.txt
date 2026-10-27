@@ -1,4 +1,4 @@
-Day 9/150: ChatGPT se 1 sawaal pucha, kya wo tumse seekha?
+Day 9/150: ChatGPT ko 100 baar ek hi cheez samjhayi, phir bhi wo har same galti kyun dohrata hai?
 
 Seekhna pehle ho chuka hota hai. Jaise student mahinon padhta hai, phir exam hall mein bina padhe likhta hai. AI mein inke naam hain training aur inference.
 
@@ -6,7 +6,7 @@ Ek chhote model par dekha (sirf example, asli LLM nahi): 5 points, y = 2x + 1.
 1. Training: model har step par apni galti dekhta hai aur w, b ko thoda sarkata hai. Loss 15.84 se 0.0000 tak, 500 steps mein.
 2. Inference: weights lock. x = 10 par jawab 21.0, x = 100 par 201.4. Weights wahi ke wahi.
 
-Training dheemi aur mahngi hai, aur ek baar hoti hai. Inference mein trained model bas chalta hai. Kuch systems baad mein naye data par dobara train hote hain, wo alag training hai.
+Training dheemi aur mahngi hai, aur aam taur par ek baar hoti hai. Inference zyada efficient hai: trained model bas chalta hai, baar-baar istemal hota hai. Kuch systems baad mein naye data par dobara train hote hain, wo alag training hai.
 
 Ab tum batao: x = 50 daalo, to jawab lagbhag kya aayega, aur w badlega ya nahi? Comment mein likho.
 

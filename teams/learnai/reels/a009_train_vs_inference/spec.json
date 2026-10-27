@@ -77,11 +77,11 @@
   ],
   "copy": {
     "hi": {
-      "A": "@hook ChatGPT{चैटजीपीटी} से 1{एक} सवाल पूछा, | क्या वो तुमसे सीखा? || जो सीखना था, वो पहले हो चुका। || जैसे एक student महीनों पढ़ता है, | फिर exam hall में बिना पढ़े हर सवाल का जवाब लिखता है। || AI में इन दोनों के नाम हैं: | training और inference।",
+      "A": "@hook ChatGPT{चैटजीपीटी} को 100{सौ} बार एक ही चीज़ समझाई, | फिर भी वो हर same गलती क्यों दोहराता है? || क्योंकि जो सीखना था, वो पहले हो चुका। || जैसे एक student महीनों पढ़ता है, | फिर exam hall में बिना पढ़े हर सवाल का जवाब लिखता है। || AI में इन दोनों के नाम हैं: | training और inference।",
       "B": "इसे मैंने एक छोटे model पर चलाया, | ये सिर्फ़ एक उदाहरण है। || 5{five} points हैं, | जो y equals 2{two} x plus 1{one} की line पर बैठते हैं। || Model के पास 2{two} numbers हैं, w{डब्ल्यू} और b{बी}। | इन्हें weights कहते हैं, | इन्हीं से model अपना जवाब निकालता है। || Loss यानी model की गलती का number, | जितना कम, उतना सही।",
       "C": "Training में model हर step पर अपनी गलती देखता है, | और weights को थोड़ा सरकाता है, ताकि गलती घटे। || Step 1{one} पर loss 15.84{fifteen-point-eight-four} था। || Step 10{ten} पर 0.03{zero-point-zero-three}। || Step 500{five-hundred} पर 0.0000{zero}। || w अब 2.00{two-point-zero-zero}, और b 0.99{zero-point-nine-nine}। | यानी model ने line पकड़ ली। || ये है training: | 500{five-hundred} बार weights बदले, तब गलती ख़त्म हुई।",
       "D": "अब weights को lock कर दो। || नया input आया: x equals 10{ten}। | Model बस multiply करता है, और add करता है: | जवाब 21.0{twenty-one-point-zero}। || x equals 100{hundred}, जवाब 201.4{two-hundred-one-point-four}। || ये है inference: | trained model को नए input पर बस चलाना। | हर जवाब में सिर्फ़ 1{one} multiply और 1{one} add, | और weights वही के वही रहे।",
-      "E": "Training धीमी और महँगी है, | और एक बार होती है। | Inference सस्ती है, | और trained model को वैसे ही बार-बार इस्तेमाल किया जाता है। || इसलिए ChatGPT तुम्हारे message से सीखता नहीं, | सीखा हुआ model बस चलाता है।",
+      "E": "Training धीमी और महँगी है, | और आम तौर पर एक बार होती है। | Inference ज़्यादा efficient है, | और trained model को वैसे ही बार-बार इस्तेमाल किया जाता है। || इसलिए ChatGPT तुम्हारे message से सीखता नहीं, | सीखा हुआ model बस चलाता है।",
       "F": "@emph असली models में अरबों weights होते हैं, | ये छोटा model सिर्फ़ एक तस्वीर है, पर दोनों stages यही हैं। || कुछ systems को बाद में नए data पर दोबारा train किया जाता है, | पर वो अलग training है, जवाब देना नहीं।",
       "G": "तो याद रखो: | training में weights बदलते हैं, | inference में नहीं। || अब तुम बताओ: | इसमें x equals 50{fifty} डालो, | तो जवाब लगभग क्या आएगा, और w बदलेगा या नहीं? | Comment में लिखो। || और रोज़ एक नया AI idea समझने के लिए, | follow कर लो।"
     }
