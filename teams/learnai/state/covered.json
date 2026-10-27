@@ -1067,13 +1067,10 @@
     {
       "id": "q120",
       "track": "interview",
-      "unit": "D7",
       "title": "Interview: Multi-agent mein har agent ka context alag kyun rakhte hain?",
       "kind": "question",
-      "topic": "Each subagent works in its own fresh context window on one narrow job and hands back only a short note, so the lead agent's context stays small and clean and agents can run in parallel; the price is more total tokens and agents that cannot see each other's decisions, so tasks that need one shared picture are a poor fit.",
-      "hook_type": "relatable_stake",
-      "status": "planned",
-      "planned": "2026-10-27"
+      "topic": "Multi-agent: each subagent gets its own context window, returns a short note; lead stays small, agents run in parallel; cost: more tokens, no shared decisions.",
+      "status": "built"
     },
     {
       "id": "q121",

@@ -1,0 +1,11 @@
+Agent ne itna padha ki asli sawal hi bhool gaya. Interview mein poochha jaata hai: multi-agent system mein har agent ka context alag kyun rakhte hain?
+
+Jawab: har subagent apni alag window mein ek chhota kaam karta hai aur lead agent ko sirf chhota note lautata hai. Maan lo (ye example hai) pages ke 12000 words hain. Ek shared context mein sabke saamne 12000 words aur asli sawal dab jaata hai. Alag windows mein 3000, 4000, 5000 words padhe jaate hain, har agent 200 words ka note lautata hai, to lead ke saamne 600 words aate hain. Teeno ek saath chalte hain, intzar sabse lambe kaam jitna.
+
+Boundary: Anthropic ne June 2025 mein apne data mein dekha ki multi-agent system chat se karib 15x zyada tokens khaata hai. Aur agents ek-doosre ke faisle nahi dekhte, to jahan sabko ek tasvir chahiye, wahan ek agent behtar hai.
+
+Interview mein bolo: "Each subagent gets its own context window and returns only a short summary, so the lead stays clean and agents run in parallel. The cost is more tokens, and agents can't see each other's decisions."
+
+Tum apne project mein abhi ek agent chalate ho ya kai? Comment mein ek ya kai likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #MultiAgent

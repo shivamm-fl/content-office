@@ -1287,15 +1287,11 @@
       "hook_formula": "concrete wrong outcome, then the interview question",
       "hook_source": "strategist, 2026-10-27",
       "trap": "One shared giant context that every agent reads and clutters.",
-      "visual_idea": "One big window overflowing with page cards, the question card pushed to the corner and fading. Then the lead's small window with 3 small subagent windows beside it; each subagent window fills with pages, then a short note card flies into the lead's window. A last panel: two agents drawing mismatched halves (shared-context warning).",
-      "everyday_anchor": "A manager who sends three people to read three folders and asks each for a one-page note, instead of reading all three folders herself.",
-      "example": "EXAMPLE (invented sizes, words stand in for tokens, real output in state/runs/q120_context_run.txt): one shared context carries 12000 words; three subagents read 3000, 4000, 5000 words each in their own windows and return 200 words each, so the lead sees 600 words; total work is 12600 words, slightly more than shared. Anthropic's own measurement: multi-agent systems use about 15x more tokens than chats (their data, June 2025).",
       "sources": [
         "https://www.anthropic.com/engineering/multi-agent-research-system",
         "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
         "https://cognition.com/blog/dont-build-multi-agents"
       ],
-      "source_notes": "Anthropic: subagents work in parallel with their own context windows and condense findings for the lead; 'In our data' multi-agent about 15x more tokens than chats, agents about 4x; not a good fit where agents must share context or have many dependencies (June 2025). Context-engineering post: subagent may use tens of thousands of tokens and returns about 1,000-2,000-token summary. Cognition (12 Jun 2025): share full traces, conflicting implicit decisions give bad results (Flappy Bird example); default to one single-threaded agent. Do not say 'today' without the date.",
       "length_target_s": 110,
       "cover_headline": "Why give each agent its own context",
       "thumb_text": "Agent context",
@@ -1306,6 +1302,10 @@
         "ai engineer interview"
       ],
       "status": "planned",
+      "visual_idea": "One big window overflowing with page cards, the question card pushed to the corner and fading. Then the lead's small window with 3 small subagent windows beside it; each subagent window fills with pages, then a short note card flies into the lead's window. A last panel: two agents drawing mismatched halves (shared-context warning).",
+      "everyday_anchor": "A manager who sends three people to read three folders and asks each for a one-page note, instead of reading all three folders herself.",
+      "example": "EXAMPLE (invented sizes, words stand in for tokens, real output in state/runs/q120_context_run.txt): one shared context carries 12000 words; three subagents read 3000, 4000, 5000 words each in their own windows and return 200 words each, so the lead sees 600 words; total work is 12600 words. Anthropic's own measurement: multi-agent systems use about 15x more tokens than chats (their data, June 2025).",
+      "source_notes": "Anthropic (13 Jun 2025): subagents operate in parallel with their own context windows and condense findings for the lead; 'In our data' multi-agent about 15x more tokens than chats. Cognition (12 Jun 2025): subagents cannot see what the other was doing, conflicting implicit decisions.",
       "facts_to_verify": [
         "Anthropic: subagents have own context windows, parallel, condensed findings (June 2025)",
         "About 15x more tokens than chats is Anthropic's own data",
