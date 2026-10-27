@@ -1,27 +1,62 @@
 {
   "items": [
     {
-      "id": "s008",
+      "id": "s009",
       "track": "series",
-      "day": 8,
+      "day": 9,
       "unit": "P1",
-      "title": "Latency vs throughput: ek request kitni der, aur ek second mein kitni",
+      "title": "Back-of-envelope: users se requests per second tak ka hisaab",
+      "one_idea": "Turn a user count into requests per second with round numbers and open arithmetic: users x requests per user / 86,400, then multiply by a peak factor.",
       "format": "concept",
-      "hook_type": "surprising_fact",
-      "spoken_hook": "Fast server भी हज़ारों requests पर अटक सकता है।",
-      "hook_score": 30,
-      "cover_headline": "Latency vs Throughput Explained",
-      "thumb_text": "Fast ya Zyada?",
-      "length_target_s": 140,
-      "status": "planned",
-      "script_file": "state/scripts/s008.txt",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: रोज़ 10 लाख users हों, तो peak requests per second कैसे निकालोगे?",
+      "hook_score": 38.6,
+      "hook_10s": "Interviewer ने पूछा: 10 लाख users रोज़, peak requests कितनी? इसका जवाब एक छोटे से हिसाब में है: users से requests, और requests से requests per second। Example से करते हैं। [frame 0: a row of phone icons on the left, an empty server box on the right with a '? req/s' dial]",
+      "hook_candidates": [
+        {
+          "formula": "interviewer_asked: Interviewer ने पूछा opener with one self-contained question",
+          "text": "Interviewer ने पूछा: 10 लाख users रोज़, peak requests कितनी?"
+        },
+        {
+          "formula": "direct_question: the conversion as a plain question",
+          "text": "10 लाख users का app, server पर कितनी requests per second?"
+        },
+        {
+          "formula": "relatable_stake: capacity guessed wrong",
+          "text": "Server छोटा लिया, और शाम को सब एक साथ आ गए।"
+        }
+      ],
+      "hook_formula": "interviewer_asked: Interviewer ने पूछा opener with one self-contained question (7-word question, total 10 words)",
+      "hook_source": "hook-writer interviewer_asked; least used and longest ago among the last six reels (Day 5)",
+      "visual_idea": "One fixed frame: a row of phone icons feeding a server box. A calculation strip builds left to right in cards (users, x requests, = per day, / 86,400 seconds, = average req/s), then a day-long bar chart gets a tall evening bar that marks the peak, and a final row of small request dots inside the server box shows 'in flight'.",
+      "everyday_anchor": "A railway ticket counter on a festival evening: the day's total tickets sold hides the 6 pm rush the counters must be sized for.",
+      "example": "EXAMPLE (invented, labelled on screen): 10 lakh users, 20 requests per user per day, peak 3x average, 0.2 s per request. 1,000,000 x 20 = 20,000,000 per day; / 86,400 = about 231 average req/s; x 3 = about 700 peak req/s; 700 x 0.2 = about 140 requests in flight (Little's law).",
+      "length_target_s": 150,
+      "cover_headline": "Users to Requests Per Second",
+      "thumb_text": "Kitni RPS?",
+      "keywords": [
+        "requests per second calculation",
+        "back of envelope estimation system design",
+        "users to QPS",
+        "system design capacity estimation",
+        "peak traffic estimation",
+        "Little's law in flight requests"
+      ],
       "sources": [
-        "https://en.wikipedia.org/wiki/Network_performance",
-        "https://aws.amazon.com/what-is/latency/",
-        "https://en.wikipedia.org/wiki/Throughput",
-        "https://en.wikipedia.org/wiki/Latency_(engineering)",
+        "https://en.wikipedia.org/wiki/Queries_per_second",
+        "https://en.wikipedia.org/wiki/Requests_per_second",
         "https://en.wikipedia.org/wiki/Little%27s_law"
-      ]
+      ],
+      "facts_to_verify": [
+        "Wikipedia (fetched 2026-10-27): QPS is the rate of queries a system gets per second and RPS is the more accurate name for request-response systems; it is used to decide when to scale. The page gives no formula, so the arithmetic is shown on screen, not sourced.",
+        "Little's law L = lambda x W (Little's law page): average number in the system = arrival rate x mean time in system; used for the 'in flight' line.",
+        "Wikipedia Requests per second: limits depend on operating conditions, no fixed threshold; so the reel gives no per-server capacity number.",
+        "All traffic numbers (10 lakh users, 20 requests, 3x peak, 0.2 s) are EXAMPLE; the arithmetic is plain (20,000,000/86,400 = 231.5; x3 = 694; 700 x 0.2 = 140) and needs no source.",
+        "No claim about any real company's traffic."
+      ],
+      "script_file": "state/scripts/s009.txt",
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }
