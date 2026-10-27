@@ -1,0 +1,8 @@
+A: @hook Interviewer ने पूछा: Multi-agent system कब चाहिए, और कब एक agent काफी है?
+B: तुम्हारा जवाब: पहले एक agent से शुरू करो। | कई agents तब, जब काम अलग-अलग हिस्सों में बँट सके और वो हिस्से एक साथ चल सकें। || दो बातें देखते हैं।
+C: Agent यानी वो model जो खुद tools चलाकर काम करता है। | मान लो, ये example है, एक chat में 2000{two-thousand} tokens लगते हैं, token यानी text का टुकड़ा जिसका bill बनता है। | वही काम एक agent करे तो 8000{eight-thousand}, यानी 4{four}x। | कई agents मिलकर करें तो 30000{thirty-thousand}, यानी 15{fifteen}x। | ये 4{four}x और 15{fifteen}x Anthropic के अपने measurements हैं, कोई कानून नहीं। | मतलब हर agent जोड़ना महँगा है, तो दिखाने के लिए मत जोड़ो।
+D: पहली बात, क्या काम बँटता है? | मान लो, तीन folders हैं और हर एक का summary चाहिए। | 3{three} agents एक साथ पढ़ते हैं, क्योंकि किसी को दूसरे का result नहीं चाहिए। | समय सबसे लंबे काम जितना लगता है।
+E: दूसरी बात, क्या सब एक context window में आता है? | Context window यानी वो text जो model एक बार में सामने रखकर पढ़ सकता है। | अगर काम उससे बड़ा है, तो उसे अलग agents में बाँटो, क्योंकि एक window में जगह ही नहीं है।
+F: Boundary: जहाँ agents को एक ही context share करना हो, या एक step दूसरे पर टिका हो, वहाँ एक agent रखो। | क्योंकि agents एक-दूसरे के फ़ैसले नहीं देखते। | एक तस्वीर का आधा हिस्सा एक agent बनाए, आधा दूसरा, तो जोड़ने पर वो match नहीं करती।
+G: Interview में बोलो: “I start with one agent. I add more only when the work splits into independent parts that run in parallel, or won't fit in one context window. Each extra agent costs tokens, and agents can't see each other's decisions.”
+H: तुम्हारे project में अभी एक agent चलता है या कई? | Comment में एक या कई लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।

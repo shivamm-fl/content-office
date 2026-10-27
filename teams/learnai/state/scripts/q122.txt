@@ -1,0 +1,10 @@
+A: @hook तुमने refund पूछा, AI ने product search चला दिया। गलती model की नहीं, तुम्हारे लिखे text की थी।
+B: Interviewer ने पूछा: Tool का schema ऐसे कैसे लिखोगे कि model गलत tool न चुने? | Schema यानी वो text जो model पढ़ता है: tool का नाम, description और parameters।
+C: तुम्हारा जवाब: Model सिर्फ़ वही पढ़कर चुनता है जो तुमने लिखा, इसलिए हर tool का text साफ़ और अलग लिखो। || तीन बातें हैं।
+D: मान लो दो tools हैं: search और lookup, दोनों का description “gets data”। | User पूछता है: “Order A17 का refund status क्या है?” | दोनों एक जैसे दिखते हैं, तो चुनाव सिक्का उछालने जैसा है, और कभी गलत वाला निकलता है।
+E: पहली बात, नाम और description। | नाम में काम लिखो: orders_get_status। | Description में तीन चीज़ें: ये क्या करता है, कब use करना है, और कब नहीं। | जैसे: “Order ID हो तब use करो, products ढूँढने के लिए नहीं।” | क्योंकि model के पास तुम्हारा code नहीं, ये text ही उसका manual है। | मोटा नियम: तीन से चार sentences।
+F: दूसरी बात, parameters। | सिर्फ़ user नहीं, user_id लिखो, ताकि नाम और ID में confusion न हो। | जहाँ options fixed हैं, वहाँ enum दो, यानी allowed values की list: shipped, refunded या pending। | क्योंकि तब model अपनी बनाई value नहीं भेज सकता।
+G: तीसरी बात, tools कम रखो। | जितने ज़्यादा tools, उतने मिलते-जुलते नाम, और चुनना उतना मुश्किल। | मोटा नियम: एक बार में 20{twenty} से कम।
+H: Boundary: schema कितना भी अच्छा हो, असली सवालों पर चलाकर देखो कि कौन सा tool चुना गया।
+I: Interview में बोलो: “The model picks a tool only from the text I write. So I give each tool a distinct name, a clear description of when to use it and when not, enums for fixed values, and I keep the tool count small.”
+J: तुम्हारे app में कितने tools हैं, 5{five}, 10{ten} या 20{twenty}? | Comment में number लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।

@@ -60,3 +60,7 @@ Types: stake q108, q110, q112 (n=3) median skip 60.1 %; asked q109, q111, q113, 
 Experiment q112: bar was hold above 41 % and watch above 12 s; it got 25 % hold and 9.4 s, so it missed on n=1. Close it as weak; the stake-on-a-picture idea had 2 of 3 passes (q108, q110), so keep it with no jargon in line 1.
 Do: a007 (tokens bill/limits myth-bust) open with the concrete bill or cut-off scene, ~100 s like a005 rather than 130 to 150 s; watch saves and shares. q116 and q117 take the asked hook with the full question; q117 ("prompt vs context engineering") has jargon risk, so open with the scene, define both terms in the first teaching lines; aim 95 to 125 s, since 160 s reels (q114, q115) hold only 8 to 12 %.
 Owner decision: none needed.
+
+## 2026-10-27 (growth analyst, standup for a010, q122, q123)
+Numbers: a006 725 views, 57.9 % skip, 14.8 s, 0 shares. a007 (bill scene) 1,348 views, 48.6 % skip, 15.7 s, 7 shares, 1.1 saves per 100 reach: best skip of any series day. q116 63.4 %, q117 64.3 % (13 shares, 2.9 saves). a008 (n=1) 737 views, 65.8 %, 9.3 s: missed its bar (hold 34 %, watch 9.3 s). q118-q121 all 67 to 73 % skip on 186 to 561 views (q121 and a009 hours old). Asked q116, q117, q119 (n=3) median 64.3 %; stake q118, q120 (n=2) 67.5 %: favours asked by 3 points, hint only.
+Do: open with the concrete scene and keep a010 near 100 s; the last four reels all slid.

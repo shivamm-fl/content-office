@@ -1,0 +1,8 @@
+A: Interviewer ne poocha: Multi-agent system kab chahiye, aur kab ek agent kaafi hai?
+B: Tumhara jawab: pehle ek agent se shuru karo. Kai agents tab, jab kaam alag-alag hisson mein bant sake aur wo hisse ek saath chal sakein. Do baatein dekhte hain.
+C: Agent yaani wo model jo khud tools chalakar kaam karta hai. Maan lo, ye example hai, ek chat mein 2000 tokens lagte hain, token yaani text ka tukda jiska bill banta hai. Wahi kaam ek agent kare to 8000, yaani 4x. Kai agents milkar karein to 30000, yaani 15x. Ye 4x aur 15x Anthropic ke apne measurements hain, koi kaanoon nahi. Matlab har agent jodna mehnga hai, to dikhane ke liye mat jodo.
+D: Pehli baat, kya kaam bantta hai? Maan lo, teen folders hain aur har ek ka summary chahiye. 3 agents ek saath padhte hain, kyunki kisi ko doosre ka result nahi chahiye. Samay sabse lambe kaam jitna lagta hai.
+E: Doosri baat, kya sab ek context window mein aata hai? Context window yaani wo text jo model ek baar mein saamne rakhkar padh sakta hai. Agar kaam usse bada hai, to use alag agents mein baanto, kyunki ek window mein jagah hi nahi hai.
+F: Boundary: jahan agents ko ek hi context share karna ho, ya ek step doosre par tika ho, wahan ek agent rakho. Kyunki agents ek-doosre ke faisle nahi dekhte. Ek tasveer ka aadha hissa ek agent banaye, aadha doosra, to jodne par wo match nahi karti.
+G: Interview mein bolo: "I start with one agent. I add more only when the work splits into independent parts that run in parallel, or won't fit in one context window. Each extra agent costs tokens, and agents can't see each other's decisions."
+H: Tumhare project mein abhi ek agent chalta hai ya kai? Comment mein ek ya kai likho. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.

@@ -1,0 +1,10 @@
+A: Tumne refund poocha, AI ne product search chala diya. Galti model ki nahi, tumhare likhe text ki thi.
+B: Interviewer ne poocha: Tool ka schema aise kaise likhoge ki model galat tool na chune? Schema yaani wo text jo model padhta hai: tool ka naam, description aur parameters.
+C: Tumhara jawab: Model sirf wahi padhkar chunta hai jo tumne likha, isliye har tool ka text saaf aur alag likho. Teen baatein hain.
+D: Maan lo do tools hain: search aur lookup, dono ka description "gets data". User poochta hai: "Order A17 ka refund status kya hai?" Dono ek jaise dikhte hain, to chunaav sikka uchhalne jaisa hai, aur kabhi galat wala nikalta hai.
+E: Pehli baat, naam aur description. Naam mein kaam likho: orders_get_status. Description mein teen cheezein: ye kya karta hai, kab use karna hai, aur kab nahi. Jaise: "Order ID ho tab use karo, products dhoondhne ke liye nahi." Kyunki model ke paas tumhara code nahi, ye text hi uska manual hai. Mota niyam: teen se chaar sentences.
+F: Doosri baat, parameters. Sirf user nahi, user_id likho, taaki naam aur ID mein confusion na ho. Jahan options fixed hain, wahan enum do, yaani allowed values ki list: shipped, refunded ya pending. Kyunki tab model apni banai value nahi bhej sakta.
+G: Teesri baat, tools kam rakho. Jitne zyada tools, utne milte-julte naam, aur chunna utna mushkil. Mota niyam: ek baar mein twenty se kam.
+H: Boundary: schema kitna bhi accha ho, asli sawaalon par chalakar dekho ki kaun sa tool chuna gaya.
+I: Interview mein bolo: "The model picks a tool only from the text I write. So I give each tool a distinct name, a clear description of when to use it and when not, enums for fixed values, and I keep the tool count small."
+J: Tumhare app mein kitne tools hain, five, ten ya twenty? Comment mein number likho. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.
