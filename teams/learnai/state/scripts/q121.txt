@@ -1,0 +1,10 @@
+A: @hook Interviewer ने पूछा: Agent का loop, यानी think, act, observe, क्या होता है?
+B: तुम्हारा जवाब: Agent एक loop है। | Model सोचता है, tool माँगता है, तुम्हारा app वो tool चलाकर result वापस देता है, और ये तब तक घूमता है जब तक काम पूरा न हो। || तीन steps में देखते हैं।
+C: सबसे आसान तरीका: user का सवाल model को एक बार भेजो और जवाब ले लो। | मान लो user पूछता है, “मेरा order A17 कहाँ है?” | Model के पास तुम्हारा database नहीं है, तो वो अंदाज़े से बोलेगा। | एक call, और जवाब गलत।
+D: पहला step, think। | Model goal देखता है और तय करता है कि अभी क्या चाहिए: order A17 की status।
+E: दूसरा step, act, यानी model एक tool call माँगता है: lookup_order, A17। | Model tool खुद नहीं चलाता, वो सिर्फ़ माँगता है, क्योंकि tool चलाना तुम्हारे app का काम है। | App चलाता है और जवाब आता है: shipped 2{two} days ago।
+F: तीसरा step, observe, यानी वो result वापस model के पास जाता है। | अब model के पास असली जानकारी है, तो दूसरे turn में वो बोलता है: “Order A17 दो दिन पहले ship हुआ।” | कुल 2{two} model calls, और 1{one} tool run।
+G: अगर पहले result से काम न बनता, तो model फिर tool माँगता, और loop दोबारा घूमता।
+H: Boundary: loop को हमेशा एक turn limit दो, मान लो 5{five} turns। | वरना model अटककर tool चलाता रहेगा, और bill बढ़ता रहेगा।
+I: Interview में बोलो: “An agent is a loop. The model thinks, asks for a tool call, my app runs it and sends back the result, and this repeats until the model finishes or a turn limit stops it.”
+J: तुम्हारे हिसाब से एक agent को कितने turns मिलने चाहिए, 5{five}, 10{ten} या 20{twenty}? | Comment में एक number लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।

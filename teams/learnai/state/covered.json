@@ -1056,6 +1056,39 @@
       "kind": "question",
       "topic": "Chatbot memory design: the model is stateless; short-term = recent turns resent, long-term = chosen facts stored outside the chat and retrieved when relevant.",
       "status": "built"
+    },
+    {
+      "id": "a009",
+      "track": "series",
+      "unit": "A3",
+      "title": "Training vs inference: learn once, answer a million times",
+      "kind": "concept",
+      "topic": "Training is the one slow, costly stage where a model's numbers (weights) are adjusted from data until its error is small; inference is every later use, where the trained model is only run on new input and its weights do not change. So an AI answering you is not learning from your message at that moment: learn once, answer many times.",
+      "hook_type": "direct_question",
+      "status": "planned",
+      "planned": "2026-10-27"
+    },
+    {
+      "id": "q120",
+      "track": "interview",
+      "unit": "D7",
+      "title": "Interview: Multi-agent mein har agent ka context alag kyun rakhte hain?",
+      "kind": "question",
+      "topic": "Each subagent works in its own fresh context window on one narrow job and hands back only a short note, so the lead agent's context stays small and clean and agents can run in parallel; the price is more total tokens and agents that cannot see each other's decisions, so tasks that need one shared picture are a poor fit.",
+      "hook_type": "relatable_stake",
+      "status": "planned",
+      "planned": "2026-10-27"
+    },
+    {
+      "id": "q121",
+      "track": "interview",
+      "unit": "F2",
+      "title": "Interview: Agent ka loop kya hota hai: think, act, observe?",
+      "kind": "question",
+      "topic": "An agent is not a smarter chatbot but a loop: the model thinks about the goal, asks for a tool call (act), your app runs the tool and sends the result back (observe), and the loop repeats until the model decides it is done or a turn limit stops it.",
+      "hook_type": "interviewer_asked",
+      "status": "planned",
+      "planned": "2026-10-27"
     }
   ]
 }

@@ -1,0 +1,10 @@
+A: Agent ne itna padha ki asli sawaal hi bhool gaya.
+B: Interviewer ne poocha: Multi-agent system mein har agent ka context alag kyun rakhte hain?
+C: Tumhara jawab: har agent apni alag window mein ek chhota kaam karta hai, aur lead, yaani jo mukhya agent sabko jodta hai, use sirf chhota note lautata hai. Teen baatein hain.
+D: Context yaani woh text jo model ek baar mein saamne rakhkar padhta hai. Sabse aasan tareeka: saare agents ek hi context mein padhen. Maan lo, ye example hai, saare pages milakar 12000 words hue. To sabke saamne 12000 words hain, aur asli sawaal unmein dab jaata hai.
+E: Pehla step, har agent ki apni window. Pricing ke 3000 words, reviews ke 4000, rivals ke 5000, teen alag agents mein. Kyunki har ek ko sirf apne pages dikhte hain, uska dhyaan bhatakta nahi.
+F: Doosra step, sirf note wapas. Har agent 200 words ka note lautata hai, to lead ke saamne 600 words aate hain, 12000 nahi. Kyunki lead ko nichod chahiye, kaccha maal nahi.
+G: Teesra step, teeno ek saath chalte hain, kyunki kisi ko doosre ke pages nahi chahiye. Intezaar sabse lambe kaam jitna lagta hai.
+H: Boundary: ye muft nahi hai. Anthropic ne June 2025 mein apne data mein dekha ki multi-agent system chat se kareeb 15x zyada tokens khaata hai, yaani text ke tukde jinka bill banta hai. Aur agents ek-doosre ke faisle nahi dekhte, to jahan sabko ek tasveer chahiye, wahan ek agent behtar hai.
+I: Interview mein bolo: "Each subagent gets its own context window and returns only a short summary, so the lead stays clean and agents run in parallel. The cost is more tokens, and agents can't see each other's decisions."
+J: Tum apne project mein abhi ek agent chalate ho ya kai? Comment mein ek ya kai likho. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.

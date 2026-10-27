@@ -1,0 +1,10 @@
+A: @hook Agent ने इतना पढ़ा कि असली सवाल ही भूल गया।
+B: Interviewer ने पूछा: Multi-agent system में हर agent का context अलग क्यों रखते हैं?
+C: तुम्हारा जवाब: हर agent अपनी अलग window में एक छोटा काम करता है, और lead, यानी जो मुख्य agent सबको जोड़ता है, उसे सिर्फ़ छोटा note लौटाता है। || तीन बातें हैं।
+D: Context यानी वो text जो model एक बार में सामने रखकर पढ़ता है। | सबसे आसान तरीका: सारे agents एक ही context में पढ़ें। | मान लो, ये example है, सारे pages मिलाकर 12000{twelve-thousand} words हुए। | तो सबके सामने 12000{twelve-thousand} words हैं, और असली सवाल उनमें दब जाता है।
+E: पहला step, हर agent की अपनी window। | Pricing के 3000{three-thousand} words, reviews के 4000{four-thousand}, rivals के 5000{five-thousand}, तीन अलग agents में। | क्योंकि हर एक को सिर्फ़ अपने pages दिखते हैं, उसका ध्यान भटकता नहीं।
+F: दूसरा step, सिर्फ़ note वापस। | हर agent 200{two-hundred} words का note लौटाता है, तो lead के सामने 600{six-hundred} words आते हैं, 12000{twelve-thousand} नहीं। | क्योंकि lead को निचोड़ चाहिए, कच्चा माल नहीं।
+G: तीसरा step, तीनों एक साथ चलते हैं, क्योंकि किसी को दूसरे के pages नहीं चाहिए। | इंतज़ार सबसे लंबे काम जितना लगता है।
+H: Boundary: ये मुफ़्त नहीं है। | Anthropic ने जून 2025{twenty-twenty-five} में अपने data में देखा कि multi-agent system chat से करीब 15{fifteen}x ज़्यादा tokens खाता है, यानी text के टुकड़े जिनका bill बनता है। | और agents एक-दूसरे के फ़ैसले नहीं देखते, तो जहाँ सबको एक तस्वीर चाहिए, वहाँ एक agent बेहतर है।
+I: Interview में बोलो: “Each subagent gets its own context window and returns only a short summary, so the lead stays clean and agents run in parallel. The cost is more tokens, and agents can't see each other's decisions.”
+J: तुम अपने project में अभी एक agent चलाते हो या कई? | Comment में एक या कई लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।

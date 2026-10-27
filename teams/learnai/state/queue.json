@@ -1241,6 +1241,118 @@
         "ai engineer interview"
       ],
       "status": "planned"
+    },
+    {
+      "id": "a009",
+      "track": "series",
+      "day": 9,
+      "unit": "A3",
+      "format": "concept",
+      "status": "planned",
+      "title": "Training vs inference: learn once, answer a million times",
+      "one_idea": "Training is the one slow, costly stage where a model's numbers (weights) are adjusted from data until its error is small; inference is every later use, where the trained model is only run on new input and its weights do not change. So an AI answering you is not learning from your message at that moment: learn once, answer many times.",
+      "hook_type": "direct_question",
+      "spoken_hook": "ChatGPT जवाब देते समय क्या कुछ सीखता भी है?",
+      "hook_formula": "plain_question",
+      "hook_source": "strategist, 2026-10-27",
+      "trap": "Thinking the model learns from each chat while it answers.",
+      "visual_idea": "Left: a workshop with 5 dots and a line that is nudged step by step (loss number falling 15.84 to 0.0000), then a padlock closes on two numbers w and b. Right: a queue of users, each dropping an x into the locked box and getting a prediction; the padlocked numbers never change.",
+      "everyday_anchor": "A student who studies for months before the exam (training), then answers every question in the exam hall without studying more (inference).",
+      "example": "EXAMPLE (tiny model, real run output in state/runs/a009_train_infer_run.txt): 5 points that follow y = 2x + 1; training by gradient descent, 500 steps: loss 15.8384 at step 1, 0.0274 at step 10, 0.0000 at step 500, w=2.00 b=0.99. Inference with fixed numbers: x=10 gives 21.0, x=20 gives 41.1, x=100 gives 201.4, weights unchanged afterwards. Real LLMs have billions of weights; this is a toy picture of the same two stages.",
+      "sources": [
+        "https://blogs.nvidia.com/blog/difference-deep-learning-training-inference-ai/",
+        "https://developers.google.com/machine-learning/crash-course/production-ml-systems/static-vs-dynamic-training",
+        "https://huggingface.co/learn/llm-course/chapter1/4"
+      ],
+      "source_notes": "NVIDIA: training adjusts weights over many iterations, compute-heavy; inference = trained model generates outputs on new data. Google MLCC: static training = train once offline, serve the same model. HF: pretraining needs huge data and long time. No fetched page says in so many words that weights do not change per request: say 'the trained model is reused as it is' (attribute to NVIDIA/Google); the toy run shows it directly.",
+      "length_target_s": 120,
+      "cover_headline": "Training vs inference in AI",
+      "thumb_text": "Train vs run",
+      "keywords": [
+        "training vs inference",
+        "what is inference in ai",
+        "does chatgpt learn from chats",
+        "ai engineer roadmap"
+      ],
+      "facts_to_verify": [
+        "NVIDIA: training adjusts weights over many iterations; inference uses the trained model on new data",
+        "Google MLCC: static training = train once offline, serve the same model",
+        "Toy run output (state/runs/a009_train_infer_run.txt) is an example, not an LLM"
+      ]
+    },
+    {
+      "id": "q120",
+      "track": "interview",
+      "unit": "D7",
+      "format": "question",
+      "title": "Interview: Multi-agent mein har agent ka context alag kyun rakhte hain?",
+      "one_idea": "Each subagent works in its own fresh context window on one narrow job and hands back only a short note, so the lead agent's context stays small and clean and agents can run in parallel; the price is more total tokens and agents that cannot see each other's decisions, so tasks that need one shared picture are a poor fit.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Agent ने इतना पढ़ा कि असली सवाल ही भूल गया।",
+      "hook_formula": "concrete wrong outcome, then the interview question",
+      "hook_source": "strategist, 2026-10-27",
+      "trap": "One shared giant context that every agent reads and clutters.",
+      "visual_idea": "One big window overflowing with page cards, the question card pushed to the corner and fading. Then the lead's small window with 3 small subagent windows beside it; each subagent window fills with pages, then a short note card flies into the lead's window. A last panel: two agents drawing mismatched halves (shared-context warning).",
+      "everyday_anchor": "A manager who sends three people to read three folders and asks each for a one-page note, instead of reading all three folders herself.",
+      "example": "EXAMPLE (invented sizes, words stand in for tokens, real output in state/runs/q120_context_run.txt): one shared context carries 12000 words; three subagents read 3000, 4000, 5000 words each in their own windows and return 200 words each, so the lead sees 600 words; total work is 12600 words, slightly more than shared. Anthropic's own measurement: multi-agent systems use about 15x more tokens than chats (their data, June 2025).",
+      "sources": [
+        "https://www.anthropic.com/engineering/multi-agent-research-system",
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+        "https://cognition.com/blog/dont-build-multi-agents"
+      ],
+      "source_notes": "Anthropic: subagents work in parallel with their own context windows and condense findings for the lead; 'In our data' multi-agent about 15x more tokens than chats, agents about 4x; not a good fit where agents must share context or have many dependencies (June 2025). Context-engineering post: subagent may use tens of thousands of tokens and returns about 1,000-2,000-token summary. Cognition (12 Jun 2025): share full traces, conflicting implicit decisions give bad results (Flappy Bird example); default to one single-threaded agent. Do not say 'today' without the date.",
+      "length_target_s": 110,
+      "cover_headline": "Why give each agent its own context",
+      "thumb_text": "Agent context",
+      "keywords": [
+        "multi agent context",
+        "subagent context window",
+        "multi agent llm interview",
+        "ai engineer interview"
+      ],
+      "status": "planned",
+      "facts_to_verify": [
+        "Anthropic: subagents have own context windows, parallel, condensed findings (June 2025)",
+        "About 15x more tokens than chats is Anthropic's own data",
+        "Cognition: conflicting implicit decisions when agents do not share context (12 Jun 2025)"
+      ]
+    },
+    {
+      "id": "q121",
+      "track": "interview",
+      "unit": "F2",
+      "format": "question",
+      "title": "Interview: Agent ka loop kya hota hai: think, act, observe?",
+      "one_idea": "An agent is not a smarter chatbot but a loop: the model thinks about the goal, asks for a tool call (act), your app runs the tool and sends the result back (observe), and the loop repeats until the model decides it is done or a turn limit stops it.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Agent का loop, यानी think, act, observe, क्या होता है?",
+      "hook_formula": "interviewer_asked",
+      "hook_source": "strategist, 2026-10-27",
+      "trap": "Describing an agent as a smarter chatbot instead of a loop that calls tools and reads the results.",
+      "visual_idea": "A circle of three cards (THINK, ACT, OBSERVE) with an arrow loop; a goal card enters, a tool box sits outside the circle with the app running it; a result card returns into the circle; a counter ticks turn 1, turn 2 and a FINISH exit. A stop sign for the turn limit.",
+      "everyday_anchor": "A person looking for a parcel: think where it might be, call the courier, hear the status, decide the next call, until the parcel is found.",
+      "example": "EXAMPLE (stub model, invented order A17, real output in state/runs/q121_agent_loop_run.txt): turn 1 THINK+ACT call lookup_order('A17'); OBSERVE 'shipped 2 days ago'; turn 2 FINISH. 2 model calls, 1 tool run by the app, max-turn limit 5.",
+      "sources": [
+        "https://arxiv.org/abs/2210.03629",
+        "https://www.anthropic.com/engineering/building-effective-agents",
+        "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
+      ],
+      "source_notes": "ReAct (Yao et al., 2022): model alternates reasoning and acting; authors' own results. Anthropic (19 Dec 2024): agents are typically LLMs using tools based on environmental feedback in a loop; teams add limits such as max iterations. Claude docs: for tools you define, the model returns a tool_use call, your code runs it and sends back a tool_result (server tools like web search are run by the provider). 'think, act, observe' is the common name; the ReAct abstract does not use those exact words.",
+      "length_target_s": 110,
+      "cover_headline": "What is an AI agent loop",
+      "thumb_text": "Agent loop",
+      "keywords": [
+        "ai agent loop",
+        "react agent think act observe",
+        "agent vs chatbot",
+        "ai engineer interview"
+      ],
+      "status": "planned",
+      "facts_to_verify": [
+        "Anthropic Dec 2024: agents = LLMs using tools based on feedback in a loop; max-iteration limits",
+        "Claude docs: for client tools the app runs the tool and returns tool_result",
+        "ReAct results are the authors' claims"
+      ]
     }
   ]
 }

@@ -1,293 +1,295 @@
 {
-  "about": "DRAFT (2026-10-19, for the owner's approval; not wired into any script): the order of the interview series of LearnAI, two reels a day. Questions an interviewer really asks an AI engineer, in a teaching order, grouped in arcs, each linked to a course unit of roadmap/ai-engineer.json. None repeats a question already published in ai-course (q01 to q26) or built here (q101 to q104). A title is a working title: the planner turns it into a queue entry (next office id from q105, hook_type rotating as before, sources fetched, any code run) and the scriptwriter follows docs-notes/interview-teaching-flow.md. The `trap` is the tempting wrong answer the reel shows first. Hooks are not part of this file and are unchanged. The owner decides changes to this file.",
-  "rules": [
-    "The work day takes the next two `todo` questions in order. A question is skipped only when its sources cannot be verified, and the skip is written in `note`.",
-    "A reel is done when it is published (status done), as in the 150-day series.",
-    "Stand-alone: no pointer to another reel, no 'part', no 'next'. The order is for the planner, not for the viewer.",
-    "Facts: every number comes from a page fetched in the planning session or from a run, never from this file."
-  ],
-  "arcs": [
-    "How the model answers",
-    "Embeddings and retrieval",
-    "Context engineering",
-    "Tools and agents",
-    "Evaluation and safety",
-    "Production",
-    "Beyond text"
-  ],
-  "questions": [
-    {
-      "n": 1,
-      "arc": "How the model answers",
-      "unit": "C6",
-      "title": "Interview: Temperature, top-k aur top-p teeno laga diye. Output pe kaun sa asar karta hai?",
-      "trap": "Treating the three knobs as one: top-p and top-k cut the list of candidate words, temperature reshapes the odds inside what is left.",
-      "status": "built",
-      "office_id": "q105",
-      "variant_ids": [
-        "q107"
-      ]
-    },
-    {
-      "n": 2,
-      "arc": "How the model answers",
-      "unit": "C3",
-      "title": "Interview: Few-shot examples dene se model kab behtar hota hai, kab nahi?",
-      "trap": "Adding examples blindly: they teach the answer format and the label options, but all examples of one label or an unlucky order can pull the answer, and every example costs tokens on every request.",
-      "status": "built",
-      "office_id": "q106"
-    },
-    {
-      "n": 3,
-      "arc": "How the model answers",
-      "unit": "C4",
-      "title": "Interview: Model ko 'step by step socho' bolna har baar kaam karta hai?",
-      "trap": "Chain-of-thought as magic: it helps on multi-step problems and costs tokens and time on the easy ones.",
-      "status": "planned",
-      "reel": "q108"
-    },
-    {
-      "n": 4,
-      "arc": "How the model answers",
-      "unit": "C2",
-      "title": "Interview: System prompt aur user prompt mein conflict ho to model kiski sunta hai?",
-      "trap": "Believing the system prompt always wins: it is a strong instruction, not a lock.",
-      "status": "planned",
-      "reel": "q109"
-    },
-    {
-      "n": 5,
-      "arc": "How the model answers",
-      "unit": "A3",
-      "title": "Interview: Model ne confidently galat fact bol diya. Hallucination kyun hoti hai, aur kaise kam karoge?",
-      "trap": "Calling it a bug to patch: the model predicts likely words, it does not look facts up.",
-      "status": "planned",
-      "reel": "q110"
-    },
-    {
-      "n": 6,
-      "arc": "How the model answers",
-      "unit": "A6",
-      "title": "Interview: Open source model use karoge ya closed API? Decide kaise karoge?",
-      "trap": "Picking on benchmark scores alone instead of data privacy, cost at your volume and who runs it.",
-      "status": "planned",
-      "reel": "q111"
-    },
-    {
-      "n": 7,
-      "arc": "Embeddings and retrieval",
-      "unit": "B2",
-      "title": "Interview: Embeddings ko compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi?",
-      "trap": "Comparing vector lengths when only direction carries meaning.",
-      "status": "planned",
-      "reel": "q112"
-    },
-    {
-      "n": 8,
-      "arc": "Embeddings and retrieval",
-      "unit": "B4",
-      "title": "Interview: Vector database ki zaroorat kab nahi padti?",
-      "trap": "Reaching for a vector database for a few thousand chunks that fit in memory.",
-      "status": "planned",
-      "reel": "q113"
-    },
-    {
-      "n": 9,
-      "arc": "Embeddings and retrieval",
-      "unit": "E4",
-      "title": "Interview: Retrieval mein metadata filter kab lagaoge aur kyun?",
-      "trap": "Searching the whole index when the user's question already says which product, date or language it is about.",
-      "status": "planned",
-      "reel": "q114"
-    },
-    {
-      "n": 10,
-      "arc": "Embeddings and retrieval",
-      "unit": "E5",
-      "title": "Interview: Top 5 chunks mil gaye, phir bhi sahi chunk 4th pe tha. Reranker kya karta hai?",
-      "trap": "Trusting the first retrieval order: the cheap search finds candidates, a second model orders them.",
-      "status": "planned",
-      "reel": "q115"
-    },
-    {
-      "n": 11,
-      "arc": "Embeddings and retrieval",
-      "unit": "E6",
-      "title": "Interview: RAG ka jawab galat aaya. Retrieval kharab hai ya generation, kaise pakdoge?",
-      "trap": "Judging only the final answer instead of checking whether the right chunk was retrieved.",
-      "status": "planned",
-      "reel": "q116"
-    },
-    {
-      "n": 12,
-      "arc": "Context engineering",
-      "unit": "D2",
-      "title": "Interview: Prompt engineering aur context engineering mein asli fark kya hai?",
-      "trap": "Rewording the prompt when the model lacks the information it needs.",
-      "status": "planned",
-      "reel": "q117"
-    },
-    {
-      "n": 13,
-      "arc": "Context engineering",
-      "unit": "D4",
-      "title": "Interview: Lambi chat ko chhota karna hai: truncate karoge ya summarise?",
-      "trap": "Cutting the oldest messages and losing the one fact the user stated first.",
-      "status": "planned",
-      "reel": "q118"
-    },
-    {
-      "n": 14,
-      "arc": "Context engineering",
-      "unit": "D6",
-      "title": "Interview: Chatbot ko pichli baatein yaad rakhni hain. Memory kaise design karoge?",
-      "trap": "Storing every message forever instead of choosing what is worth remembering.",
-      "status": "planned",
-      "reel": "q119"
-    },
-    {
-      "n": 15,
-      "arc": "Context engineering",
-      "unit": "D7",
-      "title": "Interview: Multi-agent mein har agent ka context alag kyun rakhte hain?",
-      "trap": "One shared giant context that every agent reads and corrupts.",
-      "status": "todo"
-    },
-    {
-      "n": 16,
-      "arc": "Tools and agents",
-      "unit": "F2",
-      "title": "Interview: Agent ka loop kya hota hai: think, act, observe?",
-      "trap": "Describing an agent as a smarter chatbot instead of a loop that calls tools and reads the results.",
-      "status": "todo"
-    },
-    {
-      "n": 17,
-      "arc": "Tools and agents",
-      "unit": "F1",
-      "title": "Interview: Tool ka schema aise likhoge ki model galat tool na chune. Kaise?",
-      "trap": "Vague tool names and descriptions: the model chooses from the text you wrote.",
-      "status": "todo"
-    },
-    {
-      "n": 18,
-      "arc": "Tools and agents",
-      "unit": "F4",
-      "title": "Interview: Multi-agent system kab zaroori hai, kab ek agent kaafi hai?",
-      "trap": "Adding agents for show: every hand-off costs tokens and can lose detail.",
-      "status": "todo"
-    },
-    {
-      "n": 19,
-      "arc": "Tools and agents",
-      "unit": "F7",
-      "title": "Interview: MCP server stdio se chalta hai ya HTTP se? Kab kaun sa?",
-      "trap": "Not knowing that the transport decides where the server can run and who can reach it.",
-      "status": "todo"
-    },
-    {
-      "n": 20,
-      "arc": "Tools and agents",
-      "unit": "F5",
-      "title": "Interview: Bina framework ke agent likhna ho to kya-kya chahiye?",
-      "trap": "Thinking a framework is needed: the loop, the tool call and the stop rule are a few dozen lines.",
-      "status": "todo"
-    },
-    {
-      "n": 21,
-      "arc": "Evaluation and safety",
-      "unit": "G4",
-      "title": "Interview: AI app ko red-team kaise karoge?",
-      "trap": "Testing only with friendly prompts.",
-      "status": "todo"
-    },
-    {
-      "n": 22,
-      "arc": "Evaluation and safety",
-      "unit": "G3",
-      "title": "Interview: Golden dataset kaise banate hain aur kitne examples chahiye?",
-      "trap": "Collecting examples that all look alike, so a regression in a corner case never shows.",
-      "status": "todo"
-    },
-    {
-      "n": 23,
-      "arc": "Evaluation and safety",
-      "unit": "G5",
-      "title": "Interview: Model ke jawab mein bias hai ya nahi, ye kaise napoge?",
-      "trap": "Reading a few answers by eye instead of comparing groups on the same questions.",
-      "status": "todo"
-    },
-    {
-      "n": 24,
-      "arc": "Evaluation and safety",
-      "unit": "G7",
-      "title": "Interview: User ka private data prompt mein bhejna theek hai? Kya dhyan rakhoge?",
-      "trap": "Sending raw personal data to a hosted model without classifying it first.",
-      "status": "todo"
-    },
-    {
-      "n": 25,
-      "arc": "Production",
-      "unit": "H2",
-      "title": "Interview: Ek request 20 second legi. Kahan time ja raha hai, tracing se kaise dekhoge?",
-      "trap": "Looking at total latency only, not at the time of each step.",
-      "status": "todo"
-    },
-    {
-      "n": 26,
-      "arc": "Production",
-      "unit": "H1",
-      "title": "Interview: Production mein AI app ke liye kaun se alerts lagaoge?",
-      "trap": "Alerting on errors only, while the answers quietly get worse.",
-      "status": "todo"
-    },
-    {
-      "n": 27,
-      "arc": "Production",
-      "unit": "H5",
-      "title": "Interview: API 429 de rahi hai. Retry kaise karoge?",
-      "trap": "Retrying instantly in a loop and making the rate limit worse.",
-      "status": "todo"
-    },
-    {
-      "n": 28,
-      "arc": "Production",
-      "unit": "H4",
-      "title": "Interview: Batch API kab use karoge, real-time API kab?",
-      "trap": "Paying real-time prices for work nobody is waiting for.",
-      "status": "todo"
-    },
-    {
-      "n": 29,
-      "arc": "Production",
-      "unit": "H3",
-      "title": "Interview: Semantic cache aur prompt cache mein kya fark hai?",
-      "trap": "Treating both caches as the same: one reuses an answer, the other reuses the cost of reading the prompt.",
-      "status": "todo"
-    },
-    {
-      "n": 30,
-      "arc": "Beyond text",
-      "unit": "I2",
-      "title": "Interview: Scanned PDF ke liye OCR use karoge ya vision model?",
-      "trap": "Using a vision model on every page when a cheap OCR step reads clean text.",
-      "status": "todo"
-    },
-    {
-      "n": 31,
-      "arc": "Beyond text",
-      "unit": "I4",
-      "title": "Interview: Speech-to-text ki quality kaise napoge?",
-      "trap": "Judging by listening to a few clips instead of measuring word errors on a fixed set.",
-      "status": "todo"
-    },
-    {
-      "n": 32,
-      "arc": "Beyond text",
-      "unit": "J1",
-      "title": "Interview: Recommendation system mein embeddings kaise kaam aate hain?",
-      "trap": "Recommending by popularity alone instead of by similarity of taste.",
-      "status": "todo"
-    }
-  ]
+ "about": "DRAFT (2026-10-19, for the owner's approval; not wired into any script): the order of the interview series of LearnAI, two reels a day. Questions an interviewer really asks an AI engineer, in a teaching order, grouped in arcs, each linked to a course unit of roadmap/ai-engineer.json. None repeats a question already published in ai-course (q01 to q26) or built here (q101 to q104). A title is a working title: the planner turns it into a queue entry (next office id from q105, hook_type rotating as before, sources fetched, any code run) and the scriptwriter follows docs-notes/interview-teaching-flow.md. The `trap` is the tempting wrong answer the reel shows first. Hooks are not part of this file and are unchanged. The owner decides changes to this file.",
+ "rules": [
+  "The work day takes the next two `todo` questions in order. A question is skipped only when its sources cannot be verified, and the skip is written in `note`.",
+  "A reel is done when it is published (status done), as in the 150-day series.",
+  "Stand-alone: no pointer to another reel, no 'part', no 'next'. The order is for the planner, not for the viewer.",
+  "Facts: every number comes from a page fetched in the planning session or from a run, never from this file."
+ ],
+ "arcs": [
+  "How the model answers",
+  "Embeddings and retrieval",
+  "Context engineering",
+  "Tools and agents",
+  "Evaluation and safety",
+  "Production",
+  "Beyond text"
+ ],
+ "questions": [
+  {
+   "n": 1,
+   "arc": "How the model answers",
+   "unit": "C6",
+   "title": "Interview: Temperature, top-k aur top-p teeno laga diye. Output pe kaun sa asar karta hai?",
+   "trap": "Treating the three knobs as one: top-p and top-k cut the list of candidate words, temperature reshapes the odds inside what is left.",
+   "status": "built",
+   "office_id": "q105",
+   "variant_ids": [
+    "q107"
+   ]
+  },
+  {
+   "n": 2,
+   "arc": "How the model answers",
+   "unit": "C3",
+   "title": "Interview: Few-shot examples dene se model kab behtar hota hai, kab nahi?",
+   "trap": "Adding examples blindly: they teach the answer format and the label options, but all examples of one label or an unlucky order can pull the answer, and every example costs tokens on every request.",
+   "status": "built",
+   "office_id": "q106"
+  },
+  {
+   "n": 3,
+   "arc": "How the model answers",
+   "unit": "C4",
+   "title": "Interview: Model ko 'step by step socho' bolna har baar kaam karta hai?",
+   "trap": "Chain-of-thought as magic: it helps on multi-step problems and costs tokens and time on the easy ones.",
+   "status": "planned",
+   "reel": "q108"
+  },
+  {
+   "n": 4,
+   "arc": "How the model answers",
+   "unit": "C2",
+   "title": "Interview: System prompt aur user prompt mein conflict ho to model kiski sunta hai?",
+   "trap": "Believing the system prompt always wins: it is a strong instruction, not a lock.",
+   "status": "planned",
+   "reel": "q109"
+  },
+  {
+   "n": 5,
+   "arc": "How the model answers",
+   "unit": "A3",
+   "title": "Interview: Model ne confidently galat fact bol diya. Hallucination kyun hoti hai, aur kaise kam karoge?",
+   "trap": "Calling it a bug to patch: the model predicts likely words, it does not look facts up.",
+   "status": "planned",
+   "reel": "q110"
+  },
+  {
+   "n": 6,
+   "arc": "How the model answers",
+   "unit": "A6",
+   "title": "Interview: Open source model use karoge ya closed API? Decide kaise karoge?",
+   "trap": "Picking on benchmark scores alone instead of data privacy, cost at your volume and who runs it.",
+   "status": "planned",
+   "reel": "q111"
+  },
+  {
+   "n": 7,
+   "arc": "Embeddings and retrieval",
+   "unit": "B2",
+   "title": "Interview: Embeddings ko compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi?",
+   "trap": "Comparing vector lengths when only direction carries meaning.",
+   "status": "planned",
+   "reel": "q112"
+  },
+  {
+   "n": 8,
+   "arc": "Embeddings and retrieval",
+   "unit": "B4",
+   "title": "Interview: Vector database ki zaroorat kab nahi padti?",
+   "trap": "Reaching for a vector database for a few thousand chunks that fit in memory.",
+   "status": "planned",
+   "reel": "q113"
+  },
+  {
+   "n": 9,
+   "arc": "Embeddings and retrieval",
+   "unit": "E4",
+   "title": "Interview: Retrieval mein metadata filter kab lagaoge aur kyun?",
+   "trap": "Searching the whole index when the user's question already says which product, date or language it is about.",
+   "status": "planned",
+   "reel": "q114"
+  },
+  {
+   "n": 10,
+   "arc": "Embeddings and retrieval",
+   "unit": "E5",
+   "title": "Interview: Top 5 chunks mil gaye, phir bhi sahi chunk 4th pe tha. Reranker kya karta hai?",
+   "trap": "Trusting the first retrieval order: the cheap search finds candidates, a second model orders them.",
+   "status": "planned",
+   "reel": "q115"
+  },
+  {
+   "n": 11,
+   "arc": "Embeddings and retrieval",
+   "unit": "E6",
+   "title": "Interview: RAG ka jawab galat aaya. Retrieval kharab hai ya generation, kaise pakdoge?",
+   "trap": "Judging only the final answer instead of checking whether the right chunk was retrieved.",
+   "status": "planned",
+   "reel": "q116"
+  },
+  {
+   "n": 12,
+   "arc": "Context engineering",
+   "unit": "D2",
+   "title": "Interview: Prompt engineering aur context engineering mein asli fark kya hai?",
+   "trap": "Rewording the prompt when the model lacks the information it needs.",
+   "status": "planned",
+   "reel": "q117"
+  },
+  {
+   "n": 13,
+   "arc": "Context engineering",
+   "unit": "D4",
+   "title": "Interview: Lambi chat ko chhota karna hai: truncate karoge ya summarise?",
+   "trap": "Cutting the oldest messages and losing the one fact the user stated first.",
+   "status": "planned",
+   "reel": "q118"
+  },
+  {
+   "n": 14,
+   "arc": "Context engineering",
+   "unit": "D6",
+   "title": "Interview: Chatbot ko pichli baatein yaad rakhni hain. Memory kaise design karoge?",
+   "trap": "Storing every message forever instead of choosing what is worth remembering.",
+   "status": "planned",
+   "reel": "q119"
+  },
+  {
+   "n": 15,
+   "arc": "Context engineering",
+   "unit": "D7",
+   "title": "Interview: Multi-agent mein har agent ka context alag kyun rakhte hain?",
+   "trap": "One shared giant context that every agent reads and corrupts.",
+   "status": "planned",
+   "reel": "q120"
+  },
+  {
+   "n": 16,
+   "arc": "Tools and agents",
+   "unit": "F2",
+   "title": "Interview: Agent ka loop kya hota hai: think, act, observe?",
+   "trap": "Describing an agent as a smarter chatbot instead of a loop that calls tools and reads the results.",
+   "status": "planned",
+   "reel": "q121"
+  },
+  {
+   "n": 17,
+   "arc": "Tools and agents",
+   "unit": "F1",
+   "title": "Interview: Tool ka schema aise likhoge ki model galat tool na chune. Kaise?",
+   "trap": "Vague tool names and descriptions: the model chooses from the text you wrote.",
+   "status": "todo"
+  },
+  {
+   "n": 18,
+   "arc": "Tools and agents",
+   "unit": "F4",
+   "title": "Interview: Multi-agent system kab zaroori hai, kab ek agent kaafi hai?",
+   "trap": "Adding agents for show: every hand-off costs tokens and can lose detail.",
+   "status": "todo"
+  },
+  {
+   "n": 19,
+   "arc": "Tools and agents",
+   "unit": "F7",
+   "title": "Interview: MCP server stdio se chalta hai ya HTTP se? Kab kaun sa?",
+   "trap": "Not knowing that the transport decides where the server can run and who can reach it.",
+   "status": "todo"
+  },
+  {
+   "n": 20,
+   "arc": "Tools and agents",
+   "unit": "F5",
+   "title": "Interview: Bina framework ke agent likhna ho to kya-kya chahiye?",
+   "trap": "Thinking a framework is needed: the loop, the tool call and the stop rule are a few dozen lines.",
+   "status": "todo"
+  },
+  {
+   "n": 21,
+   "arc": "Evaluation and safety",
+   "unit": "G4",
+   "title": "Interview: AI app ko red-team kaise karoge?",
+   "trap": "Testing only with friendly prompts.",
+   "status": "todo"
+  },
+  {
+   "n": 22,
+   "arc": "Evaluation and safety",
+   "unit": "G3",
+   "title": "Interview: Golden dataset kaise banate hain aur kitne examples chahiye?",
+   "trap": "Collecting examples that all look alike, so a regression in a corner case never shows.",
+   "status": "todo"
+  },
+  {
+   "n": 23,
+   "arc": "Evaluation and safety",
+   "unit": "G5",
+   "title": "Interview: Model ke jawab mein bias hai ya nahi, ye kaise napoge?",
+   "trap": "Reading a few answers by eye instead of comparing groups on the same questions.",
+   "status": "todo"
+  },
+  {
+   "n": 24,
+   "arc": "Evaluation and safety",
+   "unit": "G7",
+   "title": "Interview: User ka private data prompt mein bhejna theek hai? Kya dhyan rakhoge?",
+   "trap": "Sending raw personal data to a hosted model without classifying it first.",
+   "status": "todo"
+  },
+  {
+   "n": 25,
+   "arc": "Production",
+   "unit": "H2",
+   "title": "Interview: Ek request 20 second legi. Kahan time ja raha hai, tracing se kaise dekhoge?",
+   "trap": "Looking at total latency only, not at the time of each step.",
+   "status": "todo"
+  },
+  {
+   "n": 26,
+   "arc": "Production",
+   "unit": "H1",
+   "title": "Interview: Production mein AI app ke liye kaun se alerts lagaoge?",
+   "trap": "Alerting on errors only, while the answers quietly get worse.",
+   "status": "todo"
+  },
+  {
+   "n": 27,
+   "arc": "Production",
+   "unit": "H5",
+   "title": "Interview: API 429 de rahi hai. Retry kaise karoge?",
+   "trap": "Retrying instantly in a loop and making the rate limit worse.",
+   "status": "todo"
+  },
+  {
+   "n": 28,
+   "arc": "Production",
+   "unit": "H4",
+   "title": "Interview: Batch API kab use karoge, real-time API kab?",
+   "trap": "Paying real-time prices for work nobody is waiting for.",
+   "status": "todo"
+  },
+  {
+   "n": 29,
+   "arc": "Production",
+   "unit": "H3",
+   "title": "Interview: Semantic cache aur prompt cache mein kya fark hai?",
+   "trap": "Treating both caches as the same: one reuses an answer, the other reuses the cost of reading the prompt.",
+   "status": "todo"
+  },
+  {
+   "n": 30,
+   "arc": "Beyond text",
+   "unit": "I2",
+   "title": "Interview: Scanned PDF ke liye OCR use karoge ya vision model?",
+   "trap": "Using a vision model on every page when a cheap OCR step reads clean text.",
+   "status": "todo"
+  },
+  {
+   "n": 31,
+   "arc": "Beyond text",
+   "unit": "I4",
+   "title": "Interview: Speech-to-text ki quality kaise napoge?",
+   "trap": "Judging by listening to a few clips instead of measuring word errors on a fixed set.",
+   "status": "todo"
+  },
+  {
+   "n": 32,
+   "arc": "Beyond text",
+   "unit": "J1",
+   "title": "Interview: Recommendation system mein embeddings kaise kaam aate hain?",
+   "trap": "Recommending by popularity alone instead of by similarity of taste.",
+   "status": "todo"
+  }
+ ]
 }

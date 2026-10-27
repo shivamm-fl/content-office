@@ -1,0 +1,9 @@
+TRAIN step   1: w=1.00 b=0.28 loss=15.8384
+TRAIN step  10: w=2.10 b=0.61 loss=0.0274
+TRAIN step 100: w=2.06 b=0.79 loss=0.0080
+TRAIN step 500: w=2.00 b=0.99 loss=0.0000
+INFERENCE (weights fixed, 1 multiply+1 add each):
+  x=10: predict 21.0
+  x=20: predict 41.1
+  x=100: predict 201.4
+weights unchanged after inference: True
