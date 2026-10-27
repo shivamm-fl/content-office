@@ -1,0 +1,12 @@
+A: @hook Contains Duplicate problem, | sorting के बिना एक loop में solve!
+B: मान लो array है 4{चार}, 7{सात}, 1{एक}, 9{नौ}, 7{सात}, 3{तीन}। || सवाल है: | क्या कोई value दो बार आई है? || Trick यह है: | हर value देखते हुए याद रखो कि पहले कौन सी value आ चुकी है।
+C: Simple approach: | हर value को बाकी सारी values से compare करो। || इस array में duplicate मिलने तक 8{आठ} pair checks लगते हैं। || 10{दस} हज़ार numbers पर worst case में लगभग 5{पाँच} करोड़ pair checks, | यानी time complexity O(n{एन}) squared।
+D: अब हर pair देखने की ज़रूरत नहीं। || एक set बनाओ, | नाम seen। || Set यानी ऐसा structure जिसमें हर value एक बार रहती है, | और value अंदर है या नहीं, | इसका lookup average O(1{वन}) होता है।
+E: Loop में 3{तीन} steps हैं। || पहला: | current value को seen में check करो। || दूसरा: | अगर वो वहाँ है, | तो duplicate मिल गया, | True return करो। || तीसरा: | नहीं है, | तो उसे seen में add करो।
+F: यही array चलाते हैं। || 4{चार}, 7{सात}, 1{एक}, 9{नौ}, | चारों नए हैं, | चारों seen में add हुए। || अब दूसरा 7{सात} आया, | और 7{सात} पहले से seen में है। || True, | सिर्फ़ 5{पाँच} steps में, | एक भी pair check नहीं किया।
+G: Complexity: | O(n{एन}) time और O(n{एन}) extra space। || Sorting में O(n{एन}) log n लगता है, | इसलिए यह loop बेहतर है। || एक detail: | hash lookup का worst case O(n{एन}) हो सकता है, | इसलिए यह average case की बात है।
+H: अब Valid Anagram। || दो strings दी हैं, | क्या दूसरी string पहली के letters rearrange करके बनती है? || जैसे listen और silent।
+I: Idea वही है: | याद रखो कि क्या देखा। || बस set की जगह हर character की count रखो, | एक hash map में। || Python का Counter यही करता है। || listen और silent, | दोनों में e, i, l, n, s, t की count एक-एक है, | तो True। || rat और car में t और c अलग हैं, | तो False।
+J: Counting में O(n{एन}) time लगता है, | और lowercase letters के लिए space सिर्फ़ 26{छब्बीस} counts का। || Unicode में भी idea वही रहता है।
+K: तो pattern यह है: || जब सवाल हो "यह value पहले आ चुकी है?" या "यह कितनी बार आई?", | तो दोबारा compare मत करो, | seen set या count map में याद रखो।
+L: अब तुम्हारा turn! || क्या 3{तीन}, 8{आठ}, 3{तीन} में duplicate है? || और aab तथा abb anagrams हैं? || Answer comment करो। || ऐसे ही DSA patterns के लिए follow कर लो।
