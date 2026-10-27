@@ -15,3 +15,6 @@ The picture: O(n²) to O(n) from frame 0, then one array row (5 1 12 3 8) with t
 | H | complexity and worst case | BRUTE O(n²), HASH MAP O(n), O(n) space tiles, true-scale bars (EXAMPLE), WORST LOOKUP O(n) and NO STRICT O(n) | TIME, SPACE | tiles + bars |
 | I | edge case [3, 3], target 6 | 3 not in map yet, store 3 → 0, second 3 finds it, [0, 1], 1 LOOK then 2 STORE, red STORE FIRST panel | TARGET 6, SEEN, SAME ELEMENT | tiles |
 | J | quiz and follow | Array 2 7 11 15, TARGET 26, INDICES ? , ?, comment box, FOLLOW pill | COMMENT KARO | tiles + pill |
+
+
+REVISE 2026-10-27: rebuilt for the owner's own script (state/scripts/d008.txt). Scenes now: A brute force O(n²) to O(n) with hash map; B list, target, answer [3,4], use each once; C pair web, 10 checks, 49,995,000; D complement = target - x, 11-8=3, KEY/VALUE table; E pattern flow (current element, required value, hash map, complement); F code with three operations; G real run with complement per number and the seen table; H O(n²) vs O(n), space, 10,000 steps, worst-case lookup O(n) not guaranteed; I edge case [3,3] check first then store, STORE FIRST panel; J quiz and comment/follow. Same kit and layout as before.

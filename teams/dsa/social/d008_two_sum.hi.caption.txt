@@ -1,13 +1,13 @@
-Day 8/150: Two Sum problem mein brute force ke O(n squared) checks ko O(n) mein kaise laate hain? Ek hash map se!
+Day 8/150: Two Sum problem mein brute force ke O(n) squared checks ko O(n) mein kaise laate hain? Ek hash map se.
 
-Array [5, 1, 12, 3, 8] aur target 11: un do numbers ke indices chahiye jinka sum 11 ho. Answer index 3 aur 4, kyunki 3 + 8 = 11. Ek hi element do baar use nahi kar sakte.
+Array 5, 1, 12, 3, 8 aur target 11: jawab index 3 aur 4, kyunki 3 + 8 = 11. Ek hi element ko do baar use nahi kar sakte.
 
-Brute force mein har pair check hota hai: 5 elements par 10 pairs, aur 10,000 elements par lagbhag 5 crore pair comparisons (sirf example).
+Brute force mein har number ko baaki numbers ke saath check karna padta hai: 5 elements par 10 pairs. 10,000 elements par (sirf example) lagbhag 5 crore pair comparisons.
 
-Trick complement hai: complement = target - x. Hash map mein number ke saath uska index store karo aur dekho ki complement pehle aa chuka hai ya nahi. Time average O(n), extra space O(n), lookup average O(1). Hash map lookup ka worst case O(n) ho sakta hai, isliye strictly O(n) guarantee nahi hai.
+Trick hai complement: complement = target minus x. Phir bas yeh dekho ki complement pehle aa chuka hai ya nahi. Iske liye hash map, jismein number ke saath uska index store hota hai. Lookup average O(1) hota hai, isliye time average O(n) aur extra space O(n). Lookup ka worst case O(n) ho sakta hai, to worst-case time strictly O(n) guarantee nahi hai.
 
-Edge case [3, 3], target 6: pehle complement check karo, phir current number store karo, warna ek hi element do baar use ho sakta hai.
+Edge case: 3, 3 aur target 6. Pehle complement check karo, phir current number store karo, warna ek hi element ko do baar use karne ka risk hota hai.
 
-Ab tum batao: array [2, 7, 11, 15] aur target 26 ho, to kaun se do indices? Comment mein likho. Answer: index 2 aur 3, kyunki 11 + 15 = 26.
+Ab tumhara turn: array 2, 7, 11, 15 aur target 26 ho, to kaun se do indices return honge? Comment mein likho, aur code khud dry run karke verify karna. Answer: index 2 aur 3, kyunki 11 + 15 = 26.
 
 #dsa #twosum #codinginterview
