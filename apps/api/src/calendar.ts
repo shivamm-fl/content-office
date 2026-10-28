@@ -17,6 +17,8 @@ export interface PostingConfig {
 export interface OfficeReel {
   item: string; title: string; track: string; thread_id: string | null; duration_s: number | null; cover_url: string | null;
   stage: PipelineItem["stage"] | "approved"; detail: string | null;
+  /** when the owner approved this version (ms); a post made before it belongs to an older version of the reel */
+  approved_at?: number | null;
 }
 /** Where one reel stands, from its newest studio run and its newest final card (the owner's answer to it). A rework that did not pass leaves the
  * version the owner approved in place: it is still the newest reel anyone approved, so it stays postable and is not hidden as "failed". */
@@ -111,7 +113,10 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
   const titleOf = (k: string) => status[k]?.title ?? inp.office.find((o) => o.item === k)?.title ?? k;
 
   // released and waiting: what the slot poster can take (qa_passed, media in the release, not yet published)
-  const postedByOffice = new Set(inp.posts.filter((p) => p.mode === "now" && p.status === "done").map((p) => p.item));
+  // A post only counts for the version it was made from: if the owner took the reel down, had it rebuilt and approved it again, the old post must not hide it.
+  const approvedAt = new Map<string, number>();
+  for (const o of inp.office) if (o.approved_at) approvedAt.set(o.item, Math.max(approvedAt.get(o.item) ?? 0, o.approved_at));
+  const postedByOffice = new Set(inp.posts.filter((p) => p.mode === "now" && p.status === "done" && p.created_at >= (approvedAt.get(p.item) ?? 0)).map((p) => p.item));
   const waiting = (k: string) => isItem(k) && status[k]?.qa_passed === true && status[k]?.release_assets === true && !status[k]?.published && !postedByOffice.has(k);
   const pools: Record<string, string[]> = {};
   for (const t of TRACKS) {

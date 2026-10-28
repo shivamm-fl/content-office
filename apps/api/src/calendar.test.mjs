@@ -235,3 +235,12 @@ test("reel stage: an approved reel whose rework failed is in the ready list of t
   assert.deepEqual(cal.ready.map((r) => r.item), ["q103"]);
   assert.equal(cal.pipeline.length, 0);
 });
+
+test("a post made before the owner approved a rebuilt version does not hide the reel", () => {
+  const status = { ...base(), a010: rel("Rebuilt", { qa_passed: false }) };
+  const oldPost = { id: "p1", item: "a010", mode: "now", date: null, time: null, status: "done", gh_url: null, error: null, created_at: 1000, updated_at: 2000 };
+  const office = (approved_at) => [{ item: "a010", title: "Rebuilt", track: "series", thread_id: "t", duration_s: 55, cover_url: null, stage: "approved", detail: null, approved_at }];
+  const now = IST("2026-10-18", "10:00");
+  assert.ok(buildCalendar(input(now, { status, office: office(5000), posts: [oldPost] })).ready.some((r) => r.item === "a010"));
+  assert.ok(!buildCalendar(input(now, { status, office: office(500), posts: [oldPost] })).ready.some((r) => r.item === "a010"));   // approved before the post: still posted
+});
