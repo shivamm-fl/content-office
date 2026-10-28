@@ -571,7 +571,7 @@ export class Office extends DurableObject<Env> {
         duration_s: m?.duration_s ?? null, cover_url: m?.cover_url ?? null,
       };
       const { stage, detail } = reelStage(run, ask ? { status: ask.status, created_at: ask.created_at, answer: ask.answer as { decision?: string; notes?: string } | null } : null, ACTIVE);
-      out.push({ ...base, stage, detail });
+      out.push({ ...base, stage, detail, approved_at: ask?.answer && (ask.answer as { decision?: string }).decision === "approved" ? ask.answered_at : null });
     }
     return out;
   }
