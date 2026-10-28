@@ -1355,8 +1355,7 @@
       "hook_formula": "plain_question on a frustration the viewer knows",
       "hook_source": "strategist, 2026-10-28 (learning 2026-10-27: start from a frustration in plain words)",
       "trap": "Thinking every AI model is a chatbot that can do text, pictures and sound alike; each kind has its own input and output.",
-      "visual_idea": "Four boxes in a row, each a machine with an input slot and an output slot. A chat window first asks for a photo and gets only words back. A tiny app diagram at the end wires three of the boxes together.",
-      "everyday_anchor": "A kitchen with different appliances: the mixer, the toaster and the pressure cooker all run on electricity, but you cannot toast bread in the mixer.",
+      "visual_idea": "Chat asks for a photo and gets only words. Then four machines in a row, each with an input slot and an output slot: text to text; prompt to picture; sound wave to transcript (and text to voice); sentence to a row of numbers. Last: a tiny app wiring them together. No kitchen analogy.",
       "example": "EXAMPLE (illustrative). Four kinds by input and output. One number shown: OpenAI's text-embedding-3-small returns 1,536 numbers by default (OpenAI embeddings docs, vendor figure).",
       "sources": [
         "https://huggingface.co/tasks/text-generation",
@@ -1365,7 +1364,7 @@
         "https://huggingface.co/tasks/sentence-similarity",
         "https://developers.openai.com/api/docs/guides/embeddings"
       ],
-      "length_target_s": 120,
+      "length_target_s": 65,
       "cover_headline": "The 4 kinds of AI model",
       "thumb_text": "4 AI models",
       "keywords": [
