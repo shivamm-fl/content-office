@@ -1,35 +1,60 @@
 {
   "items": [
     {
-      "id": "s009",
+      "id": "s010",
       "track": "series",
-      "day": 9,
+      "day": 10,
       "unit": "P1",
-      "title": "Back-of-envelope: users se requests per second tak ka hisaab",
-      "one_idea": "Turn a user count into requests per second with round numbers and open arithmetic: users x requests per user / 86,400, then multiply by a peak factor.",
+      "title": "Availability aur nines: 99.9% ka matlab saal mein kitna downtime",
+      "one_idea": "Availability is uptime divided by total time; each extra nine cuts the allowed downtime per year by about 10x (99.9% is about 9 hours, 99.99% about 53 minutes, 99.999% about 5 minutes), and dependencies in a row multiply their availabilities, so the total is lower than any single part.",
       "format": "concept",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: रोज़ 10 लाख users हों, तो peak requests per second कैसे निकालोगे?",
-      "hook_score": 38.6,
-      "hook_formula": "interviewer_asked: one self-contained question",
-      "visual_idea": "One fixed frame: phones feeding a server; calculation cards; day-long bar chart with a tall evening bar; request dots in the server box.",
-      "everyday_anchor": "A railway ticket counter on a festival evening: the day's total tickets hides the 6 pm rush.",
-      "example": "EXAMPLE (invented, labelled on screen): 10 lakh users, 20 requests per user per day, peak 3x, 0.2 s per request.",
+      "hook_type": "direct_question",
+      "spoken_hook": "99.9% uptime का मतलब: साल में कितनी देर बंद रहेगा?",
+      "hook_10s": "99.9% uptime का मतलब: साल में कितनी देर बंद रहेगा? अगर तुम्हारा app साल में 9 घंटे बंद रहे, तो वो 99.9% है। और 99.99% में सिर्फ़ 53 मिनट। [frame 0: a 365-day bar with one thin red sliver, label 99.9%]",
+      "hook_formula": "direct_question: the number the viewer has seen on every SLA page, asked as a plain question about it",
+      "hook_source": "https://en.wikipedia.org/wiki/High_availability",
+      "hook_candidates": [
+        {
+          "formula": "direct_question",
+          "text": "99.9% uptime का मतलब: साल में कितनी देर बंद रहेगा?"
+        },
+        {
+          "formula": "relatable_stake",
+          "text": "तुम्हारी payment app साल में कितनी देर बंद रह सकती है?"
+        },
+        {
+          "formula": "surprising_fact",
+          "text": "99.9% uptime में भी साल के करीब 9 घंटे बंद रहता है।"
+        }
+      ],
+      "visual_idea": "One fixed frame: a long 365-day bar with the allowed downtime cut out as a red sliver; stepping 99%, 99.9%, 99.99%, 99.999% shrinks the sliver each time (3.65 days, 8.8 hours, 53 minutes, 5 minutes) on a ladder of cards. Then three boxes in a row (load balancer, app, database) with their availabilities multiplying into a thicker sliver.",
+      "everyday_anchor": "A UPI payment app or IRCTC booking page being down for a few hours on the day you need it: the same 'almost always up' number can still mean a missed payment.",
+      "example": "EXAMPLE (arithmetic shown on screen): 365 days x 24 h = 8,760 h; 0.1% of 8,760 h = 8.76 h (99.9%); 0.01% = 52.6 min (99.99%); 0.001% = 5.26 min (99.999%). Three parts in a row, each EXAMPLE 99.9%: 0.999 x 0.999 x 0.999 = 0.997, so about 26 h of downtime a year.",
       "length_target_s": 150,
-      "cover_headline": "Users to Requests Per Second",
-      "thumb_text": "Kitni RPS?",
+      "cover_headline": "Availability and the Nines",
+      "thumb_text": "Kitne nines?",
       "keywords": [
-        "requests per second calculation",
-        "back of envelope estimation system design",
-        "users to QPS",
-        "peak traffic estimation"
+        "availability nines system design",
+        "99.9 vs 99.99 uptime downtime per year",
+        "what is high availability",
+        "SLA uptime percentage explained",
+        "five nines availability"
       ],
       "sources": [
-        "https://en.wikipedia.org/wiki/Queries_per_second",
-        "https://en.wikipedia.org/wiki/Requests_per_second",
-        "https://en.wikipedia.org/wiki/Little%27s_law"
+        "https://en.wikipedia.org/wiki/High_availability",
+        "https://en.wikipedia.org/wiki/Availability",
+        "https://aws.amazon.com/compute/sla/"
       ],
-      "script_file": "state/scripts/s009.txt",
+      "facts_to_verify": [
+        "Nines table (High availability page): 99% = 3.7 days/yr, 99.9% = 9 h, 99.99% = 53 min, 99.999% = 5.3 min; the page expresses availability as a percentage of uptime in a given year.",
+        "Recompute from 365 days: 0.1% of 8,760 h = 8.76 h; 0.01% = 52.6 min; 0.001% = 5.26 min. Show the arithmetic on screen, round the way the page does.",
+        "Availability = uptime / (uptime + downtime) (Wikipedia Availability); unavailability = 1 minus availability.",
+        "Series multiplication 0.999^3 = 0.997 is arithmetic (assumes independent failures and every part needed); say so and label the three parts EXAMPLE. Run it and show the real output.",
+        "AWS EC2 SLA page: region-level commitment is at least 99.99% Monthly Uptime Percentage across two or more AZs; credits 10% below 99.99%, 30% below 99.0%, 100% below 95.0%. Name it on screen as 'Source: aws.amazon.com' if used; do not claim AWS actually achieves it.",
+        "High availability page: scheduled downtime also counts for true HA although many sites exclude it; mention only if time allows.",
+        "Do not say any named company runs at a given number of nines."
+      ],
+      "script_file": "state/scripts/s010.txt",
       "status": "planned",
       "qa_passed": false
     }

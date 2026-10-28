@@ -1,0 +1,12 @@
+A: @hook 99.9{ninety-nine-point-nine}% uptime का मतलब: साल में कितनी देर बंद रहेगा? || लगभग 9{नौ} घंटे, ये कम नहीं है। | क्योंकि ये 9{नौ} घंटे उसी दिन आ सकते हैं, जिस दिन तुम्हें payment करना हो।
+B: Uptime यानी app जितनी देर चालू रहा। || Availability यानी कुल समय का कितना हिस्सा app चालू रहा। | और उसे लोग percent में बोलते हैं।
+C: पहले साल के घंटे गिनो। || 365{three-sixty-five} days times 24{twenty-four} hours, यानी 8,760{eight-thousand-seven-hundred-sixty} hours।
+D: अब 99.9{ninety-nine-point-nine}% availability का मतलब है, 0.1{point-one} percent समय बंद। || 8,760{eight-thousand-seven-hundred-sixty} का 0.1{point-one} percent, यानी 8.76{eight-point-seven-six} hours। | यही वो 9{नौ} घंटे हैं।
+E: अब एक nine और जोड़ो। || 99.99{ninety-nine-point-nine-nine}% में बंद रहने का हिस्सा 0.01{point-zero-one} percent है, | तो साल में सिर्फ़ 52.6{fifty-two-point-six} minutes। || 99.999{ninety-nine-point-nine-nine-nine}% में 0.001{point-zero-zero-one} percent, यानी 5.26{five-point-two-six} minutes।
+F: और नीचे चलो, तो 99{ninety-nine}% में साल के 87.6{eighty-seven-point-six} hours बंद, यानी करीब 3.65{three-point-six-five} दिन। || @emph हर नया nine, बंद रहने का समय 10{ten} गुना घटा देता है।
+G: पर तुम्हारा app एक अकेली चीज़ नहीं है। || Request पहले load balancer से गुज़रती है, यानी जो requests को servers में बाँटता है। | फिर app server, फिर database। || तीनों चालू हों, तभी payment होगा।
+H: मान लो तीनों की availability 99.9{ninety-nine-point-nine}% है। || EXAMPLE: | एक के बाद एक चलने वाली चीज़ें, तो availability आपस में multiply होती है। || 0.999{point-nine-nine-nine} times 0.999{point-nine-nine-nine} times 0.999{point-nine-nine-nine}, यानी 0.997{point-nine-nine-seven}।
+I: यानी 99.7{ninety-nine-point-seven}%। || अब बंद रहने का हिस्सा 0.3{point-three} percent है, | तो साल में करीब 26{twenty-six} hours। || हर part अलग से 9{नौ} घंटे वाला था, पर तीनों साथ मिलकर लगभग तीन गुना बंद रहते हैं।
+J: ये हिसाब तब सही है, जब parts एक दूसरे से अलग फ़ेल हों और हर एक ज़रूरी हो। || पर बात साफ़ है: | chain में जितने ज़्यादा parts, कुल availability उतनी कम।
+K: @emph याद रखो: | 365{three-sixty-five} times 24{twenty-four}, फिर बंद रहने का percent। || और कोई 99.9{ninety-nine-point-nine}% बोले, तो पूछो कि कितने parts एक के बाद एक हैं, और planned maintenance गिना गया या नहीं।
+L: अब तुम बताओ: | 99.99{ninety-nine-point-nine-nine}% वाले 3{three} parts एक के बाद एक। || कुल availability लगभग कितनी? | Comment में लिखो। || ऐसे और system design concepts के लिए follow करो।
