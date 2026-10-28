@@ -1,0 +1,7 @@
+Availability and the Nines in Hinglish: 99.9% Uptime Kitna Downtime? (Day 10/150)
+
+Availability is uptime divided by total time (uptime plus downtime), usually written as a percentage per year. Over 8,760 hours in a year, 99% allows about 3.7 days of downtime, 99.9% about 9 hours, 99.99% about 53 minutes and 99.999% about 5.3 minutes, so each extra nine cuts the allowed downtime about ten times. When parts work in a row and every one is needed, their availabilities multiply, so the total is lower than any single part. The three parts at 99.9% each (0.999 x 0.999 x 0.999 = 0.997, about 26 hours a year) are an invented example that assumes independent failures.
+
+Sources:
+https://en.wikipedia.org/wiki/High_availability
+https://en.wikipedia.org/wiki/Availability

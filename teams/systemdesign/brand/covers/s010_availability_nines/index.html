@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Learnvora System Design cover</title>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      :root { --bg: #0B1220; --panel: #131C2E; --text: #F3EFE6; --muted: #8FA0B8; --accent: #4CC9F0; }
+      html, body { margin: 0; width: 1080px; height: 1920px; background: var(--bg); overflow: hidden; }
+      #root { position: relative; width: 1080px; height: 1920px; color: var(--text); font-family: "Space Grotesk", sans-serif; overflow: hidden;
+        background: radial-gradient(circle at 50% 70%, rgba(76,201,240,.22) 0%, rgba(76,201,240,.06) 36%, rgba(11,18,32,0) 62%), radial-gradient(circle at 92% 96%, rgba(108,140,213,.18) 0%, rgba(11,18,32,0) 42%), var(--bg); }
+      /* everything that matters sits between y 260 and y 1660: the profile grid shows the centre 3:4 of the cover */
+      #pillrow { position: absolute; left: 0; right: 0; top: 330px; display: flex; justify-content: center; }
+      #pill { padding: 20px 44px; border-radius: 999px; background: var(--accent); color: #0B1220; font-size: 40px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; white-space: nowrap; }
+      #headline { position: absolute; left: 70px; right: 70px; top: 440px; height: 560px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 128px; line-height: 1.06; font-weight: 700; letter-spacing: -1px; }
+      #headline div { max-width: 940px; }
+      #headline em { font-style: normal; color: var(--accent); }
+      #day { position: absolute; left: 0; right: 0; top: 1060px; text-align: center; }
+      #daylabel { font-size: 40px; font-weight: 600; letter-spacing: 14px; color: var(--muted); }
+      #dayrow { display: flex; justify-content: center; align-items: baseline; gap: 22px; margin-top: 6px; }
+      #daynum { font-size: 250px; line-height: 1; font-weight: 700; letter-spacing: -4px; color: var(--accent); }
+      #dayof { font-size: 72px; font-weight: 500; color: var(--muted); }
+      #track { position: absolute; left: 150px; right: 150px; top: 1440px; height: 20px; border-radius: 10px; background: var(--panel); overflow: hidden; }
+      #fill { height: 100%; border-radius: 10px; background: var(--accent); }
+      #handle { position: absolute; left: 0; right: 0; bottom: 120px; text-align: center; color: var(--muted); font-size: 46px; font-weight: 500; letter-spacing: 1px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="cover" data-start="0" data-duration="1" data-width="1080" data-height="1920">
+      <div id="pillrow"><div id="pill">SYSTEM DESIGN</div></div>
+      <div id="headline"><div>Availability and the <em>Nines</em></div></div>
+      <div id="day"><div id="daylabel">DAY</div><div id="dayrow"><div id="daynum">010</div><div id="dayof">/ 150</div></div></div>
+      <div id="track"><div id="fill" style="width:6.67%"></div></div>
+      <div id="handle">@systemdesign.learnvora</div>
+    </div>
+  </body>
+</html>

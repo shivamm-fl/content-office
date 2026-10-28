@@ -10,49 +10,18 @@
       "format": "concept",
       "hook_type": "direct_question",
       "spoken_hook": "99.9% uptime का मतलब: साल में कितनी देर बंद रहेगा?",
-      "hook_10s": "99.9% uptime का मतलब: साल में कितनी देर बंद रहेगा? अगर तुम्हारा app साल में 9 घंटे बंद रहे, तो वो 99.9% है। और 99.99% में सिर्फ़ 53 मिनट। [frame 0: a 365-day bar with one thin red sliver, label 99.9%]",
+      "hook_score": 47.6,
       "hook_formula": "direct_question: the number the viewer has seen on every SLA page, asked as a plain question about it",
       "hook_source": "https://en.wikipedia.org/wiki/High_availability",
-      "hook_candidates": [
-        {
-          "formula": "direct_question",
-          "text": "99.9% uptime का मतलब: साल में कितनी देर बंद रहेगा?"
-        },
-        {
-          "formula": "relatable_stake",
-          "text": "तुम्हारी payment app साल में कितनी देर बंद रह सकती है?"
-        },
-        {
-          "formula": "surprising_fact",
-          "text": "99.9% uptime में भी साल के करीब 9 घंटे बंद रहता है।"
-        }
-      ],
-      "visual_idea": "One fixed frame: a long 365-day bar with the allowed downtime cut out as a red sliver; stepping 99%, 99.9%, 99.99%, 99.999% shrinks the sliver each time (3.65 days, 8.8 hours, 53 minutes, 5 minutes) on a ladder of cards. Then three boxes in a row (load balancer, app, database) with their availabilities multiplying into a thicker sliver.",
-      "everyday_anchor": "A UPI payment app or IRCTC booking page being down for a few hours on the day you need it: the same 'almost always up' number can still mean a missed payment.",
-      "example": "EXAMPLE (arithmetic shown on screen): 365 days x 24 h = 8,760 h; 0.1% of 8,760 h = 8.76 h (99.9%); 0.01% = 52.6 min (99.99%); 0.001% = 5.26 min (99.999%). Three parts in a row, each EXAMPLE 99.9%: 0.999 x 0.999 x 0.999 = 0.997, so about 26 h of downtime a year.",
+      "visual_idea": "One fixed frame: a long 365-day bar with the allowed downtime cut out as a red sliver; stepping 99%, 99.9%, 99.99%, 99.999% shrinks the sliver each time on a ladder of cards. Then three boxes in a row with their availabilities multiplying into a thicker sliver.",
+      "everyday_anchor": "A UPI payment app or IRCTC booking page being down for a few hours on the day you need it.",
       "length_target_s": 150,
       "cover_headline": "Availability and the Nines",
       "thumb_text": "Kitne nines?",
-      "keywords": [
-        "availability nines system design",
-        "99.9 vs 99.99 uptime downtime per year",
-        "what is high availability",
-        "SLA uptime percentage explained",
-        "five nines availability"
-      ],
       "sources": [
         "https://en.wikipedia.org/wiki/High_availability",
         "https://en.wikipedia.org/wiki/Availability",
         "https://aws.amazon.com/compute/sla/"
-      ],
-      "facts_to_verify": [
-        "Nines table (High availability page): 99% = 3.7 days/yr, 99.9% = 9 h, 99.99% = 53 min, 99.999% = 5.3 min; the page expresses availability as a percentage of uptime in a given year.",
-        "Recompute from 365 days: 0.1% of 8,760 h = 8.76 h; 0.01% = 52.6 min; 0.001% = 5.26 min. Show the arithmetic on screen, round the way the page does.",
-        "Availability = uptime / (uptime + downtime) (Wikipedia Availability); unavailability = 1 minus availability.",
-        "Series multiplication 0.999^3 = 0.997 is arithmetic (assumes independent failures and every part needed); say so and label the three parts EXAMPLE. Run it and show the real output.",
-        "AWS EC2 SLA page: region-level commitment is at least 99.99% Monthly Uptime Percentage across two or more AZs; credits 10% below 99.99%, 30% below 99.0%, 100% below 95.0%. Name it on screen as 'Source: aws.amazon.com' if used; do not claim AWS actually achieves it.",
-        "High availability page: scheduled downtime also counts for true HA although many sites exclude it; mention only if time allows.",
-        "Do not say any named company runs at a given number of nines."
       ],
       "script_file": "state/scripts/s010.txt",
       "status": "planned",

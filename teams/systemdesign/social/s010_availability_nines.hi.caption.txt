@@ -1,0 +1,16 @@
+Day 10/150: 99.9% uptime ka matlab, saal mein kitni der band rahega?
+
+Availability = uptime / total time. Har naya nine downtime ko lagbhag 10 guna kam kar deta hai.
+
+99% = 3.65 din
+99.9% = 8.76 ghante
+99.99% = 52.6 minutes
+99.999% = 5.26 minutes
+
+Aur app ek akeli cheez nahi hai: load balancer, app server aur database ek ke baad ek chalte hain, to availability multiply hoti hai. Example: 0.999 x 0.999 x 0.999 = 0.997, yaani saal mein lagbhag 26 ghante band. Ye hisaab tab sahi hai jab parts alag fail hon aur har ek zaruri ho.
+
+(Teen parts ke 99.9% sirf example hain.)
+
+Sawal: 99.99% wale 3 parts ek ke baad ek, total availability lagbhag kitni? Comment karo.
+
+#systemdesign #backend #interviewprep
