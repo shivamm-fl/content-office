@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="55.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="58" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="55.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="55.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="55.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="58" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="58" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="58" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -114,20 +114,20 @@
       M.icon(A, "cross", 790, 700, 120, HOT).show(at("A", "likhkar"));
       pillAt(A, "TEXT MODEL", 130, 960, at("A", "text"), CYAN, 40);
       const aM = [tile(A, "IN", 90, 1090, 220, 110, IN_C, 52, true), tile(A, "MODEL", 400, 1090, 280, 110, CYAN, 52, false), tile(A, "OUT", 770, 1090, 220, 110, OUT_C, 52, true)];
-      show(aM[1], at("A", "Model"), { opacity: 0, y: 14 }); show(aM[0], at("A", "andar"), { opacity: 0, y: 14 }); show(aM[2], at("A", "bahar"), { opacity: 0, y: 14 });
-      M.arrow(A, { from: [316, 1145], to: [394, 1145], color: IN_C, w: 8 }).show(at("A", "andar"), 0.3); M.arrow(A, { from: [686, 1145], to: [764, 1145], color: OUT_C, w: 8 }).show(at("A", "bahar"), 0.3);
+      show(aM[1], at("A", "Model"), { opacity: 0, y: 14 }); show(aM[0], at("A", "input"), { opacity: 0, y: 14 }); show(aM[2], at("A", "output"), { opacity: 0, y: 14 });
+      M.arrow(A, { from: [316, 1145], to: [394, 1145], color: IN_C, w: 8 }).show(at("A", "input"), 0.3); M.arrow(A, { from: [686, 1145], to: [764, 1145], color: OUT_C, w: 8 }).show(at("A", "output"), 0.3);
       M.fit(A, { y: 460, h: 850, maxScale: 1.25 });
 
       // ============ B: text model ============
       // diagram: B
-      const bM = col3(B, 400, "TEXT MODEL", "text", S.B + 0.05, at("B", "andar"), at("B", "bahar"));
+      const bM = col3(B, 400, "TEXT MODEL", "text", S.B + 0.05, at("B", "input"), at("B", "output"));
       el(bM.inC, `font:600 46px ${LAT};color:${TEXT}`, "Write a poem");
       el(bM.outC, `font:600 46px ${LAT};color:${TEXT}`, "Roses are red...");
       M.fit(B, { y: 220, h: 1100, maxScale: 1.15 });
 
       // ============ C: image model ============
       // diagram: C
-      const cM = col3(C, 400, "IMAGE MODEL", "image", S.C + 0.05, at("C", "prompt"), at("C", "bahar"));
+      const cM = col3(C, 400, "IMAGE MODEL", "image", S.C + 0.05, at("C", "prompt"), at("C", "output"));
       el(cM.inC, `font:600 46px ${LAT};color:${TEXT}`, "A cat on a sofa");
       pic(cM.outC, 250, 14, 200, 140, OUT_C);
       M.fit(C, { y: 220, h: 1100, maxScale: 1.15 });
@@ -174,7 +174,7 @@
 
       // ============ G: recap, question, follow ============
       // diagram: G
-      pillAt(G, "IN", 150, 250, at("G", "andar"), IN_C, 44); pillAt(G, "OUT", 430, 250, at("G", "bahar"), OUT_C, 44); pillAt(G, "= KIND", 690, 250, at("G", "kind"), ACC, 44);
+      pillAt(G, "IN", 150, 250, at("G", "input"), IN_C, 44); pillAt(G, "OUT", 430, 250, at("G", "output"), OUT_C, 44); pillAt(G, "= KIND", 690, 250, at("G", "kind"), ACC, 44);
       const gIn = chip(G, 190, 380, 700, 150, IN_C, at("G", "voice")); M.icon(gIn, "mic", 0, 0, 90, IN_C).show(at("G", "voice")); el(gIn, `font:700 40px ${COD};color:${TEXT}`, "VOICE NOTE");
       M.arrow(G, { from: [540, 536], to: [540, 596], color: IN_C, w: 10 }).show(at("G", "voice") + 0.4, 0.3);
       const gB = M.box(G, { x: 340, y: 600, w: 400, h: 170, label: "?", color: ACC, size: 100 }); gB.show(at("G", "kaun"));
@@ -187,7 +187,7 @@
       M.fit(G, { y: 240, h: 1100, maxScale: 1.1 });
 
       M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G);
-      M.finish({ kw: { text: "cyan", image: "cyan", audio: "cyan", Embedding: "gold", numbers: "good", andar: "gold", bahar: "good", model: "cyan", Model: "cyan", nahi: "hot", follow: "gold", kind: "gold", photo: "gold", matlab: "good" } });
+      M.finish({ kw: { text: "cyan", image: "cyan", audio: "cyan", Embedding: "gold", numbers: "good", input: "gold", output: "good", Input: "gold", model: "cyan", Model: "cyan", nahi: "hot", follow: "gold", kind: "gold", photo: "gold", matlab: "good" } });
       window.__timelines["main"] = tl;
     </script>
   </body>

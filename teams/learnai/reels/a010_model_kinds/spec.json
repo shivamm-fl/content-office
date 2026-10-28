@@ -83,13 +83,13 @@
   ],
   "copy": {
     "hi": {
-      "A": "@hook AI से फोटो माँगी, उसने सिर्फ लिखकर दे दिया, क्यों? || क्योंकि वो text model था। | Model कौन सा है, ये इससे तय होता है कि अंदर क्या जाता है और बाहर क्या आता है।",
-      "B": "Text model: text अंदर, text बाहर। | तुम सवाल लिखते हो, वो जवाब लिखता है।",
-      "C": "Image model: लिखा हुआ prompt अंदर, picture बाहर। | फोटो चाहिए, तो यही model चाहिए।",
-      "D": "Audio model: आवाज़ अंदर, लिखा हुआ transcript बाहर। | या उल्टा: text अंदर, आवाज़ बाहर।",
-      "E": "Embedding model: text अंदर, numbers की list बाहर, जो मतलब नापती है। | इसीलिए \"पैसे वापस\" खोजो, तो \"refund\" वाला note मिल जाता है, भले एक word न मिले।",
+      "A": "@hook AI से फोटो माँगी, उसने सिर्फ लिखकर दे दिया, क्यों? || क्योंकि वो text model था। | Model कौन सा है, ये इससे तय होता है कि input क्या है और output क्या है।",
+      "B": "Text model: text input, text output। | तुम सवाल लिखते हो, वो जवाब लिखता है।",
+      "C": "Image model: लिखा हुआ prompt input, picture output। | फोटो चाहिए, तो यही model चाहिए।",
+      "D": "Audio model: आवाज़ input, लिखा हुआ transcript output। | या उल्टा: text input, आवाज़ output।",
+      "E": "Embedding model: text input, numbers की list output, जो मतलब measure करती है। | इसीलिए \"पैसे वापस\" खोजो, तो \"refund\" वाला note मिल जाता है, भले एक word न मिले।",
       "F": "असली app में ये सब पीछे जुड़े होते हैं। | इसीलिए फोटो माँगने पर app आम तौर पर image model को बुलाता है।",
-      "G": "याद रखो: अंदर क्या, बाहर क्या, वही model की kind है। || अब बताओ: voice note को text बनाना हो, तो कौन सा model? | Comment में लिखो, और रोज़ एक AI idea के लिए follow कर लो."
+      "G": "याद रखो: input क्या, output क्या, वही model की kind है। || अब बताओ: voice note को text बनाना हो, तो कौन सा model? | Comment में लिखो, और रोज़ एक AI idea के लिए follow कर लो."
     }
   },
   "prime": "सुनो, ये बहुत interesting है!"
