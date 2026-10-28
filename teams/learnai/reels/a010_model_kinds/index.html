@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="102.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="55.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -32,7 +32,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div><div class="beat" id="sJ"></div><div class="beat" id="sK"></div>
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -41,16 +41,16 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="102.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="102.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="102.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="55.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="55.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="55.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"], tag: "150 DAYS OF AI · DAY 10" });
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "150 DAYS OF AI · DAY 10" });
       Viz.install(M);
       const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, VIOLET, MUTED, TEXT } = M;
-      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI"), J = M.$("#sJ"), K = M.$("#sK");
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG");
       const at = (sc, w, n) => M.W(sc, w, n);
       const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
 
@@ -110,152 +110,84 @@
       gone(aDots, 1.1);
       const aR = show(el(A, `left:130px;top:680px;width:620px;height:250px;box-sizing:border-box;border-radius:26px;border:3px solid ${CYAN};background:${ca(CYAN, 0.12)}`), 1.15, { opacity: 0, y: 12 });
       lines(aR, 40, 50, 540, 4, MUTED);
-      const aT = pillAt(A, "TEXT ONLY", 560, 960, at("A", "sirf"), HOT, 40);
-      const aPh = show(pic(A, 790, 700, 150, 105, MUTED, true), at("A", "likhkar"), { opacity: 0, y: 12 }); const aX = M.icon(A, "cross", 815, 715, 100, HOT); aX.show(at("A", "likhkar"));
-      pillAt(A, "TEXT MODEL", 130, 960, at("A", "model"), CYAN, 40);
+      pillAt(A, "TEXT ONLY", 560, 960, at("A", "sirf"), HOT, 40);
+      M.icon(A, "cross", 790, 700, 120, HOT).show(at("A", "likhkar"));
+      pillAt(A, "TEXT MODEL", 130, 960, at("A", "text"), CYAN, 40);
       const aM = [tile(A, "IN", 90, 1090, 220, 110, IN_C, 52, true), tile(A, "MODEL", 400, 1090, 280, 110, CYAN, 52, false), tile(A, "OUT", 770, 1090, 220, 110, OUT_C, 52, true)];
-      show(aM[1], at("A", "model", 1), { opacity: 0, y: 14 }); show(aM[0], at("A", "input"), { opacity: 0, y: 14 }); show(aM[2], at("A", "output"), { opacity: 0, y: 14 });
-      M.arrow(A, { from: [316, 1145], to: [394, 1145], color: IN_C, w: 8 }).show(at("A", "input"), 0.3); M.arrow(A, { from: [686, 1145], to: [764, 1145], color: OUT_C, w: 8 }).show(at("A", "output"), 0.3);
-      M.fit(A, { y: 460, h: 850, maxScale: 1.4 });
+      show(aM[1], at("A", "Model"), { opacity: 0, y: 14 }); show(aM[0], at("A", "andar"), { opacity: 0, y: 14 }); show(aM[2], at("A", "bahar"), { opacity: 0, y: 14 });
+      M.arrow(A, { from: [316, 1145], to: [394, 1145], color: IN_C, w: 8 }).show(at("A", "andar"), 0.3); M.arrow(A, { from: [686, 1145], to: [764, 1145], color: OUT_C, w: 8 }).show(at("A", "bahar"), 0.3);
+      M.fit(A, { y: 460, h: 850, maxScale: 1.25 });
 
-      // ============ B: the kitchen, then four kinds ============
+      // ============ B: text model ============
       // diagram: B
-      const appl = (host, x, kind, label, t) => { const c = gl(host, x, 360, 300, 330, null); show(c, t, { opacity: 0, y: 20 });
-        const s = el(c, "left:50px;top:30px;width:200px;height:200px");
-        const S_ = { mixer: `<rect x="20" y="86" width="60" height="8" rx="3"/><rect x="46" y="30" width="10" height="56"/><rect x="26" y="16" width="52" height="20" rx="8"/><path d="M14 94 h72 l-8 -28 h-56z" fill="none"/>`,
-          toaster: `<rect x="14" y="36" width="72" height="50" rx="12" fill="none"/><path d="M30 36 v-6 M54 36 v-6 M30 30 h24" /><rect x="28" y="46" width="44" height="6" rx="3"/><rect x="92" y="50" width="8" height="22" rx="4"/>`,
-          cooker: `<rect x="20" y="42" width="60" height="44" rx="8" fill="none"/><path d="M26 42 q24 -26 48 0"/><rect x="44" y="24" width="12" height="10" rx="3"/><path d="M12 56 h8 M80 56 h8"/>` }[kind];
-        s.innerHTML = `<svg viewBox="0 0 100 100" width="200" height="200" style="overflow:visible"><g stroke="${TEXT}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" fill="${ca(CYAN, 0.25)}">${S_}</g></svg>`;
-        el(c, `left:0;top:250px;width:300px;text-align:center;font:700 40px ${COD};letter-spacing:.06em;color:${TEXT}`, label); return c; };
-      const bApp = [appl(B, 70, "mixer", "MIXER", at("B", "Mixer")), appl(B, 390, "toaster", "TOASTER", at("B", "toaster")), appl(B, 710, "cooker", "COOKER", at("B", "toaster") + 0.5)];
-      const bPow = pillAt(B, "ELECTRICITY", 340, 250, at("B", "bijli"), ACC, 38);
-      const bLn = [195, 515, 835].map((x) => show(el(B, `left:${x - 2}px;top:320px;width:5px;height:40px;background:${ACC}`), at("B", "bijli") + 0.2, { opacity: 0 }));
-      const bBread = show(el(B, `left:110px;top:760px;width:220px;height:90px;border-radius:30px 30px 14px 14px;border:3px solid ${ACC};background:${ca(ACC, 0.3)};display:flex;align-items:center;justify-content:center;font:700 38px ${COD};color:${TEXT}`, "BREAD"), at("B", "bread"), { opacity: 0, y: 20 });
-      const bAr = M.arrow(B, { from: [220, 755], to: [220, 700], color: ACC, w: 9 }); bAr.show(at("B", "bread") + 0.2, 0.3);
-      const bX = M.icon(B, "cross", 330, 760, 100, HOT); bX.show(at("B", "nahi"));
-      const bOld = [...bApp, bPow, ...bLn, bBread];
-      goneAll(bOld, at("B", "AI") - 0.1); bAr.hide(at("B", "AI") - 0.1); bX.hide(at("B", "AI") - 0.1);
-      const KS = [["TEXT", "text", "text", "text > text"], ["IMAGE", "image", "image", "text > picture"], ["AUDIO", "speaker", "audio", "voice <> text"], ["EMBEDDING", "numbers", "embedding", "text > numbers"]];
-      pillAt(B, "4 KINDS", 380, 245, at("B", "4"), ACC, 44);
-      KS.forEach((k, i) => { const b = M.box(B, { x: 70 + (i % 2) * 480, y: 360 + Math.floor(i / 2) * 400, w: 460, h: 340, label: k[0], sub: k[3], icon: k[1], color: CYAN, size: k[0] === "EMBEDDING" ? 46 : 56, subsize: 36 }); b.show(at("B", k[2])); });
-      M.fit(B, { y: 220, h: 1100, maxScale: 1.6 });
+      const bM = col3(B, 400, "TEXT MODEL", "text", S.B + 0.05, at("B", "andar"), at("B", "bahar"));
+      el(bM.inC, `font:600 46px ${LAT};color:${TEXT}`, "Write a poem");
+      el(bM.outC, `font:600 46px ${LAT};color:${TEXT}`, "Roses are red...");
+      M.fit(B, { y: 220, h: 1100, maxScale: 1.15 });
 
-      // ============ C: text model ============
+      // ============ C: image model ============
       // diagram: C
-      const cM = col3(C, 400, "TEXT MODEL", "text", S.C + 0.05, at("C", "andar"), at("C", "bahar"));
-      el(cM.inC, `font:600 46px ${LAT};color:${TEXT}`, "Write a poem");
-      el(cM.outC, `font:600 46px ${LAT};color:${TEXT}`, "Roses are red...");
+      const cM = col3(C, 400, "IMAGE MODEL", "image", S.C + 0.05, at("C", "prompt"), at("C", "bahar"));
+      el(cM.inC, `font:600 46px ${LAT};color:${TEXT}`, "A cat on a sofa");
+      pic(cM.outC, 250, 14, 200, 140, OUT_C);
       M.fit(C, { y: 220, h: 1100, maxScale: 1.15 });
 
-      // ============ D: image model ============
+      // ============ D: audio model, both ways ============
       // diagram: D
-      const dM = col3(D, 400, "IMAGE MODEL", "image", S.D + 0.05, at("D", "andar"), at("D", "bahar"));
-      el(dM.inC, `font:600 46px ${LAT};color:${TEXT}`, "A cat on a sofa");
-      pic(dM.outC, 250, 14, 200, 140, OUT_C).style.left = "250px";
-      M.fit(D, { y: 220, h: 1100, maxScale: 1.15 });
-
-      // ============ E: audio model, both ways ============
-      // diagram: E
       const rowE = (y, lab, labT, inT, outT, inB, outB) => {
-        pillAt(E, lab, 540 - Math.round(lab.length * 13), y - 80, labT, CYAN, 38);
-        const i = chip(E, 40, y, 320, 300, IN_C, inT), o = chip(E, 720, y, 320, 300, OUT_C, outT); inB(i); outB(o);
-        const bx = M.box(E, { x: 400, y: y, w: 280, h: 300, label: "AUDIO", sub: "MODEL", color: MC, size: 44, subsize: 36 }); bx.show(S.E + 0.05);
-        M.arrow(E, { from: [364, y + 150], to: [396, y + 150], color: IN_C, w: 8 }).show(inT + 0.15, 0.25); M.arrow(E, { from: [684, y + 150], to: [716, y + 150], color: OUT_C, w: 8 }).show(outT - 0.05, 0.25); };
-      rowE(350, "SPEECH RECOGNITION", at("E", "speech"), at("E", "aavaz"), at("E", "transcript"), (c) => wave(c, 36, 60, 250, 180, ACC), (c) => lines(c, 40, 90, 240, 4, MUTED));
-      rowE(850, "TEXT TO SPEECH", at("E", "ya"), at("E", "text"), at("E", "aavaz", 1), (c) => lines(c, 40, 90, 240, 4, MUTED), (c) => M.icon(c, "speaker", 90, 90, 140, OUT_C));
-      M.fit(E, { y: 240, h: 1080, maxScale: 1.1 });
+        pillAt(D, lab, 540 - Math.round(lab.length * 13), y - 80, labT, CYAN, 38);
+        const i = chip(D, 40, y, 320, 200, IN_C, inT), o = chip(D, 720, y, 320, 200, OUT_C, outT); inB(i); outB(o);
+        const bx = M.box(D, { x: 400, y: y, w: 280, h: 200, label: "AUDIO", sub: "MODEL", color: MC, size: 44, subsize: 36 }); bx.show(S.D + 0.05);
+        M.arrow(D, { from: [364, y + 100], to: [396, y + 100], color: IN_C, w: 8 }).show(inT + 0.15, 0.25); M.arrow(D, { from: [684, y + 100], to: [716, y + 100], color: OUT_C, w: 8 }).show(outT - 0.05, 0.25); };
+      rowE(400, "SPEECH TO TEXT", at("D", "aavaz"), at("D", "aavaz"), at("D", "transcript"), (c) => wave(c, 36, 40, 250, 120, ACC), (c) => lines(c, 40, 56, 240, 3, MUTED));
+      rowE(850, "TEXT TO SPEECH", at("D", "ya"), at("D", "text"), at("D", "aavaz", 1), (c) => lines(c, 40, 56, 240, 3, MUTED), (c) => M.icon(c, "speaker", 100, 50, 120, OUT_C));
+      M.fit(D, { y: 260, h: 1040, maxScale: 1.1 });
 
-      // ============ F: embedding model, then the meaning map ============
-      // diagram: F
-      const fM = col3(F, 400, "EMBEDDING MODEL", "numbers", S.F + 0.05, at("F", "text"), at("F", "numbers"), 44);
-      el(fM.inC, `font:700 50px ${COD};color:${TEXT}`, "refund");
-      el(fM.outC, `font:700 42px ${COD};color:${TEXT}`, "[0.12, -0.80, 0.45, ...]");
-      const fP1 = pillAt(F, "MEANING", 470, 330, at("F", "matlab"), GOOD, 40);
-      const fP2 = pillAt(F, "NOT WORDS", 450, 1250, at("F", "words"), HOT, 40);
-      const fOld = [fM.inC, fM.outC, fM.bx, fP1, fP2]; const fAll = [...F.querySelectorAll(":scope > *")];
-      fAll.forEach((d) => gone(d, at("F", "maan") - 0.25));
-      const fMap = M.map(F, { x: 80, y: 280, w: 920, h: 700, title: "MEANING MAP", pts: [
+      // ============ E: embedding model, then the meaning map ============
+      // diagram: E
+      const eM = col3(E, 400, "EMBEDDING MODEL", "numbers", S.E + 0.05, at("E", "text"), at("E", "numbers"), 44);
+      el(eM.inC, `font:700 50px ${COD};color:${TEXT}`, "refund");
+      el(eM.outC, `font:700 42px ${COD};color:${TEXT}`, "[0.12, -0.80, 0.45, ...]");
+      pillAt(E, "MEANING", 470, 330, at("E", "matlab"), GOOD, 40);
+      [...E.querySelectorAll(":scope > *")].forEach((d) => gone(d, at("E", "isilie") - 0.25));
+      const eMap = M.map(E, { x: 80, y: 300, w: 920, h: 860, title: "MEANING MAP", pts: [
         { id: "n", label: "REFUND NOTE", x: 0.25, y: 0.3, color: GOOD, side: "t", size: 40 },
         { id: "q", label: "PAISE VAAPAS", x: 0.5, y: 0.46, color: ACC, side: "b", size: 40 },
         { id: "w", label: "WEATHER", x: 0.86, y: 0.84, color: MUTED, side: "t", size: 40 }] });
-      fMap.enter(at("F", "maan")); fMap.show(at("F", "refund"), ["n"]); fMap.show(at("F", "paise"), ["q"]); fMap.show(at("F", "paise") + 0.3, ["w"]);
-      pillAt(F, "EXAMPLE", 700, 1240, at("F", "refund"), ACC, 34);
-      [["refund", "0.31  0.72  ...", 1010, GOOD], ["paise vaapas", "0.35  0.69  ...", 1110, ACC]].forEach((r) => { const c = chip(F, 120, r[2], 840, 84, r[3], at("F", "numbers", 1) - 0.2); c.style.justifyContent = "space-between"; c.style.padding = "0 30px"; el(c, `position:static;font:700 36px ${COD};color:${TEXT}`, r[0]); el(c, `position:static;font:700 40px ${COD};color:${r[3]}`, r[1]); });
-      pillAt(F, "0 WORDS SHARED", 120, 1240, at("F", "Words"), HOT, 40);
-      fMap.link(at("F", "numbers", 1), "n", "q", { label: "CLOSE", color: GOOD, size: 40 }); fMap.ring(at("F", "numbers", 1), "q", { r: 40, color: GOOD });
-      M.fit(F, { y: 240, h: 1100, maxScale: 1.3 });
+      eMap.enter(at("E", "isilie")); eMap.show(at("E", "paise"), ["q"]); eMap.show(at("E", "refund"), ["n"]); eMap.show(at("E", "refund"), ["w"]);
+      pillAt(E, "EXAMPLE", 700, 1180, at("E", "paise"), ACC, 34);
+      pillAt(E, "0 WORDS SHARED", 280, 1240, at("E", "word"), HOT, 40);
+      eMap.link(at("E", "mil"), "n", "q", { label: "CLOSE", color: GOOD, size: 40 }); eMap.ring(at("E", "mil"), "q", { r: 40, color: GOOD });
+      M.fit(E, { y: 260, h: 1060, maxScale: 1.1 });
 
-      // ============ G: 1,536 numbers ============
+      // ============ F: the app joins the models, calls the image model ============
+      // diagram: F
+      const fApp = M.box(F, { x: 240, y: 380, w: 600, h: 220, label: "APP", icon: "chat", color: ACC, size: 56 }); fApp.show(at("F", "app"));
+      const fKids = [["TEXT", "text", 60], ["EMBEDDING", "numbers", 390], ["IMAGE", "image", 720]];
+      const fB = fKids.map((k, i) => { const b = M.box(F, { x: k[2], y: 760, w: 300, h: 220, label: k[0], icon: k[1], color: MC, size: 38 }); b.show(at("F", "jude") + i * 0.2); return b; });
+      const fArr = fKids.map((k, i) => { const a = M.arrow(F, { from: [540, 606], to: [k[2] + 150, 754], color: MUTED, w: 7 }); a.show(at("F", "jude") + i * 0.2, 0.3); return a; });
+      show(bub(F, "Photo please", 290, 230, 500, 100, ACC, null, { size: 44 }), at("F", "photo"), { opacity: 0, y: -14 });
+      [0, 1].forEach((i) => { fB[i].hide(at("F", "bulata") - 0.3); fArr[i].hide(at("F", "bulata") - 0.3); });
+      const fCall = M.arrow(F, { from: [700, 606], to: [870, 754], color: ACC, w: 12, label: "CALLS", size: 38 }); fCall.show(at("F", "bulata") - 0.5, 0.3); fCall.travel(at("F", "bulata") - 0.4, 0.6, ACC);
+      show(pic(F, 720, 1060, 300, 210, OUT_C), at("F", "bulata") + 0.3, { opacity: 0, y: 20 });
+      M.fit(F, { y: 220, h: 1100, maxScale: 1.1 });
+
+      // ============ G: recap, question, follow ============
       // diagram: G
-      const gIn = chip(G, 190, 270, 700, 110, IN_C, at("G", "sentence")); el(gIn, `font:600 46px ${LAT};color:${TEXT}`, "1 sentence");
-      tagIn(G, 190, 206, at("G", "sentence"));
-      M.arrow(G, { from: [540, 386], to: [540, 436], color: IN_C, w: 10 }).show(at("G", "sentence") + 0.2, 0.3);
-      const gB = M.box(G, { x: 190, y: 440, w: 700, h: 200, label: "EMBEDDING", sub: "text-embedding-3-small", color: MC, icon: "numbers", size: 50, subsize: 36 }); gB.show(at("G", "OpenAI"));
-      M.arrow(G, { from: [540, 646], to: [540, 696], color: OUT_C, w: 10 }).show(at("G", "1536"), 0.3);
-      const gN = el(G, `left:90px;top:700px;width:900px;text-align:center;font:800 130px ${COD};color:${GOOD}`, "0"); tl.set(gN, { opacity: 0 }, 0);
-      const CELL = "repeating-linear-gradient(90deg, transparent 0 13px, #0B1020 13px 17px), repeating-linear-gradient(0deg, transparent 0 13px, #0B1020 13px 17px)";
-      const gG0 = show(el(G, `left:156px;top:870px;width:816px;height:544px;background:${CELL}, ${ca(GOOD, 0.22)}`), at("G", "1536"), { opacity: 0 });
-      const gG1 = el(G, `left:156px;top:870px;width:816px;height:544px;background:${CELL}, ${GOOD};clip-path:inset(0 0 100% 0)`);
-      const gO = { v: 0 }; tl.to(gN, { opacity: 1, duration: 0.2, immediateRender: false }, at("G", "1536"));
-      tl.to(gO, { v: 1536, duration: 1.5, ease: "power2.out", onUpdate: () => { gN.textContent = Math.round(gO.v).toLocaleString("en-US"); gG1.style.clipPath = `inset(0 0 ${(100 - gO.v / 15.36).toFixed(2)}% 0)`; }, immediateRender: false }, at("G", "1536"));
-      tagOut(G, 190, 1440, at("G", "numbers")); txt(G, "NUMBERS", 400, 1440, 300, at("G", "numbers"), TEXT, 44, "left");
-      pillAt(G, "VENDOR FIGURE", 330, 1520, at("G", "vendor"), ACC, 40);
-      M.fit(G, { y: 190, h: 1150, maxScale: 1.1 });
+      pillAt(G, "IN", 150, 250, at("G", "andar"), IN_C, 44); pillAt(G, "OUT", 430, 250, at("G", "bahar"), OUT_C, 44); pillAt(G, "= KIND", 690, 250, at("G", "kind"), ACC, 44);
+      const gIn = chip(G, 190, 380, 700, 150, IN_C, at("G", "voice")); M.icon(gIn, "mic", 0, 0, 90, IN_C).show(at("G", "voice")); el(gIn, `font:700 40px ${COD};color:${TEXT}`, "VOICE NOTE");
+      M.arrow(G, { from: [540, 536], to: [540, 596], color: IN_C, w: 10 }).show(at("G", "voice") + 0.4, 0.3);
+      const gB = M.box(G, { x: 340, y: 600, w: 400, h: 170, label: "?", color: ACC, size: 100 }); gB.show(at("G", "kaun"));
+      M.arrow(G, { from: [540, 776], to: [540, 836], color: OUT_C, w: 10 }).show(at("G", "text"), 0.3);
+      const gOut = chip(G, 190, 840, 700, 150, OUT_C, at("G", "text")); M.icon(gOut, "text", 0, 0, 90, OUT_C).show(at("G", "text")); el(gOut, `font:700 40px ${COD};color:${TEXT}`, "TEXT");
+      txt(G, "COMMENT", 120, 1060, 400, at("G", "Comment"), CYAN, 44, "left");
+      show(el(G, `left:120px;top:1140px;width:840px;height:90px;border-radius:45px;border:1.5px solid rgba(150,175,215,.45);font:500 36px ${COD};color:#A5B0C8;display:flex;align-items:center;padding:0 34px;box-sizing:border-box`, "Add a comment..."), at("G", "Comment") + 0.1, { opacity: 0, y: 12 });
+      const gF = M.pill(G, "+  FOLLOW", at("G", "follow") - 0.4, { x: 380, y: 1270, kind: "acc", size: 44 });
+      tl.fromTo(gF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("G", "follow"));
+      M.fit(G, { y: 240, h: 1100, maxScale: 1.1 });
 
-      // ============ H: the app joins them ============
-      // diagram: H
-      const hUser = bub(H, "paise vaapas", 270, 240, 540, 110, ACC, at("H", "User"), { size: 46 });
-      const hE = M.box(H, { x: 250, y: 420, w: 580, h: 170, label: "EMBEDDING", icon: "numbers", color: MC, size: 48 }); hE.show(S.H + 0.05);
-      const hNote = chip(H, 250, 670, 580, 150, OUT_C, at("H", "note")); M.icon(hNote, "doc", 0, 0, 90, OUT_C).show(at("H", "note")); el(hNote, `font:700 42px ${COD};color:${TEXT}`, "REFUND NOTE");
-      const hT = M.box(H, { x: 250, y: 900, w: 580, h: 170, label: "TEXT MODEL", icon: "text", color: MC, size: 48 }); hT.show(at("H", "judte"));
-      const hAns = chip(H, 250, 1150, 580, 130, OUT_C, at("H", "jawab")); lines(hAns, 100, 30, 380, 2, MUTED);
-      const hA = [[[540, 356], [540, 414], IN_C, at("H", "User") + 0.3], [[540, 596], [540, 664], OUT_C, at("H", "note") - 0.4], [[540, 826], [540, 894], OUT_C, at("H", "text") + 0.0], [[540, 1076], [540, 1144], OUT_C, at("H", "jawab") - 0.1]];
-      hA.forEach((a) => { const ar = M.arrow(H, { from: a[0], to: a[1], color: a[2], w: 10 }); ar.show(a[3], 0.3); ar.travel(a[3] + 0.05, 0.5, a[2]); });
-      M.fit(H, { y: 220, h: 1100, maxScale: 1.1 });
-
-      // ============ I: the chatbot calls an image model ============
-      // diagram: I
-      const iChat = M.box(I, { x: 70, y: 330, w: 440, h: 250, label: "CHAT APP", icon: "chat", color: ACC, size: 50 }); iChat.show(S.I + 0.05);
-      const iPic = pic(I, 590, 330, 400, 280, OUT_C); show(iPic, at("I", "photo"), { opacity: 0, y: 20 });
-      const iImg = M.box(I, { x: 70, y: 840, w: 440, h: 250, label: "IMAGE", sub: "MODEL", icon: "image", color: MC, size: 50, subsize: 36 }); iImg.show(at("I", "image"));
-      const iA = M.arrow(I, { from: [290, 590], to: [290, 832], color: ACC, w: 10, label: "CALLS", size: 38 }); iA.show(at("I", "bula"), 0.3); iA.travel(at("I", "bula"), 0.6, ACC);
-      const iB = M.arrow(I, { from: [516, 900], to: [700, 620], color: OUT_C, w: 10 }); iB.show(at("I", "bula") + 0.7, 0.3); iB.travel(at("I", "bula") + 0.7, 0.6, OUT_C);
-      const iAlone = pillAt(I, "CHAT ALONE", 650, 960, at("I", "akela"), HOT, 40);
-      const iX = M.icon(I, "cross", 560, 952, 70, HOT); iX.show(at("I", "akela"));
-      tl.to(iPic, { opacity: 0.25, duration: 0.3, immediateRender: false }, at("I", "akela"));
-      M.fit(I, { y: 260, h: 1000, maxScale: 1.6 });
-
-      // ============ J: kind = in + out ============
-      // diagram: J
-      const JR = [["TEXT", ["text"], ["text"]], ["IMAGE", ["text"], ["image"]], ["AUDIO", ["mic", "text"], ["text", "speaker"]], ["EMBEDDING", ["text"], ["numbers"]]];
-      const jIn = [], jOut = [], jBox = [];
-      JR.forEach((r, i) => { const y = 300 + i * 240, t0 = S.J + 0.1 + i * 0.25;
-        const ci = chip(J, 50, y, 260, 170, IN_C, t0), co = chip(J, 770, y, 260, 170, OUT_C, t0); jIn.push(ci); jOut.push(co);
-        r[1].forEach((k, j) => M.icon(ci, k, (260 - r[1].length * 110) / 2 + j * 110 + 5, 35, 100, IN_C).show(t0));
-        r[2].forEach((k, j) => M.icon(co, k, (260 - r[2].length * 110) / 2 + j * 110 + 5, 35, 100, OUT_C).show(t0));
-        const bx = M.box(J, { x: 360, y: y, w: 360, h: 170, label: r[0], color: MC, size: r[0] === "EMBEDDING" ? 40 : 48 }); bx.show(t0); jBox.push(bx);
-        M.arrow(J, { from: [314, y + 85], to: [356, y + 85], color: IN_C, w: 8 }).show(t0 + 0.1, 0.25); M.arrow(J, { from: [724, y + 85], to: [766, y + 85], color: OUT_C, w: 8 }).show(t0 + 0.1, 0.25); });
-      tagIn(J, 50, 240, at("J", "andar")); tagOut(J, 770, 240, at("J", "bahar"));
-      jIn.forEach((c) => tl.to(c, { backgroundColor: ca(IN_C, 0.35), duration: 0.3, immediateRender: false }, at("J", "andar")));
-      jOut.forEach((c) => tl.to(c, { backgroundColor: ca(OUT_C, 0.35), duration: 0.3, immediateRender: false }, at("J", "bahar")));
-      pillC(J, "KIND = IN + OUT", 1260, at("J", "kind"), { col: ACC, size: 40, h: 70 });
-      M.fit(J, { y: 220, h: 1100, maxScale: 1.25 });
-
-      // ============ K: comment + follow ============
-      // diagram: K
-      const kIn = chip(K, 190, 270, 700, 170, IN_C, S.K + 0.05); M.icon(kIn, "mic", 0, 0, 90, IN_C).show(S.K + 0.05); el(kIn, `font:700 40px ${COD};color:${TEXT}`, "VOICE NOTE");
-      M.arrow(K, { from: [540, 446], to: [540, 520], color: IN_C, w: 10 }).show(at("K", "Voice") + 0.4, 0.3);
-      const kB = M.box(K, { x: 340, y: 524, w: 400, h: 200, label: "?", color: ACC, size: 120 }); kB.show(at("K", "kaun"));
-      M.arrow(K, { from: [540, 730], to: [540, 804], color: OUT_C, w: 10 }).show(at("K", "text"), 0.3);
-      const kOut = chip(K, 190, 810, 700, 170, OUT_C, at("K", "text")); M.icon(kOut, "text", 0, 0, 90, OUT_C).show(at("K", "text")); el(kOut, `font:700 40px ${COD};color:${TEXT}`, "TEXT");
-      txt(K, "COMMENT", 120, 1060, 400, at("K", "Comment"), CYAN, 44, "left");
-      show(el(K, `left:120px;top:1140px;width:840px;height:90px;border-radius:45px;border:1.5px solid rgba(150,175,215,.45);font:500 36px ${COD};color:#A5B0C8;display:flex;align-items:center;padding:0 34px;box-sizing:border-box`, "Add a comment..."), at("K", "Comment") + 0.1, { opacity: 0, y: 12 });
-      const kF = M.pill(K, "+  FOLLOW", at("K", "follow") - 0.4, { x: 380, y: 1270, kind: "acc", size: 44 });
-      tl.fromTo(kF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("K", "follow"));
-      M.fit(K, { y: 240, h: 1100, maxScale: 1.3 });
-
-      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I); M.wipe(S.J); M.wipe(S.K);
-      M.finish({ kw: { text: "cyan", image: "cyan", audio: "cyan", embedding: "gold", Embedding: "gold", numbers: "good", andar: "gold", bahar: "good", model: "cyan", input: "gold", output: "good", nahi: "hot", follow: "gold", kind: "gold", photo: "gold", number: "good" } });
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G);
+      M.finish({ kw: { text: "cyan", image: "cyan", audio: "cyan", Embedding: "gold", numbers: "good", andar: "gold", bahar: "good", model: "cyan", Model: "cyan", nahi: "hot", follow: "gold", kind: "gold", photo: "gold", matlab: "good" } });
       window.__timelines["main"] = tl;
     </script>
   </body>

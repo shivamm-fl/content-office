@@ -1349,14 +1349,14 @@
       "format": "structure",
       "status": "planned",
       "title": "The kinds of AI model: text, image, audio, embedding",
-      "one_idea": "AI model is not one thing: what a model takes in and what it puts out decides its kind. A text model turns text into more text, an image model turns a written prompt into a picture, an audio (speech) model turns sound into a transcript or text into speech, and an embedding model turns text into a list of numbers that measures meaning, not words. An AI app often joins several of them, which is why a chat model alone cannot do everything.",
+      "one_idea": "What a model takes in and what it puts out decides its kind: text to text, prompt to picture, sound to transcript (or text to voice), text to a list of numbers that measures meaning. An AI app often joins several of them.",
       "hook_type": "direct_question",
       "spoken_hook": "AI से फोटो माँगी, उसने सिर्फ लिखकर दे दिया, क्यों?",
       "hook_formula": "plain_question on a frustration the viewer knows",
-      "hook_source": "strategist, 2026-10-28 (learning 2026-10-27: start from a frustration in plain words)",
-      "trap": "Thinking every AI model is a chatbot that can do text, pictures and sound alike; each kind has its own input and output.",
-      "visual_idea": "Chat asks for a photo and gets only words. Then four machines in a row, each with an input slot and an output slot: text to text; prompt to picture; sound wave to transcript (and text to voice); sentence to a row of numbers. Last: a tiny app wiring them together. No kitchen analogy.",
-      "example": "EXAMPLE (illustrative). Four kinds by input and output. One number shown: OpenAI's text-embedding-3-small returns 1,536 numbers by default (OpenAI embeddings docs, vendor figure).",
+      "hook_source": "strategist, 2026-10-28",
+      "trap": "Thinking every AI model is a chatbot that can do text, pictures and sound alike.",
+      "visual_idea": "Chat asks for a photo and gets only words. Then four machines, each with an input slot and an output slot, then a tiny app wiring them together. No analogy, no kitchen.",
+      "example": "EXAMPLE (illustrative, no numbers shown): a search for 'paise wapas' finds a note that says 'refund' because an embedding model compares meaning.",
       "sources": [
         "https://huggingface.co/tasks/text-generation",
         "https://huggingface.co/tasks/text-to-image",
@@ -1372,6 +1372,9 @@
         "text image audio embedding model",
         "what is an embedding model",
         "ai engineer roadmap"
+      ],
+      "facts_to_verify": [
+        "Hugging Face task pages: input and output of text generation, text-to-image, automatic speech recognition, sentence similarity (fetched 2026-10-28)"
       ]
     },
     {
