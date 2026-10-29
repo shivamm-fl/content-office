@@ -1,0 +1,144 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "click",
+      "C",
+      0,
+      0.9
+    ],
+    [
+      "click",
+      "D",
+      2,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      4,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      5,
+      0
+    ],
+    [
+      "pop",
+      "D",
+      6,
+      0
+    ],
+    [
+      "click",
+      "E",
+      0,
+      0
+    ],
+    [
+      "click",
+      "F",
+      0,
+      0
+    ],
+    [
+      "err",
+      "F",
+      2,
+      0.6
+    ],
+    [
+      "click",
+      "G",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "G",
+      1,
+      0
+    ],
+    [
+      "err",
+      "G",
+      2,
+      0
+    ],
+    [
+      "click",
+      "H",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "I",
+      1,
+      0
+    ],
+    [
+      "save",
+      "I",
+      2,
+      0.5
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Framework install किया, पर agent का loop समझ नहीं आया!",
+      "B": "Interviewer ने पूछा: बिना framework के agent लिखना हो, तो तुम्हें क्या-क्या चाहिए?",
+      "C": "तुम्हारा जवाब: तीन चीज़ें, एक loop, एक tool table और एक stop rule। || एक-एक करके देखते हैं।",
+      "D": "Agent यानी वो model जो tools चलाकर काम करता है। | लगता है framework के बिना ये बनेगा ही नहीं। | मैंने बिना framework के चलाकर देखा, ये example है, model नकली था, पर structure असली। | सवाल: Pune का मौसम? | पहले turn में model ने कहा, get_weather चलाओ, मेरे code ने चलाया: 31{thirty-one} C, clear। | दूसरे turn में model ने final जवाब दिया। | पूरा code सिर्फ़ 10{ten} lines का था।",
+      "E": "पहला step, loop। | Model को call करो, जवाब देखो, और काम पूरा होने तक दोहराओ। | क्योंकि model एक बार में एक ही बात बोलता है: tool चाहिए, या जवाब तैयार है।",
+      "F": "दूसरा step, tool table, यानी नाम से function की list। | Model सिर्फ़ नाम माँगता है, जैसे get_weather, और उसे चलाता तुम्हारा code है। | क्योंकि model सिर्फ़ text लिखता है, खुद कुछ चला नहीं सकता।",
+      "G": "तीसरा step, stop rule। | जवाब तैयार हो तो रुको, या ज़्यादा से ज़्यादा 5{five} turns, turn यानी model को एक बार call करना। | क्योंकि वरना loop कभी खत्म नहीं होगा।",
+      "H": "Interview में बोलो: “An agent is a loop: call the model, run the tool it asks for, feed the result back. It stops at a final answer or a maximum number of turns. I'd start with direct API calls and use a framework only when I understand what it does.”",
+      "I": "तुम्हारे agent का loop अभी किसने लिखा, तुमने या framework ने? | Comment में खुद या framework लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

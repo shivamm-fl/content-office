@@ -1,0 +1,17 @@
+Framework install kiya, par agent ka loop samajh nahi aaya!
+
+Interviewer ne poocha: bina framework ke agent likhna ho, to tumhein kya-kya chahiye?
+
+Jawab: teen cheezen, ek loop, ek tool table aur ek stop rule.
+
+1. Loop: model ko call karo, jawab dekho, aur kaam poora hone tak dohrao. Model ya to tool maangta hai, ya final jawab deta hai.
+2. Tool table: naam se function ki list. Model sirf naam maangta hai (get_weather), use chalata tumhara code hai.
+3. Stop rule: final jawab mile to ruko, ya zyada se zyada 5 turns. Warna loop kabhi khatam nahi hoga.
+
+Example (nakli model, koi API call nahi): ye poora loop, tool table aur stop rule 10 lines ka code tha. Turn 1 mein get_weather Pune chala, 31 C, clear mila; turn 2 mein final jawab.
+
+Anthropic ki salah: direct API calls se shuru karo, framework tabhi lo jab samajhte ho ki wo andar kya karta hai.
+
+Tumhare agent ka loop abhi kisne likha, tumne ya framework ne? Comment mein khud ya framework likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #AIAgents

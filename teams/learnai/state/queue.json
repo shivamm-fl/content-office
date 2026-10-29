@@ -1521,18 +1521,12 @@
       "hook_formula": "relatable_stake",
       "hook_source": "strategist, 2026-10-29 (differs from q124)",
       "trap": "Thinking a framework is needed: the loop, the tool call and the stop rule are a few dozen lines.",
-      "visual_idea": "A big box labelled FRAMEWORK is opened and shows a small loop inside: model, tool, result, back to model. Then the same loop drawn as three plain pieces (loop, tool table, stop rule) with the real 10 lines of the run beside it and turn 1 CALL, turn 2 FINISH lighting up. A stop sign at turn 5 for the maximum-turn rule.",
-      "everyday_anchor": "Making tea yourself: boil, add, check, stop. A tea machine hides the steps but does the same ones.",
-      "example": "EXAMPLE (stub model, no API call; real run in state/runs/q125_loop_run_output.txt): the whole loop, the tool table and the stop rule are 10 lines of code (comments and blank lines not counted); the run shows turn 1 CALL get_weather Pune -> 31 C, clear, then turn 2 FINISH. A real agent adds the model API call; the structure is the same.",
+      "visual_idea": "A big box labelled FRAMEWORK is opened and shows a small loop inside; then the loop as three plain pieces with the real 10 lines of the run and turn 1 CALL, turn 2 FINISH; a stop at turn 5. EXAMPLE pill on the code (stub model).",
+      "example": "EXAMPLE (stub model, no API call; run in state/runs/q125_loop_run_output.txt): loop, tool table and stop rule are 10 lines of code; turn 1 CALL get_weather Pune -> 31 C, clear, then turn 2 FINISH.",
       "sources": [
         "https://www.anthropic.com/engineering/building-effective-agents"
       ],
-      "facts_to_verify": [
-        "Anthropic, Building effective agents: 'start by using LLM APIs directly: many patterns can be implemented in a few lines of code'; frameworks can add layers that obscure prompts and responses; if you use one, understand the underlying code (fetched 2026-10-29)",
-        "Same page: agents are 'typically just LLMs using tools based on environmental feedback in a loop'; stopping conditions such as a maximum number of iterations are common (fetched 2026-10-29)",
-        "Code count of 10 lines is from our own stub run (state/runs/q125_loop_run.py), not a claim about real frameworks"
-      ],
-      "length_target_s": 105,
+      "length_target_s": 115,
       "cover_headline": "Build an agent without a framework",
       "thumb_text": "No framework",
       "keywords": [

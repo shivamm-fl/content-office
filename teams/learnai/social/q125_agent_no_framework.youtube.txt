@@ -1,0 +1,8 @@
+Bina framework ke AI agent kaise likhein
+
+Interview mein poochha jata hai: bina framework ke agent likhna ho to kya-kya chahiye? Jawab: teen cheezen. Ek loop jo model ko call karta hai, ek tool table jisme naam se function milta hai (model sirf naam maangta hai, use aapka code chalata hai), aur ek stop rule: final jawab ya maximum turns. Anthropic ka blog direct LLM API calls se shuru karne ki salah deta hai, kyunki kai patterns kuch lines mein ban jate hain, aur framework ke extra layers prompts aur responses ko chhupa sakte hain; framework use karo to samjho ki wo andar kya karta hai. Video ka code example hamara apna stub hai (nakli model, koi API call nahi): loop, tool table aur stop rule 10 lines ke the.
+
+Is video mein: ai agent without framework, agent loop code, build ai agent from scratch, ai engineer interview.
+
+Sources:
+https://www.anthropic.com/engineering/building-effective-agents
