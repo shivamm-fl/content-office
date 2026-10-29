@@ -1,11 +1,12 @@
-# A framework-free agent: the whole loop, tool table and stop rule. The model is a stub (no API call).
-def model(history):
-    if not any(k=="observe" for k,_ in history): return ("act",("get_weather","Pune"))
-    return ("finish","Pune: "+history[-1][1])
-TOOLS={"get_weather":lambda city:"31 C, clear"}
-history=[("goal","Pune ka mausam?")]
-for turn in range(1,6):                      # stop rule: max 5 turns
-    kind,p=model(history)
-    if kind=="finish": print("turn",turn,"FINISH ->",p); break
-    name,arg=p; obs=TOOLS[name](arg)
-    print("turn",turn,"CALL",name,arg,"->",obs); history.append(("observe",obs))
+# q125 stub run: an agent without a framework. The model is a stub (no API call); the structure is the real one.
+# The 10 code lines below (comments and blank lines not counted) are the whole loop, tool table and stop rule.
+tools = {"get_weather": lambda c: "31 C, clear"}
+def model(m):
+    if len(m) < 2: return "get_weather", "Pune"
+    return None, m[-1]
+m = ["Weather in Pune?"]
+for turn in range(1, 6):
+    name, arg = model(m)
+    print("turn", turn, name or "FINISH", arg)
+    if name is None: break
+    m.append(tools[name](arg))
