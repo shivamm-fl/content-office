@@ -1124,12 +1124,12 @@
       "id": "q124",
       "track": "interview",
       "title": "Interview: MCP server stdio se chalta hai ya HTTP se? Kab kaun sa?",
-      "status": "planned",
-      "planned": "2026-10-29",
       "kind": "question",
-      "topic": "MCP transports: stdio (local subprocess, one client) vs Streamable HTTP (independent server, many clients, auth and Origin checks).",
+      "topic": "MCP transports: stdio (subprocess, private) vs Streamable HTTP (shared, Origin/localhost/auth).",
       "hook_formula": "company_specific",
-      "hook_type": "company_specific"
+      "hook_type": "company_specific",
+      "status": "built",
+      "planned": "2026-10-29"
     },
     {
       "id": "q125",

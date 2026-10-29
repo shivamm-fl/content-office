@@ -1,0 +1,9 @@
+MCP server: stdio ya HTTP, kab kaun sa
+
+Interview mein poochha jata hai: MCP server ko stdio se chalayein ya HTTP se, aur kab kaun sa? Jawab: ek app aur ek machine ho to stdio, jahan client server ko subprocess ki tarah start karta hai aur stdin/stdout se baat karta hai. Kai log ya kai apps ho to Streamable HTTP, jahan server alag process hai aur ek endpoint par kai clients jude sakte hain. HTTP mein MCP spec ke hisaab se server ko Origin header validate karna chahiye, local ho to localhost par bind karna chahiye, aur authentication lagana chahiye. Video ke editor aur tickets server (50 agents) examples hain, claims nahi.
+
+Is video mein: mcp stdio vs http, mcp transport, streamable http mcp, ai engineer interview.
+
+Sources:
+https://modelcontextprotocol.io/specification/2025-06-18/basic/transports
+https://www.anthropic.com/news/model-context-protocol

@@ -1,0 +1,13 @@
+Anthropic ne MCP banaya. Server stdio se chalao ya HTTP se?
+
+Jawab: ek app, ek machine, to stdio. Kai log ya kai apps, to HTTP.
+
+stdio: app server ko apni machine par subprocess ki tarah start karti hai aur stdin/stdout se baat karti hai. Server sirf usi app ka hota hai, hosting ya login nahi chahiye.
+
+HTTP: server apna alag process hai, ek endpoint par kai clients jude sakte hain. Example: ek company ka tickets server jo 50 agents use karte hain (example hai, claim nahi).
+
+HTTP mein dhyan rakho: Origin header check karo, local chala rahe ho to localhost par bind karo, aur authentication lagao.
+
+Tumhara MCP server abhi stdio par hai ya HTTP par? Comment mein likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #MCP

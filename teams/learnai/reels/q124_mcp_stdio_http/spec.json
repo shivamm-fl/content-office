@@ -1,0 +1,123 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "click",
+      "B",
+      2,
+      0
+    ],
+    [
+      "click",
+      "C",
+      2,
+      0
+    ],
+    [
+      "err",
+      "C",
+      3,
+      0.3
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      3,
+      0
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "click",
+      "E",
+      2,
+      0
+    ],
+    [
+      "lock",
+      "F",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "G",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "H",
+      1,
+      0
+    ],
+    [
+      "save",
+      "H",
+      2,
+      0.5
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Anthropic ने MCP बनाया। Server stdio से चलाओ या HTTP से?",
+      "B": "Interview में पूरा सवाल ये आता है: MCP server को stdio से चलाएँ या HTTP से, और कब कौन सा? | तुम्हारा जवाब: एक app, एक machine, तो stdio। | कई लोग या कई apps, तो HTTP। || तीन बातें हैं।",
+      "C": "MCP यानी वो standard, जिससे AI app बाहर के tools से जुड़ती है। | Tool वाला हिस्सा MCP server है, और transport यानी दोनों के बात करने का रास्ता। || मान लो, ये example है, तुम्हारे editor को सिर्फ़ अपनी files पढ़नी हैं। | यहाँ HTTP लगाओगे तो server host करना पड़ेगा, address देना पड़ेगा, login बनाना पड़ेगा। | 1{एक} आदमी के लिए 3{तीन} extra काम।",
+      "D": "पहली बात, stdio यानी program का सीधा input-output। | App खुद server को अपनी machine पर subprocess की तरह start करती है, यानी साथ चलने वाला छोटा program। | App stdin में input लिखती है, server stdout में output लौटाता है। | क्योंकि server सिर्फ़ उसी app का है, hosting और login की ज़रूरत नहीं।",
+      "E": "दूसरी बात, HTTP यानी network पर बात करना। | Server अपना अलग process है, एक endpoint यानी एक address पर, और कई clients जुड़ते हैं। | मान लो, एक company का tickets server है और 50{fifty} agents उसे इस्तेमाल करते हैं। | सबको एक जगह चाहिए, इसलिए यहाँ HTTP।",
+      "F": "तीसरी बात, HTTP में दरवाज़ा खुला है। | Origin check करो, यानी request किस website से आई। | Local चला रहे हो तो localhost पर bind करो, यानी बाहर से पहुँच नहीं। | और authentication लगाओ, वरना कोई भी तुम्हारे tools चला देगा।",
+      "G": "@emph Interview में बोलो: “stdio runs the server as a subprocess of one client, so it is private and needs no hosting. HTTP is for a shared or remote server, and there I validate Origin, bind to localhost, and add authentication.”",
+      "H": "तुम्हारा MCP server अभी stdio पर है या HTTP पर? | Comment में लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

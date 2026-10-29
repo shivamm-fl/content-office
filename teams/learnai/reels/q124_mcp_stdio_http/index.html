@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>MCP stdio or HTTP</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="119" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="119" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="119" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="119" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 48}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const paint = (d, col, t, fill) => tl.to(d, { borderColor: ca(col, 0.95), backgroundColor: ca(col, fill == null ? 0.16 : fill), duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const moveTo = (d, t, dx, dy, dur) => tl.to(d, { x: dx || 0, y: dy || 0, duration: dur || 0.7, ease: "power3.inOut", immediateRender: false }, t);
+      // a labelled card: icon at left, label (and a small sub) at right
+      const lcard = (host, x, y, w, h, label, col, t, o) => { o = o || {}; const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:20px;border:2.5px solid ${ca(col, 0.6)};background:${ca(col, 0.08)}`);
+        if (o.icon) M.icon(d, o.icon, 20, (h - 52) / 2, 52, col).show(t);
+        const l = el(d, `left:${o.icon ? 90 : 0}px;right:0;top:0;height:${h}px;display:flex;align-items:center;${o.icon ? "" : "justify-content:center;"}font:800 ${o.size || 38}px ${COD};letter-spacing:.05em;color:${col};white-space:nowrap`, label);
+        show(d, t, { opacity: 0, y: 18 }); return { d, l }; };
+      const chat = (host, x, y, w, h, text, col, t, mine) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${mine ? "30px 30px 6px 30px" : "30px 30px 30px 6px"};border:2px solid ${ca(col, 0.6)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:600 ${mine ? 44 : 44}px ${LAT};color:${TEXT};white-space:nowrap`, text); return show(d, t, { opacity: 0, y: 18 }); };
+
+
+      const agent = (host, x, y, w, h, label, col, t, o) => { const b = M.box(host, Object.assign({ x, y, w, h, label, icon: "model", color: col, size: 40 }, o || {})); b.show(t); return b; };
+
+      
+      const srv = (host, x, y, w, h, label, col, t, o) => { const b = M.box(host, Object.assign({ x, y, w, h, label, icon: "gear", color: col, size: 40 }, o || {})); b.show(t); return b; };
+
+      // ============ A: hook ============
+      M.hook(["MCP server:", "stdio or HTTP?"], { size: 104, top: 215 });
+      pillC(A, "MADE BY ANTHROPIC", 470, 0.3, { size: 36, h: 62, col: MUTED });
+      const aF1 = el(A, `left:90px;top:570px;width:900px;height:340px;border-radius:26px;border:3.5px solid ${ca(CYAN, 0.9)};background:${ca(CYAN, 0.06)}`); show(aF1, at("A", "stdio"));
+      tag(A, "STDIO · SAME MACHINE", 90, 590, 900, at("A", "stdio") + 0.1, CYAN, 42);
+      srv(A, 150, 690, 290, 170, "APP", CYAN, at("A", "stdio") + 0.2, { icon: "chat", size: 44 });
+      srv(A, 640, 690, 290, 170, "SERVER", VIOLET, at("A", "stdio") + 0.35, { icon: "gear", size: 44 });
+      M.arrow(A, { from: [445, 750], to: [635, 750], color: GOOD, w: 9 }).show(at("A", "stdio") + 0.5, 0.3);
+      M.arrow(A, { from: [635, 810], to: [445, 810], color: ACC, w: 9 }).show(at("A", "stdio") + 0.6, 0.3);
+      tag(A, "OR", 0, 935, 1080, at("A", "ya"), ACC, 64);
+      const aF2 = el(A, `left:90px;top:1040px;width:900px;height:420px;border-radius:26px;border:3.5px solid ${ca(VIOLET, 0.9)};background:${ca(VIOLET, 0.06)}`); show(aF2, at("A", "HTTP"));
+      tag(A, "HTTP · OVER NETWORK", 90, 1060, 900, at("A", "HTTP") + 0.1, VIOLET, 42);
+      srv(A, 340, 1140, 400, 150, "SERVER", VIOLET, at("A", "HTTP") + 0.2, { icon: "cloud", size: 44 });
+      [0, 1, 2].forEach((i) => { const x = 180 + i * 290; M.icon(A, "user", x + 20, 1350, 90, CYAN).show(at("A", "HTTP") + 0.4 + i * 0.1);
+        M.arrow(A, { from: [x + 65, 1345], to: [540, 1300], color: CYAN, w: 6 }).show(at("A", "HTTP") + 0.5 + i * 0.1, 0.3); });
+      M.fit(A, { y: 450, h: 850, maxScale: 1.9 });
+      // ============ B: question and one-line answer ============
+      pillC(B, "INTERVIEW QUESTION", 200, 0.1, { size: 40, h: 66, col: ACC });
+      lcard(B, 70, 300, 940, 170, "MCP SERVER: HOW TO RUN?", CYAN, at("B", "MCP"), { icon: "chat", size: 44 });
+      const bF1 = el(B, `left:70px;top:560px;width:940px;height:300px;border-radius:26px;border:3.5px solid ${ca(GOOD, 0.9)};background:${ca(GOOD, 0.07)}`); show(bF1, at("B", "ek"));
+      M.icon(B, "user", 120, 640, 120, GOOD).show(at("B", "ek"));
+      tag(B, "1 APP", 90, 780, 200, at("B", "ek"), GOOD, 38);
+      M.arrow(B, { from: [270, 700], to: [440, 700], color: GOOD, w: 9 }).show(at("B", "machine"), 0.3);
+      M.box(B, { x: 450, y: 620, w: 220, h: 160, label: "SERVER", icon: "gear", color: VIOLET, size: 34 }).show(at("B", "machine"));
+      M.box(B, { x: 740, y: 610, w: 240, h: 180, label: "STDIO", color: GOOD, size: 56 }).show(at("B", "stdio", 2));
+      const bF2 = el(B, `left:70px;top:950px;width:940px;height:360px;border-radius:26px;border:3.5px solid ${ca(VIOLET, 0.9)};background:${ca(VIOLET, 0.07)}`); show(bF2, at("B", "kai"));
+      [0, 1, 2].forEach((i) => { M.icon(B, "user", 110 + i * 120, 1010 + (i === 1 ? 0 : 0), 90, CYAN).show(at("B", "kai") + i * 0.1);
+        M.arrow(B, { from: [155 + i * 120, 1110], to: [470, 1190], color: CYAN, w: 6 }).show(at("B", "apps"), 0.3); });
+      tag(B, "MANY", 90, 1230, 400, at("B", "kai"), CYAN, 38);
+      M.box(B, { x: 470, y: 1100, w: 220, h: 160, label: "SERVER", icon: "cloud", color: VIOLET, size: 34 }).show(at("B", "apps"));
+      M.box(B, { x: 740, y: 1090, w: 240, h: 180, label: "HTTP", color: VIOLET, size: 56 }).show(at("B", "HTTP", 2));
+      tag(B, "3 THINGS", 0, 1370, 1080, at("B", "teen"), ACC, 90);
+      M.fit(B, { y: 200, h: 1100, maxScale: 1.9 });
+      // ============ C: define, then example ============
+      const cApp = srv(C, 240, 260, 600, 230, "AI APP", CYAN, 0.1, { icon: "chat", size: 56 });
+      const cMc = tag(C, "MCP", 60, 580, 420, at("C", "MCP"), ACC, 64); cMc.style.textAlign = "right";
+      const cAr = M.arrow(C, { from: [540, 500], to: [540, 770], color: ACC, w: 12 }); cAr.show(at("C", "jisse"), 0.3);
+      const cTr = tag(C, "TRANSPORT = PATH", 580, 600, 440, at("C", "transport"), ACC, 40); cTr.style.textAlign = "left";
+      const cSv = srv(C, 240, 780, 600, 230, "MCP SERVER", VIOLET, at("C", "Tool"), { icon: "gear", size: 52 });
+      const cIc = ["doc", "db", "search"].map((k, i) => { const h = M.icon(C, k, 270 + i * 190, 1080, 120, GOOD); h.show(at("C", "Tool") + 0.3 + i * 0.12); return h; });
+      const cTl = tag(C, "TOOLS", 0, 1230, 1080, at("C", "Tool") + 0.3, GOOD, 48);
+      const cEnd = P("C", 2) - 0.1;
+      cApp.hide(cEnd); cSv.hide(cEnd); cAr.hide(cEnd); [cMc, cTr, cTl].forEach((d) => gone(d, cEnd)); cIc.forEach((h) => h.hide(cEnd));
+      pillC(C, "EXAMPLE", 200, P("C", 2) - 0.1, { size: 40, h: 64, col: ACC });
+      srv(C, 90, 300, 420, 220, "EDITOR", CYAN, P("C", 2), { icon: "code", size: 48 });
+      srv(C, 600, 300, 390, 220, "MY FILES", GOOD, at("C", "files"), { icon: "doc", size: 48 });
+      M.arrow(C, { from: [515, 410], to: [595, 410], color: GOOD, w: 10 }).show(at("C", "files"), 0.3);
+      tag(C, "HTTP = EXTRA", 0, 600, 1080, at("C", "HTTP", 2), HOT, 68);
+      lcard(C, 90, 720, 900, 150, "HOST THE SERVER", HOT, at("C", "host"), { icon: "cloud", size: 46 });
+      lcard(C, 90, 900, 900, 150, "GIVE AN ADDRESS", HOT, at("C", "address"), { icon: "globe", size: 46 });
+      lcard(C, 90, 1080, 900, 150, "BUILD A LOGIN", HOT, at("C", "login"), { icon: "lock", size: 46 });
+      tag(C, "1 USER = 3 JOBS", 0, 1290, 1080, at("C", "1"), HOT, 76);
+      M.fit(C, { y: 200, h: 1100, maxScale: 1.9 });
+      // ============ D: stdio ============
+      const dFr = el(D, `left:60px;top:300px;width:960px;height:880px;border-radius:30px;border:4px solid ${ca(CYAN, 0.9)};background:${ca(CYAN, 0.06)}`); show(dFr, 0.1);
+      tag(D, "ONE MACHINE", 60, 225, 960, 0.1, CYAN, 46);
+      srv(D, 280, 350, 520, 190, "APP", CYAN, 0.2, { icon: "chat", size: 56 });
+      srv(D, 280, 760, 520, 190, "SERVER", VIOLET, at("D", "subprocess"), { icon: "gear", size: 56 });
+      tag(D, "SUBPROCESS", 0, 980, 1080, at("D", "subprocess") + 0.2, VIOLET, 44);
+      M.arrow(D, { from: [400, 545], to: [400, 755], color: GOOD, w: 10 }).show(at("D", "stdin"), 0.3);
+      tag(D, "STDIN", 90, 620, 280, at("D", "stdin"), GOOD, 46);
+      M.arrow(D, { from: [680, 755], to: [680, 545], color: ACC, w: 10 }).show(at("D", "stdout"), 0.3);
+      tag(D, "STDOUT", 710, 620, 280, at("D", "stdout"), ACC, 46);
+      M.icon(D, "lock", 330, 1230, 110, GOOD).show(at("D", "sirf"));
+      tag(D, "ONE CLIENT ONLY", 460, 1255, 560, at("D", "sirf"), GOOD, 44).style.textAlign = "left";
+      tag(D, "NO HOSTING · NO LOGIN", 0, 1390, 1080, at("D", "hosting"), GOOD, 50);
+      M.fit(D, { y: 200, h: 1150, maxScale: 1.9 });
+
+      // ============ E: HTTP ============
+      pillC(E, "EXAMPLE", 200, 0.1, { size: 40, h: 64, col: ACC });
+      srv(E, 240, 290, 600, 210, "TICKETS SERVER", VIOLET, 0.15, { icon: "cloud", size: 44 });
+      const eDoor = el(E, `left:90px;top:540px;width:900px;height:100px;border-radius:16px;border:3px solid ${ca(ACC, 0.9)};background:${ca(ACC, 0.14)};display:flex;align-items:center;justify-content:center;font:800 48px ${COD};color:${ACC}`, "/mcp · ONE ADDRESS");
+      show(eDoor, at("E", "endpoint"));
+      const eCl = [], eAr = [];
+      [0, 1, 2].forEach((i) => { const x = 60 + i * 340;
+        eCl.push(srv(E, x, 800, 300, 170, "CLIENT", CYAN, at("E", "clients") + i * 0.12, { icon: "user", size: 44 }));
+        const a = M.arrow(E, { from: [x + 150, 795], to: [x + 150, 645], color: CYAN, w: 8 }); a.show(at("E", "clients") + 0.2 + i * 0.12, 0.3); eAr.push(a); });
+      const e50 = at("E", "50");
+      eCl.forEach((h) => h.hide(e50 - 0.1)); eAr.forEach((h) => h.hide(e50 - 0.1));
+      for (let r = 0; r < 5; r++) for (let c = 0; c < 10; c++) { const n = r * 10 + c;
+        const d = el(E, `left:${105 + c * 87}px;top:${790 + r * 72}px;width:56px;height:56px;border-radius:50%;border:3px solid ${ca(CYAN, 0.9)};background:${ca(CYAN, 0.22)}`); show(d, e50 + n * 0.012, { opacity: 0, scale: 0.7 }, 0.3); }
+      M.arrow(E, { from: [540, 780], to: [540, 645], color: CYAN, w: 9 }).show(e50 + 0.3, 0.3);
+      tag(E, "50 AGENTS", 0, 1175, 1080, e50, CYAN, 76);
+      tag(E, "ONE PLACE FOR ALL", 0, 1285, 1080, at("E", "jagah"), GOOD, 52);
+      M.fit(E, { y: 200, h: 1150, maxScale: 1.9 });
+
+      // ============ F: guards at the door ============
+      const fAt = M.box(F, { x: 190, y: 230, w: 700, h: 210, label: "OTHER WEBSITE", icon: "globe", color: HOT, size: 48 }); fAt.show(P("F", 0) + 0.1);
+      const fAr = M.arrow(F, { from: [540, 450], to: [540, 1090], color: HOT, w: 14 }); fAr.show(at("F", "darvaza"), 0.4);
+      const fSv = M.box(F, { x: 190, y: 1100, w: 700, h: 230, label: "YOUR TOOLS", sub: "HTTP SERVER /mcp", icon: "gear", color: VIOLET, size: 52, subsize: 38 }); fSv.show(P("F", 0) + 0.3);
+      const fg = [["ORIGIN CHECK", "WHICH WEBSITE?", "globe", GOOD, "Origin", 490], ["LOCALHOST ONLY", "NOT OUTSIDE", "lock", CYAN, "localhost", 690], ["AUTHENTICATION", "WHO ARE YOU?", "user", ACC, "authentication", 890]].map(([l, sb, ic, col, w, y]) => {
+        const b = M.box(F, { x: 90, y, w: 900, h: 180, label: l, sub: sb, icon: ic, color: col, size: 46, subsize: 34 }); b.show(at("F", w)); return b; });
+      const fSt = stamp(F, "NO GUARD = RUNS TOOLS", 540, 720, HOT, at("F", "varna"), 52);
+      fg.forEach((b) => b.hide(at("F", "varna")));
+      M.fit(F, { y: 200, h: 1100, maxScale: 1.9 });
+      // ============ G: interview line ============
+      pillC(G, "SAY THIS", 200, 0.05, { size: 42, h: 66, col: ACC });
+      M.box(G, { x: 90, y: 310, w: 900, h: 300, label: "STDIO", sub: "SUBPROCESS · PRIVATE", icon: "lock", color: CYAN, size: 64, subsize: 44 }).show(at("G", "subprocess"));
+      M.box(G, { x: 90, y: 680, w: 900, h: 300, label: "HTTP", sub: "SHARED · REMOTE", icon: "cloud", color: VIOLET, size: 64, subsize: 44 }).show(at("G", "shared"));
+      [["ORIGIN", "validate", "globe", GOOD], ["LOCALHOST", "bind", "lock", CYAN], ["AUTH", "add", "user", ACC]].forEach(([l, w, ic, col], i) => {
+        M.box(G, { x: 60 + i * 330, y: 1060, w: 300, h: 240, label: l, icon: ic, color: col, size: i === 1 ? 34 : 42 }).show(at("G", w)); });
+      M.fit(G, { y: 200, h: 1100, maxScale: 1.9 });
+      // ============ H: close ============
+      tag(H, "STDIO OR HTTP?", 0, 260, 1080, 0.05, ACC, 84);
+      const hC = glass(H, 80, 500, 920, 520, CYAN); show(hC, P("H", 0) + 0.3, { opacity: 0, y: 20 });
+      el(hC, `left:36px;top:26px;font:800 46px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      M.pill(hC, "STDIO", at("H", "stdio"), { x: 170, y: 140, kind: "out", size: 68 }); M.pill(hC, "HTTP", at("H", "HTTP"), { x: 520, y: 140, kind: "out", size: 68 });
+      show(el(hC, `left:40px;right:40px;bottom:44px;height:96px;border-radius:48px;border:2px solid rgba(150,175,215,.5);font:500 40px ${COD};color:#B4C0D8;display:flex;align-items:center;padding:0 36px`, "Add a comment..."), P("H", 0) + 0.5, { opacity: 0 });
+      const fbt = el(H, `left:340px;top:1120px;width:400px;height:110px;border-radius:55px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 52px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fbt, at("H", "follow") - 0.5, { opacity: 0 });
+      tl.to(fbt, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("H", "follow")); tl.to(fbt, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("H", "follow") + 0.12);
+      M.fit(H, { y: 200, h: 1100, maxScale: 1.9 });
+
+      ["B","C","D","E","F","G","H"].forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { stdio: "cyan", HTTP: "gold", MCP: "gold", subprocess: "cyan", stdin: "good", stdout: "gold", Origin: "good", localhost: "cyan", authentication: "gold", server: "cyan", endpoint: "gold", login: "hot", host: "hot", address: "hot", follow: "gold", Comment: "gold" } });
+      window.__timelines["main"] = tl;
+
+    </script>
+  </body>
+</html>

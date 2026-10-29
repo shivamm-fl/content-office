@@ -20,3 +20,6 @@ Format:
   - What differs (read from the two `script.txt`): A is the owner's wording, 243 words, hook type `interviewer_asked` ("Interviewer ने पूछा: LLM में Temperature, Top-K और Top-P का difference बताओ"), no numbers spoken, three parts (Top-K, Top-P, Temperature), a recap, a check question and "Comment करो!". B is the team's, 390 words, hook type `relatable_stake` ("Chatbot ने बोला: आज मौसम बहुत नमकीन है।"), then the interview question and the answer in the first lines, three numbered steps with real numbers from a run (the odd word 0.6 % to 1.9 % at temperature 1.5, top-p 0.9 keeping 5 words, then 6), a part on how the three interact, a say-it-in-the-interview recap, a comment question and a follow line.
 
 ## Closed
+
+## 2026-10-29: q124 company_specific hook (trial)
+- Hypothesis: naming Anthropic as MCP's creator in the first line ("Anthropic ने MCP बनाया। Server stdio से चलाओ या HTTP से?") holds viewers better than the plain stake hooks (0 of the last six interview reels used company_specific). Look at skip rate and avg watch after 72 hours; a few hundred views is promising or weak, never proof.

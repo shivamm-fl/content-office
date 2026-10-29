@@ -1487,37 +1487,35 @@
       "status": "planned",
       "unit": "F7",
       "title": "Interview: MCP server stdio se chalta hai ya HTTP se? Kab kaun sa?",
-      "one_idea": "The transport decides where an MCP server runs and who can reach it. stdio: the client starts the server as a subprocess on the same machine and talks over stdin/stdout, so it is private to that one client and has nothing to host. Streamable HTTP: the server runs on its own, handles many clients over one endpoint, so use it for a shared or remote server, and then you must validate the Origin header, bind to localhost when local, and add authentication.",
+      "one_idea": "The transport decides where an MCP server runs and who can reach it. stdio: the client starts the server as a subprocess on the same machine and talks over stdin/stdout. Streamable HTTP: the server runs on its own, handles many clients over one endpoint; then validate Origin, bind to localhost when local, add authentication.",
       "hook_type": "company_specific",
       "spoken_hook": "Anthropic ने MCP बनाया। Server stdio से चलाओ या HTTP से?",
       "company": "Anthropic",
       "company_source": "https://www.anthropic.com/news/model-context-protocol",
       "hook_formula": "company_specific",
-      "hook_source": "strategist, 2026-10-29 (least used of the last six: 0 of 6; the last six were 3 relatable_stake and 3 interviewer_asked)",
-      "trap": "Not knowing that the transport decides where the server can run and who can reach it; picking HTTP for a private local tool, or stdio for something a whole team must share.",
-      "visual_idea": "Two panels. Left: a laptop with an app box that spawns a small server box inside it with a short two-way pipe (stdin / stdout), a lock icon: one client only. Right: a server on a cloud box with one /mcp door and three different clients on three machines connecting by HTTP, and a guard at the door (auth, Origin check). A fork at the end with two questions: same machine and just me, or shared and remote.",
-      "everyday_anchor": "Your own cupboard at home versus a shop counter that anyone in the queue can reach: the cupboard needs no door guard, the counter does.",
-      "example": "Label example, no numbers: a local file-reading server for your own editor uses stdio; a company's shared tickets server used by many agents uses Streamable HTTP with authentication.",
+      "hook_source": "strategist, 2026-10-29",
+      "length_target_s": 115,
+      "cover_headline": "MCP: stdio or HTTP?",
+      "thumb_text": "stdio or HTTP",
       "sources": [
         "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports",
         "https://www.anthropic.com/news/model-context-protocol"
       ],
-      "facts_to_verify": [
-        "MCP spec 2025-06-18: two standard transports, stdio and Streamable HTTP; clients SHOULD support stdio whenever possible (fetched 2026-10-29)",
-        "stdio: the client launches the server as a subprocess, server reads stdin and writes stdout (fetched 2026-10-29)",
-        "Streamable HTTP: server is an independent process handling multiple client connections over one MCP endpoint (POST and GET); servers MUST validate Origin, SHOULD bind to localhost when local, SHOULD authenticate (fetched 2026-10-29)",
-        "Anthropic announcement 25 Nov 2024: MCP was created at Anthropic; local MCP server support in Claude Desktop (fetched 2026-10-29)",
-        "The spec is a dated version (2025-06-18); say 'the spec' and do not claim it is the latest"
-      ],
-      "length_target_s": 105,
-      "cover_headline": "MCP: stdio or HTTP?",
-      "thumb_text": "stdio or HTTP",
       "keywords": [
         "mcp stdio vs http",
         "mcp transport",
         "streamable http mcp",
         "ai engineer interview"
-      ]
+      ],
+      "example": "A local file-reading server for your own editor uses stdio; a company's shared tickets server used by 50 agents uses Streamable HTTP with authentication (both examples, not claims).",
+      "facts_to_verify": [
+        "stdio: client launches the server as a subprocess, stdin/stdout (spec 2025-06-18)",
+        "Streamable HTTP: independent process, multiple clients, single MCP endpoint",
+        "Servers MUST validate Origin, SHOULD bind to localhost, SHOULD implement authentication",
+        "Anthropic introduced MCP (2024-11-25)"
+      ],
+      "visual_idea": "Left: a laptop with an app box that spawns a small server box with a two-way pipe (stdin/stdout). Right: a server box with one /mcp door, three clients connecting by HTTP, a guard at the door with Origin check, localhost and auth.",
+      "everyday_anchor": "none: protocol topic with no everyday moment; the editor reading your own files is the stand-in example"
     },
     {
       "id": "q125",
