@@ -1,0 +1,12 @@
+A neural network in one picture: weights and layers
+
+Model file mein sirf numbers hote hain, to AI kahan hai? Is video mein ek chhota neural network dekhte hain: weight, bias aur ReLU ke saath, asli numbers ke saath, aur ye ki training sirf in numbers ko badalti hai.
+
+Is video mein: what is a neural network, weights and layers, what is a weight in AI, ReLU activation, AI engineer roadmap.
+
+Example ke weights hamare haath se chune hue toy numbers hain, trained model nahi. Weights aur bias ka matlab, hidden layers aur ReLU (negative ko 0 karna, baaki ko waisa hi rakhna) Google ke Machine Learning Crash Course se hai. "Bina ReLU ke layers ka stack ek seedha calculation rehta hai" bhi wahin se hai. Model file ka tensors ka format Hugging Face safetensors docs se hai; "file mein rules ya text nahi, sirf numbers" is example network ke liye hamari samajhaane ki baat hai.
+
+Sources:
+https://developers.google.com/machine-learning/crash-course/neural-networks/nodes-hidden-layers
+https://developers.google.com/machine-learning/crash-course/neural-networks/activation-functions
+https://huggingface.co/docs/safetensors/index

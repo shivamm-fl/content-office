@@ -1116,9 +1116,12 @@
       "id": "a011",
       "track": "series",
       "title": "A neural network in one picture: weights and layers",
-      "status": "planned",
-      "planned": "2026-10-29",
-      "topic": "A neural network is layers of neurons; each multiplies inputs by weights, adds a bias, applies ReLU; the model file is those weights."
+      "kind": "concept",
+      "topic": "Neurons multiply by weights, add bias, ReLU; model file = list of 9 weights and biases; training changes them.",
+      "hook_formula": "plain_question on a frustration the viewer knows",
+      "hook_type": "direct_question",
+      "status": "built",
+      "date": "2026-10-29"
     },
     {
       "id": "q124",

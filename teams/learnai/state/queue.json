@@ -1450,25 +1450,17 @@
       "format": "structure",
       "status": "planned",
       "title": "A neural network in one picture: weights and layers",
-      "one_idea": "A neural network is numbers arranged in layers: each neuron multiplies its inputs by weights, adds a bias and passes the result through a simple cut-off (ReLU); the next layer does the same on those results. The 'model' you download is the list of those weights and biases, and training only changes them.",
+      "one_idea": "A neural network is numbers arranged in layers: each neuron multiplies its inputs by weights, adds a bias and passes the result through ReLU; the model file is the list of weights and biases, and training only changes them.",
       "hook_type": "direct_question",
       "spoken_hook": "Model download किया, फाइल में बस numbers! AI कहाँ है?",
       "hook_formula": "plain_question on a frustration the viewer knows",
-      "hook_source": "strategist, 2026-10-29; owner learnings 2026-10-27 and 2026-10-28",
-      "trap": "Thinking the model file holds rules, text or a small brain, when it is only weights and biases that a fixed recipe multiplies and adds.",
-      "visual_idea": "A folder with a model file opens to a wall of numbers. One neuron is drawn: two inputs, two weight tags, a bias, a ReLU gate. Then two neurons in layer 1 feeding one output neuron; the real numbers of the run flow through the arrows. Last: the same picture with a different input (3,2) and a different answer, weights unchanged. No analogy.",
-      "example": "EXAMPLE (hand-set toy weights, not a trained model; real run in state/runs/a011_network_run_output.txt): inputs 2 and 3; hidden1 = 1*2 + (-1)*3 + 0 = -1, ReLU gives 0; hidden2 = 2*2 + 1*3 + (-4) = 3, ReLU gives 3; output = 1*0 + 1*3 + 0 = 3. The network has 9 parameters (weights and biases). Input (3,2) gives hidden 1 and 4 and output 5 with the same weights.",
+      "hook_source": "strategist, 2026-10-29",
       "sources": [
         "https://developers.google.com/machine-learning/crash-course/neural-networks/nodes-hidden-layers",
         "https://developers.google.com/machine-learning/crash-course/neural-networks/activation-functions",
         "https://huggingface.co/docs/safetensors/index"
       ],
-      "facts_to_verify": [
-        "Google ML Crash Course: layers between input and output are hidden layers; hidden-layer nodes are neurons; each neuron value is computed from its inputs, weights and bias; weights and biases are the parameters; training adjusts them (fetched 2026-10-29)",
-        "Google ML Crash Course: ReLU returns 0 for negative input, otherwise the input (max(0,x)); without a nonlinear activation, stacked layers stay linear (fetched 2026-10-29)",
-        "Hugging Face safetensors: a format for storing tensors (arrays of numbers), used for model weight files (fetched 2026-10-29; the page says tensors, not 'weights', so say 'model file of numbers' and let the Google page define weights)"
-      ],
-      "length_target_s": 110,
+      "length_target_s": 100,
       "cover_headline": "A neural network in one picture",
       "thumb_text": "Weights + layers",
       "keywords": [
@@ -1477,8 +1469,7 @@
         "what is a weight in ai",
         "relu activation",
         "ai engineer roadmap"
-      ],
-      "everyday_anchor": "none: the opening is the viewer's own scene of opening a downloaded model and finding only numbers; no analogy is forced (learning 2026-10-28)"
+      ]
     },
     {
       "id": "q124",

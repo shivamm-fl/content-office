@@ -1,0 +1,17 @@
+Day 11/150: model file mein bas numbers hain, to AI kahan hai?
+
+Wahi numbers AI hain. Ek neuron har input ko weight se multiply karta hai, sab jodta hai, bias jodta hai, aur ReLU lagata hai: negative ho to zero, warna jaisa hai waisa.
+
+Example (hand-set toy weights, trained model nahi):
+1. Input 2 aur 3.
+2. Neuron 1: 1x2 + (-1)x3 + 0 = -1, ReLU ke baad 0.
+3. Neuron 2: 2x2 + 1x3 - 4 = 3, ReLU ke baad 3.
+4. Output neuron: 1x0 + 1x3 = 3.
+
+Is chhote network mein 9 parameters hain: 6 weights aur 3 biases. Model file bas aise hi numbers ki list hoti hai. Input badlo (3, 2) to jawab 5 aata hai, weights wahi. Training sirf in numbers ko badalti hai.
+
+Ab tum batao: input 1 aur 1 ho, to jawab kya aayega? Comment mein likho. Jawab: 0.
+
+Roz ek AI idea ke liye follow karo.
+
+#AI #NeuralNetwork #150DaysOfAI

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>A neural network in one picture: weights and layers</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="91.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="91.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="91.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="91.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I"], tag: "150 DAYS OF AI · DAY 11" });
+      Viz.install(M);
+      const { tl, S } = M; const { ACC, CYAN, HOT, GOOD, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#101A2E", GREY = "#8FA3C7";
+
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur, op) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: op == null ? 1 : op, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const dimTo = (d, t, op) => { tl.to(d, { opacity: op, duration: 0.3, immediateRender: false }, t); return d; };
+      const pillAt = (host, text, x, y, t, col, size, dash) => { const sz = size || 38, h = Math.round(sz * 1.7);
+        return show(el(host, `left:${x}px;top:${y}px;height:${h}px;display:flex;align-items:center;padding:0 28px;border-radius:999px;border:2px ${dash ? "dashed" : "solid"} ${col};background:${ca(col, 0.12)};font:700 ${sz}px ${COD};letter-spacing:.08em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: -10 }); };
+      const head = (sc, host, text) => { pillAt(host, text, 70, 215, S[sc] + 0.05, CYAN, 40); pillAt(host, "EXAMPLE", 790, 222, S[sc] + 0.05, GREY, 36); };
+      const line = (host, x1, y1, x2, y2, col, w, t, dash, op) => { const pad = 8, lx = Math.min(x1, x2) - pad, ly = Math.min(y1, y2) - pad, W_ = Math.abs(x2 - x1) + 2 * pad, H_ = Math.abs(y2 - y1) + 2 * pad;
+        const d = el(host, `left:${lx}px;top:${ly}px;width:${W_}px;height:${H_}px`);
+        d.innerHTML = `<svg width="${W_}" height="${H_}" style="overflow:visible"><line x1="${x1 - lx}" y1="${y1 - ly}" x2="${x2 - lx}" y2="${y2 - ly}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" ${dash ? 'stroke-dasharray="14 12"' : ""}/></svg>`;
+        return t == null ? d : show(d, t, { opacity: 0 }, 0.4, op); };
+      const circ = (host, cx, cy, r, col, fill, bw) => el(host, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;box-sizing:border-box;border-radius:50%;border:${bw || 5}px solid ${col};background:${ca(col, fill == null ? 0.12 : fill)}`);
+      const val = (host, cx, cy, text, col, t, size, op) => show(el(host, `left:${cx - 80}px;top:${cy - 40}px;width:160px;height:80px;display:flex;align-items:center;justify-content:center;font:800 ${size || 64}px ${COD};color:${col}`, text), t, { opacity: 0, scale: 0.8 }, 0.3, op);
+      const tag = (host, cx, cy, text, col, dash, t, op) => show(el(host, `left:${cx - 62}px;top:${cy - 30}px;width:124px;height:60px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:14px;border:3px ${dash ? "dashed" : "solid"} ${col};background:${PANEL};font:800 38px ${COD};color:${col};white-space:nowrap`, text), t, { opacity: 0, scale: 0.9 }, 0.35, op);
+      const travel = (host, x1, y1, x2, y2, t, dur, txt, col) => { const d = el(host, `left:0;top:0;width:76px;height:76px;box-sizing:border-box;border-radius:50%;background:${col || "#E8EEF9"};display:flex;align-items:center;justify-content:center;font:800 36px ${COD};color:#0B1220`, txt);
+        tl.set(d, { opacity: 0, x: x1 - 38, y: y1 - 38 }, 0); tl.to(d, { opacity: 1, duration: 0.12, immediateRender: false }, t);
+        tl.to(d, { x: x2 - 38, y: y2 - 38, duration: dur, ease: "power1.inOut", immediateRender: false }, t); tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      const dial = (host, cx, cy, r, col, a0) => { const face = circ(host, cx, cy, r, col, 0.1, 6); const arm = el(host, `left:${cx - 7}px;top:${cy - r + 14}px;width:14px;height:${r - 14}px;border-radius:7px;background:${ACC}`); const hub = circ(host, cx, cy, 14, ACC, 1, 2);
+        tl.set(arm, { rotation: a0, transformOrigin: `7px ${r - 14}px` }, 0); return { face, arm, hub, all: [face, arm, hub] }; };
+      const calc = (host, y, t0, parts, res) => { const g = show(glass(host, 90, y, 900, 250, CYAN), t0, { opacity: 0 }, 0.3);
+        const row = el(host, `left:130px;top:${y + 36}px;height:80px;display:flex;gap:24px;align-items:center;font:700 58px ${COD};color:${TEXT};white-space:nowrap`);
+        parts.forEach(([h, t]) => { const s = document.createElement("span"); s.innerHTML = h; row.appendChild(s); show(s, t, { opacity: 0, y: 12 }, 0.3); });
+        const r2 = el(host, `left:130px;top:${y + 140}px;height:80px;display:flex;align-items:center;font:800 70px ${COD};color:${res[2]};white-space:nowrap`, res[0]); show(r2, res[1], { opacity: 0, y: 12 }, 0.35); return { g, row, r2 }; };
+
+      // ============ the network (same drawing in every scene) ============
+      const R = 80, IN = [[150, 480], [150, 820]], HID = [[540, 480], [540, 820]], OUT = [930, 650];
+      const EDGES = [{ a: IN[0], b: HID[0], w: "×1" }, { a: IN[1], b: HID[0], w: "×−1" }, { a: IN[0], b: HID[1], w: "×2" }, { a: IN[1], b: HID[1], w: "×1" }, { a: HID[0], b: OUT, w: "×1" }, { a: HID[1], b: OUT, w: "×1" }];
+      const BIAS = [{ p: HID[0], b: "+0" }, { p: HID[1], b: "−4" }, { p: OUT, b: "+0" }];
+      const bnd = (a, b, r) => { const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy); return [a[0] + dx / L * r, a[1] + dy / L * r]; };
+      const lerp = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+      const EDGE = "rgba(232,238,249,0.45)";
+      function net(host, o) {
+        const r = { edges: [], wp: [], bp: [], nodes: [] }; const dn = o.dimNodes || [], dE = o.dimE || [], dW = o.dimW || [], dB = o.dimB || [];
+        EDGES.forEach((e, i) => { const p = bnd(e.a, e.b, R), q = bnd(e.b, e.a, R); r.edges.push(line(host, p[0], p[1], q[0], q[1], EDGE, 5, o.tE, false, dE.includes(i) ? 0.25 : 1)); });
+        [IN[0], IN[1], HID[0], HID[1], OUT].forEach((c, i) => { const op = dn.includes(i) ? 0.35 : 1; r.nodes.push(show(circ(host, c[0], c[1], R, i < 2 ? GREY : CYAN, i < 2 ? 0.08 : 0.14), o.tN, { opacity: 0, scale: 0.9 }, 0.4, op)); });
+        EDGES.forEach((e, i) => { if (o.w[i] == null) { r.wp.push(null); return; } const m = lerp(e.a, e.b, 0.62); r.wp.push(tag(host, m[0], m[1], e.w, ACC, false, o.w[i], dW.includes(i) ? 0.35 : 1)); });
+        BIAS.forEach((b, i) => { if (o.b[i] == null) { r.bp.push(null); return; } r.bp.push(tag(host, b.p[0], b.p[1] + R + 42, b.b, ACC, true, o.b[i], dB.includes(i) ? 0.35 : 1)); });
+        r.all = [].concat(r.edges, r.nodes, r.wp.filter(Boolean), r.bp.filter(Boolean)); return r; }
+      const ringC = (host, c, col, t) => show(circ(host, c[0], c[1], R + 18, col, 0, 5), t, { opacity: 0, scale: 1.08 }, 0.3);
+      const NEW = 0.05;
+
+      // ============ A: hook: a model file is only numbers ============
+      // diagram: A
+      M.hook(["Model download kiya,", "file mein bas numbers!", "AI kahan hai?"], { size: 74, top: 215 });
+      const aCard = show(glass(A, 110, 530, 860, 460, CYAN, 28), 0.05, { opacity: 0 });
+      show(el(A, `left:150px;top:555px;font:700 40px ${COD};color:${TEXT};white-space:nowrap`, "model.safetensors"), 0.1, { opacity: 0 });
+      const WALL = ["0.31", "−1.20", "0.07", "2.45", "−0.88", "0.52", "1.90", "−0.04", "0.76", "−2.10", "0.13", "1.07", "−0.63", "0.98", "−1.45", "0.29", "1.62", "−0.37", "0.84", "−0.19"];
+      WALL.forEach((n, i) => show(el(A, `left:${170 + (i % 4) * 200}px;top:${635 + Math.floor(i / 4) * 66}px;width:200px;text-align:center;font:600 44px ${COD};color:${n[0] === "−" ? "#FF8A9C" : TEXT};white-space:nowrap`, n), 0.15 + i * 0.045, { opacity: 0, y: 8 }, 0.3));
+      show(el(A, `left:102px;top:522px;width:876px;height:476px;box-sizing:border-box;border-radius:34px;border:5px solid ${ACC}`), at("A", "yahi"), { opacity: 0, scale: 1.03 }, 0.35);
+      pillAt(A, "THE MODEL", 670, 546, at("A", "numbers", 1), ACC, 34);
+      pillAt(A, "EXAMPLE", 740, 1010, 0.2, GREY, 36);
+      const cellRing = show(el(A, `left:176px;top:836px;width:188px;height:62px;box-sizing:border-box;border-radius:14px;border:4px solid ${CYAN}`), at("A", "dial"), { opacity: 0, scale: 1.05 }, 0.3);
+      line(A, 270, 900, 290, 1062, CYAN, 4, at("A", "dial"), true);
+      const dl = dial(A, 290, 1170, 100, CYAN, -45); dl.all.forEach((d) => show(d, at("A", "dial") + 0.1, { opacity: 0 }, 0.4));
+      pillAt(A, "WEIGHT", 470, 1040, at("A", "weight"), ACC, 44);
+      pillAt(A, "MORE", 470, 1130, at("A", "badhana"), GOOD, 40);
+      pillAt(A, "LESS", 470, 1215, at("A", "ghatana"), HOT, 40);
+      tl.to(dl.arm, { rotation: 55, duration: 0.5, ease: "power3.out", immediateRender: false }, at("A", "badhana"));
+      tl.to(dl.arm, { rotation: -75, duration: 0.5, ease: "power3.out", immediateRender: false }, at("A", "ghatana"));
+
+      // ============ B: the tiny network ============
+      // diagram: B
+      head("B", B, "TINY NETWORK");
+      const nb = net(B, { tN: S.B + 0.05, tE: S.B + 0.3, w: [], b: [] });
+      val(B, IN[0][0], IN[0][1], "2", TEXT, at("B", "2")); val(B, IN[1][0], IN[1][1], "3", TEXT, at("B", "3"));
+      pillAt(B, "INPUT", 70, 322, at("B", "Input"), GREY, 34); pillAt(B, "OUTPUT", 760, 322, at("B", "Neuron"), CYAN, 34);
+      const bLeg = [["× WEIGHT", 90, at("B", "multiply"), ACC], ["+ ADD", 410, at("B", "jodta", 0), CYAN], ["+ BIAS", 690, at("B", "bias"), ACC]];
+      bLeg.forEach(([tx, x, t, col]) => pillAt(B, tx, x, 1080, t, col, 44));
+      pillAt(B, "FIXED NUMBER", 330, 1190, at("B", "fixed"), ACC, 38, true);
+
+      // ============ C: neuron 1 ============
+      // diagram: C
+      head("C", C, "NEURON 1");
+      const nc = net(C, { tN: NEW, tE: NEW, w: [at("C", "1", 0), at("C", "minus", 0), null, null, null, null], b: [at("C", "zero"), null, null], dimE: [2, 3, 4, 5], dimNodes: [3, 4] });
+      val(C, IN[0][0], IN[0][1], "2", TEXT, NEW); val(C, IN[1][0], IN[1][1], "3", TEXT, NEW);
+      ringC(C, HID[0], ACC, at("C", "neuron"));
+      { const p = bnd(IN[0], HID[0], R), q = bnd(HID[0], IN[0], R), p2 = bnd(IN[1], HID[0], R), q2 = bnd(HID[0], IN[1], R);
+        travel(C, p[0], p[1], q[0], q[1], at("C", "1", 2), 0.7, "2"); travel(C, p2[0], p2[1], q2[0], q2[1], at("C", "minus", 1), 0.7, "−3"); }
+      val(C, HID[0][0], HID[0][1], "−1", HOT, at("C", "minus", 2));
+      calc(C, 1040, at("C", "1", 2) - 0.1, [["1×2", at("C", "1", 2)], ["+ (−1)×3", at("C", "plus")], ["+ 0", at("C", "plus") + 0.9]], ["= −1", at("C", "yaani"), HOT]);
+
+      // ============ D: ReLU ============
+      // diagram: D
+      head("D", D, "RELU");
+      show(glass(D, 90, 330, 900, 660, CYAN, 28), S.D + 0.05, { opacity: 0 });
+      line(D, 200, 740, 880, 740, GREY, 4, S.D + 0.1); line(D, 540, 420, 540, 960, GREY, 4, S.D + 0.1);
+      line(D, 340, 940, 840, 440, "rgba(232,238,249,0.3)", 4, S.D + 0.2, true);
+      show(el(D, `left:840px;top:690px;font:700 36px ${COD};color:${GREY}`, "IN"), S.D + 0.2, { opacity: 0 }); show(el(D, `left:560px;top:390px;font:700 36px ${COD};color:${GREY}`, "OUT"), S.D + 0.2, { opacity: 0 });
+      line(D, 240, 740, 540, 740, HOT, 12, at("D", "negative"));
+      pillAt(D, "→ 0", 250, 650, at("D", "zero", 0), HOT, 40);
+      line(D, 540, 740, 840, 440, GOOD, 12, at("D", "varna"));
+      pillAt(D, "SAME", 660, 775, at("D", "vaisa"), GOOD, 40);
+      const dDot = el(D, `left:0;top:0;width:52px;height:52px;border-radius:50%;background:${ACC}`);
+      tl.set(dDot, { opacity: 0, x: 440 - 26, y: 840 - 26 }, 0); tl.to(dDot, { opacity: 1, duration: 0.3, immediateRender: false }, at("D", "minus"));
+      tl.to(dDot, { y: 740 - 26, duration: 0.5, ease: "power2.inOut", immediateRender: false }, at("D", "zero", 1));
+      show(el(D, `left:330px;top:812px;font:800 52px ${COD};color:${ACC}`, "−1"), at("D", "minus"), { opacity: 0 });
+      line(D, 440, 840, 440, 745, ACC, 3, at("D", "zero", 1), true);
+      show(el(D, `left:470px;top:668px;font:800 52px ${COD};color:${ACC}`, "0"), at("D", "bana"), { opacity: 0 });
+      [0, 1, 2].forEach((k) => show(el(D, `left:${90 + k * 320}px;top:1040px;width:260px;height:90px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:20px;border:3px solid ${CYAN};background:${ca(CYAN, 0.12)};font:700 40px ${COD};color:${TEXT}`, "LAYER"), at("D", "layers") + k * 0.2, { opacity: 0, y: 14 }));
+      line(D, 180, 1275, 400, 1175, HOT, 10, at("D", "seedha"));
+      pillAt(D, "STRAIGHT LINE", 450, 1190, at("D", "seedha"), HOT, 40);
+
+      // ============ E: neuron 2 ============
+      // diagram: E
+      head("E", E, "NEURON 2");
+      net(E, { tN: NEW, tE: NEW, w: [NEW, NEW, at("E", "2", 0), at("E", "1", 0), null, null], b: [NEW, at("E", "bias"), null], dimW: [0, 1], dimB: [0], dimE: [0, 1, 4, 5], dimNodes: [2, 4] });
+      val(E, IN[0][0], IN[0][1], "2", TEXT, NEW); val(E, IN[1][0], IN[1][1], "3", TEXT, NEW); val(E, HID[0][0], HID[0][1], "0", GREY, NEW, 64, 0.35);
+      ringC(E, HID[1], ACC, at("E", "neuron"));
+      { const p = bnd(IN[0], HID[1], R), q = bnd(HID[1], IN[0], R), p2 = bnd(IN[1], HID[1], R), q2 = bnd(HID[1], IN[1], R);
+        travel(E, p[0], p[1], q[0], q[1], at("E", "2", 1), 0.7, "4"); travel(E, p2[0], p2[1], q2[0], q2[1], at("E", "1", 1), 0.7, "3"); }
+      val(E, HID[1][0], HID[1][1], "3", GOOD, at("E", "3", 1));
+      calc(E, 1040, at("E", "2", 1) - 0.1, [["2×2", at("E", "2", 1)], ["+ 1×3", at("E", "plus")], ["− 4", at("E", "minus", 1)]], ["= 3", at("E", "yaani"), GOOD]);
+      pillAt(E, "RELU: SAME", 330, 960, at("E", "ReLU"), GOOD, 40);
+
+      // ============ F: layer 1 and the output ============
+      // diagram: F
+      head("F", F, "OUTPUT");
+      net(F, { tN: NEW, tE: NEW, w: [NEW, NEW, NEW, NEW, at("F", "1", 0), at("F", "1", 1)], b: [NEW, NEW, at("F", "jawab")], dimW: [0, 1, 2, 3], dimB: [0, 1], dimE: [0, 1, 2, 3], dimNodes: [0, 1] });
+      val(F, IN[0][0], IN[0][1], "2", GREY, NEW, 64, 0.35); val(F, IN[1][0], IN[1][1], "3", GREY, NEW, 64, 0.35);
+      val(F, HID[0][0], HID[0][1], "0", TEXT, NEW); val(F, HID[1][0], HID[1][1], "3", TEXT, NEW);
+      show(el(F, `left:430px;top:385px;width:220px;height:530px;box-sizing:border-box;border-radius:36px;border:4px dashed ${CYAN}`), at("F", "neurons"), { opacity: 0 }, 0.4);
+      pillAt(F, "LAYER 1", 395, 305, at("F", "layer"), CYAN, 36);
+      travel(F, 620, 505, 860, 600, at("F", "zero"), 0.6, "0"); travel(F, 620, 795, 860, 700, at("F", "times", 1), 0.6, "3");
+      ringC(F, OUT, ACC, at("F", "Output"));
+      val(F, OUT[0], OUT[1], "3", GOOD, at("F", "jawab"), 72);
+      pillAt(F, "ANSWER", 740, 360, at("F", "jawab"), GOOD, 36);
+      calc(F, 1040, at("F", "1", 0) - 0.1, [["1×0", at("F", "1", 0)], ["+ 1×3", at("F", "plus")], ["+ 0", at("F", "plus") + 0.9]], ["= 3", at("F", "jawab"), GOOD]);
+
+      // ============ G: nine numbers, the file is the list ============
+      // diagram: G
+      head("G", G, "PARAMETERS");
+      const ng = net(G, { tN: NEW, tE: NEW, w: [NEW, NEW, NEW, NEW, NEW, NEW], b: [NEW, NEW, NEW] });
+      ng.wp.forEach((w) => tl.to(w, { backgroundColor: ca(ACC, 0.4), duration: 0.3, immediateRender: false }, at("G", "weights")));
+      ng.bp.forEach((b) => tl.to(b, { backgroundColor: ca(ACC, 0.4), duration: 0.3, immediateRender: false }, at("G", "biases")));
+      const g1 = [show(el(G, `left:90px;top:1050px;font:800 190px ${COD};color:${ACC}`, "9"), at("G", "9"), { opacity: 0, scale: 0.8 }),
+        pillAt(G, "6 WEIGHTS", 380, 1040, at("G", "6"), ACC, 40), pillAt(G, "3 BIASES", 380, 1130, at("G", "3"), ACC, 40, true), pillAt(G, "PARAMETERS", 380, 1220, at("G", "parameters"), CYAN, 40)];
+      g1.forEach((d) => gone(d, at("G", "model") - 0.3));
+      ng.all.forEach((d) => gone(d, at("G", "model") - 0.3));
+      show(glass(G, 90, 560, 900, 330, CYAN, 28), at("G", "model") - 0.2, { opacity: 0 }, 0.4);
+      show(el(G, `left:130px;top:590px;font:700 40px ${COD};color:${TEXT};white-space:nowrap`, "model.safetensors"), at("G", "model") - 0.1, { opacity: 0 });
+      ["1", "−1", "2", "1", "1", "1", "0", "−4", "0"].forEach((n, i) => show(el(G, `left:${108 + i * 98}px;top:690px;width:90px;height:110px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:14px;border:3px ${i < 6 ? "solid" : "dashed"} ${ACC};background:${ca(ACC, 0.18)};font:800 46px ${COD};color:${TEXT}`, n), at("G", "file") + i * 0.12, { opacity: 0, y: 14 }, 0.3));
+      pillAt(G, "NO RULES", 140, 960, at("G", "rules"), HOT, 44); pillAt(G, "NO TEXT", 600, 960, at("G", "text"), HOT, 44);
+
+      // ============ H: same file, new input ============
+      // diagram: H
+      head("H", H, "NEW INPUT");
+      net(H, { tN: NEW, tE: NEW, w: [NEW, NEW, NEW, NEW, NEW, NEW], b: [NEW, NEW, NEW] });
+      const hOld = [val(H, IN[0][0], IN[0][1], "2", TEXT, NEW), val(H, IN[1][0], IN[1][1], "3", TEXT, NEW), val(H, HID[0][0], HID[0][1], "0", TEXT, NEW), val(H, HID[1][0], HID[1][1], "3", TEXT, NEW), val(H, OUT[0], OUT[1], "3", TEXT, NEW)];
+      [[0, at("H", "3") - 0.1], [1, at("H", "2") - 0.1], [2, at("H", "layer") - 0.1], [3, at("H", "layer") - 0.1], [4, at("H", "jawab") - 0.1]].forEach(([i, t]) => gone(hOld[i], t, 0.2));
+      val(H, IN[0][0], IN[0][1], "3", ACC, at("H", "3")); val(H, IN[1][0], IN[1][1], "2", ACC, at("H", "2"));
+      val(H, HID[0][0], HID[0][1], "1", GOOD, at("H", "1")); val(H, HID[1][0], HID[1][1], "4", GOOD, at("H", "4"));
+      ringC(H, OUT, ACC, at("H", "5")); val(H, OUT[0], OUT[1], "5", GOOD, at("H", "5"), 72);
+      const hFile = [show(glass(H, 90, 1040, 900, 200, CYAN, 24), at("H", "File") - 0.1, { opacity: 0 }, 0.3),
+        show(el(H, `left:130px;top:1075px;font:700 40px ${COD};color:${TEXT};white-space:nowrap`, "model.safetensors"), at("H", "File"), { opacity: 0 }),
+        pillAt(H, "SAME FILE", 130, 1140, at("H", "wahi", 1), GOOD, 40), pillAt(H, "NEW ANSWER", 540, 1140, at("H", "alag"), ACC, 40)];
+      hFile.forEach((d) => gone(d, at("H", "Training") - 0.3));
+      pillAt(H, "TRAINING", 360, 1030, at("H", "Training"), ACC, 44);
+      [300, 540, 780].forEach((cx, k) => { const dd = dial(H, cx, 1190, 66, CYAN, -50 + k * 20); dd.all.forEach((d) => show(d, at("H", "Training") + 0.1, { opacity: 0 }, 0.4));
+        tl.to(dd.arm, { rotation: [60, -70, 30][k], duration: 0.6, ease: "power3.out", immediateRender: false }, at("H", "dials") + k * 0.12); });
+
+      // ============ I: comment + follow ============
+      // diagram: I
+      pillAt(I, "YOUR TURN", 70, 215, S.I + 0.05, CYAN, 40);
+      const iP = show(glass(I, 90, 330, 900, 640, CYAN, 28), S.I + 0.05, { opacity: 0 }, 0.4);
+      [430, 640].forEach((y, k) => show(el(I, `left:130px;top:${y}px;width:150px;height:150px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:50%;border:5px solid ${GREY};background:${ca(GREY, 0.08)};font:800 70px ${COD};color:${TEXT}`, "1"), k ? at("I", "1", 0) : S.I + 0.15, { opacity: 0, scale: 0.8 }));
+      M.arrow(I, { from: [290, 505], to: [400, 580], color: GREY, w: 8 }).show(at("I", "1", 1), 0.3); M.arrow(I, { from: [290, 715], to: [400, 640], color: GREY, w: 8 }).show(at("I", "1", 1), 0.3);
+      M.box(I, { x: 410, y: 480, w: 260, h: 230, label: "NETWORK", color: CYAN, size: 40 }).show(at("I", "1", 1) + 0.1);
+      M.arrow(I, { from: [680, 595], to: [770, 595], color: ACC, w: 8 }).show(at("I", "jawab"), 0.3);
+      show(el(I, `left:780px;top:520px;width:150px;height:150px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:50%;border:5px solid ${ACC};background:${ca(ACC, 0.12)};font:800 90px ${COD};color:${ACC}`, "?"), at("I", "jawab"), { opacity: 0, scale: 0.8 });
+      pillAt(I, "COMMENT", 130, 345, at("I", "Comment"), CYAN, 34);
+      show(el(I, `left:130px;top:860px;width:820px;height:80px;box-sizing:border-box;border-radius:40px;border:1.5px solid rgba(150,175,215,.35);font:500 32px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("I", "Comment") + 0.2, { opacity: 0 });
+      const fb = pillAt(I, "+  FOLLOW", 330, 1080, at("I", "follow") - 0.5, ACC, 44);
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("I", "follow"));
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I);
+      M.finish({ kw: { numbers: "gold", weight: "gold", weights: "gold", bias: "gold", dial: "gold", ReLU: "hot", negative: "hot", zero: "cyan", parameters: "gold", layer: "cyan", layers: "cyan", follow: "gold", Comment: "gold", jawab: "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
