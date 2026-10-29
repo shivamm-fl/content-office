@@ -1441,6 +1441,117 @@
         "agentic ai interview",
         "ai engineer interview"
       ]
+    },
+    {
+      "id": "a011",
+      "track": "series",
+      "day": 11,
+      "unit": "A3",
+      "format": "structure",
+      "status": "planned",
+      "title": "A neural network in one picture: weights and layers",
+      "one_idea": "A neural network is numbers arranged in layers: each neuron multiplies its inputs by weights, adds a bias and passes the result through a simple cut-off (ReLU); the next layer does the same on those results. The 'model' you download is the list of those weights and biases, and training only changes them.",
+      "hook_type": "direct_question",
+      "spoken_hook": "Model download किया, फाइल में बस numbers! AI कहाँ है?",
+      "hook_formula": "plain_question on a frustration the viewer knows",
+      "hook_source": "strategist, 2026-10-29; owner learnings 2026-10-27 and 2026-10-28",
+      "trap": "Thinking the model file holds rules, text or a small brain, when it is only weights and biases that a fixed recipe multiplies and adds.",
+      "visual_idea": "A folder with a model file opens to a wall of numbers. One neuron is drawn: two inputs, two weight tags, a bias, a ReLU gate. Then two neurons in layer 1 feeding one output neuron; the real numbers of the run flow through the arrows. Last: the same picture with a different input (3,2) and a different answer, weights unchanged. No analogy.",
+      "example": "EXAMPLE (hand-set toy weights, not a trained model; real run in state/runs/a011_network_run_output.txt): inputs 2 and 3; hidden1 = 1*2 + (-1)*3 + 0 = -1, ReLU gives 0; hidden2 = 2*2 + 1*3 + (-4) = 3, ReLU gives 3; output = 1*0 + 1*3 + 0 = 3. The network has 9 parameters (weights and biases). Input (3,2) gives hidden 1 and 4 and output 5 with the same weights.",
+      "sources": [
+        "https://developers.google.com/machine-learning/crash-course/neural-networks/nodes-hidden-layers",
+        "https://developers.google.com/machine-learning/crash-course/neural-networks/activation-functions",
+        "https://huggingface.co/docs/safetensors/index"
+      ],
+      "facts_to_verify": [
+        "Google ML Crash Course: layers between input and output are hidden layers; hidden-layer nodes are neurons; each neuron value is computed from its inputs, weights and bias; weights and biases are the parameters; training adjusts them (fetched 2026-10-29)",
+        "Google ML Crash Course: ReLU returns 0 for negative input, otherwise the input (max(0,x)); without a nonlinear activation, stacked layers stay linear (fetched 2026-10-29)",
+        "Hugging Face safetensors: a format for storing tensors (arrays of numbers), used for model weight files (fetched 2026-10-29; the page says tensors, not 'weights', so say 'model file of numbers' and let the Google page define weights)"
+      ],
+      "length_target_s": 110,
+      "cover_headline": "A neural network in one picture",
+      "thumb_text": "Weights + layers",
+      "keywords": [
+        "what is a neural network",
+        "weights and layers",
+        "what is a weight in ai",
+        "relu activation",
+        "ai engineer roadmap"
+      ],
+      "everyday_anchor": "none: the opening is the viewer's own scene of opening a downloaded model and finding only numbers; no analogy is forced (learning 2026-10-28)"
+    },
+    {
+      "id": "q124",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "F7",
+      "title": "Interview: MCP server stdio se chalta hai ya HTTP se? Kab kaun sa?",
+      "one_idea": "The transport decides where an MCP server runs and who can reach it. stdio: the client starts the server as a subprocess on the same machine and talks over stdin/stdout, so it is private to that one client and has nothing to host. Streamable HTTP: the server runs on its own, handles many clients over one endpoint, so use it for a shared or remote server, and then you must validate the Origin header, bind to localhost when local, and add authentication.",
+      "hook_type": "company_specific",
+      "spoken_hook": "Anthropic ने MCP बनाया। Server stdio से चलाओ या HTTP से?",
+      "company": "Anthropic",
+      "company_source": "https://www.anthropic.com/news/model-context-protocol",
+      "hook_formula": "company_specific",
+      "hook_source": "strategist, 2026-10-29 (least used of the last six: 0 of 6; the last six were 3 relatable_stake and 3 interviewer_asked)",
+      "trap": "Not knowing that the transport decides where the server can run and who can reach it; picking HTTP for a private local tool, or stdio for something a whole team must share.",
+      "visual_idea": "Two panels. Left: a laptop with an app box that spawns a small server box inside it with a short two-way pipe (stdin / stdout), a lock icon: one client only. Right: a server on a cloud box with one /mcp door and three different clients on three machines connecting by HTTP, and a guard at the door (auth, Origin check). A fork at the end with two questions: same machine and just me, or shared and remote.",
+      "everyday_anchor": "Your own cupboard at home versus a shop counter that anyone in the queue can reach: the cupboard needs no door guard, the counter does.",
+      "example": "Label example, no numbers: a local file-reading server for your own editor uses stdio; a company's shared tickets server used by many agents uses Streamable HTTP with authentication.",
+      "sources": [
+        "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports",
+        "https://www.anthropic.com/news/model-context-protocol"
+      ],
+      "facts_to_verify": [
+        "MCP spec 2025-06-18: two standard transports, stdio and Streamable HTTP; clients SHOULD support stdio whenever possible (fetched 2026-10-29)",
+        "stdio: the client launches the server as a subprocess, server reads stdin and writes stdout (fetched 2026-10-29)",
+        "Streamable HTTP: server is an independent process handling multiple client connections over one MCP endpoint (POST and GET); servers MUST validate Origin, SHOULD bind to localhost when local, SHOULD authenticate (fetched 2026-10-29)",
+        "Anthropic announcement 25 Nov 2024: MCP was created at Anthropic; local MCP server support in Claude Desktop (fetched 2026-10-29)",
+        "The spec is a dated version (2025-06-18); say 'the spec' and do not claim it is the latest"
+      ],
+      "length_target_s": 105,
+      "cover_headline": "MCP: stdio or HTTP?",
+      "thumb_text": "stdio or HTTP",
+      "keywords": [
+        "mcp stdio vs http",
+        "mcp transport",
+        "streamable http mcp",
+        "ai engineer interview"
+      ]
+    },
+    {
+      "id": "q125",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "F5",
+      "title": "Interview: Bina framework ke agent likhna ho to kya-kya chahiye?",
+      "one_idea": "An agent without a framework needs three things you write yourself: a loop that calls the model, a table of tools your code runs when the model asks, and a stop rule (a final answer or a maximum number of turns). The model only asks for a tool; your code runs it and feeds the result back. Anthropic advises starting with direct API calls because many patterns take a few lines and frameworks can hide the prompts; use a framework only if you understand what it does underneath.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Framework install किया, पर agent का loop समझ नहीं आया!",
+      "hook_formula": "relatable_stake",
+      "hook_source": "strategist, 2026-10-29 (differs from q124)",
+      "trap": "Thinking a framework is needed: the loop, the tool call and the stop rule are a few dozen lines.",
+      "visual_idea": "A big box labelled FRAMEWORK is opened and shows a small loop inside: model, tool, result, back to model. Then the same loop drawn as three plain pieces (loop, tool table, stop rule) with the real 10 lines of the run beside it and turn 1 CALL, turn 2 FINISH lighting up. A stop sign at turn 5 for the maximum-turn rule.",
+      "everyday_anchor": "Making tea yourself: boil, add, check, stop. A tea machine hides the steps but does the same ones.",
+      "example": "EXAMPLE (stub model, no API call; real run in state/runs/q125_loop_run_output.txt): the whole loop, the tool table and the stop rule are 10 lines of code (comments and blank lines not counted); the run shows turn 1 CALL get_weather Pune -> 31 C, clear, then turn 2 FINISH. A real agent adds the model API call; the structure is the same.",
+      "sources": [
+        "https://www.anthropic.com/engineering/building-effective-agents"
+      ],
+      "facts_to_verify": [
+        "Anthropic, Building effective agents: 'start by using LLM APIs directly: many patterns can be implemented in a few lines of code'; frameworks can add layers that obscure prompts and responses; if you use one, understand the underlying code (fetched 2026-10-29)",
+        "Same page: agents are 'typically just LLMs using tools based on environmental feedback in a loop'; stopping conditions such as a maximum number of iterations are common (fetched 2026-10-29)",
+        "Code count of 10 lines is from our own stub run (state/runs/q125_loop_run.py), not a claim about real frameworks"
+      ],
+      "length_target_s": 105,
+      "cover_headline": "Build an agent without a framework",
+      "thumb_text": "No framework",
+      "keywords": [
+        "ai agent without framework",
+        "agent loop code",
+        "build ai agent from scratch",
+        "ai engineer interview"
+      ]
     }
   ]
 }

@@ -1,0 +1,9 @@
+A: Anthropic ne MCP banaya. Server stdio se chalao ya HTTP se?
+B: Interview mein poora sawal ye aata hai: MCP server ko stdio se chalayein ya HTTP se, aur kab kaun sa? Tumhara jawab: ek app, ek machine, toh stdio. Kai log ya kai apps, toh HTTP. Teen baatein hain.
+C: MCP yaani wo standard, jisse AI app bahar ke tools se judti hai. Tool wala hissa MCP server hai, aur transport yaani dono ke baat karne ka raasta. Maan lo, ye example hai, tumhare editor ko sirf apni files padhni hain. Yahan HTTP lagaoge toh server host karna padega, address dena padega, login banana padega. Ek aadmi ke liye teen extra kaam.
+D: Pehli baat, stdio yaani program ka seedha input-output. App khud server ko apni machine par subprocess ki tarah start karti hai, yaani saath chalne wala chhota program. App stdin mein input likhti hai, server stdout mein output lautata hai. Kyunki server sirf usi app ka hai, hosting aur login ki zaroorat nahi.
+E: Doosri baat, HTTP yaani network par baat karna. Server apna alag process hai, ek endpoint yaani ek address par, aur kai clients judte hain. Maan lo, ek company ka tickets server hai aur fifty agents use karte hain. Sabko ek jagah chahiye, isliye yahan HTTP.
+F: Teesri baat, HTTP mein darwaza khula hai. Origin check karo, yaani request kis website se aayi. Local chala rahe ho toh localhost par bind karo, yaani bahar se pahunch nahi. Aur authentication lagao, warna koi bhi tumhare tools chala dega.
+G: Boundary: ek machine, ek app, toh stdio kaafi hai. Doosre aadmi ko bhi chahiye, toh HTTP.
+H: Interview mein bolo: "stdio runs the server as a subprocess of one client, so it is private and needs no hosting. HTTP is for a shared or remote server, and there I validate Origin, bind to localhost, and add authentication."
+I: Tumhara MCP server abhi stdio par hai ya HTTP par? Comment mein likho. Roz ek naya interview sawal, poore jawab ke saath, follow kar lo.

@@ -1,0 +1,9 @@
+A: @hook Model download किया, फाइल में बस numbers! AI कहाँ है? || यही numbers AI हैं। | हर number एक dial है: weight यानी input को कितना बढ़ाना या घटाना है।
+B: एक छोटा network देखो। | Input में दो numbers हैं: 2{two} और 3{three}। || Neuron हर input को उसके weight से multiply करता है, सब जोड़ता है, और bias जोड़ता है। | Bias यानी एक fixed number।
+C: पहले neuron के weights हैं 1{one} और minus 1{one}, bias zero। | 1{one} times 2{two}, plus minus 1{one} times 3{three}, यानी minus 1{one}।
+D: अब ReLU: number negative हो, तो zero कर दो; वरना वैसा ही रहने दो। | यहाँ minus 1{one} था, तो zero बना। | ये इसलिए, कि इसके बिना कितनी भी layers लगा लो, network एक सीधा calculation ही रहता है।
+E: दूसरा neuron: weights 2{two} और 1{one}, bias minus 4{four}। | 2{two} times 2{two}, plus 1{one} times 3{three}, minus 4{four}, यानी 3{three}। | Positive है, तो ReLU उसे वैसा ही रखता है।
+F: ये दो neurons पहली layer हैं। | Output neuron इनके results लेता है: 1{one} times zero, plus 1{one} times 3{three}। | जवाब: 3{three}।
+G: गिनो तो कुल 9{nine} numbers हैं: 6{six} weights और 3{three} biases। | इन्हें parameters कहते हैं। | तुम्हारी model file बस इन्हीं numbers की list है। | उसमें न rules हैं, न text।
+H: Input बदलकर 3{three} और 2{two} दो, weights वही। | पहली layer में 1{one} और 4{four} बने, जवाब 5{five}। | File वही, जवाब अलग। | Training सिर्फ इन dials को बदलती है।
+I: अब बताओ: input 1{one} और 1{one} हो, तो जवाब क्या आएगा? | Comment में लिखो, जवाब caption में है। | रोज़ एक AI idea के लिए follow कर लो।

@@ -1,0 +1,9 @@
+A: Model download kiya, file mein bas numbers! AI kahan hai? Yahi numbers AI hain. Har number ek dial hai: weight yaani input ko kitna badhana ya ghatana hai.
+B: Ek chhota network dekho. Input mein do numbers hain: 2 aur 3. Neuron har input ko uske weight se multiply karta hai, sab jodta hai, aur bias jodta hai. Bias yaani ek fixed number.
+C: Pehle neuron ke weights hain 1 aur minus 1, bias zero. 1 times 2, plus minus 1 times 3, yaani minus 1.
+D: Ab ReLU: number negative ho, to zero kar do; warna waisa hi rehne do. Yahan minus 1 tha, to zero bana. Ye isliye, ki iske bina kitni bhi layers laga lo, network ek seedha calculation hi rehta hai.
+E: Doosra neuron: weights 2 aur 1, bias minus 4. 2 times 2, plus 1 times 3, minus 4, yaani 3. Positive hai, to ReLU use waisa hi rakhta hai.
+F: Ye do neurons pehli layer hain. Output neuron inke results leta hai: 1 times zero, plus 1 times 3. Jawab: 3.
+G: Gino to kul 9 numbers hain: 6 weights aur 3 biases. Inhein parameters kehte hain. Tumhari model file bas inhi numbers ki list hai. Usmein na rules hain, na text.
+H: Input badalkar 3 aur 2 do, weights wahi. Pehli layer mein 1 aur 4 bane, jawab 5. File wahi, jawab alag. Training sirf in dials ko badalti hai.
+I: Ab batao: input 1 aur 1 ho, to jawab kya aayega? Comment mein likho, jawab caption mein hai. Roz ek AI idea ke liye follow kar lo.

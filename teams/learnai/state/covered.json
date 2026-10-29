@@ -1111,6 +1111,36 @@
       "hook_type": "interviewer_asked",
       "status": "built",
       "planned": "2026-10-28"
+    },
+    {
+      "id": "a011",
+      "track": "series",
+      "title": "A neural network in one picture: weights and layers",
+      "status": "planned",
+      "planned": "2026-10-29",
+      "topic": "A neural network is layers of neurons; each multiplies inputs by weights, adds a bias, applies ReLU; the model file is those weights."
+    },
+    {
+      "id": "q124",
+      "track": "interview",
+      "title": "Interview: MCP server stdio se chalta hai ya HTTP se? Kab kaun sa?",
+      "status": "planned",
+      "planned": "2026-10-29",
+      "kind": "question",
+      "topic": "MCP transports: stdio (local subprocess, one client) vs Streamable HTTP (independent server, many clients, auth and Origin checks).",
+      "hook_formula": "company_specific",
+      "hook_type": "company_specific"
+    },
+    {
+      "id": "q125",
+      "track": "interview",
+      "title": "Interview: Bina framework ke agent likhna ho to kya-kya chahiye?",
+      "status": "planned",
+      "planned": "2026-10-29",
+      "kind": "question",
+      "topic": "Framework-free agent: loop, tool table, stop rule; start with direct API calls.",
+      "hook_formula": "relatable_stake",
+      "hook_type": "relatable_stake"
     }
   ]
 }

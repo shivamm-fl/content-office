@@ -1,0 +1,10 @@
+A: Framework install kiya, par agent ka loop samajh nahi aaya!
+B: Interviewer ne poocha: bina framework ke agent likhna ho, to tumhein kya-kya chahiye?
+C: Tumhara jawab: teen cheezein, ek loop, ek tool table aur ek stop rule. Ek-ek karke dekhte hain.
+D: Agent yaani wo model jo tools chalakar kaam karta hai. Lagta hai framework ke bina ye banega hi nahi. Maine bina framework ke chalakar dekha, ye example hai, model nakli tha, par structure asli. Sawaal: Pune ka mausam? Pehle turn mein model ne kaha, get_weather chalao, mere code ne chalaya: 31 C, clear. Doosre turn mein model ne final jawab diya. Poora code sirf 10 lines ka tha.
+E: Pehla step, loop. Model ko call karo, jawab dekho, aur kaam poora hone tak dohrao. Kyunki model ek baar mein ek hi baat bolta hai: tool chahiye, ya jawab taiyaar hai.
+F: Doosra step, tool table, yaani naam se function ki list. Model sirf naam maangta hai, jaise get_weather, aur use chalata tumhara code hai. Kyunki model sirf text likhta hai, khud kuch chala nahi sakta.
+G: Teesra step, stop rule. Jawab taiyaar ho to ruko, ya zyada se zyada 5 turns, turn yaani model ko ek baar call karna. Kyunki warna loop kabhi khatam nahi hoga.
+H: Boundary: framework bekaar nahi hai. Par wo layers jodta hai jo prompts chhupa deti hain. Isliye Anthropic ki salah hai ki direct API calls se shuru karo.
+I: Interview mein bolo: "An agent is a loop: call the model, run the tool it asks for, feed the result back. It stops at a final answer or a maximum number of turns. I'd start with direct API calls and use a framework only when I understand what it does."
+J: Tumhare agent ka loop abhi kisne likha, tumne ya framework ne? Comment mein khud ya framework likho. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.

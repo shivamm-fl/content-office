@@ -64,3 +64,9 @@ Owner decision: none needed.
 ## 2026-10-27 (growth analyst, standup for a010, q122, q123)
 Numbers: a006 725 views, 57.9 % skip, 14.8 s, 0 shares. a007 (bill scene) 1,348 views, 48.6 % skip, 15.7 s, 7 shares, 1.1 saves per 100 reach: best skip of any series day. q116 63.4 %, q117 64.3 % (13 shares, 2.9 saves). a008 (n=1) 737 views, 65.8 %, 9.3 s: missed its bar (hold 34 %, watch 9.3 s). q118-q121 all 67 to 73 % skip on 186 to 561 views (q121 and a009 hours old). Asked q116, q117, q119 (n=3) median 64.3 %; stake q118, q120 (n=2) 67.5 %: favours asked by 3 points, hint only.
 Do: open with the concrete scene and keep a010 near 100 s; the last four reels all slid.
+
+## 2026-10-29 (growth analyst, standup for a011 and two interview reels)
+Numbers: a008 (130 s) 758 views, 65.7 % skip, 9.9 s, 0.16 shares per 100 reach; a009 (125.5 s) 1,037 views, 62.7 %, 11.7 s, 1.8 saves; both missed a007's bar (48.7 %, 15.6 s). Series so far: only the two ~100 s days (a005, a007) beat 55 % skip. q120 (stake, scene) 62 %, 24.8 s, 21.6 % retention on 1,196 views: best hold of the week. q123 (asked, 109 s) 1,410 views, 60 %, 15.5 s, 2.4 saves, 10 shares. q122 66.5 %, q121 64.7 %. Stake q118, q120, q122 (n=3) median skip 66.5 %; asked q119, q121, q123 (n=3) 64.7 %: gap under 2 points, retire nothing. a010 (55.5 s) is not synced yet (0 everywhere).
+Do: a011 about 100 s with a picture from frame 0; interview reels 105 to 110 s.
+Experiment: a011 opens on the drawn network with one number flowing through, no jargon in line 1, "weight" defined as a dial in the first teaching line.
+Owner decision: none needed.
