@@ -1,0 +1,9 @@
+Single Point of Failure and Redundancy Explained in Hinglish (Day 11/150)
+
+A single point of failure (SPOF) is a part of a system that would stop the entire system from working if it failed, with no backup or redundant option. Find it by asking, for each part on the request path, whether everything stops if it dies. Remove it by adding a redundant copy, so a load balancer can send requests to the other one (failover). For parallel components the availability is 1 - (1 - X)^N: two servers at 99% each give about 99.99%, about 53 minutes of downtime a year (an invented example). This only holds if the copies fail independently, so two servers on one power socket count as one. The switch itself, such as a single load balancer, can become the next SPOF, and each copy adds cost.
+
+Sources:
+https://en.wikipedia.org/wiki/Single_point_of_failure
+https://en.wikipedia.org/wiki/Redundancy_(engineering)
+https://en.wikipedia.org/wiki/High_availability
+https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html

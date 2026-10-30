@@ -6,51 +6,24 @@
       "day": 11,
       "unit": "P1",
       "title": "Single point of failure aur redundancy: ek cheez girne se sab kyun band hota hai",
-      "one_idea": "A single point of failure is any one part with no backup whose failure stops the whole system; you find it by asking 'if this dies, does everything stop?' for each part on the request path, and you remove it by adding a redundant copy, but the catch is that the switch-over to the copy (failover), the detection of the failure and the extra cost can themselves become the next weak spot.",
+      "one_idea": "A single point of failure is any one part with no backup whose failure stops the whole system; find it by asking if this dies does everything stop, remove it with a redundant copy, but failover, detection and cost can become the next weak spot.",
       "format": "concept",
       "hook_type": "relatable_stake",
       "spoken_hook": "एक ही server गिरा, और पूरा app बंद हो गया।",
-      "hook_formula": "relatable_stake: the viewer's own app going dark because one thing broke, stated as a plain fact with no question after it",
+      "hook_formula": "relatable_stake: the viewer's own app going dark because one thing broke, plain fact, no question after it",
       "hook_source": "https://en.wikipedia.org/wiki/Single_point_of_failure",
-      "hook_10s": "एक ही server गिरा, और पूरा app बंद हो गया। इसे कहते हैं single point of failure: एक ऐसी चीज़, जिसका कोई backup नहीं। चलिए देखते हैं, ये कैसे पकड़ें और कैसे हटाएं। [frame 0: a row of four boxes (phone, server, database, payment) with one red box going dark and the whole row turning grey]",
-      "hook_candidates": [
-        {
-          "hook": "एक ही server गिरा, और पूरा app बंद हो गया।",
-          "formula": "relatable_stake"
-        },
-        {
-          "hook": "Interviewer ने पूछा: कौन सी एक चीज़ गिरे तो सब बंद?",
-          "formula": "interviewer_asked"
-        },
-        {
-          "hook": "Server दो थे, फिर भी app बंद। ऐसा क्यों?",
-          "formula": "surprising_fact"
-        }
-      ],
-      "visual_idea": "One fixed frame: a chain of boxes (user, load balancer, one server, one database) where one box turns red and everything after it goes grey; then the same box gets a twin beside it, the red one dies and the arrows reroute to the twin so the chain stays green. A last step shows the switch box itself with a single arrow into it, turning red, and gets its own twin.",
-      "everyday_anchor": "A whole building or mohalla losing power because it has one transformer and no second line, or a shop with one billing counter and one card machine: when it stops, nobody can pay.",
-      "example": "EXAMPLE: one server that is up 99% of the time. Two such servers running side by side, where either can serve, are both down only 1% x 1% = 0.01% of the time, so about 99.99% (formula 1 - (1 - X)^N from Wikipedia High availability). It holds only if the two fail independently; two servers on one power socket or one rack do not. EXAMPLE numbers, not from a real company.",
       "sources": [
         "https://en.wikipedia.org/wiki/Single_point_of_failure",
         "https://en.wikipedia.org/wiki/Redundancy_(engineering)",
         "https://en.wikipedia.org/wiki/High_availability",
         "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html"
       ],
-      "facts_to_verify": [
-        "SPOF definition: a part whose failure stops the whole system and has no backup (Wikipedia Single point of failure)",
-        "Redundancy can be at component, system and site level (Wikipedia Single point of failure)",
-        "Redundancy = intentional duplication of critical components; active vs passive (Wikipedia Redundancy (engineering))",
-        "The crossover point itself tends to become a single point of failure (Wikipedia High availability, second principle)",
-        "Formula 1-(1-X)^N and its independence assumption (Wikipedia High availability; Redundancy (engineering) says the formula assumes independent failures); recompute 99% x 2 = 99.99% by hand",
-        "Common-cause failure example: two power supplies on one socket (Wikipedia Redundancy (engineering))",
-        "AWS: replace one large resource with multiple small ones so they do not share a common point of failure (Well-Architected reliability pillar, design principles)",
-        "Perrow quote that redundancy adds complexity is a contested view: say 'adds complexity', do not claim redundancy lowers reliability in general",
-        "The cost of redundancy is not stated in the fetched pages: say it as plain reasoning (twice the servers), not as a sourced figure",
-        "No real company outage or internal design is named; any company mention needs its own fetched post"
-      ],
       "length_target_s": 150,
       "cover_headline": "One Thing Breaks, Everything Stops",
       "thumb_text": "Ek hi server?",
+      "script_file": "state/scripts/s011.txt",
+      "status": "planned",
+      "qa_passed": false,
       "keywords": [
         "single point of failure",
         "spof kya hai",
@@ -58,9 +31,14 @@
         "failover explained in hindi",
         "high availability system design"
       ],
-      "status": "planned",
-      "qa_passed": false,
-      "script_file": "state/scripts/s011.txt"
+      "visual_idea": "One fixed frame: a chain of boxes (user, load balancer, one server, one database) where the server turns red and the app stops; then the server gets a twin and requests reroute to it; last the single load balancer turns red and gets its own twin.",
+      "everyday_anchor": "A shop with one billing counter and one card machine: when it stops, nobody can pay.",
+      "example": "EXAMPLE: one server up 99% of the time. Two such servers, either can serve, are both down only 1% x 1% = 0.01% of the time, about 99.99% (1-(1-X)^N, Wikipedia High availability). Holds only if they fail independently. EXAMPLE numbers, not from a real company.",
+      "facts_to_verify": [
+        "SPOF definition (Wikipedia SPOF)",
+        "availability of parallel components 1-(1-X)^N and independence (Wikipedia High availability)",
+        "99.99% is about 53 min/year (Wikipedia High availability)"
+      ]
     }
   ]
 }

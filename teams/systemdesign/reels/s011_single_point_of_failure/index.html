@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Single point of failure and redundancy</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="128.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+        <div class="beat" id="sL"></div>
+        <div class="beat" id="sM"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="128.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="128.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="128.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J","K","L","M"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 011 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J, K, L, N] = SC.map((k) => M.$("#s" + k));
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const lab = (host, x, y, w, col, txt, t, size, al) => show(el(host, `left:${x}px;width:${w}px;text-align:${al || "center"};top:${y}px;font:600 ${size || 38}px var(--code);letter-spacing:.06em;color:${col};white-space:nowrap`, txt), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const card = (host, w, h, cx, y, col, html, size) => el(host, `left:${cx - w / 2}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 44}px var(--code);color:${INK};white-space:nowrap`, html);
+      const num = (host, w, h, cx, y, col, html, t, size) => show(card(host, w, h, cx, y, col, html, size), t, { opacity: 0, y: 14 });
+      const op = (host, txt, cx, y, t, col) => show(el(host, `left:${cx - 60}px;width:120px;text-align:center;top:${y}px;font:800 72px var(--code);color:${col || GREY};white-space:nowrap`, txt), t, { opacity: 0, y: 6 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const cover = (host, x, y, w, h, t) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(14,18,30,.62)`), t, { opacity: 0, y: 0 });
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M29 17L12 46M35 17l17 29"/></g>`;
+      const S = M.S;
+
+      // single chain, left layout (right column x 660-1020 is for stamps)
+      const CX = 360, CW = 580, CXL = 70;
+      const ROWS = { u: [220, 160], lb: [450, 190], sv: [710, 190], db: [970, 190] };
+      const chain = (host, ts, o) => { o = o || {}; const b = {};
+        [["u", "user", "USER"], ["lb", "balancer", "LOAD BALANCER"], ["sv", "server", "SERVER"], ["db", "db", "DATABASE"]].forEach(([k, ic, lb], i) => {
+          b[k] = M.box(host, { x: CXL, y: ROWS[k][0], w: CW, h: ROWS[k][1], label: lb, icon: ic, color: CYAN, size: 46, isize: 70 }); b[k].show(ts[i]);
+          if (i > 0) { const pk = ["u", "lb", "sv", "db"][i - 1]; b["a" + k] = M.arrow(host, { from: [CX, ROWS[pk][0] + ROWS[pk][1] + 2], to: [CX, ROWS[k][0] - 4], color: GREY, w: 8 }); b["a" + k].show(ts[i] - 0.1, 0.25); } });
+        return b; };
+      const rowRing = (host, k, col, t, tOff) => ring(host, CXL, ROWS[k][0], CW, ROWS[k][1], col, t, tOff);
+      const rowCover = (host, k, t) => cover(host, CXL, ROWS[k][0], CW, ROWS[k][1], t);
+      const RC = 850; // right column centre x (660..1020)
+
+      // ===== A: hook, the chain, the server goes red, app down =====
+      // diagram: A
+      M.hook(["Ek server gira,", "poora app band"], { size: 80, top: 230 });
+      chain(A, [0.05, 0.1, 0.15, 0.2]);
+      rowRing(A, "sv", HOT, at("A", "gira"));
+      ["u", "lb", "db"].forEach((k) => rowCover(A, k, at("A", "band")));
+      stamp(A, "APP DOWN", RC, 290, HOT, at("A", "band"), 44, 340);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: shop with one counter =====
+      // diagram: B
+      const shelf = panel(B, 90, 230, 900, 250, GREY, ""); show(shelf, S.B + 0.05, { opacity: 0, y: 14 });
+      const sq = []; for (let r = 0; r < 2; r++) for (let c = 0; c < 8; c++) sq.push(show(el(B, `left:${150 + c * 100}px;top:${270 + r * 100}px;width:70px;height:70px;border-radius:10px;border:3px solid ${M.ca(GREY, 0.7)};box-sizing:border-box`), S.B + 0.1, { opacity: 0, y: 0 }));
+      tl.to(sq, { borderColor: GOOD, backgroundColor: M.ca(GOOD, 0.45), duration: 0.4, immediateRender: false }, at("B", "bhara"));
+      lab(B, 90, 495, 900, INK, "FULL SHELF", at("B", "bhara"), 46);
+      [200, 440, 680].forEach((x, i) => { M.icon(B, "user", x + 20, 620, 130, CYAN).show(at("B", "dukan") + 0.3 + i * 0.15); M.arrow(B, { from: [x + 85, 765], to: [540, 850], color: GREY, w: 6 }).show(at("B", "counter") - 0.1 + i * 0.1, 0.3); });
+      const cnt = M.box(B, { x: 190, y: 870, w: 700, h: 190, label: "ONE COUNTER", icon: "coin", color: ACC, size: 46, isize: 80 }); cnt.show(at("B", "counter"));
+      ring(B, 190, 870, 700, 190, HOT, at("B", "ruk"));
+      stamp(B, "NO SALE", 540, 1110, HOT, at("B", "nahi"), 56, 520);
+      M.icon(B, "cross", 440, 735, 80, HOT).show(at("B", "nahi"));
+      M.fit(B);
+
+      // ===== C: the request path =====
+      // diagram: C
+      Object.values(ROWS).forEach(([y, hh]) => show(el(C, `left:${CXL}px;top:${y}px;width:${CW}px;height:${hh}px;border-radius:16px;border:3px dashed ${M.ca(GREY, 0.6)};box-sizing:border-box`), 0.05, { opacity: 0, y: 0 }));
+      lab(C, 680, 270, 340, GREY, "REQUEST", 0.1, 44);
+      const c = chain(C, [S.C + 0.1, at("C", "load"), at("C", "server"), at("C", "database")]);
+      c.alb.travel(at("C", "Request"), 0.5, ACC);
+      c.asv.travel(at("C", "phir"), 0.4, ACC);
+      c.adb.travel(at("C", "database") - 0.3, 0.4, ACC);
+      lab(C, 680, 520, 340, ACC, "SPLITS", at("C", "baantta"), 52);
+      M.fit(C);
+
+      // ===== D: server down, SPOF =====
+      // diagram: D
+      const d0 = chain(D, [0.05, 0.1, 0.15, 0.2]);
+      rowRing(D, "sv", HOT, at("D", "gir"));
+      d0.adb.hide(at("D", "gir")); M.arrow(D, { from: [CX, 904], to: [CX, 966], color: HOT, w: 8, dash: true }).show(at("D", "gir"), 0.25);
+      M.icon(D, "cross", 545, 735, 100, HOT).show(at("D", "gir"));
+      const dDown = stamp(D, "DOWN", RC, 745, HOT, at("D", "gir"), 52, 340); gone(dDown, at("D", "single"));
+      stamp(D, "APP DOWN", RC, 290, HOT, at("D", "band"), 44, 340);
+      stamp(D, "SPOF", RC, 745, ACC, at("D", "single") + 0.2, 52, 340);
+      const slot = show(el(D, `left:680px;top:850px;width:340px;height:90px;border-radius:14px;border:3px dashed ${M.ca(INK, 0.8)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:600 40px var(--code);color:${INK};white-space:nowrap`, "NO BACKUP"), at("D", "backup"), { opacity: 0, y: 8 });
+      M.fit(D);
+
+      // ===== E: three steps =====
+      // diagram: E
+      const eMini = (i, t, y) => { const ps = [
+          [["server", CYAN], ["server", HOT], ["server", CYAN]],
+          [["server", CYAN], ["server", GOOD]],
+          [["balancer", CYAN], ["balancer", GOOD]]][i];
+        const x0 = 540 - (ps.length * 150 - 30) / 2;
+        ps.forEach(([ic, col], k) => { M.box(E, { x: x0 + k * 150, y: y + 100, w: 120, h: 110, label: "", icon: ic, color: col, size: 24, isize: 70 }).show(t + 0.15 + k * 0.1); });
+        if (i === 0) M.icon(E, "search", x0 + 380, y + 105, 100, ACC).show(t + 0.5); };
+      [["1", "FIND SPOF", "dhoondhna"], ["2", "ADD COPY", "hatana"], ["3", "CHECK COPY", "steps"]].forEach(([n, lb, w], i) => {
+        const y = 230 + i * 330, t = at("E", w);
+        const r = panel(E, 90, y, 900, 290, i === 2 ? ACC : CYAN, ""); show(r, t, { opacity: 0, y: 18 });
+        show(el(E, `left:130px;top:${y + 20}px;width:84px;height:84px;border-radius:42px;border:4px solid ${ACC};display:flex;align-items:center;justify-content:center;font:800 52px var(--code);color:${ACC}`, n), t, { opacity: 0, y: 18 });
+        show(el(E, `left:240px;top:${y + 32}px;font:700 56px var(--code);color:${INK};white-space:nowrap`, lb), t + 0.1, { opacity: 0, y: 10 });
+        eMini(i, t, y); });
+      M.fit(E);
+
+      // ===== F: step 1, ask each part =====
+      // diagram: F
+      chain(F, [0.05, 0.1, 0.15, 0.2]);
+      ["u", "lb", "sv", "db"].forEach((k, i) => rowRing(F, k, ACC, at("F", "request") + i * 0.6, at("F", "request") + i * 0.6 + 0.55));
+      lab(F, 680, 640, 340, ACC, "IF IT DIES?", at("F", "poochho"), 42);
+      rowRing(F, "sv", HOT, at("F", "mar"));
+      stamp(F, "DIES", RC, 745, HOT, at("F", "mar"), 52, 340);
+      ["u", "lb", "db"].forEach((k) => rowCover(F, k, at("F", "sab")));
+      stamp(F, "ALL STOP", RC, 290, HOT, at("F", "sab"), 44, 340);
+      stamp(F, "YES = SPOF", RC, 880, ACC, at("F", "haan"), 40, 340); rowRing(F, "sv", ACC, at("F", "haan"));
+      M.fit(F);
+
+      // ===== G: step 2, a twin and failover =====
+      // diagram: G
+      const GU = [390, 190, 300, 110], GL = [330, 370, 420, 140], GS1 = [90, 640, 420, 160], GS2 = [570, 640, 420, 160], GD = [330, 930, 420, 140];
+      const bx = (host, p, lb, ic, col, t) => { const b = M.box(host, { x: p[0], y: p[1], w: p[2], h: p[3], label: lb, icon: ic, color: col, size: 38, isize: 54 }); b.show(t); return b; };
+      bx(G, GU, "USER", "user", CYAN, 0.05); bx(G, GL, "LOAD BALANCER", "balancer", CYAN, 0.1); bx(G, GS1, "SERVER 1", "server", CYAN, 0.15); bx(G, GD, "DATABASE", "db", CYAN, 0.2);
+      M.arrow(G, { from: [540, 302], to: [540, 366], color: GREY, w: 8 }).show(0.1, 0.25);
+      const g1 = M.arrow(G, { from: [450, 512], to: [300, 636], color: GREY, w: 8 }); g1.show(0.15, 0.25);
+      const g1d = M.arrow(G, { from: [300, 802], to: [450, 926], color: GREY, w: 8 }); g1d.show(0.2, 0.25);
+      const gslot = el(G, `left:570px;top:640px;width:420px;height:160px;border-radius:16px;border:3px dashed ${M.ca(GREY, 0.8)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 60px var(--code);color:${GREY}`, "+"); show(gslot, S.G + 0.3, { opacity: 0, y: 0 }); gone(gslot, at("G", "copy"));
+      bx(G, GS2, "SERVER 2", "server", CYAN, at("G", "copy"));
+      const g2 = M.arrow(G, { from: [630, 512], to: [780, 636], color: GREY, w: 8 }); g2.show(at("G", "copy") + 0.1, 0.25);
+      const g2d = M.arrow(G, { from: [780, 802], to: [630, 926], color: GREY, w: 8 }); g2d.show(at("G", "copy") + 0.1, 0.25);
+      const gRed = stamp(G, "REDUNDANCY", 540, 1115, GOOD, at("G", "redundancy"), 52, 600); gone(gRed, at("G", "ruke"));
+      ring(G, GS1[0], GS1[1], GS1[2], GS1[3], HOT, at("G", "ruke")); cover(G, GS1[0], GS1[1], GS1[2], GS1[3], at("G", "ruke"));
+      g1.hide(at("G", "ruke"));
+      const g1x = M.arrow(G, { from: [450, 512], to: [300, 636], color: HOT, w: 8, dash: true }); g1x.show(at("G", "ruke"), 0.25);
+      g2.travel(at("G", "doosre") - 0.2, 0.5, GOOD);
+      stamp(G, "FAILOVER", 540, 1115, ACC, at("G", "failover"), 52, 600);
+      M.fit(G);
+
+      // ===== H: the arithmetic =====
+      // diagram: H
+      M.pill(H, "EXAMPLE", at("H", "EXAMPLE"), { x: 390, y: 200, kind: "out", size: 46 });
+      const hs = [];
+      const yb = (y, t, sx, label) => { hs.push(lab(H, 60, y - 74, 700, INK, label, t, 46, "left"));
+        hs.push(show(el(H, `left:60px;top:${y}px;width:960px;height:110px;border-radius:12px;border:3px solid ${M.ca(GOOD, 0.8)};background:${M.ca(GOOD, 0.5)};box-sizing:border-box`), t, { opacity: 0, y: 0 }));
+        if (sx != null) hs.push(show(el(H, `left:${sx}px;top:${y - 6}px;width:12px;height:122px;background:${HOT};border-radius:3px`), at("H", "99%"), { opacity: 0, y: 0 })); };
+      yb(380, S.H + 0.1, 250, "SERVER 1 · 99%"); yb(590, S.H + 0.25, 700, "SERVER 2 · 99%");
+      hs.push(lab(H, 640, 308, 380, HOT, "1% DOWN ▼", at("H", "99%"), 40, "right"), lab(H, 640, 518, 380, HOT, "1% DOWN ▼", at("H", "99%"), 40, "right"));
+      yb(800, at("H", "servers"), null, "BOTH AT ONCE?");
+      [250, 700].forEach((gx) => hs.push(show(el(H, `left:${gx}px;top:794px;width:12px;height:122px;border:2px dashed ${M.ca(HOT, 0.7)};box-sizing:border-box;border-radius:3px`), at("H", "donon", 0), { opacity: 0, y: 0 })));
+      hs.push(show(el(H, `left:480px;top:794px;width:4px;height:122px;background:${HOT};border-radius:2px`), at("H", "saath"), { opacity: 0, y: 0 }));
+      hs.push(lab(H, 300, 930, 480, HOT, "≈ NEVER", at("H", "saath"), 52));
+      gone(hs, at("H", "1", 0) - 0.15);
+      const s3 = [];
+      s3.push(num(H, 300, 170, 200, 380, HOT, "1%", at("H", "1", 0), 90), op(H, "×", 540, 405, at("H", "times")), num(H, 300, 170, 880, 380, HOT, "1%", at("H", "1", 1), 90),
+        op(H, "=", 540, 600, at("H", "001") - 0.3, GOOD), num(H, 640, 200, 540, 700, HOT, "0.01%", at("H", "001"), 110));
+      gone(s3, at("H", "availability") - 0.1);
+      num(H, 800, 210, 540, 330, GOOD, "99.99%", at("H", "9999%"), 120);
+      lab(H, 60, 606, 600, INK, "1 YEAR", at("H", "saal", 1), 46, "left");
+      show(el(H, `left:60px;top:680px;width:960px;height:120px;border-radius:12px;border:3px solid ${M.ca(GOOD, 0.8)};background:${M.ca(GOOD, 0.5)};box-sizing:border-box`), at("H", "saal", 1), { opacity: 0, y: 0 });
+      show(el(H, `left:600px;top:674px;width:4px;height:132px;background:${HOT};border-radius:2px`), at("H", "53"), { opacity: 0, y: 0 });
+      num(H, 600, 150, 540, 860, HOT, "53 MIN DOWN", at("H", "53"), 64);
+      M.fit(H);
+
+      // ===== I: failures must be independent =====
+      // diagram: I
+      const IS1 = [90, 300, 420, 230], IS2 = [570, 300, 420, 230];
+      M.box(I, { x: IS1[0], y: IS1[1], w: IS1[2], h: IS1[3], label: "SERVER 1", icon: "server", color: CYAN, size: 44, isize: 80 }).show(S.I + 0.1);
+      M.box(I, { x: IS2[0], y: IS2[1], w: IS2[2], h: IS2[3], label: "SERVER 2", icon: "server", color: CYAN, size: 44, isize: 80 }).show(S.I + 0.15);
+      const i1 = ring(I, IS1[0], IS1[1], IS1[2], IS1[3], HOT, S.I + 2.0, S.I + 3.4), i1c = cover(I, IS1[0], IS1[1], IS1[2], IS1[3], S.I + 2.0); gone(i1c, S.I + 3.4);
+      gone(lab(I, 90, 560, 420, GOOD, "STAYS UP", S.I + 2.2, 44), S.I + 3.4);
+      M.box(I, { x: 190, y: 900, w: 700, h: 240, label: "ONE SOCKET", icon: "bolt", color: ACC, size: 52, isize: 90 }).show(at("I", "socket"));
+      M.arrow(I, { from: [300, 896], to: [300, 536], color: ACC, w: 8 }).show(at("I", "socket") + 0.1, 0.3);
+      M.arrow(I, { from: [780, 896], to: [780, 536], color: ACC, w: 8 }).show(at("I", "socket") + 0.1, 0.3);
+      ring(I, 190, 900, 700, 240, HOT, at("I", "bijli"));
+      [IS1, IS2].forEach((p) => { ring(I, p[0], p[1], p[2], p[3], HOT, at("I", "bijli") + 0.2); cover(I, p[0], p[1], p[2], p[3], at("I", "bijli") + 0.2); });
+      stamp(I, "COUNTS AS 1", 540, 1215, ACC, at("I", "gine"), 56, 600);
+      M.fit(I);
+
+      // ===== J: step 3, check the backup's switch =====
+      // diagram: J
+      const JU = GU, JL = [330, 370, 420, 140], JS1 = GS1, JS2 = GS2, JD = GD;
+      bx(J, JU, "USER", "user", CYAN, 0.05); const jl = bx(J, JL, "LOAD BALANCER", "balancer", CYAN, 0.1);
+      const js1 = bx(J, JS1, "SERVER 1", "server", CYAN, 0.15), js2 = bx(J, JS2, "SERVER 2", "server", CYAN, 0.2); bx(J, JD, "DATABASE", "db", CYAN, 0.25);
+      const jOld = [M.arrow(J, { from: [540, 302], to: [540, 366], color: GREY, w: 8 }), M.arrow(J, { from: [450, 512], to: [300, 636], color: GREY, w: 8 }), M.arrow(J, { from: [630, 512], to: [780, 636], color: GREY, w: 8 })];
+      jOld.forEach((a, i) => a.show(0.1 + i * 0.05, 0.25));
+      M.arrow(J, { from: [300, 802], to: [450, 926], color: GREY, w: 8 }).show(0.3, 0.25); M.arrow(J, { from: [780, 802], to: [630, 926], color: GREY, w: 8 }).show(0.3, 0.25);
+      ring(J, JS1[0], JS1[1], JS1[2], JS1[3], GOOD, at("J", "backup"), at("J", "backup") + 0.9); ring(J, JS2[0], JS2[1], JS2[2], JS2[3], GOOD, at("J", "backup"), at("J", "backup") + 0.9);
+      const jq = ring(J, JL[0], JL[1], JL[2], JL[3], ACC, at("J", "jaancho"), at("J", "girte")); gone(lab(J, 790, 410, 240, ACC, "ALONE?", at("J", "jaancho"), 42), at("J", "girte"));
+      ring(J, JL[0], JL[1], JL[2], JL[3], HOT, at("J", "girte"), at("J", "twin") - 0.1); gone(cover(J, JL[0], JL[1], JL[2], JL[3], at("J", "girte")), at("J", "twin") - 0.1);
+      [JS1, JS2].forEach((p) => gone(cover(J, p[0], p[1], p[2], p[3], at("J", "bekar")), at("J", "twin") - 0.1));
+      const jn = stamp(J, "NEW SPOF", 540, 1115, HOT, at("J", "SPOF"), 56, 560); gone(jn, at("J", "twin"));
+      // the twin: first balancer slides left, second appears on the right, four arrows
+      jOld.slice(1).forEach((a) => a.hide(at("J", "twin")));
+      jl.move(at("J", "twin"), { x: 90, y: 370 }, 0.5);
+      bx(J, [570, 370, 420, 140], "LOAD BALANCER", "balancer", GOOD, at("J", "twin") + 0.2);
+      [[[300, 302], [300, 366]], [[780, 302], [780, 366]]];
+      [[300, 512, 300, 636], [300, 512, 780, 636], [780, 512, 780, 636], [780, 512, 300, 636]].forEach(([x1, y1, x2, y2]) => M.arrow(J, { from: [x1, y1], to: [x2, y2], color: GREY, w: 8 }).show(at("J", "twin") + 0.6, 0.3));
+      stamp(J, "TWIN LB", 540, 1115, GOOD, at("J", "twin") + 0.6, 56, 560);
+      M.fit(J);
+
+      // ===== K: cost, then the biggest loss first =====
+      // diagram: K
+      const k1 = [];
+      const kb1 = M.box(K, { x: 90, y: 330, w: 420, h: 170, label: "1 SERVER", icon: "server", color: CYAN, size: 40, isize: 64 }); kb1.show(S.K + 0.2);
+      k1.push(num(K, 420, 170, 780, 330, ACC, "COST ×1", S.K + 0.4, 52));
+      const kb2 = [90, 310].map((x, i) => { const b = M.box(K, { x, y: 620, w: 200, h: 170, label: "", icon: "server", color: CYAN, size: 30, isize: 80 }); b.show(at("K", "dugne") + i * 0.12); return b; });
+      k1.push(num(K, 420, 170, 780, 620, HOT, "COST ×2", at("K", "dugna"), 52));
+      k1.push(lab(K, 90, 530, 420, GREY, "2 COPIES", at("K", "dugne"), 38));
+      k1.push(stamp(K, "NOT FREE", 540, 900, HOT, at("K", "free"), 56, 520));
+      gone(k1, at("K", "pehle") - 0.2); [kb1, ...kb2].forEach((b) => b.hide(at("K", "pehle") - 0.2));
+      // second half: rank the parts by loss when they fail (invented bars, EXAMPLE)
+      M.pill(K, "EXAMPLE", at("K", "pehle") + 0.1, { x: 390, y: 200, kind: "out", size: 46 });
+      const KP = [["gear", "PART A", 0.35], ["gear", "PART B", 0.6], ["gear", "PART C", 1.0]];
+      KP.forEach(([ic, lb, f], i) => { const y = 390 + i * 250, t = at("K", "girne") + i * 0.15;
+        M.box(K, { x: 60, y, w: 440, h: 170, label: lb, icon: ic, color: CYAN, size: 34, isize: 60 }).show(at("K", "pehle") + 0.2 + i * 0.1);
+        show(el(K, `left:520px;top:${y + 55}px;width:480px;height:60px;border-radius:8px;border:2px solid ${M.ca(GREY, 0.5)};box-sizing:border-box`), at("K", "pehle") + 0.2 + i * 0.1, { opacity: 0, y: 0 });
+        const b = el(K, `left:520px;top:${y + 55}px;width:${480 * f}px;height:60px;border-radius:6px;background:${HOT};transform-origin:0 50%`); tl.set(b, { opacity: 0, scaleX: 0 }, 0); tl.to(b, { opacity: 1, scaleX: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, t); });
+      lab(K, 520, 315, 480, HOT, "LOSS IF DOWN", at("K", "girne"), 44);
+      ring(K, 60, 890, 440, 170, ACC, at("K", "sabse")); stamp(K, "DOUBLE FIRST", 540, 1120, ACC, at("K", "nuksan"), 56, 620);
+      M.fit(K);
+
+      // ===== L: the SPOF moves, ask again =====
+      // diagram: L
+      chain(L, [0.05, 0.1, 0.15, 0.2]);
+      const lt = stamp(L, "SPOF", RC, 745, ACC, 0.3, 52, 340);
+      gone(lab(L, 680, 670, 340, GOOD, "+ BACKUP", at("L", "backup"), 44), at("L", "khisak") - 0.05); rowRing(L, "sv", GOOD, at("L", "backup"), at("L", "khisak") + 1.0);
+      tl.to(lt, { y: -270, duration: 0.6, ease: "power3.inOut", immediateRender: false }, at("L", "khisak"));
+      rowRing(L, "lb", HOT, at("L", "khisak") + 0.5);
+      stamp(L, "ASK AGAIN", 540, 1220, ACC, at("L", "sawal"), 56, 560);
+      M.fit(L);
+
+      // ===== M: comment + follow =====
+      // diagram: M
+      M.pill(N, "YOUR TURN", S.M + 0.1, { x: 340, y: 200, kind: "out", size: 44 });
+      [["balancer", "?", 0], ["server", "?", 1], ["db", "?", 2]].forEach(([ic, q, i]) => M.box(N, { x: 90 + i * 330, y: 320, w: 300, h: 190, label: ["LB", "SERVER", "DB"][i], icon: ic, color: CYAN, size: 42, isize: 70 }).show(S.M + 0.3 + i * 0.12));
+      stamp(N, "WHICH IS ALONE?", 540, 560, ACC, at("M", "akela"), 52, 700);
+      const cc = panel(N, 80, 800, 920, 450, CYAN, "COMMENT KARO"); show(cc, at("M", "comment") - 0.2, { opacity: 0, y: 14 });
+      [["SERVER", "server,"], ["DATABASE", "database"], ["LOAD BALANCER", "balancer,"]].forEach(([lb, w], i) => M.pill(cc, lb, at("M", w.replace(",", "")), { x: 250, y: 100 + i * 75, kind: "out", size: 34 }));
+      show(el(cc, "left:40px;right:40px;top:330px;height:90px;border-radius:45px;border:1.5px solid rgba(150,175,215,.5);font:500 40px var(--code);color:#C3CCDE;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("M", "comment"), { opacity: 0 });
+      const fb = M.pill(N, "+  FOLLOW", at("M", "follow") - 0.4, { x: 380, y: 1330, kind: "acc", size: 52 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("M", "follow"));
+      M.fit(N);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { server: "cyan", servers: "cyan", band: "hot", gir: "hot", SPOF: "gold", spof: "gold", backup: "good", copy: "good", redundancy: "good", failover: "gold", step: "gold", twin: "good", free: "hot", dugna: "hot", akela: "hot", comment: "gold", follow: "gold", percent: "cyan", availability: "gold", "9999%": "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+Day 11/150: ek hi server gira, aur poora app band ho gaya. Ye hota kyun hai?
+
+Single point of failure (SPOF) yaani koi ek cheez jiska backup nahi, aur jiske girte hi sab ruk jaye.
+
+3 steps:
+1. Request ke raaste par har part se pucho: ye mara, to kya sab rukega? Haan hai, to wahi SPOF hai.
+2. Uski ek aur copy lagao (redundancy). Load balancer dono ko dekhta hai, ek ruke to dusre ko bhejta hai (failover).
+3. Jisne backup joda, use bhi jaancho. Akela load balancer hi naya SPOF ban jata hai.
+
+Example: ek server 99% chalu, do aise servers dono ek saath girein sirf 1% x 1% = 0.01%, yaani 99.99%, saal mein lagbhag 53 minutes band. Ye tabhi sahi hai jab dono alag-alag girein; ek hi power socket par hon to dono ek gine jate hain. Aur har copy ka kharcha bhi badhta hai.
+
+(99% wala server sirf example hai.)
+
+Sawal: tumhare app ka sabse akela part kaun sa hai: server, database ya load balancer? Comment karo.
+
+#systemdesign #backend #interviewprep
