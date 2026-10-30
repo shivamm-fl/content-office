@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Recursion aur call stack: har call ka apna frame</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="130.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+                <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="130.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="130.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="130.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J"], tag: "DSA 010/150" });
+      Viz.install(M);
+      const { tl } = M; const at = (sc, w, n) => M.W(sc, w, n); const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const $s = (k) => M.$("#s" + k);
+      const A = $s("A"), B = $s("B"), C = $s("C"), D = $s("D"), E = $s("E"), F = $s("F"), G = $s("G"), H = $s("H"), I = $s("I"), J = $s("J");
+      const cp = (sc, i) => REEL.hi.caps.filter((c) => c.scene === sc)[i].s;
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const stamp = (host, txt, x, y, col, t) => { const d = el(host, `left:${x}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.96);font:700 52px var(--code);color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size, ts) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, String(from)); const o = { v: from };
+        show(d, ts == null ? segs[0][0] - 0.3 : ts, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t);
+      const drop = (d, t, fx, fy) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: fx, y: fy }, { opacity: 1, x: 0, y: 0, duration: 0.6, ease: "power3.inOut", immediateRender: false }, t); return d; };
+      const bigtxt = (host, css, txt, col, size, t) => show(lab(host, css, txt, col, size), t, { opacity: 0 });
+
+      const frameTile = (host, x, y, w, h, name, sub, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col, .6)};background:${M.ca(col, .14)};font:700 ${fs || 44}px var(--code);display:flex;align-items:center;justify-content:space-between;padding:0 22px;white-space:nowrap`, `<span>${name}</span><span class="sub" style="color:${col}">${sub}</span>`);
+      const ghost = (host, x, y, w, h) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px dashed rgba(150,175,215,.35)`);
+      const bigtile = (host, x, y, w, h, title, sub, col) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;border:2px solid ${M.ca(col, .6)};background:${M.ca(col, .12)};display:flex;flex-direction:column;align-items:center;justify-content:center;white-space:nowrap`, `<div style="font:800 58px var(--code);color:${col}">${title}</div><div style="font:600 38px var(--code);color:#B8C4DC;margin-top:10px">${sub}</div>`);
+      const hlLine = (d, t, col) => tl.to(d, { backgroundColor: M.ca(col, .22), duration: 0.3, immediateRender: false }, t);
+      const SY = (k) => 840 - k * 128;   // frame top for stack level k (0 = bottom), frame 560 x 118
+      const NV = [5, 4, 3, 2, 1, 0];
+
+      // diagram: A  (hook: a stack of frames grows past the limit)
+      M.hook(["RECURSIVE FUNCTION", "RecursionError!"], { size: 84, top: 250 });
+      const pa = panel(A, 60, 500, 960, 790, CYAN, "CALL STACK"); show(pa, 0.05);
+      const aF = [0, 1, 2, 3, 4, 5].map((k) => { const f = frameTile(pa, 40, 660 - k * 104, 560, 96, "fact(n)", "frame", CYAN, 46); show(f, 0.1 + k * 0.1, { opacity: 0, y: 20 }); return f; });
+      const aL = el(pa, "left:20px;top:230px;width:920px;height:0;border-top:4px dashed " + HOT); show(aL, 0.3, { opacity: 0 });
+      bigtxt(pa, "left:640px;width:290px;top:170px", "LIMIT", HOT, 48, 0.3);
+      ring(aF[4], cp("A", 3), HOT); ring(aF[5], cp("A", 3), HOT);
+      const ao = tile(pa, 630, 420, 310, 120, "OVERFLOW", HOT, 46); dimIn(ao, 0.1, 0.3); lit(ao, cp("A", 3));
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B  (a chain of calls on smaller inputs ends at the base case, which returns directly)
+      const b0 = ST.B;
+      M.pill(B, "SMALLER INPUT", cp("B", 10), { x: 270, y: 205, w: 540, kind: "acc", size: 44 });
+      const pb = panel(B, 60, 290, 960, 940, CYAN, "RECURSION"); show(pb, b0 + 0.1);
+      const bT = [cp("B", 2), cp("B", 6), cp("B", 8), cp("B", 10), cp("B", 12), cp("B", 18)];
+      [5, 4, 3, 2, 1, 0].forEach((n, i) => {
+        const base = n === 0, w = 560 - i * 40;
+        const t = tile(pb, 60 + i * 20, 80 + i * 140, w, 96, "f(" + n + ")", base ? GOOD : CYAN, 56); dimIn(t, b0 + 0.1, 0.3); lit(t, base ? cp("B", 19) : bT[i]);
+        if (!base) { const a = lab(pb, `left:${60 + i * 20}px;width:${w}px;top:${80 + i * 140 + 98}px`, "↓ n − 1", CYAN, 38); dimIn(a, b0 + 0.1, 0.3); lit(a, bT[i + 1]); }
+      });
+      const bR = tile(pb, 620, 80 + 5 * 140, 300, 112, "return 1", GOOD, 46); show(bR, cp("B", 29), { opacity: 0, x: -30 });
+      const bN = lab(pb, "left:560px;width:360px;top:350px", "NO MORE CALLS", HOT, 38); show(bN, cp("B", 25), { opacity: 0 });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C  (factorial code: the line that calls itself, the line that stops)
+      const c0 = ST.C;
+      M.pill(C, "FACTORIAL", cp("C", 0), { x: 330, y: 205, w: 420, kind: "acc", size: 44 });
+      const pc = panel(C, 60, 300, 960, 900, CYAN, "PYTHON"); show(pc, c0 + 0.1);
+      const CL = ["def fact(n):", "    if n == 0:", "        return 1", "    return n * fact(n - 1)"];
+      const cE = CL.map((t, i) => { const d = el(pc, `left:30px;top:${90 + i * 120}px;width:900px;height:100px;border-radius:12px;white-space:pre;font:600 50px var(--code);color:#E8EDF6;display:flex;align-items:center;padding-left:22px;background:rgba(0,0,0,0)`, t); show(d, c0 + 0.15 + i * 0.05, { opacity: 0 }); return d; });
+      hlLine(cE[3], cp("C", 8), ACC); tl.to(cE[3], { backgroundColor: "rgba(255,255,255,.05)", duration: 0.3, immediateRender: false }, cp("C", 14) - 0.2);
+      hlLine(cE[1], cp("C", 14), GOOD); hlLine(cE[2], cp("C", 21), GOOD);
+      const cT1 = tile(pc, 40, 600, 880, 120, "↻ CALLS ITSELF", ACC, 54); dimIn(cT1, c0 + 0.1, 0.25); lit(cT1, cp("C", 8)); tl.to(cT1, { opacity: 0.45, duration: 0.3, immediateRender: false }, cp("C", 14) - 0.2);
+      const cT2 = tile(pc, 40, 750, 880, 120, "■ STOPS, RETURNS 1", GOOD, 54); dimIn(cT2, c0 + 0.1, 0.25); lit(cT2, cp("C", 14));
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D  (fact(5): six calls push six frames)
+      const d0 = ST.D;
+      const pd = panel(D, 60, 230, 960, 1010, CYAN, "RUN fact(5)"); show(pd, d0 + 0.1);
+      const dG = NV.map((n, k) => dimIn(ghost(pd, 40, SY(k), 560, 118), d0 + 0.1, 0.5));
+      const dT = [3, 10, 14, 17, 20, 26].map((i) => cp("D", i));
+      const dF = NV.map((n, k) => { const f = frameTile(pd, 40, SY(k), 560, 118, "fact(" + n + ")", "n = " + n, CYAN); show(f, dT[k], { opacity: 0, y: 30 }); return f; });
+      counter(pd, "left:620px;width:310px;top:130px", 0, dT.map((t, k) => [t, t + 0.12, k + 1]), ACC, 130, d0 + 0.2);
+      bigtxt(pd, "left:620px;width:310px;top:290px", "CALLS", CYAN, 44, d0 + 0.2);
+      ring(dF[5], cp("D", 35), ACC);
+      bigtxt(pd, "left:620px;width:310px;top:520px", "5", HOT, 130, cp("D", 40));
+      bigtxt(pd, "left:620px;width:310px;top:680px", "WAITING", HOT, 44, cp("D", 42));
+      dF.slice(0, 5).forEach((f) => dim(f, cp("D", 40), 0.6));
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E  (the call stack: frames, arguments, push, pop, depth)
+      const e0 = ST.E;
+      const pe = panel(E, 60, 230, 960, 1010, CYAN, "CALL STACK"); show(pe, e0 + 0.1);
+      NV.forEach((n, k) => dimIn(ghost(pe, 40, SY(k), 560, 118), e0 + 0.1, 0.5));
+      const eF = NV.map((n, k) => { const f = frameTile(pe, 40, SY(k), 560, 118, "fact(" + n + ")", "n = " + n, CYAN); show(f, e0 + 0.15 + k * 0.05, { opacity: 0, y: 20 }); return f; });
+      const eA = el(pe, `left:620px;top:100px;width:310px;height:270px;border-radius:14px;border:2px solid ${M.ca(CYAN, .5)};background:${M.ca(CYAN, .1)}`); dimIn(eA, e0 + 0.1, 0.3); lit(eA, cp("E", 19));
+      el(eA, `left:0;width:310px;top:18px;text-align:center;font:700 46px var(--code);color:${CYAN}`, "fact(3)");
+      el(eA, `left:0;width:310px;top:88px;text-align:center;font:800 70px var(--code);color:${ACC}`, "n = 3");
+      el(eA, "left:0;width:310px;top:196px;text-align:center;font:700 36px var(--code);color:#B8C4DC", "ARGS + LOCALS");
+      ring(eF[2], cp("E", 19), ACC); tl.to(eA, { borderColor: ACC, duration: 0.25, immediateRender: false }, cp("E", 24));
+      const ePu = tile(pe, 620, 410, 310, 100, "▼ PUSH", GOOD, 44); dimIn(ePu, e0 + 0.1, 0.3); lit(ePu, cp("E", 34));
+      const ePo = tile(pe, 620, 540, 310, 100, "▲ POP", HOT, 44); dimIn(ePo, e0 + 0.1, 0.3); lit(ePo, cp("E", 40));
+      ring(eF[5], cp("E", 34), GOOD);
+      tl.to(eF[5], { y: -60, opacity: 0, duration: 0.4, ease: "power2.in", immediateRender: false }, cp("E", 40) + 0.1);
+      tl.to(eF[5], { y: 0, opacity: 1, duration: 0.4, immediateRender: false }, cp("E", 43));
+      counter(pe, "left:620px;width:310px;top:680px", 0, [[cp("E", 45), cp("E", 45) + 0.3, 6]], ACC, 130, cp("E", 44));
+      bigtxt(pe, "left:620px;width:310px;top:840px", "DEPTH", CYAN, 44, cp("E", 44));
+      const e6 = tile(pe, 620, 910, 310, 90, "6 FRAMES", GOOD, 40); dimIn(e6, e0 + 0.1, 0.3); lit(e6, cp("E", 51));
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F  (returns pop the frames, the answer builds)
+      const f0 = ST.F;
+      const pf = panel(F, 60, 230, 960, 1010, CYAN, "RETURNS"); show(pf, f0 + 0.1);
+      NV.forEach((n, k) => dimIn(ghost(pf, 40, SY(k), 560, 118), f0 + 0.1, 0.5));
+      const fF = NV.map((n, k) => { const f = frameTile(pf, 40, SY(k), 560, 118, "fact(" + n + ")", "n = " + n, CYAN); show(f, f0 + 0.15 + k * 0.05, { opacity: 0, y: 20 }); return f; });
+      const VT = [9, 19, 25, 31, 37, 44].map((i) => cp("F", i)), VV = ["1", "1", "2", "6", "24", "120"];
+      bigtxt(pf, "left:620px;width:310px;top:70px", "RETURNED", GOOD, 40, f0 + 0.2);
+      VV.forEach((v, i) => {
+        const k = 5 - i, last = i === 5;
+        const chip = tile(pf, 620, 130 + i * 128, 310, 108, v, last ? ACC : GOOD, 60); show(chip, VT[i] + 0.1, { opacity: 0, y: 20 });
+        const r = el(fF[k], "right:22px;top:0;height:100%;display:flex;align-items:center;font:700 44px var(--code);color:" + GOOD, "→ " + v); tl.set(r, { opacity: 0 }, 0);
+        tl.set(fF[k].querySelector(".sub"), { opacity: 0 }, VT[i]); tl.set(r, { opacity: 1 }, VT[i]); ring(fF[k], VT[i], last ? ACC : GOOD);
+        if (!last) tl.to(fF[k], { y: -50, opacity: 0, duration: 0.4, ease: "power2.in", immediateRender: false }, VT[i] + 0.55);
+      });
+      stamp(pf, "OUTPUT 120", 310, 520, ACC, cp("F", 51));
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G  (no base case: the stack grows past the limit)
+      const g0 = ST.G;
+      const pg = panel(G, 60, 230, 960, 1060, CYAN, null); show(pg, g0 + 0.1);
+      const GL = ["def fact(n):", "    if n == 0: return 1", "    return n * fact(n - 1)"];
+      const gE = GL.map((t, i) => { const d = el(pg, `left:30px;top:${30 + i * 76}px;width:900px;height:66px;border-radius:12px;white-space:pre;font:600 40px var(--code);color:#E8EDF6;display:flex;align-items:center;padding-left:22px;background:rgba(0,0,0,0)`, t); show(d, g0 + 0.15 + i * 0.05, { opacity: 0 }); return d; });
+      tl.to(gE[1], { opacity: 0.3, duration: 0.3, immediateRender: false }, cp("G", 3));
+      const gx = lab(pg, "left:770px;width:130px;top:100px", "✗", HOT, 52); show(gx, cp("G", 3), { opacity: 0 });
+      hlLine(gE[2], cp("G", 5), ACC);
+      const GV = [5, 4, 3, 2, 1, 0, -1, -2], GY = (k) => 940 - k * 72;
+      const gT = GV.map((v, k) => cp("G", 10) + k * ((cp("G", 17) - cp("G", 10)) / 7));
+      GV.forEach((n, k) => dimIn(ghost(pg, 40, GY(k), 700, 62), g0 + 0.1, 0.35));
+      const gF = GV.map((n, k) => { const f = frameTile(pg, 40, GY(k), 700, 62, "fact(" + n + ")", "n = " + n, k >= 7 ? HOT : CYAN, 38); show(f, gT[k], { opacity: 0, y: 20 }); return f; });
+      const gLine = el(pg, "left:20px;top:500px;width:920px;height:0;border-top:4px dashed " + HOT); show(gLine, g0 + 0.3, { opacity: 0 });
+      bigtxt(pg, "left:760px;width:180px;top:446px", "LIMIT", HOT, 40, g0 + 0.3);
+      stamp(pg, "RecursionError", 480, 272, HOT, cp("G", 23));
+      bigtxt(pg, "left:0;width:960px;top:380px", "maximum recursion depth exceeded", "#B8C4DC", 34, cp("G", 24));
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H  (the limit: total(10,000) overflows the stack, the loop keeps one frame)
+      const h0 = ST.H;
+      const ph = panel(H, 60, 240, 960, 1040, CYAN, null); show(ph, h0 + 0.1);
+      const hl_ = tile(ph, 40, 30, 880, 100, "CPython limit ≈ 1000", ACC, 46); dimIn(hl_, h0 + 0.1, 0.35); lit(hl_, cp("H", 12));
+      const hc = el(ph, `left:40px;top:160px;width:880px;height:250px;border-radius:14px;border:2px solid ${M.ca(CYAN, .5)};background:${M.ca(CYAN, .1)}`); dimIn(hc, h0 + 0.1, 0.35); lit(hc, cp("H", 19));
+      ["def total(n):", "    if n == 0: return 0", "    return n + total(n - 1)"].forEach((t, i) => el(hc, `left:24px;top:${22 + i * 72}px;white-space:pre;font:600 40px var(--code);color:#E8EDF6`, t));
+      el(ph, `left:40px;top:450px;width:440px;height:590px;border-radius:14px;border:2px solid ${M.ca(CYAN, .35)}`);
+      el(ph, `left:500px;top:450px;width:420px;height:590px;border-radius:14px;border:2px solid ${M.ca(GOOD, .35)}`);
+      bigtxt(ph, "left:40px;width:440px;top:462px", "RECURSION", CYAN, 40, h0 + 0.2);
+      bigtxt(ph, "left:500px;width:420px;top:462px", "LOOP", GOOD, 40, h0 + 0.2);
+      const hLim = el(ph, "left:56px;top:566px;width:408px;height:0;border-top:4px dashed " + HOT); show(hLim, cp("H", 12), { opacity: 0 });
+      bigtxt(ph, "left:300px;width:170px;top:520px", "LIMIT", HOT, 44, cp("H", 12));
+      const hT = [0, 1, 2, 3, 4, 5, 6].map((k) => cp("H", 30) + k * ((cp("H", 38) - cp("H", 30)) / 6));
+      [0, 1, 2, 3, 4, 5, 6].forEach((k) => { const over = k >= 5; 
+        dimIn(ghost(ph, 70, 830 - k * 52, 220, 44), h0 + 0.1, 0.3);
+        const f = el(ph, `left:70px;top:${830 - k * 52}px;width:220px;height:44px;border-radius:8px;border:2px solid ${M.ca(over ? HOT : CYAN, .7)};background:${M.ca(over ? HOT : CYAN, .3)}`); show(f, hT[k], { opacity: 0, y: 14 }); });
+      bigtxt(ph, "left:40px;width:440px;top:886px", "10,000 DEEP", HOT, 44, cp("H", 33));
+      const hErr = tile(ph, 50, 935, 420, 80, "RecursionError", HOT, 42); show(hErr, cp("H", 39), { opacity: 0, scale: 1.08 });
+      bigtxt(ph, "left:500px;width:420px;top:520px", "total(10,000)", GOOD, 44, cp("H", 42));
+      const hs = tile(ph, 530, 700, 360, 90, "1 FRAME", GOOD, 44); show(hs, cp("H", 45), { opacity: 0 });
+      bigtxt(ph, "left:500px;width:420px;top:850px", "SUM", "#B8C4DC", 44, cp("H", 47));
+      const hr = tile(ph, 520, 925, 380, 90, "50,005,000", GOOD, 46); show(hr, cp("H", 47), { opacity: 0 });
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I  (recap: two ingredients, depth n is n frames, a loop keeps one)
+      const i0 = ST.I;
+      const pi = panel(I, 60, 260, 960, 1020, CYAN, null); show(pi, i0 + 0.1);
+      const it1 = bigtile(pi, 40, 30, 440, 190, "BASE CASE", "n == 0 → 1", GOOD); dimIn(it1, i0 + 0.1, 0.3); lit(it1, cp("I", 9));
+      const it2 = bigtile(pi, 500, 30, 420, 190, "SMALLER", "n → n − 1", CYAN); dimIn(it2, i0 + 0.1, 0.3); lit(it2, cp("I", 12));
+      bigtxt(pi, "left:40px;width:420px;top:240px", "DEPTH n", ACC, 44, cp("I", 15));
+      bigtxt(pi, "left:500px;width:420px;top:240px", "LOOP", GOOD, 44, cp("I", 26));
+      [0, 1, 2, 3, 4, 5].forEach((k) => { const f = tile(pi, 60, 660 - k * 68, 380, 58, "frame", CYAN, 36); dimIn(f, i0 + 0.1, 0.25); lit(f, cp("I", 19) + k * 0.1); });
+      const iB = el(pi, `left:470px;top:350px;width:8px;height:370px;border-radius:4px;background:${ACC}`); dimIn(iB, i0 + 0.1, 0.3); lit(iB, cp("I", 19));
+      const it3 = tile(pi, 40, 740, 420, 110, "n FRAMES", ACC, 52); dimIn(it3, i0 + 0.1, 0.3); lit(it3, cp("I", 20));
+      const iL = tile(pi, 540, 660, 380, 58, "frame", GOOD, 36); dimIn(iL, i0 + 0.1, 0.25); lit(iL, cp("I", 26));
+      const it5 = tile(pi, 500, 740, 420, 110, "1 FRAME", GOOD, 52); dimIn(it5, i0 + 0.1, 0.3); lit(it5, cp("I", 26));
+      const it4 = tile(pi, 40, 880, 880, 110, "VERY DEEP → LOOP", ACC, 52); dimIn(it4, i0 + 0.1, 0.3); lit(it4, cp("I", 26));
+      M.fit(I, { y: 200, h: 1100 });
+
+      // diagram: J  (quiz: count the frames of fact(3); comment and follow)
+      const j0 = ST.J;
+      M.pill(J, "EXAMPLE", j0 + 0.1, { x: 780, y: 215, w: 240, kind: "out", size: 30 });
+      const pj = panel(J, 60, 290, 960, 640, CYAN, "QUIZ"); show(pj, j0 + 0.1);
+      show(tile(pj, 620, 100, 300, 110, "fact(3)", CYAN, 56), cp("J", 3), { opacity: 0, y: 20 });
+      const jq = tile(pj, 620, 250, 300, 170, "MAX FRAMES?", HOT, 34); dimIn(jq, j0 + 0.1, 0.3); lit(jq, cp("J", 12));
+      for (let k = 0; k < 6; k++) { const y = 530 - k * 80;
+        if (k === 0) show(frameTile(pj, 40, y, 540, 70, "fact(3)", "n = 3", CYAN, 38), cp("J", 3) + 0.2, { opacity: 0, y: 20 });
+        else { const g = ghost(pj, 40, y, 540, 70); dimIn(g, j0 + 0.1, 0.55); el(g, "left:0;width:540px;top:0;height:70px;display:flex;align-items:center;justify-content:center;font:800 44px var(--code);color:#B8C4DC", "?"); } }
+      const jg = lab(pj, "left:620px;width:300px;top:470px", "? FRAMES", "#B8C4DC", 44); show(jg, cp("J", 15), { opacity: 0 });
+      const q2 = panel(J, 60, 960, 960, 230, CYAN, "COMMENT KARO"); dimIn(q2, j0 + 0.1, 0.4); lit(q2, cp("J", 18));
+      show(el(q2, "left:40px;right:40px;top:100px;height:90px;border-radius:50px;border:1.5px solid rgba(150,175,215,.35);font:500 44px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 30px", "Add a comment..."), cp("J", 19), { opacity: 0 });
+      const fb = M.pill(J, "+  FOLLOW", cp("J", 27) - 0.4, { x: 300, y: 1230, w: 480, kind: "acc", size: 56 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, cp("J", 27));
+      M.fit(J, { y: 200, h: 1100 });
+
+      ["B","C","D","E","F","G","H","I","J"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { Recursion: "gold", RecursionError: "hot", base: "good", stack: "cyan", frame: "cyan", frames: "cyan", limit: "hot", loop: "good", push: "good", pop: "hot", Factorial: "gold", Depth: "gold", Answer: "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+Day 10/150: Recursive function chalaya, RecursionError aa gaya!
+
+Recursion yaani function khud ko call kare, har baar chhote input par. Rukne ki jagah hoti hai base case, jo bina kisi aur call ke seedhe value return kar deta hai.
+
+fact(5) mein 6 calls hoti hain: fact(5) se fact(0) tak. Har active call ka ek frame call stack par rehta hai (typically arguments aur local variables ke saath). Call par frame push, return par pop. Yahan depth 6 tak gayi, yaani ek saath 6 frames. Wapsi mein 1, 1, 2, 6, 24 aur aakhir mein 120 aata hai.
+
+Base case hata do, to fact(n - 1) kabhi rukta nahi aur Python RecursionError deta hai: maximum recursion depth exceeded. Base case sahi ho tab bhi limit hai: CPython ka default lagbhag 1000 depth hai. total(10000) recursion se chalane par wahi error aata hai, jabki loop se sum 50005000 nikalta hai, kyunki loop mein ek hi frame rehta hai.
+
+Ab tumhara turn: fact(3) chalane par stack par ek saath zyada se zyada kitne frames honge? Comment mein likho. Answer: 4 (fact(3), fact(2), fact(1), fact(0)).
+
+#dsa #recursion #callstack
