@@ -1,11 +1,11 @@
 A: @hook एक ही server गिरा, और पूरा app बंद हो गया।
-B: मान लो दुकान में एक ही billing counter है, और वो रुक गया, तो सामान भरा होने पर भी कोई कुछ नहीं ख़रीद सकता।
+B: मान लो दुकान में एक ही billing counter है, | और वो रुक गया, तो सामान भरा होने पर भी कोई कुछ नहीं ख़रीद सकता।
 C: App में भी यही होता है। || Request पहले load balancer पर आती है, यानी जो requests को servers में बाँटता है। | फिर server, फिर database।
 D: अब server एक ही है और वो गिर गया। || बाक़ी सब ठीक है, पर app बंद। | ऐसे part का नाम है single point of failure, यानी SPOF। | यानी कोई एक चीज़, जिसका backup नहीं, और गिरते ही सब रुक जाए।
 E: इसे ढूँढना और हटाना 3{three} steps का काम है।
-F: पहला step: request के रास्ते पर हर part से पूछो, अगर ये मर गया, तो क्या सब रुक जाएगा? | जवाब हाँ है, तो वही SPOF है।
+F: पहला step: request के रास्ते पर हर part से पूछो, | अगर ये मर गया, तो क्या सब रुक जाएगा? | जवाब हाँ है, तो वही SPOF है।
 G: दूसरा step: उसकी एक और copy लगाओ। || इसे redundancy कहते हैं, यानी एक की जगह दो। | Load balancer दोनों को देखता है, और एक रुके तो requests दूसरे को भेज देता है। | इस switch-over को failover कहते हैं।
-H: अब हिसाब देखो। || EXAMPLE: | मान लो एक server साल में 99{ninety-nine}% चालू रहता है। || दो servers तभी बंद होंगे, जब दोनों एक साथ गिरें। | 1{one} percent times 1{one} percent, यानी 0.01{point-zero-one} percent। | तो availability 99.99{ninety-nine-point-nine-nine}%, यानी साल में करीब 52{fifty-two} minutes बंद।
+H: अब हिसाब देखो। || EXAMPLE: | मान लो एक server साल में 99{ninety-nine}% चालू रहता है। || दो servers तभी बंद होंगे, जब दोनों एक साथ गिरें। | 1{one} percent times 1{one} percent, यानी 0.01{point-zero-one} percent। | तो availability 99.99{ninety-nine-point-nine-nine}%, यानी साल में करीब 53{fifty-three} minutes बंद।
 I: पर ये हिसाब तभी सही है, जब दोनों अलग-अलग गिरें। || दोनों एक ही power socket या एक ही rack में हैं, तो बिजली जाते ही दोनों गए। | तब वो दो नहीं, एक ही गिने जाते हैं।
 J: तीसरा step: जिस चीज़ ने backup जोड़ा, उसे भी जाँचो। || Load balancer अकेला है, तो वो गिरते ही दोनों servers बेकार, यानी वही नया SPOF। | इसलिए उसकी भी twin लगानी पड़ती है।
 K: और ये free नहीं है। || हर copy का मतलब servers दुगने, तो खर्चा भी दुगना। | इसलिए पहले वो part दुगना करो, जिसके गिरने से सबसे ज़्यादा नुकसान हो।
