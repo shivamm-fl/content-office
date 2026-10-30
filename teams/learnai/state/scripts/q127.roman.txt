@@ -1,0 +1,10 @@
+A: Interviewer ne poocha: Evaluation ke liye golden dataset kaise banaoge?
+B: Tumhara jawab: golden dataset yaani test inputs ki fixed list, har input ke saath wo answer jo tum chahte ho. Use asli task jaise alag-alag cases se banao. Count se zyada variety zaroori hai. Teen steps hain.
+C: Evaluation yaani prompt badalne ke baad model ke jawab isi list par score karna. Ye invented example hai: ek refund bot.
+D: Aasan tareeka: 20 ek jaise plain refund cases. Prompt badla, 20 mein se 20 pass, sab theek lagta hai. Wahi change 20 alag-alag cases par chalaya: 20 mein se sirf 13 pass. Hinglish spelling ke 4 toote, partial refund ke 3. Pehli list ko ye kabhi pata nahi chalta, kyunki usmein aisa case tha hi nahi.
+E: Pehla step, typical cases. Wahi inputs jo asli users bhejte hain. Kyunki dataset asli traffic jaisa ho, tabhi score kisi kaam ka hai.
+F: Doosra step, edge aur adversarial cases. Edge yaani ajeeb par asli input, jaise Hinglish spelling ya partial refund. Adversarial yaani bot ko todne wala input, jaise gusse wala message. Kyunki bot yahin sabse pehle gadbad karta hai.
+G: Teesra step, production ki failures jodo. Asli user ko bot galat jawab de, to wo input sahi answer ke saath list mein daalo. Kyunki kal ka bug aaj ka test ban jaata hai.
+H: Kitne examples? Koi official magic number nahi hai, ye 20 hamara example tha. Chhoti list se shuru karo, nayi tarah ki failure mile to badhao.
+I: Interview mein bolo: "A golden dataset is a fixed set of test inputs with expected answers, and I score every change against it. I build it from typical, edge and adversarial cases, then add failures from production. Variety matters more than count."
+J: Tumhari test list mein abhi kitne cases hain? Comment mein number likho. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.

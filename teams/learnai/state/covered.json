@@ -1144,6 +1144,39 @@
       "hook_type": "relatable_stake",
       "status": "built",
       "planned": "2026-10-29"
+    },
+    {
+      "id": "a012",
+      "track": "series",
+      "title": "Parameters: what 7B and 70B actually mean",
+      "kind": "concept",
+      "topic": "Parameters = learned weights/biases; 7B = 7 billion; memory 14 GB fp16 (example).",
+      "hook_formula": "direct_question",
+      "hook_type": "direct_question",
+      "status": "planned",
+      "planned": "2026-10-30"
+    },
+    {
+      "id": "q126",
+      "track": "interview",
+      "title": "Interview: AI app ko red-team kaise karoge?",
+      "kind": "question",
+      "topic": "Red-teaming an AI app: list harms, attack, record, fix, rerun; friendly prompts prove nothing.",
+      "hook_formula": "company_specific",
+      "hook_type": "company_specific",
+      "status": "planned",
+      "planned": "2026-10-30"
+    },
+    {
+      "id": "q127",
+      "track": "interview",
+      "title": "Interview: Golden dataset kaise banate hain aur kitne examples chahiye?",
+      "kind": "question",
+      "topic": "Golden dataset: varied typical/edge/adversarial cases from real task; start small, mine production.",
+      "hook_formula": "interviewer_asked",
+      "hook_type": "interviewer_asked",
+      "status": "planned",
+      "planned": "2026-10-30"
     }
   ]
 }

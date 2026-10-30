@@ -1,0 +1,7 @@
+A: @hook Download page पर 7B{seven-B} और 70B{seventy-B} लिखा। फर्क क्या है? || B यानी billion। | 7B{seven-B} model में 7{सात} अरब numbers हैं, | और 70B{seventy-B} में 70{सत्तर} अरब। || इन्हें parameters कहते हैं।
+B: Parameter यानी model के अंदर एक सीखा हुआ number: | weight या bias। || Weight यानी input को कितना बढ़ाना है, | bias यानी एक fixed number। | Training इन्हीं को सीखती है। || एक छोटे network में सिर्फ़ 9{nine} ऐसे numbers थे। | यहाँ अरबों हैं।
+C: Model file में और कुछ नहीं होता, | बस इन numbers की list। || हर number 2{two} bytes की जगह लेता है। | तो 7{seven} billion times 2{two} bytes, यानी 14{fourteen} GB। || 70B{seventy-B} का हुआ 140{one-hundred-forty} GB। | ये हमारा अंदाज़ा है, सिर्फ़ weights का।
+D: इसलिए 70B{seventy-B} model laptop पर यूँ ही नहीं चलता। || एक तरीका: हर number को छोटा रखो। | 4-bit{four-bit} यानी सिर्फ़ आधा byte। || तब 7B{seven-B} सिर्फ़ 3.5{three-point-five} GB का, | और 70B{seventy-B} 35{thirty-five} GB का।
+E: Parameters ज़्यादा, तो model के पास सीखने की जगह ज़्यादा। | इसे capacity कहते हैं। || पर इसका मतलब ये नहीं, कि 70B{seventy-B} हर काम में बेहतर है। | छोटे काम के लिए 7B{seven-B} तेज़ और सस्ता पड़ता है, | क्योंकि उसे चलाने में memory कम लगती है।
+F: तो फर्क ये है: | 7B{seven-B} में numbers कम, file छोटी। | 70B{seventy-B} में दस गुना numbers, और file भी दस गुनी बड़ी।
+G: अब बताओ: अगर हर number 2{two} bytes की जगह 1{one} byte ले, तो 7B{seven-B} model कितने GB का होगा? | Comment में लिखो, जवाब caption में है। | रोज़ एक AI idea के लिए follow कर लो।

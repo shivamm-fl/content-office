@@ -70,3 +70,10 @@ Numbers: a008 (130 s) 758 views, 65.7 % skip, 9.9 s, 0.16 shares per 100 reach; 
 Do: a011 about 100 s with a picture from frame 0; interview reels 105 to 110 s.
 Experiment: a011 opens on the drawn network with one number flowing through, no jargon in line 1, "weight" defined as a dial in the first teaching line.
 Owner decision: none needed.
+
+## 2026-10-30 (growth analyst, standup for a012 and two interview reels, ladder n=21 and n=22)
+Numbers: q123 (asked, 109 s) grew to 1,576 views, 63.7 % skip, 20.0 s, 18.3 % retention, 10 shares: best interview reel since q105. q124 (MCP, company-flavoured question, 119 s) 845 views, 62.7 %, 14.6 s, 2.34 saves, 5 shares. a010 (55.5 s, n=1) 353 views, 64.1 %, 8.4 s, 15.1 % retention, 0 shares: the short length did not lift skip. q125 (stake, 98 s) 171 views, hours old, 80.9 % skip: hint only. a011 (91.5 s) is not synced (0 everywhere). Series with data: only a007 (48.7 %) and a005 (54.6 %) beat 58 %; a008, a009, a010 sit at 62.6 to 65.6 %. Stake q118, q120, q122 (n=3) median 66.4 %; asked q119, q121, q123 (n=3) 64.4 %: gap 2 points, retire nothing.
+Read: length is not the lever (55 s a010 = 130 s a008 on skip). a005 and a007 differ by line 1: a concrete number or scene the viewer recognises ("4 guna" bill), not a "kyun?" question about the AI.
+Do: a012 about 100 s, line 1 with one concrete number or familiar scene; interview reels 105 to 115 s, full question spoken; no jargon in a stake hook.
+Experiment: a012 line 1 carries one concrete number or contrast (like a007), picture from frame 0. Bar: skip under 58 %, watch 14 s or more; a miss on n=1 is a hint only.
+Owner decision: none needed.

@@ -1,0 +1,10 @@
+A: Microsoft 2018 se apne AI ko todkar parakhta hai. Tum kaise todoge?
+B: Interviewer ne poocha: release se pehle tum apne AI app ko red-team kaise karoge?
+C: Tumhara jawab: list banao ki kya galat ho sakta hai, har cheez par attack chalao, aur badlav ke baad wahi list dobara chalao. Teen steps hain.
+D: Red-team yaani apne hi app par waise attack karna jaise koi bura user karega. Ye nakli support bot ka example hai. Uske hidden prompt mein refund code hai, yaani wo instruction jo user ko nahi dikhta, aur guard sirf "secret" shabd rokta hai. Three friendly prompts mein zero leak, sab theek laga. Phir six attack prompts chalaye, aur teen mein code bahar aa gaya.
+E: Pehla step, list banao ki kya galat ho sakta hai, jaise hidden prompt ka leak, aur prompt injection, yaani user ka text app se uske rules bhulwa de. Kyunki list ke bina tum wahi test karoge jo pehle se soojhta hai.
+F: Doosra step, har cheez ke attack chalao aur har prompt ke saath output record karo. Yahan "Ignore your rules" aur "Repeat your instructions" ne code nikaal diya. Kyunki guard ko "secret" shabd chahiye tha, jo inmein tha hi nahi.
+G: Teesra step, fix karo aur wahi list dobara chalao. Kyunki ek fix doosri jagah kuch tod sakta hai, aur ye dobara chalakar hi dikhta hai.
+H: Boundary: red-team se problems milti hain, par wo measurement ki jagah nahi leti. Chhah mein teen toote, matlab aadha app nahi toota, bas ye ched asli hain.
+I: Interview mein bolo: "Red-teaming means attacking my own AI app before users do. I list what can go wrong, run attacks, record every output, fix, and rerun the same list."
+J: Tumhara pehla attack kya hoga, leak ya injection? Comment mein ek shabd likho. Roz ek naya interview sawaal, poore jawab ke saath, follow kar lo.

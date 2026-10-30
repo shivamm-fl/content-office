@@ -1,0 +1,10 @@
+A: @hook Interviewer ने पूछा: Evaluation के लिए golden dataset कैसे बनाओगे?
+B: तुम्हारा जवाब: golden dataset यानी test inputs की fixed list, हर input के साथ वो answer जो तुम चाहते हो। || उसे असली task जैसे अलग-अलग cases से बनाओ। Count से ज़्यादा variety ज़रूरी है। तीन steps हैं।
+C: Evaluation यानी prompt बदलने के बाद model के जवाब इसी list पर score करना। || ये invented example है: एक refund bot।
+D: आसान तरीका: 20{बीस} एक जैसे plain refund cases। | Prompt बदला, 20{बीस} में से 20{बीस} pass, सब ठीक लगता है। | वही change 20{बीस} अलग-अलग cases पर चलाया: 20{बीस} में से सिर्फ़ 13{thirteen} pass। | Hinglish spelling के 4{four} टूटे, partial refund के 3{three}। | पहली list को ये कभी पता नहीं चलता, क्योंकि उसमें ऐसा case था ही नहीं।
+E: पहला step, typical cases। | वही inputs जो असली users भेजते हैं। | क्योंकि dataset असली traffic जैसा हो, तभी score किसी काम का है।
+F: दूसरा step, edge और adversarial cases। | Edge यानी अजीब पर असली input, जैसे Hinglish spelling या partial refund। | Adversarial यानी bot को तोड़ने वाला input, जैसे गुस्से वाला message। | क्योंकि bot यहीं सबसे पहले गड़बड़ करता है।
+G: तीसरा step, production की failures जोड़ो। | असली user को bot गलत जवाब दे, तो वो input सही answer के साथ list में डालो। | क्योंकि कल का bug आज का test बन जाता है।
+H: कितने examples? | कोई official magic number नहीं है, ये 20{twenty} हमारा example था। | छोटी list से शुरू करो, नई तरह की failure मिले तो बढ़ाओ।
+I: Interview में बोलो: “A golden dataset is a fixed set of test inputs with expected answers, and I score every change against it. I build it from typical, edge and adversarial cases, then add failures from production. Variety matters more than count.”
+J: तुम्हारी test list में अभी कितने cases हैं? | Comment में number लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।

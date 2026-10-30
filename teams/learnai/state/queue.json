@@ -1535,6 +1535,123 @@
         "build ai agent from scratch",
         "ai engineer interview"
       ]
+    },
+    {
+      "id": "a012",
+      "track": "series",
+      "day": 12,
+      "unit": "A3",
+      "format": "concept",
+      "status": "planned",
+      "title": "Parameters: what 7B and 70B actually mean",
+      "one_idea": "A parameter is one learned number (a weight or bias) inside the model; 7B means about 7 billion of them. The model file is those numbers, so more parameters means more capacity but also more memory and cost, and bigger is not automatically better.",
+      "hook_type": "direct_question",
+      "spoken_hook": "Download page पर 7B और 70B लिखा। फर्क क्या है?",
+      "hook_formula": "plain_question on a scene the viewer knows",
+      "hook_source": "strategist, 2026-10-30",
+      "visual_idea": "A download list with two files, 7B and 70B. Zoom into 7B: the file opens into a long grid of tiny number cells (a011's 9-number network sits in the corner for scale). Then two shelves: 7B file as a small box, 70B file ten times bigger, with GB labels from the run; last, a dial row showing more dials = more it can hold, not always better.",
+      "everyday_anchor": "The model list on a download page (Hugging Face or Ollama) showing 7B, 70B and the file size.",
+      "example": "EXAMPLE (our arithmetic, weights only, real output in state/runs/a012_params_output.txt): 7B numbers at 2 bytes each = 14.0 GB, at 4-bit (half a byte) 3.5 GB; 70B = 140.0 GB or 35.0 GB. Meta lists Llama 3.1 in 8B, 70B and 405B sizes. Google's crash course counts a small 4-neuron-layer network at 21 parameters.",
+      "sources": [
+        "https://developers.google.com/machine-learning/glossary",
+        "https://developers.google.com/machine-learning/crash-course/neural-networks/nodes-hidden-layers",
+        "https://huggingface.co/meta-llama/Llama-3.1-8B",
+        "https://huggingface.co/meta-llama/Llama-3.1-70B",
+        "https://huggingface.co/docs/accelerate/usage_guides/model_size_estimator"
+      ],
+      "facts_to_verify": [
+        "Glossary: parameters = weights and biases learned in training",
+        "Crash course: 4-neuron hidden layer network has 21 parameters",
+        "Llama 3.1 sizes 8B/70B/405B (model cards)",
+        "fp32 to fp16 halves size (Accelerate); 2 bytes per parameter and 4-bit about 0.5 byte are our arithmetic, labelled as example"
+      ],
+      "length_target_s": 100,
+      "cover_headline": "What 7B and 70B really mean",
+      "thumb_text": "7B vs 70B",
+      "keywords": [
+        "what are parameters in ai",
+        "7b vs 70b model",
+        "llm parameters explained",
+        "model size gb",
+        "ai engineer roadmap"
+      ]
+    },
+    {
+      "id": "q126",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "G4",
+      "title": "Interview: AI app ko red-team kaise karoge?",
+      "trap": "Testing only with friendly prompts, so the app looks fine until someone attacks it.",
+      "one_idea": "Red-teaming means attacking your own AI app on purpose before users do. Make a list of what can go wrong (leaking the hidden prompt, prompt injection, harmful output), write attacks for each, run them, record prompt and output, fix, and rerun the same list after every change; friendly prompts alone prove nothing and red-teaming does not replace systematic measurement.",
+      "hook_type": "company_specific",
+      "spoken_hook": "Microsoft अपने AI को खुद तोड़ता है। तुम कैसे तोड़ोगे?",
+      "company": "Microsoft",
+      "company_source": "https://www.microsoft.com/en-us/security/blog/2023/08/07/microsoft-ai-red-team-building-future-of-safer-ai/",
+      "hook_formula": "company_specific",
+      "hook_source": "strategist, 2026-10-30 (Microsoft AI Red Team established 2018; page supports only that)",
+      "visual_idea": "A chat app with 3 green ticks from friendly prompts, then an attacker card slides in with 6 attack prompts in a list; three flip to red LEAK as the hidden code spills. Then the loop: LIST, ATTACK, RECORD, FIX, RERUN as a circle.",
+      "everyday_anchor": "A shopkeeper testing his own lock by trying to pick it before a thief does.",
+      "example": "EXAMPLE (stub app, invented, real output in state/runs/q126_redteam_run_output.txt): 3 friendly prompts leak 0; 6 attack prompts leak 3 (ignore-rules, repeat-instructions, print-in-Hindi), because the guard only blocks the word 'secret'.",
+      "sources": [
+        "https://www.microsoft.com/en-us/security/blog/2023/08/07/microsoft-ai-red-team-building-future-of-safer-ai/",
+        "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/red-teaming",
+        "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+        "https://www.anthropic.com/news/challenges-in-red-teaming-ai-systems"
+      ],
+      "facts_to_verify": [
+        "Microsoft AI Red Team established 2018",
+        "Microsoft Learn: open-ended testing first, build harm list, record date/ID/prompt/output, test with and without mitigations, not a replacement for systematic measurement",
+        "OWASP LLM01:2025 Prompt Injection is #1",
+        "Anthropic page on challenges in red teaming"
+      ],
+      "length_target_s": 108,
+      "cover_headline": "How to red-team an AI app",
+      "thumb_text": "Red-team it",
+      "keywords": [
+        "red teaming ai app",
+        "llm red team",
+        "prompt injection test",
+        "ai safety interview",
+        "ai engineer interview"
+      ]
+    },
+    {
+      "id": "q127",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "G3",
+      "title": "Interview: Golden dataset kaise banate hain aur kitne examples chahiye?",
+      "trap": "Collecting examples that all look alike, so a regression in a corner case never shows.",
+      "one_idea": "A golden dataset is a fixed set of test inputs with the answer you expect, used to score every change. Build it from the real task: typical cases, edge cases and adversarial cases, and keep adding failures mined from production. Variety matters more than count; no official source gives a magic number, so start small (about 20 varied cases is our example) and grow.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Evaluation के लिए golden dataset कैसे बनाओगे?",
+      "hook_formula": "interviewer_asked",
+      "hook_source": "strategist, 2026-10-30 (differs from q126)",
+      "visual_idea": "Two test sheets of 20 tick boxes: one with 20 identical-looking rows, one with 5 colour-coded kinds. A prompt change flips cards: the alike sheet stays 20/20 green, the varied sheet drops to 13/20 with the failing kinds highlighted.",
+      "everyday_anchor": "A teacher setting an exam: 20 copies of the same easy question would never show which topic the class forgot.",
+      "example": "EXAMPLE (invented refund-bot, real output in state/runs/q127_golden_run_output.txt): after a prompt change, 20 alike cases stay 20/20, while 20 varied cases drop to 13/20 and expose Hinglish spelling (4) and partial refund (3).",
+      "sources": [
+        "https://platform.claude.com/docs/en/docs/test-and-evaluate/develop-tests",
+        "https://developers.openai.com/api/docs/guides/evaluation-best-practices"
+      ],
+      "facts_to_verify": [
+        "Anthropic: mirror the real task distribution and include edge cases",
+        "OpenAI: typical, edge and adversarial cases; log and mine production",
+        "No official recommended count; our 20 is an example"
+      ],
+      "length_target_s": 108,
+      "cover_headline": "How to build a golden dataset",
+      "thumb_text": "Golden dataset",
+      "keywords": [
+        "golden dataset llm",
+        "llm evaluation dataset",
+        "how many eval examples",
+        "ai evals interview",
+        "ai engineer interview"
+      ]
     }
   ]
 }

@@ -1,0 +1,7 @@
+A: Download page par 7B aur 70B likha hai. Farak kya hai? B yaani billion. 7B model mein 7 arab numbers hain, aur 70B mein 70 arab. Inhe parameters kehte hain.
+B: Parameter yaani model ke andar ek seekha hua number: weight ya bias. Weight yaani input ko kitna badhana hai, bias yaani ek fixed number. Training inhi ko seekhti hai. Ek chhote network mein sirf 9 aise numbers the. Yahan arabon hain.
+C: Model file mein aur kuch nahi hota, bas in numbers ki list. Har number 2 bytes ki jagah leta hai. To 7 billion times 2 bytes, yaani 14 GB. 70B ka hua 140 GB. Ye hamara andaza hai, sirf weights ka.
+D: Isliye 70B model laptop par yun hi nahi chalta. Ek tarika: har number ko chhota rakho. 4-bit yaani sirf aadha byte. Tab 7B sirf 3.5 GB ka, aur 70B 35 GB ka.
+E: Parameters zyada, to model ke paas seekhne ki jagah zyada. Ise capacity kehte hain. Par iska matlab ye nahi, ki 70B har kaam mein behtar hai. Chhote kaam ke liye 7B tez aur sasta padta hai, kyunki use chalane mein memory kam lagti hai.
+F: To farak ye hai: 7B mein numbers kam, file chhoti. 70B mein das guna numbers, aur file bhi das guni badi.
+G: Ab batao: agar har number 2 bytes ki jagah 1 byte le, to 7B model kitne GB ka hoga? Comment mein likho, jawab caption mein hai. Roz ek AI idea ke liye follow kar lo.
