@@ -1586,11 +1586,11 @@
       "trap": "Testing only with friendly prompts, so the app looks fine until someone attacks it.",
       "one_idea": "Red-teaming means attacking your own AI app on purpose before users do. Make a list of what can go wrong (leaking the hidden prompt, prompt injection, harmful output), write attacks for each, run them, record prompt and output, fix, and rerun the same list after every change; friendly prompts alone prove nothing and red-teaming does not replace systematic measurement.",
       "hook_type": "company_specific",
-      "spoken_hook": "Microsoft अपने AI को खुद तोड़ता है। तुम कैसे तोड़ोगे?",
+      "spoken_hook": "Microsoft 2018 से अपने AI को तोड़कर परखता है। तुम कैसे तोड़ोगे?",
       "company": "Microsoft",
       "company_source": "https://www.microsoft.com/en-us/security/blog/2023/08/07/microsoft-ai-red-team-building-future-of-safer-ai/",
       "hook_formula": "company_specific",
-      "hook_source": "strategist, 2026-10-30 (Microsoft AI Red Team established 2018; page supports only that)",
+      "hook_source": "scriptwriter, 2026-10-30 (Microsoft AI Red Team established 2018; page supports only that)",
       "visual_idea": "A chat app with 3 green ticks from friendly prompts, then an attacker card slides in with 6 attack prompts in a list; three flip to red LEAK as the hidden code spills. Then the loop: LIST, ATTACK, RECORD, FIX, RERUN as a circle.",
       "everyday_anchor": "A shopkeeper testing his own lock by trying to pick it before a thief does.",
       "example": "EXAMPLE (stub app, invented, real output in state/runs/q126_redteam_run_output.txt): 3 friendly prompts leak 0; 6 attack prompts leak 3 (ignore-rules, repeat-instructions, print-in-Hindi), because the guard only blocks the word 'secret'.",
@@ -1602,11 +1602,11 @@
       ],
       "facts_to_verify": [
         "Microsoft AI Red Team established 2018",
-        "Microsoft Learn: open-ended testing first, build harm list, record date/ID/prompt/output, test with and without mitigations, not a replacement for systematic measurement",
-        "OWASP LLM01:2025 Prompt Injection is #1",
-        "Anthropic page on challenges in red teaming"
+        "Microsoft Learn red-teaming guide",
+        "OWASP LLM01:2025 Prompt Injection",
+        "Anthropic red teaming page"
       ],
-      "length_target_s": 108,
+      "length_target_s": 110,
       "cover_headline": "How to red-team an AI app",
       "thumb_text": "Red-team it",
       "keywords": [

@@ -1,0 +1,9 @@
+AI app ko red-team kaise karein
+
+Interview mein poochha jata hai: release se pehle AI app ko red-team kaise karoge? Red-team matlab apne hi app par waise attack karna jaise koi bura user karega. Jawab: pehle list banao ki kya galat ho sakta hai (hidden prompt ka leak, prompt injection), phir har cheez ke attack chalao aur har prompt ke saath output record karo, phir fix karke wahi list dobara chalao. Microsoft ne 2018 mein apni AI Red Team banayi. Microsoft Learn ke mutabik red teaming systematic measurement ki jagah nahi leti: wo harms dhundhne mein madad karti hai. Video ka support bot hamara apna example hai (nakli, invented numbers): 3 friendly prompts mein 0 leak, 6 attack prompts mein 3 leak.
+
+Is video mein: red teaming ai app, llm red team, prompt injection test, ai engineer interview.
+
+Sources:
+https://www.microsoft.com/en-us/security/blog/2023/08/07/microsoft-ai-red-team-building-future-of-safer-ai/
+https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/red-teaming

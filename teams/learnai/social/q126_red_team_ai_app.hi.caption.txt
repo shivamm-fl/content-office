@@ -1,0 +1,17 @@
+Microsoft 2018 se apne AI ko todkar parakhta hai. Tum kaise todoge?
+
+Interviewer ne poocha: release se pehle tum apne AI app ko red-team kaise karoge?
+
+Jawab: red-team matlab apne hi app par waise attack karna jaise koi bura user karega. Teen steps:
+
+1. List banao ki kya galat ho sakta hai: hidden prompt ka leak, prompt injection.
+2. Har cheez ke attack chalao aur har prompt ke saath output record karo.
+3. Fix karo aur wahi list dobara chalao, kyunki ek fix doosri jagah kuch tod sakta hai.
+
+Example (nakli support bot, invented): 3 friendly prompts mein 0 leak, par 6 attack prompts mein se 3 mein refund code bahar aa gaya, kyunki guard sirf "secret" shabd rokta tha.
+
+Boundary: red-team se problems milti hain, par wo measurement ki jagah nahi leti.
+
+Tumhara pehla attack kya hoga, leak ya injection? Comment mein ek shabd likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #AISafety
