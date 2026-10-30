@@ -1,44 +1,106 @@
 {
-  "items": [
+ "items": [
+  {
+   "id": "d009",
+   "track": "series",
+   "day": 9,
+   "unit": "P1",
+   "format": "problem",
+   "title": "Contains Duplicate aur Valid Anagram: ek hash map se dono",
+   "one_idea": "Both Contains Duplicate and Valid Anagram are answered by remembering what you have already seen in a hash-based structure (a set of seen values, a count of each character), so no sorting or pair-checking is needed.",
+   "hook_type": "surprising_fact",
+   "spoken_hook": "Contains Duplicate problem, sorting के बिना एक loop में solve!",
+   "hook_formula": "plain_payoff_fact",
+   "visual_idea": "Row of six cells 4 7 1 9 7 3 with a pointer walking right and a seen box filling; at the second 7 the cell turns red; then count bars for listen and silent overlap, rat and car differ at t and c.",
+   "everyday_anchor": "none: developer audience (owner 2026-10-26)",
+   "example": "[4,7,1,9,7,3]: duplicate at step 5 with a set, 8 pair checks brute force; 10,000 numbers 49,995,000 pairs; listen/silent True, rat/car False.",
+   "pattern": "remember what you have seen",
+   "check_question": "Is [3,8,3] a duplicate? Are aab and abb anagrams? (yes, no)",
+   "sources": [
+    "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0200-0299/0217.Contains%20Duplicate/README_EN.md",
+    "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0200-0299/0242.Valid%20Anagram/README_EN.md",
+    "https://docs.python.org/3/library/collections.html",
+    "https://en.wikipedia.org/wiki/Hash_table"
+   ],
+   "length_target_s": 165,
+   "cover_headline": "Duplicates and anagrams, one trick",
+   "thumb_text": "Seen set",
+   "keywords": [
+    "contains duplicate",
+    "valid anagram"
+   ],
+   "status": "planned",
+   "qa_passed": false,
+   "script_locked": true,
+   "hook_source": "plain payoff fact, owner-approved script 2026-10-27",
+   "facts_to_verify": [
+    "Contains Duplicate hash table O(n) time/space, sorting O(n log n) (doocs 0217) - verified",
+    "Valid Anagram counting O(n) time, O(C) space, C=26 (doocs 0242) - verified",
+    "Counter is a dict subclass; hash lookup average O(1), worst O(n)",
+    "Code run: qa/d009/output.txt"
+   ]
+  },
+  {
+   "id": "d010",
+   "track": "series",
+   "day": 10,
+   "unit": "P1",
+   "format": "concept",
+   "title": "Recursion aur call stack: har call ka apna frame",
+   "one_idea": "A recursive function calls itself on a smaller input until a base case returns; each active call keeps one frame on the call stack, so a missing base case or too much depth ends in a RecursionError (stack overflow).",
+   "hook_type": "relatable_stake",
+   "spoken_hook": "Recursive function चलाया, RecursionError आ गया!",
+   "hook_formula": "error_first_standard_term",
+   "hook_candidates": [
     {
-      "id": "d009",
-      "track": "series",
-      "day": 9,
-      "unit": "P1",
-      "format": "problem",
-      "title": "Contains Duplicate aur Valid Anagram: ek hash map se dono",
-      "one_idea": "Both Contains Duplicate and Valid Anagram are answered by remembering what you have already seen in a hash-based structure (a set of seen values, a count of each character), so no sorting or pair-checking is needed.",
-      "hook_type": "surprising_fact",
-      "spoken_hook": "Contains Duplicate problem, sorting के बिना एक loop में solve!",
-      "hook_formula": "plain_payoff_fact",
-      "visual_idea": "Row of six cells 4 7 1 9 7 3 with a pointer walking right and a seen box filling; at the second 7 the cell turns red; then count bars for listen and silent overlap, rat and car differ at t and c.",
-      "everyday_anchor": "none: developer audience (owner 2026-10-26)",
-      "example": "[4,7,1,9,7,3]: duplicate at step 5 with a set, 8 pair checks brute force; 10,000 numbers 49,995,000 pairs; listen/silent True, rat/car False.",
-      "pattern": "remember what you have seen",
-      "check_question": "Is [3,8,3] a duplicate? Are aab and abb anagrams? (yes, no)",
-      "sources": [
-        "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0200-0299/0217.Contains%20Duplicate/README_EN.md",
-        "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0200-0299/0242.Valid%20Anagram/README_EN.md",
-        "https://docs.python.org/3/library/collections.html",
-        "https://en.wikipedia.org/wiki/Hash_table"
-      ],
-      "length_target_s": 165,
-      "cover_headline": "Duplicates and anagrams, one trick",
-      "thumb_text": "Seen set",
-      "keywords": [
-        "contains duplicate",
-        "valid anagram"
-      ],
-      "status": "planned",
-      "qa_passed": false,
-      "script_locked": true,
-      "hook_source": "plain payoff fact, owner-approved script 2026-10-27",
-      "facts_to_verify": [
-        "Contains Duplicate hash table O(n) time/space, sorting O(n log n) (doocs 0217) - verified",
-        "Valid Anagram counting O(n) time, O(C) space, C=26 (doocs 0242) - verified",
-        "Counter is a dict subclass; hash lookup average O(1), worst O(n)",
-        "Code run: qa/d009/output.txt"
-      ]
+     "formula": "error_first_standard_term",
+     "text": "Recursive function चलाया, RecursionError आ गया!"
+    },
+    {
+     "formula": "plain_payoff_fact",
+     "text": "Recursion में हर call का अपना stack frame बनता है।"
+    },
+    {
+     "formula": "direct_question",
+     "text": "Recursive function खुद को call करे, तो memory में क्या होता है?"
     }
-  ]
+   ],
+   "hook_source": "relatable_stake is the oldest of the last six (only d005); the error is the real one an engineer meets, with the standard term and no undefined word; d005 used the same wrong-way-first idea so this compares it on a concept day",
+   "hook_10s": "Recursive function चलाया, RecursionError आ गया! Recursion यानी function खुद को छोटे input पर call करे। हर call stack पर अपना frame रखता है, और base case पर रुकता है। [frame 0: a stack of call boxes growing upward past a red limit line, label RecursionError]",
+   "visual_idea": "A vertical call stack: fact(5) pushes frame boxes fact(5), fact(4) down to fact(0) one by one with n in each, then the returns pop from the top while the value 1, 1x1, 2, 6, 24, 120 builds up; second panel removes the base case and the stack keeps growing until it crosses a red limit line at depth 1000 and turns into RecursionError.",
+   "everyday_anchor": "none: developer audience, no everyday analogies (owner 2026-10-26)",
+   "example": "fact(5): 6 calls, max depth 6, returns 120; fact without base case: RecursionError 'maximum recursion depth exceeded' at depth 999 counted from the call; total(10000) recursive fails, loop gives 50005000. Run on CPython 3.12.3 (EXAMPLE limits are platform and version dependent).",
+   "pattern": "base case plus smaller subproblem",
+   "check_question": "What does f(n) = n * f(n-1) do with no base case? (RecursionError)",
+   "sources": [
+    "https://docs.python.org/3/library/sys.html",
+    "https://docs.python.org/3/library/exceptions.html",
+    "https://en.wikipedia.org/wiki/Call_stack",
+    "https://en.wikipedia.org/wiki/Recursion_(computer_science)",
+    "https://raw.githubusercontent.com/python/cpython/3.12/Include/internal/pycore_ceval.h"
+   ],
+   "length_target_s": 150,
+   "cover_headline": "Recursion and the call stack",
+   "thumb_text": "Call stack",
+   "keywords": [
+    "recursion",
+    "call stack",
+    "base case",
+    "recursion error python",
+    "stack overflow"
+   ],
+   "status": "planned",
+   "qa_passed": false,
+   "facts_to_verify": [
+    "Each active call has one stack frame typically holding arguments, return address (if saved on the stack) and locals; push on call, pop on return; say 'typically', not 'always' (Wikipedia Call stack, researcher-verified)",
+    "Base case returns directly; recursive case breaks into smaller sub-problems; unbounded recursion typically exhausts stack space (Wikipedia Recursion, verified)",
+    "RecursionError is raised when the maximum recursion depth is exceeded (Python exceptions docs, verified)",
+    "Default limit 1000 is NOT in the sys docs; it is Py_DEFAULT_RECURSION_LIMIT 1000 in CPython 3.12 source (pycore_ceval.h). Say 'CPython's default' and say 'about 1000'; never 'the Python docs say 1000'",
+    "O(n) stack space for depth n has no fetched source: present it as 'n frames for depth n' shown by the run, not as a cited claim, unless the researcher finds a source",
+    "Run the code and show its real output: fact(5)=120 (6 calls with the n==0 base case; researcher counted 5 for a base case at n==1, so match the code shown on screen); no-base-case RecursionError 'maximum recursion depth exceeded' at depth about 999; total(10000) fails, loop gives 50005000; fact(5000) also fails",
+    "Optional: naive fib(5) 15 calls, fib(30) 2692537 calls (researcher-run, CPython 3.12.3); keep out unless the script needs a second example"
+   ],
+   "script_file": "state/scripts/d010.txt"
+  }
+ ]
 }

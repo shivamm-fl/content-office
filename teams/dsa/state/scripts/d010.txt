@@ -1,0 +1,10 @@
+A: @hook Recursive function चलाया, RecursionError आ गया!
+B: Recursion यानी function खुद को ही call करे, | हर बार छोटे input पर। || और रुकने की जगह होती है base case, | जो बिना किसी और call के सीधे value return कर देता है।
+C: Factorial लो। || fact of n equals n times fact of n minus 1{एक}, | और base case है: | n equals 0{शून्य} पर return 1{एक}।
+D: अब fact of 5{पाँच} चलाओ। || वो बुलाता है fact of 4{चार}, | फिर fact of 3{तीन}, | fact of 2{दो}, | fact of 1{एक}, | और आख़िर में fact of 0{शून्य}। || कुल 6{छह} calls हुईं। || जब तक fact of 0{शून्य} return नहीं करता, | बाकी 5{पाँच} calls अधूरी हैं, | अपने जवाब का wait करती हुई।
+E: ये अधूरी calls रहती हैं call stack पर। || Call stack यानी वो memory, | जिसमें हर active call का एक frame रहता है, | typically उसके arguments और local variables के साथ। || Call होते ही frame push होता है, | return होते ही pop। || यहाँ stack की depth 6{छह} तक गई, | यानी एक साथ 6{छह} frames।
+F: अब वापसी देखो। || fact of 0{शून्य} return करता है 1{एक}, | और उसका frame pop। || fact of 1{एक} देता है 1{एक}, | fact of 2{दो} देता है 2{दो}, | fact of 3{तीन} देता है 6{छह}, | fact of 4{चार} देता है 24{चौबीस}, | और fact of 5{पाँच} देता है 120{एक-सौ-बीस}। || Output वही आया जो चाहिए था: | 120{एक-सौ-बीस}।
+G: अब base case हटा दो। || fact of n minus 1{एक} कभी रुकता ही नहीं, | frames बढ़ते जाते हैं, | और Python error देता है: | RecursionError, | maximum recursion depth exceeded।
+H: Base case सही हो, | तब भी एक limit है। || CPython का default लगभग 1{एक} हज़ार depth है। || मान लो total of n equals n plus total of n minus 1{एक}। || total of 10{दस} हज़ार recursion से चलाओ, | तो वही RecursionError आता है। || वही sum एक loop से 5{पाँच} करोड़ 5{पाँच} हज़ार निकलता है, | क्योंकि loop में एक ही frame रहता है।
+I: याद रखो: | हर recursive function में दो चीज़ें चाहिए, | base case और छोटा होता input। || Depth n हो, | तो n frames, | इसलिए बहुत गहरे input पर loop बेहतर है।
+J: अब तुम्हारा turn! || fact of 3{तीन} चलाने पर stack पर एक साथ ज़्यादा से ज़्यादा कितने frames होंगे? || Answer comment करो। || ऐसे ही DSA concepts के लिए follow कर लो।
