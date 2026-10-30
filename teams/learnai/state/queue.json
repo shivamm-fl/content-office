@@ -1549,21 +1549,12 @@
       "spoken_hook": "Download page पर 7B और 70B लिखा। फर्क क्या है?",
       "hook_formula": "plain_question on a scene the viewer knows",
       "hook_source": "strategist, 2026-10-30",
-      "visual_idea": "A download list with two files, 7B and 70B. Zoom into 7B: the file opens into a long grid of tiny number cells (a011's 9-number network sits in the corner for scale). Then two shelves: 7B file as a small box, 70B file ten times bigger, with GB labels from the run; last, a dial row showing more dials = more it can hold, not always better.",
-      "everyday_anchor": "The model list on a download page (Hugging Face or Ollama) showing 7B, 70B and the file size.",
-      "example": "EXAMPLE (our arithmetic, weights only, real output in state/runs/a012_params_output.txt): 7B numbers at 2 bytes each = 14.0 GB, at 4-bit (half a byte) 3.5 GB; 70B = 140.0 GB or 35.0 GB. Meta lists Llama 3.1 in 8B, 70B and 405B sizes. Google's crash course counts a small 4-neuron-layer network at 21 parameters.",
       "sources": [
         "https://developers.google.com/machine-learning/glossary",
         "https://developers.google.com/machine-learning/crash-course/neural-networks/nodes-hidden-layers",
         "https://huggingface.co/meta-llama/Llama-3.1-8B",
         "https://huggingface.co/meta-llama/Llama-3.1-70B",
         "https://huggingface.co/docs/accelerate/usage_guides/model_size_estimator"
-      ],
-      "facts_to_verify": [
-        "Glossary: parameters = weights and biases learned in training",
-        "Crash course: 4-neuron hidden layer network has 21 parameters",
-        "Llama 3.1 sizes 8B/70B/405B (model cards)",
-        "fp32 to fp16 halves size (Accelerate); 2 bytes per parameter and 4-bit about 0.5 byte are our arithmetic, labelled as example"
       ],
       "length_target_s": 100,
       "cover_headline": "What 7B and 70B really mean",

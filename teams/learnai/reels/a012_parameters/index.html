@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Parameters: what 7B and 70B actually mean</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="92" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="92" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="92" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="92" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "150 DAYS OF AI · DAY 12" });
+      Viz.install(M);
+      const { tl, S } = M; const { ACC, CYAN, HOT, GOOD, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#101A2E", GREY = "#8FA3C7";
+// ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur, op) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: op == null ? 1 : op, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const dimTo = (d, t, op) => { tl.to(d, { opacity: op, duration: 0.3, immediateRender: false }, t); return d; };
+      const pillAt = (host, text, x, y, t, col, size, dash) => { const sz = size || 38, h = Math.round(sz * 1.7);
+        return show(el(host, `left:${x}px;top:${y}px;height:${h}px;display:flex;align-items:center;padding:0 28px;border-radius:999px;border:2px ${dash ? "dashed" : "solid"} ${col};background:${ca(col, 0.12)};font:700 ${sz}px ${COD};letter-spacing:.08em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: -10 }); };
+      const head = (sc, host, text) => { pillAt(host, text, 70, 215, S[sc] + 0.05, CYAN, 40); pillAt(host, "EXAMPLE", 790, 222, S[sc] + 0.05, GREY, 36); };
+      const line = (host, x1, y1, x2, y2, col, w, t, dash, op) => { const pad = 8, lx = Math.min(x1, x2) - pad, ly = Math.min(y1, y2) - pad, W_ = Math.abs(x2 - x1) + 2 * pad, H_ = Math.abs(y2 - y1) + 2 * pad;
+        const d = el(host, `left:${lx}px;top:${ly}px;width:${W_}px;height:${H_}px`);
+        d.innerHTML = `<svg width="${W_}" height="${H_}" style="overflow:visible"><line x1="${x1 - lx}" y1="${y1 - ly}" x2="${x2 - lx}" y2="${y2 - ly}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" ${dash ? 'stroke-dasharray="14 12"' : ""}/></svg>`;
+        return t == null ? d : show(d, t, { opacity: 0 }, 0.4, op); };
+      const circ = (host, cx, cy, r, col, fill, bw) => el(host, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;box-sizing:border-box;border-radius:50%;border:${bw || 5}px solid ${col};background:${ca(col, fill == null ? 0.12 : fill)}`);
+      const val = (host, cx, cy, text, col, t, size, op) => show(el(host, `left:${cx - 80}px;top:${cy - 40}px;width:160px;height:80px;display:flex;align-items:center;justify-content:center;font:800 ${size || 64}px ${COD};color:${col}`, text), t, { opacity: 0, scale: 0.8 }, 0.3, op);
+      const tag = (host, cx, cy, text, col, dash, t, op) => show(el(host, `left:${cx - 62}px;top:${cy - 30}px;width:124px;height:60px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:14px;border:3px ${dash ? "dashed" : "solid"} ${col};background:${PANEL};font:800 38px ${COD};color:${col};white-space:nowrap`, text), t, { opacity: 0, scale: 0.9 }, 0.35, op);
+      const travel = (host, x1, y1, x2, y2, t, dur, txt, col) => { const d = el(host, `left:0;top:0;width:76px;height:76px;box-sizing:border-box;border-radius:50%;background:${col || "#E8EEF9"};display:flex;align-items:center;justify-content:center;font:800 36px ${COD};color:#0B1220`, txt);
+        tl.set(d, { opacity: 0, x: x1 - 38, y: y1 - 38 }, 0); tl.to(d, { opacity: 1, duration: 0.12, immediateRender: false }, t);
+        tl.to(d, { x: x2 - 38, y: y2 - 38, duration: dur, ease: "power1.inOut", immediateRender: false }, t); tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      const dial = (host, cx, cy, r, col, a0) => { const face = circ(host, cx, cy, r, col, 0.1, 6); const arm = el(host, `left:${cx - 7}px;top:${cy - r + 14}px;width:14px;height:${r - 14}px;border-radius:7px;background:${ACC}`); const hub = circ(host, cx, cy, 14, ACC, 1, 2);
+        tl.set(arm, { rotation: a0, transformOrigin: `7px ${r - 14}px` }, 0); return { face, arm, hub, all: [face, arm, hub] }; };
+      const calc = (host, y, t0, parts, res) => { const g = show(glass(host, 90, y, 900, 250, CYAN), t0, { opacity: 0 }, 0.3);
+        const row = el(host, `left:130px;top:${y + 36}px;height:80px;display:flex;gap:24px;align-items:center;font:700 58px ${COD};color:${TEXT};white-space:nowrap`);
+        parts.forEach(([h, t]) => { const s = document.createElement("span"); s.innerHTML = h; row.appendChild(s); show(s, t, { opacity: 0, y: 12 }, 0.3); });
+        const r2 = el(host, `left:130px;top:${y + 140}px;height:80px;display:flex;align-items:center;font:800 70px ${COD};color:${res[2]};white-space:nowrap`, res[0]); show(r2, res[1], { opacity: 0, y: 12 }, 0.35); return { g, row, r2 }; };
+      const EDGEC = "rgba(232,238,249,0.45)";
+
+      const fmt = (n) => n.toLocaleString("en-US");
+      const counter = (node, t, dur, target) => { const o = { v: 0 }; tl.to(o, { v: target, duration: dur, ease: "power2.out", immediateRender: false, onUpdate: () => { node.textContent = fmt(Math.round(o.v)); } }, t); };
+      const cell = (host, x, y, w, h, text, col, t, size, dash) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:16px;border:3px ${dash ? "dashed" : "solid"} ${col};background:${ca(col, 0.14)};font:800 ${size || 46}px ${COD};color:${TEXT};white-space:nowrap`, text), t, { opacity: 0, y: 14 }, 0.3);
+      const stampAt = (host, txt, cx, y, col, t) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 28px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 46px ${COD};color:${col};white-space:nowrap`, txt); gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const NUMS = ["0.31", "−1.20", "0.07", "2.45", "−0.88", "1.90"];
+
+      // ============ A: hook: download list, 7B and 70B ============
+      // diagram: A
+      const hookEnd = M.hook(["Download page par", "7B ya 70B likha.", "Farak kya hai?"], { size: 76, top: 215 });
+      const gA = el(A, "left:0;top:0;width:1080px;height:1920px");
+      tl.to(gA, { y: -200, duration: 0.5, ease: "power3.inOut", immediateRender: false }, Math.max(3.6, typeof hookEnd === "number" ? hookEnd : 3.6));
+      const rowsA = [["7B", 560, CYAN, 7e9, "model-7B"], ["70B", 940, ACC, 70e9, "model-70B"]];
+      rowsA.forEach(([lab, y, col, target, fname], k) => {
+        show(glass(gA, 90, y, 900, 340, col, 26), 0.05, { opacity: 0 }, 0.4);
+        show(el(gA, `left:130px;top:${y + 24}px;font:800 110px ${COD};color:${col}`, lab), 0.1, { opacity: 0 });
+        show(el(gA, `left:130px;top:${y + 160}px;font:600 34px ${COD};color:${GREY}`, fname + ".safetensors"), 0.15, { opacity: 0 });
+        const cn = el(gA, `left:340px;top:${y + 40}px;width:600px;text-align:right;font:800 62px ${COD};color:${TEXT};white-space:nowrap`, "?"); show(cn, 0.2, { opacity: 0 });
+        counter(cn, at("A", "arab", k), 1.0, target);
+        NUMS.slice(0, 5).forEach((n, i) => show(el(gA, `left:${125 + i * 112}px;top:${y + 250}px;width:110px;text-align:center;font:700 33px ${COD};color:${n[0] === "−" ? "#FF8A9C" : GREY};white-space:nowrap`, n), 0.3 + i * 0.1 + k * 0.3, { opacity: 0, y: 8 }, 0.3));
+        show(el(gA, `left:332px;top:${y + 28}px;width:616px;height:96px;box-sizing:border-box;border-radius:20px;border:4px solid ${ACC}`), at("A", "parameters"), { opacity: 0, scale: 1.04 }, 0.3);
+      });
+      pillAt(gA, "B = BILLION", 90, 1310, at("A", "billion"), CYAN, 44);
+      pillAt(gA, "PARAMETERS", 560, 1310, at("A", "parameters"), ACC, 44);
+
+      // ============ B: one learned number ============
+      // diagram: B
+      head("B", B, "PARAMETER");
+      const g1 = el(B, "left:0;top:0;width:1080px;height:1920px");
+      show(glass(g1, 90, 340, 440, 360, CYAN, 26), S.B + 0.1, { opacity: 0 }, 0.4);
+      show(el(g1, `left:90px;top:430px;width:440px;text-align:center;font:800 150px ${COD};color:${TEXT}`, "0.31"), S.B + 0.15, { opacity: 0 });
+      show(el(g1, `left:84px;top:334px;width:452px;height:372px;box-sizing:border-box;border-radius:32px;border:5px solid ${ACC}`), at("B", "number"), { opacity: 0, scale: 1.04 }, 0.3);
+      const bd = dial(g1, 780, 500, 150, CYAN, -45); bd.all.forEach((d) => show(d, at("B", "weight", 0), { opacity: 0 }, 0.4));
+      pillAt(g1, "WEIGHT", 650, 690, at("B", "weight", 0), ACC, 46);
+      tl.to(bd.arm, { rotation: 60, duration: 0.6, ease: "power3.out", immediateRender: false }, at("B", "badhana"));
+      cell(g1, 90, 770, 440, 170, "+ 2", ACC, at("B", "bias", 0), 90, true);
+      pillAt(g1, "BIAS", 580, 805, at("B", "bias", 0), ACC, 42, true);
+      pillAt(g1, "FIXED", 770, 805, at("B", "fixed"), GREY, 38);
+      tl.to(bd.arm, { rotation: -70, duration: 0.6, ease: "power3.out", immediateRender: false }, at("B", "seekhti"));
+      pillAt(g1, "TRAINING", 400, 985, at("B", "Training"), CYAN, 42);
+      [250, 540, 830].forEach((cx, k) => { const dd = dial(g1, cx, 1160, 80, CYAN, -50 + k * 20); dd.all.forEach((d) => show(d, at("B", "Training") + 0.1, { opacity: 0 }, 0.4));
+        tl.to(dd.arm, { rotation: [60, -70, 30][k], duration: 0.6, ease: "power3.out", immediateRender: false }, at("B", "seekhti") + 0.1 + k * 0.12); });
+      gone(g1, at("B", "Google") - 0.15, 0.3);
+      const NP = { i0: [130, 520], i1: [130, 680], i2: [130, 840], h0: [330, 460], h1: [330, 590], h2: [330, 720], h3: [330, 850], o: [530, 655] };
+      const nEdges = [];
+      ["i0", "i1", "i2"].forEach((a) => ["h0", "h1", "h2", "h3"].forEach((h) => nEdges.push([a, h]))); ["h0", "h1", "h2", "h3"].forEach((h) => nEdges.push([h, "o"]));
+      const nAll = [];
+      pillAt(B, "GOOGLE EXAMPLE", 90, 345, at("B", "Google"), GREY, 40);
+      nEdges.forEach(([a, b]) => nAll.push(line(B, NP[a][0], NP[a][1], NP[b][0], NP[b][1], "rgba(232,238,249,0.75)", 4, at("B", "Google"))));
+      Object.keys(NP).forEach((k) => nAll.push(show(circ(B, NP[k][0], NP[k][1], 44, k[0] === "i" ? GREY : CYAN, 0.3, 5), at("B", "Google"), { opacity: 0, scale: 0.9 }, 0.3)));
+      nAll.push(show(el(B, `left:640px;top:560px;width:350px;text-align:center;font:800 200px ${COD};color:${ACC}`, "21"), at("B", "21"), { opacity: 0, scale: 0.9 }, 0.4));
+      nAll.push(pillAt(B, "PARAMETERS", 680, 790, at("B", "21") + 0.2, ACC, 40));
+      nAll.forEach((d) => dimTo(d, at("B", "arbon") - 0.1, 0.3));
+      show(el(B, `left:90px;top:1020px;width:900px;height:270px;box-sizing:border-box;border-radius:18px;border:3px solid ${CYAN};background-color:${ca(CYAN, 0.12)};background-image:linear-gradient(${ca(CYAN, 0.6)} 1.5px, transparent 1.5px),linear-gradient(90deg,${ca(CYAN, 0.6)} 1.5px, transparent 1.5px);background-size:15px 15px`), at("B", "arbon") - 0.1, { opacity: 0, scale: 0.96 }, 0.5);
+      pillAt(B, "BILLIONS", 380, 930, at("B", "arbon"), ACC, 48);
+
+      // ============ C: the file is a list; bytes; 14 GB and 140 GB ============
+      // diagram: C
+      pillAt(C, "FILE SIZE", 70, 215, S.C + 0.05, CYAN, 40); pillAt(C, "WEIGHTS ONLY", 400, 218, at("C", "weights"), GREY, 36); pillAt(C, "EXAMPLE", 790, 222, S.C + 0.05, GREY, 36);
+      show(glass(C, 90, 320, 900, 400, CYAN, 26), S.C + 0.1, { opacity: 0 }, 0.4);
+      show(el(C, `left:130px;top:335px;font:700 38px ${COD};color:${TEXT};white-space:nowrap`, "model file"), S.C + 0.15, { opacity: 0 });
+      NUMS.forEach((n, i) => { const cx = 118 + i * 142;
+        cell(C, cx, 400, 132, 280, n, i % 2 ? GREY : CYAN, at("C", "list") - 0.9 + i * 0.12, 36).style.paddingBottom = "150px";
+        pillAt(C, "2 B", cx + 6, 590, at("C", "2", 0) + i * 0.05, ACC, 36); });
+      const cc = el(C, `left:110px;top:760px;height:90px;display:flex;gap:22px;align-items:center;font:800 62px ${COD};color:${TEXT};white-space:nowrap`);
+      [["7B", at("C", "7"), CYAN], ["× 2 BYTES", at("C", "2", 1), ACC], ["= 14 GB", at("C", "14"), GOOD]].forEach(([h, t, col]) => { const s = document.createElement("span"); s.style.color = col; s.textContent = h; cc.appendChild(s); show(s, t, { opacity: 0, y: 12 }, 0.3); });
+      const barC = (y, lab, w, col, t, size) => { show(el(C, `left:90px;top:${y}px;font:800 54px ${COD};color:${col}`, lab), S.C + 0.5, { opacity: 0 });
+        const q = show(el(C, `left:300px;top:${y}px;width:690px;text-align:right;font:800 54px ${COD};color:${GREY}`, "? GB"), S.C + 0.5, { opacity: 0 }); q.setAttribute("data-layout-allow-overlap", ""); gone(q, t, 0.15);
+        const r = show(el(C, `left:300px;top:${y + 4}px;width:690px;text-align:right;font:800 54px ${COD};color:${TEXT}`, size), t + 0.1, { opacity: 0 }); r.setAttribute("data-layout-allow-overlap", "");
+        const b = el(C, `left:90px;top:${y + 76}px;width:${w}px;height:84px;border-radius:14px;background:${col}`); tl.set(b, { opacity: 0, scaleX: 0, transformOrigin: "0 50%" }, 0);
+        tl.to(b, { opacity: 1, scaleX: 1, duration: 0.7, ease: "power3.out", immediateRender: false }, t); return b; };
+      barC(890, "7B", 78, CYAN, at("C", "14") + 0.1, "14 GB");
+      barC(1085, "70B", 780, ACC, at("C", "140"), "140 GB");
+
+      // ============ D: smaller numbers, same bars shrink ============
+      // diagram: D
+      head("D", D, "SMALLER");
+      show(glass(D, 90, 320, 900, 300, CYAN, 26), S.D + 0.1, { opacity: 0 }, 0.4);
+      const lab2 = show(el(D, `left:130px;top:335px;font:800 54px ${COD};color:${ACC};white-space:nowrap`, "2 BYTES = 16 BITS"), S.D + 0.2, { opacity: 0 });
+      const lab4 = el(D, `left:130px;top:335px;font:800 54px ${COD};color:${GOOD};white-space:nowrap`, "4-BIT = ½ BYTE"); tl.set(lab4, { opacity: 0 }, 0);
+      lab2.setAttribute("data-layout-allow-overlap", ""); lab4.setAttribute("data-layout-allow-overlap", "");
+      gone(lab2, at("D", "4-bit") - 0.05, 0.2); tl.fromTo(lab4, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.3, immediateRender: false }, at("D", "4-bit") + 0.1);
+      for (let i = 0; i < 16; i++) { const sq = show(el(D, `left:${132 + i * 52}px;top:450px;width:44px;height:130px;border-radius:10px;border:3px solid ${ACC};background:${ca(ACC, 0.3)}`), S.D + 0.3 + i * 0.03, { opacity: 0, scale: 0.8 }, 0.25);
+        if (i >= 4) tl.to(sq, { opacity: 0.12, duration: 0.4, immediateRender: false }, at("D", "aadha")); else tl.to(sq, { borderColor: GOOD, backgroundColor: ca(GOOD, 0.35), duration: 0.3, immediateRender: false }, at("D", "aadha")); }
+      const mkBar = (y, lab, size0, size1, w0, w1, col) => {
+        show(el(D, `left:90px;top:${y}px;font:800 54px ${COD};color:${col}`, lab), S.D + 0.3, { opacity: 0 });
+        const s0 = show(el(D, `left:300px;top:${y}px;width:690px;text-align:right;font:800 54px ${COD};color:${TEXT}`, size0), S.D + 0.3, { opacity: 0 });
+        const s1 = el(D, `left:300px;top:${y}px;width:690px;text-align:right;font:800 54px ${COD};color:${GOOD}`, size1); tl.set(s1, { opacity: 0 }, 0);
+        s0.setAttribute("data-layout-allow-overlap", ""); s1.setAttribute("data-layout-allow-overlap", "");
+        const b = el(D, `left:90px;top:${y + 80}px;width:${w0}px;height:84px;border-radius:14px;background:${col}`); tl.set(b, { opacity: 0 }, 0);
+        tl.to(b, { opacity: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, S.D + 0.3);
+        return { b, s0, s1, w0, w1 }; };
+      const b7 = mkBar(700, "7B", "14 GB", "3.5 GB", 78, 19.5, CYAN), b70 = mkBar(950, "70B", "140 GB", "35 GB", 780, 195, ACC);
+      gone(pillAt(D, "HEAVY", 600, 1200, at("D", "laptop"), HOT, 44), at("D", "chhota") + 0.2);
+      [[b7, at("D", "35", 0)], [b70, at("D", "35", 1)]].forEach(([o, t]) => {
+        tl.to(o.b, { width: o.w1, duration: 0.7, ease: "power3.out", immediateRender: false }, at("D", "aadha"));
+        gone(o.s0, t - 0.5, 0.15); tl.fromTo(o.s1, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3, immediateRender: false }, t); });
+
+      // ============ E: capacity, not always better ============
+      // diagram: E
+      pillAt(E, "ROOM TO LEARN", 70, 215, S.E + 0.05, CYAN, 40); pillAt(E, "CAPACITY", 560, 215, at("E", "capacity"), ACC, 40);
+      show(glass(E, 90, 320, 900, 260, CYAN, 26), S.E + 0.1, { opacity: 0 }, 0.4);
+      show(el(E, `left:130px;top:340px;font:800 80px ${COD};color:${CYAN}`, "7B"), S.E + 0.15, { opacity: 0 });
+      for (let i = 0; i < 7; i++) show(el(E, `left:${130 + i * 78}px;top:480px;width:62px;height:62px;border-radius:12px;border:3px solid ${CYAN};background:${ca(CYAN, 0.2)}`), S.E + 0.3 + i * 0.08, { opacity: 0, scale: 0.8 }, 0.25);
+      show(glass(E, 90, 620, 900, 560, ACC, 26), S.E + 0.1, { opacity: 0 }, 0.4);
+      show(el(E, `left:130px;top:640px;font:800 80px ${COD};color:${ACC}`, "70B"), S.E + 0.15, { opacity: 0 });
+      for (let i = 0; i < 70; i++) show(el(E, `left:${110 + (i % 10) * 52}px;top:${740 + Math.floor(i / 10) * 60}px;width:44px;height:48px;border-radius:9px;border:3px solid ${ACC};background:${ca(ACC, 0.2)}`), S.E + 0.5 + i * 0.03, { opacity: 0, scale: 0.8 }, 0.25);
+      pillAt(E, "1 CELL = 1B", 70, 1215, S.E + 1.0, GREY, 36);
+      stampAt(E, "NOT ALWAYS", 770, 650, HOT, at("E", "behtar"));
+      pillAt(E, "FAST", 720, 350, at("E", "tez"), GOOD, 40); pillAt(E, "CHEAP", 720, 450, at("E", "sasta"), GOOD, 40);
+      pillAt(E, "MEMORY ↑", 690, 1000, at("E", "memory"), HOT, 40);
+
+      // ============ F: ten times ============
+      // diagram: F
+      pillAt(F, "7B", 90, 215, S.F + 0.05, CYAN, 54);
+      show(el(F, `left:90px;top:330px;width:170px;height:170px;border-radius:16px;background:${CYAN}`), S.F + 0.5, { opacity: 0, y: 14 }, 0.4);
+      pillAt(F, "FEWER NUMBERS", 310, 345, at("F", "kam"), CYAN, 38); pillAt(F, "SMALL FILE", 310, 425, at("F", "chhoti"), CYAN, 38);
+      pillAt(F, "70B", 90, 570, at("F", "70B"), ACC, 54);
+      for (let i = 0; i < 10; i++) show(el(F, `left:${90 + (i % 5) * 180}px;top:${690 + Math.floor(i / 5) * 180}px;width:170px;height:170px;border-radius:16px;background:${ACC}`), at("F", "70B") + 0.2 + i * 0.07, { opacity: 0, y: 14 }, 0.3);
+      pillAt(F, "10× NUMBERS", 90, 1100, at("F", "das", 0), ACC, 40); pillAt(F, "10× FILE", 540, 1100, at("F", "das", 1), ACC, 40);
+
+      // ============ G: your turn ============
+      // diagram: G
+      pillAt(G, "YOUR TURN", 70, 215, S.G + 0.05, CYAN, 40);
+      show(glass(G, 90, 330, 900, 800, CYAN, 28), S.G + 0.05, { opacity: 0 }, 0.4);
+      cell(G, 140, 450, 300, 170, "7B", CYAN, S.G + 0.15, 80);
+      cell(G, 140, 660, 300, 170, "1 BYTE", ACC, at("G", "1", 0), 50);
+      M.arrow(G, { from: [450, 635], to: [570, 635], color: GREY, w: 8 }).show(at("G", "GB"), 0.3);
+      show(el(G, `left:590px;top:480px;width:340px;height:310px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:24px;border:5px solid ${ACC};background:${ca(ACC, 0.12)};font:800 96px ${COD};color:${ACC};white-space:nowrap`, "? GB"), at("G", "GB"), { opacity: 0, scale: 0.9 });
+      pillAt(G, "COMMENT", 130, 345, at("G", "Comment"), CYAN, 40);
+      show(el(G, `left:130px;top:980px;width:820px;height:100px;box-sizing:border-box;border-radius:50px;border:2px solid rgba(150,175,215,.5);font:500 40px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("G", "Comment") + 0.2, { opacity: 0 });
+      const fb = pillAt(G, "+  FOLLOW", 300, 1190, at("G", "follow") - 0.5, ACC, 52);
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("G", "follow"));
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G);
+      M.finish({ kw: { numbers: "gold", parameters: "gold", billion: "gold", arab: "gold", weight: "gold", bias: "gold", capacity: "gold", bytes: "cyan", list: "cyan", memory: "cyan", tez: "good", sasta: "good", follow: "gold", Comment: "gold", aadha: "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

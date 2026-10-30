@@ -1150,11 +1150,11 @@
       "track": "series",
       "title": "Parameters: what 7B and 70B actually mean",
       "kind": "concept",
-      "topic": "Parameters = learned weights/biases; 7B = 7 billion; memory 14 GB fp16 (example).",
-      "hook_formula": "direct_question",
+      "topic": "Parameter = one learned number; 7B = 7 billion; file size = parameters x bytes (14 GB / 140 GB, 4-bit 3.5 / 35 GB); capacity vs cost.",
+      "hook_formula": "plain_question on a scene the viewer knows",
       "hook_type": "direct_question",
-      "status": "planned",
-      "planned": "2026-10-30"
+      "status": "built",
+      "date": "2026-10-30"
     },
     {
       "id": "q126",

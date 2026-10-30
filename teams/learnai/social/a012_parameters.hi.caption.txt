@@ -1,0 +1,13 @@
+Day 12/150: model ke naam mein 7B aur 70B ka kya matlab hai?
+
+B yaani billion. 7B model mein lagbhag 7 billion numbers hote hain, 70B mein 70 billion. Inhe parameters kehte hain: model ke andar ke seekhe hue numbers (weights aur biases).
+
+Model file bas in numbers ki list hoti hai. Hamara andaza (example, sirf weights): 7 billion x 2 bytes = 14 GB, 70B = 140 GB. 4-bit mein (aadha byte) 7B = 3.5 GB, 70B = 35 GB.
+
+Parameters zyada, to capacity zyada, par memory bhi zyada lagti hai. 70B har kaam mein behtar ho, ye zaroori nahi.
+
+Ab tum batao: agar har number 1 byte le, to 7B model kitne GB ka hoga? Comment mein likho. Jawab: 7 GB.
+
+Roz ek AI idea ke liye follow karo.
+
+#AI #LLM #150DaysOfAI

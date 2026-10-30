@@ -1,0 +1,14 @@
+What 7B and 70B really mean in AI models
+
+Model ke naam mein 7B aur 70B ka matlab kya hai? Is video mein parameters (weights aur biases) dekhte hain, model file ka size kaise nikalte hain, aur bada model hamesha behtar kyun nahi hota.
+
+Is video mein: what are parameters in AI, 7B vs 70B model, LLM parameters explained, model size GB, AI engineer roadmap.
+
+Parameters ki definition (model ke weights aur biases jo training mein seekhe jaate hain) Google ke ML glossary se hai. Chhote network ke parameter count ka example Google ke Machine Learning Crash Course se hai. Llama 3.1 ke 8B, 70B aur 405B sizes Meta ke model cards se hain. "2 bytes per number" aur "4-bit yaani aadha byte" se nikala hua 14 GB, 140 GB, 3.5 GB aur 35 GB hamara apna hisaab hai (sirf weights ka example), kisi source ka number nahi. Accelerate docs bhi precision ke hisaab se model ka size badalta dikhate hain.
+
+Sources:
+https://developers.google.com/machine-learning/glossary
+https://developers.google.com/machine-learning/crash-course/neural-networks/nodes-hidden-layers
+https://huggingface.co/meta-llama/Llama-3.1-8B
+https://huggingface.co/meta-llama/Llama-3.1-70B
+https://huggingface.co/docs/accelerate/usage_guides/model_size_estimator
