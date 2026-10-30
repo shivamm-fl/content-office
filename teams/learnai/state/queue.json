@@ -1630,17 +1630,16 @@
       "spoken_hook": "Interviewer ने पूछा: Evaluation के लिए golden dataset कैसे बनाओगे?",
       "hook_formula": "interviewer_asked",
       "hook_source": "strategist, 2026-10-30 (differs from q126)",
-      "visual_idea": "Two test sheets of 20 tick boxes: one with 20 identical-looking rows, one with 5 colour-coded kinds. A prompt change flips cards: the alike sheet stays 20/20 green, the varied sheet drops to 13/20 with the failing kinds highlighted.",
-      "everyday_anchor": "A teacher setting an exam: 20 copies of the same easy question would never show which topic the class forgot.",
-      "example": "EXAMPLE (invented refund-bot, real output in state/runs/q127_golden_run_output.txt): after a prompt change, 20 alike cases stay 20/20, while 20 varied cases drop to 13/20 and expose Hinglish spelling (4) and partial refund (3).",
+      "visual_idea": "Two test sheets of 20 tick boxes: one with 20 identical-looking rows, one with 5 colour-coded kinds. A prompt change flips cards: the alike sheet stays 20/20 green, the varied sheet drops to 13/20.",
+      "example": "EXAMPLE (invented refund-bot stub, state/runs/q127_golden_run_output.txt): after a prompt change, 20 alike cases stay 20/20, while 20 varied cases drop to 13/20 and expose Hinglish spelling (4) and partial refund (3).",
       "sources": [
         "https://platform.claude.com/docs/en/docs/test-and-evaluate/develop-tests",
         "https://developers.openai.com/api/docs/guides/evaluation-best-practices"
       ],
       "facts_to_verify": [
-        "Anthropic: mirror the real task distribution and include edge cases",
-        "OpenAI: typical, edge and adversarial cases; log and mine production",
-        "No official recommended count; our 20 is an example"
+        "Anthropic: mirror the real task distribution and include edge cases (verified)",
+        "OpenAI: typical, edge and adversarial cases; log and mine production (verified)",
+        "No official recommended count; our 20 is an example (verified: neither page gives one)"
       ],
       "length_target_s": 108,
       "cover_headline": "How to build a golden dataset",
@@ -1651,7 +1650,8 @@
         "how many eval examples",
         "ai evals interview",
         "ai engineer interview"
-      ]
+      ],
+      "everyday_anchor": "A teacher setting an exam: 20 copies of the same easy question would never show which topic the class forgot."
     }
   ]
 }

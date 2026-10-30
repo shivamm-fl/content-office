@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Interview: Golden dataset kaise banate hain aur kitne examples chahiye?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="114.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div><div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="114.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="114.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="114.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P, Ed } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI"), J = M.$("#sJ");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 48}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const paint = (d, col, t, fill) => tl.to(d, { borderColor: ca(col, 0.95), backgroundColor: ca(col, fill == null ? 0.16 : fill), duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const bubble = (host, x, y, w, h, text, col, t, mine, size) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${mine ? "30px 30px 6px 30px" : "30px 30px 30px 6px"};border:2px solid ${ca(col, 0.6)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:600 ${size || 42}px ${LAT};color:${TEXT};white-space:nowrap`, text); return show(d, t, { opacity: 0, y: 18 }); };
+      const pillAt = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:64px;border-radius:32px;border:2px solid ${col};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;font:700 ${size || 34}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: -14 });
+      // a test list card: header + rows "input -> expected"
+      const listCard = (host, x, y, w, rows, t, o) => { o = o || {}; const rh = o.rh || 96, hh = 70, h = hh + rows.length * rh + 24;
+        const card = glass(host, x, y, w, h, o.col || CYAN); show(card, t, { opacity: 0, y: 24 });
+        const h1 = el(card, `left:34px;top:16px;font:800 36px ${COD};letter-spacing:.1em;color:${MUTED}`, "INPUT");
+        const h2 = el(card, `left:${Math.round(w * 0.58)}px;top:16px;font:800 36px ${COD};letter-spacing:.1em;color:${MUTED}`, "EXPECTED");
+        const rs = rows.map((r, i) => { const row = el(card, `left:20px;top:${hh + i * rh}px;width:${w - 40}px;height:${rh - 12}px;border-radius:16px;border:2px solid ${ca(CYAN, 0.35)};background:${ca(CYAN, 0.07)}`);
+          el(row, `left:18px;top:0;height:${rh - 12}px;display:flex;align-items:center;font:600 ${o.fs || 38}px ${LAT};color:${TEXT};white-space:nowrap`, r[0]);
+          el(row, `left:${Math.round(w * 0.58) - 20}px;top:0;height:${rh - 12}px;display:flex;align-items:center;font:800 ${o.fs ? o.fs - 4 : 34}px ${COD};color:${GOOD};white-space:nowrap`, r[1] + " ✓");
+          tl.set(row, { opacity: 0 }, 0); return row; });
+        return { card, h1, h2, rs, rowAt: (i, tt) => tl.fromTo(rs[i], { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, tt) }; };
+      // a sheet of 20 test cells: 5 columns x 4 rows
+      const CW = 164, CH = 76, GAP = 10, SX = 106;
+      const sheet = (host, y, tints, t0) => { const cells = [];
+        for (let c = 0; c < 5; c++) { cells.push([]); for (let r = 0; r < 4; r++) {
+          const d = el(host, `left:${SX + c * (CW + GAP)}px;top:${y + r * (CH + GAP)}px;width:${CW}px;height:${CH}px;border-radius:14px;border:2.5px solid ${ca(tints[c], 0.7)};background:${ca(tints[c], 0.10)};display:flex;align-items:center;justify-content:center;font:800 50px ${COD}`);
+          const mk = el(d, "position:relative;width:auto;height:auto", ""); tl.set(mk, { opacity: 0 }, 0);
+          show(d, t0 + (c * 4 + r) * 0.03, { opacity: 0, scale: 0.9 }, 0.3); cells[c].push({ d, mk }); } }
+        return cells; };
+      const flip = (cell, ok, t) => { cell.mk.innerHTML = ok ? "✓" : "✗"; cell.mk.style.color = ok ? GOOD : HOT; paint(cell.d, ok ? GOOD : HOT, t, 0.22); tl.to(cell.mk, { opacity: 1, duration: 0.25, immediateRender: false }, t); };
+      const bigTag = (host, text, x, y, w, t, col, size) => tag(host, text, x, y, w, t, col, size);
+
+      // ============ A: hook ============
+      // diagram: A
+      M.hook(["Golden dataset", "kaise banaoge?"], { size: 104, top: 215 });
+      const aL = listCard(A, 70, 470, 940, [["refund kab milega?", "REFUND"], ["order status?", "STATUS"], ["half refund?", "PARTIAL"], ["gussa message", "ESCALATE"]], 0.05, { rh: 160, fs: 46 });
+      [0, 1, 2, 3].forEach((i) => aL.rowAt(i, 0.15 + i * 0.25));
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: definition ============
+      // diagram: B
+      pillC(B, "TEST LIST", 200, P("B", 0) + 0.05, { size: 44, h: 70 });
+      const bL = listCard(B, 70, 300, 940, [["refund kab milega?", "REFUND"], ["order status?", "STATUS"], ["half refund?", "PARTIAL"]], P("B", 0) + 0.1, { rh: 150, fs: 46 });
+      tl.set(bL.h2, { opacity: 0 }, 0); tl.to(bL.h2, { opacity: 1, duration: 0.3, immediateRender: false }, at("B", "answer") - 0.1);
+      [0, 1, 2].forEach((i) => bL.rowAt(i, Math.max(P("B", 0) + 0.4 + i * 0.3, i == 0 ? 0 : 0) + (i == 0 ? 0 : 0.2 * i)));
+      [["TYPICAL", CYAN, 60, 290], ["EDGE", VIOLET, 370, 200], ["ADVERSARIAL", ACC, 590, 430]].forEach(([lab, col, x, w], i) => {
+        show(el(B, `left:${x}px;top:890px;width:${w}px;height:110px;border-radius:55px;border:2.5px solid ${ca(col, 0.85)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:800 40px ${COD};color:${col};white-space:nowrap`, lab), at("B", "alag-alag") + i * 0.2, { opacity: 0, scale: 0.9 }); });
+      tag(B, "VARIETY > COUNT", 0, 1040, 1080, at("B", "variety"), ACC, 64);
+      tag(B, "3 STEPS", 0, 1150, 1080, at("B", "teen"), TEXT, 60);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ============ C: evaluation, the refund bot ============
+      // diagram: C
+      pillC(C, "EVALUATION", 200, P("C", 0) + 0.05, { size: 44, h: 70 });
+      M.box(C, { x: 130, y: 300, w: 820, h: 220, label: "NEW PROMPT", icon: "doc", color: VIOLET, size: 62 }).show(at("C", "prompt") - 0.1);
+      M.arrow(C, { from: [540, 525], to: [540, 605], color: ACC, w: 10 }).show(at("C", "model") - 0.1, 0.3);
+      M.box(C, { x: 130, y: 610, w: 820, h: 220, label: "BOT", icon: "robot", color: CYAN, size: 62 }).show(at("C", "model"));
+      M.arrow(C, { from: [540, 835], to: [540, 915], color: ACC, w: 10 }).show(at("C", "list") - 0.3, 0.3);
+      M.box(C, { x: 130, y: 920, w: 820, h: 220, label: "SCORE ON LIST", icon: "check", color: ACC, size: 58 }).show(at("C", "list") - 0.1);
+      pillAt(C, "EXAMPLE", 120, 1200, 320, at("C", "invented") - 0.1, ACC, 42);
+      tag(C, "REFUND BOT", 460, 1208, 520, at("C", "refund"), CYAN, 54);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // ============ D: alike vs varied sheets ============
+      // diagram: D
+      pillAt(D, "EXAMPLE", 60, 190, 280, P("D", 0) + 0.05, ACC, 36);
+      const dA0 = 262, dV0 = 700;
+      const alikeT = [CYAN, CYAN, CYAN, CYAN, CYAN];
+      const varT = [CYAN, VIOLET, ACC, MUTED, TEXT];
+      tag(D, "ALIKE", SX - 10, dA0, 300, at("D", "tarika"), CYAN, 48).style.textAlign = "left";
+      const dA = sheet(D, dA0 + 80, alikeT, at("D", "20", 0) - 0.05);
+      const sA = tag(D, "20/20", 560, dA0, 420, at("D", "pass", 0), GOOD, 54); sA.style.textAlign = "right";
+      dA.forEach((col, c) => col.forEach((cell, r) => flip(cell, true, at("D", "pass", 0) + (c * 4 + r) * 0.025)));
+      tag(D, "VARIED", SX - 10, dV0, 300, at("D", "change"), ACC, 48).style.textAlign = "left";
+      const dV = sheet(D, dV0 + 80, varT, at("D", "alag-alag") - 0.4);
+      ["PLAIN", "HINGLISH", "PARTIAL", "ANGRY", "BAD ID"].forEach((lab, c) => show(el(D, `left:${SX + c * (CW + GAP) - 8}px;top:${dV0 + 80 + 4 * (CH + GAP) + 6}px;width:${CW + 16}px;text-align:center;font:700 34px ${COD};letter-spacing:-0.04em;color:${varT[c]};white-space:nowrap`, lab), at("D", "alag-alag") + 0.5 + c * 0.1, { opacity: 0 }));
+      const sV = tag(D, "13/20", 560, dV0, 420, at("D", "13"), HOT, 54); sV.style.textAlign = "right";
+      const failSet = { 1: [0, 1, 2, 3], 2: [0, 1, 2] };
+      dV.forEach((col, c) => col.forEach((cell, r) => flip(cell, !(failSet[c] || []).includes(r), at("D", "13") + 0.05 + (c * 4 + r) * 0.03)));
+      const ring = (c, tt) => { const rg = el(D, `left:${SX + c * (CW + GAP) - 8}px;top:${dV0 + 80 - 8}px;width:${CW + 16}px;height:${4 * (CH + GAP) + 4}px;border-radius:18px;border:3px solid ${HOT}`); return show(rg, tt, { opacity: 0 }, 0.3); };
+      const bad = (c, txt, tt) => tag(D, txt, SX + c * (CW + GAP) - 8, dV0 + 80 + 4 * (CH + GAP) + 50, CW + 16, tt, HOT, 54);
+      ring(1, at("D", "Hinglish")); bad(1, "−4", at("D", "4"));
+      ring(2, at("D", "partial")); bad(2, "−3", at("D", "3"));
+      tl.to(dA.flat().map((c) => c.d), { opacity: 0.3, duration: 0.3, immediateRender: false }, at("D", "pata") - 0.1);
+      gone(sA, at("D", "pata") - 0.1, 0.2); stamp(D, "BLIND SPOT", 760, dA0 - 4, HOT, at("D", "pata"), 44);
+      M.fit(D, { y: 180, h: 1130 });
+
+      // ============ E: step 1 typical ============
+      // diagram: E
+      pillC(E, "1 · TYPICAL", 200, P("E", 0) + 0.05, { size: 44, h: 70 });
+      M.box(E, { x: 130, y: 290, w: 820, h: 150, label: "REAL USERS", icon: "user", color: CYAN, size: 54 }).show(P("E", 0) + 0.2);
+      const eMsgs = ["refund kab milega?", "order 4521 refund", "refund status?"];
+      eMsgs.forEach((m, i) => bubble(E, 100, 465 + i * 112, 880, 96, m, CYAN, at("E", "inputs") + i * 0.35, true, 46));
+      M.arrow(E, { from: [540, 795], to: [540, 860], color: ACC, w: 10 }).show(at("E", "dataset") - 0.1, 0.3);
+      const eL = listCard(E, 70, 870, 940, eMsgs.map((m) => [m, "ANSWER"]), at("E", "dataset"), { rh: 92, fs: 40, col: ACC });
+      eL.rs.forEach((r, i) => eL.rowAt(i, at("E", "traffic") + i * 0.3));
+      tag(E, "LIKE TRAFFIC", 0, 1252, 1080, at("E", "jaisa"), GOOD, 54);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // ============ F: step 2 edge + adversarial ============
+      // diagram: F
+      pillC(F, "2 · HARD CASES", 200, P("F", 0) + 0.05, { size: 42, h: 66 });
+      const fP1 = glass(F, 70, 280, 940, 400, VIOLET); show(fP1, P("F", 0) + 0.15, { opacity: 0, y: 20 });
+      el(fP1, `left:34px;top:16px;font:800 40px ${COD};letter-spacing:.06em;color:${VIOLET}`, "EDGE · ODD BUT REAL");
+      bubble(fP1, 40, 100, 860, 120, "refand kab milega?", VIOLET, at("F", "Hinglish"), true, 46);
+      bubble(fP1, 40, 245, 860, 120, "half refund chahiye", VIOLET, at("F", "partial"), true, 46);
+      const fP2 = glass(F, 70, 720, 940, 280, ACC); show(fP2, at("F", "Adversarial") - 0.1, { opacity: 0, y: 20 });
+      el(fP2, `left:34px;top:16px;font:800 40px ${COD};letter-spacing:.06em;color:${ACC}`, "ADVERSARIAL · TRIES TO BREAK");
+      bubble(fP2, 40, 110, 860, 130, "ye kya bakwaas bot hai!!", ACC, at("F", "gusse"), true, 46);
+      M.arrow(F, { from: [540, 1005], to: [540, 1075], color: ACC, w: 9 }).show(at("F", "kyonki") - 0.1, 0.3);
+      const fB = el(F, `left:190px;top:1080px;width:700px;height:120px;border-radius:20px;border:2.5px solid ${ca(CYAN, 0.7)};background:${ca(CYAN, 0.1)};display:flex;align-items:center;justify-content:center;font:800 54px ${COD};color:${CYAN}`, "BOT");
+      show(fB, at("F", "kyonki") - 0.1, { opacity: 0, y: 18 }); paint(fB, HOT, at("F", "gadbad"), 0.18); tl.to(fB, { color: HOT, duration: 0.3, immediateRender: false }, at("F", "gadbad"));
+      stamp(F, "BREAKS HERE", 540, 1215, HOT, at("F", "gadbad"), 54);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // ============ G: step 3 production ============
+      // diagram: G
+      pillC(G, "3 · PRODUCTION", 200, P("G", 0) + 0.05, { size: 44, h: 70 });
+      bubble(G, 180, 300, 740, 110, "half refund milega?", CYAN, at("G", "user"), true, 46);
+      const gBot = bubble(G, 80, 430, 800, 110, "Nahi, sirf full refund", HOT, at("G", "galat") - 0.1, false, 46);
+      const gX = el(G, `left:900px;top:435px;width:100px;height:100px;display:flex;align-items:center;font:800 76px ${COD};color:${HOT}`, "✗"); show(gX, at("G", "galat") + 0.1, { opacity: 0 });
+      M.arrow(G, { from: [440, 550], to: [440, 650], color: ACC, w: 10 }).show(at("G", "wo") - 0.1, 0.3);
+      pillAt(G, "+ NEW", 560, 575, 260, at("G", "daalo"), ACC, 44);
+      const gL = listCard(G, 70, 660, 940, [["half refund milega?", "PARTIAL"]], at("G", "wo"), { rh: 160, col: GOOD, fs: 44 });
+      gL.rowAt(0, at("G", "sahi"));
+      tag(G, "YESTERDAY: BUG", 0, 960, 1080, at("G", "kal"), HOT, 58);
+      tag(G, "TODAY: TEST", 0, 1070, 1080, at("G", "aaj"), GOOD, 64);
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ============ H: how many ============
+      // diagram: H
+      pillC(H, "HOW MANY?", 200, P("H", 0) + 0.05, { size: 46, h: 72 });
+      const hQ = tag(H, "?", 0, 290, 1080, at("H", "kitne"), ACC, 260);
+      gone(hQ, at("H", "20") - 0.3, 0.25);
+      tag(H, "NO OFFICIAL NUMBER", 0, 640, 1080, at("H", "official"), TEXT, 54);
+      tag(H, "20", 0, 290, 1080, at("H", "20"), ACC, 260);
+      pillC(H, "OUR EXAMPLE", 740, at("H", "hamara") - 0.1, { size: 44, h: 72, col: ACC });
+      tag(H, "START SMALL", 0, 860, 1080, at("H", "chhoti"), CYAN, 56);
+      const hT = (i, row, col, tt, lab) => { const d = el(H, `left:${80 + i * 156}px;top:${950 + row * 170}px;width:140px;height:100px;border-radius:18px;border:2.5px solid ${ca(col, 0.8)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:800 54px ${COD};color:${col}`, lab || "✓"); return show(d, tt, { opacity: 0, scale: 0.9 }, 0.3); };
+      [0, 1, 2, 3, 4].forEach((i) => hT(i, 0, CYAN, at("H", "chhoti") + 0.1 + i * 0.1));
+      hT(5, 0, VIOLET, at("H", "nayi"), "+");
+      tag(H, "NEW KIND", 600, 1052, 340, at("H", "nayi") + 0.1, VIOLET, 38);
+      [0, 1, 2, 3, 4].forEach((i) => hT(i, 1, CYAN, at("H", "badhao") + i * 0.08));
+      tag(H, "GROW", 60, 1052, 340, at("H", "badhao") + 0.2, GOOD, 44).style.textAlign = "left";
+      M.fit(H, { y: 200, h: 1100 });
+
+      // ============ I: say this ============
+      // diagram: I
+      pillC(I, "SAY THIS", 200, P("I", 0) + 0.05, { size: 46, h: 72, col: ACC });
+      [["FIXED LIST", "doc", CYAN, "fixed"], ["TYPICAL", "user", GOOD, "typical"], ["EDGE", "warn", VIOLET, "edge"], ["ADVERSARIAL", "shield", HOT, "adversarial"], ["FROM PRODUCTION", "bolt", ACC, "production"], ["VARIETY > COUNT", "star", ACC, "Variety"]].forEach(([lab, ic, col, w], i) => {
+        const hb = M.box(I, { x: 80, y: 300 + i * 165, w: 920, h: 145, label: lab, icon: ic, color: col, size: 54 }); hb.show(P("I", 0) + 0.1 + i * 0.12); hb.glow(at("I", w) - 0.1, col); });
+      M.fit(I, { y: 200, h: 1100 });
+
+      // ============ J: close ============
+      // diagram: J
+      tag(J, "HOW MANY CASES?", 0, 250, 1080, P("J", 0) + 0.1, ACC, 76);
+      const jC = glass(J, 60, 400, 960, 560, CYAN); show(jC, P("J", 0) + 0.5, { opacity: 0, y: 20 });
+      el(jC, `left:36px;top:24px;font:800 46px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      [["10", 30], ["20", 330], ["50+", 630]].forEach(([n, x], i) => show(el(jC, `left:${x}px;top:130px;width:290px;height:140px;border-radius:70px;border:2.5px solid ${ca(CYAN, 0.85)};background:${ca(CYAN, 0.12)};display:flex;align-items:center;justify-content:center;font:800 68px ${COD};color:${CYAN}`, n), at("J", "number") + i * 0.2, { opacity: 0, scale: 0.9 }));
+      show(el(jC, `left:36px;right:36px;bottom:44px;height:110px;border-radius:55px;border:1.5px solid rgba(150,175,215,.5);font:500 40px ${COD};color:#B4BED6;display:flex;align-items:center;padding:0 40px`, "Add a comment..."), at("J", "Comment") + 0.1, { opacity: 0 });
+      const fbt = el(J, `left:290px;top:1060px;width:500px;height:130px;border-radius:65px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 58px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fbt, at("J", "follow") - 0.5, { opacity: 0 });
+      tl.to(fbt, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("J", "follow")); tl.to(fbt, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("J", "follow") + 0.12);
+      M.fit(J, { y: 200, h: 1100 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I); M.wipe(S.J);
+      M.finish({ kw: { golden: "gold", dataset: "gold", variety: "cyan", count: "gold", typical: "good", edge: "violet", adversarial: "hot", pass: "good", toote: "hot", production: "gold", follow: "gold", comment: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+Interviewer ne poocha: evaluation ke liye golden dataset kaise banaoge?
+
+Jawab: golden dataset test inputs ki fixed list hai, har input ke saath wo answer jo tum chahte ho. Har prompt change ke baad model ke jawab isi list par score karo.
+
+1. Typical cases: wahi inputs jo asli users bhejte hain.
+2. Edge aur adversarial cases: ajib par asli input (Hinglish spelling, partial refund) aur bot ko todne wale input (gusse wala message).
+3. Production ki failures jodo: bot ne asli user ko galat jawab diya, to wo input sahi answer ke saath list mein daalo.
+
+Example (invented refund bot): 20 ek jaise cases par prompt change ke baad 20/20 pass. Wahi change 20 alag-alag cases par chalaya to sirf 13/20 pass. Hinglish spelling ke 4 aur partial refund ke 3 toote.
+
+Kitne examples? OpenAI aur Anthropic ke docs koi official number nahi dete, 20 hamara example tha. Hamari salah (docs ki nahi): chhoti list se shuru karo, nayi tarah ki failure mile to badhao, aur count se zyada variety rakho.
+
+Tumhari test list mein abhi kitne cases hain? Comment mein number likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #LLMEvals

@@ -1,0 +1,9 @@
+Golden dataset kaise banate hain (AI interview)
+
+Interview mein poochha jata hai: evaluation ke liye golden dataset kaise banaoge? Golden dataset test inputs ki fixed list hai, har input ke saath expected answer, aur har change ko isi list par score kiya jata hai. Teen steps: typical cases (asli traffic jaise inputs), edge aur adversarial cases, aur production ki failures ko list mein jodna. OpenAI ke evaluation best practices kehte hain ki test data mein typical, edge aur adversarial cases rakho aur logs se eval cases nikalo; Anthropic ke docs kehte hain ki evals asli task distribution jaise banao aur edge cases mat bhoolo. Kitne examples chahiye, iska koi official number in docs mein nahi hai: video ka 20 cases wala refund bot hamara invented example hai, aur "count se zyada variety" hamari apni salah hai.
+
+Is video mein: golden dataset llm, llm evaluation dataset, how many eval examples, ai evals interview, ai engineer interview.
+
+Sources:
+https://platform.claude.com/docs/en/docs/test-and-evaluate/develop-tests
+https://developers.openai.com/api/docs/guides/evaluation-best-practices
