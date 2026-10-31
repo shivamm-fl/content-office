@@ -1,0 +1,10 @@
+Private data LLM prompt mein bhejna safe hai? (AI interview)
+
+Interview mein poochha jata hai: user ka private data prompt mein bhejna theek hai, aur kya dhyan rakhoge? Jawab: raw private data default mein mat bhejo. Teen steps: task ko jo chahiye wahi bhejo, prompt se pehle baaki mask karo, aur provider ke terms padho aur logs mein raw text mat likho. OpenAI ke data controls page ke hisab se API data default mein training mein use nahi hota (jab tak tum opt in na karo) aur abuse-monitoring logs 30 din tak rakhe ja sakte hain. OWASP LLM02:2025 sensitive information disclosure ko LLM apps ka ek risk maanta hai. Presidio personal data detect aur de-identify karta hai, par uska page kehta hai ki wo sab sensitive info pakadne ki guarantee nahi deta. Video ka support ticket invented example hai. Ye legal advice nahi hai: apna law aur contract khud check karo.
+
+Is video mein: pii in llm prompt, is it safe to send data to chatgpt api, data privacy llm app, prompt data masking, ai engineer interview.
+
+Sources:
+https://developers.openai.com/api/docs/guides/your-data
+https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/
+https://presidio.dataprivacystack.org/

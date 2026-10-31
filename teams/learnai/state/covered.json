@@ -1205,10 +1205,10 @@
       "track": "interview",
       "title": "Interview: User ka private data prompt mein bhejna theek hai? Kya dhyan rakhoge?",
       "kind": "question",
-      "topic": "Private data in prompts: classify, minimise, mask, check provider terms, log safely; OpenAI API data policy; OWASP LLM02.",
+      "topic": "Private data in prompts: minimise, mask (names need more than patterns), check provider terms, log without raw text.",
       "hook_formula": "company_specific",
       "hook_type": "company_specific",
-      "status": "planned",
+      "status": "built",
       "planned": "2026-10-31"
     }
   ]

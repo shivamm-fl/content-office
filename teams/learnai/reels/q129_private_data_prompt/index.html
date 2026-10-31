@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Interview: User ka private data prompt mein bhejna theek hai?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="111.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div><div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="111.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="111.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="111.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P, Ed } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI"), J = M.$("#sJ");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      // ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 30px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:800 ${size || 48}px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.1 }, 0.3); };
+      const paint = (d, col, t, fill) => tl.to(d, { borderColor: ca(col, 0.95), backgroundColor: ca(col, fill == null ? 0.16 : fill), duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const bubble = (host, x, y, w, h, text, col, t, mine, size) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${mine ? "30px 30px 6px 30px" : "30px 30px 30px 6px"};border:2px solid ${ca(col, 0.6)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:600 ${size || 42}px ${LAT};color:${TEXT};white-space:nowrap`, text); return show(d, t, { opacity: 0, y: 18 }); };
+      const pillAt = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:64px;border-radius:32px;border:2px solid ${col};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;font:700 ${size || 34}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: -14 });
+      // a test list card: header + rows "input -> expected"
+      const listCard = (host, x, y, w, rows, t, o) => { o = o || {}; const rh = o.rh || 96, hh = 70, h = hh + rows.length * rh + 24;
+        const card = glass(host, x, y, w, h, o.col || CYAN); show(card, t, { opacity: 0, y: 24 });
+        const h1 = el(card, `left:34px;top:16px;font:800 36px ${COD};letter-spacing:.1em;color:${MUTED}`, "INPUT");
+        const h2 = el(card, `left:${Math.round(w * 0.58)}px;top:16px;font:800 36px ${COD};letter-spacing:.1em;color:${MUTED}`, "EXPECTED");
+        const rs = rows.map((r, i) => { const row = el(card, `left:20px;top:${hh + i * rh}px;width:${w - 40}px;height:${rh - 12}px;border-radius:16px;border:2px solid ${ca(CYAN, 0.35)};background:${ca(CYAN, 0.07)}`);
+          el(row, `left:18px;top:0;height:${rh - 12}px;display:flex;align-items:center;font:600 ${o.fs || 38}px ${LAT};color:${TEXT};white-space:nowrap`, r[0]);
+          el(row, `left:${Math.round(w * 0.58) - 20}px;top:0;height:${rh - 12}px;display:flex;align-items:center;font:800 ${o.fs ? o.fs - 4 : 34}px ${COD};color:${GOOD};white-space:nowrap`, r[1] + " ✓");
+          tl.set(row, { opacity: 0 }, 0); return row; });
+        return { card, h1, h2, rs, rowAt: (i, tt) => tl.fromTo(rs[i], { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, tt) }; };
+      // a sheet of 20 test cells: 5 columns x 4 rows
+      const CW = 164, CH = 76, GAP = 10, SX = 106;
+      const sheet = (host, y, tints, t0) => { const cells = [];
+        for (let c = 0; c < 5; c++) { cells.push([]); for (let r = 0; r < 4; r++) {
+          const d = el(host, `left:${SX + c * (CW + GAP)}px;top:${y + r * (CH + GAP)}px;width:${CW}px;height:${CH}px;border-radius:14px;border:2.5px solid ${ca(tints[c], 0.7)};background:${ca(tints[c], 0.10)};display:flex;align-items:center;justify-content:center;font:800 50px ${COD}`);
+          const mk = el(d, "position:relative;width:auto;height:auto", ""); tl.set(mk, { opacity: 0 }, 0);
+          show(d, t0 + (c * 4 + r) * 0.03, { opacity: 0, scale: 0.9 }, 0.3); cells[c].push({ d, mk }); } }
+        return cells; };
+      const flip = (cell, ok, t) => { cell.mk.innerHTML = ok ? "✓" : "✗"; cell.mk.style.color = ok ? GOOD : HOT; paint(cell.d, ok ? GOOD : HOT, t, 0.22); tl.to(cell.mk, { opacity: 1, duration: 0.25, immediateRender: false }, t); };
+      const bigTag = (host, text, x, y, w, t, col, size) => tag(host, text, x, y, w, t, col, size);
+
+      // ticket card: header + 4 rows (NAME, PHONE, EMAIL, ISSUE); rh = row height
+      const TROWS = [["NAME", "Riya Sharma"], ["PHONE", "98765 43210"], ["EMAIL", "riya.s@example.com"], ["ISSUE", "order late · refund"]];
+      const ticket = (host, x, y, w, t0, rh, fsz) => { const st = rh + 14, fs = fsz || Math.round(rh * 0.38); const card = glass(host, x, y, w, 80 + 4 * st + 20, CYAN); show(card, t0, { opacity: 0, y: 24 });
+        el(card, `left:34px;top:16px;font:800 36px ${COD};letter-spacing:.12em;color:#B4BED6`, "SUPPORT TICKET");
+        const rows = TROWS.map((r, i) => { const row = el(card, `left:20px;top:${80 + i * st}px;width:${w - 40}px;height:${rh}px;border-radius:16px;border:2px solid ${ca(CYAN, 0.35)};background:${ca(CYAN, 0.07)}`);
+          el(row, `left:20px;top:0;height:${rh}px;display:flex;align-items:center;font:800 30px ${COD};color:#B4BED6;letter-spacing:.1em`, r[0]);
+          const val = el(row, `left:190px;top:0;height:${rh}px;display:flex;align-items:center;font:700 ${fs}px ${COD};color:${TEXT};white-space:nowrap`, r[1]);
+          return { row, val, rh }; });
+        return { card, rows, st }; };
+      const chipIn = (r, text, col, t, left) => { const c = el(r.row, `left:${left || 180}px;top:${Math.round((r.rh - 74) / 2)}px;height:74px;padding:0 26px;border-radius:37px;border:2.5px solid ${col};background:${ca(col, 0.14)};display:flex;align-items:center;font:800 42px ${COD};color:${col};white-space:nowrap`, text); return show(c, t, { opacity: 0, scale: 0.9 }, 0.3); };
+      const rightTag = (r, text, col, t) => { const c = el(r.row, `right:16px;top:${Math.round((r.rh - 66) / 2)}px;height:66px;padding:0 20px;border-radius:33px;border:2px solid ${col};background:${ca(col, 0.12)};display:flex;align-items:center;font:800 34px ${COD};letter-spacing:.06em;color:${col};white-space:nowrap`, text); return show(c, t, { opacity: 0, scale: 0.9 }, 0.3); };
+      const MB = (host, y, h, t, label, col, ic) => M.box(host, { x: 140, y, w: 800, h, label: label || "MODEL", icon: ic || "cloud", color: col || CYAN, size: 60 }).show(t);
+
+      // ============ A: hook ============
+      // diagram: A
+      M.hook(["OpenAI API:", "private data safe?"], { size: 100, top: 215 });
+      const aT = ticket(A, 70, 470, 940, 0.05, 120);
+      aT.rows.slice(0, 3).forEach((r, i) => paint(r.row, HOT, at("A", "Private") + i * 0.12, 0.14));
+      M.arrow(A, { from: [540, 1112], to: [540, 1190], color: ACC, w: 10 }).show(0.4, 0.3);
+      M.box(A, { x: 140, y: 1195, w: 800, h: 150, label: "OPENAI API", icon: "cloud", color: CYAN, size: 58 }).show(0.5);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: question + the answer in one line ============
+      // diagram: B
+      pillC(B, "INTERVIEW QUESTION", 200, P("B", 0) + 0.05, { size: 42, h: 70 });
+      const bT = ticket(B, 70, 290, 940, P("B", 0) + 0.1, 128);
+      bT.rows.slice(0, 3).forEach((r, i) => paint(r.row, HOT, at("B", "private") + i * 0.1, 0.12));
+      M.arrow(B, { from: [540, 975], to: [540, 1045], color: ACC, w: 10 }).show(P("B", 0) + 0.3, 0.3);
+      MB(B, 1050, 150, P("B", 0) + 0.3);
+      stamp(B, "NOT RAW", 800, 985, HOT, at("B", "bhejo"), 52);
+      paint(bT.rows[3].row, GOOD, at("B", "task"), 0.16);
+      bT.rows.slice(0, 3).forEach((r, i) => paint(r.row, ACC, at("B", "mask") + i * 0.1, 0.12));
+      [["1 · LESS", 60, GOOD], ["2 · MASK", 390, VIOLET], ["3 · TERMS", 720, CYAN]].forEach(([lab, x, col], i) => show(el(B, `left:${x}px;top:1230px;width:300px;height:80px;border-radius:40px;border:2.5px solid ${col};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:800 38px ${COD};color:${col};white-space:nowrap`, lab), at("B", "teen") + i * 0.25, { opacity: 0, scale: 0.9 }));
+      M.fit(B, { y: 200, h: 1120 });
+
+      // ============ C: trained vs kept ============
+      // diagram: C
+      MB(C, 230, 170, P("C", 0) + 0.05, "API DATA");
+      M.arrow(C, { from: [540, 405], to: [540, 460], color: ACC, w: 9 }).show(at("C", "Train") - 0.1, 0.3);
+      const cTr = M.box(C, { x: 140, y: 465, w: 800, h: 170, label: "TRAINING: NO", icon: "check", color: GOOD, size: 56 }); cTr.show(at("C", "Train"));
+      const cKp = glass(C, 140, 670, 800, 170, ACC); show(cKp, at("C", "rakhta"), { opacity: 0, y: 20 });
+      const cKq = el(cKp, `left:0;top:0;width:800px;height:170px;display:flex;align-items:center;justify-content:center;font:800 62px ${COD};color:${ACC}`, "KEPT?"); tl.set(cKq, { opacity: 1 }, 0);
+      const cKl = el(cKp, `left:0;top:0;width:800px;height:170px;display:flex;align-items:center;justify-content:center;font:800 56px ${COD};color:${HOT}`, "ABUSE LOGS"); tl.set(cKl, { opacity: 0 }, 0);
+      gone(cKq, at("C", "abuse-monitoring") - 0.1, 0.2); tl.to(cKl, { opacity: 1, duration: 0.3, immediateRender: false }, at("C", "abuse-monitoring")); paint(cKp, HOT, at("C", "abuse-monitoring"), 0.14);
+      for (let i = 0; i < 30; i++) { const t = el(C, `left:${80 + (i % 10) * 92}px;top:${880 + Math.floor(i / 10) * 100}px;width:80px;height:88px;border-radius:12px;border:2px solid ${ca(MUTED, 0.5)};background:${ca(MUTED, 0.06)};display:flex;align-items:center;justify-content:center;font:700 30px ${COD};color:#B4BED6`, String(i + 1)); show(t, at("C", "30") - 0.2 + i * 0.01, { opacity: 0 }, 0.2); tl.to(t, { backgroundColor: ca(HOT, 0.4), borderColor: ca(HOT, 0.9), duration: 0.2, immediateRender: false }, at("C", "30") + 0.1 + i * 0.03); }
+      tag(C, "UP TO 30 DAYS", 0, 1190, 1080, at("C", "din"), HOT, 64);
+      tag(C, "Source: OpenAI docs", 0, 1275, 1080, at("C", "OpenAI"), "#B4BED6", 38);
+      M.fit(C, { y: 200, h: 1120 });
+
+      // ============ D: the invented ticket ============
+      // diagram: D
+      pillC(D, "EXAMPLE", 200, P("D", 0) + 0.05, { size: 42, h: 70 });
+      const dT = ticket(D, 70, 290, 940, P("D", 0) + 0.1, 136, 40);
+      [["naam", 0], ["phone", 1], ["email", 2]].forEach(([w, i]) => { paint(dT.rows[i].row, ACC, at("D", w), 0.14); rightTag(dT.rows[i], "PERSONAL", ACC, at("D", w) + 0.1); });
+      paint(dT.rows[3].row, CYAN, at("D", "Complaint"), 0.14);
+      M.arrow(D, { from: [540, 1020], to: [540, 1090], color: ACC, w: 10 }).show(at("D", "Task") - 0.1, 0.3);
+      M.box(D, { x: 110, y: 1095, w: 860, h: 190, label: "TASK: COMPLAINT TYPE", icon: "gear", color: CYAN, size: 48 }).show(at("D", "Task"));
+      M.fit(D, { y: 200, h: 1120 });
+
+      // ============ E: step 1, minimise ============
+      // diagram: E
+      pillC(E, "1 · SEND LESS", 200, P("E", 0) + 0.05, { size: 44, h: 70 });
+      const eT = ticket(E, 70, 290, 940, P("E", 0) + 0.1, 130);
+      [["naam", 0], ["phone", 1], ["email", 2]].forEach(([w, i]) => paint(eT.rows[i].row, HOT, at("E", w), 0.14));
+      const e3 = tag(E, "3 PERSONAL FIELDS", 0, 1020, 1080, at("E", "3"), HOT, 56); gone(e3, at("E", "kyonki") - 0.2, 0.25);
+      const eKoi = at("E", "koi");
+      tl.to(eT.rows.slice(0, 3).map((r) => r.row), { opacity: 0, x: 80, duration: 0.4, ease: "power2.in", immediateRender: false }, eKoi);
+      tl.to(eT.rows[3].row, { y: -3 * eT.st, duration: 0.5, ease: "power3.out", immediateRender: false }, eKoi + 0.3);
+      tl.to(eT.card, { height: 80 + eT.st + 20, duration: 0.5, ease: "power3.out", immediateRender: false }, eKoi + 0.3);
+      stamp(E, "NOT SENT", 290, 640, HOT, eKoi + 0.1, 56);
+      M.arrow(E, { from: [540, 560], to: [540, 860], color: ACC, w: 10 }).show(at("E", "bheja") - 0.1, 0.3);
+      MB(E, 870, 200, at("E", "bheja"));
+      tag(E, "NOT SENT = NO LEAK", 0, 1120, 1080, at("E", "leak"), GOOD, 60);
+      M.fit(E, { y: 200, h: 1120 });
+
+      // ============ F: step 2, mask ============
+      // diagram: F
+      pillC(F, "2 · MASK", 200, P("F", 0) + 0.05, { size: 44, h: 70 });
+      const fT = ticket(F, 70, 290, 940, P("F", 0) + 0.1, 112);
+      const swap = (r, text, t) => { tl.to(r.val, { opacity: 0, duration: 0.2, immediateRender: false }, t); paint(r.row, GOOD, t, 0.14); chipIn(r, text, GOOD, t + 0.1, 180); };
+      swap(fT.rows[1], "[PHONE]", at("F", "jagah") + 0.2); swap(fT.rows[2], "[EMAIL]", at("F", "placeholder") - 0.2);
+      show(el(F, `left:0;top:915px;width:1080px;display:flex;justify-content:center`, `<div style="padding:0 30px;height:70px;border-radius:35px;border:2px solid ${CYAN};background:${ca(CYAN, 0.1)};display:flex;align-items:center;font:700 42px ${COD};letter-spacing:.1em;color:${CYAN}">PATTERN MATCH</div>`), at("F", "Pattern"), { opacity: 0, y: -14 });
+      tag(F, "2 / 3 MASKED", 0, 1010, 1080, at("F", "2"), GOOD, 66);
+      paint(fT.rows[0].row, HOT, at("F", "rah"), 0.16); rightTag(fT.rows[0], "MISSED", HOT, at("F", "rah"));
+      M.arrow(F, { from: [350, 1100], to: [350, 1160], color: VIOLET, w: 8 }).show(at("F", "Presidio") - 0.1, 0.25);
+      M.box(F, { x: 60, y: 1165, w: 580, h: 150, label: "PRESIDIO", icon: "shield", color: VIOLET, size: 50 }).show(at("F", "Presidio"));
+      stamp(F, "NOT ALL", 840, 1195, HOT, at("F", "pakadta") - 0.4, 52);
+      M.fit(F, { y: 200, h: 1120 });
+
+      // ============ G: terms + logs ============
+      // diagram: G
+      pillC(G, "3 · TERMS + LOGS", 200, P("G", 0) + 0.05, { size: 42, h: 66 });
+      MB(G, 290, 180, P("G", 0) + 0.15, "PROVIDER TERMS", CYAN, "doc");
+      tag(G, "HOW MANY DAYS?", 0, 495, 1080, at("G", "kitne"), ACC, 58);
+      MB(G, 620, 180, P("G", 0) + 0.4, "YOUR LOGS", VIOLET, "db");
+      const gR = el(G, `left:140px;top:830px;width:800px;height:140px;border-radius:16px;border:2.5px solid ${ca(HOT, 0.8)};background:${ca(HOT, 0.12)};display:flex;align-items:center;justify-content:center;font:700 42px ${COD};color:${TEXT};white-space:nowrap`, "✗ Riya Sharma · 98765 43210");
+      show(gR, at("G", "raw"), { opacity: 0, y: 14 });
+      tl.to(gR, { opacity: 0.45, duration: 0.3, immediateRender: false }, at("G", "likho"));
+      const gM = el(G, `left:140px;top:1000px;width:800px;height:140px;border-radius:16px;border:2.5px solid ${ca(GOOD, 0.8)};background:${ca(GOOD, 0.12)};display:flex;align-items:center;justify-content:center;font:700 46px ${COD};color:${GOOD};white-space:nowrap`, "[PHONE] · [EMAIL]");
+      show(gM, at("G", "likho") + 0.2, { opacity: 0, y: 14 });
+      tag(G, "LOG = DATA STORE", 0, 1185, 1080, at("G", "store"), ACC, 62);
+      M.fit(G, { y: 200, h: 1120 });
+
+      // ============ H: not legal advice ============
+      // diagram: H
+      M.box(H, { x: 100, y: 290, w: 880, h: 320, label: "NOT LEGAL ADVICE", icon: "warn", color: ACC, size: 62 }).show(P("H", 0) + 0.05);
+      const hL = M.box(H, { x: 100, y: 660, w: 880, h: 260, label: "YOUR LAW", icon: "book", color: CYAN, size: 62 }); hL.show(P("H", 0) + 0.3); hL.glow(at("H", "law") - 0.1, CYAN);
+      const hC = M.box(H, { x: 100, y: 960, w: 880, h: 260, label: "YOUR CONTRACT", icon: "doc", color: CYAN, size: 58 }); hC.show(P("H", 0) + 0.5); hC.glow(at("H", "contract") - 0.1, CYAN);
+      M.fit(H, { y: 200, h: 1120 });
+
+      // ============ I: say this = the ticket passes the steps ============
+      // diagram: I
+      pillC(I, "SAY THIS", 200, P("I", 0) + 0.05, { size: 46, h: 72, col: ACC });
+      const iSt = [["RAW TICKET", "lock", HOT, "default", "don't"], ["ONLY WHAT'S NEEDED", "check", GOOD, "needs", "send", 1], ["MASK THE REST", "shield", VIOLET, "mask", "mask"], ["CHECK TERMS", "doc", CYAN, "terms", "check"], ["NO RAW LOGS", "db", ACC, "logs", "keep"]];
+      iSt.forEach(([lab, ic, col, w, w0, n], i) => {
+        const hb = M.box(I, { x: 60, y: 300 + i * 190, w: 640, h: 150, label: lab, icon: ic, color: col, size: 46 }); hb.show(P("I", 0) + 0.1 + i * 0.1); hb.glow(at("I", w) - 0.1, col);
+        if (i) M.arrow(I, { from: [380, 300 + i * 190 - 38], to: [380, 300 + i * 190 - 2], color: ACC, w: 7 }).show(P("I", 0) + 0.15 + i * 0.1, 0.2); });
+      const iTok = el(I, `left:740px;top:325px;width:280px;height:100px;border-radius:50px;border:3px solid ${HOT};background:${ca(HOT, 0.16)};display:flex;align-items:center;justify-content:center;font:800 40px ${COD};color:${HOT}`, "TICKET");
+      tl.set(iTok, { opacity: 0 }, 0); tl.to(iTok, { opacity: 1, duration: 0.3, immediateRender: false }, P("I", 0) + 0.3);
+      [["needs", 1, GOOD], ["mask", 2, VIOLET], ["terms", 3, CYAN], ["logs", 4, ACC]].forEach(([w, i, col]) => { tl.to(iTok, { y: i * 190, borderColor: col, color: col, backgroundColor: ca(col, 0.16), duration: 0.5, ease: "power3.out", immediateRender: false }, at("I", w) - 0.3); });
+      M.fit(I, { y: 200, h: 1120 });
+
+      // ============ J: close ============
+      // diagram: J
+      tag(J, "WHICH DATA?", 0, 250, 1080, P("J", 0) + 0.05, ACC, 84);
+      const jC = glass(J, 60, 380, 960, 640, CYAN); show(jC, P("J", 0) + 0.1, { opacity: 0, y: 20 });
+      el(jC, `left:36px;top:24px;font:800 50px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      [["NAME", 30, "naam"], ["PHONE", 330, "phone"], ["EMAIL", 630, "email"]].forEach(([n, x, w], i) => show(el(jC, `left:${x}px;top:130px;width:290px;height:170px;border-radius:85px;border:2.5px solid ${ca(CYAN, 0.85)};background:${ca(CYAN, 0.12)};display:flex;align-items:center;justify-content:center;font:800 58px ${COD};color:${CYAN}`, n), P("J", 0) + 0.3 + i * 0.15, { opacity: 0, scale: 0.9 }));
+      show(el(jC, `left:36px;right:36px;bottom:44px;height:130px;border-radius:65px;border:1.5px solid rgba(150,175,215,.5);font:500 44px ${COD};color:#B4BED6;display:flex;align-items:center;padding:0 40px`, "Add a comment..."), at("J", "Comment") + 0.1, { opacity: 0 });
+      const fbt = el(J, `left:240px;top:1110px;width:600px;height:160px;border-radius:80px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 68px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fbt, at("J", "follow") - 0.5, { opacity: 0 });
+      tl.to(fbt, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("J", "follow")); tl.to(fbt, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("J", "follow") + 0.12);
+      M.fit(J, { y: 200, h: 1120 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I); M.wipe(S.J);
+      M.finish({ kw: { private: "hot", train: "good", logs: "hot", mask: "violet", minimise: "good", leak: "good", phone: "cyan", email: "cyan", naam: "hot", Presidio: "violet", terms: "cyan", legal: "gold", follow: "gold", Comment: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

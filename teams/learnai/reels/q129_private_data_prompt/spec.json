@@ -1,0 +1,141 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3,
+    "J": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "warn",
+      "C",
+      2,
+      0
+    ],
+    [
+      "click",
+      "D",
+      0,
+      0
+    ],
+    [
+      "click",
+      "E",
+      0,
+      0
+    ],
+    [
+      "err",
+      "E",
+      2,
+      0
+    ],
+    [
+      "click",
+      "F",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "F",
+      2,
+      0
+    ],
+    [
+      "err",
+      "F",
+      3,
+      0
+    ],
+    [
+      "click",
+      "G",
+      0,
+      0
+    ],
+    [
+      "dip",
+      "H",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "I",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "J",
+      1,
+      0
+    ],
+    [
+      "save",
+      "J",
+      2,
+      0.5
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook OpenAI API data से train नहीं करता। Private data safe है?",
+      "B": "Interview में पूछा जाता है: | user का private data prompt में भेजना ठीक है, और क्या ध्यान रखोगे? || तुम्हारा जवाब: raw private data default में मत भेजो। | पहले तय करो task को क्या चाहिए, बाकी prompt से पहले mask करो। | तीन steps हैं।",
+      "C": "\"Train नहीं करता\" का मतलब \"रखता नहीं\" नहीं है। || OpenAI के हिसाब से API data default में training में use नहीं होता, | पर abuse-monitoring logs 30{thirty} दिन तक रह सकते हैं।",
+      "D": "ये invented support ticket है: उसमें Riya Sharma का नाम, phone number और email है। | Complaint: order नहीं आया, refund चाहिए। || Task सिर्फ़ complaint का type बताना है।",
+      "E": "पहला step, minimise। || ticket में 3{three} personal fields हैं: नाम, phone, email। | Task को इनमें से कोई नहीं चाहिए। | क्योंकि जो भेजा ही नहीं, वो leak नहीं हो सकता।",
+      "F": "दूसरा step, prompt से पहले mask करो। || Mask यानी असली value की जगह [PHONE] जैसा placeholder। || Pattern से phone और email mask हो गए, 3{three} में से 2{two}। | पर नाम रह गया, क्योंकि नाम का कोई fixed pattern नहीं होता। | इसलिए नाम के लिए Presidio जैसा tool चाहिए, और वो भी सब नहीं पकड़ता।",
+      "G": "तीसरा step, terms पढ़ो और logs में raw text मत लिखो। || Provider data कितने दिन रखता है, ये पहले देखो। | क्योंकि log भी तुम्हारा एक और data store है।",
+      "H": "एक बात: ये legal advice नहीं है। | अपना law और contract खुद check करो।",
+      "I": "Interview में बोलो: “I don't send raw personal data by default. I send only what the task needs, mask the rest before the prompt, check the provider's data terms, and keep raw text out of my logs.”",
+      "J": "तुम्हारे app के prompt में सबसे ज़्यादा कौन सा data जाता है: नाम, phone या email? | Comment में लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

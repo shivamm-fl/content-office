@@ -1724,26 +1724,24 @@
       "unit": "G7",
       "title": "Interview: User ka private data prompt mein bhejna theek hai? Kya dhyan rakhoge?",
       "trap": "Sending raw personal data to a hosted model without classifying it first.",
-      "one_idea": "Say the question in full, then: do not send raw personal data by default. First classify the data (what is personal, what is needed for the task), send only what the task needs, mask the rest before the prompt (phone, email; names need more than patterns), check the provider's terms (OpenAI says API data is not used for training by default, abuse-monitoring logs up to 30 days, zero retention needs approval), and log without the raw text. OWASP lists sensitive information disclosure as a top LLM risk.",
+      "one_idea": "Say the question in full, then: do not send raw personal data by default. Classify the data, send only what the task needs, mask the rest before the prompt (phone, email; names need more than patterns), check the provider's terms (OpenAI: API data not used for training by default, abuse-monitoring logs up to 30 days), and log without the raw text. OWASP lists sensitive information disclosure as a top LLM risk.",
       "hook_type": "company_specific",
       "company": "OpenAI",
       "company_source": "https://developers.openai.com/api/docs/guides/your-data",
       "spoken_hook": "OpenAI API data से train नहीं करता। Private data safe है?",
       "hook_formula": "company_specific (OpenAI data controls page, fetched 2026-10-31)",
-      "hook_source": "strategist, 2026-10-31 (company_specific: the two reels of the day use different types)",
-      "visual_idea": "A support ticket card with three highlighted fields (name, phone, email) travels toward a cloud box labelled MODEL. A filter gate stands in the way: phone and email turn into [PHONE] and [EMAIL] chips, the name field stays visible and is flagged red as missed by patterns. A small checklist stamps in order: CLASSIFY, MINIMISE, MASK, CHECK TERMS, LOG SAFELY.",
-      "example": "EXAMPLE (invented ticket, state/runs/q129_privacy_run_output.txt): a regex masks the 10-digit phone and the email, but the name 'Riya Sharma' stays: 2 of 3 personal fields masked, so patterns alone are not enough.",
-      "everyday_anchor": "Giving a courier a parcel: you tell him the address he needs, you do not hand him your whole wallet.",
+      "visual_idea": "A support ticket card with three highlighted fields travels toward a MODEL box; a filter turns phone and email into chips; the name stays flagged red; a checklist stamps in order.",
+      "example": "EXAMPLE (invented ticket, state/runs/q129_privacy_run_output.txt): a regex masks the phone and the email, but the name stays: 2 of 3 personal fields masked.",
       "sources": [
         "https://developers.openai.com/api/docs/guides/your-data",
         "https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/",
         "https://presidio.dataprivacystack.org/"
       ],
       "facts_to_verify": [
-        "OpenAI: API data not used to train or improve models unless you opt in; abuse-monitoring logs retained up to 30 days; Zero Data Retention needs prior approval (verified, fetched 2026-10-31)",
-        "OWASP LLM02:2025: sanitization, least-privilege access, user education and opt-out, tokenization/redaction before processing (verified)",
-        "Presidio: detects and de-identifies PII; docs say no guarantee it finds all sensitive information (verified)",
-        "Not legal advice: say check your own law and contract (India DPDP etc. not claimed)"
+        "OpenAI: API data not used to train unless opt in; abuse-monitoring logs up to 30 days (verified 2026-10-31)",
+        "OWASP LLM02:2025 (verified)",
+        "Presidio: no guarantee it finds all PII (verified)",
+        "Not legal advice"
       ],
       "length_target_s": 110,
       "cover_headline": "Private data in an LLM prompt",

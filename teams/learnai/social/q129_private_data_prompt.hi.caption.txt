@@ -1,0 +1,15 @@
+OpenAI API data se train nahi karta. To kya private data prompt mein bhejna safe hai?
+
+Interview mein poochha jata hai: user ka private data prompt mein bhejna theek hai, aur kya dhyan rakhoge?
+
+Jawab: raw private data default mein mat bhejo. Teen steps:
+1. Minimise: task ko jo chahiye, sirf wahi bhejo. Jo bheja hi nahi, wo leak nahi ho sakta.
+2. Prompt se pehle mask karo: phone aur email jaise fixed pattern regex se mask hote hain, par naam ka fixed pattern nahi hota. Presidio jaisa tool madad karta hai, par uska doc khud kehta hai ki wo sab sensitive info pakadne ki guarantee nahi deta.
+3. Provider ke terms padho aur logs mein raw text mat likho. OpenAI ke docs ke hisab se API data default mein training mein use nahi hota, par abuse-monitoring logs 30 din tak rah sakte hain.
+
+Example (invented ticket): 3 personal fields mein se pattern ne 2 mask kiye, naam reh gaya.
+Ye legal advice nahi hai: apna law aur contract khud check karo.
+
+Tumhare app ke prompt mein sabse zyada kaun sa data jata hai: naam, phone ya email? Comment mein likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #LLMPrivacy
