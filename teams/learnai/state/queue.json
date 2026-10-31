@@ -1656,20 +1656,10 @@
       "hook_type": "direct_question",
       "spoken_hook": "ChatGPT, Claude, Llama: तीनों का design एक है। कौन सा?",
       "hook_formula": "plain_question on three names the viewer knows",
-      "hook_source": "strategist, 2026-10-31 (concrete names in line 1, as a007/a012 lesson)",
-      "visual_idea": "From frame 0 three logo-less name cards (ChatGPT, Claude, Llama) point into one drawn box labelled TRANSFORMER. The box opens: one block with two stacked parts, ATTENTION (words linked by lines) then THINK (small network per word), tokens flowing through. The block is copied into a stack of 6, a token travels up through all 6, and a bar shows the block split 1/3 attention, 2/3 feed-forward.",
-      "example": "Real run (state/runs/a013_transformer_run_output.txt), base model of Vaswani et al. 2017 (d_model 512, d_ff 2048, 8 heads, 6 layers): attention 1,050,624 numbers, feed-forward 2,099,712, layer norm 2,048, one layer 3,152,384, six layers 18,914,304; attention 33.3 %, feed-forward 66.6 %. Our count from the paper's sizes, not a number the paper prints.",
-      "everyday_anchor": "A building made of identical floors: you do not design 96 different floors, you design one floor well and stack it.",
       "sources": [
         "https://arxiv.org/abs/1706.03762",
         "https://arxiv.org/html/1706.03762v7",
         "https://developers.google.com/machine-learning/crash-course/llm/transformers"
-      ],
-      "facts_to_verify": [
-        "Vaswani et al. 2017: Transformer based solely on attention, no recurrence or convolutions (verified, arxiv abs)",
-        "Base model: 6 encoder + 6 decoder layers, d_model 512, d_ff 2048, 8 heads, ~65M parameters, two sub-layers per layer with residual + layer norm (verified, arxiv html v7)",
-        "Google ML crash course: transformers stack self-attention layers; state of the art for language models (verified)",
-        "Say 'almost every LLM' (decoder-only variants exist); do not name a specific closed model's internals (not public)"
       ],
       "length_target_s": 100,
       "cover_headline": "The design behind every LLM",

@@ -1,0 +1,11 @@
+Day 13/150: ChatGPT, Claude, Llama ka design ek hai. Kaun sa?
+
+Transformer. Isme ek block hota hai, aur wahi block baar-baar stack hota hai. Har block mein do hisse: pehle attention (har word baaki words ko dekhta hai), phir feed-forward network (chhota network jo har word par alag se chalta hai).
+
+Hamari ginti (2017 ke original paper ke base size se, paper khud ye number print nahi karta): ek block mein lagbhag 3.15 million numbers, ek tihai attention mein aur do tihai feed-forward mein. Paper ke encoder mein 6 aise blocks the, yaani lagbhag 18.9 million numbers. Har block ke numbers apne hote hain, copy nahi.
+
+Ab tum batao: ek block mein 3 million numbers hon, to 10 blocks mein kul kitne? Comment mein likho. Jawab: 30 million.
+
+Roz ek AI idea ke liye follow karo.
+
+#AI #LLM #150DaysOfAI

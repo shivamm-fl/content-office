@@ -1,0 +1,12 @@
+The transformer: the design behind every LLM
+
+Transformer kya hota hai? Is video mein dekhte hain ek block kaise bana hai (attention, phir feed-forward network), block ko stack karne se poora transformer kaise banta hai, aur 2017 ke original paper ke base size mein ek block mein kitne numbers hote hain.
+
+Is video mein: what is a transformer in AI, transformer architecture explained, attention is all you need, how LLM works, AI engineer roadmap.
+
+Transformer ka idea (sirf attention par bana network), base model ke sizes (6 layers, d_model 512, d_ff 2048, 8 heads) aur har layer ke attention aur feed-forward hisse Vaswani et al. 2017 ke paper se hain. "Transformer sabse zyada use hone wala LLM architecture hai" Google ke Machine Learning Crash Course se hai. Ek block mein lagbhag 3.15 million numbers (ek tihai attention, do tihai feed-forward) aur 6 blocks mein lagbhag 18.9 million numbers hamari apni ginti hai, paper ke sizes se nikali hui (encoder ke blocks, kisi source ka printed number nahi).
+
+Sources:
+https://arxiv.org/abs/1706.03762
+https://arxiv.org/html/1706.03762v7
+https://developers.google.com/machine-learning/crash-course/llm/transformers

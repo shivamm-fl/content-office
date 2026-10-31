@@ -1183,10 +1183,10 @@
       "track": "series",
       "title": "The transformer: the design behind every LLM",
       "kind": "concept",
-      "topic": "Transformer = attention + feed-forward block stacked (6 in the 2017 paper); ~3.15M numbers per base layer, 1/3 attention.",
-      "hook_formula": "plain_question on three names",
+      "topic": "Transformer = one block (attention, then feed-forward) stacked; 3.15M numbers per base block (our count), 6 blocks.",
+      "hook_formula": "plain_question on three names the viewer knows",
       "hook_type": "direct_question",
-      "status": "planned",
+      "status": "built",
       "planned": "2026-10-31"
     },
     {

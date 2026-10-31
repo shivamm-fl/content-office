@@ -1,0 +1,123 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "B",
+      3,
+      0
+    ],
+    [
+      "click",
+      "C",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "C",
+      3,
+      0
+    ],
+    [
+      "dip",
+      "D",
+      0,
+      -0.1
+    ],
+    [
+      "click",
+      "E",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "E",
+      2,
+      0
+    ],
+    [
+      "click",
+      "F",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "F",
+      3,
+      0
+    ],
+    [
+      "pop",
+      "G",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "H",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "H",
+      3,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook ChatGPT, Claude, Llama: तीनों का design एक है। कौन सा?",
+      "B": "Transformer। || इसमें एक block होता है, और वही block बार-बार stack होता है। || हर block में दो हिस्से हैं: | पहले attention, फिर feed-forward network।",
+      "C": "एक sentence लो: | रवि ने चाय बनाई, और उसे पी लिया। || \"उसे\" किसके लिए है, रवि या चाय? || Attention यानी हर word बाकी सारे words को देखता है, | और तय करता है कि किससे कितना मतलब लेना है। || यहाँ \"उसे\" चाय की तरफ़ देखता है। | क्योंकि मतलब आसपास के words से बनता है।",
+      "D": "दूसरा हिस्सा, feed-forward network। || ये एक छोटा neural network है, जो हर word पर अलग से चलता है। || Attention ने words को जोड़ा, | अब ये हर word की जानकारी को process करता है। | क्योंकि पहले context मिलना चाहिए, फिर उस पर सोचना।",
+      "E": "अब numbers देखो। || 2017{twenty-seventeen} के original paper के base size में, | एक block में लगभग 3.15{three-point-one-five} million numbers हैं, यानी parameters। || इनमें से एक तिहाई attention में, | और दो तिहाई feed-forward में। | ये हमारी गिनती है, paper खुद ये number print नहीं करता।",
+      "F": "अब stack करो। || Words पहले block से गुज़रते हैं, | और उसका output दूसरे block का input बन जाता है। || Original paper के encoder में ऐसे 6{six} blocks थे, | यानी इन blocks में लगभग 18.9{eighteen-point-nine} million numbers।",
+      "G": "एक बात ध्यान रखना: | block का design एक है, पर numbers हर block के अपने हैं, copy नहीं। || ज़्यादातर बड़े LLMs में भी यही block design है, बस blocks और sizes बड़े हैं।",
+      "H": "तो याद रखो: attention जोड़ता है, | feed-forward सोचता है, | और block stack होता है। || अब बताओ: एक block में 3{three} million numbers हों, | तो 10{ten} blocks में कुल कितने? | जवाब caption में है। | रोज़ एक AI idea के लिए follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
