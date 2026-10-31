@@ -1,0 +1,159 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3,
+    "J": 3,
+    "K": 3,
+    "L": 3,
+    "M": 3,
+    "N": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      "A",
+      0,
+      1
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "F",
+      1,
+      0
+    ],
+    [
+      "lock",
+      "G",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "H",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "I",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "J",
+      1,
+      0.3
+    ],
+    [
+      "dip",
+      "J",
+      2,
+      -0.1
+    ],
+    [
+      "err",
+      "J",
+      2,
+      0.8
+    ],
+    [
+      "pop",
+      "K",
+      1,
+      0
+    ],
+    [
+      "err",
+      "K",
+      2,
+      2.5
+    ],
+    [
+      "ok",
+      "L",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "M",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "N",
+      0,
+      0
+    ],
+    [
+      "save",
+      "N",
+      1,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Request जाने से पहले ही, 8{आठ} चक्कर लग जाते हैं।",
+      "B": "ये MDN की गिनती है, एक simple HTTPS page के लिए। || चक्कर यानी round trip: | browser सवाल भेजे, जवाब लौटे।",
+      "C": "Food app के order जैसा समझो। | पहले restaurant का पता, फिर confirm call, फिर order, फिर rider। || Link दबाने पर भी ऐसा रास्ता चलता है। | हर stop पर देर लगती है, और कुछ टूट भी सकता है।",
+      "D": "इसे 5{five} stops में देखते हैं।",
+      "E": "पहला stop: DNS। || Browser को website का नाम पता है, server का पता नहीं। | DNS एक phone book है: | नाम दो, IP address लो, यानी server का नंबर।",
+      "F": "दूसरा stop: TCP। || Browser पूछता है: सुन रहे हो? | server बोलता है: हाँ, तुम? | browser: हाँ। || ये 3{three} messages हैं, फिर लाइन जुड़ जाती है।",
+      "G": "तीसरा stop: TLS। || HTTPS का S यही है। | यहाँ दोनों एक secret तरीका तय करते हैं, ताकि बीच में कोई पढ़ न सके। | उसी गिनती में इसके 5{five} चक्कर हैं, सबसे ज़्यादा यहीं।",
+      "H": "चौथा stop: HTTP request। || Browser माँगता है: ये page दो। | वो सीधे server तक नहीं जाती। | पहले load balancer मिलता है, यानी जो requests को कई servers में बाँटता है। | वो हर request एक server को भेजता है।",
+      "I": "पाँचवाँ stop: server। || वो page बनाता है, और जवाब उसी रास्ते से तुम्हारी screen पर लौटता है।",
+      "J": "अब देखो, क्या टूट सकता है। || हर stop में वक़्त लगता है, इसे latency कहते हैं, यानी इंतज़ार। | सारी देर जुड़ती है। || और जिस stop का backup नहीं, वो single point of failure है, यानी SPOF। | वो गिरा, तो पूरा रास्ता रुक गया।",
+      "K": "हिसाब देखो। || EXAMPLE: | मान लो पाँचों stops 99.9{ninety-nine-point-nine}% चालू रहते हैं। || ये एक के बाद एक हैं, तो सबका साथ चालू रहना ज़रूरी है। | 0.999{point-nine-nine-nine} को 5{पाँच} बार multiply करो। | जवाब करीब 99.5{ninety-nine-point-five}%, यानी साल में करीब 44{forty-four} घंटे बंद।",
+      "L": "हर stop अच्छा था, फिर भी रास्ता कमज़ोर हो गया। || इसलिए SPOF की दूसरी copy लगाते हैं, जैसे load balancer के पीछे कई servers।",
+      "M": "@emph याद रखो: | जितने stops, उतनी देर, और उतनी जगह टूटने की।",
+      "N": "अब तुम बताओ: | तुम्हारे app के रास्ते में कितने stops हैं? | एक number comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

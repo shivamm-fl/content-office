@@ -1,0 +1,18 @@
+Day 12/150: link dabane se pehle hi 8 chakkar lag jate hain. Ek click ka poora safar dekho.
+
+MDN ki simplified ginti ke hisaab se ek HTTPS page ke liye request jaane se pehle 8 round trips lagte hain. Round trip yaani browser sawal bheje, jawab laute.
+
+5 stops:
+1. DNS: naam do, IP address lo.
+2. TCP: 3 messages ka handshake, phir line jud jati hai.
+3. TLS: HTTPS ka S, secret tareeka tay hota hai. Isme 5 chakkar hain.
+4. HTTP request: load balancer use ek server ko bhejta hai.
+5. Server: page banata hai, jawab usi raaste se wapas.
+
+Har stop mein wait lagta hai (latency), aur jis stop ka backup nahi, wo single point of failure (SPOF) hai.
+
+Example: paanchon stops 99.9% chalu, ek ke baad ek, to 0.999 ka 5 power = lagbhag 99.5%, yaani saal mein karib 44 ghante band. (Ye sirf arithmetic example hai, kisi company ka number nahi.)
+
+Sawal: tumhare app ke raaste mein kitne stops hain? Ek number comment karo.
+
+#systemdesign #backend #interviewprep

@@ -1,0 +1,10 @@
+One Click, Eight Round Trips: the Journey of a Request Explained in Hinglish (Day 12/150)
+
+One tap on a link is one journey: the browser asks DNS for the IP address, opens a TCP connection with a three-way handshake, adds TLS for HTTPS, sends the HTTP request, a load balancer forwards it to one of several backend servers, and the response comes back the same way. MDN's simplified count for an HTTPS page is eight round trips before the browser can make the request (the TLS step needs five of them). Every stop adds latency, and a stop with no backup is a single point of failure, a part that would stop the entire system if it failed. Example arithmetic, not a real company's number: five stops in a row, each up 99.9%, give 0.999^5, about 99.5%, roughly 44 hours of downtime a year.
+
+Sources:
+https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work
+https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake
+https://en.wikipedia.org/wiki/Load_balancing_(computing)
+https://en.wikipedia.org/wiki/Single_point_of_failure
+https://en.wikipedia.org/wiki/High_availability

@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Ek request ka safar</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="135" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+        <div class="beat" id="sL"></div>
+        <div class="beat" id="sM"></div>
+        <div class="beat" id="sN"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="135" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="135" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="135" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 012 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J, K, L, MM, NN] = SC.map((k) => M.$("#s" + k));
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const lab = (host, x, y, w, col, txt, t, size, al) => show(el(host, `left:${x}px;width:${w}px;text-align:${al || "center"};top:${y}px;font:600 ${size || 38}px var(--code);letter-spacing:.06em;color:${col};white-space:nowrap`, txt), t, { opacity: 0, y: 12 });
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, cx, y, w, col, t, size) => show(el(host, `left:${cx - w / 2}px;width:${w}px;top:${y}px;height:70px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 38}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const card = (host, w, h, cx, y, col, html, size) => el(host, `left:${cx - w / 2}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 44}px var(--code);color:${INK};white-space:nowrap`, html);
+      const num = (host, w, h, cx, y, col, html, t, size) => show(card(host, w, h, cx, y, col, html, size), t, { opacity: 0, y: 14 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const cover = (host, x, y, w, h, t) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(14,18,30,.62)`), t, { opacity: 0, y: 0 });
+      const slot = (host, x, y, w, h, html, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;border:3px dashed ${M.ca(col || GREY, 0.8)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 44}px var(--code);color:${col || GREY};white-space:nowrap`, html), t, { opacity: 0, y: 0 });
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M29 17L12 46M35 17l17 29"/></g>`;
+      Viz.ICONS.phone = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="17" y="5" width="30" height="54" rx="7"/><path d="M28 51h8"/></g>`;
+      Viz.ICONS.pin = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round"><path d="M32 59C20 44 14 34 14 25a18 18 0 0 1 36 0c0 9-6 19-18 34z"/><circle cx="32" cy="25" r="6"/></g>`;
+      Viz.ICONS.bag = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M12 20h40l-3 38H15z"/><path d="M22 28v-8a10 10 0 0 1 20 0v8"/></g>`;
+      Viz.ICONS.bike = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="14" cy="44" r="9"/><circle cx="50" cy="44" r="9"/><path d="M14 44l10-20h16l10 20M24 24l8 20h-18M36 24l-3-8h8"/></g>`;
+      Viz.ICONS.key = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="20" cy="32" r="12"/><path d="M32 32h26M48 32v10M56 32v8"/></g>`;
+      const S = M.S;
+
+      // route of five stops (left column), right column x 660-1020 is for stamps
+      const RX = 70, RW = 560, RH = 150, RY = [230, 420, 610, 800, 990], RC = 840;
+      const RL = [["DNS", "book"], ["TCP", "chat"], ["TLS", "lock"], ["HTTP + LB", "balancer"], ["SERVER", "server"]];
+      const route = (host, ts) => { const b = []; RL.forEach(([lb, ic], i) => {
+          const x = M.box(host, { x: RX, y: RY[i], w: RW, h: RH, label: lb, icon: ic, color: CYAN, size: 40, isize: 56 }); x.show(ts[i]); b.push(x);
+          if (i > 0) M.arrow(host, { from: [RX + RW / 2, RY[i - 1] + RH + 2], to: [RX + RW / 2, RY[i] - 2], color: GREY, w: 6 }).show(ts[i] - 0.05, 0.2); });
+        return b; };
+      const rowRing = (host, i, col, t, tOff) => ring(host, RX, RY[i], RW, RH, col, t, tOff);
+      const rowCover = (host, i, t) => cover(host, RX, RY[i], RW, RH, t);
+      const TL = ["DNS", "TCP", "TLS", "HTTP", "SERVER"];
+      const trk = (host, cur) => TL.forEach((l, i) => show(el(host, `left:${76 + i * 188}px;top:200px;width:176px;height:64px;border-radius:12px;border:3px solid ${i === cur ? ACC : M.ca(GREY, 0.5)};background:${i === cur ? M.ca(ACC, 0.15) : "transparent"};display:flex;align-items:center;justify-content:center;font:700 36px var(--code);color:${i === cur ? ACC : GREY};box-sizing:border-box`, l), 0.05, { opacity: 0, y: 0 }));
+      const pageCard = (host, x, y, w, h, t) => [
+        show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:3px solid ${CYAN};background:#16203A;box-sizing:border-box`), t, { opacity: 0, y: 12 }),
+        show(el(host, `left:${x + 20}px;top:${y + 20}px;width:${w - 40}px;height:${h * 0.14}px;border-radius:6px;background:${ACC}`), t + 0.12, { opacity: 0, y: 8 }),
+        show(el(host, `left:${x + 20}px;top:${y + h * 0.34}px;width:${w - 40}px;height:${h * 0.26}px;border-radius:6px;background:${M.ca(CYAN, 0.35)}`), t + 0.24, { opacity: 0, y: 8 }),
+        show(el(host, `left:${x + 20}px;top:${y + h * 0.68}px;width:${(w - 40) * 0.8}px;height:${h * 0.07}px;border-radius:5px;background:${M.ca(INK, 0.6)}`), t + 0.36, { opacity: 0, y: 8 }),
+        show(el(host, `left:${x + 20}px;top:${y + h * 0.80}px;width:${(w - 40) * 0.55}px;height:${h * 0.07}px;border-radius:5px;background:${M.ca(INK, 0.6)}`), t + 0.48, { opacity: 0, y: 8 })];
+      const cells8 = (host, x, y, cw, gap, ch) => { const a = []; for (let i = 0; i < 8; i++) a.push(show(el(host, `left:${x + i * (cw + gap)}px;top:${y}px;width:${cw}px;height:${ch}px;border-radius:12px;border:3px dashed ${M.ca(GREY, 0.7)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${Math.round(ch * 0.4)}px var(--code);color:${GREY}`, i + 1), 0.05, { opacity: 0, y: 0 })); return a; };
+      const fillCells = (cells, from, to, t, col, each) => { for (let i = from; i < to; i++) { const c = cells[i]; tl.to(c, { borderColor: col, backgroundColor: M.ca(col, 0.25), color: INK, duration: 0.25, immediateRender: false }, t + (i - from) * each); tl.set(c, { borderStyle: "solid" }, t + (i - from) * each); } };
+
+      // ===== A: hook, eight round trips before the request leaves =====
+      // diagram: A
+      M.hook(["Request se pehle hi,", "8 chakkar"], { size: 84, top: 230 });
+      M.box(A, { x: 340, y: 500, w: 400, h: 170, label: "PHONE", icon: "phone", color: CYAN, size: 44, isize: 64 }).show(0.05);
+      const aCells = cells8(A, 60, 830, 210, 30, 120).map((c, i) => { return c; });
+      // two rows of four
+      aCells.forEach((c, i) => { c.style.left = (60 + (i % 4) * 240) + "px"; c.style.top = (830 + Math.floor(i / 4) * 150) + "px"; });
+      M.box(A, { x: 340, y: 1150, w: 400, h: 160, label: "SERVER", icon: "server", color: CYAN, size: 44, isize: 60 }).show(0.1);
+      stamp(A, "NOT SENT YET", 540, 720, HOT, at("A", "pehle"), 50, 560);
+      fillCells(aCells, 0, 8, at("A", "8"), ACC, 0.16);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: what a round trip is =====
+      // diagram: B
+      M.box(B, { x: 340, y: 330, w: 400, h: 190, label: "BROWSER", icon: "phone", color: CYAN, size: 44, isize: 64 }).show(0.05);
+      M.box(B, { x: 340, y: 930, w: 400, h: 190, label: "SERVER", icon: "server", color: CYAN, size: 44, isize: 64 }).show(0.1);
+      M.pill(B, "MDN COUNT", at("B", "MDN"), { x: 340, y: 200, kind: "out", size: 44 });
+      const bd = M.arrow(B, { from: [450, 525], to: [450, 925], color: GREY, w: 8 }); bd.show(0.15, 0.25);
+      const bu = M.arrow(B, { from: [630, 925], to: [630, 525], color: GREY, w: 8 }); bu.show(0.2, 0.25);
+      bd.travel(at("B", "sawal"), 0.7, ACC); bu.travel(at("B", "jawab"), 0.7, GOOD);
+      lab(B, 60, 700, 360, ACC, "ASK", at("B", "sawal"), 46, "right"); lab(B, 660, 700, 360, GOOD, "REPLY", at("B", "jawab"), 46, "left");
+      stamp(B, "1 ROUND TRIP", 540, 1190, ACC, at("B", "round"), 56, 600);
+      M.fit(B);
+
+      // ===== C: the food order, then the click =====
+      // diagram: C
+      const FC = [["pin", "ADDRESS", "pata"], ["phone", "CONFIRM", "confirm"], ["bag", "ORDER", "order", 1], ["bike", "RIDER", "rider"]];
+      const fy = [250, 470, 690, 910];
+      FC.forEach(([ic, lb, w, n], i) => { M.box(C, { x: 70, y: fy[i], w: 540, h: 190, label: lb, icon: ic, color: CYAN, size: 46, isize: 70 }).show(i === 0 ? at("C", "Food") : at("C", w, n));
+        if (i > 0) M.arrow(C, { from: [340, fy[i - 1] + 192], to: [340, fy[i] - 2], color: GREY, w: 6 }).show(at("C", w, n) - 0.05, 0.2); });
+      gone(lab(C, 650, 200, 370, GREY, "FOOD APP", at("C", "Food"), 38), at("C", "Link") - 0.1);
+      M.pill(C, "YOUR LINK", at("C", "Link"), { x: 650, y: 190, kind: "acc", size: 44 });
+      [0, 1, 2, 3].forEach((i) => M.icon(C, "clock", 760, fy[i] + 55, 80, HOT).show(at("C", "der") + i * 0.18));
+      ring(C, 70, fy[3], 540, 190, HOT, at("C", "toot")); M.icon(C, "cross", 650, fy[3] + 55, 80, HOT).show(at("C", "toot"));
+      M.fit(C);
+
+      // ===== D: five empty stops =====
+      // diagram: D
+      RY.forEach((y, i) => { slot(D, RX, y, RW, RH, String(i + 1), 0.05 + i * 0.05, GREY, 70); });
+      RY.forEach((y, i) => { if (i > 0) M.arrow(D, { from: [RX + RW / 2, RY[i - 1] + RH + 2], to: [RX + RW / 2, y - 2], color: GREY, w: 6 }).show(0.1 + i * 0.05, 0.2); });
+      num(D, 340, 240, RC, 480, ACC, "5", at("D", "5"), 170);
+      lab(D, 660, 740, 360, ACC, "STOPS", at("D", "stops"), 56);
+      M.fit(D);
+
+      // ===== E: DNS =====
+      // diagram: E
+      trk(E, 0);
+      M.box(E, { x: 70, y: 330, w: 420, h: 170, label: "BROWSER", icon: "phone", color: CYAN, size: 44, isize: 60 }).show(0.05);
+      const eSrvSlot = slot(E, 590, 330, 420, 170, "SERVER ?", 0.1, GREY, 44);
+      const eSrv = M.box(E, { x: 590, y: 330, w: 420, h: 170, label: "SERVER", icon: "server", color: CYAN, size: 44, isize: 60 }); eSrv.show(at("E", "nanbar"));
+      const eName = chip(E, "shop.example", 280, 540, 380, ACC, at("E", "naam"), 38);
+      tl.to(eName, { y: 230, opacity: 0, duration: 0.5, ease: "power2.in", immediateRender: false }, at("E", "do"));
+      const book = panel(E, 70, 660, 940, 380, CYAN, "DNS PHONE BOOK"); show(book, at("E", "phone"), { opacity: 0, y: 14 });
+      const rows = [["shop.example", "203.0.113.8"], ["news.example", "203.0.113.21"], ["learn.example", "203.0.113.45"]];
+      const rowEls = rows.map(([n, ip], i) => show(el(E, `left:110px;top:${740 + i * 90}px;width:860px;height:76px;border-radius:10px;box-sizing:border-box;border:2px solid transparent;font:600 40px var(--code);color:${INK};display:flex;align-items:center;justify-content:space-between;padding:0 24px;white-space:nowrap`, `<span>${n}</span><span style="color:${CYAN}">${ip}</span>`), at("E", "phone") + 0.2 + i * 0.1, { opacity: 0, y: 8 }));
+      tl.to(rowEls[0], { borderColor: ACC, backgroundColor: M.ca(ACC, 0.18), duration: 0.25, immediateRender: false }, at("E", "do"));
+      const eIp = chip(E, "203.0.113.8", 800, 540, 380, GOOD, at("E", "lo"), 38);
+      tl.to(eSrvSlot, { opacity: 0, duration: 0.2, immediateRender: false }, at("E", "nanbar"));
+      M.pill(E, "EXAMPLE", at("E", "phone"), { x: 340, y: 1110, kind: "out", size: 44 });
+      M.fit(E);
+
+      // ===== F: TCP three-way handshake =====
+      // diagram: F
+      trk(F, 1);
+      M.box(F, { x: 70, y: 310, w: 380, h: 150, label: "BROWSER", icon: "phone", color: CYAN, size: 40, isize: 56 }).show(0.05);
+      M.box(F, { x: 630, y: 310, w: 380, h: 150, label: "SERVER", icon: "server", color: CYAN, size: 40, isize: 56 }).show(0.1);
+      const life = [260, 820].map((x) => show(el(F, `left:${x - 2}px;top:465px;width:0;height:660px;border-left:4px dashed ${M.ca(GREY, 0.7)}`), 0.1, { opacity: 0, y: 0 }));
+      const hs1 = M.arrow(F, { from: [260, 560], to: [820, 680], color: ACC, w: 8 }), hs2 = M.arrow(F, { from: [820, 760], to: [260, 880], color: ACC, w: 8 }), hs3 = M.arrow(F, { from: [260, 960], to: [820, 1080], color: ACC, w: 8 });
+      hs1.show(at("F", "sun"), 0.4); hs2.show(at("F", "haan"), 0.4); hs3.show(at("F", "browser"), 0.4);
+      chip(F, "SYN", 540, 590, 190, ACC, at("F", "sun") + 0.1, 38); chip(F, "SYN-ACK", 540, 790, 270, ACC, at("F", "haan") + 0.1, 38); chip(F, "ACK", 540, 990, 190, ACC, at("F", "browser") + 0.1, 38);
+      [["1", at("F", "sun")], ["2", at("F", "haan")], ["3", at("F", "browser")]].forEach(([n, t], i) => show(el(F, `left:${i === 1 ? 856 : 150}px;top:${[535, 735, 935][i]}px;width:72px;height:72px;border-radius:36px;border:4px solid ${ACC};display:flex;align-items:center;justify-content:center;font:800 44px var(--code);color:${ACC}`, n), t, { opacity: 0, y: 0 }));
+      tl.to(life, { borderLeftColor: GOOD, duration: 0.3, immediateRender: false }, at("F", "jud"));
+      stamp(F, "CONNECTED", 540, 1170, GOOD, at("F", "jud"), 54, 560);
+      M.fit(F);
+
+      // ===== G: TLS =====
+      // diagram: G
+      trk(G, 2);
+      M.box(G, { x: 340, y: 300, w: 400, h: 150, label: "BROWSER", icon: "phone", color: CYAN, size: 40, isize: 56 }).show(0.05);
+      M.box(G, { x: 340, y: 800, w: 400, h: 150, label: "SERVER", icon: "server", color: CYAN, size: 40, isize: 56 }).show(0.1);
+      show(el(G, `left:538px;top:455px;width:0;height:340px;border-left:4px dashed ${M.ca(GREY, 0.7)}`), 0.1, { opacity: 0, y: 0 });
+      M.icon(G, "lock", 110, 520, 130, GOOD).show(at("G", "HTTPS"));
+      lab(G, 60, 665, 230, GOOD, "HTTPS", at("G", "HTTPS"), 38);
+      M.icon(G, "key", 790, 310, 110, ACC).show(at("G", "secret")); M.icon(G, "key", 790, 810, 110, ACC).show(at("G", "secret") + 0.1);
+      const msg1 = chip(G, "HELLO", 540, 590, 240, INK, at("G", "beech"), 38);
+      const eye = M.icon(G, "eye", 790, 560, 130, HOT); eye.show(at("G", "beech") + 0.2);
+      tl.to(msg1, { opacity: 0, duration: 0.01, immediateRender: false }, at("G", "padh") - 0.03);
+      const msg2 = chip(G, "x7#Q9!", 540, 590, 240, GOOD, at("G", "padh"), 38);
+      M.icon(G, "cross", 800, 570, 110, HOT).show(at("G", "sake"));
+      const g8 = cells8(G, 56, 1090, 100, 14, 90); g8.forEach((c, i) => { c.style.left = 56 + i * 114 + "px"; });
+      fillCells(g8, 0, 3, at("G", "ginti"), GREY, 0.1);
+      fillCells(g8, 3, 8, at("G", "5"), ACC, 0.16);
+      lab(G, 56, 1190, 340, GREY, "TCP 3", at("G", "ginti"), 38, "left"); lab(G, 396, 1190, 590, ACC, "TLS 5", at("G", "5"), 38, "right");
+      ring(G, 56 + 3 * 114, 1090, 5 * 114 - 14, 90, GOOD, at("G", "sabse"));
+      M.fit(G);
+
+      // ===== H: HTTP request through the load balancer =====
+      // diagram: H
+      trk(H, 3);
+      M.box(H, { x: 330, y: 300, w: 420, h: 150, label: "BROWSER", icon: "phone", color: CYAN, size: 40, isize: 56 }).show(0.05);
+      const hLB = M.box(H, { x: 330, y: 620, w: 420, h: 170, label: "LOAD BALANCER", icon: "balancer", color: CYAN, size: 36, isize: 56 }); hLB.show(at("H", "load"));
+      const hSv = [60, 390, 720].map((x, i) => { const b = M.box(H, { x, y: 960, w: 300, h: 170, label: "SERVER", icon: "server", color: CYAN, size: 36, isize: 52 }); b.show(at("H", "servers") + i * 0.1); return b; });
+      const h1 = M.arrow(H, { from: [540, 455], to: [540, 615], color: GREY, w: 8 }); h1.show(at("H", "request"), 0.25); h1.travel(at("H", "page"), 0.6, ACC);
+      chip(H, "GET /page", 200, 500, 280, ACC, at("H", "request"), 36);
+      const hd = M.arrow(H, { from: [760, 375], to: [960, 955], color: HOT, w: 7, dash: true }); hd.show(at("H", "seedhe"), 0.3);
+      M.icon(H, "cross", 820, 580, 90, HOT).show(at("H", "nahi"));
+      const hf = [210, 540, 870].map((x, i) => { const a = M.arrow(H, { from: [540, 795], to: [x, 955], color: GREY, w: 7 }); a.show(at("H", "servers") + i * 0.1, 0.25); return a; });
+      hf[1].travel(at("H", "bhejta"), 0.6, ACC);
+      ring(H, 390, 960, 300, 170, ACC, at("H", "bhejta") + 0.5);
+      M.fit(H);
+
+      // ===== I: the server builds the page and the answer returns =====
+      // diagram: I
+      trk(I, 4);
+      M.box(I, { x: 70, y: 330, w: 520, h: 180, label: "PHONE", icon: "phone", color: CYAN, size: 42, isize: 60 }).show(0.05);
+      M.box(I, { x: 70, y: 620, w: 520, h: 180, label: "LOAD BALANCER", icon: "balancer", color: CYAN, size: 36, isize: 56 }).show(0.1);
+      M.box(I, { x: 70, y: 910, w: 520, h: 180, label: "SERVER", icon: "server", color: CYAN, size: 42, isize: 60 }).show(0.15);
+      const iu1 = M.arrow(I, { from: [330, 905], to: [330, 805], color: GREY, w: 8 }), iu2 = M.arrow(I, { from: [330, 615], to: [330, 515], color: GREY, w: 8 });
+      iu1.show(0.2, 0.25); iu2.show(0.2, 0.25);
+      slot(I, 680, 850, 340, 300, "PAGE ?", 0.1, GREY, 44); 
+      const pg1 = pageCard(I, 680, 850, 340, 300, at("I", "banata"));
+      iu1.travel(at("I", "raaste"), 0.5, GOOD); iu2.travel(at("I", "raaste") + 0.5, 0.5, GOOD);
+      pageCard(I, 680, 330, 340, 180, at("I", "screen"));
+      stamp(I, "SAME ROAD BACK", 540, 1190, GOOD, at("I", "lautta"), 50, 640);
+      M.fit(I);
+
+      // ===== J: latency adds up, then the SPOF =====
+      // diagram: J
+      route(J, [0.05, 0.1, 0.15, 0.2, 0.25]);
+      const jLat = lab(J, 650, 180, 370, ACC, "LATENCY", at("J", "latency"), 38, "center");
+      const LW = [0.5, 0.35, 0.8, 0.45, 0.6], BARS = [];
+      LW.forEach((f, i) => { const y = RY[i] + 50;
+        BARS.push(show(el(J, `left:650px;top:${y}px;width:370px;height:50px;border-radius:8px;border:2px solid ${M.ca(GREY, 0.5)};box-sizing:border-box`), at("J", "latency"), { opacity: 0, y: 0 }));
+        const b = el(J, `left:650px;top:${y}px;width:${370 * f}px;height:50px;border-radius:6px;background:${HOT};transform-origin:0 50%`); tl.set(b, { opacity: 0, scaleX: 0 }, 0); tl.to(b, { opacity: 1, scaleX: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, at("J", "latency") + 0.3 + i * 0.28); BARS.push(b); });
+      const tot = []; let acc = 0; const sumW = LW.reduce((a, b) => a + b, 0);
+      LW.forEach((f, i) => { const w = 940 * f / sumW; const x = 70 + acc; acc += w; tot.push(show(el(J, `left:${x}px;top:1185px;width:${w - 4}px;height:70px;border-radius:8px;background:${i % 2 ? HOT : M.ca(HOT, 0.65)}`), at("J", "saari") + i * 0.12, { opacity: 0, y: 0 })); });
+      tot.push(lab(J, 70, 1262, 940, INK, "ALL ADDS UP", at("J", "judti"), 38, "left"));
+      const jOut = BARS.concat(tot, [jLat]).filter(Boolean); gone(jOut, at("J", "jis") - 0.1);
+      slot(J, 660, 1015, 360, 90, "NO BACKUP", at("J", "backup"), INK, 40);
+      stamp(J, "SPOF", RC, 830, ACC, at("J", "SPOF"), 52, 340);
+      rowRing(J, 4, HOT, at("J", "gira"));
+      [0, 1, 2, 3].forEach((i) => rowCover(J, i, at("J", "gira")));
+      stamp(J, "ROUTE STOPPED", RC, 400, HOT, at("J", "gira"), 38, 360);
+      M.fit(J);
+
+      // ===== K: the arithmetic =====
+      // diagram: K
+      M.pill(K, "EXAMPLE", at("K", "EXAMPLE"), { x: 340, y: 190, kind: "out", size: 46 });
+      const kc = [0, 1, 2, 3, 4].map((i) => num(K, 150, 130, 145 + i * 200, 300, GOOD, "99.9%", at("K", "paanchon") + 0.1 + i * 0.1, 38));
+      const ka = [0, 1, 2, 3].map((i) => M.arrow(K, { from: [222 + i * 200, 365], to: [268 + i * 200, 365], color: GREY, w: 6 }).show(at("K", "baad") + i * 0.1, 0.2));
+      const kAll = stamp(K, "ALL MUST WORK", 540, 480, HOT, at("K", "sabka"), 50, 640); gone(kAll, at("K", "0999") - 0.1);
+      num(K, 600, 190, 540, 560, ACC, "0.999<sup style='font-size:55%;vertical-align:super'>5</sup>", at("K", "0999"), 100);
+      num(K, 600, 190, 540, 800, GOOD, "99.5%", at("K", "995%"), 110);
+      lab(K, 70, 1010, 600, INK, "1 YEAR", at("K", "saal"), 40, "left");
+      show(el(K, `left:70px;top:1070px;width:950px;height:80px;border-radius:10px;border:3px solid ${M.ca(GOOD, 0.8)};background:${M.ca(GOOD, 0.45)};box-sizing:border-box`), at("K", "saal"), { opacity: 0, y: 0 });
+      show(el(K, `left:1015px;top:1064px;width:5px;height:92px;background:${HOT}`), at("K", "44"), { opacity: 0, y: 0 });
+      stamp(K, "44 HR DOWN", 800, 1190, HOT, at("K", "44"), 48, 440);
+      M.fit(K);
+
+      // ===== L: each stop is fine, the route is weak; add copies =====
+      // diagram: L
+      const lr = route(L, [0.05, 0.1, 0.15, 0.2, 0.25]);
+      RY.forEach((y, i) => rowRing(L, i, GOOD, at("L", "achha") + i * 0.15, at("L", "kamzor") - 0.1));
+      stamp(L, "WEAK ROUTE", RC, 550, HOT, at("L", "kamzor"), 40, 360);
+      rowRing(L, 4, ACC, at("L", "SPOF"));
+      stamp(L, "SPOF", RC, 1015, ACC, at("L", "SPOF"), 50, 340);
+      lr[4].hide(at("L", "copy"));
+      [0, 1, 2].forEach((i) => { const t = [at("L", "copy"), at("L", "kai"), at("L", "servers")][i]; M.box(L, { x: RX + i * 195, y: RY[4], w: 170, h: RH, label: "", icon: "server", color: i === 0 ? CYAN : GOOD, size: 24, isize: 80 }).show(t); });
+      rowRing(L, 3, GOOD, at("L", "balancer"), at("L", "balancer") + 1.0);
+      M.fit(L);
+
+      // ===== M: recap, three rows =====
+      // diagram: M
+      const mr = [["STOPS", "MORE STOPS", "stops,", "arrow"], ["WAIT", "MORE WAIT", "der,", "clock"], ["BREAK", "MORE BREAKS", "tootne", "cross"]];
+      mr.forEach(([k, lb, w, ic], i) => { const y = 330 + i * 290;
+        slot(MM, 90, y, 900, 230, "", 0.05 + i * 0.05, GREY);
+        const t = at("M", w.replace(",", ""));
+        M.icon(MM, ic, 150, y + 55, 120, i === 2 ? HOT : i === 1 ? ACC : CYAN).show(t);
+        show(el(MM, `left:320px;top:${y + 70}px;font:700 62px var(--code);color:${INK};white-space:nowrap`, lb), t, { opacity: 0, y: 10 }); });
+      M.fit(MM);
+
+      // ===== N: comment + follow =====
+      // diagram: N
+      [0, 1, 2, 3, 4].forEach((i) => slot(NN, 70 + i * 200, 300, 150, 130, "?", 0.05 + i * 0.05, GREY, 60));
+      stamp(NN, "COUNT YOUR STOPS", 540, 500, ACC, at("N", "kitne"), 48, 700);
+      const cc = panel(NN, 80, 700, 920, 420, CYAN, "COMMENT KARO"); show(cc, at("N", "comment") - 0.2, { opacity: 0, y: 14 });
+      const ph = show(el(cc, "left:40px;right:40px;top:200px;height:100px;border-radius:50px;border:1.5px solid rgba(150,175,215,.5);font:500 40px var(--code);color:#C3CCDE;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("N", "comment"), { opacity: 0 });
+      tl.to(ph, { opacity: 0, duration: 0.01, immediateRender: false }, at("N", "likho") - 0.03);
+      const typed = show(el(cc, "left:70px;top:222px;font:700 52px var(--code);color:#E8EDF6", "5"), at("N", "likho"), { opacity: 0, y: 0 });
+      const fb = M.pill(NN, "+  FOLLOW", at("N", "follow") - 0.4, { x: 380, y: 1230, kind: "acc", size: 52 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("N", "follow"));
+      M.fit(NN);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { chakkar: "gold", round: "gold", trip: "gold", stops: "gold", DNS: "cyan", IP: "cyan", TCP: "cyan", TLS: "cyan", HTTPS: "cyan", balancer: "cyan", server: "cyan", latency: "hot", SPOF: "hot", backup: "good", toot: "hot", 999: "gold", EXAMPLE: "gold", "995%": "hot", ghante: "hot", copy: "good", comment: "gold", follow: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

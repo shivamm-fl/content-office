@@ -6,63 +6,29 @@
       "day": 12,
       "unit": "P1",
       "title": "Ek request ka safar: click se jawab tak, Phase 1 ka poora map",
-      "one_idea": "One tap on a link is one journey: the browser asks DNS for the address, opens a TCP connection, adds TLS for HTTPS, sends an HTTP request, a load balancer picks one of several servers, and the response comes back; each stop adds latency, and any stop with no backup is a single point of failure that hurts availability.",
       "format": "recap",
       "hook_type": "surprising_fact",
       "spoken_hook": "Request जाने से पहले ही, आठ चक्कर लग जाते हैं।",
-      "hook_formula": "surprising_fact: a counted, sourced fact about the viewer's own click (MDN's own tally of eight round trips before the HTTPS request is sent), plain statement, no question after it",
       "hook_source": "https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work",
-      "hook_10s": "Request जाने से पहले ही, आठ चक्कर लग जाते हैं। ये MDN की गिनती है, एक simple HTTPS page के लिए। आज एक click का पूरा सफ़र देखते हैं: DNS से लेकर server और वापस, हर stop पर क्या होता है और कहाँ टूट सकता है। [frame 0: a phone on the left, a server on the right, eight small arrows going back and forth between them before a single page card appears]",
-      "hook_candidates": [
-        {
-          "formula": "surprising_fact",
-          "text": "Request जाने से पहले ही, आठ चक्कर लग जाते हैं।"
-        },
-        {
-          "formula": "relatable_stake",
-          "text": "एक link दबाया, और बीच में पाँच जगह कुछ भी टूट सकता था।"
-        },
-        {
-          "formula": "direct_question",
-          "text": "एक click के बाद आपका request कहाँ-कहाँ जाता है?"
-        }
-      ],
-      "visual_idea": "One fixed horizontal road: phone, DNS book, a TCP handshake of three arrows, a padlock for TLS, a load balancer fanning to three servers, then the page card returning along the same road. A stopwatch ticks on every stop (latency adds up) and a red marker shows which stop is a single point of failure, then a second copy appears beside it.",
-      "everyday_anchor": "Ordering food on a delivery app: look up the restaurant's address, call and confirm, hand over the order securely, a dispatcher picks a rider, the food comes back; any step with no backup stops the order.",
-      "example": "EXAMPLE: a page request passes DNS, TCP, TLS, load balancer and one app server; if each stop is up 99.9% and they are in a row, the whole path is up about 99.5% (0.999^5), arithmetic labelled EXAMPLE, not a real company's number.",
-      "sources": [
-        "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works",
-        "https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work",
-        "https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake",
-        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview",
-        "https://en.wikipedia.org/wiki/Load_balancing_(computing)",
-        "https://en.wikipedia.org/wiki/Throughput",
-        "https://en.wikipedia.org/wiki/High_availability",
-        "https://en.wikipedia.org/wiki/Single_point_of_failure"
-      ],
-      "facts_to_verify": [
-        "MDN How browsers work: TLS needs five more round trips and 'after eight round trips' the browser can make the request; say it is MDN's simplified count for an HTTPS page, real counts depend on TLS version and reused connections",
-        "DNS lookup returns the IP address; usually cached after the first request (MDN How browsers work)",
-        "TCP three-way handshake SYN, SYN-ACK, ACK, after DNS and before TLS (MDN TCP handshake)",
-        "HTTP is client/server, the browser always starts the request; proxies between can do load balancing (MDN HTTP overview)",
-        "load balancer sends each request to one backend server (Wikipedia Load balancing)",
-        "SPOF definition (Wikipedia); availability = ability to access the service (Wikipedia High availability)",
-        "series availability 0.999^5 is EXAMPLE arithmetic: recompute and show it",
-        "Cloudflare and other CDN pages not fetched; do not claim anything about CDN or caching speed-ups"
-      ],
-      "length_target_s": 120,
+      "length_target_s": 140,
       "cover_headline": "One Click, Eight Round Trips",
       "thumb_text": "Click ke chakkar",
       "script_file": "state/scripts/s012.txt",
       "status": "planned",
       "qa_passed": false,
+      "sources": [
+        "https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work",
+        "https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake",
+        "https://en.wikipedia.org/wiki/Load_balancing_(computing)",
+        "https://en.wikipedia.org/wiki/Single_point_of_failure",
+        "https://en.wikipedia.org/wiki/High_availability"
+      ],
       "keywords": [
         "what happens when you open a website",
         "journey of a request system design",
         "dns tcp http explained in hindi",
         "system design basics recap",
-        "request flow load balancer server",
-        "system design for beginners hindi"
+        "request flow load balancer server"
       ]
     }
   ]
