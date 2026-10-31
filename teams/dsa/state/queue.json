@@ -1,106 +1,62 @@
 {
- "items": [
-  {
-   "id": "d009",
-   "track": "series",
-   "day": 9,
-   "unit": "P1",
-   "format": "problem",
-   "title": "Contains Duplicate aur Valid Anagram: ek hash map se dono",
-   "one_idea": "Both Contains Duplicate and Valid Anagram are answered by remembering what you have already seen in a hash-based structure (a set of seen values, a count of each character), so no sorting or pair-checking is needed.",
-   "hook_type": "surprising_fact",
-   "spoken_hook": "Contains Duplicate problem, sorting के बिना एक loop में solve!",
-   "hook_formula": "plain_payoff_fact",
-   "visual_idea": "Row of six cells 4 7 1 9 7 3 with a pointer walking right and a seen box filling; at the second 7 the cell turns red; then count bars for listen and silent overlap, rat and car differ at t and c.",
-   "everyday_anchor": "none: developer audience (owner 2026-10-26)",
-   "example": "[4,7,1,9,7,3]: duplicate at step 5 with a set, 8 pair checks brute force; 10,000 numbers 49,995,000 pairs; listen/silent True, rat/car False.",
-   "pattern": "remember what you have seen",
-   "check_question": "Is [3,8,3] a duplicate? Are aab and abb anagrams? (yes, no)",
-   "sources": [
-    "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0200-0299/0217.Contains%20Duplicate/README_EN.md",
-    "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0200-0299/0242.Valid%20Anagram/README_EN.md",
-    "https://docs.python.org/3/library/collections.html",
-    "https://en.wikipedia.org/wiki/Hash_table"
-   ],
-   "length_target_s": 165,
-   "cover_headline": "Duplicates and anagrams, one trick",
-   "thumb_text": "Seen set",
-   "keywords": [
-    "contains duplicate",
-    "valid anagram"
-   ],
-   "status": "planned",
-   "qa_passed": false,
-   "script_locked": true,
-   "hook_source": "plain payoff fact, owner-approved script 2026-10-27",
-   "facts_to_verify": [
-    "Contains Duplicate hash table O(n) time/space, sorting O(n log n) (doocs 0217) - verified",
-    "Valid Anagram counting O(n) time, O(C) space, C=26 (doocs 0242) - verified",
-    "Counter is a dict subclass; hash lookup average O(1), worst O(n)",
-    "Code run: qa/d009/output.txt"
-   ]
-  },
-  {
-   "id": "d010",
-   "track": "series",
-   "day": 10,
-   "unit": "P1",
-   "format": "concept",
-   "title": "Recursion aur call stack: har call ka apna frame",
-   "one_idea": "A recursive function calls itself on a smaller input until a base case returns; each active call keeps one frame on the call stack, so a missing base case or too much depth ends in a RecursionError (stack overflow).",
-   "hook_type": "relatable_stake",
-   "spoken_hook": "Recursive function चलाया, RecursionError आ गया!",
-   "hook_formula": "error_first_standard_term",
-   "hook_candidates": [
+  "items": [
     {
-     "formula": "error_first_standard_term",
-     "text": "Recursive function चलाया, RecursionError आ गया!"
-    },
-    {
-     "formula": "plain_payoff_fact",
-     "text": "Recursion में हर call का अपना stack frame बनता है।"
-    },
-    {
-     "formula": "direct_question",
-     "text": "Recursive function खुद को call करे, तो memory में क्या होता है?"
+      "id": "d011",
+      "track": "series",
+      "day": 11,
+      "unit": "P2",
+      "format": "pattern",
+      "title": "Prefix sum: range queries O(1) mein",
+      "one_idea": "Build a running-total array once in O(n); then the sum of any range left..right is one subtraction, prefix[right+1] - prefix[left], so every query costs O(1) instead of a loop.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: array के किसी हिस्से का sum हर बार loop चलाए बिना कैसे निकालोगे?",
+      "hook_formula": "interviewer_asked_plain_question",
+      "hook_candidates": [
+        {
+          "formula": "interviewer_asked_plain_question",
+          "text": "Interviewer ने पूछा: array के किसी हिस्से का sum हर बार loop चलाए बिना कैसे निकालोगे?"
+        },
+        {
+          "formula": "cost_shock",
+          "text": "एक लाख range-sum queries, brute force: दस अरब additions."
+        },
+        {
+          "formula": "plain_payoff_fact",
+          "text": "Array का कोई भी range sum, बस एक subtraction में."
+        }
+      ],
+      "hook_source": "interviewer_asked is the oldest of the last six built (d005 to d010: d007 only; direct_question three times, surprising_fact and relatable_stake once each); question is plain, no undefined term, 14 spoken words after the opener, inside 7 to 16",
+      "hook_10s": "Interviewer ने पूछा: array के किसी हिस्से का sum हर बार loop चलाए बिना कैसे निकालोगे? जवाब है prefix sum: array को एक बार चलाकर running total बना लो, फिर कोई भी range दो numbers के subtraction से मिलेगी। [frame 0: array 3 1 4 1 5 9 with a bracket over indices 2 to 4 and a question card]",
+      "visual_idea": "Six cells 3 1 4 1 5 9 with a second row below filling left to right with running totals 0 3 4 8 9 14 23; then a bracket over indices 2 to 4 lights the two prefix cells 14 and 4 and one subtraction 14 - 4 = 10 appears; last panel compares a loop re-adding the bracket every query with a single subtraction.",
+      "everyday_anchor": "none: developer audience, no everyday analogies (owner 2026-10-26)",
+      "example": "EXAMPLE array [3,1,4,1,5,9]; prefix [0,3,4,8,9,14,23]; sum of indices 2..4 = 4+1+5 = 10 = prefix[5] - prefix[2] = 14 - 4; whole array 23. For n = 100000 numbers and 100000 queries, worst-case brute force is 10,000,000,000 additions vs 100,000 for the build plus 100,000 subtractions. Real output of the planner's run.",
+      "pattern": "precompute running totals, answer by subtraction",
+      "check_question": "With prefix [0,3,4,8,9,14,23], what is the sum of indices 1..3? (6, since 9 - 3)",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Prefix_sum",
+        "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0300-0399/0303.Range%20Sum%20Query%20-%20Immutable/README_EN.md"
+      ],
+      "length_target_s": 150,
+      "cover_headline": "Prefix sum: range sums in O(1)",
+      "thumb_text": "Prefix sum",
+      "keywords": [
+        "prefix sum",
+        "range sum query",
+        "prefix sum array",
+        "cumulative sum",
+        "range sum query immutable"
+      ],
+      "status": "planned",
+      "qa_passed": false,
+      "facts_to_verify": [
+        "Prefix sum = running total, each output the sum of the inputs up to and including that index (Wikipedia Prefix sum, fetched)",
+        "Range sum = prefix[right+1] - prefix[left] with a leading 0; build O(n) time, query O(1), O(n) extra space (doocs 0303, fetched). The Wikipedia page does NOT state the range formula or the O(1) claim: cite doocs for it",
+        "Subtraction needs an operator with an inverse (works for sum, not for max): say so only if the script mentions other operators",
+        "Run the code and show its real output: prefix [0,3,4,8,9,14,23], sum 2..4 = 10 via 14 - 4, brute force equals prefix for every range (assert passed)",
+        "100000 x 100000 = 10,000,000,000 is arithmetic (worst case, every query spans the whole array); label it EXAMPLE",
+        "Paraphrase the problem; do not copy the doocs or LeetCode wording. The check question needs the answer 6 (prefix[4]-prefix[1] = 9-3)"
+      ],
+      "qa_note": "code run by planner: n=6 asserts brute == fast for all 21 ranges"
     }
-   ],
-   "hook_source": "relatable_stake is the oldest of the last six (only d005); the error is the real one an engineer meets, with the standard term and no undefined word; d005 used the same wrong-way-first idea so this compares it on a concept day",
-   "hook_10s": "Recursive function चलाया, RecursionError आ गया! Recursion यानी function खुद को छोटे input पर call करे। हर call stack पर अपना frame रखता है, और base case पर रुकता है। [frame 0: a stack of call boxes growing upward past a red limit line, label RecursionError]",
-   "visual_idea": "A vertical call stack: fact(5) pushes frame boxes fact(5), fact(4) down to fact(0) one by one with n in each, then the returns pop from the top while the value 1, 1x1, 2, 6, 24, 120 builds up; second panel removes the base case and the stack keeps growing until it crosses a red limit line at depth 1000 and turns into RecursionError.",
-   "everyday_anchor": "none: developer audience, no everyday analogies (owner 2026-10-26)",
-   "example": "fact(5): 6 calls, max depth 6, returns 120; fact without base case: RecursionError 'maximum recursion depth exceeded' at depth 999 counted from the call; total(10000) recursive fails, loop gives 50005000. Run on CPython 3.12.3 (EXAMPLE limits are platform and version dependent).",
-   "pattern": "base case plus smaller subproblem",
-   "check_question": "What does f(n) = n * f(n-1) do with no base case? (RecursionError)",
-   "sources": [
-    "https://docs.python.org/3/library/sys.html",
-    "https://docs.python.org/3/library/exceptions.html",
-    "https://en.wikipedia.org/wiki/Call_stack",
-    "https://en.wikipedia.org/wiki/Recursion_(computer_science)",
-    "https://raw.githubusercontent.com/python/cpython/3.12/Include/internal/pycore_ceval.h"
-   ],
-   "length_target_s": 150,
-   "cover_headline": "Recursion and the call stack",
-   "thumb_text": "Call stack",
-   "keywords": [
-    "recursion",
-    "call stack",
-    "base case",
-    "recursion error python",
-    "stack overflow"
-   ],
-   "status": "planned",
-   "qa_passed": false,
-   "facts_to_verify": [
-    "Each active call has one stack frame typically holding arguments, return address (if saved on the stack) and locals; push on call, pop on return; say 'typically', not 'always' (Wikipedia Call stack, researcher-verified)",
-    "Base case returns directly; recursive case breaks into smaller sub-problems; unbounded recursion typically exhausts stack space (Wikipedia Recursion, verified)",
-    "RecursionError is raised when the maximum recursion depth is exceeded (Python exceptions docs, verified)",
-    "Default limit 1000 is NOT in the sys docs; it is Py_DEFAULT_RECURSION_LIMIT 1000 in CPython 3.12 source (pycore_ceval.h). Say 'CPython's default' and say 'about 1000'; never 'the Python docs say 1000'",
-    "O(n) stack space for depth n has no fetched source: present it as 'n frames for depth n' shown by the run, not as a cited claim, unless the researcher finds a source",
-    "Run the code and show its real output: fact(5)=120 (6 calls with the n==0 base case; researcher counted 5 for a base case at n==1, so match the code shown on screen); no-base-case RecursionError 'maximum recursion depth exceeded' at depth about 999; total(10000) fails, loop gives 50005000; fact(5000) also fails",
-    "Optional: naive fib(5) 15 calls, fib(30) 2692537 calls (researcher-run, CPython 3.12.3); keep out unless the script needs a second example"
-   ],
-   "script_file": "state/scripts/d010.txt"
-  }
- ]
+  ]
 }
