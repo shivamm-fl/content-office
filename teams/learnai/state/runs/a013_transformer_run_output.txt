@@ -1,7 +1,7 @@
-heads 8 head size 64
-attention 1050624
-feed-forward 2099712
-layernorm 2048
-one encoder layer 3152384
-stack of 6 encoder layers 18914304
-share attention 33.3%  feed-forward 66.6%
+attention 1,050,624
+feed-forward 2,099,712
+layer norm 2,048
+one layer 3,152,384
+6 layers 18,914,304
+attention 33.3 %  feed-forward 66.6 %  norm 0.06 %
+10 blocks of 3 million: 30 million
