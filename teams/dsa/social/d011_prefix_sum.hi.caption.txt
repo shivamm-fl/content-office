@@ -1,0 +1,11 @@
+Day 11/150: Array ke kisi hisse ka sum, bina har baar loop chalaye?
+
+Jawab hai prefix sum. Array ko ek baar chalakar running total bana lo, phir koi bhi range ka sum ek subtraction se milta hai: prefix[right + 1] - prefix[left].
+
+Example array [3, 1, 4, 1, 5, 9]: prefix [0, 3, 4, 8, 9, 14, 23]. Index 2 se 4 tak ka sum 4 + 1 + 5 = 10, aur prefix se 14 - 4 = 10. Build ek baar O(n) mein hota hai, har query O(1), extra space O(n). Example ke liye 100000 numbers aur 100000 queries par worst case mein loop 10000000000 additions karta hai; prefix mein 100000 additions build ki aur 100000 subtractions queries ki.
+
+Limit: ye trick sum par chalti hai kyunki sum ko subtraction se undo kar sakte hain. Max par nahi chalti.
+
+Ab tumhara turn: prefix [0, 3, 4, 8, 9, 14, 23] hai, to index 1 se 3 tak ka sum kya hoga? Comment mein likho. Answer: 6 (9 - 3).
+
+#dsa #prefixsum #interviewprep
