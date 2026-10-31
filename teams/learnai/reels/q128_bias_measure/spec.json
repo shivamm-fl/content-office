@@ -1,0 +1,138 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "A",
+      1,
+      0
+    ],
+    [
+      "click",
+      "B",
+      2,
+      0
+    ],
+    [
+      "click",
+      "C",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      3,
+      0
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "E",
+      2,
+      0
+    ],
+    [
+      "click",
+      "F",
+      1,
+      0
+    ],
+    [
+      "err",
+      "F",
+      2,
+      0
+    ],
+    [
+      "ok",
+      "F",
+      4,
+      0.2
+    ],
+    [
+      "pop",
+      "G",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "H",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "I",
+      1,
+      0
+    ],
+    [
+      "save",
+      "I",
+      2,
+      0.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Same resume, अलग नाम। | Bot ने एक reject क्यों किया?",
+      "B": "Interview में यही पूछा जाता है: | model के जवाबों में bias है या नहीं, ये कैसे measure करोगे? || तुम्हारा जवाब: bias यानी model का फ़ैसला नाम जैसी चीज़ से बदल जाना। | ये कुछ जवाब पढ़कर नहीं दिखता। | दो एक जैसे inputs भेजो, बस एक चीज़ बदलकर, और नतीजे गिनो। | तीन steps हैं।",
+      "C": "ये invented example है: एक resume screening bot, | जो हर resume को shortlist या reject करता है। || 5{five} pairs आँख से देखे, | सिर्फ़ 1{एक} में नतीजा अलग था। | नाम की वजह से, या संयोग? | इतने से पता नहीं चलता।",
+      "D": "पहला step, pairs बनाओ। || 200{two-hundred} pairs: resume हूबहू एक जैसा, बस नाम अलग। | क्योंकि फ़र्क आए, तो वजह सिर्फ़ नाम हो सकता है।",
+      "E": "दूसरा step, दोनों groups के नतीजे गिनो। || Group A के नाम पर 200{two-hundred} में से 90{ninety} shortlist हुए, यानी 45{forty-five} percent। | Group B के नाम पर 74{seventy-four}, यानी 37{thirty-seven} percent। || यानी 8{eight} points का gap। | क्योंकि एक pair संयोग हो सकता है, 200{two-hundred} pairs में pattern दिखता है।",
+      "F": "तीसरा step, flips गिनो। || कितने pairs में सिर्फ़ नाम बदलने से फ़ैसला पलट गया? | यहाँ 16{sixteen}। | क्योंकि resume वही था, इनकी वजह नाम के सिवा कुछ नहीं। || Gap मिले, तो prompt बदलो या नाम हटाओ, | और वही test दोबारा चलाओ।",
+      "G": "एक बात: ये test सिर्फ़ वही bias पकड़ता है, जो तुमने बदला। | उम्र या शहर देखना है, तो उसके अलग pairs बनाओ।",
+      "H": "Interview में बोलो: “I don't judge bias by reading a few outputs. I build paired prompts that differ in only one attribute, run many of them, and compare outcome rates between groups and how often the decision flips.”",
+      "I": "तुम सबसे पहले कौन सा attribute test करोगे: नाम, उम्र या शहर? | Comment में लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

@@ -1690,22 +1690,20 @@
       "unit": "G5",
       "title": "Interview: Model ke jawab mein bias hai ya nahi, ye kaise napoge?",
       "trap": "Reading a few answers by eye instead of comparing groups on the same questions.",
-      "one_idea": "Say the question in full, then: you cannot see bias by reading a few answers. Build pairs of prompts that are identical except one attribute (for example the name), run both through the model many times, and compare the rate of the outcome between groups (shortlisted, approved) plus how often the decision flips with only the attribute changed. Public benchmarks like BBQ and Anthropic's paired-prompt method do exactly this; then fix (prompt, remove the attribute) and rerun.",
+      "one_idea": "You cannot see bias by reading a few answers. Build pairs of prompts identical except one attribute (for example the name), run both through the model many times, compare the rate of the outcome between groups plus how often the decision flips with only the attribute changed. Public benchmarks like BBQ and Anthropic's paired-prompt method do this; then fix and rerun.",
       "hook_type": "relatable_stake",
       "spoken_hook": "Same resume, अलग नाम। Bot ने एक reject क्यों किया?",
       "hook_formula": "relatable_stake on a concrete scene, no jargon",
-      "hook_source": "strategist, 2026-10-31 (stake; least recently used of the last six)",
-      "visual_idea": "Two identical resume cards side by side, only the name line differs; a screening box stamps one green SHORTLIST and one red REJECT. Then 200 such pairs as a grid of tiles; two bars (group A 45 %, group B 37 %) and a counter of pairs where only the name flipped the decision (16). A single pair on its own is shown as inconclusive.",
-      "example": "EXAMPLE (invented stub screening model, state/runs/q128_bias_run_output.txt): 200 pairs, same resume quality, only the name changes; group A shortlisted 90 (45.0 %), group B 74 (37.0 %), 16 pairs flipped by the name alone; the first 5 pairs look identical by eye.",
-      "everyday_anchor": "A teacher who marks two identical answer sheets and finds the one with the unfamiliar name got fewer marks: one sheet proves nothing, a hundred pairs do.",
+      "visual_idea": "Two identical resume cards, only the name differs; one SHORTLIST, one REJECT. Then 200 pairs as a tile grid; two bars (45 %, 37 %) and a counter of 16 flips.",
+      "example": "EXAMPLE (invented stub screening model, state/runs/q128_bias_run_output.txt): 200 pairs, only the name changes; group A shortlisted 90 (45.0 %), group B 74 (37.0 %), 16 pairs flipped by the name alone; 4 of the first 5 pairs agree and 1 differs.",
       "sources": [
         "https://arxiv.org/abs/2110.08193",
         "https://arxiv.org/abs/2312.03689"
       ],
       "facts_to_verify": [
-        "BBQ: hand-built question sets, nine social dimensions, ambiguous vs disambiguated contexts, models lean on stereotypes when context is thin (verified, arxiv abs)",
-        "Anthropic 2023: 70 decision scenarios, demographic info systematically varied in otherwise identical prompts, Claude 2.0 showed positive and negative discrimination, prompt engineering reduced both, authors do not endorse automated high-risk decisions (verified, arxiv abs)",
-        "The 45/37/16 numbers are from our invented stub, labelled EXAMPLE"
+        "BBQ: nine social dimensions (verified)",
+        "Anthropic 2023: demographic info varied in otherwise identical prompts (verified)",
+        "45/37/16 numbers are from our invented stub, labelled EXAMPLE"
       ],
       "length_target_s": 110,
       "cover_headline": "How to measure bias in an LLM",

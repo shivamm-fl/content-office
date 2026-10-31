@@ -1,0 +1,17 @@
+Same resume, alag naam. Bot ne ek reject kyun kiya?
+
+Interview mein poocha jata hai: model ke jawabon mein bias hai ya nahi, ye kaise measure karoge?
+
+Jawab: kuch jawab padhkar bias nahi dikhta. Do ek jaise inputs bhejo, bas ek cheez (jaise naam) badalkar, aur nateeje gino.
+
+1. Pairs banao: 200 resume hoobhu ek jaise, bas naam alag.
+2. Dono groups ka shortlist rate gino.
+3. Flips gino: kitne pairs mein sirf naam badalne se faisla palat gaya.
+
+Example (invented screening bot): group A ke 200 mein se 90 shortlist (45 percent), group B ke 74 (37 percent), 16 pairs sirf naam se palte. Gap mile to prompt badlo ya naam hatao (hamari salah), aur wahi test dobara chalao.
+
+Dhyan rakho: ye test sirf wahi bias pakadta hai jo tumne badla. Umr ya shahar dekhna hai to unke alag pairs banao. Public benchmark BBQ aur Anthropic ke authors ka paper bhi controlled contrast se bias napte hain: BBQ question-answering mein, paper ek jaise prompts mein demographic jaankari badalkar.
+
+Tum sabse pehle kaun sa attribute test karoge: naam, umr ya shahar? Comment mein likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #LLMEvals

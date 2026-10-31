@@ -1,0 +1,9 @@
+LLM mein bias kaise measure karte hain (AI interview)
+
+Interview mein poochha jata hai: model ke jawabon mein bias hai ya nahi, ye kaise measure karoge? Kuch jawab padhkar bias nahi dikhta. Teen steps: pairs banao jo sirf ek attribute (jaise naam) mein alag hon, dono groups ke nateeje ka rate gino, aur gino ki kitne pairs mein sirf attribute badalne se faisla palat gaya. BBQ benchmark nau social dimensions par question-answering bias test karta hai, aur Tamkin et al. ka paper (dataset Anthropic ka) prompts mein demographic jaankari badalkar model ke faisle dekhta hai; dono controlled contrast se bias napte hain. Video ka resume screening bot (200 pairs, 45 aur 37 percent, 16 flips) hamara invented example hai. Ye test sirf wahi bias pakadta hai jo tumne badla; "gap mile to fix karke dobara chalao" hamari apni salah hai.
+
+Is video mein: llm bias evaluation, how to test ai bias, paired prompts bias test, bbq benchmark, ai engineer interview.
+
+Sources:
+https://arxiv.org/abs/2110.08193
+https://arxiv.org/abs/2312.03689
