@@ -1177,6 +1177,39 @@
       "hook_type": "interviewer_asked",
       "status": "built",
       "planned": "2026-10-30"
+    },
+    {
+      "id": "a013",
+      "track": "series",
+      "title": "The transformer: the design behind every LLM",
+      "kind": "concept",
+      "topic": "Transformer = attention + feed-forward block stacked (6 in the 2017 paper); ~3.15M numbers per base layer, 1/3 attention.",
+      "hook_formula": "plain_question on three names",
+      "hook_type": "direct_question",
+      "status": "planned",
+      "planned": "2026-10-31"
+    },
+    {
+      "id": "q128",
+      "track": "interview",
+      "title": "Interview: Model ke jawab mein bias hai ya nahi, ye kaise napoge?",
+      "kind": "question",
+      "topic": "Bias check: paired prompts differing in one attribute, many runs, compare group rates and flips; BBQ, Anthropic discrimination paper.",
+      "hook_formula": "relatable_stake",
+      "hook_type": "relatable_stake",
+      "status": "planned",
+      "planned": "2026-10-31"
+    },
+    {
+      "id": "q129",
+      "track": "interview",
+      "title": "Interview: User ka private data prompt mein bhejna theek hai? Kya dhyan rakhoge?",
+      "kind": "question",
+      "topic": "Private data in prompts: classify, minimise, mask, check provider terms, log safely; OpenAI API data policy; OWASP LLM02.",
+      "hook_formula": "company_specific",
+      "hook_type": "company_specific",
+      "status": "planned",
+      "planned": "2026-10-31"
     }
   ]
 }

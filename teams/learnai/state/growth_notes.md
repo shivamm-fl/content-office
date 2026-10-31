@@ -77,3 +77,10 @@ Read: length is not the lever (55 s a010 = 130 s a008 on skip). a005 and a007 di
 Do: a012 about 100 s, line 1 with one concrete number or familiar scene; interview reels 105 to 115 s, full question spoken; no jargon in a stake hook.
 Experiment: a012 line 1 carries one concrete number or contrast (like a007), picture from frame 0. Bar: skip under 58 %, watch 14 s or more; a miss on n=1 is a hint only.
 Owner decision: none needed.
+
+## 2026-10-31 (growth analyst, standup for a013 and two interview reels, ladder n=23 and n=24)
+Numbers: a011 (91.5 s, picture-first, n=1) 1,503 views, 63.6 % skip, 8.8 s, 1.79 saves, 0 shares per 100 reach: no better than a008 to a010. q124 (company_specific, Anthropic) 1,665 views, 62 %, 15.2 s, 11 shares. q125 (stake) 731 views, 70.9 %, 12.1 s, 1.42 shares. q126 (company, Microsoft) 355 views, 74.1 %, 8.0 s, hours old. q127 (asked, 114.5 s) 342 views, 60.7 %, 10.5 s, hint only. a012 not synced (0 everywhere).
+Types: stake q118, q120, q122, q125, q126 (n=5) median skip 67 %; asked q119, q121, q123, q124, q127 (n=5) 63.7 %. Gap 3 points, under 10: retire nothing. Series: only a005 and a007 beat 58 %.
+Do: a013 (transformer) is jargon-heavy, so line 1 is one concrete scene or number, no "transformer" or "attention" before the first teaching line; ~100 s. q-reels take the asked hook with the full question, 105 to 115 s.
+Experiment: a013 line 1 a concrete scene or number, picture from frame 0. Bar: skip under 58 %, watch 14 s or more; miss on n=1 is a hint.
+Owner decision: none needed.

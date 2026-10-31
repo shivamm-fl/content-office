@@ -1,0 +1,8 @@
+A: ChatGPT, Claude, Llama: teenon ka design ek hai. kaun saa?
+B: Transformer. ismen ek block hota hai, aur wahi block baar-baar stack hota hai. har block mein do hisse hain: pehle attention, phir feed-forward network.
+C: ek sentence lo: ravi ne chaay banai, aur use pee liya. "use" kiske liye hai, ravi ya chaay? Attention yaani har word baaki saare words ko dekhta hai, aur tay karta hai ki kisse kitna matlab lena hai. yahan "use" chaay ki taraf dekhta hai. kyonki matlab aaspas ke words se banta hai.
+D: doosra hissa, feed-forward network. ye ek chhota neural network hai, jo har word par alag se chalta hai. Attention ne words ko joda, ab ye har word ki jaankari ko process karta hai. kyonki pehle context milna chahiye, phir us par sochna.
+E: ab numbers dekho. 2017 ke original paper ke base size mein, ek block mein lagbhag 3.15 million numbers hain, yaani parameters. inmen se ek tihai attention mein, aur do tihai feed-forward mein. ye hamari ginti hai, paper khud ye number print nahi karta.
+F: ab stack karo. Words pehle block se guzarte hain, aur uska output doosre block ka input ban jata hai. Original paper mein aise 6 blocks the, yaani kul lagbhag 18.9 million numbers.
+G: ek baat dhyaan rakhna: block ka design ek hai, par numbers har block ke apne hain, copy nahi. bade LLMs mein bhi yahi block hai, bas blocks aur sizes bade hain.
+H: to yaad rakho: attention jodta hai, feed-forward sochta hai, aur block stack hota hai. ab batao: ek block mein 3 million numbers hon, to 10 blocks mein kul kitne? jawab caption mein hai. roz ek AI idea ke liye follow kar lo.

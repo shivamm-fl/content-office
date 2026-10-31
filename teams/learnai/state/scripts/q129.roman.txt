@@ -1,0 +1,10 @@
+A: OpenAI API data se train nahi karta. Private data safe hai?
+B: Interview mein poocha jata hai: user ka private data prompt mein bhejna theek hai, aur kya dhyaan rakhoge? tumhara jawab: raw private data default mein mat bhejo. pehle tay karo task ko kya chahiye, baaki prompt se pehle mask karo. teen steps hain.
+C: "Train nahi karta" ka matlab "rakhta nahi" nahi hai. OpenAI ke hisab se API data default mein training mein use nahi hota, par abuse-monitoring logs 30 din tak rah sakte hain.
+D: ye invented support ticket hai: usmein Riya Sharma ka naam, phone number aur email hai. Complaint: order nahi aaya, refund chahiye. Task sirf complaint ka type batana hai.
+E: pahla step, minimise. ticket mein 3 personal fields hain: naam, phone, email. Task ko inmen se koi nahi chahiye. kyonki jo bheja hi nahi, wo leak nahi ho sakta.
+F: doosra step, prompt se pehle mask karo. Mask yaani asli value ki jagah [PHONE] jaisa placeholder. Pattern se phone aur email mask ho gaye, 3 mein se 2. par naam rah gaya, kyonki naam ka koi fixed pattern nahi hota. isliye naam ke liye Presidio jaisa tool chahiye, aur wo bhi sab nahi pakadta.
+G: teesra step, terms padho aur logs mein raw text mat likho. Provider data kitne din rakhta hai, ye pehle dekho. kyonki log bhi tumhara ek aur data store hai.
+H: ek baat: ye legal advice nahi hai. apna law aur contract khud check karo.
+I: Interview mein bolo: “I don't send raw personal data by default. I send only what the task needs, mask the rest before the prompt, check the provider's data terms, and keep raw text out of my logs.”
+J: tumhare app ke prompt mein sabse zyada kaun saa data jata hai: naam, phone ya email? Comment mein likho. roz ek naya interview sawal, poore jawab ke saath, follow kar lo.

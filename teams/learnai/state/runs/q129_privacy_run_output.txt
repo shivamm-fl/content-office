@@ -1,0 +1,3 @@
+before: Hi, I am Riya Sharma, phone 9876543210, email riya.s@example.com. Order 55012 never arrived, refund please.
+after:  Hi, I am Riya Sharma, phone [PHONE], email [EMAIL]. Order 55012 never arrived, refund please.
+fields masked by pattern: 2 of 3 (the name 'Riya Sharma' is still there -> patterns alone are not enough)

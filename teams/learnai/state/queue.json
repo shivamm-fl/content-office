@@ -1643,6 +1643,120 @@
         "ai engineer interview"
       ],
       "everyday_anchor": "A teacher setting an exam: 20 copies of the same easy question would never show which topic the class forgot."
+    },
+    {
+      "id": "a013",
+      "track": "series",
+      "day": 13,
+      "unit": "A3",
+      "format": "structure",
+      "status": "planned",
+      "title": "The transformer: the design behind every LLM",
+      "one_idea": "A transformer is one block repeated: each block lets every word look at the other words (attention) and then thinks about each word on its own (a small feed-forward network); stack the same block many times and you have the design that almost every LLM uses. The original 2017 paper stacked 6 identical blocks; in our count of its base size one block holds about 3.15 million numbers, one third in attention and two thirds in the feed-forward part.",
+      "hook_type": "direct_question",
+      "spoken_hook": "ChatGPT, Claude, Llama: तीनों का design एक है। कौन सा?",
+      "hook_formula": "plain_question on three names the viewer knows",
+      "hook_source": "strategist, 2026-10-31 (concrete names in line 1, as a007/a012 lesson)",
+      "visual_idea": "From frame 0 three logo-less name cards (ChatGPT, Claude, Llama) point into one drawn box labelled TRANSFORMER. The box opens: one block with two stacked parts, ATTENTION (words linked by lines) then THINK (small network per word), tokens flowing through. The block is copied into a stack of 6, a token travels up through all 6, and a bar shows the block split 1/3 attention, 2/3 feed-forward.",
+      "example": "Real run (state/runs/a013_transformer_run_output.txt), base model of Vaswani et al. 2017 (d_model 512, d_ff 2048, 8 heads, 6 layers): attention 1,050,624 numbers, feed-forward 2,099,712, layer norm 2,048, one layer 3,152,384, six layers 18,914,304; attention 33.3 %, feed-forward 66.6 %. Our count from the paper's sizes, not a number the paper prints.",
+      "everyday_anchor": "A building made of identical floors: you do not design 96 different floors, you design one floor well and stack it.",
+      "sources": [
+        "https://arxiv.org/abs/1706.03762",
+        "https://arxiv.org/html/1706.03762v7",
+        "https://developers.google.com/machine-learning/crash-course/llm/transformers"
+      ],
+      "facts_to_verify": [
+        "Vaswani et al. 2017: Transformer based solely on attention, no recurrence or convolutions (verified, arxiv abs)",
+        "Base model: 6 encoder + 6 decoder layers, d_model 512, d_ff 2048, 8 heads, ~65M parameters, two sub-layers per layer with residual + layer norm (verified, arxiv html v7)",
+        "Google ML crash course: transformers stack self-attention layers; state of the art for language models (verified)",
+        "Say 'almost every LLM' (decoder-only variants exist); do not name a specific closed model's internals (not public)"
+      ],
+      "length_target_s": 100,
+      "cover_headline": "The design behind every LLM",
+      "thumb_text": "Transformer",
+      "keywords": [
+        "what is a transformer in ai",
+        "transformer architecture explained",
+        "attention is all you need",
+        "how llm works",
+        "ai engineer roadmap"
+      ]
+    },
+    {
+      "id": "q128",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "G5",
+      "title": "Interview: Model ke jawab mein bias hai ya nahi, ye kaise napoge?",
+      "trap": "Reading a few answers by eye instead of comparing groups on the same questions.",
+      "one_idea": "Say the question in full, then: you cannot see bias by reading a few answers. Build pairs of prompts that are identical except one attribute (for example the name), run both through the model many times, and compare the rate of the outcome between groups (shortlisted, approved) plus how often the decision flips with only the attribute changed. Public benchmarks like BBQ and Anthropic's paired-prompt method do exactly this; then fix (prompt, remove the attribute) and rerun.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Same resume, अलग नाम। Bot ने एक reject क्यों किया?",
+      "hook_formula": "relatable_stake on a concrete scene, no jargon",
+      "hook_source": "strategist, 2026-10-31 (stake; least recently used of the last six)",
+      "visual_idea": "Two identical resume cards side by side, only the name line differs; a screening box stamps one green SHORTLIST and one red REJECT. Then 200 such pairs as a grid of tiles; two bars (group A 45 %, group B 37 %) and a counter of pairs where only the name flipped the decision (16). A single pair on its own is shown as inconclusive.",
+      "example": "EXAMPLE (invented stub screening model, state/runs/q128_bias_run_output.txt): 200 pairs, same resume quality, only the name changes; group A shortlisted 90 (45.0 %), group B 74 (37.0 %), 16 pairs flipped by the name alone; the first 5 pairs look identical by eye.",
+      "everyday_anchor": "A teacher who marks two identical answer sheets and finds the one with the unfamiliar name got fewer marks: one sheet proves nothing, a hundred pairs do.",
+      "sources": [
+        "https://arxiv.org/abs/2110.08193",
+        "https://arxiv.org/abs/2312.03689"
+      ],
+      "facts_to_verify": [
+        "BBQ: hand-built question sets, nine social dimensions, ambiguous vs disambiguated contexts, models lean on stereotypes when context is thin (verified, arxiv abs)",
+        "Anthropic 2023: 70 decision scenarios, demographic info systematically varied in otherwise identical prompts, Claude 2.0 showed positive and negative discrimination, prompt engineering reduced both, authors do not endorse automated high-risk decisions (verified, arxiv abs)",
+        "The 45/37/16 numbers are from our invented stub, labelled EXAMPLE"
+      ],
+      "length_target_s": 110,
+      "cover_headline": "How to measure bias in an LLM",
+      "thumb_text": "Measure bias",
+      "keywords": [
+        "llm bias evaluation",
+        "how to test ai bias",
+        "paired prompts bias test",
+        "bbq benchmark",
+        "ai engineer interview"
+      ]
+    },
+    {
+      "id": "q129",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "G7",
+      "title": "Interview: User ka private data prompt mein bhejna theek hai? Kya dhyan rakhoge?",
+      "trap": "Sending raw personal data to a hosted model without classifying it first.",
+      "one_idea": "Say the question in full, then: do not send raw personal data by default. First classify the data (what is personal, what is needed for the task), send only what the task needs, mask the rest before the prompt (phone, email; names need more than patterns), check the provider's terms (OpenAI says API data is not used for training by default, abuse-monitoring logs up to 30 days, zero retention needs approval), and log without the raw text. OWASP lists sensitive information disclosure as a top LLM risk.",
+      "hook_type": "company_specific",
+      "company": "OpenAI",
+      "company_source": "https://developers.openai.com/api/docs/guides/your-data",
+      "spoken_hook": "OpenAI API data से train नहीं करता। Private data safe है?",
+      "hook_formula": "company_specific (OpenAI data controls page, fetched 2026-10-31)",
+      "hook_source": "strategist, 2026-10-31 (company_specific: the two reels of the day use different types)",
+      "visual_idea": "A support ticket card with three highlighted fields (name, phone, email) travels toward a cloud box labelled MODEL. A filter gate stands in the way: phone and email turn into [PHONE] and [EMAIL] chips, the name field stays visible and is flagged red as missed by patterns. A small checklist stamps in order: CLASSIFY, MINIMISE, MASK, CHECK TERMS, LOG SAFELY.",
+      "example": "EXAMPLE (invented ticket, state/runs/q129_privacy_run_output.txt): a regex masks the 10-digit phone and the email, but the name 'Riya Sharma' stays: 2 of 3 personal fields masked, so patterns alone are not enough.",
+      "everyday_anchor": "Giving a courier a parcel: you tell him the address he needs, you do not hand him your whole wallet.",
+      "sources": [
+        "https://developers.openai.com/api/docs/guides/your-data",
+        "https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/",
+        "https://presidio.dataprivacystack.org/"
+      ],
+      "facts_to_verify": [
+        "OpenAI: API data not used to train or improve models unless you opt in; abuse-monitoring logs retained up to 30 days; Zero Data Retention needs prior approval (verified, fetched 2026-10-31)",
+        "OWASP LLM02:2025: sanitization, least-privilege access, user education and opt-out, tokenization/redaction before processing (verified)",
+        "Presidio: detects and de-identifies PII; docs say no guarantee it finds all sensitive information (verified)",
+        "Not legal advice: say check your own law and contract (India DPDP etc. not claimed)"
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Private data in an LLM prompt",
+      "thumb_text": "Private data",
+      "keywords": [
+        "pii in llm prompt",
+        "is it safe to send data to chatgpt api",
+        "data privacy llm app",
+        "prompt data masking",
+        "ai engineer interview"
+      ]
     }
   ]
 }
