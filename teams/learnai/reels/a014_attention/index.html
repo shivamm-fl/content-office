@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Attention: how a word looks at the other words</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="106.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="106.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="106.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="106.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I"], tag: "150 DAYS OF AI · DAY 14" });
+      Viz.install(M);
+      const { tl, S } = M; const { ACC, CYAN, HOT, GOOD, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#101A2E", GREY = "#8FA3C7";
+// ============ helpers ============
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur, op) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: op == null ? 1 : op, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const dimTo = (d, t, op) => { tl.to(d, { opacity: op, duration: 0.3, immediateRender: false }, t); return d; };
+      const pillAt = (host, text, x, y, t, col, size, dash) => { const sz = size || 38, h = Math.round(sz * 1.7);
+        return show(el(host, `left:${x}px;top:${y}px;height:${h}px;display:flex;align-items:center;padding:0 28px;border-radius:999px;border:2px ${dash ? "dashed" : "solid"} ${col};background:${ca(col, 0.12)};font:700 ${sz}px ${COD};letter-spacing:.08em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: -10 }); };
+      const head = (sc, host, text) => { pillAt(host, text, 70, 215, S[sc] + 0.05, CYAN, 40); pillAt(host, "EXAMPLE", 790, 222, S[sc] + 0.05, GREY, 36); };
+      const line = (host, x1, y1, x2, y2, col, w, t, dash, op) => { const pad = 8, lx = Math.min(x1, x2) - pad, ly = Math.min(y1, y2) - pad, W_ = Math.abs(x2 - x1) + 2 * pad, H_ = Math.abs(y2 - y1) + 2 * pad;
+        const d = el(host, `left:${lx}px;top:${ly}px;width:${W_}px;height:${H_}px`);
+        d.innerHTML = `<svg width="${W_}" height="${H_}" style="overflow:visible"><line x1="${x1 - lx}" y1="${y1 - ly}" x2="${x2 - lx}" y2="${y2 - ly}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" ${dash ? 'stroke-dasharray="14 12"' : ""}/></svg>`;
+        return t == null ? d : show(d, t, { opacity: 0 }, 0.4, op); };
+      const circ = (host, cx, cy, r, col, fill, bw) => el(host, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;box-sizing:border-box;border-radius:50%;border:${bw || 5}px solid ${col};background:${ca(col, fill == null ? 0.12 : fill)}`);
+      const val = (host, cx, cy, text, col, t, size, op) => show(el(host, `left:${cx - 80}px;top:${cy - 40}px;width:160px;height:80px;display:flex;align-items:center;justify-content:center;font:800 ${size || 64}px ${COD};color:${col}`, text), t, { opacity: 0, scale: 0.8 }, 0.3, op);
+      const tag = (host, cx, cy, text, col, dash, t, op) => show(el(host, `left:${cx - 62}px;top:${cy - 30}px;width:124px;height:60px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:14px;border:3px ${dash ? "dashed" : "solid"} ${col};background:${PANEL};font:800 38px ${COD};color:${col};white-space:nowrap`, text), t, { opacity: 0, scale: 0.9 }, 0.35, op);
+      const travel = (host, x1, y1, x2, y2, t, dur, txt, col) => { const d = el(host, `left:0;top:0;width:76px;height:76px;box-sizing:border-box;border-radius:50%;background:${col || "#E8EEF9"};display:flex;align-items:center;justify-content:center;font:800 36px ${COD};color:#0B1220`, txt);
+        tl.set(d, { opacity: 0, x: x1 - 38, y: y1 - 38 }, 0); tl.to(d, { opacity: 1, duration: 0.12, immediateRender: false }, t);
+        tl.to(d, { x: x2 - 38, y: y2 - 38, duration: dur, ease: "power1.inOut", immediateRender: false }, t); tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      const dial = (host, cx, cy, r, col, a0) => { const face = circ(host, cx, cy, r, col, 0.1, 6); const arm = el(host, `left:${cx - 7}px;top:${cy - r + 14}px;width:14px;height:${r - 14}px;border-radius:7px;background:${ACC}`); const hub = circ(host, cx, cy, 14, ACC, 1, 2);
+        tl.set(arm, { rotation: a0, transformOrigin: `7px ${r - 14}px` }, 0); return { face, arm, hub, all: [face, arm, hub] }; };
+      const calc = (host, y, t0, parts, res) => { const g = show(glass(host, 90, y, 900, 250, CYAN), t0, { opacity: 0 }, 0.3);
+        const row = el(host, `left:130px;top:${y + 36}px;height:80px;display:flex;gap:24px;align-items:center;font:700 58px ${COD};color:${TEXT};white-space:nowrap`);
+        parts.forEach(([h, t]) => { const s = document.createElement("span"); s.innerHTML = h; row.appendChild(s); show(s, t, { opacity: 0, y: 12 }, 0.3); });
+        const r2 = el(host, `left:130px;top:${y + 140}px;height:80px;display:flex;align-items:center;font:800 70px ${COD};color:${res[2]};white-space:nowrap`, res[0]); show(r2, res[1], { opacity: 0, y: 12 }, 0.35); return { g, row, r2 }; };
+      const EDGEC = "rgba(232,238,249,0.45)";
+
+      const fmt = (n) => n.toLocaleString("en-US");
+      const counter = (node, t, dur, target) => { const o = { v: 0 }; tl.to(o, { v: target, duration: dur, ease: "power2.out", immediateRender: false, onUpdate: () => { node.textContent = fmt(Math.round(o.v)); } }, t); };
+      const cell = (host, x, y, w, h, text, col, t, size, dash) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:16px;border:3px ${dash ? "dashed" : "solid"} ${col};background:${ca(col, 0.14)};font:800 ${size || 46}px ${COD};color:${TEXT};white-space:nowrap`, text), t, { opacity: 0, y: 14 }, 0.3);
+      const stampAt = (host, txt, cx, y, col, t) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 28px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 46px ${COD};color:${col};white-space:nowrap`, txt); gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const NUMS = ["0.31", "−1.20", "0.07", "2.45", "−0.88", "1.90"];
+
+
+      const NAME = (host, x, y, w, text, col, t) => { show(glass(host, x, y, w, 130, col, 24), t, { opacity: 0 }, 0.35); return show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:130px;display:flex;align-items:center;justify-content:center;font:700 62px ${LAT};color:${TEXT}`, text), t, { opacity: 0 }, 0.35); };
+      const part = (host, x, y, w, h, text, col, t, size) => { show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-sizing:border-box;border-radius:22px;border:4px solid ${col};background:${ca(col, 0.16)}`), t, { opacity: 0, y: 18 }, 0.4); return show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;display:flex;align-items:center;justify-content:center;font:700 ${size || 52}px ${COD};color:${col};text-align:center`, text), t, { opacity: 0 }, 0.4); };
+      const chip = (host, x, y, w, text, col, t, size) => { const b = show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:120px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:20px;border:3px solid ${col};background:${ca(col, 0.14)};font:700 ${size || 54}px ${LAT};color:${TEXT}`, text), t, { opacity: 0, y: 16 }, 0.35); return b; };
+
+      const WATER = CYAN, MONEY = GOOD;
+      const pct = (p) => 3 + 0.33 * p;
+      const icoWaves = (host, x, y, s, col) => el(host, `left:${x}px;top:${y}px;width:${s}px;height:${s}px`, `<svg viewBox="0 0 64 64" width="${s}" height="${s}" fill="none" stroke="${col}" stroke-width="5" stroke-linecap="round"><path d="M6 22 q8 -9 13 0 t13 0 t13 0 t13 0"/><path d="M6 36 q8 -9 13 0 t13 0 t13 0 t13 0"/><path d="M6 50 q8 -9 13 0 t13 0 t13 0 t13 0"/></svg>`);
+      const icoCoins = (host, x, y, s, col) => el(host, `left:${x}px;top:${y}px;width:${s}px;height:${s}px`, `<svg viewBox="0 0 64 64" width="${s}" height="${s}" fill="none" stroke="${col}" stroke-width="4"><ellipse cx="32" cy="48" rx="22" ry="8" fill="${ca(col, 0.18)}"/><ellipse cx="32" cy="36" rx="22" ry="8" fill="${ca(col, 0.18)}"/><ellipse cx="32" cy="24" rx="22" ry="8" fill="${ca(col, 0.18)}"/><ellipse cx="32" cy="12" rx="22" ry="8" fill="${ca(col, 0.3)}"/></svg>`);
+      const light = (d, t) => tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t);
+      const grow = (d, t, dur, axis) => { tl.set(d, axis === "x" ? { scaleX: 0, transformOrigin: "0% 50%" } : { scaleY: 0, transformOrigin: "50% 100%" }, 0);
+        tl.to(d, axis === "x" ? { scaleX: 1, duration: dur || 0.6, ease: "power3.out", immediateRender: false } : { scaleY: 1, duration: dur || 0.6, ease: "power3.out", immediateRender: false }, t); return d; };
+      const hdr = (host, text, t, col, x) => pillAt(host, text, x == null ? 70 : x, 215, t, col || CYAN, 44);
+      const wchip = (host, x, y, w, h, text, col, font) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:20px;border:3px solid ${col};background:${ca(col, 0.14)};font:700 ${font}px ${LAT};color:${TEXT}`, text);
+      const ringAt = (host, x, y, w, h, t) => show(el(host, `left:${x - 5}px;top:${y - 5}px;width:${w + 10}px;height:${h + 10}px;box-sizing:border-box;border-radius:24px;border:6px solid ${ACC}`), t, { opacity: 0 }, 0.3);
+      const svgLayer = (host) => { const d = el(host, "left:0;top:0;width:1080px;height:1920px;pointer-events:none"); d.innerHTML = '<svg width="1080" height="1920" style="overflow:visible"></svg>'; return d.firstChild; };
+      const addPath = (svg, dstr, col, w, t, op) => { const p = document.createElementNS("http://www.w3.org/2000/svg", "path"); p.setAttribute("d", dstr); p.setAttribute("fill", "none"); p.setAttribute("stroke", col); p.setAttribute("stroke-width", w); p.setAttribute("stroke-linecap", "round"); svg.appendChild(p);
+        tl.set(p, { opacity: 0 }, 0); tl.to(p, { opacity: op == null ? 1 : op, duration: 0.4, ease: "power3.out", immediateRender: false }, t); return p; };
+      const arcD = (yb, yt) => `M330 ${yb} C ${330 - Math.min(260, 70 + Math.abs(yb - yt) * 0.28)} ${yb}, ${330 - Math.min(260, 70 + Math.abs(yb - yt) * 0.28)} ${yt}, 330 ${yt}`;
+      const loopD = (yb) => `M330 ${yb - 28} C 235 ${yb - 60}, 235 ${yb + 60}, 330 ${yb + 28}`;
+      const numLab = (host, y, h, text, col, t) => show(el(host, `left:600px;top:${y}px;width:170px;height:${h}px;display:flex;align-items:center;justify-content:flex-end;font:800 52px ${COD};color:${col}`, text), t, { opacity: 0, x: 10 }, 0.35);
+      const bar = (host, y, h, w, col, bh) => el(host, `left:790px;top:${y + h / 2 - (bh || 44) / 2}px;width:${w}px;height:${bh || 44}px;border-radius:10px;background:${ca(col, 0.85)}`);
+      const stageChips = (host, words, bi, o, ts, ringT) => { const rows = words.map((w, i) => { const y = o.y0 + o.pitch * i;
+          const c = show(wchip(host, 330, y, 260, o.h, w, w === words[bi] ? ACC : CYAN, o.font), ts[i], { opacity: 0, x: -20 }, 0.4);
+          return { y, mid: y + o.h / 2, c }; });
+        ringAt(host, 330, rows[bi].y, 260, o.h, ringT); return rows; };
+      const glyph = (host, x, y, wv, mv, t, tw, tm) => { // two bars, water and money, bottom aligned in a 110 px frame
+        const fr = show(el(host, `left:${x}px;top:${y}px;width:130px;height:110px;box-sizing:border-box;border-radius:14px;border:2px solid ${ca(GREY, 0.6)}`), t, { opacity: 0 }, 0.3);
+        const w_ = el(host, `left:${x + 22}px;top:${y + 108 - Math.max(wv, 4)}px;width:38px;height:${Math.max(wv, 4)}px;border-radius:6px;background:${WATER}`);
+        const m_ = el(host, `left:${x + 70}px;top:${y + 108 - Math.max(mv, 4)}px;width:38px;height:${Math.max(mv, 4)}px;border-radius:6px;background:${MONEY}`);
+        grow(w_, tw == null ? t : tw, 0.5); grow(m_, tm == null ? t : tm, 0.5); return { fr, w_, m_ }; };
+      const WORDS1 = ["I", "sat", "on", "the", "river", "bank"], PITCH = { y0: 330, pitch: 150, h: 110, font: 56 };
+      const SCORE_W = [27, 34, 22, 19, 200, 108], PCT = [3, 3, 2, 2, 77, 13];
+
+      // ============ A: hook: two phrases, one word ============
+      // diagram: A
+      M.hook(["River bank & bank loan:", "model ko farak kaise pata?"], { size: 68, top: 215 });
+      const phrase = (host, y, h, left, right, wi, sw, t, icon, col) => { show(glass(host, 90, y, 900, h, col, 28), t, { opacity: 0 }, 0.35);
+        const l = left, r = right; show(wchip(host, 130, y + h / 2 - 70, 270, 140, l, l === "bank" ? ACC : CYAN, 70), t + 0.05, { opacity: 0, y: 14 }, 0.4);
+        show(wchip(host, 420, y + h / 2 - 70, 270, 140, r, r === "bank" ? ACC : CYAN, 70), t + 0.1, { opacity: 0, y: 14 }, 0.4);
+        return icon(host, 740, y + h / 2 - 85, 170, col); };
+      const hA1 = phrase(A, 470, 340, "river", "bank", 1, 0, 0.05, icoWaves, WATER); show(hA1, 0.1, { opacity: 0 }, 0.4);
+      const hA2 = phrase(A, 920, 340, "bank", "loan", 0, 1, 0.12, icoCoins, MONEY); show(hA2, 0.15, { opacity: 0 }, 0.4);
+      pillAt(A, "SAME WORD", 340, 830, 0.2, ACC, 38);
+
+      // ============ B: same word, two meanings: attention picks the neighbour ============
+      // diagram: B
+      const hSame = hdr(B, "SAME WORD", S.B + 0.05, ACC);
+      const bCard = (y, left, right, icon, col) => { show(glass(B, 90, y, 900, 270, col, 28), S.B + 0.05, { opacity: 0 }, 0.35);
+        show(wchip(B, 130, y + 95, 250, 130, left, left === "bank" ? ACC : CYAN, 62), S.B + 0.1, { opacity: 0, y: 14 }, 0.4);
+        show(wchip(B, 410, y + 95, 250, 130, right, right === "bank" ? ACC : CYAN, 62), S.B + 0.15, { opacity: 0, y: 14 }, 0.4);
+        const ic = icon(B, 730, y + 55, 170, col); show(ic, S.B + 0.2, { opacity: 0 }, 0.4, 0.35); return ic; };
+      const icB1 = bCard(330, "river", "bank", icoWaves, WATER), icB2 = bCard(670, "bank", "loan", icoCoins, MONEY);
+      light(icB1, at("B", "kinara")); light(icB2, at("B", "paise"));
+      gone(hSame, at("B", "attention") - 0.1, 0.25);
+      hdr(B, "ATTENTION", at("B", "attention"), CYAN);
+      const bsv = svgLayer(B);
+      [[330, 255, 525], [670, 255, 535]].forEach(([y, xa, xb], k) => { const d = `M${xa} ${y + 95} C ${xa} ${y + 20}, ${xb} ${y + 20}, ${xb} ${y + 95}`;
+        const thin = addPath(bsv, d, GREY, 4, at("B", "dekhta"), 0.8);
+        const thick = addPath(bsv, d, ACC, 22, at("B", "kisko") + 0.1, 1); }); // the gold line fades in over the thin one
+      [["1 · QUERY", 90, 1040], ["2 · KEY", 560, 1040], ["3 · SOFTMAX", 90, 1160], ["4 · VALUE", 560, 1160]].forEach(([t_, x, y], k) =>
+        show(el(B, `left:${x}px;top:${y}px;width:430px;height:84px;display:flex;align-items:center;justify-content:center;border-radius:42px;border:3px solid ${ACC};background:${ca(ACC, 0.12)};font:700 42px ${COD};letter-spacing:.06em;color:${ACC};white-space:nowrap`, t_), at("B", "chaar") + k * 0.25, { opacity: 0, y: 14 }, 0.35));
+
+      // ============ C: step 1, query ============
+      // diagram: C
+      head("C", C, "1 · QUERY");
+      const tC = [at("C", "I"), at("C", "sat"), at("C", "on"), at("C", "the"), at("C", "river"), at("C", "bank", 0)];
+      [0, 1, 2, 3, 4, 5].forEach((i) => show(el(C, `left:330px;top:${PITCH.y0 + 150 * i}px;width:260px;height:110px;box-sizing:border-box;border-radius:20px;border:3px dashed ${ca(GREY, 0.5)}`), S.C + 0.05 + i * 0.05, { opacity: 0 }, 0.3));
+      const rowsC = stageChips(C, WORDS1, 5, PITCH, tC, at("C", "Query", 0));
+      const qy = rowsC[5].mid;
+      const qcard = show(glass(C, 630, qy - 235, 390, 400, ACC), at("C", "Query", 0), { opacity: 0, x: 20 }, 0.45);
+      line(C, 590, qy, 630, qy, ACC, 6, at("C", "Query", 0));
+      show(el(C, `left:630px;top:${qy - 225}px;width:390px;height:140px;display:flex;align-items:center;justify-content:center;font:800 130px ${COD};color:${ACC}`, "?"), at("C", "sawal"), { opacity: 0, scale: 0.8 }, 0.4);
+      const wq = icoWaves(C, 665, qy - 70, 140, WATER), mq = icoCoins(C, 835, qy - 70, 140, MONEY);
+      show(wq, at("C", "Query", 0) + 0.2, { opacity: 0 }, 0.4, 0.3); show(mq, at("C", "Query", 0) + 0.2, { opacity: 0 }, 0.4, 0.3);
+      light(wq, at("C", "water")); light(mq, at("C", "money"));
+      pillAt(C, "WATER", 655, qy + 85, at("C", "water"), WATER, 36); pillAt(C, "MONEY", 840, qy + 85, at("C", "money"), MONEY, 36);
+
+      // ============ D: step 2, keys and scores ============
+      // diagram: D
+      head("D", D, "2 · KEY");
+      const rowsD = stageChips(D, WORDS1, 5, PITCH, [0, 1, 2, 3, 4, 5].map((i) => S.D + 0.05 + i * 0.04), S.D + 0.1);
+      const tLabel = at("D", "label"), tMatch = at("D", "milao");
+      pillAt(D, "KEY", 630, 1205, tLabel, GREY, 36); pillAt(D, "SCORE", 800, 1205, tMatch, GREY, 36);
+      const gl = [[10, 10, null], [12, 8, null], [8, 8, null], [8, 7, null], [100, 0, at("D", "water")], [38, 38, at("D", "thoda", 0)]];
+      const glyphs = rowsD.map((r, i) => { const g = gl[i]; const gg = glyph(D, 620, r.y, g[0], g[1], tLabel, g[2] == null ? tLabel : g[2], i === 5 ? at("D", "thoda", 1) : (g[2] == null ? tLabel : g[2])); return gg; });
+      const scoresD = rowsD.map((r, i) => { const b = bar(D, r.y, 110, SCORE_W[i], i === 4 ? ACC : CYAN); grow(b, tMatch + 0.12 * i, 0.7, "x"); return b; });
+      glyphs.forEach((g, i) => { tl.to(g.fr, { borderColor: ca(ACC, 1), duration: 0.15, immediateRender: false }, tMatch + 0.12 * i); tl.to(g.fr, { borderColor: ca(GREY, 0.6), duration: 0.3, immediateRender: false }, tMatch + 0.12 * i + 0.4); });
+      tl.to(scoresD[4], { backgroundColor: ca(ACC, 1), duration: 0.3, immediateRender: false }, at("D", "ooncha", 1));
+      const qb = show(el(D, `left:170px;top:${rowsD[5].mid - 45}px;width:90px;height:90px;border-radius:50%;box-sizing:border-box;border:4px solid ${ACC};background:${ca(ACC, 0.16)};display:flex;align-items:center;justify-content:center;font:800 52px ${COD};color:${ACC}`, "Q"), at("D", "Query"), { opacity: 0, x: -20 }, 0.4);
+      line(D, 260, rowsD[5].mid, 330, rowsD[5].mid, ACC, 5, at("D", "Query") + 0.1);
+
+      // ============ E: step 3, softmax ============
+      // diagram: E
+      head("E", E, "3 · SOFTMAX");
+      const rowsE = stageChips(E, WORDS1, 5, PITCH, [0, 1, 2, 3, 4, 5].map((i) => S.E + 0.05 + i * 0.04), S.E + 0.1);
+      const bE = rowsE.map((r, i) => { const b = bar(E, r.y, 110, SCORE_W[i], i === 4 ? ACC : CYAN); show(b, S.E + 0.15, { opacity: 0 }, 0.3, 0.85); return b; });
+      const tPc = at("E", "percentages"), tPW = [at("E", "percent", 1), 0, 0, 0, at("E", "77"), at("E", "13")];
+      
+      bE.forEach((b, i) => tl.to(b, { width: Math.max(PCT[i] * 2.6, 8), duration: 0.8, ease: "power3.inOut", immediateRender: false }, tPc + 0.05 * i));
+      const tSm = [at("E", "2"), at("E", "2") + 0.12, at("E", "2") + 0.24, at("E", "3") + 0.1];
+      const tE = [tSm[0], tSm[1], tSm[2], tSm[3], at("E", "77"), at("E", "13")];
+      rowsE.forEach((r, i) => numLab(E, r.y, 110, PCT[i] + "%", i === 4 ? ACC : TEXT, tE[i]));
+      const asvg = svgLayer(E);
+      addPath(asvg, arcD(rowsE[5].mid, rowsE[4].mid), ACC, pct(77), at("E", "77") - 0.1);
+      addPath(asvg, loopD(rowsE[5].mid), CYAN, pct(13), at("E", "13") - 0.1);
+      [0, 1, 2, 3].forEach((i) => addPath(asvg, arcD(rowsE[5].mid, rowsE[i].mid), GREY, pct(3), tE[i] - 0.1, 0.9));
+      // stacked bar = 100
+      const segs = [[PCT[4], ACC], [PCT[5], CYAN], [3, GREY], [3, GREY], [2, GREY], [2, GREY]]; let sx = 90;
+      const track = show(el(E, "left:90px;top:1255px;width:900px;height:45px;border-radius:12px;box-sizing:border-box;border:2px solid rgba(150,175,215,.5)"), at("E", "milkar") - 0.3, { opacity: 0 }, 0.3);
+      segs.forEach(([p, col], k) => { const w_ = p * 9, d = el(E, `left:${sx}px;top:1255px;width:${w_ - (k < 5 ? 2 : 0)}px;height:45px;border-radius:${k === 0 ? "12px 0 0 12px" : k === 5 ? "0 12px 12px 0" : "0"};background:${ca(col, col === GREY ? 0.55 : 0.9)}`);
+        const t_ = k === 0 ? at("E", "77") : k === 1 ? at("E", "13") : tE[k - 2 + 0]; grow(d, k < 2 ? t_ : tE[k - 2], 0.5, "x"); sx += w_; });
+      pillAt(E, "SUM = 100", 650, 1186, at("E", "100"), ACC, 34);
+
+      // ============ F: step 4, values mixed ============
+      // diagram: F
+      head("F", F, "4 · VALUE");
+      const frow = (y, name, col, p, wv, mv, tName, tG, tP) => { show(wchip(F, 70, y, 300, 130, name, col, 54), tName, { opacity: 0, x: -20 }, 0.4);
+        glyph(F, 400, y + 10, wv, mv, tG, tG, tG);
+        const pp = show(el(F, `left:570px;top:${y}px;width:420px;height:130px;display:flex;align-items:center;font:800 58px ${COD};color:${col === ACC ? ACC : TEXT};white-space:nowrap`, `× ${p}%`), tP, { opacity: 0, x: 14 }, 0.4); return pp; };
+      pillAt(F, "VALUE", 390, 285, at("F", "Value"), GREY, 34); pillAt(F, "× PERCENT", 620, 285, at("F", "percent"), GREY, 34);
+      frow(340, "river", ACC, 77, 100, 4, S.F + 0.1, at("F", "jaankari"), at("F", "percent"));
+      frow(500, "bank", CYAN, 13, 38, 38, S.F + 0.25, at("F", "jaankari") + 0.1, at("F", "percent") + 0.15);
+      frow(660, "4 others", GREY, 10, 10, 10, S.F + 0.4, at("F", "jaankari") + 0.2, at("F", "percent") + 0.3);
+      pillAt(F, "+ ADD", 70, 810, at("F", "jod"), ACC, 40);
+      const mrow = (y, lab, col, v, tl_, tb, tn) => { pillAt(F, lab, 70, y + 12, tl_, col, 40);
+        const b = el(F, `left:360px;top:${y}px;width:${Math.max(v / 2.6 * 600, 30)}px;height:88px;border-radius:12px;background:${ca(col, 0.9)}`); grow(b, tb, 0.9, "x");
+        const n = show(el(F, `left:${360 + Math.max(v / 2.6 * 600, 30) + 20}px;top:${y}px;height:88px;display:flex;align-items:center;font:800 62px ${COD};color:${col}`, "0.00"), tb, { opacity: 0 }, 0.2);
+        const o = { v: 0 }; tl.to(o, { v: v, duration: 0.9, ease: "power2.out", immediateRender: false, onUpdate: () => { n.textContent = o.v.toFixed(2); } }, tb); return b; };
+      mrow(890, "WATER", WATER, 2.06, at("F", "water"), at("F", "206"), 0);
+      mrow(1010, "MONEY", MONEY, 0.14, at("F", "money"), at("F", "014"), 0);
+      const shore = show(el(F, `left:70px;top:1150px;width:940px;height:130px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:34px;border-radius:24px;border:5px solid ${ACC};background:${ca(ACC, 0.12)};font:800 62px ${COD};color:${ACC};white-space:nowrap`, "BANK = SHORE"), at("F", "kinara"), { opacity: 0, scale: 0.95 }, 0.4);
+      show(icoWaves(F, 100, 1160, 100, WATER), at("F", "kinara"), { opacity: 0 }, 0.4);
+
+      // ============ G: the same four steps, loan sentence ============
+      // diagram: G
+      const hG1 = hdr(G, "SAME STEPS", S.G + 0.05, CYAN);
+      const WORDS2 = ["I", "went", "to", "the", "bank", "loan"], PG = { y0: 300, pitch: 120, h: 92, font: 48 };
+      const rowsG = stageChips(G, WORDS2, 4, PG, [0, 1, 2, 3, 4, 5].map((i) => S.G + 0.1 + i * 0.25), at("G", "loan", 0));
+      const tG = [at("G", "77") + 0.5, at("G", "77") + 0.6, at("G", "77") + 0.7, at("G", "77") + 0.8, at("G", "77") + 0.3, at("G", "77")];
+      const PG_ = [3, 3, 2, 2, 13, 77];
+      rowsG.forEach((r, i) => { numLab(G, r.y, 92, PG_[i] + "%", i === 5 ? ACC : TEXT, tG[i]); const b = bar(G, r.y, 92, Math.max(PG_[i] * 2.6, 8), i === 5 ? ACC : CYAN, 38); grow(b, tG[i], 0.6, "x"); });
+      const gsvg = svgLayer(G);
+      addPath(gsvg, arcD(rowsG[4].mid, rowsG[5].mid), ACC, pct(77), at("G", "loan", 1) - 0.1);
+      addPath(gsvg, loopD(rowsG[4].mid), CYAN, pct(13), tG[4] - 0.1);
+      [0, 1, 2, 3].forEach((i) => addPath(gsvg, arcD(rowsG[4].mid, rowsG[i].mid), GREY, pct(3), tG[i] - 0.1, 0.9));
+      const gm = (y, lab, col, v, tl_, tb) => { pillAt(G, lab, 70, y + 8, tl_, col, 38);
+        const w_ = Math.max(v / 2.6 * 560, 30); const b = el(G, `left:330px;top:${y}px;width:${w_}px;height:78px;border-radius:12px;background:${ca(col, 0.9)}`); grow(b, tb, 0.9, "x");
+        const n = show(el(G, `left:${330 + w_ + 20}px;top:${y}px;height:78px;display:flex;align-items:center;font:800 56px ${COD};color:${col}`, "0.00"), tb, { opacity: 0 }, 0.2);
+        const o = { v: 0 }; tl.to(o, { v: v, duration: 0.9, ease: "power2.out", immediateRender: false, onUpdate: () => { n.textContent = o.v.toFixed(2); } }, tb); };
+      gm(1090, "MONEY", MONEY, 2.06, at("G", "money"), at("G", "206"));
+      gm(1190, "WATER", WATER, 0.13, at("G", "water"), at("G", "013"));
+      gone(hG1, at("G", "wahi", 1) - 0.45, 0.25);
+      hdr(G, "SAME WORD", at("G", "wahi", 1), ACC); hdr(G, "NEW MEANING", at("G", "badal"), GOOD, 560);
+
+      // ============ H: made-up numbers vs a model that learns ============
+      // diagram: H
+      hdr(H, "EXAMPLE", S.H + 0.05, GREY);
+      const hcard = (y, title, col, dash, nums, learn) => { const g = show(glass(H, 90, y, 900, 400, col, 28), S.H + 0.1, { opacity: 0 }, 0.4);
+        if (dash) tl.set(g, { borderStyle: "dashed" }, 0);
+        pillAt(H, title, 130, y + 25, S.H + 0.2, col, 40);
+        nums.forEach((n, i) => { const x = 130 + (i % 3) * 285, yy = y + 125 + Math.floor(i / 3) * 135;
+          const c = show(el(H, `left:${x}px;top:${yy}px;width:250px;height:110px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:16px;border:3px ${dash ? "dashed" : "solid"} ${col};background:${ca(col, 0.14)};font:700 54px ${COD};color:${TEXT}`, learn ? "0" : n + "%"), S.H + 0.25 + i * 0.05, { opacity: 0, y: 12 }, 0.35);
+          if (learn) { const o = { v: 0 }; tl.to(o, { v: n, duration: 1.8, ease: "power2.out", immediateRender: false, onUpdate: () => { c.textContent = Math.round(o.v) + "%"; } }, at("H", "asli")); } }); };
+      hcard(330, "OUR NUMBERS", GREY, true, [77, 13, 3, 3, 2, 2], false);
+      hcard(860, "REAL MODEL", CYAN, false, [52, 21, 8, 4, 9, 6], true);
+      M.arrow(H, { from: [540, 740], to: [540, 850], color: ACC, w: 8 }).show(at("H", "asli") - 0.3, 0.3);
+      pillAt(H, "LEARNS", 700, 770, at("H", "seekhta"), ACC, 38);
+
+      // ============ I: recap, quiz, follow ============
+      // diagram: I
+      const recap = el(I, "left:0;top:0;width:1080px;height:1920px");
+      [["?", "QUERY", ACC, "query", 300], ["≈", "KEY", CYAN, "key", 470], ["%", "SOFTMAX", ACC, "softmax", 640], ["+", "VALUE", CYAN, "value", 810]].forEach(([g, lab, col, w, y]) => {
+        const t_ = at("I", w), t0 = S.I + 0.05 + (y - 300) / 170 * 0.12; show(glass(recap, 90, y, 900, 140, col, 24), t0, { opacity: 0, y: 18 }, 0.4);
+        show(el(recap, `left:130px;top:${y}px;width:120px;height:140px;display:flex;align-items:center;justify-content:center;font:800 90px ${COD};color:${col}`, g), t0 + 0.05, { opacity: 0 }, 0.4);
+        show(el(recap, `left:290px;top:${y}px;width:650px;height:140px;display:flex;align-items:center;font:700 58px ${COD};color:${TEXT};letter-spacing:.06em`, lab), t_ + 0.05, { opacity: 0 }, 0.4); });
+      gone(recap, at("I", "batao") - 0.25, 0.3);
+      hdr(I, "YOUR TURN", at("I", "batao"), CYAN);
+      const qseg = (x, w, col, txt, t, dash) => show(el(I, `left:${x}px;top:340px;width:${w}px;height:150px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:12px;border:3px ${dash ? "dashed" : "solid"} ${col};background:${ca(col, dash ? 0.06 : 0.85)};font:800 56px ${COD};color:${dash ? col : "#0B1220"}`, txt), t, { opacity: 0, scaleX: 0.9 }, 0.4);
+      qseg(90, 693, ACC, "77", at("I", "77"), false); qseg(783, 117, CYAN, "13", at("I", "13"), false); qseg(900, 90, GREY, "?", at("I", "baaki"), true);
+      [["RIVER  77%", ACC, "river", 2], ["BANK  13%", CYAN, "bank", 1], ["4 WORDS  ?", GREY, "baaki", 0]].forEach(([lab, col, w, n], k) => {
+        const t_ = w === "river" ? at("I", "77") : w === "bank" ? at("I", "13") : at("I", "baaki");
+        show(el(I, `left:90px;top:${540 + k * 100}px;width:700px;height:80px;display:flex;align-items:center;gap:24px;font:700 50px ${COD};color:${col};white-space:nowrap`, `<span style="display:inline-block;width:44px;height:44px;border-radius:8px;background:${ca(col, 0.9)}"></span><span>${lab}</span>`), t_, { opacity: 0, x: -14 }, 0.35); });
+      pillAt(I, "ANSWER: CAPTION", 70, 880, at("I", "jawab"), CYAN, 42);
+      show(el(I, `left:90px;top:990px;width:900px;height:100px;box-sizing:border-box;border-radius:50px;border:2px solid rgba(150,175,215,.5);font:500 40px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("I", "caption"), { opacity: 0 }, 0.4);
+      const fb = pillAt(I, "+  FOLLOW", 300, 1150, at("I", "follow") - 0.5, ACC, 52);
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("I", "follow"));
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I);
+      M.finish({ kw: { query: "gold", Query: "gold", key: "cyan", Key: "cyan", softmax: "gold", value: "cyan", Value: "cyan", water: "cyan", money: "good", river: "gold", River: "gold", bank: "gold", attention: "gold", kinara: "cyan", follow: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

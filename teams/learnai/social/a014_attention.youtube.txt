@@ -1,0 +1,11 @@
+Attention: how a word looks at the other words
+
+Attention kya hota hai? Is video mein dekhte hain ki ek word, jaise bank, baaki words ko dekhkar apna matlab kaise tay karta hai: query, key, softmax aur value ke chaar steps, ek chhote example ke saath.
+
+Is video mein: what is attention in AI, self attention explained, how LLM understands context, attention mechanism simple, AI engineer roadmap.
+
+Attention ka formula softmax(QK^T / sqrt(d_k)) V aur "output values ka weighted sum hai, jiske weights query aur key ke match se aate hain" Vaswani et al. 2017 ke paper se hai. "Har token ke liye poochta hai ki baaki tokens uske matlab ko kitna asar karte hain" Google ke Machine Learning Crash Course se hai. Reel ke saare numbers (77 percent, 13 percent, 2.06, 0.14, 0.13) hamare apne banaye hue example ke hain, kisi asli model ke nahi.
+
+Sources:
+https://arxiv.org/html/1706.03762v7
+https://developers.google.com/machine-learning/crash-course/llm/transformers

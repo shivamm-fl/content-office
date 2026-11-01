@@ -1,0 +1,11 @@
+Day 14/150: River bank aur bank loan: model farak kaise jaanta hai?
+
+Word wahi hai, bank. Par ek mein matlab kinara hai, doosre mein paise wala bank. Attention yahi suljhata hai: har word baaki words ko dekhta hai aur tay karta hai ki kisko kitna matlab dena hai. Chaar steps: query (bank ka sawal), key (har word ka label), softmax (scores ko percent banao, jo milkar 100 hon), value (percent se guna karke jod do).
+
+Ye numbers humne example ke liye banaye hain. Asli model inhe khud seekhta hai.
+
+Ab tum batao: river ko 77 percent, bank khud ko 13 percent, baaki chaar words ko milakar kitna? Comment mein likho. Jawab: 10 percent.
+
+Roz ek AI idea ke liye follow karo.
+
+#AI #LLM #150DaysOfAI

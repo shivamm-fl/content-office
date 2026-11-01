@@ -1752,20 +1752,18 @@
       "format": "concept",
       "status": "planned",
       "title": "Attention: how a word looks at the other words",
-      "one_idea": "Attention lets one word decide which other words matter for its meaning: the word asks a question (query), every word offers a label (key), the match scores become percentages that add to 100 (softmax), and the word takes a weighted mix of the others (values). Same word 'bank' gets river as 77 % in one sentence and loan as 77 % in another, so its meaning changes with its neighbours. Different picture from a013: a bank-word with lines of different thickness to its neighbours and a percentage bar, not the Ravi/chai pronoun. Stand-alone: transformer is not needed, 'token' is not used.",
+      "one_idea": "Attention lets one word decide which other words matter for its meaning: the word asks a question (query), every word offers a label (key), the match scores become percentages that add to 100 (softmax), and the word takes a weighted mix of the others (values). Same word 'bank' gets river as 77 % in one sentence and loan as 77 % in another, so its meaning changes with its neighbours.",
       "hook_type": "direct_question",
       "spoken_hook": "River bank और bank loan: model फ़र्क कैसे जानता है?",
       "hook_formula": "plain_question on a concrete pair of phrases (same word, two meanings), picture from frame 0",
-      "visual_idea": "Frame 0: two short sentences, 'river bank' and 'bank loan', the word bank highlighted in both. Then one sentence 'I sat on the river bank' with lines from bank to every word, thickness = weight; a percentage bar sums to 100; a small [water, money] meter fills from the mix; the second sentence flips the thick line to loan and the meter to money.",
-      "example": "EXAMPLE (invented 2-number vectors, formula softmax(q.k/sqrt(d_k)) of the 2017 paper; state/runs/a014_attention_run_output.txt): in 'I sat on the river bank' the word bank gives river 76.7 %, itself 13.1 %, I 2.7 %, sat 3.0 %, on 2.3 %, the 2.2 % (sum 100.0); the mix leans water 2.06 vs money 0.14. In 'I went to the bank loan' loan gets 77.1 % and the mix leans money 2.06 vs water 0.13. Real models learn these numbers; ours are made up to show the steps.",
+      "visual_idea": "Frame 0: two short phrases, 'river bank' and 'bank loan', bank highlighted. Then one sentence with lines from bank to every word (thickness = weight), a percentage bar summing to 100, a [water, money] meter from the mix; the second sentence flips the thick line to loan and the meter to money.",
+      "example": "EXAMPLE (invented 2-number vectors, softmax(q.k/sqrt(d_k)); state/runs/a014_attention_run_output.txt): 'I sat on the river bank': river 76.7 %, bank 13.1 %, I 2.6, sat 3.0, on 2.4, the 2.2; mix water 2.06 money 0.14. 'I went to the bank loan': loan 76.7 %, mix money 2.06 water 0.13.",
       "sources": [
         "https://arxiv.org/html/1706.03762v7",
         "https://developers.google.com/machine-learning/crash-course/llm/transformers"
       ],
       "facts_to_verify": [
-        "Attention(Q,K,V)=softmax(QK^T/sqrt(d_k))V; output is a weighted sum of values, weights from query-key match (paper, fetched 2026-11-01)",
-        "Base model: 8 heads, d_k=d_v=64 (paper, fetched 2026-11-01)",
-        "Google ML crash course: self-attention asks how much each other token affects the interpretation of this token; different heads can learn different relationships (fetched 2026-11-01)",
+        "Attention(Q,K,V)=softmax(QK^T/sqrt(d_k))V; output is a weighted sum of values (paper)",
         "All shown weights are from our invented example, labelled EXAMPLE"
       ],
       "length_target_s": 100,
@@ -1778,8 +1776,7 @@
         "attention mechanism simple",
         "ai engineer roadmap"
       ],
-      "hook_source": "strategist, 2026-11-01",
-      "everyday_anchor": "Reading a sentence and knowing which neighbouring word decides what an ambiguous word means, like 'bank' next to 'river' or next to 'loan'."
+      "hook_source": "strategist, 2026-11-01"
     },
     {
       "id": "q130",
