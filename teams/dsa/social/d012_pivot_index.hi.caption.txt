@@ -1,0 +1,9 @@
+Day 12/150: Pivot Index problem: left aur right ka sum barabar kahan?
+
+Pivot index woh index hai jiske left ke elements ka sum aur right ke elements ka sum same ho. Brute force har index par dono sum alag se nikalta hai, to time O(n^2) lagta hai. Fix: pehle poore array ka total ek baar nikalo, phir left sum chalate raho aur right = total - left - current.
+
+Example array [1, 7, 3, 6, 5, 6]: total 28. Index 3 par left 11, current 6, right 28 - 11 - 6 = 11, to answer 3. Array [1, 2, 3] mein koi index nahi milta, to -1. Array [2, 1, -1] mein index 0 par left khaali hai aur khaali side ka sum 0 hota hai, to answer 0. Kai pivot ho sakte hain, to sabse left wala chahiye: pehla match milte hi return karo. Ek pass, time O(n), extra space O(1). Example ke liye 100000 elements par brute force ke lagbhag 10 arab reads aur one pass ke lagbhag 2 lakh reads.
+
+Ab tumhara turn: array [1, 2, 3, 3] mein pivot index kya hoga? Comment mein likho. Answer: 2 (left 1 + 2 = 3, right 3).
+
+#dsa #pivotindex #interviewprep

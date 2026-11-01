@@ -1,0 +1,7 @@
+Pivot Index: Left Sum = Right Sum in One Pass
+
+Find Pivot Index asks for the leftmost index where the sum of the elements to its left equals the sum of the elements to its right; an empty side counts as 0, and the answer is -1 when no index works. Computing both sums at every index is O(n^2). Instead, compute the total once, keep a running left sum, and take right = total - left - current. The first index where left equals right is the answer, found in one O(n) pass with O(1) extra space. Example: for [1, 7, 3, 6, 5, 6] the total is 28; at index 3 left is 11 and right is 28 - 11 - 6 = 11, so the answer is 3. [1, 2, 3] returns -1 and [2, 1, -1] returns 0. Example arithmetic: with 100,000 elements, re-summing both sides at every index is about 10 billion element reads, against about 200,000 for the one pass.
+
+Sources:
+https://raw.githubusercontent.com/doocs/leetcode/main/solution/0700-0799/0724.Find%20Pivot%20Index/README_EN.md
+https://en.wikipedia.org/wiki/Prefix_sum
