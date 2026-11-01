@@ -1,11 +1,11 @@
 Day 13/150: ChatGPT, Claude, Llama ka design ek hai. Kaun sa?
 
-Transformer. Isme ek block hota hai, aur wahi block baar-baar stack hota hai. Har block mein do hisse: pehle attention (har word baaki words ko dekhta hai), phir feed-forward network (chhota network jo har word par alag se chalta hai).
+Transformer: attention par bana design. Har block mein pehle attention aata hai (words ko context ke saath jodta hai), phir feed-forward network (har token ko alag se process karta hai).
 
-Hamari ginti (2017 ke original paper ke base size se, paper khud ye number print nahi karta): ek block mein lagbhag 3.15 million numbers, ek tihai attention mein aur do tihai feed-forward mein. Paper ke encoder mein 6 aise blocks the, yaani lagbhag 18.9 million numbers. Har block ke numbers apne hote hain, copy nahi.
+Example: "Ravi ne chai banayi, aur use pee liya." "Use" Ravi hai ya chai? Clue "pee liya" hai, isliye attention chai ko bada weight deta hai (0.8 aur 0.1 sirf example numbers hain). Feed-forward mein 512 numbers ko 2048 tak expand karte hain, negative ko 0 karte hain, phir wapas 512 (original base model ke sizes). Chhota example: x aur minus x, ReLU lagao, to -3 aur 3 dono ka jawab 3: seedhi line ye nahi kar sakti.
 
-Ab tum batao: ek block mein 3 million numbers hon, to 10 blocks mein kul kitne? Comment mein likho. Jawab: 30 million.
+Ab tum batao: "Ravi ne gilas giraya, aur wo toot gaya." "Wo" kiske liye hai? Jawab: gilas, clue "toot gaya": gilas tootta hai, Ravi nahi.
 
-Roz ek AI idea ke liye follow karo.
+Comment mein apna attention ka example likho.
 
 #AI #LLM #150DaysOfAI

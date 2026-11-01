@@ -65,6 +65,12 @@
       -0.1
     ],
     [
+      "pop",
+      "D",
+      4,
+      0
+    ],
+    [
       "click",
       "E",
       0,
@@ -73,50 +79,56 @@
     [
       "pop",
       "E",
+      5,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      12,
+      0
+    ],
+    [
+      "click",
+      "F",
+      0,
+      0
+    ],
+    [
+      "pop",
+      "F",
+      5,
+      0
+    ],
+    [
+      "ok",
+      "G",
       2,
       0
     ],
     [
-      "click",
-      "F",
-      0,
-      0
-    ],
-    [
-      "ok",
-      "F",
-      3,
-      0
-    ],
-    [
-      "pop",
-      "G",
-      1,
-      0
-    ],
-    [
       "pop",
       "H",
-      1,
+      3,
       0
     ],
     [
       "ok",
       "H",
-      3,
+      5,
       0.3
     ]
   ],
   "copy": {
     "hi": {
       "A": "@hook ChatGPT, Claude, Llama: तीनों का design एक है। कौन सा?",
-      "B": "Transformer। || इसमें एक block होता है, और वही block बार-बार stack होता है। || हर block में दो हिस्से हैं: | पहले attention, फिर feed-forward network।",
-      "C": "एक sentence लो: | रवि ने चाय बनाई, और उसे पी लिया। || \"उसे\" किसके लिए है, रवि या चाय? || Attention यानी हर word बाकी सारे words को देखता है, | और तय करता है कि किससे कितना मतलब लेना है। || यहाँ \"उसे\" चाय की तरफ़ देखता है। | क्योंकि मतलब आसपास के words से बनता है।",
-      "D": "दूसरा हिस्सा, feed-forward network। || ये एक छोटा neural network है, जो हर word पर अलग से चलता है। || Attention ने words को जोड़ा, | अब ये हर word की जानकारी को process करता है। | क्योंकि पहले context मिलना चाहिए, फिर उस पर सोचना।",
-      "E": "अब numbers देखो। || 2017{twenty-seventeen} के original paper के base size में, | एक block में लगभग 3.15{three-point-one-five} million numbers हैं, यानी parameters। || इनमें से एक तिहाई attention में, | और दो तिहाई feed-forward में। | ये हमारी गिनती है, paper खुद ये number print नहीं करता।",
-      "F": "अब stack करो। || Words पहले block से गुज़रते हैं, | और उसका output दूसरे block का input बन जाता है। || Original paper के encoder में ऐसे 6{six} blocks थे, | यानी इन blocks में लगभग 18.9{eighteen-point-nine} million numbers।",
-      "G": "एक बात ध्यान रखना: | block का design एक है, पर numbers हर block के अपने हैं, copy नहीं। || ज़्यादातर बड़े LLMs में भी यही block design है, बस blocks और sizes बड़े हैं।",
-      "H": "तो याद रखो: attention जोड़ता है, | feed-forward सोचता है, | और block stack होता है। || अब बताओ: एक block में 3{three} million numbers हों, | तो 10{ten} blocks में कुल कितने? | जवाब caption में है। | रोज़ एक AI idea के लिए follow कर लो।"
+      "B": "Answer है: | Transformer family का core design, | attention-based architecture। || Common idea ये है: | attention से tokens को context देना, | और feed-forward network से हर token को अलग process करना। || अब इसको एक simple example से समझो।",
+      "C": "रवि ने चाय बनाई, और उसे पी लिया। || यहाँ “उसे” किसके लिए है, रवि या चाय? || Clue है “पी लिया”। || पीना चाय के साथ होता है, रवि के साथ नहीं।",
+      "D": "Attention हर word को बाकी words के साथ compare करता है, | और relevance के हिसाब से weights बनाता है। || Illustratively, “उसे” चाय को 0.8{zero-point-eight} weight दे सकता है, | और रवि को 0.1{zero-point-one}। || ये actual model के fixed numbers नहीं हैं। | सिर्फ़ intuition के लिए example numbers हैं। || यानी attention का काम है: | words के बीच connection बनाना।",
+      "E": "अब second part आता है: | position-wise feed-forward network। || Attention ने “उसे” के context में रवि और चाय दोनों की information ला दी। || Feed-forward network अब इस एक token representation को independently process करता है। || Original Transformer Base configuration में model dimension 512{five-twelve} था, | और feed-forward के बीच का dimension 2048{twenty-forty-eight}। || Simple picture: | 512{five-twelve} numbers को temporarily 2048{twenty-forty-eight} numbers में expand करो, | activation rule लगाओ, | फिर वापस 512{five-twelve} में shrink करो। || इसको ऐसे imagine करो: | एक value x, और दूसरी value minus x। || ReLU rule negative value को zero कर देता है। || अगर x minus 3{three} है, | तो minus 3{three} zero बनेगा और 3{three} बचेगा। || अगर x 3{three} है, | तो 3{three} बचेगा और minus 3{three} zero बनेगा। || दोनों cases में output 3{three} मिल सकता है। || सिर्फ़ एक straight linear step ये distinction नहीं बना पाता। || Important: ये सिर्फ़ illustrative example है, | actual network के learned numbers का claim नहीं।",
+      "F": "Original 2017{twenty-seventeen} Transformer के एक encoder stack में 6{six} identical layers थे। || हर layer में पहले attention, | फिर position-wise feed-forward network आता था। || Decoder stack में masked self-attention और encoder-decoder attention भी होता था। || Modern decoder-only LLMs में usually causal self-attention के बाद feed-forward block repeat होता है। || एक block का output अगले block का input बनता है। | इसी तरह blocks stack होते हैं, | और representation step-by-step refine होती है।",
+      "G": "Recap: | attention words को context के साथ जोड़ता है। || Feed-forward हर token को independently transform करता है। || और blocks का stack पूरे process को repeat करता है।",
+      "H": "अब second example solve करो। || रवि ने गिलास गिराया, और वो टूट गया। || “वो” रवि है या गिलास? || Clue है “टूट गया”। || गिलास टूट सकता है, रवि नहीं। || Comment में बताओ: | attention को explain करने के लिए तुम्हारा example क्या होगा?"
     }
   },
   "prime": "सुनो, ये बहुत interesting है!"

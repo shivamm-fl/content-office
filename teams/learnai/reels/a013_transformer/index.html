@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="105.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="172.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="105.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="105.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="105.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="172.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="172.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="172.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -99,113 +99,143 @@
         M.arrow(A, { from: [540, y + 134], to: [540, y + 156], color: GREY, w: 6 }).show(0.3, 0.2); });
       show(el(A, `left:240px;top:1050px;width:600px;height:210px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:26px;border:5px dashed ${ACC};background:${ca(ACC, 0.1)};font:800 150px ${COD};color:${ACC}`, "?"), 0.2, { opacity: 0, scale: 0.94 }, 0.4);
 
-      // ============ B: one block, stacked; two parts ============
+      // ============ B: the answer, one block with two jobs ============
       // diagram: B
       pillAt(B, "TRANSFORMER", 70, 215, at("B", "Transformer"), ACC, 46);
-      [2, 1].forEach((k) => show(glass(B, 150 + k * 22, 330 - k * 46, 780, 200, CYAN, 26), at("B", "baar-baar") + (2 - k) * 0.15, { opacity: 0, y: 20 }, 0.35, 0.5));
-      show(glass(B, 150, 380, 780, 830, CYAN, 30), at("B", "block", 0), { opacity: 0, y: 24 }, 0.45);
-      pillAt(B, "ONE BLOCK", 190, 410, at("B", "block", 0) + 0.1, CYAN, 40);
-      pillAt(B, "× AGAIN", 700, 270, at("B", "stack"), GREY, 40);
-      part(B, 200, 520, 680, 270, "ATTENTION", CYAN, at("B", "hisse"), 54);
-      part(B, 200, 900, 680, 270, "FEED-FORWARD", ACC, at("B", "hisse") + 0.3, 50);
-      M.arrow(B, { from: [540, 796], to: [540, 894], color: GREY, w: 8 }).show(at("B", "phir"), 0.3);
-      pillAt(B, "1", 210, 535, at("B", "pehle"), CYAN, 44); pillAt(B, "2", 210, 915, at("B", "phir"), ACC, 44);
+      pillAt(B, "ATTENTION-BASED", 70, 320, at("B", "attention-based"), CYAN, 42);
+      show(glass(B, 150, 460, 780, 760, CYAN, 30), at("B", "Common"), { opacity: 0, y: 24 }, 0.45);
+      pillAt(B, "ONE BLOCK", 190, 490, at("B", "Common") + 0.1, CYAN, 40);
+      part(B, 200, 590, 680, 230, "ATTENTION", CYAN, at("B", "attention"), 54);
+      part(B, 200, 930, 680, 230, "FEED-FORWARD", ACC, at("B", "feed-forward"), 50);
+      M.arrow(B, { from: [540, 826], to: [540, 924], color: GREY, w: 8 }).show(at("B", "feed-forward"), 0.3);
+      pillAt(B, "CONTEXT", 640, 495, at("B", "context"), CYAN, 36); pillAt(B, "EACH TOKEN", 600, 1175, at("B", "alag"), ACC, 36);
 
-      // ============ C: attention: use -> Ravi or chai ============
+      // ============ C: attention step 1: who is "use"? ============
       // diagram: C
       pillAt(C, "ATTENTION", 70, 215, S.C + 0.05, CYAN, 46); pillAt(C, "EXAMPLE", 790, 222, S.C + 0.05, GREY, 36);
-      const WX = [70, 295, 520, 745], CW = 215;
+      const WX = [70, 295, 520, 745], CW = 215, tx = (i) => WX[i] + CW / 2;
       const row1 = ["Ravi", "ne", "chai", "banai"], row2 = ["aur", "use", "pee", "liya"];
-      const tm = [at("C", "ravi"), at("C", "ne"), at("C", "chaay", 0), at("C", "banai")], tm2 = [at("C", "aur"), at("C", "use", 0), at("C", "pee"), at("C", "liya")];
-      const cc = {};
-      row1.forEach((w, i) => { cc[w] = chip(C, WX[i], 450, CW, w, w === "chai" ? ACC : CYAN, tm[i], 52); });
-      row2.forEach((w, i) => { cc[w] = chip(C, WX[i], 1000, CW, w, w === "use" ? HOT : CYAN, tm2[i], 52); });
-      const tx = (i) => WX[i] + CW / 2;
-      [0, 1, 3].forEach((i) => line(C, tx(1), 1000, tx(i), 570, GREY, 4, at("C", "Attention") + i * 0.12, false, 0.7));
-      line(C, tx(1), 1000, tx(2), 570, GREY, 4, at("C", "Attention") + 0.24, false, 0.7);
-      const lChai = line(C, tx(1), 1000, tx(2), 570, ACC, 14, at("C", "yahan"), false, 1);
-      const rR = show(el(C, `left:${WX[0] - 10}px;top:440px;width:${CW + 20}px;height:140px;box-sizing:border-box;border-radius:26px;border:5px solid ${HOT}`), at("C", "ravi", 1), { opacity: 0, scale: 1.06 }, 0.3);
-      const rC = show(el(C, `left:${WX[2] - 10}px;top:440px;width:${CW + 20}px;height:140px;box-sizing:border-box;border-radius:26px;border:5px solid ${ACC}`), at("C", "chaay", 1), { opacity: 0, scale: 1.06 }, 0.3);
-      gone(rR, at("C", "yahan") - 0.1, 0.3);
-      gone(pillAt(C, "WHO?", 400, 1190, at("C", "kiske"), HOT, 52), at("C", "yahan") - 0.1, 0.2);
-      pillAt(C, "STRONG LINK", 300, 1190, at("C", "yahan") + 0.2, ACC, 46);
+      const tm = [at("C", "ravi", 0), at("C", "ne"), at("C", "chaay", 0), at("C", "banai")], tm2 = [at("C", "aur"), at("C", "use", 0), at("C", "pee", 0), at("C", "liya", 0)];
+      row1.forEach((w, i) => chip(C, WX[i], 440, CW, w, CYAN, tm[i], 52));
+      row2.forEach((w, i) => chip(C, WX[i], 1000, CW, w, CYAN, tm2[i], 52));
+      show(el(C, `left:${WX[1] - 10}px;top:990px;width:${CW + 20}px;height:140px;box-sizing:border-box;border-radius:26px;border:5px solid ${HOT}`), at("C", "use", 1), { opacity: 0, scale: 1.06 }, 0.3);
+      pillAt(C, "PRONOUN", 70, 1150, at("C", "use", 1), HOT, 46);
+      line(C, tx(1), 1000, tx(0), 560, GREY, 5, at("C", "ravi", 1), true, 0.8);
+      line(C, tx(1), 1000, tx(2), 560, GREY, 5, at("C", "chaay", 1), true, 0.8);
+      show(el(C, `left:${tx(0) - 60}px;top:700px;width:120px;text-align:center;font:800 90px ${COD};color:${HOT}`, "?"), at("C", "ravi", 1), { opacity: 0 }, 0.25);
+      show(el(C, `left:${tx(2) - 60}px;top:700px;width:120px;text-align:center;font:800 90px ${COD};color:${HOT}`, "?"), at("C", "chaay", 1), { opacity: 0 }, 0.25);
+      show(el(C, `left:${WX[2] - 12}px;top:990px;width:${2 * CW + 49}px;height:140px;box-sizing:border-box;border-radius:26px;border:5px solid ${ACC};background:${ca(ACC, 0.14)}`), at("C", "Clue"), { opacity: 0, scale: 1.05 }, 0.3);
+      pillAt(C, "CLUE", 600, 1150, at("C", "Clue"), ACC, 46);
+      pillAt(C, "DRINK ✓", 560, 330, at("C", "chaay", 2), GOOD, 42); pillAt(C, "PERSON ✗", 60, 330, at("C", "ravi", 2), HOT, 42);
 
-      // ============ D: feed-forward: a small network per word ============
+      // ============ D: attention step 2: weights (example numbers) ============
       // diagram: D
-      pillAt(D, "FEED-FORWARD", 70, 215, S.D + 0.05, ACC, 46);
-      const DW = ["Ravi", "chai", "use"], DY = [380, 700, 1020], nets = [];
-      DW.forEach((w, i) => {
-        chip(D, 70, DY[i], 260, w, CYAN, S.D + 0.2 + i * 0.12, 54);
-        M.arrow(D, { from: [340, DY[i] + 60], to: [420, DY[i] + 60], color: GREY, w: 7 }).show(at("D", "chhota") + i * 0.1, 0.3);
-        const nb = show(glass(D, 430, DY[i] - 20, 260, 160, ACC, 22), at("D", "chhota") + i * 0.1, { opacity: 0 }, 0.35);
-        M.icon(D, "model", 480, DY[i] - 4, 130, ACC).show(at("D", "chhota") + i * 0.1);
-        M.arrow(D, { from: [700, DY[i] + 60], to: [780, DY[i] + 60], color: GREY, w: 7 }).show(at("D", "alag") + i * 0.1, 0.3);
-        nets.push(chip(D, 790, DY[i], 220, w, ACC, at("D", "alag") + i * 0.12, 54)); });
-      [[0, 1], [1, 2]].forEach(([a, b]) => line(D, 200, DY[a] + 120, 200, DY[b], GREY, 6, at("D", "joda"), true, 0.8));
-      pillAt(D, "JOINED", 270, 600, at("D", "joda"), CYAN, 38);
-      pillAt(D, "EACH WORD ALONE", 90, 1175, at("D", "alag"), ACC, 42);
-      pillAt(D, "1 CONTEXT", 90, 1250, at("D", "pehle"), CYAN, 38); pillAt(D, "2 THINK", 440, 1250, at("D", "sochna"), ACC, 38);
+      pillAt(D, "WEIGHT", 70, 215, at("D", "weights"), CYAN, 46); pillAt(D, "EXAMPLE", 790, 222, S.D + 0.05, GREY, 36);
+      ["Ravi", "ne", "chai", "banai"].forEach((w, i) => chip(D, WX[i], 440, CW, w, CYAN, S.D + 0.1 + i * 0.08, 52));
+      const dch2 = ["aur", "use", "pee", "liya"].map((w, i) => chip(D, WX[i], 1000, CW, w, CYAN, S.D + 0.1 + i * 0.08, 52)); gone(dch2[1], at("D", "yaani") - 0.05, 0.15);
+      [0, 1, 2, 3].forEach((i) => line(D, tx(1), 1000, tx(i), 560, GREY, 3, at("D", "compare"), false, 0.5));
+      line(D, tx(1), 1000, tx(2), 560, ACC, 16, at("D", "08"), false, 1);
+      line(D, tx(1), 1000, tx(0), 560, GREY, 5, at("D", "01"), false, 1);
+      show(el(D, `left:${tx(2) - 100}px;top:320px;width:200px;text-align:center;font:800 100px ${COD};color:${ACC}`, "0.8"), at("D", "08"), { opacity: 0, y: 12 }, 0.3);
+      show(el(D, `left:${tx(0) - 100}px;top:320px;width:200px;text-align:center;font:800 100px ${COD};color:#8FA3C7`, "0.1"), at("D", "01"), { opacity: 0, y: 12 }, 0.3);
+      pillAt(D, "NOT REAL VALUES", 560, 1240, at("D", "fixed"), HOT, 36);
+      show(el(D, `left:${WX[1]}px;top:1000px;width:${CW}px;height:120px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:20px;border:4px solid ${ACC};background:${ca(ACC, 0.25)};font:700 40px ${LAT};color:${TEXT};white-space:nowrap`, "use+chai"), at("D", "yaani"), { opacity: 0 }, 0.4);
+      pillAt(D, "JOINS WORDS", 70, 1240, at("D", "connection"), GOOD, 42);
 
-      // ============ E: the numbers of one block ============
+      // ============ E: feed-forward on ONE token, then the x / -x example ============
       // diagram: E
-      pillAt(E, "2017 PAPER", 70, 215, at("E", "2017"), GREY, 42); pillAt(E, "BASE SIZE", 460, 215, at("E", "size"), CYAN, 42);
-      show(glass(E, 90, 340, 900, 380, ACC, 28), S.E + 0.1, { opacity: 0 }, 0.4);
-      const bigN = el(E, `left:90px;top:400px;width:900px;text-align:center;font:800 130px ${COD};color:${ACC};white-space:nowrap`, "0"); show(bigN, S.E + 0.15, { opacity: 0 });
-      counter(bigN, at("E", "315"), 1.4, 3152384);
-      show(el(E, `left:90px;top:580px;width:900px;text-align:center;font:700 46px ${COD};color:${GREY}`, "NUMBERS IN ONE BLOCK"), at("E", "block"), { opacity: 0 });
-      part(E, 90, 850, 300, 260, "", CYAN, at("E", "tihai", 0), 40); part(E, 390, 850, 600, 260, "", ACC, at("E", "tihai", 1), 40);
-      show(el(E, `left:90px;top:1135px;width:300px;text-align:center;font:700 44px ${COD};color:${CYAN}`, "ATTENTION"), at("E", "tihai", 0), { opacity: 0 });
-      show(el(E, `left:390px;top:1135px;width:600px;text-align:center;font:700 44px ${COD};color:${ACC}`, "FEED-FORWARD"), at("E", "tihai", 1), { opacity: 0 });
-      show(el(E, `left:90px;top:910px;width:300px;text-align:center;font:800 110px ${COD};color:${CYAN}`, "1/3"), at("E", "tihai", 0) + 0.1, { opacity: 0 });
-      show(el(E, `left:390px;top:910px;width:600px;text-align:center;font:800 110px ${COD};color:${ACC}`, "2/3"), at("E", "tihai", 1) + 0.1, { opacity: 0 });
-      pillAt(E, "OUR COUNT", 90, 1225, at("E", "hamari"), HOT, 44); pillAt(E, "NOT IN PAPER", 520, 1225, at("E", "print"), GREY, 40);
+      const eh = [pillAt(E, "FEED-FORWARD", 70, 215, at("E", "feed-forward", 0), ACC, 46), pillAt(E, "POSITION-WISE", 520, 215, at("E", "position-wise"), GREY, 40)]; eh.forEach((d) => gone(d, at("E", "isko") - 0.1, 0.3));
+      const cellRow = (host, x, y, n, cw, vals, col, t, step, size) => vals.slice(0, n).map((v, i) => cell(host, x + i * cw, y, cw - 8, 110, v, col, t + i * (step || 0.06), size || 38));
+      const ge = el(E, "left:0;top:0;width:1080px;height:1920px");
+      const wchip = el(ge, `left:70px;top:380px;width:230px;height:110px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:20px;border:4px solid ${ACC};background:${ca(ACC, 0.25)};font:700 40px ${LAT};color:${TEXT};white-space:nowrap`, "use+chai");
+      show(wchip, at("E", "use"), { opacity: 0 }, 0.4);
+      pillAt(ge, "AFTER ATTENTION", 70, 310, at("E", "information"), GREY, 40);
+      pillAt(ge, "ONE TOKEN ONLY", 560, 310, at("E", "independently"), HOT, 40);
+      const V1 = ["0.3", "−1.2", "…"];
+      cellRow(ge, 330, 380, 3, 220, V1, CYAN, at("E", "512", 0), 0.08, 46);
+      pillAt(ge, "512 NUMBERS", 70, 520, at("E", "512", 1), CYAN, 40);
+      M.arrow(ge, { from: [540, 560], to: [540, 640], color: GREY, w: 8 }).show(at("E", "expand"), 0.3);
+      pillAt(ge, "EXPAND", 600, 570, at("E", "expand"), GREY, 40);
+      const V2 = ["0.5", "−0.4", "1.7", "−2.0", "…"];
+      const L2 = cellRow(ge, 70, 660, 5, 190, V2, ACC, at("E", "2048", 1), 0.05, 44);
+      pillAt(ge, "2048 CHECKS", 70, 790, at("E", "2048", 1), ACC, 40);
+      [1, 3].forEach((i) => { gone(L2[i], at("E", "lagao") - 0.05, 0.15); cell(ge, 70 + i * 190, 660, 182, 110, "0", GOOD, at("E", "lagao"), 44); });
+      pillAt(ge, "NEGATIVE → 0", 520, 790, at("E", "rule", 0), HOT, 40);
+      M.arrow(ge, { from: [540, 850], to: [540, 960], color: GREY, w: 8 }).show(at("E", "shrink"), 0.3);
+      pillAt(ge, "SHRINK", 600, 880, at("E", "shrink"), GREY, 40);
+      cellRow(ge, 330, 990, 3, 220, ["0.4", "0.9", "…"], GOOD, at("E", "512", 2), 0.08, 46);
+      pillAt(ge, "512 AGAIN", 70, 1130, at("E", "512", 2), GOOD, 40);
+      gone(ge, at("E", "isko") - 0.1, 0.3);
+      // the x and -x example
+      pillAt(E, "EXAMPLE", 790, 222, at("E", "isko"), GREY, 36);
+      cell(E, 330, 330, 300, 100, "CHECK 1: x", CYAN, at("E", "value", 0), 40); cell(E, 650, 330, 340, 100, "CHECK 2: −x", ACC, at("E", "minus", 0), 40);
+      pillAt(E, "RELU: NEGATIVE → 0", 70, 215 + 0, at("E", "ReLU"), HOT, 40);
+      const exRow = (y, xv, a, b, res, tAgar, tAns) => {
+        cell(E, 70, y, 230, 130, "x = " + xv, TEXT, tAgar, 44);
+        const c1 = cell(E, 330, y, 300, 130, a, a === "0" ? "#8FA3C7" : GOOD, tAgar + 0.6, 56), c2 = cell(E, 650, y, 340, 130, b, b === "0" ? "#8FA3C7" : GOOD, tAgar + 0.9, 56);
+        return cell(E, 330, y + 150, 660, 100, "SUM = " + res, ACC, tAns, 52); };
+      const sumA = exRow(480, "−3", "0", "3", "3", at("E", "agar", 0), at("E", "bachega", 0));
+      const sumB = exRow(780, "3", "3", "0", "3", at("E", "agar", 1), at("E", "bachega", 1));
+      pillAt(E, "SAME 3", 70, 1075, at("E", "donon", 1), GOOD, 46);
+      pillAt(E, "STRAIGHT LINE ✗", 420, 1075, at("E", "straight"), HOT, 46);
+      pillAt(E, "ONLY ILLUSTRATIVE", 70, 1200, at("E", "illustrative"), GREY, 42);
 
-      // ============ F: stack six blocks ============
+      // ============ F: encoder stack, decoder, decoder-only, repeat ============
       // diagram: F
-      pillAt(F, "STACK", 70, 215, S.F + 0.05, CYAN, 46);
-      const BY = (k) => 1110 - k * 135, blk = [];
-      for (let k = 0; k < 6; k++) { blk.push(part(F, 130, BY(k), 630, 112, "BLOCK " + (k + 1), k % 2 ? ACC : CYAN, S.F + 0.5 + k * 0.12, 46)); }
-      const tok = travel(F, 80, BY(0) + 56, 80, BY(1) + 56, at("F", "Words"), at("F", "uska") - at("F", "Words"), "", "#E8EEF9");
-      const tok2 = travel(F, 80, BY(1) + 56, 80, BY(5) + 56, at("F", "doosre"), 2.2, "", "#E8EEF9");
-      pillAt(F, "OUT → IN", 790, BY(1) + 20, at("F", "output"), GREY, 34);
-      pillAt(F, "6 BLOCKS", 70, 1275, at("F", "6"), ACC, 46);
-      const bigF = el(F, `left:420px;top:1262px;width:560px;text-align:right;font:800 66px ${COD};color:${ACC};white-space:nowrap`, "0"); show(bigF, at("F", "189"), { opacity: 0 }, 0.2);
-      counter(bigF, at("F", "189"), 1.4, 18914304);
+      const g1 = el(F, "left:0;top:0;width:1080px;height:1920px"), BYF = (k) => 1100 - k * 140;
+      pillAt(g1, "2017 PAPER", 70, 215, at("F", "2017"), GREY, 42); pillAt(g1, "ENCODER", 450, 215, at("F", "encoder"), CYAN, 42);
+      const L6 = [];
+      for (let k = 0; k < 6; k++) { const y = BYF(k), t0 = at("F", "6") + k * 0.1;
+        show(el(g1, `left:130px;top:${y}px;width:60px;height:110px;display:flex;align-items:center;justify-content:center;font:800 46px ${COD};color:${GREY}`, String(k + 1)), t0, { opacity: 0 }, 0.3);
+        const a = show(el(g1, `left:200px;top:${y}px;width:300px;height:110px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:16px 0 0 16px;border:4px solid ${CYAN};background:${ca(CYAN, 0.2)};font:700 34px ${COD};color:${CYAN};white-space:nowrap`, "ATTENTION"), t0, { opacity: 0, y: 14 }, 0.35);
+        const b = show(el(g1, `left:500px;top:${y}px;width:360px;height:110px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:0 16px 16px 0;border:4px solid ${ACC};background:${ca(ACC, 0.2)};font:700 34px ${COD};color:${ACC};white-space:nowrap`, "FEED-FORWARD"), t0, { opacity: 0, y: 14 }, 0.35);
+        L6.push([a, b]); }
+      pillAt(g1, "6 IDENTICAL LAYERS", 250, 1260, at("F", "identical"), ACC, 40);
+      tl.to(L6[0][0], { backgroundColor: ca(CYAN, 0.55), duration: 0.25, immediateRender: false }, at("F", "attention", 0)); tl.to(L6[0][1], { backgroundColor: ca(ACC, 0.55), duration: 0.25, immediateRender: false }, at("F", "feed-forward", 0));
+      gone(g1, at("F", "Decoder") - 0.1, 0.3);
+      const gd = el(F, "left:0;top:0;width:1080px;height:1920px");
+      pillAt(gd, "DECODER", 650, 215, at("F", "Decoder"), "#9B8CFF", 42);
+      part(gd, 160, 400, 760, 220, "MASKED ATTENTION", CYAN, at("F", "masked"), 44);
+      part(gd, 160, 690, 760, 220, "ENCODER ATTENTION", "#9B8CFF", at("F", "encoder-decoder"), 44);
+      part(gd, 160, 980, 760, 220, "FEED-FORWARD", ACC, at("F", "bhi"), 44);
+      gone(gd, at("F", "Modern") - 0.1, 0.3);
+      const g3 = el(F, "left:0;top:0;width:1080px;height:1920px");
+      pillAt(g3, "DECODER-ONLY LLM", 70, 215, at("F", "decoder-only"), GOOD, 42);
+      part(g3, 160, 340, 760, 220, "CAUSAL ATTENTION", CYAN, at("F", "causal"), 46);
+      part(g3, 160, 640, 760, 220, "FEED-FORWARD", ACC, at("F", "feed-forward", 1), 46);
+      M.arrow(g3, { from: [540, 566], to: [540, 634], color: GREY, w: 8 }).show(at("F", "feed-forward", 1), 0.3);
+      pillAt(g3, "× REPEAT", 380, 930, at("F", "repeat"), ACC, 46);
+      gone(g3, at("F", "ek", 1) - 0.1, 0.3);
+      const g4 = el(F, "left:0;top:0;width:1080px;height:1920px");
+      for (let k = 0; k < 4; k++) part(g4, 190, 1010 - k * 150, 540, 120, "BLOCK " + (k + 1), k % 2 ? ACC : CYAN, at("F", "ek", 1) + k * 0.1, 44);
+      travel(g4, 120, 1070, 120, 920, at("F", "output"), at("F", "input") - at("F", "output"), "", "#E8EEF9");
+      travel(g4, 120, 920, 120, 470, at("F", "tarah"), 3.0, "", "#E8EEF9");
+      pillAt(g4, "OUT → IN", 750, 910, at("F", "input"), GREY, 36);
+      pillAt(g4, "REFINES", 70, 215, at("F", "refine"), GOOD, 46);
 
-      // ============ G: same design, own numbers ============
+      // ============ G: recap ============
       // diagram: G
-      pillAt(G, "SAME DESIGN", 70, 215, at("G", "design"), CYAN, 44);
-      const gg = el(G, "left:0;top:0;width:1080px;height:1920px");
-      const VALS = [["0.31", "−1.2", "0.07", "2.4"], ["−0.8", "0.9", "1.6", "−0.2"], ["1.1", "0.04", "−2.0", "0.6"]];
-      VALS.forEach((vs, k) => { const y = 340 + k * 300;
-        show(glass(gg, 90, y, 900, 260, CYAN, 26), S.G + 0.1 + k * 0.15, { opacity: 0 }, 0.4);
-        show(el(gg, `left:120px;top:${y + 20}px;width:300px;height:60px;box-sizing:border-box;border-radius:14px;background:${ca(CYAN, 0.35)}`), S.G + 0.2 + k * 0.15, { opacity: 0 }, 0.3);
-        show(el(gg, `left:420px;top:${y + 20}px;width:540px;height:60px;box-sizing:border-box;border-radius:14px;background:${ca(ACC, 0.35)}`), S.G + 0.2 + k * 0.15, { opacity: 0 }, 0.3);
-        vs.forEach((v, i) => show(el(gg, `left:${120 + i * 210}px;top:${y + 130}px;width:190px;height:100px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:14px;border:3px solid ${GREY};font:700 46px ${COD};color:${v[0] === "−" ? "#FF8A9C" : TEXT}`, v), at("G", "apne") + i * 0.08, { opacity: 0, y: 10 }, 0.3)); });
-      pillAt(gg, "OWN NUMBERS", 70, 1290, at("G", "apne"), ACC, 44);
-      stampAt(gg, "NOT A COPY", 760, 1300, HOT, at("G", "copy"));
-      gone(gg, at("G", "bade") - 0.1, 0.3);
-      pillAt(G, "MORE BLOCKS", 70, 1190, at("G", "blocks"), ACC, 46); pillAt(G, "BIGGER SIZES", 520, 1190, at("G", "sizes"), CYAN, 46);
-      for (let i = 0; i < 30; i++) { const cx = 110 + (i % 6) * 150, cy = 330 + Math.floor(i / 6) * 160;
-        show(el(G, `left:${cx}px;top:${cy}px;width:130px;height:120px;box-sizing:border-box;border-radius:16px;border:3px solid ${CYAN};background:linear-gradient(90deg,${ca(CYAN, 0.35)} 33%,${ca(ACC, 0.35)} 33%)`), at("G", "bade") + 0.05 * i, { opacity: 0, scale: 0.85 }, 0.3); }
+      pillAt(G, "RECAP", 70, 215, at("G", "Recap"), CYAN, 46);
+      [["ATTENTION", "JOINS", CYAN, "attention", 340], ["FEED-FORWARD", "TRANSFORMS", ACC, "Feed-forward", 640], ["BLOCK STACK", "REPEATS", GOOD, "stack", 940]].forEach(([a, b, col, w, y]) => {
+        part(G, 70, y, 500, 220, a, col, at("G", w), 44); pillAt(G, b, 610, y + 60, at("G", w) + 0.3, col, 44); });
 
-      // ============ H: recap and quiz ============
+      // ============ H: second example and comment ============
       // diagram: H
-      const hh = el(H, "left:0;top:0;width:1080px;height:1920px");
-      [["ATTENTION", "JOINS", CYAN, "attention", 390], ["FEED-FORWARD", "THINKS", ACC, "feed-forward", 650], ["BLOCK", "STACKS", GOOD, "stack", 910]].forEach(([a, b, col, w, y]) => {
-        part(hh, 90, y, 520, 200, a, col, at("H", w), 46); pillAt(hh, b, 640, y + 50, at("H", w) + 0.3, col, 48); });
-      gone(hh, at("H", "batao") - 0.1, 0.3);
-      pillAt(H, "YOUR TURN", 70, 215, at("H", "batao"), CYAN, 44);
-      for (let i = 0; i < 10; i++) { const x = 90 + (i % 5) * 180, y = 330 + Math.floor(i / 5) * 190;
-        show(el(H, `left:${x}px;top:${y}px;width:160px;height:150px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:16px;border:3px solid ${ACC};background:${ca(ACC, 0.16)};font:700 46px ${COD};color:${TEXT}`, "3M"), at("H", "3") + 0.07 * i, { opacity: 0, scale: 0.85 }, 0.3); }
-      show(el(H, `left:90px;top:760px;width:900px;height:170px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:24px;border:5px solid ${ACC};background:${ca(ACC, 0.12)};font:800 100px ${COD};color:${ACC};white-space:nowrap`, "? M"), at("H", "kitne"), { opacity: 0, scale: 0.94 }, 0.4);
-      pillAt(H, "COMMENT", 70, 980, at("H", "jawab"), CYAN, 40);
-      show(el(H, `left:90px;top:1070px;width:900px;height:100px;box-sizing:border-box;border-radius:50px;border:2px solid rgba(150,175,215,.5);font:500 40px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("H", "caption"), { opacity: 0 });
-      const fb = pillAt(H, "+  FOLLOW", 300, 1210, at("H", "follow") - 0.5, ACC, 52);
-      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+      pillAt(H, "SECOND EXAMPLE", 70, 215, at("H", "second"), CYAN, 44);
+      const q1 = ["Ravi", "ne", "gilas", "giraya"], q2 = ["aur", "wo", "toot", "gaya"], qt1 = [at("H", "ravi", 0), at("H", "ne"), at("H", "gilas", 0), at("H", "giraya")], qt2 = [at("H", "aur"), at("H", "wo", 0), at("H", "toot", 0), at("H", "gaya")];
+      q1.forEach((w, i) => chip(H, WX[i], 340, CW, w, CYAN, qt1[i], 50));
+      q2.forEach((w, i) => chip(H, WX[i], 530, CW, w, CYAN, qt2[i], 50));
+      show(el(H, `left:${WX[1] - 10}px;top:520px;width:${CW + 20}px;height:140px;box-sizing:border-box;border-radius:26px;border:5px solid ${HOT}`), at("H", "wo", 1), { opacity: 0, scale: 1.06 }, 0.3);
+      pillAt(H, "WHO?", 400, 700, at("H", "ya"), HOT, 46);
+      show(el(H, `left:${WX[2] - 12}px;top:520px;width:${2 * CW + 49}px;height:140px;box-sizing:border-box;border-radius:26px;border:5px solid ${ACC};background:${ca(ACC, 0.14)}`), at("H", "Clue"), { opacity: 0, scale: 1.05 }, 0.3);
+      pillAt(H, "CLUE", 600, 700, at("H", "Clue"), ACC, 46);
+      pillAt(H, "CAN BREAK ✓", 380, 795, at("H", "gilas", 1), GOOD, 38); pillAt(H, "NO ✗", 70, 795, at("H", "ravi", 2), HOT, 38);
+      pillAt(H, "COMMENT", 70, 940, at("H", "Comment"), CYAN, 40);
+      show(el(H, `left:90px;top:1030px;width:900px;height:100px;box-sizing:border-box;border-radius:50px;border:2px solid rgba(150,175,215,.5);font:500 40px ${COD};color:#8592AD;display:flex;align-items:center;padding:0 30px`, "Add a comment..."), at("H", "batao"), { opacity: 0 });
+      pillAt(H, "YOUR EXAMPLE?", 300, 1170, at("H", "tumhara"), ACC, 46);
 
       M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
-      M.finish({ kw: { Transformer: "gold", block: "cyan", stack: "cyan", attention: "gold", Attention: "gold", "feed-forward": "gold", numbers: "gold", tihai: "gold", ginti: "cyan", copy: "hot", follow: "gold" } });
+      M.finish({ kw: { Transformer: "gold", block: "cyan", stack: "cyan", attention: "gold", Attention: "gold", "feed-forward": "gold", "Feed-forward": "gold", Clue: "gold", weights: "gold", zero: "good", ReLU: "gold", expand: "cyan", shrink: "cyan", Comment: "gold" } });
       window.__timelines["main"] = tl;
     </script>
   </body>
