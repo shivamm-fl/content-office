@@ -1,0 +1,41 @@
+{
+  "local_tests_passed": 25846,
+  "leetcode_accepted": false,
+  "studio_started": false,
+  "code_sha256": "42966424f712ade09e49df1188266fc9d499b9e306862f24565cf91683aa6663",
+  "example": [
+    1,
+    6,
+    2,
+    5,
+    4
+  ],
+  "answer": 12,
+  "trace": [
+    {
+      "left": 0,
+      "right": 4,
+      "area": 4,
+      "best": 4
+    },
+    {
+      "left": 1,
+      "right": 4,
+      "area": 12,
+      "best": 12
+    },
+    {
+      "left": 1,
+      "right": 3,
+      "area": 10,
+      "best": 12
+    },
+    {
+      "left": 1,
+      "right": 2,
+      "area": 2,
+      "best": 12
+    }
+  ],
+  "oracle": "independent all-pairs area enumeration, exhaustive height sequences, seeded arrays and constructed n=100000 boundaries; input preserved"
+}

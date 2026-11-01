@@ -13,7 +13,7 @@ import re
 import sys
 from pathlib import Path
 
-HARD = [re.compile(p) for p in (r"^state entry", r"^files exist", r"^video 1080x1920", r"^audio aac", r"^length \d+-\d+ s$", r"^frames change over time", r"^video matches the composition", r"^narration is the owner's locked script")]
+HARD = [re.compile(p) for p in (r"^state entry", r"^files exist", r"^video 1080x1920", r"^audio aac", r"^length \d+-\d+ s$", r"^frames change over time", r"^video matches the composition", r"^narration is the owner's locked script", r"^coding Accepted and teaching contract$", r"^coding lesson length 60-120 s$", r"^coding teaching independently reviewed$", r"^coding on-screen Accepted code$")]
 
 
 def checks(verify: dict) -> list[dict]:
@@ -24,7 +24,12 @@ def broken(verify: dict) -> list[dict]:
     """The failed checks that make the reel unusable; with no gate report at all, the missing report itself."""
     if not checks(verify):
         return [{"name": "gate report", "ok": False, "detail": str(verify.get("why") or "no gate report")}]
-    return [c for c in checks(verify) if not c.get("ok") and any(p.match(str(c.get("name", ""))) for p in HARD)]
+    missing_checks = []
+    if re.fullmatch(r"[bp]\d{2,4}", str(verify.get("reel", ""))):
+        required = {"coding Accepted and teaching contract", "coding lesson length 60-120 s", "coding teaching independently reviewed", "coding on-screen Accepted code"}
+        missing = required - {c.get("name") for c in checks(verify)}
+        missing_checks = [{"name": name, "ok": False, "detail": "required coding check missing"} for name in sorted(missing)]
+    return missing_checks + [c for c in checks(verify) if not c.get("ok") and any(p.match(str(c.get("name", ""))) for p in HARD)]
 
 
 def notes(verify: dict) -> list[str]:

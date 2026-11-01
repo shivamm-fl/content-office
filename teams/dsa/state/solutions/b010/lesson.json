@@ -1,0 +1,24 @@
+{
+  "id":"b010","slug":"container-with-most-water","number":"11","title":"Container With Most Water","difficulty":"Medium",
+  "sources":["https://leetcode.com/problems/container-with-most-water/description/"],
+  "copy":{
+    "A":"@hook Container problem में shorter boundary ही क्यों बदलती है? | Given array: one, six, two, five, four. ये line heights हैं। | Two lines चुनकर maximum water चाहिए। Area है smaller height into index gap। Best pair indices one और four का area twelve है।",
+    "B":"Brute force: हर pair का area निकालो और largest रखो। | Five lines पर ten pairs check होंगे। | बड़े input में हर left boundary के लिए सारे right partners फिर घूमते हैं: O of n squared work।",
+    "C":"सिर्फ widest pair चुनने वाला shortcut भी गलत है। First और last की width four है, लेकिन smaller height one: area four। | अंदर heights six और four की width three है; area twelve। | इसलिए width अकेली answer तय नहीं करती।",
+    "D":"दोनों ends पर pointers रखो। Shorter boundary को hold करके दूसरा pointer अंदर लाओ, तो width घटेगी और height limit बढ़ेगी नहीं। | इसलिए उस shorter boundary का कोई अंदर वाला partner current area को beat नहीं कर सकता। उसे safely discard करो। | Shorter pointer बदलने से ही limiting height बढ़ने की possibility मिलती है। Equal heights हों तो कोई भी side बदल सकते हैं।",
+    "E":"Dry run: indices zero और four। Height one, width four: area four, best four। | Left आगे: heights six और four, width three। Area twelve, best twelve। | Right अंदर: heights six और five, width two। Area ten; best twelve ही रहेगा। | फिर heights six और two, width one: area two। Pointers मिले; answer twelve।",
+    "F":"Given array: three, three. Gap one है, area three; equal heights पर भी move safe है। | Given array: zero, zero. Answer zero है। | Width index difference है, चुनी lines की गिनती नहीं।",
+    "G":"Code में area और best update करने के बाद shorter side move होती है। | हर iteration में one pointer अंदर: O of n time, O of one extra space। | Taller boundary को ही move करना safe क्यों नहीं है? Comment करो।"
+  },
+  "teaching":{
+    "problem":"Choose two vertical boundaries from nonnegative heights to maximize min(height[left],height[right]) times their index gap. Original [1,6,2,5,4] returns12 from indices1 and4.",
+    "brute_force":"Enumerate all pairs; five lines give ten pairs. Repeated partner scans take O(n squared) time and constant extra space.",
+    "bottleneck":"All-pairs work is quadratic. A widest-pair-only shortcut also fails: endpoints give width4 times height1 equals4, while the narrower pair at indices1 and4 gives width3 times height4 equals12.",
+    "optimization":"Start at both ends, measure area and update the global best, then discard a shorter boundary. Holding it while shrinking width cannot increase the limiting height, so no inner partner with that boundary can beat the current area. Equal boundary heights permit moving either pointer.",
+    "dry_run":"[1,6,2,5,4]: (0,4) gives area4/best4; (1,4) area12/best12; (1,3) area10/best12; (1,2) area2/best12. Converge and return12. [3,3] returns3, [0,0] returns0; width is the index difference, not a count of lines.",
+    "complexity":"One pointer moves inward on every iteration, at most n-1 iterations: O(n) time and O(1) extra space. No sorting, copying or auxiliary arrays are used."
+  },
+  "teaching_scenes":{"problem":["A"],"brute_force":["B"],"bottleneck":["C"],"optimization":["D"],"dry_run":["E","F"],"complexity":["G"]},
+  "cues":[["click","B",1,0],["err","C",0,0],["ok","E",1,0],["click","F",0,0]],
+  "narration_numbers":"Given array input; all values, signs, index values and counts in English. Technical Hinglish and owner tempo 0.9. Actual Accepted code must be visible."
+}

@@ -17,6 +17,8 @@ import { gunzipSync, gzipSync } from "node:zlib";
 import { mapClaudeEvent, newMapState, parseFrontmatter, roster } from "./events.mjs";
 import { callOps, OPS_TOOLS } from "./ops.mjs";
 import { makeStudio, STUDIO_TOOLS } from "./studio.mjs";
+import { makeLeetcode, LEETCODE_TOOLS } from "./leetcode.mjs";
+import { validateCodingItem } from "../../apps/api/src/coding.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "../..");
@@ -186,6 +188,10 @@ function startMcp(ctx) {
       return text(`Task left for ${to}. The owner decides when it starts.`);
     }
     if (name === "request_build") {
+      if (TEAM === "dsa") {
+        try { await validateCodingItem(a.item_id, a.item ?? {}, process.env.CODING_PROOF_SECRET ?? ""); }
+        catch (e) { return text(`The studio refused: ${e.message}`, true); }
+      }
       const r = await fetch(`${OFFICE}/api/runner/build?team=${TEAM}&run=${RUN_ID}`, {
         method: "POST", headers: { "X-Run-Token": ctx.token, "Content-Type": "application/json" },
         body: JSON.stringify({ item_id: a.item_id, item: a.item, script: a.script, notes: a.notes }),
@@ -240,6 +246,7 @@ function startMcp(ctx) {
       if (ans.office_note) parts.push(String(ans.office_note));
       return text(parts.join("\n\n"));
     }
+    if (ctx.leetcode && LEETCODE_TOOLS.some((t) => t.name === name)) return ctx.leetcode.call(name, a);
     if (ctx.studio && STUDIO_TOOLS.some((t) => t.name === name)) {
       try { return await ctx.studio.call(name, a); } catch (e) { return text(e.message, true); }
     }
@@ -258,7 +265,7 @@ function startMcp(ctx) {
         return { jsonrpc: "2.0", id: m.id, result: { protocolVersion: m.params?.protocolVersion || "2025-06-18", capabilities: { tools: {} }, serverInfo: { name: "office", version: "1.0.0" } } };
       }
       if (m.method === "ping") return { jsonrpc: "2.0", id: m.id, result: {} };
-      if (m.method === "tools/list") return { jsonrpc: "2.0", id: m.id, result: { tools: [...TOOLS, ...(ctx.studio ? STUDIO_TOOLS : []), ...(ctx.company ? OPS_TOOLS : [])] } };
+      if (m.method === "tools/list") return { jsonrpc: "2.0", id: m.id, result: { tools: [...TOOLS, ...(ctx.studio ? STUDIO_TOOLS : []), ...(ctx.leetcode ? LEETCODE_TOOLS : []), ...(ctx.company ? OPS_TOOLS : [])] } };
       if (m.method === "tools/call") {
         try { return { jsonrpc: "2.0", id: m.id, result: await call(m.params?.name, m.params?.arguments || {}) }; }
         catch (e) { return { jsonrpc: "2.0", id: m.id, result: text(`office tool failed: ${e.message}`, true) }; }
@@ -360,6 +367,12 @@ async function main() {
   const work = await claim();
   log(`claimed: agent ${work.agent.slug}, ${work.messages.length} message(s)`);
   const ctx = { token: work.token, team: work.team, company: work.team.scope === "company", waiting: 0, link: null, resolveAsk: () => undefined, currentAgent: () => work.agent.slug };
+  if (TEAM === "dsa") ctx.leetcode = makeLeetcode({ teamDir: TEAM_DIR, reserveAttempt: async (item) => {
+    const r = await fetch(`${OFFICE}/api/runner/coding-attempt?team=${TEAM}&run=${RUN_ID}`, {
+      method: "POST", headers: { "X-Run-Token": ctx.token, "Content-Type": "application/json" }, body: JSON.stringify({ item }),
+    });
+    if (!r.ok) throw new Error((await r.json()).error ?? "submission budget unavailable");
+  } });
   const state = newMapState(work.agent.slug);
   ctx.roster = () => roster(state);
   if (work.run.profile === "studio") {

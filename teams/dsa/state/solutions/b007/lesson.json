@@ -1,0 +1,24 @@
+{
+  "id":"b007","slug":"find-minimum-in-rotated-sorted-array","number":"153","title":"Find Minimum in Rotated Sorted Array","difficulty":"Medium",
+  "sources":["https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/"],
+  "copy":{
+    "A":"@hook Rotated sorted array का minimum जल्दी कैसे मिलेगा? | Given array: seven, nine, one, three, five. | Values unique हैं। Sorted array rotate हुआ है; minimum one चाहिए।",
+    "B":"Brute force: हर value पढ़ो और smallest याद रखो। | Seven, seven, one, one, one: scan का running minimum। | Answer सही है, लेकिन O of n time लगता है। Problem का target O of log n है।",
+    "C":"Rotation के कारण first element minimum होना जरूरी नहीं। यहाँ seven के बाद आगे one है। | फिर भी पूरा order खत्म नहीं हुआ: array में सिर्फ rotation वाला drop है। | इसी structure से हर बार आधा search area हटा सकते हैं।",
+    "D":"Middle value को right endpoint से compare करो। | Middle बड़ा है, तो rotation drop middle के बाद है; minimum strictly right में होगा। Left को middle plus one करो। | Otherwise middle से right तक sorted है। Minimum middle या उसके left में है; right को middle रखो।",
+    "E":"Dry run: left index zero, right four। Middle index two: value one, right value five। | One छोटा है, इसलिए right index two करो। Middle को हटाया नहीं। | अब middle index one: nine बड़ा है right के one से। Left index two करो। दोनों pointers मिले; answer one।",
+    "F":"पहली comparison में right को middle minus one करते, तो actual minimum ही हट जाता। | Already sorted input भी valid है: Given array: one, three, five. यही rule first element तक पहुँचता है। | Single element हो, तो loop चलता ही नहीं।",
+    "G":"हर iteration में candidate interval लगभग आधा होता है: O of log n time, O of one extra space। | Linear scan की जगह sorted structure काम आया। | Smaller middle मिलने पर उसे retain क्यों करते हैं? Comment करो।"
+  },
+  "teaching":{
+    "problem":"Return the minimum of an ascending sorted and rotated array of unique elements. Original worked input [7,9,1,3,5] returns 1; official target is O(log n).",
+    "brute_force":"Read every value and keep a running minimum: [7,7,1,1,1], O(n) time and O(1) extra space.",
+    "bottleneck":"Linear scan does not exploit sorted order and misses the required logarithmic target. Rotation means the first element is not necessarily smallest, but the array retains at most one descending boundary.",
+    "optimization":"Maintain an interval containing the minimum. If nums[mid]>nums[right], the rotation drop and minimum lie strictly after mid, so left=mid+1. Otherwise mid..right is sorted and its minimum is at mid, so the global minimum is at mid or left of it; retain mid with right=mid.",
+    "dry_run":"[7,9,1,3,5]: (left,right,mid)=(0,4,2); 1<5 gives right=2. Then (0,2,1); 9>1 gives left=2. Converge at index 2, return 1. right=mid-1 would incorrectly remove that minimum. [1,3,5] and a single element work too.",
+    "complexity":"The interval shrinks to roughly half every iteration, yielding O(log n) time and O(1) extra space; baseline scan is O(n) time. Unique elements are required by this problem."
+  },
+  "teaching_scenes":{"problem":["A"],"brute_force":["B"],"bottleneck":["C"],"optimization":["D"],"dry_run":["E","F"],"complexity":["G"]},
+  "cues":[["click","B",1,0],["click","D",1,0],["ok","E",2,0],["err","F",0,0]],
+  "narration_numbers":"Explicit Given array input, all values, indices and calculation counts in English; technical Hinglish; owner tempo 0.9."
+}

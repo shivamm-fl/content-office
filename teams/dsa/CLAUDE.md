@@ -3,9 +3,17 @@
 Learnvora DSA teaches DSA to Hindi and Hinglish speakers (people preparing for coding interviews) on Instagram (@dsa.learnvora). It is one of three Learnvora floors (ai.learnvora, dsa.learnvora, systemdesign.learnvora). This folder is the team's workspace in the content office: the owner starts the work day from the office app, approves the finished reels, and posts them. Agents never post.
 
 ## The goal
+For Blind75/POTD, read **`docs-notes/blind75-runbook.md`** first: owner corrections, code QA, actual batch progress, covers and Office handoff; it distinguishes local changes from deployed automation.
+
 **Grow the handle**: more people who watch a reel to the end, save it, share it and follow, week after week. That is the team's single goal and the measure of every choice. You are a small reel team that owns this result, not stations of a pipeline: talk to each other, ask each other early, challenge each other's work, try things, keep what works and write down what you learned (`state/learnings.md`, `state/team_playbook.md`, `state/experiments.md`). Every day the team should be a little better than the day before. **Value first (company rule 8): every reel teaches; hooks and growth tuning never cost a reel its clarity or value, and nothing filler sits between the hook and the first line that teaches.**
 
 ## The series (owner, 2026-10-18)
+**Additional tracks (owner, 2026-11-01): Blind 75 (`blind75`, b001–b075) and LeetCode POTD (`potd`, p0001 onward).** Read `docs-notes/coding-series.md` and `prompts/coding-day.md`. These lessons MUST run 60–120 seconds and teach problem → brute force → its concrete bottleneck/failure → optimization WITH reasoning → dry run → time and extra-space complexity. This newer owner rule overrides older length, counter, answer-first, analogy and packaging rules for these two tracks only. The audience is working engineers; use technical Hinglish. A genuine signed LeetCode Accepted result bound to the exact Python code is mandatory BEFORE studio production. No local-test substitute or invented proof. Their automatic coding day is separate from the owner-started 150-day series; owner approval and posting still apply.
+
+**Newer number-reading correction (owner, 2026-11-01): current b005 and future coding reels introduce inputs with “Given array:” and read array values, negative signs, computed values and numeric counts in English. Rest stays technical Hinglish, tempo 0.9. This overrides the older Hindi-number rule below. Earlier b001–b004 must not be regenerated for this correction.**
+
+**On-screen code correction (owner, 2026-11-01): actual Accepted Python code MUST be visible in every coding reel, in readable chunks synchronized with the explanation. A separate solution.py file does not satisfy this. Repair every missing-code reel, explicitly including b004, b006, b007, b008 and b009; this newer explicit instruction authorizes those video updates. Preserve the teaching flow, voice tempo and 60–120s duration. Verify rendered code frames and source coverage before marking an export ready.**
+
 **150 Days of DSA**: one idea a day, Day 1 to Day 150, in the order of `roadmap/series-150.json`. Track `series`, ids `d001` to `d150`: the id number is the day. `docs-notes/series-style.md` has the day types, the arcs and the caption rule; `docs-notes/teaching-flow.md` has how a day is taught (beats, detail checklist, pacing). The same series runs on the other two Learnvora handles.
 
 ## Where things live (paths are relative to this folder)

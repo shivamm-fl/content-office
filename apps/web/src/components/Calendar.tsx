@@ -186,6 +186,33 @@ function PostLine({ p }: { p: PostRecord }) {
   );
 }
 
+function CodingControls() {
+  type Settings = { potd: boolean; blind75: boolean; configured: boolean };
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    let live = true;
+    api<Settings>("/api/teams/dsa/coding").then((s) => { if (live) setSettings(s); }).catch((e: Error) => { if (live) setError(e.message); });
+    return () => { live = false; };
+  }, []);
+  const toggle = async (track: "potd" | "blind75") => {
+    if (!settings) return;
+    setBusy(true); setError("");
+    try { setSettings(await api<Settings>("/api/teams/dsa/coding", { method: "POST", json: { [track]: !settings[track] } })); }
+    catch (e) { setError((e as Error).message); } finally { setBusy(false); }
+  };
+  return <section className="rounded-xl border border-wall bg-desk px-4 py-3" aria-label="Coding series automation">
+    <p className="text-[14px] font-semibold">Daily coding reels</p>
+    <p className="mt-1 text-[12.5px] text-dim">{settings?.configured ? "Starts at 05:40 IST. LeetCode Accepted first, then a 1–2 minute lesson for your review." : "LeetCode connection needs setup before automatic production can start."}</p>
+    {settings && <div className="mt-3 flex flex-wrap gap-2">{([ ["potd", "LeetCode POTD"], ["blind75", "Blind 75"] ] as const).map(([id, label]) =>
+      <button key={id} role="switch" aria-checked={settings[id]} disabled={busy} onClick={() => toggle(id)} className="rounded-lg border border-wall px-3 py-2 text-xs">{label}: {settings[id] ? (settings.configured ? "on" : "enabled after setup") : "paused"}</button>
+    )}</div>}
+    <p className="mt-2 text-[12px] text-dim">Pausing stops future daily starts. Reels already being made continue; you approve and post finished reels.</p>
+    {error && <p role="alert" className="mt-2 text-xs text-coral">{error}</p>}
+  </section>;
+}
+
 export function CalendarView({ office, focus }: { office: Office; focus: string | null }) {
   const { team } = office.state!;
   const { loadCalendar } = office;
@@ -222,6 +249,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
   return (
     <Screen title={`${team.name} calendar`} right={<span className="text-xs text-dim">{cal ? `${cal.clock} IST` : ""}</span>}>
       <div className="space-y-6 px-4 py-4">
+        {team.slug === "dsa" && <CodingControls key={team.slug} />}
         <div className="flex items-center gap-2 text-[13px]">
           <Pill className="border-gold/70 text-gold">{team.name} floor</Pill>
           <span className="text-dim">{team.handles.map((h) => h.handle).join(", ")}</span>

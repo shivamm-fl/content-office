@@ -1,0 +1,24 @@
+{
+  "id":"b006","slug":"maximum-product-subarray","number":"152","title":"Maximum Product Subarray","difficulty":"Medium",
+  "sources":["https://leetcode.com/problems/maximum-product-subarray/description/"],
+  "copy":{
+    "A":"@hook Maximum Product Subarray में सिर्फ maximum रखने से क्या छूटेगा? | Given array: minus two, three, minus four. | Non-empty contiguous subarray का maximum product चाहिए। पूरे array का product twenty four है।",
+    "B":"Brute force में हर start चुनो, फिर right end बढ़ाते हुए running product निकालो। | Three elements पर six ranges check होंगी। | बड़े array पर O of n squared work: वही factors अलग starts से फिर multiply होते हैं।",
+    "C":"अब सिर्फ maximum ending product रखने वाला shortcut देखो। | Three पर maximum three है। Minus four आया, तो three into minus four, minus twelve। | लेकिन पिछला minimum minus six था। Minus six into minus four, twenty four! उसे खोना गलती है।",
+    "D":"Negative से multiply करने पर order उलटता है: सबसे छोटा product सबसे बड़ा बन सकता है। | इसलिए maximum और minimum ending products, दोनों रखो। | Current value अकेली, old maximum into current, old minimum into current: इन्हीं three candidates से नया maximum और minimum चुनो।",
+    "E":"Minus two से शुरू: maximum और minimum दोनों minus two। | Three आया: candidates three, minus six, minus six। Maximum three, minimum minus six। | Minus four पर candidates minus four, minus twelve, twenty four। नया maximum twenty four; global best भी twenty four।",
+    "F":"Zero पर भी नई शुरुआत possible है। | Given array: minus two, zero, minus three. Answer zero है। | Minus two और minus three को select करके product six नहीं ले सकते: बीच का zero skip करना contiguous rule तोड़ेगा।",
+    "G":"हर element पर three candidates: O of n time, O of one extra space। | Brute force quadratic था। दोनों new states पुराने maximum और minimum से निकालो। | Minimum product को याद रखना कब useful होगा? Comment करो।"
+  },
+  "teaching":{
+    "problem":"Find the largest product of a nonempty contiguous subarray; [-2,3,-4] yields 24 from the entire input.",
+    "brute_force":"For each start extend the right endpoint and update a running product, enumerating all six ranges for three elements in O(n squared) time.",
+    "bottleneck":"Different starts reprocess overlapping factors. Keeping only the maximum ending product is also insufficient: it loses prior minimum -6, which multiplies by -4 to make 24.",
+    "optimization":"Multiplication by a negative reverses order, so either prior extreme can become the next maximum or minimum. Every ending subarray either starts at current x or extends a prior ending subarray; compare x, old_high*x and old_low*x for both new extremes.",
+    "dry_run":"For [-2,3,-4], high is [-2,3,24], low [-2,-6,-12], best [-2,3,24]. At -4 the candidates are -4,-12,24. [-2,0,-3] returns 0; skipping the middle zero is not a contiguous subarray.",
+    "complexity":"Three candidates per element give O(n) time and O(1) extra space. All-ranges running-product brute force is O(n squared) time and O(1) extra space."
+  },
+  "teaching_scenes":{"problem":["A"],"brute_force":["B"],"bottleneck":["C"],"optimization":["D"],"dry_run":["E","F"],"complexity":["G"]},
+  "cues":[["click","B",1,0],["err","C",1,0],["ok","E",2,0],["err","F",2,0]],
+  "narration_numbers":"Given array introduction and English number/sign/calculation readings, owner preference from b005 onward."
+}

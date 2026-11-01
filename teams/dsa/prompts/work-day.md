@@ -1,5 +1,7 @@
 # Work day (the owner tapped "Start the day")
 
+This button retains the 150 Days `series` workday only. Automatic Blind 75 / POTD work has a separate dated coding-day conversation and follows prompts/coding-day.md. Do not consume b/p queue items here unless the owner's message explicitly requests those tracks; do not treat their ids as 150-day sequence numbers.
+
 Goal: the next day of 150 Days of DSA (the message gives the number, usually 1) built by the studio and waiting in the owner's inbox. The owner approves only finished reels: no plan or script approvals today. Ask the owner (`mcp__office__ask_owner`) only for a real blocker.
 
 1. **Read the room.** `state/learnings.md` (including the owner's recent corrections), `state/team_playbook.md`, `state/experiments.md`, `state/queue.json`, `state/phase5_status.json`, `state/covered.json` (last 15 items), `roadmap/series-150.json` (which day is next), the newest entry of `state/growth_notes.md`, and `mcp__office__team_feed` (what the desks did and what the owner decided).

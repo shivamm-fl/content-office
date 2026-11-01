@@ -45,12 +45,34 @@ for it in items:
         problems.append(f"{rid}: id prefix must match track {track} ({PREFIX[track]}##)")
     elif int(rid[1:]) < ID_START.get(track, 0):
         problems.append(f"{rid}: office ids start at {PREFIX[track]}{ID_START[track]} (state/config.json id_start)")
-    if SERIES_DAYS:
+    if SERIES_DAYS and track == "series":
         day = it.get("day")
         if not isinstance(day, int) or not 1 <= day <= SERIES_DAYS:
             problems.append(f"{rid}: day must be a whole number from 1 to {SERIES_DAYS} (the day of the series)")
         elif re.fullmatch(r"[a-z]\d+", rid) and int(rid[1:]) != day:
             problems.append(f"{rid}: the id number is the day, but day is {day}")
+    if track in ("blind75", "potd"):
+        if not 60 <= float(it.get("length_target_s") or 0) <= 120:
+            problems.append(f"{rid}: coding lessons must target 60–120 seconds")
+        if track == "blind75":
+            manifest = json.loads((ROOT / "roadmap/blind75.json").read_text(encoding="utf-8"))
+            row = next((p for p in manifest["problems"] if p["id"] == rid), None)
+            if not row or row["slug"] != it.get("problem", {}).get("slug") or row["position"] != it.get("position"):
+                problems.append(f"{rid}: not the canonical Blind 75 problem/position")
+        else:
+            from datetime import date
+            try:
+                day = date.fromisoformat(it["challenge_date"])
+                n = (day - date(2026, 11, 1)).days + 1
+                if rid != f"p{n:04d}" or not 1 <= n <= 9999:
+                    raise ValueError("date mismatch")
+            except (ValueError, KeyError, TypeError):
+                problems.append(f"{rid}: invalid UTC challenge_date/POTD id")
+        for beat in ("problem", "brute_force", "bottleneck", "optimization", "dry_run", "complexity"):
+            if len(str(it.get("teaching", {}).get(beat, "")).split()) < 5:
+                problems.append(f"{rid}: teaching.{beat} must explain the concrete example/reasoning")
+        if not it.get("solution_code") or not it.get("accepted_proof"):
+            problems.append(f"{rid}: solve and obtain trusted Accepted evidence before queuing a reel")
     if rid in seen:
         problems.append(f"{rid}: duplicate id")
     seen.add(rid)

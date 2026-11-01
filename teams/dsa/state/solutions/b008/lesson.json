@@ -1,0 +1,24 @@
+{
+  "id":"b008","slug":"search-in-rotated-sorted-array","number":"33","title":"Search in Rotated Sorted Array","difficulty":"Medium",
+  "sources":["https://leetcode.com/problems/search-in-rotated-sorted-array/description/"],
+  "copy":{
+    "A":"@hook Rotated array में normal binary search क्यों चूकेगी? | Given array: six, eight, two, four, five. Target eight है। | Unique values वाले इस array में target का index one लौटाना है; absent हो तो minus one।",
+    "B":"Brute force: left से हर value को target से compare करो। | Six match नहीं, eight match है, तो index one मिल गया। | लेकिन target आखिर में या absent हो, तो पूरा array पढ़ना पड़ेगा: worst case O of n।",
+    "C":"Normal binary search यहाँ फँसती है। Middle value two है; eight बड़ा है, इसलिए blindly right जाना गलत होगा। | Eight तो left में है! Rotation ने पूरे interval का sorted होना तोड़ा है।",
+    "D":"लेकिन सिर्फ rotation वाला drop है, इसलिए middle के दोनों तरफ में कम से कम one half sorted होगा। | Left value middle से छोटी या equal है, तो left half sorted; otherwise right half sorted। | Target sorted half की value range में हो तो वही half रखो, वरना दूसरा। Middle match पहले check करो।",
+    "E":"Dry run: middle index two, value two। Right half two, four, five sorted है; eight उसकी range से बाहर। Right index one करो। | अब interval six, eight। Middle six है; sorted left half में eight नहीं, तो left index one करो। | अब middle eight match; return index one।",
+    "F":"Target seven हो, तो intervals indices zero to four, zero to one, one to one, फिर empty। | Left right से आगे निकला; return minus one। | Equality check पहले करने से single remaining value भी छूटती नहीं।",
+    "G":"हर बार sorted half पहचानकर लगभग आधा interval हटाया: O of log n time, O of one extra space। | Blind comparison की जगह sorted range ने direction तय की। | Target middle से बड़ा हो, फिर भी left क्यों जाना पड़ सकता है? Comment करो।"
+  },
+  "teaching":{
+    "problem":"Return the target's index in an ascending, possibly rotated array with unique values, or -1 when absent. Original [6,8,2,4,5], target 8 returns index 1.",
+    "brute_force":"Compare from left to right: 6 misses and 8 matches at index 1. If the target is last or absent, linear scan takes O(n) worst-case time.",
+    "bottleneck":"Linear scan ignores retained order. Ordinary binary search based only on target>nums[mid] also fails: 8>2 would wrongly discard the left side containing 8.",
+    "optimization":"At most one descending rotation boundary means at least one half around mid is sorted. Check mid equality first. nums[left]<=nums[mid] identifies a sorted left half; otherwise right is sorted. Test whether target lies inside that half's numeric interval, then retain that half or its complement.",
+    "dry_run":"[6,8,2,4,5], target 8: mid index2 value2, sorted right [2,4,5] excludes8, so right=1. Then mid index0 value6, sorted left [6] excludes8, so left=1. Mid1 matches8, return1. Target7 follows intervals [0,4],[0,1],[1,1],empty and returns-1.",
+    "complexity":"Each iteration removes roughly half the candidate interval: O(log n) time, O(1) extra space. Unique values are required; linear scan is O(n) worst case."
+  },
+  "teaching_scenes":{"problem":["A"],"brute_force":["B"],"bottleneck":["C"],"optimization":["D"],"dry_run":["E","F"],"complexity":["G"]},
+  "cues":[["click","B",1,0],["err","C",1,0],["ok","E",2,0],["click","F",1,0]],
+  "narration_numbers":"Given array introduction; input values, signs, indices, calculated values and counts in English. Technical Hinglish, owner tempo 0.9."
+}

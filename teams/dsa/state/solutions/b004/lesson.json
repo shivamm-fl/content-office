@@ -1,0 +1,77 @@
+{
+  "id": "b004",
+  "slug": "product-of-array-except-self",
+  "number": "238",
+  "title": "Product of Array Except Self",
+  "difficulty": "Medium",
+  "cover": "Product Except Self: Two Passes, No Division",
+  "sources": [
+    "https://leetcode.com/problems/product-of-array-except-self/description/"
+  ],
+  "copy": {
+    "A": "@hook Product of Array Except Self बिना division कैसे निकालोगे? | Array दो, तीन, चार, पाँच। | हर index पर बाकी सबका product चाहिए। Index एक पर तीन हटेगा: दो into चार into पाँच, चालीस।",
+    "B": "Brute force: हर index के लिए बाकी सारे elements multiply करो। | पहले तीन into चार into पाँच: साठ। | फिर दो into चार into पाँच: चालीस। हर answer के लिए नई scan।",
+    "C": "एक ही elements के products बार-बार बन रहे हैं। | एक लाख elements पर लगभग दस अरब multiplications: quadratic work। | Total product को current value से divide करना allowed ही नहीं है।",
+    "D": "Current element हटाओ, तो बचता क्या है? | उसके strictly left के elements और strictly right के elements। | इसलिए answer है left product into right product। तीन को हटाने पर दो into बीस, चालीस।",
+    "E": "Left से right चलो। Current value multiply करने से पहले running prefix को answer में रखो। | Prefix row: एक, दो, छह, चौबीस। | पहले element के left कुछ नहीं, इसलिए product एक।",
+    "F": "अब right से left, suffix शुरू में एक। | आखिरी index: चौबीस into एक, चौबीस। फिर suffix पाँच। | अगले पर छह into पाँच, तीस। फिर suffix बीस। | अगले पर दो into बीस, चालीस; पहले पर एक into साठ, साठ।",
+    "G": "Zero भी अपने आप handle होता है। | दो, zero, चार पर output zero, आठ, zero। | सिर्फ zero वाले index का answer दो into चार है। Division की ज़रूरत नहीं।",
+    "H": "दो passes: O of n time। | Output array O of n जगह लेता है। उसे exclude करें, तो सिर्फ running prefix और suffix: O of one extra space। | Prefix store पहले होगा या multiply पहले? Comment करो।"
+  },
+  "teaching": {
+    "problem": "For [2,3,4,5], each output excludes its own input element; output [60,40,30,24] without division.",
+    "brute_force": "For every index scan and multiply all other n-1 values, e.g. 3*4*5=60 and 2*4*5=40.",
+    "bottleneck": "The same factors are multiplied repeatedly across n(n-1) operations; n=100000 gives 9999900000 multiplications. Division is forbidden by the problem.",
+    "optimization": "Excluding an index partitions the remaining elements into a strictly-left prefix and strictly-right suffix. Their products multiply to the required output; store prefix before consuming the current element and combine suffix in reverse.",
+    "dry_run": "Prefix outputs [1,2,6,24]. Reverse suffixes 1,5,20,60 produce [60,40,30,24]. [2,0,4] produces [0,8,0] without division.",
+    "complexity": "Two passes are O(n) time. The returned answer uses O(n) space; excluding that required output, only O(1) auxiliary space is used."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D",
+      "E"
+    ],
+    "dry_run": [
+      "F",
+      "G"
+    ],
+    "complexity": [
+      "H"
+    ]
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "err",
+      "C",
+      1,
+      0
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "ok",
+      "F",
+      3,
+      0
+    ]
+  ]
+}

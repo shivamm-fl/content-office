@@ -1,0 +1,50 @@
+{
+  "id": "b003",
+  "slug": "contains-duplicate",
+  "number": "217",
+  "title": "Contains Duplicate",
+  "sources": [
+    "https://leetcode.com/problems/contains-duplicate/description/",
+    "https://docs.python.org/3/builtins/time-complexity.html"
+  ],
+  "status": "prepared_unverified_no_studio",
+  "copy": {
+    "A": "@hook Contains Duplicate में हर pair compare करना ज़रूरी है? | Array पाँच, दो, नौ, दो। | कोई value कम से कम दो बार आए, तो true; सारी distinct हों, तो false।",
+    "B": "Brute force में हर element को उसके बाद वाले elements से compare करो। | पाँच किसी से match नहीं। फिर दो को नौ और आखिरी दो से compare करो: match, return true।",
+    "C": "Problem answer में नहीं, repeated search में है। | सारे elements अलग हों, तो हर pair check होगा। | एक लाख elements पर लगभग पाँच अरब comparisons: O of n squared time।",
+    "D": "किसी current value का duplicate कब मिलेगा? | जब वही value पहले आ चुकी हो। | इसलिए हर पुराना element दोबारा scan करने की जगह, पहले देखी values एक hash set में रखो।",
+    "E": "पाँच आया: set में नहीं, add करो। | दो नहीं मिला, add करो। नौ नहीं मिला, add करो। | आखिरी दो पहले से set में है। Duplicate मिला, return true।",
+    "F": "Check करने के बाद add करना है। | Add पहले किया, तो पहली ही value खुद से match होगी। | Loop पूरा हो गया और match नहीं मिला, तो false।",
+    "G": "Hash set membership average constant time है। | इसलिए पूरा scan average O of n time, extra space O of n। | Brute force O of n squared time लेता था, extra space O of one। | Set में indices भी चाहिए या सिर्फ values? Comment करो।"
+  },
+  "teaching": {
+    "problem": "Return true for any repeated value, including [5,2,9,2]; otherwise return false for all distinct values.",
+    "brute_force": "Compare chronological i<j pairs, returning true on equality; the original example finds matching twos on its fifth comparison.",
+    "bottleneck": "An all-distinct input requires n(n-1)/2 comparisons. At n=100000 this is 4999950000 comparisons, not an invented measured runtime or TLE claim.",
+    "optimization": "A duplicate exists at the current position exactly when its value appears earlier. Hash-set membership replaces the repeated earlier-element scan with average constant-time membership.",
+    "dry_run": "For [5,2,9,2], check then add 5,2,9; final 2 is already present and returns true. Adding before checking would falsely match the first value to itself.",
+    "complexity": "Hash set uses average O(n) time and O(n) extra space. All-pairs brute force takes O(n squared) time and O(1) extra space; worst-case hash guarantees are not claimed."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "difficulty": "Easy"
+}

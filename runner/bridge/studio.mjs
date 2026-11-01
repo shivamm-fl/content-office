@@ -9,6 +9,7 @@ import { join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ITEM_MEDIA = fileURLToPath(new URL("../scripts/item_media.py", import.meta.url));
+const CODING_GATE = fileURLToPath(new URL("../scripts/coding_gate.py", import.meta.url));
 
 const PROTECTED = ["scripts", ".claude/skills", "reels/_template", "reels/_kit", "brand/covers/_template", "brand/fonts"];
 const HF = "hyperframes@0.8.149";
@@ -189,6 +190,19 @@ export function makeStudio({ teamDir, python, onProgress }) {
   async function call(name, a) {
     guard();
     removeNodeModules(teamDir);
+    // Reject before paid audio or rendering, even when a build was requested outside the normal planner.
+    if (["make_voice", "render_video"].includes(name)) {
+      const { abs } = teamFolder(teamDir, a.folder);
+      const id = /^(?:b|p)\d{2,4}(?=_|$)/.exec(abs.split(sep).pop())?.[0];
+      if (id) {
+        const check = await py([CODING_GATE, abs, id], { env: { CODING_PROOF_SECRET: process.env.CODING_PROOF_SECRET ?? "" }, timeoutMs: 30_000 });
+        if (check.code !== 0) return text(`Coding lesson blocked before production: ${check.out}`, true);
+        if (name === "render_video") {
+          const total = JSON.parse(readFileSync(join(abs, "data.json"), "utf8"))?.hi?.total;
+          if (!(total >= 60 && total <= 120)) return text("Coding lesson audio must be 60–120 seconds before rendering. Reduce/rewrite the example or wording; do not rush the voice.", true);
+        }
+      }
+    }
     if (name === "make_voice") return makeVoice(a);
     if (name === "render_video") {
       const { rel, abs } = teamFolder(teamDir, a.folder);
@@ -257,7 +271,7 @@ export function makeStudio({ teamDir, python, onProgress }) {
     if (name === "studio_gate") {
       if (!/^[a-z]\d{2,4}$/.test(String(a.item))) return text("bad item id", true);
       onProgress(`Running the gate for ${a.item}`);
-      const r = await py(["scripts/ci_verify_reel.py", String(a.item), "--skip-review"], { timeoutMs: 10 * 60_000 });
+      const r = await py(["scripts/ci_verify_reel.py", String(a.item), "--skip-review"], { env: { CODING_PROOF_SECRET: process.env.CODING_PROOF_SECRET ?? "" }, timeoutMs: 10 * 60_000 });
       return text(r.out.slice(-4000), r.code !== 0);
     }
     return text(`unknown studio tool ${name}`, true);

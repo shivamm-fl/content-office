@@ -1,0 +1,52 @@
+{
+  "local_tests_passed": 5010,
+  "example": [
+    8,
+    3,
+    6,
+    2,
+    7
+  ],
+  "answer": 5,
+  "trace": [
+    {
+      "i": 0,
+      "price": 8,
+      "lowest": 8,
+      "candidate": 0,
+      "best": 0
+    },
+    {
+      "i": 1,
+      "price": 3,
+      "lowest": 3,
+      "candidate": -5,
+      "best": 0
+    },
+    {
+      "i": 2,
+      "price": 6,
+      "lowest": 3,
+      "candidate": 3,
+      "best": 3
+    },
+    {
+      "i": 3,
+      "price": 2,
+      "lowest": 2,
+      "candidate": -1,
+      "best": 3
+    },
+    {
+      "i": 4,
+      "price": 7,
+      "lowest": 2,
+      "candidate": 5,
+      "best": 5
+    }
+  ],
+  "naive_pairs": 10,
+  "maximum_n": 100000,
+  "worst_case_pairs_at_max_n": 4999950000,
+  "leetcode_accepted": false
+}

@@ -1,0 +1,25 @@
+{
+  "id":"b009","slug":"3sum","number":"15","title":"3Sum","difficulty":"Medium",
+  "sources":["https://leetcode.com/problems/3sum/description/"],
+  "copy":{
+    "A":"@hook Three Sum में duplicate triplets रोककर speed कैसे बढ़ाएँ? | Given array: one, minus two, two, zero, one, minus two. | Three अलग indices का sum zero चाहिए। Unique value-triplets लौटाओ: minus two, zero, two; और minus two, one, one।",
+    "B":"Brute force में three indices चुनकर हर combination का sum check करो। | Six elements पर twenty combinations हैं। Same value-triplet अलग indices से फिर आ सकता है। | बड़े input पर O of n cubed work: हर pair के लिए third element फिर ढूँढ रहे हैं।",
+    "C":"Optimization की शुरुआत sorting से। Copy sort करने पर मिलता है: minus two, minus two, zero, one, one, two। | अब one value anchor fix करो। बाकी sorted suffix में two pointers रखो: smallest और largest candidate।",
+    "D":"Sum zero से छोटा हो, तो left बढ़ाओ। उसी left के साथ right घटाने पर sum बढ़ेगा नहीं; इसलिए वह left discard कर सकते हैं। | Sum बड़ा हो, तो right घटाओ। Zero मिले, triplet save करके दोनों pointers अंदर लाओ।",
+    "E":"Anchor minus two। Left minus two, right two: sum minus two, इसलिए left आगे। | अब minus two plus zero plus two equals zero: first triplet। | दोनों pointers अंदर: minus two plus one plus one equals zero। Second triplet। Indices अलग हैं, इसलिए repeated one valid है।",
+    "F":"Duplicates रोकने के लिए repeated anchor skip करो। Match के बाद repeated left और right values भी skip करो। | लेकिन repeated values को input से delete मत करो: वरना minus two, one, one खो जाएगा। | Given array: zero, zero, zero. इससे सिर्फ one triplet मिलेगा।",
+    "G":"हर anchor पर pointers सिर्फ अंदर चलते हैं: O of n squared time। | इस Python version में sorted copy और sorting के लिए O of n extra space है; returned triplets अलग count होंगे। | Duplicate values हटाना गलत क्यों है? Comment करो।"
+  },
+  "teaching":{
+    "problem":"Return unique value triplets summing to zero from three distinct indices. Original [1,-2,2,0,1,-2] gives [-2,0,2] and [-2,1,1]; repeated values at distinct indices are valid.",
+    "brute_force":"Enumerate all index triples i<j<k; six elements give twenty combinations. Deduplicate equal value-triplets. This takes O(n cubed) time and repeats the third-element search.",
+    "bottleneck":"Searching the third element for every pair repeats work, and duplicate values create duplicate value-triplets from different index choices.",
+    "optimization":"Sort a copy; fix an anchor and use left/right in its sorted suffix. If the sum is low, no smaller right can rescue that left, so advance left; symmetrically decrease right for a high sum. Save zero-sum hits and move both. Skip repeated anchors and repeated pointer values after hits without deleting multiplicity from the input.",
+    "dry_run":"Sorted [-2,-2,0,1,1,2], anchor index0=-2. left1=-2/right5=2 sum-2, move left2=0; sum0 saves[-2,0,2]. Move left3=1/right4=1; sum0 saves[-2,1,1]. Distinct indices permit equal ones. Skip repeated anchor at index1. [0,0,0] produces exactly one triplet.",
+    "complexity":"O(n squared) time dominates O(n log n) sorting. This exact Python implementation uses an O(n) sorted copy and sorting workspace, excluding O(k) returned triplets. Do not claim constant auxiliary space or remove duplicate input values."
+  },
+  "teaching_scenes":{"problem":["A"],"brute_force":["B"],"bottleneck":["B"],"optimization":["C","D"],"dry_run":["E","F"],"complexity":["G"]},
+  "teaching_phrases":{"problem":[["A",0],["A",1],["A",2]],"brute_force":[["B",0],["B",1]],"bottleneck":[["B",2]],"optimization":[["C",0],["C",1],["D",0],["D",1]],"dry_run":[["E",0],["E",1],["E",2],["F",0],["F",1],["F",2]],"complexity":[["G",0],["G",1],["G",2]]},
+  "cues":[["click","C",0,0],["click","D",0,0],["ok","E",1,0],["err","F",1,0]],
+  "narration_numbers":"All array and computed values/signs/counts read in English with Given array introductions; technical Hinglish and owner tempo 0.9."
+}

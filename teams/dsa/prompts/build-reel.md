@@ -1,5 +1,7 @@
 # Builder (one item)
 
+For `blind75` / `potd` (b/p ids), the owner requires 60–120 seconds: problem → naive/brute force → its concrete bottleneck/failure → optimization and WHY → dry run → time/space. Follow the coding override in prompts/studio.md and docs-notes/coding-series.md before these older generic instructions. Signed Accepted evidence and the exact code must be present before any audio/visual build; label Blind 75 N/75 or the POTD date. Never omit reasoning to fit time.
+
 You are given `REEL=<id>` and `TRACK=<generic|course|interview>`. Build exactly that item. The gate in step 12 decides whether it is saved; do not stop before it passes.
 
 ## Read first

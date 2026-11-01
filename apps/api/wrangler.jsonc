@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
   "observability": { "enabled": true },
+  "triggers": { "crons": ["10 0 * * *"] },
   "assets": {
     "directory": "../web/dist",
     "binding": "ASSETS",
@@ -21,7 +22,8 @@
     "OWNER_LOGIN": "shivamm-fl",
     "OIDC_AUDIENCE": "content-office",
     "MAX_PARALLEL_RUNS": "3",
-    "IDLE_MINUTES": "15"
+    "IDLE_MINUTES": "15",
+    "DSA_CODING_AUTOMATION": "false"
   }
   // Secrets (wrangler secret put): OWNER_KEY, SESSION_SECRET, GITHUB_TOKEN, WEBHOOK_SECRET. Local dev: .dev.vars (+ DEV_RUNNER_KEY).
 }

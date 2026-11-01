@@ -1,0 +1,24 @@
+{
+  "id":"b011","slug":"sum-of-two-integers","number":"371","title":"Sum of Two Integers","difficulty":"Medium",
+  "sources":["https://leetcode.com/problems/sum-of-two-integers/description/","https://docs.python.org/3/builtins/stdtypes.html#bitwise-operations-on-integer-types"],
+  "copy":{
+    "A":"@hook Plus operator के बिना sum कैसे निकलेगा? | Given integers: five and three. Answer eight चाहिए, लेकिन plus और minus operators allowed नहीं हैं।",
+    "B":"Naive idea: five से start करके three बार increment करो: six, seven, eight। | ये magnitude के साथ steps बढ़ाता है, और increment में फिर plus चाहिए। इसलिए ये valid solution ही नहीं है।",
+    "C":"तो bitwise XOR कर दें? Five XOR three देता है six, eight नहीं। | XOR अलग bits जोड़ता है, लेकिन जहाँ दोनों bits one हैं, वहाँ carry छूट जाता है।",
+    "D":"इसलिए two parts बनाओ। XOR से sum without carry; AND से दोनों one वाले positions। | AND result को one bit left shift करो: ये next position का carry है। | दोनों results पुराने a और b से एक साथ निकालो। फिर sum और carry पर यही repeat करो, जब तक carry zero न हो।",
+    "E":"Dry run: five और three से XOR six, carry two। | Six और two से four और four। | Four और four से zero और eight। | Zero और eight से eight और zero। Carry खत्म, answer eight।",
+    "F":"Python में negative integers की sign bits आगे तक extend होती हैं। इसलिए sum और carry को thirty two bit mask से सीमित करते हैं। | Given integers: minus two and minus three. Result का sign bit set है; code उसे signed negative five में वापस convert करता है। | Mask के बिना negative carry फैलता रह सकता है।",
+    "G":"ये पूरा Accepted code है: XOR partial sum, shifted AND carry, mask, फिर signed conversion। | Fixed thirty two bits में at most thirty two carry rounds: O of one time, O of one extra space। | XOR अकेला sum क्यों नहीं है? Comment करो।"
+  },
+  "teaching":{
+    "problem":"Compute sum of two integers without addition or subtraction operators, with each input in [-1000,1000]. Original scalar example five and three returns eight.",
+    "brute_force":"Repeated unit increments from five through six, seven and eight take a number of steps proportional to the second operand magnitude.",
+    "bottleneck":"Unit increments still require the forbidden plus operator, so this baseline is invalid under the constraint. XOR alone also fails: five XOR three is six because it omits carry from positions where both inputs have a one bit.",
+    "optimization":"XOR forms the partial sum without carry; AND identifies shared one positions and left shift moves that carry to the next position. Simultaneous assignment uses the previous values for both results. Iterate until carry is zero. Mask both results to a fixed 32-bit pattern to bound Python negative sign extension, then convert a set sign bit back to a signed negative integer.",
+    "dry_run":"(5,3) -> (6,2) -> (4,4) -> (0,8) -> (8,0), with the pair representing partial sum and remaining carry. Negative example -2 and -3 produces 32-bit FFFFFFFB then signed -5. All spoken signs, values and counts are English.",
+    "complexity":"For the legal input domain and fixed 32-bit mask, carry propagates left for at most 32 rounds. Constant fixed-width work and a fixed number of scalars give O(1) time and O(1) extra space. This is not a general unbounded-integer complexity claim."
+  },
+  "teaching_scenes":{"problem":["A"],"brute_force":["B"],"bottleneck":["C"],"optimization":["D"],"dry_run":["E","F"],"complexity":["G"]},
+  "cues":[["click","B",0,0],["err","C",0,0],["ok","E",3,0],["click","F",1,0]],
+  "narration_numbers":"Scalar inputs use Given integers. All signs, values, counts and computed results in English; technical Hinglish; owner tempo 0.9. Full Accepted method body visible."
+}

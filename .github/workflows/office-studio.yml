@@ -25,6 +25,7 @@ env:
   RUN_ID: ${{ inputs.run_id }}
   TEAM: ${{ inputs.team }}
   ITEM: ${{ inputs.item }}
+  CODING_PROOF_SECRET: ${{ secrets.CODING_PROOF_SECRET }}
   PIP_PACKAGES: "edge-tts==7.2.8 numpy soundfile tiktoken"
 jobs:
   build:

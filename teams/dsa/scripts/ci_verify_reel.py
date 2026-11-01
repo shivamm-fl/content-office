@@ -53,6 +53,12 @@ def main(rid, skip_review=False):
         rep["checks"].append({"name": name, "ok": bool(ok), "detail": str(detail)[:300]}); rep["ok"] &= bool(ok)
     if not e: chk("state entry", False, "no entry in state/phase5_status.json"); return rep
     mp4, cover, cap, folder = ROOT / e.get("mp4", "x"), ROOT / e.get("cover", "x"), ROOT / e.get("caption", "x"), ROOT / e.get("folder", "x")
+    if re.fullmatch(r"[bp]\d{2,4}", rid):
+        sys.path.insert(0, str(ROOT.parents[1] / "runner/scripts"))
+        import coding_gate
+        chk("coding Accepted and teaching contract", *coding_gate.check(folder, rid))
+        chk("coding on-screen Accepted code", *coding_gate.check_visible_code(folder, rid))
+        if not rep["ok"]: return rep
     meta = ROOT / "social" / (folder.name + ".youtube.txt")
     chk("files exist", all(p.exists() for p in (mp4, cover, cap, meta, folder / "spec.json", folder / "data.json")), mp4.name + " " + cover.name + " " + cap.name + " " + meta.name)
     if not rep["ok"]: return rep
@@ -67,6 +73,8 @@ def main(rid, skip_review=False):
     chk("audio aac present", au.get("codec_name") == "aac", au)
     data = json.loads((folder / "data.json").read_text(encoding="utf-8")).get("hi", {})
     chk("length " + str(MIN_S) + "-" + str(MAX_S) + " s", MIN_S <= dur <= MAX_S, "%.1fs" % dur)
+    if re.fullmatch(r"[bp]\d{2,4}", rid):
+        chk("coding lesson length 60-120 s", 60 <= dur <= 120, "%.1fs" % dur)
     chk("length equals data.json total", abs(dur - float(data.get("total", -99))) < 1.0, "%.1f vs %s" % (dur, data.get("total")))
     lo = sh("ffmpeg", "-hide_banner", "-nostats", "-i", str(mp4), "-af", "ebur128=peak=true", "-f", "null", "-")
     m = re.findall(r"I:\s+(-?[\d.]+) LUFS", lo.stderr); tp = re.findall(r"Peak:\s+(-?[\d.]+) dBFS", lo.stderr)
@@ -126,6 +134,8 @@ def main(rid, skip_review=False):
         except ValueError:
             fdetail = "unreadable fact report: run scripts/fact_review.py again"
     chk("facts checked against the sources (no high finding)", fok, fdetail)
+    if re.fullmatch(r"[bp]\d{2,4}", rid):
+        chk("coding teaching independently reviewed", fok, fdetail)
     chk("youtube metadata has a title and a description", len([l for l in meta.read_text(encoding="utf-8").splitlines() if l.strip()]) >= 2, meta.name)
     hashes = set()
     for i in range(6):

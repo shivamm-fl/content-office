@@ -1,0 +1,17 @@
+@hook Two Sum में क्या हर pair check करना पड़ेगा? | Array चार, एक, आठ, छह; target चौदह। | दो elements का sum चौदह चाहिए; उनके अलग indices लौटाने हैं।
+
+Brute force: हर unique pair check करो। | चार plus एक पाँच, चार plus आठ बारह। | छह checks के बाद आठ plus छह चौदह मिलता है।
+
+चार numbers पर छह checks। | लेकिन दस हज़ार numbers पर worst case: लगभग पाँच करोड़ pairs! | हर बार partner search करना bottleneck है।
+
+Current number x हो, तो partner exactly target minus x होगा। | इसलिए सवाल है: क्या ये partner पहले दिखा था?
+
+Hash map पहले देखे numbers और उनके indices याद रखेगा। | पूरी list search करने की जगह direct lookup। | यहीं repeated work हटता है।
+
+चार का partner दस: नहीं मिला, store करो। | एक का तेरह, आठ का छह: नहीं मिले। | दोनों store करो।
+
+अब छह का partner आठ map में index दो पर है। | Current index तीन। | Return दो और तीन। चार iterations में answer!
+
+पहले check, फिर store। | सात, सात और target चौदह पर store पहले किया, तो पहला सात खुद से match होगा। | पिछले elements ही map में रखो।
+
+हर element पर average constant-time lookup: average O of n time। | Extra space O of n। | Brute force में O of n squared time था। | Map में values के साथ क्या store होगा? Comment करो।

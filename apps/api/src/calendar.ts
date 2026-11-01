@@ -70,7 +70,7 @@ export function publishedMs(e: Phase5Entry): number | null {
 /** The series floors (dsa: d, systemdesign: s) have one track, "series" (their team.json). */
 const SERIES_PREFIXES = ["d", "s"];
 export const trackOfItem = (item: string) =>
-  TRACKS.find((t) => t.prefix === item[0])?.id ?? (SERIES_PREFIXES.includes(item[0]) ? "series" : item[0] === "x" ? "experiment" : "other");
+  TRACKS.find((t) => t.prefix === item[0])?.id ?? (item[0] === "b" ? "blind75" : item[0] === "p" ? "potd" : SERIES_PREFIXES.includes(item[0]) ? "series" : item[0] === "x" ? "experiment" : "other");
 
 /** The floor a reel belongs to: the floor whose track has its id prefix (`claims`: prefix to team slug). An id no floor claims (old x experiments) is learnai's. */
 export const floorOfItem = (item: string, claims: Record<string, string>): string => claims[item[0]] ?? "learnai";

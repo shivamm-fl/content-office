@@ -1,0 +1,28 @@
+{
+  "id": "b002",
+  "slug": "best-time-to-buy-and-sell-stock",
+  "number": "121",
+  "title": "Best Time to Buy and Sell Stock",
+  "short_title": "Buy before you sell",
+  "cover": "Stock Profit: Stop Checking Every Pair",
+  "copy": {
+    "A": "@hook Buy and Sell Stock में maximum profit कैसे निकालोगे? | Prices आठ, तीन, छह, दो, सात। | सिर्फ एक buy और बाद में एक sell allowed है। Profit नहीं बनता, तो zero।",
+    "B": "Brute force में हर buy day के साथ सभी future sell days check करो। | पाँच days पर दस pairs। | तीन पर buy, छह पर sell: profit तीन। दो पर buy, सात पर sell: पाँच।",
+    "C": "Answer सही है, लेकिन हर sell price के लिए पुराने buy prices दोबारा check हो रहे हैं। | एक लाख days पर worst case लगभग पाँच अरब pairs। | यही quadratic bottleneck है।",
+    "D": "किसी fixed sell day का best profit कब होगा? | जब उससे पहले की buy price सबसे कम हो। | इसलिए सारे पुराने prices नहीं, सिर्फ lowest price याद रखनी है।",
+    "E": "Left से right चलो। | Current price minus lowest-so-far candidate profit है। Best answer update करो, फिर lowest price update करो। | क्योंकि सिर्फ पिछले days देखते हैं, buy-before-sell अपने आप valid है।",
+    "F": "आठ से शुरू करो। तीन आया तो lowest तीन। | छह पर candidate तीन, best तीन। | दो आया तो lowest दो। अब सात: सात minus दो पाँच, best पाँच।",
+    "G": "एक trap: पूरे array का maximum minus minimum मत कर देना। | नौ, एक, दो पर नौ पहले आया है। Buy एक, sell दो; profit सिर्फ एक। | Decreasing prices पर answer zero ही रखो।",
+    "H": "हर price एक बार: O of n time, O of one extra space। | Brute force O of n squared था। | Optimization का reason: हर sell day के लिए सिर्फ सबसे सस्ती पिछली buy चाहिए। | Lowest और best में क्या फर्क है? Comment करो।"
+  },
+  "teaching": {
+    "problem": "One buy followed by one later sell; maximize profit for [8,3,6,2,7], allowing no transaction for zero profit.",
+    "brute_force": "Check all ten chronological buy and sell pairs in the five-day example and compare their differences.",
+    "bottleneck": "For every sell day, all earlier buy prices are repeatedly scanned; n(n-1)/2 pairs is quadratic.",
+    "optimization": "For a fixed sell price, subtracting the smallest earlier price maximizes profit. Keep only this prefix minimum and the best profit, preserving buy-before-sell order.",
+    "dry_run": "On [8,3,6,2,7], lowest becomes 3, selling at 6 gives 3, lowest becomes 2, and selling at 7 gives 5. [9,1,2] prevents selling at the earlier 9.",
+    "complexity": "One scan is O(n) time and O(1) extra space. All chronological pairs take O(n squared) time and O(1) extra space."
+  },
+  "teaching_scenes": {"problem":["A"],"brute_force":["B"],"bottleneck":["C"],"optimization":["D","E"],"dry_run":["F","G"],"complexity":["H"]},
+  "sources": ["https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"]
+}

@@ -1,0 +1,24 @@
+{
+  "id":"b005","slug":"maximum-subarray","number":"53","title":"Maximum Subarray","difficulty":"Medium",
+  "sources":["https://leetcode.com/problems/maximum-subarray/description/?envId=rr2ss0g5&envType=problem-list-v2"],
+  "copy":{
+    "A":"@hook Maximum Subarray में क्या हर range जोड़नी पड़ेगी? | Given array: minus three, four, minus one, two, minus six, three. | बिना gap की non-empty subarray का maximum sum चाहिए। Four, minus one, two का sum five है।",
+    "B":"Brute force में हर start चुनो। | Right end आगे बढ़ाओ, running sum update करो, और best रखो। | Six elements पर twenty one ranges। अलग start से overlapping elements फिर process होते हैं।",
+    "C":"हर possible range बनती है: O of n squared work। | One hundred thousand elements पर लगभग five billion ranges। | पूरा पुराना range याद रखने के बजाय, current index पर end होने वाला best sum काफी है।",
+    "D":"Current element पर two choices हैं: अकेले शुरू करो, या पिछली best-ending subarray को extend करो। | पिछला sum negative है, तो उसे जोड़ना नुकसान करेगा; नया start बेहतर है। | Negative element नहीं, negative पिछला sum drop करते हैं।",
+    "E":"Minus three से शुरू। Four पर restart: ending four, best four। | Minus one पर extend करके three; two पर five, best five। | Minus six के बाद ending minus one। | आखिरी three पर restart, ending three; लेकिन global best five ही रहेगा।",
+    "F":"एक trap: best को zero से initialize मत करो। | Given array: minus five, minus two, minus seven. Non-empty answer minus two है। | Ending और best दोनों पहले element से शुरू करो।",
+    "G":"हर element पर two choices, constant work: O of n time और O of one extra space। | Brute force quadratic था। | Ending current index पर खत्म होता है; best कहीं भी हो सकता है। | Last ending three है, answer five क्यों? Comment करो।"
+  },
+  "teaching":{
+    "problem":"Find the largest sum of a nonempty contiguous subarray; [-3,4,-1,2,-6,3] has answer 5 from [4,-1,2].",
+    "brute_force":"Choose each start and extend the right end while maintaining its running sum, checking all n(n+1)/2 nonempty ranges in O(n squared), not cubic time.",
+    "bottleneck":"Overlapping elements are processed repeatedly for different starts; n=100000 yields 5000050000 ranges. A single best-ending sum summarizes the needed past.",
+    "optimization":"Any subarray ending at current x either starts at x or extends a subarray ending immediately before it. The best ending sum is max(x,previous_ending+x); a negative previous sum can only hurt a restart. Keep global best separately.",
+    "dry_run":"Ending sums [-3,4,3,5,-1,3] and global best [-3,4,4,5,5,5]. Negative current -1 can be retained; negative previous ending is discarded. All-negative [-5,-2,-7] returns -2, not zero.",
+    "complexity":"Kadane performs constant work per element: O(n) time and O(1) extra space. Running-sum all-ranges brute force is O(n squared) time and O(1) extra space."
+  },
+  "teaching_scenes":{"problem":["A"],"brute_force":["B"],"bottleneck":["C"],"optimization":["D"],"dry_run":["E","F"],"complexity":["G"]},
+  "cues":[["click","B",1,0],["err","C",0,0],["ok","E",1,0],["err","F",1,0]],
+  "narration_numbers":"Owner correction: introduce inputs as Given array and read array values, signs, computed values and numeric counts in English. Earlier reels are deliberately unchanged."
+}

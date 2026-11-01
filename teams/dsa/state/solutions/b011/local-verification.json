@@ -1,0 +1,34 @@
+{
+  "local_tests_passed": 24744,
+  "leetcode_accepted": false,
+  "studio_started": false,
+  "code_sha256": "bdc77084dddb1f7e5703c3af13c07fde89a28058adde01af617fa48e6287920c",
+  "example": [
+    5,
+    3
+  ],
+  "answer": 8,
+  "trace": [
+    [
+      5,
+      3
+    ],
+    [
+      6,
+      2
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      0,
+      8
+    ],
+    [
+      8,
+      0
+    ]
+  ],
+  "oracle": "Python integer addition, exhaustive signed pairs, seeded legal inputs, domain boundaries; AST excludes Add/Sub; every carry trace terminates within 32 rounds"
+}

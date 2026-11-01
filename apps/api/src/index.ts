@@ -334,6 +334,25 @@ app.post("/api/runner/learning", async (c) => {
 });
 
 // A desk hands a reel to the studio (office tool request_build).
+app.post("/api/runner/coding-attempt", async (c) => {
+  const id = await runToken(c);
+  if (!id || id.slug !== "dsa") return bad(c, 403, "DSA run required");
+  const { item } = await c.req.json<{ item: string }>();
+  try { return c.json(await office(c.env, "dsa").reserveCodingAttempt("dsa", item)); }
+  catch (e) { return bad(c, 409, (e as Error).message); }
+});
+
+app.get("/api/teams/:team/coding", async (c) => {
+  if (c.req.param("team") !== "dsa") return bad(c, 404, "DSA only");
+  return c.json(await office(c.env, "dsa").codingSettings());
+});
+app.post("/api/teams/:team/coding", async (c) => {
+  if (c.req.param("team") !== "dsa") return bad(c, 404, "DSA only");
+  const body = await c.req.json<{ potd?: boolean; blind75?: boolean }>();
+  if ((body.potd !== undefined && typeof body.potd !== "boolean") || (body.blind75 !== undefined && typeof body.blind75 !== "boolean")) return bad(c, 400, "switches must be booleans");
+  return c.json(await office(c.env, "dsa").codingSettings(body));
+});
+
 app.post("/api/runner/build", async (c) => {
   const id = await runToken(c);
   if (!id) return bad(c, 403, "bad run token");
@@ -468,4 +487,9 @@ app.get("/media/:team/:item/:file", async (c) => {
 app.all("/api/*", (c) => bad(c, 404, "not found"));
 app.all("*", (c) => c.env.ASSETS.fetch(c.req.raw));
 
-export default app;
+export default {
+  fetch: app.fetch,
+  async scheduled(event: ScheduledController, env: Env): Promise<void> {
+    await office(env, "dsa").startCodingDay(new Date(event.scheduledTime).toISOString().slice(0, 10));
+  },
+};

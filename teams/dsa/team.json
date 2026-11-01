@@ -1,7 +1,7 @@
 {
   "slug": "dsa",
   "name": "Learnvora DSA",
-  "tagline": "DSA for Hindi and Hinglish speakers who want to crack coding interviews: 150 days, one idea a day",
+  "tagline": "Coding interviews in Hinglish: 150 Days of DSA, Blind 75 and LeetCode POTD",
   "handles": [
     {
       "platform": "instagram",
@@ -13,6 +13,16 @@
       "id": "series",
       "prefix": "d",
       "name": "150 Days of DSA"
+    },
+    {
+      "id": "blind75",
+      "prefix": "b",
+      "name": "Blind 75"
+    },
+    {
+      "id": "potd",
+      "prefix": "p",
+      "name": "LeetCode POTD"
     }
   ],
   "lead": "producer",
@@ -181,5 +191,6 @@
       "kind": "reception"
     }
   ],
-  "pace": 1
+  "pace": 1,
+  "daily": { "series": 1, "blind75": 0, "potd": 0 }
 }

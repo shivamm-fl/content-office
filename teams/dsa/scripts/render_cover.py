@@ -4,6 +4,7 @@ The template (brand/covers/_template) is: a filled pill with the category only (
 Wrap the key words of the headline in <em></em>; without it the last one to three words get it. A trailing item number in the pill text (" · 03", " - 3") is removed automatically.
 Options: --template <dir> to use another template folder (tests). Clean English only: no Hindi, no emoji."""
 import argparse
+import json
 import html
 import re
 import shutil
@@ -35,6 +36,9 @@ def main():
     a.add_argument("--day", type=int, default=None, help="the day of the series (1..of); default: the number in the folder name, d047_slug is Day 47")
     a.add_argument("--of", type=int, default=150, help="length of the series")
     a = a.parse_args()
+    track = "blind75" if a.folder.startswith("b") else "potd" if a.folder.startswith("p") else "series"
+    if track == "blind75":
+        a.of = 75
     tpl = Path(a.template)
     cover = ROOT / "brand" / "covers" / a.folder
     if not (tpl / "index.html").exists():
@@ -58,11 +62,22 @@ def main():
         if not m:
             sys.exit("give --day N, or name the folder <letter><day>_slug (for example d047_binary_search)")
         a.day = int(m.group(1))
-    if not 1 <= a.day <= a.of:
+    if track != "potd" and not 1 <= a.day <= a.of:
         sys.exit("--day must be between 1 and --of")
     s, n3 = re.subn(r'(<div id="daynum">)[^<]*(</div>)', lambda m: m.group(1) + f"{a.day:03d}" + m.group(2), s)
     s, n4 = re.subn(r'(<div id="dayof">)[^<]*(</div>)', lambda m: m.group(1) + f"/ {a.of}" + m.group(2), s)
     s, n5 = re.subn(r'(<div id="fill" style="width:)[^"]*(")', lambda m: m.group(1) + f"{100 * a.day / a.of:.2f}%" + m.group(2), s)
+    if track == "blind75":
+        s = s.replace('<div id="daylabel">DAY</div>', '<div id="daylabel">BLIND 75</div>')
+    elif track == "potd":
+        item = json.loads((ROOT / "reels" / a.folder / "coding.json").read_text(encoding="utf-8"))
+        from datetime import date
+        d = date.fromisoformat(item["challenge_date"])
+        expected = f"p{(d - date(2026, 11, 1)).days + 1:04d}"
+        if a.folder.split("_")[0] != expected:
+            sys.exit("POTD cover date does not match its id")
+        s = re.sub(r'<div id="day">.*?(?=\s*<div id="track">)', f'<div id="day"><div id="daylabel">LEETCODE POTD</div><div id="dayrow"><div id="daynum" style="font-size:100px;letter-spacing:0;margin-top:65px">{d.strftime("%d %b %Y").upper()}</div></div></div>\n', s, flags=re.S)
+        s = re.sub(r'<div id="track">.*?</div></div>', '', s, flags=re.S)
     if (n3, n4, n5) != (1, 1, 1):
         sys.exit('the template must contain <div id="daynum">, <div id="dayof"> and <div id="fill" style="width:..">')
     if n1 != 1 or n2 != 1:

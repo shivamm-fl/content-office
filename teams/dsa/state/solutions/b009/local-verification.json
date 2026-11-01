@@ -1,0 +1,35 @@
+{
+  "local_tests_passed": 5487,
+  "leetcode_accepted": false,
+  "studio_started": false,
+  "code_sha256": "6c48c889373f4230ffef1317c7ef6ceaedd868a53e47db27547a28b489472c6f",
+  "example": [
+    1,
+    -2,
+    2,
+    0,
+    1,
+    -2
+  ],
+  "sorted_example": [
+    -2,
+    -2,
+    0,
+    1,
+    1,
+    2
+  ],
+  "answer": [
+    [
+      -2,
+      0,
+      2
+    ],
+    [
+      -2,
+      1,
+      1
+    ]
+  ],
+  "oracle": "independent index-triple enumeration, exhaustive multisets, seeded arrays, constructed n=3000 boundaries; no duplicate outputs and no input mutation"
+}

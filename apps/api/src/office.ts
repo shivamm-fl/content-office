@@ -17,6 +17,7 @@ import { stallAction } from "./stall";
 import { findAnomalies } from "./health";
 import { TEAMS, team as getTeam } from "./teams";
 import { loadLibrary, approvalMatches, approvalKey, type LibraryApproval, type LibraryItem } from "./library";
+import { validateCodingItem } from "./coding";
 
 /** Id prefix of every floor's tracks to the floor (e r q learnai, d dsa, s systemdesign): the publishing repo's state holds the reels of all floors. */
 const claims = (): Record<string, string> => Object.fromEntries(Object.entries(TEAMS).flatMap(([slug, t]) => t.tracks.map((tr) => [tr.prefix, slug])));
@@ -37,6 +38,8 @@ export interface Env {
   DISPATCH_MODE?: string;
   MAX_PARALLEL_RUNS?: string;
   IDLE_MINUTES?: string;
+  CODING_PROOF_SECRET?: string;
+  DSA_CODING_AUTOMATION?: string;
 }
 
 const ACTIVE: RunStatus[] = ["queued", "starting", "live", "idle", "blocked_limit"];
@@ -371,11 +374,50 @@ export class Office extends DurableObject<Env> {
     return { thread };
   }
 
+  /** Daily coding work is independent of the owner's 150-day workday. One launch per UTC challenge date. */
+  async startCodingDay(iso: string): Promise<{ started: boolean }> {
+    if (this.env.DSA_CODING_AUTOMATION !== "true" || (this.env.CODING_PROOF_SECRET?.length ?? 0) < 32 || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return { started: false };
+    this.ensureTeam("dsa");
+    const settings = this.codingSettings();
+    if (!settings.potd && !settings.blind75) return { started: false };
+    const key = `coding-day:${iso}`;
+    // Synchronous reservation precedes dispatch so overlapping cron deliveries cannot duplicate work.
+    this.sql.exec("CREATE TABLE IF NOT EXISTS coding_days (date TEXT PRIMARY KEY, thread_id TEXT)");
+    if (this.one("SELECT date FROM coding_days WHERE date = ?", key)) return { started: false };
+    this.sql.exec("INSERT INTO coding_days (date) VALUES (?)", key);
+    const { thread } = await this.postMessage("dsa", { agent: "producer", kind: "workday", title: `Coding day, ${iso}`, tap: true,
+      text: `Automatic coding day for ${iso} (LeetCode UTC date): ${settings.potd ? "one POTD first" : "POTD paused"}; ${settings.blind75 ? "one next unfinished Blind 75 item" : "Blind 75 paused"}. Follow prompts/coding-day.md. Do not plan a 150 Days item in this run. Resume signed pending submissions; never invent Accepted proof. Return blocked setup/access failures clearly and stop; no repeated owner questions.` });
+    this.sql.exec("UPDATE coding_days SET thread_id = ? WHERE date = ?", thread.id, key);
+    return { started: true };
+  }
+
+  codingSettings(update?: { potd?: boolean; blind75?: boolean }): { potd: boolean; blind75: boolean; configured: boolean } {
+    this.ensureTeam("dsa");
+    this.sql.exec("CREATE TABLE IF NOT EXISTS coding_settings (id INTEGER PRIMARY KEY, potd INTEGER, blind75 INTEGER)");
+    this.sql.exec("INSERT OR IGNORE INTO coding_settings (id, potd, blind75) VALUES (1, 1, 1)");
+    if (update?.potd !== undefined) this.sql.exec("UPDATE coding_settings SET potd = ? WHERE id = 1", Number(update.potd));
+    if (update?.blind75 !== undefined) this.sql.exec("UPDATE coding_settings SET blind75 = ? WHERE id = 1", Number(update.blind75));
+    const row = this.one<{ potd: number; blind75: number }>("SELECT potd, blind75 FROM coding_settings WHERE id = 1")!;
+    return { potd: Boolean(row.potd), blind75: Boolean(row.blind75), configured: this.env.DSA_CODING_AUTOMATION === "true" && (this.env.CODING_PROOF_SECRET?.length ?? 0) >= 32 };
+  }
+
+  reserveCodingAttempt(slug: string, item: string): { attempt: number } {
+    this.ensureTeam(slug);
+    if (slug !== "dsa" || !/^[bp]\d{3,4}$/.test(item)) throw new Error("not a DSA coding item");
+    this.sql.exec("CREATE TABLE IF NOT EXISTS coding_attempts (item TEXT PRIMARY KEY, attempts INTEGER NOT NULL)");
+    const n = this.one<{ attempts: number }>("SELECT attempts FROM coding_attempts WHERE item = ?", item)?.attempts ?? 0;
+    if (n >= 3) throw new Error("blocked_attempt_limit: three submissions used; inspect the failure before retrying");
+    this.sql.exec("INSERT INTO coding_attempts (item, attempts) VALUES (?, 1) ON CONFLICT(item) DO UPDATE SET attempts = attempts + 1", item);
+    return { attempt: n + 1 };
+  }
+
   /** A desk hands one reel to the studio: a build thread per reel, its brief as the first message, a studio run. */
   async requestBuild(slug: string, fromRunId: string, input: { item_id: string; item?: unknown; script?: string; notes?: string }): Promise<{ thread_id: string; run_id: string; reused: boolean }> {
     const team = this.ensureTeam(slug);
     const itemId = String(input.item_id ?? "").trim();
     if (!/^[a-z]\d{2,4}$/.test(itemId)) throw new Error(`bad item id ${itemId}`);
+    if (claims()[itemId[0]] && claims()[itemId[0]] !== slug) throw new Error("item does not belong to this floor");
+    await validateCodingItem(itemId, (input.item ?? {}) as Record<string, unknown>, this.env.CODING_PROOF_SECRET ?? "");
     const from = this.getRun(fromRunId);
     // The work day this reel belongs to: the studio reports back to it, and the day ends when all its reels are done.
     const fromThread = from?.thread_id ? this.one<{ id: string; kind: string; day: string | null }>("SELECT id, kind, day FROM threads WHERE id = ?", from.thread_id) : null;

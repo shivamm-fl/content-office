@@ -1,12 +1,24 @@
 {
   "mode": "office",
-  "mode_note": "Office mode (owner, 2026-10-17): nothing runs on a schedule; every run is started from the office app. The owner approves finished reels and posts from the phone. The office never posts.",
+  "mode_note": "The 150-day series starts from the office app. Blind 75 and POTD have a separate 05:40 IST coding day, enabled only after the authorized LeetCode connection and live pilot are configured. The owner approves finished reels and controls posting.",
   "id_start": {
-    "series": 1
+    "series": 1,
+    "blind75": 1,
+    "potd": 1
   },
-  "id_note": "Series ids are the day: Day 7 is d007. One reel per day, one day is made in a work day (per_track 1; raise it to 3 for a three-day buffer).",
+  "id_note": "150-day ids: d001-d150. Blind 75: b001-b075. POTD: p0001 onward, UTC date offset from 2026-11-01, with challenge_date stored separately. The owner's workday makes one series reel; the separate coding day makes at most one per enabled coding track.",
   "per_track": 1,
   "series_days": 150,
+  "coding": {
+    "tracks": ["blind75", "potd"],
+    "language": "python3",
+    "min_seconds": 60,
+    "max_seconds": 120,
+    "accepted_required": true,
+    "daily_per_track": 1,
+    "potd_epoch_utc": "2026-11-01",
+    "blind75_manifest": "roadmap/blind75.json"
+  },
   "formats": [
     "concept",
     "structure",

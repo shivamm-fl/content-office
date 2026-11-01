@@ -10,7 +10,8 @@
     "dev:api": "pnpm --filter @office/api dev",
     "dev:web": "pnpm --filter @office/web dev",
     "typecheck": "pnpm gen:teams && pnpm -r typecheck",
-    "test": "node --test runner/bridge/events.test.mjs runner/bridge/studio.test.mjs runner/bridge/ops.test.mjs apps/api/src/*.test.mjs tools/gen_teams.test.mjs"
+    "test": "node --test runner/bridge/events.test.mjs runner/bridge/studio.test.mjs runner/bridge/ops.test.mjs runner/bridge/leetcode.test.mjs apps/api/src/*.test.mjs tools/gen_teams.test.mjs",
+    "test:coding": "node --test runner/bridge/leetcode.test.mjs apps/api/src/coding.test.mjs && python runner/scripts/test_coding_gate.py"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

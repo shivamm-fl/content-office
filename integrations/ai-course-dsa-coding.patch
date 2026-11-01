@@ -1,0 +1,46 @@
+diff --git a/scripts/publish_teams.py b/scripts/publish_teams.py
+index 868eb5d..d7c0b5d 100644
+--- a/scripts/publish_teams.py
++++ b/scripts/publish_teams.py
+@@ -30,7 +30,7 @@ TEAMS = {
+         "legacy": {"ig_token": "IG_ACCESS_TOKEN", "ig_user": "IG_USER_ID", "fb_page": "FB_PAGE_ID", "fb_token": "FB_PAGE_TOKEN"},
+     },
+     "dsa": {
+-        "handle": "dsa.learnvora", "prefixes": {"d": "series"},
++        "handle": "dsa.learnvora", "prefixes": {"d": "series", "b": "blind75", "p": "potd"},
+         "ig_token_secret": "META_IG_TOKEN_DSA", "ig_user_var": "META_IG_USER_ID_DSA", "fb_token_secret": "META_PAGE_TOKEN_DSA", "fb_page_var": "META_FB_PAGE_ID_DSA",
+         "facebook": True, "youtube": False, "legacy": None,
+     },
+diff --git a/scripts/test_publish_teams.py b/scripts/test_publish_teams.py
+index c97ebfc..722a2f0 100644
+--- a/scripts/test_publish_teams.py
++++ b/scripts/test_publish_teams.py
+@@ -52,6 +52,7 @@ check("team of a reel: by prefix", [PT.team_for(i) for i in ("e101", "r5", "q24"
+ check("an id nobody claims is learnai's, unless the hand-over recorded another team",
+       PT.team_for("x12") == "learnai" and PT.team_for("z01", {"release_team": "dsa"}) == "dsa" and PT.team_for("z01", {"release_team": "nobody"}) == "learnai")
+ check("tracks: e r q as before, d and s are series", [PT.track_of(i) for i in ("e1", "r1", "q1", "d1", "s1", "x1")] == ["generic", "course", "interview", "series", "series", "experiment"])
++check("Blind 75 and POTD are DSA tracks and never use LearnAI's credentials", [(PT.team_for(i), PT.track_of(i), PT.youtube_on(i)) for i in ("b001", "p0001")] == [("dsa", "blind75", False), ("dsa", "potd", False)])
+ 
+ # ---- which credentials a team uses
+ legacy = {"IG_ACCESS_TOKEN": "old-ig", "IG_USER_ID": "111", "FB_PAGE_ID": "222", "FB_PAGE_TOKEN": "old-fb"}
+@@ -253,7 +254,7 @@ with tempfile.TemporaryDirectory() as d:
+     root = Path(d)
+     (root / "state").mkdir()
+     (root / "state/config.json").write_text(json.dumps(cfg_h), encoding="utf-8")
+-    (root / "state/phase5_status.json").write_text(json.dumps({"d001": rel(release_team="dsa"), "e101": rel()}), encoding="utf-8")
++    (root / "state/phase5_status.json").write_text(json.dumps({"d001": rel(release_team="dsa"), "b001": rel(release_team="dsa"), "p0001": rel(release_team="dsa"), "e101": rel()}), encoding="utf-8")
+     O.ROOT = root
+     O.ist_today = lambda now=None: "2026-10-18"
+ 
+@@ -269,6 +270,11 @@ with tempfile.TemporaryDirectory() as d:
+ 
+     code, out = cli("--team", "dsa", "--item", "d001", "--action", "now")
+     check("dsa: Post now of a released d reel asks the workflow to start post-reel", code == 0 and "dispatch=true" in out, out)
++    for rid in ("b001", "p0001"):
++        code, out = cli("--team", "dsa", "--item", rid, "--action", "now")
++        check(f"{rid}: DSA handover dispatches Post now", code == 0 and "dispatch=true" in out, out)
++        code, out = cli("--team", "learnai", "--item", rid, "--action", "now")
++        check(f"{rid}: handover to LearnAI is refused", code != 0 and "belongs to team dsa" in out, out)
+     code, out = cli("--team", "dsa", "--item", "d001", "--action", "slot", "--date", "2026-10-19", "--time", "13:00")
+     check("dsa: a slot is refused", code != 0 and "only e, r and q" in out, out)
+     code, out = cli("--team", "dsa", "--item", "e101", "--action", "now")

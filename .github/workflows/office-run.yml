@@ -65,6 +65,10 @@ jobs:
       - name: Agent session
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          LEETCODE_AUTOMATION_AUTHORIZED: ${{ secrets.LEETCODE_AUTOMATION_AUTHORIZED }}
+          LEETCODE_SESSION_COOKIE: ${{ secrets.LEETCODE_SESSION_COOKIE }}
+          LEETCODE_CSRF_TOKEN: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          CODING_PROOF_SECRET: ${{ secrets.CODING_PROOF_SECRET }}
           OIDC_AUDIENCE: content-office
         run: node runner/bridge/bridge.mjs
       - name: Pack the run's changes
