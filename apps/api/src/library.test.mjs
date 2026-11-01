@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseLibrary, loadLibrary, assetKey, libraryPreview, savedReels, mediaResponse, approvalMatches } from './library.ts';
+import { parseLibrary, loadLibrary, assetKey, libraryPreview, savedReels, mediaResponse, approvalMatches, approvedLibraryReels, libraryHandover } from './library.ts';
+import { buildCalendar } from './calendar.ts';
 const item={item:'b001',title:'Two Sum',track:'blind75',version:'a'.repeat(16),folder:'b001_two_sum',duration_s:78,caption:'caption',youtube:'youtube',video_sha256:'a'.repeat(64),cover_sha256:'b'.repeat(64),saved_at:'2026-11-02'};
 test('invalid imported metadata cannot select arbitrary paths or URLs',()=>{
   assert.deepEqual(parseLibrary({items:[{...item,version:'../../private'},{...item,item:'../secret'},{...item,video_sha256:'bad'},{...item,duration_s:999}]}),[]);
@@ -35,4 +36,16 @@ test('approval is never inherited by a different version, video or cover',()=>{
   }
   assert.equal(savedReels('dsa',[item])[0].approved,false);
   assert.equal(savedReels('dsa',[item],{b001:record})[0].approved_at,123);
+});
+test('approved private reel enters the normal ready list with a cover and exact-version handover',()=>{
+  const record={...item,approved_at:123,approved_by:'owner'};
+  const approved=approvedLibraryReels('dsa',[item],{b001:record});
+  const calendar=buildCalendar({team:'dsa',publishing:true,now:Date.now(),cfg:{},status:{},office:approved,posts:[],slots:false});
+  assert.equal(calendar.ready.length,1);assert.equal(calendar.ready[0].item,'b001');assert.equal(calendar.ready[0].track,'blind75');assert.equal(calendar.ready[0].can_schedule,false);
+  assert.equal(calendar.ready[0].cover_url,savedReels('dsa',[item])[0].cover_url);
+  assert.deepEqual(libraryHandover('dsa',item,record),{source:'library',library_version:item.version,caption:item.caption,youtube:item.youtube});
+  assert.throws(()=>libraryHandover('dsa',item,undefined),/not approved/);
+  assert.throws(()=>libraryHandover('dsa',{...item,caption:'edited'},record),/not approved/);
+  assert.equal(approvedLibraryReels('dsa',[item],{}).length,0);
+  const handed=buildCalendar({team:'dsa',publishing:true,now:Date.now(),cfg:{},status:{},office:approved,posts:[{item:'b001',status:'handing_over'}],slots:false});assert.equal(handed.ready.length,0);
 });

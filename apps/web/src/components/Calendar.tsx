@@ -40,6 +40,7 @@ function PreviewSheet({ office, item, title, reel, saved=false, onApprovalChange
   const [broken, setBroken] = useState(false);
   const [approving,setApproving]=useState(false);
   const [approvalError,setApprovalError]=useState("");
+  const library=Boolean(saved||info?.version);
   useEffect(() => {
     let live = true;
     const request=saved?api<PreviewInfo>(`/api/teams/${office.state!.team.slug}/library/${item}/preview`):loadPreview(item);
@@ -61,7 +62,7 @@ function PreviewSheet({ office, item, title, reel, saved=false, onApprovalChange
         <div className="px-4 pt-4">
           <p className="text-xs text-dim">{item}{info?.duration_s ? `, ${Math.round(info.duration_s)} s` : ""}</p>
           <p className="text-[15px] font-semibold leading-snug">{info?.title ?? title}</p>
-          {saved&&info&&<p className={`mt-1 text-xs ${info.approved?"text-[#6FD3A6]":"text-gold"}`}>{info.approved?"Approved":"Waiting for your approval"}</p>}
+          {library&&info&&<p className={`mt-1 text-xs ${info.approved?"text-[#6FD3A6]":"text-gold"}`}>{info.approved?"Approved":"Waiting for your approval"}</p>}
         </div>
         {info ? (
           <video src={info.video_url} poster={info.cover_url ?? undefined} controls playsInline preload="metadata" onError={() => setBroken(true)} className="mx-auto mt-3 block h-[58vh] w-full bg-black object-contain" />
@@ -79,8 +80,8 @@ function PreviewSheet({ office, item, title, reel, saved=false, onApprovalChange
         )}
         {approvalError&&<p role="alert" className="px-4 py-2 text-sm text-coral">{approvalError}</p>}
         <div className="sticky bottom-0 flex gap-2 border-t border-wall bg-desk px-4 py-3">
-          {saved&&info&&<button disabled={approving} onClick={decide} className={`flex-1 rounded-lg py-2.5 text-sm font-semibold ${info.approved?"border border-wall text-paper":"bg-gold text-ink"}`}>{approving?"Saving…":info.approved?"Undo approval":"Approve reel"}</button>}
-          {reel && <button onClick={() => onPost(reel)} className="flex-1 rounded-lg bg-gold py-2.5 text-sm font-semibold text-ink">Post this…</button>}
+          {library&&info&&<button disabled={approving} onClick={decide} className={`flex-1 rounded-lg py-2.5 text-sm font-semibold ${info.approved?"border border-wall text-paper":"bg-gold text-ink"}`}>{approving?"Saving…":info.approved?"Undo approval":"Approve reel"}</button>}
+          {reel && (!library||info?.approved) && <button onClick={() => onPost(reel)} className="flex-1 rounded-lg bg-gold py-2.5 text-sm font-semibold text-ink">Post this…</button>}
           <button onClick={onClose} className={`rounded-lg border border-wall py-2.5 text-sm ${reel||saved ? "px-5" : "flex-1"}`}>Close</button>
         </div>
       </div>
@@ -259,10 +260,10 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
         {error && <p className="rounded-lg border border-coral/60 px-3 py-2 text-sm text-coral">{error}</p>}
         {!cal && !error && <p className="text-center text-sm text-dim">Opening the calendar…</p>}
 
-        {!!cal?.saved?.length && <section aria-label="Saved reels">
-          <h2 className="mb-1 text-sm text-paper">Saved reels · {cal.saved.length}</h2>
+        {!!cal?.saved?.some(r=>!r.approved) && <section aria-label="Saved reels">
+          <h2 className="mb-1 text-sm text-paper">Saved reels · {cal.saved.filter(r=>!r.approved).length}</h2>
           <p className="mb-3 text-[12.5px] text-dim">Open a reel to review its video, cover and captions, then approve it.</p>
-          <ul className="space-y-2.5">{cal.saved.map(r=><li key={r.item} className="flex items-center gap-3 rounded-xl border border-wall bg-desk p-3">
+          <ul className="space-y-2.5">{cal.saved.filter(r=>!r.approved).map(r=><li key={r.item} className="flex items-center gap-3 rounded-xl border border-wall bg-desk p-3">
             <button onClick={()=>setPreview({item:r.item,title:r.title,saved:true})} aria-label={`Preview ${r.title}`} className="shrink-0">
               <img src={r.cover_url} alt={`${r.title} cover`} className="h-28 w-[63px] rounded border border-wall object-contain" loading="lazy" />
             </button>

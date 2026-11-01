@@ -1,5 +1,5 @@
 // Owner-private files imported by an authenticated Cloudflare administrator.
-// A saved reel never enters the publishing queue or implies studio/owner approval.
+// Saving alone implies no approval. Exact-version owner approvals enter the normal Calendar ready list.
 export interface SavedReel {
   item: string; title: string; track: string; duration_s: number; cover_url: string;
   version: string; approved: boolean; approved_at: number | null;
@@ -14,6 +14,17 @@ export function approvalMatches(item:LibraryItem,record:LibraryApproval|null|und
     record.youtube===item.youtube && Number.isFinite(record.approved_at) && typeof record.approved_by==='string');
 }
 export const approvalKey=(item:string,version:string)=>`library.approval.${item}.${version}`;
+export function approvedLibraryReels(team:string,items:LibraryItem[],approvals:Record<string,LibraryApproval>) {
+  return items.filter(a=>approvalMatches(a,approvals[a.item])).map(a=>({
+    item:a.item,title:a.title,track:a.track,thread_id:null,duration_s:a.duration_s,
+    cover_url:`/api/teams/${team}/library/${a.item}/${a.version}/cover`,stage:'approved' as const,
+    detail:null,approved_at:approvals[a.item].approved_at,
+  }));
+}
+export function libraryHandover(team:string,item:LibraryItem,approval:LibraryApproval|undefined) {
+  if(!approvalMatches(item,approval))throw new Error(`${item.item} is not approved for its current version. Review and approve it first.`);
+  return {source:'library',library_version:item.version,caption:approval.caption,youtube:approval.youtube};
+}
 export interface LibraryItem {
   item: string; title: string; track: string; version: string; folder: string;
   duration_s: number; caption: string; youtube: string;

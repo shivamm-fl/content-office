@@ -14,3 +14,6 @@ python scripts/test_office_handover.py
 ```
 
 Both publisher suites passed in the clean checkout with mocked requests; nothing was posted. DSA's current platform switches remain in effect (Instagram and Facebook where the existing length rules permit; no DSA YouTube account is configured).
+
+
+2026-11-02: Private Office-library handover and b/p DSA routing are now on ai-course main at b5d9150. Approved library items enter the normal Calendar ready list. Only the owner-confirmed Post action imports the exact private staged version (identity, safe paths, media hashes and texts checked) and starts the existing post workflow. No publishing workflow was dispatched during development. Private staging helper: tools/stage_office_library.py.

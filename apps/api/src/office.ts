@@ -16,7 +16,7 @@ import { waitForSave } from "./save_gate";
 import { stallAction } from "./stall";
 import { findAnomalies } from "./health";
 import { TEAMS, team as getTeam } from "./teams";
-import { loadLibrary, approvalMatches, approvalKey, type LibraryApproval, type LibraryItem } from "./library";
+import { loadLibrary, approvalMatches, approvalKey, approvedLibraryReels, libraryHandover, type LibraryApproval, type LibraryItem } from "./library";
 import { validateCodingItem } from "./coding";
 
 /** Id prefix of every floor's tracks to the floor (e r q learnai, d dsa, s systemdesign): the publishing repo's state holds the reels of all floors. */
@@ -677,7 +677,13 @@ export class Office extends DurableObject<Env> {
       try { ({ cfg, status } = await this.publisherState()); } catch (e) { note = `Could not read the publishing repo: ${(e as Error).message}`; }
     }
     // The publishing repo's status and settings are shared by every floor: this floor sees its own reels only, and only learnai has slots.
-    return buildCalendar({ team: slug, publishing: Boolean(repo) && !note, now: Date.now(), cfg, status: floorStatus(status, slug, claims()), office: this.officeReels(), posts, note, slots: slug === SLOT_TEAM });
+    const library=await loadLibrary(this.env.TRANSCRIPTS,slug);
+    const approvals=await this.libraryApprovals(slug,library);
+    const importedIds=new Set(library.map(a=>a.item));
+    const officeReels=[...this.officeReels().filter(a=>!importedIds.has(a.item)),...approvedLibraryReels(slug,library,approvals)];
+    // Publisher state alone must not bypass an undone or changed library approval.
+    const visibleStatus=Object.fromEntries(Object.entries(status).filter(([id,s])=>!importedIds.has(id)||s.published||Boolean(approvals[id])));
+    return buildCalendar({ team: slug, publishing: Boolean(repo) && !note, now: Date.now(), cfg, status: floorStatus(visibleStatus, slug, claims()), office: officeReels, posts, note, slots: slug === SLOT_TEAM });
   }
 
   /** Post one reel now, or put it on a slot. Starts the publishing repo's hand-over workflow (the owner's explicit tap, confirmed in the app). */
@@ -691,6 +697,15 @@ export class Office extends DurableObject<Env> {
     if (why) throw new Error(why);
     const open = this.one("SELECT * FROM posts WHERE item = ? AND status = 'handing_over'", req.item);
     if (open) return toPost(open);   // a second tap is the same hand-over
+    const library=(await loadLibrary(this.env.TRANSCRIPTS,slug)).find(a=>a.item===req.item);
+    if(library){
+      const approvals=await this.libraryApprovals(slug,[library]);
+      const handover=libraryHandover(slug,library,approvals[req.item]);
+      const run=await dispatchPublisher(this.env,repo,"office-handover.yml",{
+        ...handoverInputs(slug,req,"office",handover),source:handover.source,library_version:handover.library_version,
+      });
+      return this.recordPost(req.item,req.mode,req.date??null,req.time??null,run,Boolean(req.trial));
+    }
     const released = status[req.item]?.qa_passed === true && status[req.item]?.release_assets === true;
     if (!released) {
       const reel = this.officeReels().find((r) => r.item === req.item);

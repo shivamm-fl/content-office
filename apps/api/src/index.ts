@@ -183,6 +183,8 @@ app.get("/api/teams/:team/preview/:item", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");
   try {
+    const library=(await loadLibrary(c.env.TRANSCRIPTS,slug)).find(a=>a.item===c.req.param("item"));
+    if(library){const approvals=await office(c.env,slug).libraryApprovals(slug,[library]);return c.json(libraryPreview(slug,library,approvals[library.item]));}
     return c.json(await office(c.env, slug).previewInfo(slug, c.req.param("item")));
   } catch (e) {
     return bad(c, 404, (e as Error).message);
