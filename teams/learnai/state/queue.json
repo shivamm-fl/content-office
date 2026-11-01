@@ -1743,6 +1743,115 @@
         "prompt data masking",
         "ai engineer interview"
       ]
+    },
+    {
+      "id": "a014",
+      "track": "series",
+      "day": 14,
+      "unit": "A3",
+      "format": "concept",
+      "status": "planned",
+      "title": "Attention: how a word looks at the other words",
+      "one_idea": "Attention lets one word decide which other words matter for its meaning: the word asks a question (query), every word offers a label (key), the match scores become percentages that add to 100 (softmax), and the word takes a weighted mix of the others (values). Same word 'bank' gets river as 77 % in one sentence and loan as 77 % in another, so its meaning changes with its neighbours. Different picture from a013: a bank-word with lines of different thickness to its neighbours and a percentage bar, not the Ravi/chai pronoun. Stand-alone: transformer is not needed, 'token' is not used.",
+      "hook_type": "direct_question",
+      "spoken_hook": "River bank और bank loan: model फ़र्क कैसे जानता है?",
+      "hook_formula": "plain_question on a concrete pair of phrases (same word, two meanings), picture from frame 0",
+      "visual_idea": "Frame 0: two short sentences, 'river bank' and 'bank loan', the word bank highlighted in both. Then one sentence 'I sat on the river bank' with lines from bank to every word, thickness = weight; a percentage bar sums to 100; a small [water, money] meter fills from the mix; the second sentence flips the thick line to loan and the meter to money.",
+      "example": "EXAMPLE (invented 2-number vectors, formula softmax(q.k/sqrt(d_k)) of the 2017 paper; state/runs/a014_attention_run_output.txt): in 'I sat on the river bank' the word bank gives river 76.7 %, itself 13.1 %, I 2.7 %, sat 3.0 %, on 2.3 %, the 2.2 % (sum 100.0); the mix leans water 2.06 vs money 0.14. In 'I went to the bank loan' loan gets 77.1 % and the mix leans money 2.06 vs water 0.13. Real models learn these numbers; ours are made up to show the steps.",
+      "sources": [
+        "https://arxiv.org/html/1706.03762v7",
+        "https://developers.google.com/machine-learning/crash-course/llm/transformers"
+      ],
+      "facts_to_verify": [
+        "Attention(Q,K,V)=softmax(QK^T/sqrt(d_k))V; output is a weighted sum of values, weights from query-key match (paper, fetched 2026-11-01)",
+        "Base model: 8 heads, d_k=d_v=64 (paper, fetched 2026-11-01)",
+        "Google ML crash course: self-attention asks how much each other token affects the interpretation of this token; different heads can learn different relationships (fetched 2026-11-01)",
+        "All shown weights are from our invented example, labelled EXAMPLE"
+      ],
+      "length_target_s": 100,
+      "cover_headline": "How a word looks at other words",
+      "thumb_text": "Attention",
+      "keywords": [
+        "what is attention in ai",
+        "self attention explained",
+        "how llm understands context",
+        "attention mechanism simple",
+        "ai engineer roadmap"
+      ],
+      "hook_source": "strategist, 2026-11-01",
+      "everyday_anchor": "Reading a sentence and knowing which neighbouring word decides what an ambiguous word means, like 'bank' next to 'river' or next to 'loan'."
+    },
+    {
+      "id": "q130",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "H2",
+      "title": "Interview: Ek request 20 second legi. Kahan time ja raha hai, tracing se kaise dekhoge?",
+      "trap": "Looking at total latency only, not at the time of each step.",
+      "one_idea": "Say the question in full, then: a total of 20 s tells you nothing about where. Trace the request: every step (embed, search, rerank, each LLM call, each tool call and its retry) is a span with a start and an end; spans of one request share a trace id and nest as parent and child. Sort spans by duration and read the share of each. Fix the biggest share first (in the example the reranker is 31 %, and a timed-out tool plus its retry is 29 %, so the LLM is not the only suspect). Boundary: spans that run in parallel do not add up to the total, so read the critical path.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Chatbot का जवाब 20 second में आता है, time कहाँ गया ये कैसे देखोगे?",
+      "hook_formula": "interviewer_asked (one complete question, as an interviewer says it; 16 words)",
+      "visual_idea": "A chat bubble with a 20.0 s timer from frame 0; the timer is cut into a horizontal bar of 7 coloured segments (a waterfall of spans) that slide in one by one with labels (embed, search, rerank, LLM, tool, retry, LLM); the longest segments get a ruler showing their percent; a trace id tag ties them together.",
+      "example": "EXAMPLE (invented trace, state/runs/q130_trace_run_output.txt): total 20.0 s = embed 0.3 + vector search 0.5 + rerank 6.2 (31.0 %) + LLM call 1 2.4 + order API timeout 5.0 (25.0 %) + retry 0.8 + LLM answer 4.8 (24.0 %); waiting on the tool including its retry 5.8 s = 29 %.",
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/signals/traces/",
+        "https://github.com/open-telemetry/semantic-conventions-genai"
+      ],
+      "facts_to_verify": [
+        "OpenTelemetry: a trace is the path of a request; spans are units of work with start and end, share a trace id, child spans point to a parent (fetched 2026-11-01)",
+        "OpenTelemetry has GenAI conventions for spans, metrics, events of GenAI clients, now in their own repo (fetched 2026-11-01); do not claim stable or exact attribute names",
+        "Numbers are an invented EXAMPLE"
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Where did the 20 seconds go",
+      "thumb_text": "Tracing",
+      "keywords": [
+        "llm latency tracing",
+        "opentelemetry traces explained",
+        "why is my ai app slow",
+        "rag latency debugging",
+        "ai engineer interview"
+      ],
+      "hook_source": "strategist, 2026-11-01",
+      "everyday_anchor": "A courier tracking page that shows how long the parcel waited at each hub, so you see which stop caused the delay and not just the late delivery."
+    },
+    {
+      "id": "q131",
+      "track": "interview",
+      "format": "question",
+      "status": "planned",
+      "unit": "H1",
+      "title": "Interview: Production mein AI app ke liye kaun se alerts lagaoge?",
+      "trap": "Alerting on errors only, while the answers quietly get worse.",
+      "one_idea": "Say the question in full, then: an AI app can fail while every request returns 200, so alerts cover four groups. (1) the classic signals of Google's SRE book: latency, traffic, errors, saturation; (2) cost: tokens per request and spend per day; (3) quality: a sample of live answers graded by an eval each day, alert on a drop; (4) safety: guardrail or refusal rate jumping. Page only for what is urgent and actionable; the rest goes to a dashboard. In the example errors stay near 1 % all week so an error alert (>5 %) never fires, while the quality alert (<80 %) fires from day 5.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "रात 2 बजे users बोले: जवाब गलत। Dashboard green है।",
+      "hook_formula": "relatable_stake (night-time user complaints while the dashboard is green, no jargon)",
+      "visual_idea": "A dashboard with all-green error tile from frame 0 while a second tile 'answer quality' slides down; a 7-day mini chart: flat error line near 1 %, quality line stepping from about 90 % to 75 %; four alert cards stamp in (classic, cost, quality, safety); a phone buzz icon marks only the urgent ones.",
+      "example": "EXAMPLE (invented week, 1000 requests/day, 100 graded answers/day, seeded run, state/runs/q131_alerts_run_output.txt): errors 1.2, 1.1, 1.0, 1.0, 1.1, 0.7, 1.6 % (error alert at 5 % never fires); eval pass 90, 89, 89, 94, 78, 74, 77 % (quality alert below 80 % fires on days 5, 6, 7).",
+      "sources": [
+        "https://sre.google/sre-book/monitoring-distributed-systems/",
+        "https://github.com/open-telemetry/semantic-conventions-genai"
+      ],
+      "facts_to_verify": [
+        "Google SRE book: four golden signals latency, traffic, errors, saturation; page on urgent, actionable, user-visible conditions; prefer alerting on symptoms (fetched 2026-11-01)",
+        "Quality sampling, cost and guardrail alerts are our recommended practice, not a quoted standard",
+        "Numbers are an invented EXAMPLE"
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Alerts for an AI app in production",
+      "thumb_text": "AI alerts",
+      "keywords": [
+        "llm monitoring alerts",
+        "ai app production monitoring",
+        "llm observability",
+        "golden signals ai",
+        "ai engineer interview"
+      ],
+      "hook_source": "strategist, 2026-11-01",
+      "everyday_anchor": "A shop whose door sensor shows no break-in while customers quietly stop buying: the usual alarm is quiet but the problem is real."
     }
   ]
 }

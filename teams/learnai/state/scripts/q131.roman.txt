@@ -1,0 +1,10 @@
+A: raat 2 baje users bole: jawab galat. Dashboard green hai. koi alert nahi baja.
+B: Interview mein poocha jata hai: Production mein AI app ke liye kaun se alerts lagaoge? Production yaani jahan asli users hain, alert yaani phone ki warning. tumhara jawab: sirf errors nahi, quality ka bhi alert, kul chaar tarah ke, kyonki AI app galat jawab dekar bhi error nahi dikhata.
+C: maan lo roz 1000 requests aati hain. pehla alert sab yahi lagate hain: errors 5 percent se upar jaayen, to phone baje. poore hafte errors 1 percent ke aaspas rahe, alert ek baar bhi nahi baja. par paanchve din se jawab kharab hone lage. roz ke 100 jawab jaanche, to sahi jawab 90 se girkar 78 reh gaye.
+D: pehla, classic signals. Latency yaani jawab ki deri, errors yaani fail hona, traffic yaani requests ki ginti, saturation yaani system kitna bhar gaya. us hafte ye chaaron hare the.
+E: doosra, cost. Tokens yaani model jitna text padhta-likhta hai, usi ka bill banta hai. isliye roz ka kharch dekho, kyonki prompt bada hua to bill chupchaap badhta hai.
+F: teesra, quality. roz kuch asli jawab uthakar eval se check karo, yaani har jawab ko pass ya fail do. 80 percent se neeche jaate hi alert bajta, yaani paanchve din se.
+G: chautha, safety. Guardrail yaani khatarnak jawab rokne wala check. wo achanak bahut baar roke, ya model baar-baar mana kare, to alert lagao, kyonki kuch badal gaya hai.
+H: ek baat: phone sirf us par bajao, jo urgent ho aur jis par tum kuch kar sako. baaki dashboard par, warna har alert ignore hone lagega.
+I: Interview mein bolo: “I alert on four things: the classic signals, cost, answer quality from a daily eval, and safety. I page only on what is urgent and actionable.”
+J: tumhare app mein pehle kaun sa alert lagaoge: quality ya cost? Comment mein likho. roz ek naya interview sawal, poore jawab ke saath, follow kar lo.

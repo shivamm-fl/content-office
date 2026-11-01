@@ -1,0 +1,9 @@
+A: @hook River bank और bank loan: model फ़र्क कैसे जानता है?
+B: Word वही है, bank। | पर एक में मतलब किनारा है, दूसरे में पैसे वाला bank। || यही attention सुलझाता है: | हर word बाकी words को देखता है, | और तय करता है कि किसको कितना मतलब देना है। || चार steps हैं।
+C: Sentence: I sat on the river bank। || पहला step, query। | Query यानी वो सवाल जो bank पूछता है: | मेरे आसपास water का clue है या money का?
+D: दूसरा step, key। | Key यानी हर word का label। || River का label है water, | bank का थोड़ा water, थोड़ा money। || Query को हर key से मिलाओ, | जितना match, उतना score ऊँचा। | River का सबसे ऊँचा आता है।
+E: तीसरा step, softmax। || Scores को percentages बनाओ, जो मिलकर 100{सौ} बनें। | क्योंकि percent में साफ़ दिखता है कि कौन कितना ज़रूरी है। || River को 77{seventy-seven} percent, | bank खुद को 13{thirteen} percent, | बाकी चार words को 2{दो} से 3{three} percent।
+F: चौथा step, value। | Value यानी word की जानकारी। | हर value को उसके percent से गुणा करके जोड़ दो। || Result: water की तरफ़ 2.06{two-point-oh-six}, | money की तरफ़ सिर्फ़ 0.14{zero-point-one-four}। | यही bank का नया मतलब है: किनारा।
+G: वही चार steps loan वाले sentence पर: | loan को 77{seventy-seven} percent, money 2.06{two-point-oh-six}, water सिर्फ़ 0.13{zero-point-one-three}। || Word वही, मतलब बदल गया, क्योंकि आसपास के words बदल गए।
+H: ये numbers मैंने बनाए हैं। | असली model इन्हें खुद सीखता है।
+I: याद रखो: query पूछता है, key match कराती है, softmax percent देता है, और value mix होती है। || अब बताओ: river को 77{seventy-seven} percent, bank खुद को 13{thirteen} percent, | बाकी चार words को मिलाकर कितना? | जवाब caption में है। | रोज़ एक AI idea के लिए follow कर लो।

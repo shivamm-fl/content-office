@@ -1,0 +1,9 @@
+A: Interviewer ne poocha: Chatbot ka jawab 20 second mein aata hai, time kahan gaya ye kaise dekhoge?
+B: tumhara jawab: trace lagao, yaani request ke har step ka alag time record karo. phir sabse bade hisse ko pehle theek karo. teen steps hain.
+C: maan lo app documents dhoondta hai, rerank karta hai yaani best order mein lagata hai, LLM se order API chunwata hai, API bulata hai, phir LLM se jawab likhwata hai. kul 20 second. sab yahi total dekhkar sochte hain ki LLM slow hai. par LLM ke dono calls milakar sirf 7.2 second hain, yaani 36 percent. Model badlo, tab bhi baaki 12.8 second wahin rahenge.
+D: pehla step, har kaam ko span banao. Span yaani ek kaam, start aur end time ke saath. End mein se start ghatao, to uska time milta hai, kyonki tab har step ka apna number hota hai. yahan 6 spans hain, order API ke retry yaani dobara koshish samet.
+E: doosra step, sab spans par ek trace id lagao. Trace id yaani us request ka number, aur uske saare spans milkar trace hain, yaani poora raasta. kyonki hazaron requests saath chalti hain.
+F: teesra step, spans ko time se sort karo. Rerank 6.2 second, yaani 31 percent. Order API ka timeout aur retry milakar 5.8 second, yaani 29 percent. sabse bada hissa rerank hai, LLM nahi, isliye pehle use theek karo.
+G: ek baat: jo spans saath-saath chalte hain, unka time jodne se total nahi banta. do searches saath chalin, 3 aur 2 second, to total mein 3 second hi lage. isliye sabse lamba raasta dekho.
+H: Interview mein bolo: “I trace the request: every step is a span, all spans share one trace id, and I fix the biggest share first.”
+I: tumhare app mein sabse slow hissa kaun sa: LLM, search ya tool? Comment mein likho. roz ek naya interview sawal, poore jawab ke saath, follow kar lo.

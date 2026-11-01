@@ -84,3 +84,10 @@ Types: stake q118, q120, q122, q125, q126 (n=5) median skip 67 %; asked q119, q1
 Do: a013 (transformer) is jargon-heavy, so line 1 is one concrete scene or number, no "transformer" or "attention" before the first teaching line; ~100 s. q-reels take the asked hook with the full question, 105 to 115 s.
 Experiment: a013 line 1 a concrete scene or number, picture from frame 0. Bar: skip under 58 %, watch 14 s or more; miss on n=1 is a hint.
 Owner decision: none needed.
+
+## 2026-11-01 (growth analyst, standup for a014 and two interview reels, ladder n=25 and n=26)
+Numbers: a012 (92 s, concrete 7B vs 70B contrast, n=1) 1,485 views, 62.4 % skip, 12.9 s, 1.51 saves and 0.25 shares per 100 reach: missed its bar (skip under 58 %, watch 14 s); series since a008 sits flat at 62.4 to 65.7 % (n=5). q128 (stake, no-jargon scene, 112.5 s) 501 views, 57.9 % skip, 12.6 s, 3.64 saves per 100 reach, 0 shares: best stake skip since q120, hint only (n=1, hours old). q127 (asked) 1,690 views, 63.1 %, 10.9 s, 7 shares. q126 (company, Microsoft) 544 views, 69.9 %, 10.2 s. a013 and q129 are not synced (0 everywhere), so the 2026-10-31 experiment has no result yet.
+Types: stake q118, q120, q122, q125, q128 (n=5) median skip 66.7 %; asked q119, q121, q123, q127 (n=4) 64.2 %; company_specific q124, q126 (n=2) 62.3 and 69.9 %. Gaps under 10 points: retire nothing. Last six q (q124 to q129): company 3, stake 2, asked 1.
+Do: a014 (attention) line 1 is one picture or scene, the same word meaning two things in two sentences, no "attention" or "transformer" before the first teaching line; about 100 s. q130 asked, q131 stake; both 100 to 115 s.
+Experiment: a014 opens on a two-sentence picture (same word, two meanings), bar skip under 58 % and watch 14 s or more; q131 stake opens on a concrete night-time alert scene, no jargon in line 1, bar skip under 59 %. Miss on n=1 is a hint.
+Owner decision: none needed.

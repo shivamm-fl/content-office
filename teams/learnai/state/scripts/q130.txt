@@ -1,0 +1,9 @@
+A: @hook Interviewer ने पूछा: Chatbot का जवाब 20{twenty} second में आता है, time कहाँ गया ये कैसे देखोगे?
+B: तुम्हारा जवाब: trace लगाओ, यानी request के हर step का अलग time record करो। | फिर सबसे बड़े हिस्से को पहले ठीक करो। | तीन steps हैं।
+C: मान लो app documents ढूँढता है, rerank करता है यानी best order में लगाता है, | LLM से order API चुनवाता है, API बुलाता है, | फिर LLM से जवाब लिखवाता है। || कुल 20{twenty} second। | सब यही total देखकर सोचते हैं कि LLM slow है। || पर LLM के दोनों calls मिलाकर सिर्फ़ 7.2{seven-point-two} second हैं, यानी 36{thirty-six} percent। | Model बदलो, तब भी 12.8{twelve-point-eight} second वहीं रहेंगे।
+D: पहला step, हर काम को span बनाओ। | Span यानी एक काम, start और end time के साथ। | End में से start घटाओ, तो उसका time मिलता है, | क्योंकि तब हर step का अपना number होता है।  || यहाँ 6{six} spans हैं, order API के retry यानी दोबारा कोशिश समेत।
+E: दूसरा step, सब spans पर एक trace id लगाओ। | Trace id यानी उस request का नंबर, | और उसके सारे spans मिलकर trace हैं, यानी पूरा रास्ता। | क्योंकि हज़ारों requests साथ चलती हैं।
+F: तीसरा step, spans को time से sort करो। || Rerank 6.2{six-point-two} second, यानी 31{thirty-one} percent। | Order API का timeout और retry मिलाकर 5.8{five-point-eight} second, यानी 29{twenty-nine} percent। || सबसे बड़ा हिस्सा rerank है, LLM नहीं, | इसलिए पहले उसे ठीक करो।
+G: एक बात: जो spans साथ-साथ चलते हैं, उनका time जोड़ने से total नहीं बनता। | दो searches साथ चलीं, 3{three} और 2{two} second, तो total में 3{three} second ही लगे। | इसलिए सबसे लंबा रास्ता देखो।
+H: Interview में बोलो: “I trace the request: every step is a span, all spans share one trace id, and I fix the biggest share first.”
+I: तुम्हारे app में सबसे slow हिस्सा कौन सा: LLM, search या tool? | Comment में लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।

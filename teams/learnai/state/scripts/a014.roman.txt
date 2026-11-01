@@ -1,0 +1,9 @@
+A: River bank aur bank loan: model fark kaise jaanta hai?
+B: Word wahi hai, bank. par ek mein matlab kinara hai, doosre mein paise wala bank. yahi attention suljhata hai: har word baaki words ko dekhta hai, aur tay karta hai ki kisko kitna matlab dena hai. chaar steps hain.
+C: Sentence: I sat on the river bank. pehla step, query. Query yaani wo sawal jo bank poochta hai: mere aaspas water ka clue hai ya money ka?
+D: doosra step, key. Key yaani har word ka label. River ka label hai water, bank ka thoda water, thoda money. Query ko har key se milao, jitna match, utna score ooncha. River ka sabse ooncha aata hai.
+E: teesra step, softmax. Scores ko percentages banao, jo milkar 100 banen. kyonki percent mein saaf dikhta hai ki kaun kitna zaroori hai. River ko 77 percent, bank khud ko 13 percent, baaki chaar words ko 2 se 3 percent.
+F: chautha step, value. Value yaani word ki jaankari. har value ko uske percent se guna karke jod do. Result: water ki taraf 2.06, money ki taraf sirf 0.14. yahi bank ka naya matlab hai: kinara.
+G: wahi chaar steps loan wale sentence par: loan ko 77 percent, money 2.06, water sirf 0.13. Word wahi, matlab badal gaya, kyonki aaspas ke words badal gaye.
+H: ye numbers maine banaye hain. asli model inhen khud seekhta hai.
+I: to yaad rakho: query poochta hai, key match karati hai, softmax percent deta hai, aur value mix hoti hai. ab batao: river ko 77 percent, bank khud ko 13 percent, baaki chaar words ko milakar kitna? jawab caption mein hai. roz ek AI idea ke liye follow kar lo.

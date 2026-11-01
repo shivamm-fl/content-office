@@ -1,0 +1,10 @@
+A: @hook रात 2{दो} बजे users बोले: जवाब गलत। | Dashboard green है। || कोई alert नहीं बजा।
+B: Interview में पूछा जाता है: Production में AI app के लिए कौन से alerts लगाओगे? || Production यानी जहाँ असली users हैं, | alert यानी phone की warning। || तुम्हारा जवाब: सिर्फ़ errors नहीं, quality का भी alert, कुल चार तरह के, | क्योंकि AI app गलत जवाब देकर भी error नहीं दिखाता।
+C: मान लो रोज़ 1000{one-thousand} requests आती हैं। | पहला alert सब यही लगाते हैं: errors 5{five} percent से ऊपर जाएँ, तो phone बजे। || पूरे हफ़्ते errors 1{one} percent के आसपास रहे, | alert एक बार भी नहीं बजा। || पर पाँचवें दिन से जवाब खराब होने लगे। | रोज़ के 100{सौ} जवाब जाँचे, | तो सही जवाब 90{नब्बे} से गिरकर 78{अट्ठहत्तर} रह गए।
+D: पहला, classic signals। || Latency यानी जवाब की देरी, errors यानी fail होना, | traffic यानी requests की गिनती, | saturation यानी system कितना भर गया। || उस हफ़्ते ये चारों हरे थे।
+E: दूसरा, cost। | Tokens यानी model जितना text पढ़ता-लिखता है, उसी का bill बनता है। | इसलिए रोज़ का खर्च देखो, क्योंकि prompt बड़ा हुआ तो bill चुपचाप बढ़ता है।
+F: तीसरा, quality। || रोज़ कुछ असली जवाब उठाकर eval से check करो, | यानी हर जवाब को pass या fail दो। | 80{eighty} percent से नीचे जाते ही alert बजता, यानी पाँचवें दिन से।
+G: चौथा, safety। | Guardrail यानी खतरनाक जवाब रोकने वाला check। | वो अचानक बहुत बार रोके, या model बार-बार मना करे, तो alert लगाओ, | क्योंकि कुछ बदल गया है।
+H: एक बात: phone सिर्फ़ उस पर बजाओ, जो urgent हो और जिस पर तुम कुछ कर सको। | बाकी dashboard पर, वरना हर alert ignore होने लगेगा।
+I: Interview में बोलो: “I alert on four things: the classic signals, cost, answer quality from a daily eval, and safety. I page only on what is urgent and actionable.”
+J: तुम्हारे app में पहले कौन सा alert लगाओगे: quality या cost? | Comment में लिखो। || रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow कर लो।
