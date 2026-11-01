@@ -88,6 +88,8 @@ export interface PostRecord {
   trial?: boolean;
 }
 export interface CalendarData {
+  /** Private imports awaiting review; saving never makes an item postable. */
+  saved?: { item: string; title: string; track: string; duration_s: number; cover_url: string }[];
   team: string; publishing: boolean; now: number; today: string; clock: string;
   paused: boolean; window: [string, string]; slot_times: string[]; posts_per_slot: number; can_post_now: boolean; last_post_hours: number | null;
   ready: ReadyReel[]; days: CalendarDay[]; pipeline: PipelineItem[]; recent: PostedReel[]; posts: PostRecord[];

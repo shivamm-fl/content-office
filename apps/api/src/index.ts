@@ -7,6 +7,7 @@ import { renderTranscript } from "./ops";
 import { verifyGithubOidc } from "./oidc";
 import { Office, type Env } from "./office";
 import { TEAMS, team as getTeam } from "./teams";
+import { assetKey, loadLibrary, savedReels, libraryPreview, mediaResponse } from "./library";
 
 export { Office };
 
@@ -143,7 +144,26 @@ app.post("/api/teams/:team/sync", async (c) => {
 app.get("/api/teams/:team/calendar", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");
-  return c.json(await office(c.env, slug).calendar(slug));
+  const [calendar, library] = await Promise.all([office(c.env, slug).calendar(slug), loadLibrary(c.env.TRANSCRIPTS, slug)]);
+  return c.json({ ...calendar, saved: savedReels(slug, library) });
+});
+
+// Private review library. Files are imported with the administrator's existing KV permissions,
+// not through a public upload endpoint, runner identity or social-publishing workflow.
+app.get("/api/teams/:team/library/:item/:version/:kind", async (c) => {
+  const slug=teamOr404(c); const {item,version,kind}=c.req.param();
+  if(!slug || (kind!=="video"&&kind!=="cover"))return bad(c,404,"not found");
+  const entry=(await loadLibrary(c.env.TRANSCRIPTS,slug)).find(x=>x.item===item&&x.version===version);
+  if(!entry)return bad(c,404,"not found");
+  const bytes=await c.env.TRANSCRIPTS.get(assetKey(slug,entry,kind),"arrayBuffer");
+  if(!bytes)return bad(c,404,"not found");
+  return mediaResponse(bytes,kind==="video"?"video/mp4":"image/png",kind==="video"?entry.video_sha256:entry.cover_sha256,c.req.header("Range")??null);
+});
+app.get("/api/teams/:team/library/:item/preview", async (c) => {
+  const slug=teamOr404(c);
+  if(!slug)return bad(c,404,"no such team");
+  const saved=(await loadLibrary(c.env.TRANSCRIPTS,slug)).find(x=>x.item===c.req.param("item"));
+  return saved?c.json(libraryPreview(slug,saved)):bad(c,404,"not found");
 });
 
 // Watch a reel before it is posted: its video, cover and the texts that would go out. For a reel released in the private publishing repo the

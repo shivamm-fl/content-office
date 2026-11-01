@@ -4,8 +4,9 @@ import type { CalendarCell, CalendarData, CalendarSlot, PostRecord, PreviewInfo,
 import { useCallback, useEffect, useState } from "react";
 import type { Office } from "../store";
 import { Empty, Screen, go, timeAgo } from "./ui";
+import { api } from "../api";
 
-const SHORT: Record<string, string> = { generic: "What's new", course: "Course", interview: "Interview", experiment: "Experiment" };
+const SHORT: Record<string, string> = { generic: "What's new", course: "Course", interview: "Interview", experiment: "Experiment", blind75: "Blind 75", potd: "LeetCode POTD" };
 const trackName = (team: Team, id: string) => SHORT[id] ?? team.tracks.find((t) => t.id === id)?.name ?? "Reel";
 const STAGE: Record<string, [string, string]> = {
   studio: ["In the studio", "text-paper"], approval: ["Waits for you", "text-gold"], failed: ["Did not pass the gate", "text-coral"],
@@ -32,16 +33,17 @@ function CellRow({ c, team, paused, onPreview }: { c: CalendarCell; team: Team; 
 }
 
 /** Watch a reel (and read the texts that would go out) before it is posted. */
-function PreviewSheet({ office, item, title, reel, onClose, onPost }: { office: Office; item: string; title: string; reel: ReadyReel | null; onClose: () => void; onPost: (r: ReadyReel) => void }) {
+function PreviewSheet({ office, item, title, reel, saved=false, onClose, onPost }: { office: Office; item: string; title: string; reel: ReadyReel | null; saved?: boolean; onClose: () => void; onPost: (r: ReadyReel) => void }) {
   const { loadPreview } = office;
   const [info, setInfo] = useState<PreviewInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [broken, setBroken] = useState(false);
   useEffect(() => {
     let live = true;
-    loadPreview(item).then((i) => { if (live) setInfo(i); }).catch((e: Error) => { if (live) setError(e.message); });
+    const request=saved?api<PreviewInfo>(`/api/teams/${office.state!.team.slug}/library/${item}/preview`):loadPreview(item);
+    request.then((i) => { if (live) setInfo(i); }).catch((e: Error) => { if (live) setError(e.message); });
     return () => { live = false; };
-  }, [loadPreview, item]);
+  }, [loadPreview, item, saved, office.state!.team.slug]);
   return (
     <div className="fixed inset-0 z-30 flex items-end bg-black/60" onClick={onClose}>
       <div className="safe-bottom mx-auto max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-2xl border border-wall bg-desk" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={`Preview ${title}`}>
@@ -176,7 +178,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
   const [cal, setCal] = useState<CalendarData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sheet, setSheet] = useState<ReadyReel | null>(null);
-  const [preview, setPreview] = useState<{ item: string; title: string } | null>(null);
+  const [preview, setPreview] = useState<{ item: string; title: string; saved?:boolean } | null>(null);
   const [opened, setOpened] = useState<string | null>(null);
   const [switching, setSwitching] = useState<"pause" | "resume" | null>(null);
   const [busy, setBusy] = useState(false);
@@ -214,6 +216,20 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
 
         {error && <p className="rounded-lg border border-coral/60 px-3 py-2 text-sm text-coral">{error}</p>}
         {!cal && !error && <p className="text-center text-sm text-dim">Opening the calendar…</p>}
+
+        {!!cal?.saved?.length && <section aria-label="Saved reels">
+          <h2 className="mb-1 text-sm text-paper">Saved reels · {cal.saved.length}</h2>
+          <p className="mb-3 text-[12.5px] text-dim">Covers, videos and captions saved in the Office for your review.</p>
+          <ul className="space-y-2.5">{cal.saved.map(r=><li key={r.item} className="flex items-center gap-3 rounded-xl border border-wall bg-desk p-3">
+            <button onClick={()=>setPreview({item:r.item,title:r.title,saved:true})} aria-label={`Preview ${r.title}`} className="shrink-0">
+              <img src={r.cover_url} alt={`${r.title} cover`} className="h-28 w-[63px] rounded border border-wall object-contain" loading="lazy" />
+            </button>
+            <div className="min-w-0 flex-1"><p className="text-[14px] font-medium leading-snug">{r.title}</p>
+              <p className="mt-1 text-[11.5px] text-dim">{r.item} · {trackName(team,r.track)} · {r.duration_s}s</p>
+              <p className="mt-1 text-[11.5px] text-gold">Saved for review</p></div>
+            <button onClick={()=>setPreview({item:r.item,title:r.title,saved:true})} className="rounded-lg border border-wall px-3 py-2 text-xs">Preview</button>
+          </li>)}</ul>
+        </section>}
 
         {cal && !cal.publishing && !cal.note && <Empty>This floor has no publishing repo yet, so there is nothing to post from here. Its reels still show up under "Being made".</Empty>}
         {cal?.note && <p className="rounded-lg border border-coral/60 px-3 py-2 text-sm text-coral">{cal.note}</p>}
@@ -349,7 +365,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
       </div>
       {sheet && cal && <PostSheet cal={cal} reel={sheet} office={office} onClose={() => setSheet(null)} onDone={() => { setSheet(null); void load(); }} onPreview={() => { setPreview({ item: sheet.item, title: sheet.title }); setSheet(null); }} />}
       {preview && cal && (
-        <PreviewSheet office={office} item={preview.item} title={preview.title} reel={cal.ready.find((r) => r.item === preview.item) ?? null}
+        <PreviewSheet office={office} item={preview.item} title={preview.title} saved={preview.saved} reel={preview.saved ? null : cal.ready.find((r) => r.item === preview.item) ?? null}
           onClose={() => setPreview(null)} onPost={(r) => { setPreview(null); setSheet(r); }} />
       )}
     </Screen>
