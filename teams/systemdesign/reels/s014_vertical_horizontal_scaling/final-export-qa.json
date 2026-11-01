@@ -1,0 +1,38 @@
+{
+  "item": "s014",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 124.0,
+  "video_sha256": "8780f4da8ef38c12857b4d7d57f85b5d6d1f3eb8e5672d522fd03c0f31aa5ccf",
+  "cover_sha256": "d99b4ec0f2237c2c13144316b960d7cc13f87fa0f4ea9ece43f2347fea22899e",
+  "loudness": {
+    "input_i": "-13.92",
+    "input_tp": "-1.91",
+    "input_lra": "3.70",
+    "input_thresh": "-24.59",
+    "output_i": "-13.84",
+    "output_tp": "-1.00",
+    "output_lra": "3.70",
+    "output_thresh": "-24.47",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.16"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "Final MP4 shows clear resource cells, instance routing and directional arrows.",
+    "Shared database bottleneck, external sessions and loss of one replica agree with narration.",
+    "Cyan branding, day counter, captions and cover inspected."
+  ]
+}

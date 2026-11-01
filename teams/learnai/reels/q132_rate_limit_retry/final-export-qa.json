@@ -1,0 +1,38 @@
+{
+  "item": "q132",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 109.0,
+  "video_sha256": "f9801d521a321e0057bcf24fff76baa2e986f14b3959bfebcd8b42d0a16759d7",
+  "cover_sha256": "5ee28009c0d2084e5f6d1c1e9468b917cbf8667724c79e1a095cc2d12d9208b6",
+  "loudness": {
+    "input_i": "-13.91",
+    "input_tp": "-1.91",
+    "input_lra": "4.00",
+    "input_thresh": "-24.66",
+    "output_i": "-13.97",
+    "output_tp": "-1.83",
+    "output_lra": "3.40",
+    "output_thresh": "-24.65",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.03"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "Final MP4 scene contact sheet reviewed; no clipping in inspected frames.",
+    "Arrowheads use inline geometry and remain visible in later scenes.",
+    "Narration uses exact paid alignment, Flash v2.5, tempo 0.9."
+  ]
+}

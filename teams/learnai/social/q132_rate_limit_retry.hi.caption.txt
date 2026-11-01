@@ -1,0 +1,7 @@
+API 429 aaye toh retry kaise karoge?
+
+Rate limit ke baad instant retries traffic badha sakti hain. Error reason aur Retry-After padho; retryable failure par bounded backoff, jitter, deadline aur concurrency control use karo. Spend cap ko blind retry mat karo.
+
+Comment karke batao: jitter clients ko saath jagata hai ya alag?
+
+#AIEngineering #Learnvora #LLM

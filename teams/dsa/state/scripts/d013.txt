@@ -1,0 +1,21 @@
+Product of Array Except Self में current index कैसे exclude करोगे? | Given array: one, two, three, four। | Index one पर two को छोड़ना है, इसलिए one times three times four, answer twelve।
+
+हर index के लिए यही करना है। | Output होगा twenty four, twelve, eight, six। | Condition है: division use नहीं करना। Negative values और zero भी input में आ सकते हैं।
+
+सीधा तरीका: हर index के लिए बाकी सभी elements multiply करो। | Four elements में twelve multiplications होती हैं। | General case में n times n minus one, यानी O n squared time। Left और right के products बार बार बन रहे हैं।
+
+हर index के बचे हुए elements को दो हिस्सों में बाँटो। | Current index के left का product, और उसके right का product। | दोनों multiply करने पर current element अपने आप छूट जाएगा।
+
+पहला pass left से right जाएगा। | answer में पहले left product रखेंगे, फिर current value से running product update करेंगे। | शुरू में product one है, क्योंकि खाली हिस्से का product one लेते हैं।
+
+इस array में left products हैं one, one, two, six। | Index two के left में one और two हैं, इसलिए product two। | ध्यान दो, current three उस product में शामिल नहीं है।
+
+अब right से left चलो। Right product भी one से शुरू होगा। | पहले answer को right से multiply करो, फिर right को current value से multiply करो। | यही order current element को exclude रखता है।
+
+Last index पर six times one, answer six। | फिर two times four, answer eight। | फिर one times twelve, answer twelve। | First index पर one times twenty four, answer twenty four।
+
+यही पूरा Python solution है। | First loop left products store करता है; second loop right products multiply करता है। | मैंने इसी code को examples और random arrays पर brute force से compare किया है।
+
+Given array: two, zero, three। | Output zero, six, zero होगा। | Zero के index पर left two और right three मिलते हैं। बाकी दोनों answers में zero शामिल है। Division की जरूरत नहीं पड़ी।
+
+दो passes हैं, इसलिए O n time। | Output array को छोड़कर सिर्फ left और right products रखते हैं: O one extra space। | Output को गिनोगे तो O n space है। Comments में बताओ: दो zeros हों तो output क्या होगा? DSA सीखने के लिए follow करो।

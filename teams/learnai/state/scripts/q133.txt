@@ -1,0 +1,17 @@
+Interviewer ने पूछा: Batch API कब use करोगे और real-time कब? | सवाल यह है कि result का इंतजार कौन कर रहा है। | सामने user बैठा है, या काम बाद में पूरा हो सकता है?
+
+मान लो support app में live chat भी है, और ten thousand पुराने tickets की tagging भी। | Chat user को जवाब अभी चाहिए। | पुराने tickets की report सुबह तक चाहिए। दोनों की deadline अलग है।
+
+हर ticket को live request बनाना tempting है। | लेकिन offline काम के लिए real-time रास्ता चुनकर तुम ऐसी जल्दी खरीद रहे हो जिसकी जरूरत नहीं। | उल्टा chat को batch में डालोगे तो user result आने तक अटक जाएगा।
+
+पहला रास्ता real-time है। | Request भेजो और उसी interaction में response लो; streaming हो तो answer के हिस्से आते दिखते हैं। | यह low waiting time की जरूरत वाले chat और interactive workflows में काम आता है।
+
+दूसरा रास्ता batch है: कई independent requests का job submit करो। | Job ID रखो, processing status check करो, फिर results collect करो। | User को उसी connection पर wait नहीं कराना पड़ता।
+
+हर ticket को अपना custom ID दो। | Results जिस order में लौटें, उस पर भरोसा मत करो। | ID से result को सही ticket में जोड़ो, वरना सही classification भी गलत customer record पर लग सकती है।
+
+Batch में हर request का result अलग check करो। | मान लो hundred में ninety eight succeed और two fail हुए। | केवल failed requests की वजह समझकर उन्हें retry करो; पूरे hundred को दोबारा मत भेजो।
+
+Batch तुरंत पूरा होने की guarantee नहीं है। | Claude batches को पूरा होने में up to twenty four hours लग सकते हैं, और unfinished requests expire भी हो सकती हैं। | इसलिए hard deadline और failure handling पहले तय करो।
+
+Interview में कहो: interactive user के लिए real-time चुनूँगा। | Independent offline काम के लिए batch, अगर deadline और provider की limits allow करें। | Comments में बताओ: रात की ticket tagging, batch या real-time? Practical AI interviews के लिए follow करो।

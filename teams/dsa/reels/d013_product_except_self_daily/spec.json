@@ -1,0 +1,55 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5,
+    "K": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://leetcode.com/problems/product-of-array-except-self/description/"
+  ],
+  "copy": {
+    "hi": {
+      "A": "Product of Array Except Self में current index कैसे exclude करोगे? | Given array: one, two, three, four। | Index one पर two को छोड़ना है, इसलिए one times three times four, answer twelve।",
+      "B": "हर index के लिए यही करना है। | Output होगा twenty four, twelve, eight, six। | Condition है: division use नहीं करना। Negative values और zero भी input में आ सकते हैं।",
+      "C": "सीधा तरीका: हर index के लिए बाकी सभी elements multiply करो। | Four elements में twelve multiplications होती हैं। | General case में n times n minus one, यानी O n squared time। Left और right के products बार बार बन रहे हैं।",
+      "D": "हर index के बचे हुए elements को दो हिस्सों में बाँटो। | Current index के left का product, और उसके right का product। | दोनों multiply करने पर current element अपने आप छूट जाएगा।",
+      "E": "पहला pass left से right जाएगा। | answer में पहले left product रखेंगे, फिर current value से running product update करेंगे। | शुरू में product one है, क्योंकि खाली हिस्से का product one लेते हैं।",
+      "F": "इस array में left products हैं one, one, two, six। | Index two के left में one और two हैं, इसलिए product two। | ध्यान दो, current three उस product में शामिल नहीं है।",
+      "G": "अब right से left चलो। Right product भी one से शुरू होगा। | पहले answer को right से multiply करो, फिर right को current value से multiply करो। | यही order current element को exclude रखता है।",
+      "H": "Last index पर six times one, answer six। | फिर two times four, answer eight। | फिर one times twelve, answer twelve। | First index पर one times twenty four, answer twenty four।",
+      "I": "यही पूरा Python solution है। | First loop left products store करता है; second loop right products multiply करता है। | मैंने इसी code को examples और random arrays पर brute force से compare किया है।",
+      "J": "Given array: two, zero, three। | Output zero, six, zero होगा। | Zero के index पर left two और right three मिलते हैं। बाकी दोनों answers में zero शामिल है। Division की जरूरत नहीं पड़ी।",
+      "K": "दो passes हैं, इसलिए O n time। | Output array को छोड़कर सिर्फ left और right products रखते हैं: O one extra space। | Output को गिनोगे तो O n space है। Comments में बताओ: दो zeros हों तो output क्या होगा? DSA सीखने के लिए follow करो।"
+    }
+  }
+}

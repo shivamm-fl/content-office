@@ -1,0 +1,11 @@
+{
+  "item": "q132",
+  "sources_fetched": "2026-11-02 IST session",
+  "sources": [
+    "https://platform.claude.com/docs/en/api/rate-limits",
+    "https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter"
+  ],
+  "examples_are_illustrative": true,
+  "claims_checked": true,
+  "notes": "Rate-limit Retry-After is respected when present; spend-cap failures not retried blindly. Backoff policy, jitter delays and client count explicitly illustrative."
+}

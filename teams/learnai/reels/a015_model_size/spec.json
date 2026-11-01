@@ -1,0 +1,49 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://arxiv.org/abs/2203.15556"
+  ],
+  "copy": {
+    "hi": {
+      "A": "बड़ा model हमेशा बेहतर answer देता है? | मान लो तुम्हें support tickets को billing और delivery में बाँटना है।",
+      "B": "दोनों models को वही tickets दो। | सिर्फ parameters की गिनती देखकर winner चुनोगे, तो असली काम की quality पता ही नहीं चलेगी।",
+      "C": "Parameters model के सीखे हुए numbers हैं। | लेकिन उन numbers को सीखने के लिए training data और compute भी चाहिए। | बड़ा model कम training पाए, तो उसकी capacity का पूरा फायदा नहीं मिलता।",
+      "D": "एक real comparison देखो। Chinchilla में seventy billion parameters थे। | Gopher में two hundred eighty billion। | फिर भी Chinchilla ने कई evaluation tasks पर बेहतर result दिया।",
+      "E": "उसी training compute budget में Chinchilla को four times ज्यादा training data मिला। | इसलिए यह comparison size के साथ training balance का फर्क भी दिखाता है। | इससे हर छोटा model बेहतर साबित नहीं होता।",
+      "F": "अपने app में कैसे चुनोगे? | पहला step: अलग रखे हुए labelled tickets पर दोनों की accuracy measure करो। | वही examples दोनों को दो, और test answers prompt में मत डालो।",
+      "G": "दूसरा step: response time और cost भी साथ रखो। | मान लो छोटे model ने hundred में ninety four tickets सही किये, बड़े ने ninety five। | ये example numbers हैं, benchmark नहीं।",
+      "H": "अगर तुम्हारी minimum जरूरत ninety three है, दोनों pass हैं। | अब speed और cost देखकर चुन सकते हो। | लेकिन जरूरी कठिन cases पर छोटा model fail करे, तो overall average के पीछे वह failure मत छुपाओ।",
+      "I": "Model size एक signal है, तुम्हारे task का report card नहीं। | Comments में बताओ: model चुनते समय पहले size देखोगे या अपना test? | ऐसी practical AI learning के लिए follow करो।"
+    }
+  }
+}

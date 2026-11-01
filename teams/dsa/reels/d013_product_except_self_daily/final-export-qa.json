@@ -1,0 +1,40 @@
+{
+  "item": "d013",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true,
+    "code_tested": true
+  },
+  "duration_s": 133.0,
+  "video_sha256": "809c8a569ee42d1b3ee2c6bce8291c2636b6e848f5801e943763bbd8749fa23d",
+  "cover_sha256": "1eef8b81e7e7bcd62653588674653cad9a5833f85a0e7e306317173e121f16cc",
+  "loudness": {
+    "input_i": "-13.92",
+    "input_tp": "-1.69",
+    "input_lra": "4.10",
+    "input_thresh": "-24.66",
+    "output_i": "-14.03",
+    "output_tp": "-1.48",
+    "output_lra": "3.90",
+    "output_thresh": "-24.71",
+    "normalization_type": "dynamic",
+    "target_offset": "0.03"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "code_frames_inspected": true,
+  "visual_review_notes": [
+    "Final MP4 first-loop narration highlights the first-loop lines, not return.",
+    "Index-two narration highlights index 2 and left product 2.",
+    "Actual Python code, zero case, dry run and complexities checked; 5000 random code tests passed."
+  ]
+}

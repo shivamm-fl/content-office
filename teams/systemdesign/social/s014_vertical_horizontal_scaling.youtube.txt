@@ -1,0 +1,12 @@
+Vertical vs horizontal scaling samjho
+
+Day 14/150: Same machine ki CPU/RAM badhana scale up hai; aur instances jodna scale out. 300 RPS ka illustrative example, shared database bottleneck, session state aur failure capacity ke saath choice samjho.
+
+Comment karke batao: same server ki RAM badhana vertical hai ya horizontal?
+
+Sources:
+https://learn.microsoft.com/en-us/azure/architecture/best-practices/auto-scaling
+https://docs.cloud.google.com/compute/docs/autoscaler
+
+Tags: vertical scaling,horizontal scaling,system design
+AI-assisted visuals and narration.

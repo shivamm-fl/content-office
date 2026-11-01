@@ -1,0 +1,13 @@
+# Visual plan · daily production 2026-11-02
+
+| Scene | Spoken beat | Picture | Labels | Built with |
+|---|---|---|---|---|
+| A | Bigger = better? | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Ticket → ?, Small model, Large model | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| B | Same task | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Same tickets, Same labels, Same test | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| C | Size vs training | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Parameters, Training data, Compute budget | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| D | A real comparison | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Chinchilla · 70B, Gopher · 280B, Evaluation winner: Chinchilla | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| E | Why it happened | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Same compute, 4× training data, Balance matters | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| F | Measure your task | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Held-out tickets, Model A → labels, Model B → labels | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| G | Quality and cost | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | EXAMPLE · 100 tickets, Small: 94 correct, Large: 95 correct | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| H | Your threshold | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Minimum: 93/100, Both pass, Check hard cases | Custom SVG with phrase-aligned GSAP opacity and highlights |
+| I | Choose by evidence | Two differently sized model blocks share one test input; parameter grids compare capacity, then held-out correctness grids show task scores and a threshold. | Your test, Quality threshold, Cost + latency | Custom SVG with phrase-aligned GSAP opacity and highlights |

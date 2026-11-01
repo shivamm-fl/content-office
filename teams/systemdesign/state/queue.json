@@ -14,7 +14,7 @@
       "cover_headline": "Fast For One User, Not A Million",
       "thumb_text": "One vs Million",
       "script_file": "state/scripts/s013.txt",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "sources": [
         "https://en.wikipedia.org/wiki/Scalability",
@@ -28,6 +28,40 @@
         "system design interview scalability",
         "scalable system kya hota hai"
       ]
+    },
+    {
+      "id": "s014",
+      "track": "series",
+      "title": "Vertical vs Horizontal Scaling",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/s014.txt",
+      "script_locked": false,
+      "day": 14,
+      "format": "trade-off",
+      "hook_type": "direct_question",
+      "spoken_hook": "Traffic बढ़े तो server बड़ा करोगे, या servers बढ़ाओगे?",
+      "hook_source": "Owner-requested daily production; roadmap order, 2026-11-02",
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/architecture/best-practices/auto-scaling",
+        "https://docs.cloud.google.com/compute/docs/autoscaler"
+      ],
+      "facts_to_verify": [
+        "Vertical adds resources to same machine; horizontal adds instances. Capacity figures explicitly illustrative and ideal, shared bottleneck and loss of one replica caveats stated."
+      ],
+      "visual_idea": "One concrete running example drawn with labelled objects, phrase aligned changes and readable Python for the DSA solution.",
+      "length_target_s": 124.0,
+      "cover_headline": "Vertical vs Horizontal Scaling",
+      "thumb_text": "BIGGER OR MORE?",
+      "keywords": [
+        "vertical scaling",
+        "horizontal scaling",
+        "system design"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-02",
+      "office_version": "02f6b7f266577b9f",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/systemdesign/library/s014/preview"
     }
   ]
 }

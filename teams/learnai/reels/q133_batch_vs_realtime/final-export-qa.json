@@ -1,0 +1,37 @@
+{
+  "item": "q133",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 110.5,
+  "video_sha256": "f15dca2ab559a2b0fecd3fa42ccbe8716972377b5a9c3dc3a2d21fb16d96e9c9",
+  "cover_sha256": "afb74fc21100e17f5730b543940a1a99d31f704a911b9a5092f79933c8094bf6",
+  "loudness": {
+    "input_i": "-13.91",
+    "input_tp": "-1.90",
+    "input_lra": "5.20",
+    "input_thresh": "-24.64",
+    "output_i": "-14.03",
+    "output_tp": "-1.82",
+    "output_lra": "4.30",
+    "output_thresh": "-24.71",
+    "normalization_type": "dynamic",
+    "target_offset": "0.03"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "Final MP4 running example, result-ID matching and expiry boundary inspected.",
+    "Inline arrowheads are visible on both live and batch paths."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://learn.microsoft.com/en-us/azure/architecture/best-practices/auto-scaling",
+    "https://docs.cloud.google.com/compute/docs/autoscaler"
+  ],
+  "copy": {
+    "hi": {
+      "A": "Traffic बढ़े तो server बड़ा करोगे, या servers बढ़ाओगे? | मान लो stateless API का एक server hundred requests per second संभालता है। | अब three hundred requests per second आ रही हैं। ये example capacity है।",
+      "B": "सिर्फ इंतजार करने से capacity नहीं बढ़ेगी। | हर second two hundred requests का extra काम आ रहा है। | अब two options हैं: उसी machine को मजबूत बनाना, या काम कई machines में बाँटना।",
+      "C": "पहला option vertical scaling, यानी उसी machine के resources बढ़ाना। | CPU या memory बढ़ाओ, अगर वही bottleneck है। | Application के copies बाँटने की जरूरत कम पड़ती है, इसलिए शुरुआत में यह आसान हो सकता है।",
+      "D": "लेकिन double CPU का मतलब हमेशा double throughput नहीं है। | अगर database slow है, तो app server बड़ा करने से database ठीक नहीं होगा। | नई machine की actual capacity load test से measure करो।",
+      "E": "दूसरा option horizontal scaling: application के और instances जोड़ो। | Example में three servers, हर एक hundred requests per second। | Load balancer requests बाँटे, तो ideal combined capacity three hundred होगी।",
+      "F": "Ideal इसलिए कहा, क्योंकि बराबर load और कोई shared bottleneck न होने की assumption है। | Shared database hundred requests पर अटक जाए, तो three app servers भी उसे पार नहीं कर सकते। | पूरा request path देखना जरूरी है।",
+      "G": "एक और बात: user session सिर्फ एक server की memory में हो, तो अगली request दूसरे server पर fail हो सकती है। | Stateless API में request का जरूरी state बाहर रखा जाता है। | तब copies के बीच request बाँटना आसान होता है।",
+      "H": "Multiple instances से failure संभालने का रास्ता भी मिलता है। | लेकिन three में से one server गिरा, तो example capacity two hundred रह गई। | Three hundred traffic के लिए spare capacity चाहिए; copies होना alone guarantee नहीं है।",
+      "I": "तो machine limit के अंदर simple setup चाहिए, vertical scaling देखो। | कई instances चल सकते हों और demand बढ़ती रहे, horizontal scaling देखो। | दोनों साथ भी use होते हैं। पहले bottleneck measure करो।",
+      "J": "Comments में बताओ: एक server की RAM बढ़ाई, vertical या horizontal? | रोज clear examples के साथ system design सीखने के लिए follow करो।"
+    }
+  }
+}

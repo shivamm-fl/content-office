@@ -1,0 +1,33 @@
+{
+  "team": "learnai",
+  "item": "a015",
+  "version": "3bcba7173b23b33b",
+  "remote_verified": true,
+  "video_sha256": "ed49aaeac36b7e17bff33668175e03b999335fa153224020e1f46f62eb961a95",
+  "cover_sha256": "d5e308cd31650a36a9f2696f409074ad17788d0dc87b6f5100ef2631077f4480",
+  "preview_url": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/a015/preview",
+  "calendar_url": "https://content-office.learnai-ai.workers.dev/#/calendar",
+  "location": "learnai floor / Calendar / Saved reels",
+  "owner_approval": "pending",
+  "published": false,
+  "scheduled": false,
+  "prior_unrelated_items_preserved": true,
+  "private_package": {
+    "item": "a015",
+    "version": "3bcba7173b23b33b",
+    "private_repo": "shivamm-fl/ai-course",
+    "tag": "library-learnai-a015-3bcba7173b23b33b",
+    "verified": true
+  },
+  "paid_voice_cache": {
+    "key": "reel-library/learnai/a015/voice-cache-6d82bf1e186bf1ed.tgz",
+    "sha256": "6d82bf1e186bf1ed7cd1143f8278ff3c49eea0d381f9b8e22101ec390079a092",
+    "bytes": 1228929,
+    "remote_verified": true,
+    "voice": "Shivam Trainer",
+    "model": "eleven_flash_v2_5",
+    "tempo": 0.9,
+    "contents": "spec.json plus paid raw MP3 phrases and exact alignment JSON; no credentials",
+    "restore": "Restore audio/hi/el_* into the reel folder before make_reel_audio.py; unchanged phrases incur no new voice generation."
+  }
+}

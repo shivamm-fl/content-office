@@ -240,7 +240,7 @@
         "pdf prompt mein daalna ya rag"
       ],
       "notes": "Caveat: 200,000-token figure and caching savings are Anthropic's own; the 40-page handbook is an illustration, say 'maan lo'. Not a repeat of q03 (context rot) or q05 (RAG vs fine-tuning).",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "unit": "D1"
     },
@@ -275,7 +275,7 @@
         "ai engineer interview question"
       ],
       "notes": "Caveats: Onit page is a JOB POST, not an interview question and has no posting date and no About section: say 'job post', never 'interview mein pucha'; confirm company name on the Lever page before showing it; page never mentions stop conditions, those come from Anthropic's building-effective-agents post (guidance, gives no specific limit).",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "unit": "F5",
       "company": "Onit",
@@ -312,7 +312,7 @@
         "chatbot wrong answer debug interview"
       ],
       "notes": "Caveat: OpenTelemetry page defines tracing in general; the LLM-specific mapping (retrieval, prompt, tool as spans) is our illustration, label it as an example. Onit job post (https://jobs.lever.co/onit/5110cadf-965f-4597-ae95-7d4c000675d7) lists tracing but is not used as company hook here.",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "unit": "H2"
     },
@@ -364,7 +364,7 @@
         "ai engineer interview questions",
         "langfuse tracing"
       ],
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "office_note": "approved by the owner as q27 on 2026-10-17; renamed to q104 because office ids start at 101"
     },
@@ -479,7 +479,7 @@
       ],
       "caption_note": "The answer to the check question is 3 (put it in the caption).",
       "studio_note": "FINISHED COMPOSITION, VOICE ONLY (owner, 2026-10-19). The owner approved this reel as a Swara preview and wants it in his own voice. reels/a001_how_a_model_learns already holds the final spec.json (narration and 25 sound cues), script.txt and index.html (all the pictures, placed from the word timings of data.json, so they follow the new voice). Do NOT rewrite the script, do NOT redraw the pictures, do NOT run new_reel.py (the folder exists). Steps: (1) make_voice with the owner's voice (the default). (2) If the total is over 178 s raise spec.json \"pace\" from 1.26 toward 1.32 (at most 1.35) and run make_voice again; never cut words. (3) hyperframes check and snapshots at about 8 times to confirm the pictures still match the voice; only fix a picture if its label lands more than 0.5 s off the spoken word. (4) render_video. (5) render_cover(folder=\"a001_how_a_model_learns\", pill=\"AI\", headline=\"How models <em>actually learn</em>\"): the series cover with DAY 001 / 150. (6) social/a001_how_a_model_learns.hi.caption.txt exists: lint it with .claude/skills/ig-caption/caption.py. (7) studio_gate. Length may run up to 180 s (owner).",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false
     },
     {
@@ -516,7 +516,7 @@
       ],
       "caption_note": "The answer to the check question is: nahi (put it in the caption).",
       "studio_note": "FINISHED REEL, DELIVER ONLY (owner, 2026-10-19). The owner approved this reel: video, voice (his own voice on Flash v2.5 at tempo 0.9), cover and caption. The runner restores reels/a002_train_validation_test_hi.mp4, its voice files and the phrase cache before you start. Do NOT rewrite the script, redraw the pictures, run new_reel.py, make_voice, render_video or render_cover: the video is made from exactly these files, and the gate refuses a video whose composition changed without a render. Steps: (1) check that reels/a002_train_validation_test_hi.mp4 is there; (2) lint social/a002_train_validation_test.hi.caption.txt with .claude/skills/ig-caption/caption.py (it passes); (3) studio_gate; (4) a short report. If the video is missing, stop and say so in the report, do not rebuild it.",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false
     },
     {
@@ -543,7 +543,7 @@
         "ai engineer interview"
       ],
       "caption_note": "Use the owner's command hook unchanged; one comment ask about NAMKEEN, with the answer not shown in the reel.",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "facts_to_verify": [
         "top_k: the number of highest probability vocabulary tokens kept for top-k filtering (Hugging Face GenerationConfig docs, fetched 2026-10-20)",
@@ -591,7 +591,7 @@
       ],
       "trap": "Adding examples blindly. Reframed after reading the sources: labels barely matter (Min et al.), so the trap is not 'a wrong example is copied'; it is cost on every request, a one-sided or badly ordered set that pulls the answer, and never measuring against the no-example prompt.",
       "caption_note": "The answer to the check question is: positive (the model may lean toward positive when all three examples are positive). Put it in the caption.",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false
     },
     {
@@ -629,7 +629,7 @@
         "top p vs temperature"
       ],
       "caption_note": "The answer to the check question is: badhte hain (put it in the caption).",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "cover_count": 1,
       "trial": {
@@ -672,7 +672,7 @@
       "caption_note": "Comment question: model seekh raha hai ya ratta maar raha hai? (put it in the caption)",
       "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. Length: the owner wants it as long as the teaching needs (up to 180 s); the first estimate is 150 to 175 s. If it renders over 180 s, report it, do not cut.",
       "script_file": "state/scripts/a003.txt",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false
     },
     {
@@ -709,7 +709,7 @@
       "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. ",
       "script_file": "state/scripts/q108.txt",
       "script_locked": true,
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "format": "trade-off"
     },
@@ -747,7 +747,7 @@
       "studio_note": "OWNER'S OWN SCRIPT, approved with his edits on 2026-10-20 and re-formatted only (Devanagari for Hindi words, Roman for English, {spoken} forms for numbers). Keep every line; do not rewrite or shorten. Voice: make_voice picks the owner's voice. ",
       "script_file": "state/scripts/q109.txt",
       "script_locked": true,
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "format": "demo"
     },
@@ -782,7 +782,7 @@
       ],
       "caption_note": "Comment question: agar hamesha top guess chune, to jawab har baar same aayega? (answer in caption)",
       "script_file": "state/scripts/a004.txt",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "hook_source": "strategist, backfilled 2026-10-22"
     },
@@ -816,7 +816,7 @@
       "trap": "Calling it a bug to patch: the model predicts likely words, it does not look facts up.",
       "caption_note": "Comment question: blank answer ko 0 marks do ya galat ko minus? (put the answer in the caption)",
       "script_file": "state/scripts/q110.txt",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "facts_to_verify": [
         "arXiv 2509.04664: training and benchmark grading reward guessing over saying 'I don't know' (abstract); arXiv 2005.11401: RAG, retrieval-augmented generation (abstract). Fetched in the planning session of 2026-10-21."
@@ -827,7 +827,7 @@
       "track": "interview",
       "unit": "A6",
       "format": "trade-off",
-      "status": "planned",
+      "status": "built",
       "title": "Interview: Open source model use karoge ya closed API? Decide kaise karoge?",
       "one_idea": "Decide on data privacy and control, cost at your own request volume (an API is pay per use, self-hosting is a fixed server bill plus someone to run it) and the licence terms, not on benchmark scores alone; start with an API and move when volume or privacy demands it.",
       "hook_type": "interviewer_asked",
@@ -856,7 +856,8 @@
       "hook_source": "strategist, backfilled 2026-10-22",
       "facts_to_verify": [
         "Llama 3 licence 700 million monthly active users clause; Apache 2.0 allows commercial use; OpenAI API data not used for training by default, abuse logs up to 30 days (pages listed in sources, fetched 2026-10-21)."
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "a005",
@@ -889,7 +890,7 @@
       ],
       "caption_note": "Comment question: pretraining mein text ko labels kisne diye? (answer: kisi ne nahi, agla word hi answer hai; put it in the caption)",
       "script_file": "state/scripts/a005.txt",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "hook_source": "strategist, 2026-10-22",
       "script_locked": true,
@@ -900,7 +901,7 @@
       "track": "interview",
       "unit": "B2",
       "format": "concept",
-      "status": "planned",
+      "status": "built",
       "title": "Interview: Embeddings ko compare karne ke liye cosine similarity kyun, seedhi distance kyun nahi?",
       "one_idea": "Cosine similarity compares the direction of two embedding vectors (what they are about) and ignores their length, while plain distance also punishes a difference in length; when every vector is scaled to length 1 (as OpenAI's embeddings already are) the two give the same ranking.",
       "hook_type": "relatable_stake",
@@ -914,14 +915,15 @@
       "length_target_s": 110,
       "cover_headline": "Cosine or distance for embeddings?",
       "thumb_text": "Cosine vs distance",
-      "folder": "q112_cosine_vs_distance"
+      "folder": "q112_cosine_vs_distance",
+      "qa_passed": false
     },
     {
       "id": "q113",
       "track": "interview",
       "unit": "B4",
       "format": "trade-off",
-      "status": "planned",
+      "status": "built",
       "title": "Interview: Vector database ki zaroorat kab nahi padti?",
       "one_idea": "Searching every stored vector (exact search) is simple and perfectly accurate, and a few thousand to some hundred thousand vectors are searched in milliseconds in memory, so a vector database or approximate index is needed only when the data, speed or number of users outgrow that; approximate indexes trade some recall for speed.",
       "hook_type": "interviewer_asked",
@@ -973,7 +975,7 @@
         "ai engineer roadmap"
       ],
       "caption_note": "Growth note 2026-10-24: open on the one concrete scene (the message splitting into tiles), no jargon in line 1, 120 to 150 s.",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "hook_source": "strategist, 2026-10-24",
       "script_file": "state/scripts/a006.txt",
@@ -1011,7 +1013,7 @@
         "ai engineer interview"
       ],
       "caption_note": "Growth note 2026-10-24: full question spoken, 95 to 120 s, keep the ending.",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "hook_source": "strategist, 2026-10-24",
       "script_locked": true,
@@ -1051,7 +1053,7 @@
         "ai engineer interview"
       ],
       "caption_note": "Growth note 2026-10-24: no jargon in line 1; full question spoken, 95 to 120 s, keep the ending. Fallback if the owner dislikes the company hook: relatable_stake.",
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "hook_source": "strategist, 2026-10-24",
       "script_file": "state/scripts/q115.txt",
@@ -1063,7 +1065,7 @@
       "day": 7,
       "unit": "A4",
       "format": "myth-bust",
-      "status": "planned",
+      "status": "built",
       "title": "Why tokens decide your bill, your limits and some silly mistakes",
       "one_idea": "Myth: AI is billed and limited by words. Truth: the bill and the limit are counted in tokens, input and output both, and the same meaning can cost very different token counts (measured example: one sentence is 10 tokens in English, 14 in Roman Hinglish, 42 in Devanagari Hindi), so count tokens, not words, before you budget.",
       "hook_type": "direct_question",
@@ -1089,7 +1091,8 @@
         "chatgpt token limit",
         "token vs word",
         "ai engineer roadmap"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q116",
@@ -1119,7 +1122,8 @@
         "retrieval vs generation",
         "ai engineer interview"
       ],
-      "status": "planned"
+      "status": "built",
+      "qa_passed": false
     },
     {
       "id": "q117",
@@ -1147,7 +1151,8 @@
         "ai engineer interview",
         "llm interview question"
       ],
-      "status": "planned"
+      "status": "built",
+      "qa_passed": false
     },
     {
       "id": "a008",
@@ -1155,7 +1160,7 @@
       "day": 8,
       "unit": "A3",
       "format": "concept",
-      "status": "planned",
+      "status": "built",
       "title": "Raw model vs chat model: why the first one cannot answer",
       "one_idea": "A raw (pretrained, base) model only continues text, so a question gets more text that looks like it, often more questions; a chat model is the same kind of model trained further on conversations (instruction tuning and human feedback) and fed the chat in a template with roles, so it replies as the assistant.",
       "hook_type": "direct_question",
@@ -1181,7 +1186,8 @@
         "why chatgpt answers questions",
         "ai engineer roadmap"
       ],
-      "script_file": "state/scripts/a008.txt"
+      "script_file": "state/scripts/a008.txt",
+      "qa_passed": false
     },
     {
       "id": "q118",
@@ -1213,7 +1219,8 @@
         "conversation summary memory",
         "ai engineer interview"
       ],
-      "status": "planned"
+      "status": "built",
+      "qa_passed": false
     },
     {
       "id": "q119",
@@ -1240,7 +1247,8 @@
         "short term vs long term memory ai",
         "ai engineer interview"
       ],
-      "status": "planned"
+      "status": "built",
+      "qa_passed": false
     },
     {
       "id": "a009",
@@ -1248,7 +1256,7 @@
       "day": 9,
       "unit": "A3",
       "format": "concept",
-      "status": "planned",
+      "status": "built",
       "title": "Training vs inference: learn once, answer a million times",
       "one_idea": "Training is the one slow, costly stage where a model's numbers (weights) are adjusted from data until its error is small; inference is every later use, where the trained model is only run on new input and its weights do not change. So an AI answering you is not learning from your message at that moment: learn once, answer many times.",
       "hook_type": "direct_question",
@@ -1274,7 +1282,8 @@
         "ai engineer roadmap"
       ],
       "script_file": "state/scripts/a009.txt",
-      "script_locked": true
+      "script_locked": true,
+      "qa_passed": false
     },
     {
       "id": "q120",
@@ -1302,7 +1311,7 @@
         "multi agent llm interview",
         "ai engineer interview"
       ],
-      "status": "planned",
+      "status": "built",
       "visual_idea": "One big window overflowing with page cards, the question card pushed to the corner and fading. Then the lead's small window with 3 small subagent windows beside it; each subagent window fills with pages, then a short note card flies into the lead's window. A last panel: two agents drawing mismatched halves (shared-context warning).",
       "everyday_anchor": "A manager who sends three people to read three folders and asks each for a one-page note, instead of reading all three folders herself.",
       "example": "EXAMPLE (invented sizes, words stand in for tokens, real output in state/runs/q120_context_run.txt): one shared context carries 12000 words; three subagents read 3000, 4000, 5000 words each in their own windows and return 200 words each, so the lead sees 600 words; total work is 12600 words. Anthropic's own measurement: multi-agent systems use about 15x more tokens than chats (their data, June 2025).",
@@ -1311,7 +1320,8 @@
         "Anthropic: subagents have own context windows, parallel, condensed findings (June 2025)",
         "About 15x more tokens than chats is Anthropic's own data",
         "Cognition: conflicting implicit decisions when agents do not share context (12 Jun 2025)"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q121",
@@ -1339,7 +1349,8 @@
         "agent vs chatbot",
         "ai engineer interview"
       ],
-      "status": "planned"
+      "status": "built",
+      "qa_passed": false
     },
     {
       "id": "a010",
@@ -1347,7 +1358,7 @@
       "day": 10,
       "unit": "A5",
       "format": "structure",
-      "status": "planned",
+      "status": "built",
       "title": "The kinds of AI model: text, image, audio, embedding",
       "one_idea": "What a model takes in and what it puts out decides its kind: text to text, prompt to picture, sound to transcript (or text to voice), text to a list of numbers that measures meaning. An AI app often joins several of them.",
       "hook_type": "direct_question",
@@ -1375,7 +1386,8 @@
       ],
       "facts_to_verify": [
         "Hugging Face task pages: input and output of text generation, text-to-image, automatic speech recognition, sentence similarity (fetched 2026-10-28)"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q122",
@@ -1404,12 +1416,13 @@
         "why ai picks wrong tool",
         "ai engineer interview"
       ],
-      "status": "planned"
+      "status": "built",
+      "qa_passed": false
     },
     {
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "id": "q123",
       "unit": "F4",
       "title": "Interview: Multi-agent system kab zaroori hai, kab ek agent kaafi hai?",
@@ -1440,7 +1453,8 @@
         "when to use multi agent",
         "agentic ai interview",
         "ai engineer interview"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "a011",
@@ -1448,7 +1462,7 @@
       "day": 11,
       "unit": "A3",
       "format": "structure",
-      "status": "planned",
+      "status": "built",
       "title": "A neural network in one picture: weights and layers",
       "one_idea": "A neural network is numbers arranged in layers: each neuron multiplies its inputs by weights, adds a bias and passes the result through ReLU; the model file is the list of weights and biases, and training only changes them.",
       "hook_type": "direct_question",
@@ -1469,13 +1483,14 @@
         "what is a weight in ai",
         "relu activation",
         "ai engineer roadmap"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q124",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "F7",
       "title": "Interview: MCP server stdio se chalta hai ya HTTP se? Kab kaun sa?",
       "one_idea": "The transport decides where an MCP server runs and who can reach it. stdio: the client starts the server as a subprocess on the same machine and talks over stdin/stdout. Streamable HTTP: the server runs on its own, handles many clients over one endpoint; then validate Origin, bind to localhost when local, add authentication.",
@@ -1506,13 +1521,14 @@
         "Anthropic introduced MCP (2024-11-25)"
       ],
       "visual_idea": "Left: a laptop with an app box that spawns a small server box with a two-way pipe (stdin/stdout). Right: a server box with one /mcp door, three clients connecting by HTTP, a guard at the door with Origin check, localhost and auth.",
-      "everyday_anchor": "none: protocol topic with no everyday moment; the editor reading your own files is the stand-in example"
+      "everyday_anchor": "none: protocol topic with no everyday moment; the editor reading your own files is the stand-in example",
+      "qa_passed": false
     },
     {
       "id": "q125",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "F5",
       "title": "Interview: Bina framework ke agent likhna ho to kya-kya chahiye?",
       "one_idea": "An agent without a framework needs three things you write yourself: a loop that calls the model, a table of tools your code runs when the model asks, and a stop rule (a final answer or a maximum number of turns). The model only asks for a tool; your code runs it and feeds the result back. Anthropic advises starting with direct API calls because many patterns take a few lines and frameworks can hide the prompts; use a framework only if you understand what it does underneath.",
@@ -1534,7 +1550,8 @@
         "agent loop code",
         "build ai agent from scratch",
         "ai engineer interview"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "a012",
@@ -1542,7 +1559,7 @@
       "day": 12,
       "unit": "A3",
       "format": "concept",
-      "status": "planned",
+      "status": "built",
       "title": "Parameters: what 7B and 70B actually mean",
       "one_idea": "A parameter is one learned number (a weight or bias) inside the model; 7B means about 7 billion of them. The model file is those numbers, so more parameters means more capacity but also more memory and cost, and bigger is not automatically better.",
       "hook_type": "direct_question",
@@ -1565,13 +1582,14 @@
         "llm parameters explained",
         "model size gb",
         "ai engineer roadmap"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q126",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "G4",
       "title": "Interview: AI app ko red-team kaise karoge?",
       "trap": "Testing only with friendly prompts, so the app looks fine until someone attacks it.",
@@ -1606,13 +1624,14 @@
         "prompt injection test",
         "ai safety interview",
         "ai engineer interview"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q127",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "G3",
       "title": "Interview: Golden dataset kaise banate hain aur kitne examples chahiye?",
       "trap": "Collecting examples that all look alike, so a regression in a corner case never shows.",
@@ -1642,7 +1661,8 @@
         "ai evals interview",
         "ai engineer interview"
       ],
-      "everyday_anchor": "A teacher setting an exam: 20 copies of the same easy question would never show which topic the class forgot."
+      "everyday_anchor": "A teacher setting an exam: 20 copies of the same easy question would never show which topic the class forgot.",
+      "qa_passed": false
     },
     {
       "id": "a013",
@@ -1650,7 +1670,7 @@
       "day": 13,
       "unit": "A3",
       "format": "structure",
-      "status": "planned",
+      "status": "built",
       "title": "The transformer: the design behind every LLM",
       "one_idea": "A transformer is one block repeated: each block lets every word look at the other words (attention) and then thinks about each word on its own (a small feed-forward network); stack the same block many times and you have the design that almost every LLM uses. The original 2017 paper stacked 6 identical blocks; in our count of its base size one block holds about 3.15 million numbers, one third in attention and two thirds in the feed-forward part.",
       "hook_type": "direct_question",
@@ -1670,13 +1690,14 @@
         "attention is all you need",
         "how llm works",
         "ai engineer roadmap"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q128",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "G5",
       "title": "Interview: Model ke jawab mein bias hai ya nahi, ye kaise napoge?",
       "trap": "Reading a few answers by eye instead of comparing groups on the same questions.",
@@ -1704,13 +1725,14 @@
         "paired prompts bias test",
         "bbq benchmark",
         "ai engineer interview"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "q129",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "G7",
       "title": "Interview: User ka private data prompt mein bhejna theek hai? Kya dhyan rakhoge?",
       "trap": "Sending raw personal data to a hosted model without classifying it first.",
@@ -1742,7 +1764,8 @@
         "data privacy llm app",
         "prompt data masking",
         "ai engineer interview"
-      ]
+      ],
+      "qa_passed": false
     },
     {
       "id": "a014",
@@ -1750,7 +1773,7 @@
       "day": 14,
       "unit": "A3",
       "format": "concept",
-      "status": "planned",
+      "status": "built",
       "title": "Attention: how a word looks at the other words",
       "one_idea": "Attention lets one word decide which other words matter for its meaning: the word asks a question (query), every word offers a label (key), the match scores become percentages that add to 100 (softmax), and the word takes a weighted mix of the others (values). Same word 'bank' gets river as 77 % in one sentence and loan as 77 % in another, so its meaning changes with its neighbours.",
       "hook_type": "direct_question",
@@ -1776,13 +1799,14 @@
         "attention mechanism simple",
         "ai engineer roadmap"
       ],
-      "hook_source": "strategist, 2026-11-01"
+      "hook_source": "strategist, 2026-11-01",
+      "qa_passed": false
     },
     {
       "id": "q130",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "H2",
       "title": "Interview: Ek request 20 second legi. Kahan time ja raha hai, tracing se kaise dekhoge?",
       "trap": "Looking at total latency only, not at the time of each step.",
@@ -1804,13 +1828,14 @@
         "rag latency debugging",
         "ai engineer interview"
       ],
-      "hook_source": "strategist, 2026-11-01"
+      "hook_source": "strategist, 2026-11-01",
+      "qa_passed": false
     },
     {
       "id": "q131",
       "track": "interview",
       "format": "question",
-      "status": "planned",
+      "status": "built",
       "unit": "H1",
       "title": "Interview: Production mein AI app ke liye kaun se alerts lagaoge?",
       "trap": "Alerting on errors only, while the answers quietly get worse.",
@@ -1840,7 +1865,108 @@
         "ai engineer interview"
       ],
       "hook_source": "strategist, 2026-11-01",
-      "everyday_anchor": "A shop whose door sensor shows no break-in while customers quietly stop buying: the usual alarm is quiet but the problem is real."
+      "everyday_anchor": "A shop whose door sensor shows no break-in while customers quietly stop buying: the usual alarm is quiet but the problem is real.",
+      "qa_passed": false
+    },
+    {
+      "id": "a015",
+      "track": "series",
+      "title": "Is a Bigger Model Always Smarter?",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/a015.txt",
+      "script_locked": false,
+      "day": 15,
+      "format": "myth-bust",
+      "hook_type": "direct_question",
+      "spoken_hook": "बड़ा model हमेशा बेहतर answer देता है?",
+      "hook_source": "Owner-requested daily production; roadmap order, 2026-11-02",
+      "sources": [
+        "https://arxiv.org/abs/2203.15556"
+      ],
+      "facts_to_verify": [
+        "Paper supports 70B Chinchilla vs 280B Gopher, 4x training data and same training compute. Ticket accuracy numbers explicitly illustrative. No universal small-model superiority claim."
+      ],
+      "visual_idea": "One concrete running example drawn with labelled objects, phrase aligned changes and readable Python for the DSA solution.",
+      "length_target_s": 95.0,
+      "cover_headline": "Is a Bigger Model Always Smarter?",
+      "thumb_text": "SIZE TRAP",
+      "keywords": [
+        "model size",
+        "Chinchilla",
+        "AI model evaluation"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-02",
+      "office_version": "3bcba7173b23b33b",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/a015/preview"
+    },
+    {
+      "id": "q132",
+      "track": "interview",
+      "title": "API 429: How Should You Retry?",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/q132.txt",
+      "script_locked": false,
+      "day": 28,
+      "format": "question",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: API rate limit करे, तो retry कैसे करोगे?",
+      "hook_source": "Owner-requested daily production; roadmap order, 2026-11-02",
+      "sources": [
+        "https://platform.claude.com/docs/en/api/rate-limits",
+        "https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter"
+      ],
+      "facts_to_verify": [
+        "Rate-limit Retry-After is respected when present; spend-cap failures not retried blindly. Backoff policy, jitter delays and client count explicitly illustrative."
+      ],
+      "visual_idea": "One concrete running example drawn with labelled objects, phrase aligned changes and readable Python for the DSA solution.",
+      "length_target_s": 109.0,
+      "cover_headline": "API 429: How Should You Retry?",
+      "thumb_text": "TRAFFIC SPIKE",
+      "keywords": [
+        "API 429",
+        "retry backoff",
+        "jitter"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-02",
+      "office_version": "dddb3fd678b142d4",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q132/preview"
+    },
+    {
+      "id": "q133",
+      "track": "interview",
+      "title": "Batch API or Real-Time API?",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/q133.txt",
+      "script_locked": false,
+      "day": 29,
+      "format": "question",
+      "hook_type": "direct_question",
+      "spoken_hook": "Interviewer ने पूछा: Batch API कब use करोगे और real-time कब?",
+      "hook_source": "Owner-requested daily production; roadmap order, 2026-11-02",
+      "sources": [
+        "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+      ],
+      "facts_to_verify": [
+        "Batch is asynchronous; custom_id matches unordered results; per-request failures and up-to-24-hour expiry described. No guarantee of completion."
+      ],
+      "visual_idea": "One concrete running example drawn with labelled objects, phrase aligned changes and readable Python for the DSA solution.",
+      "length_target_s": 110.5,
+      "cover_headline": "Batch API or Real-Time API?",
+      "thumb_text": "WHO IS WAITING?",
+      "keywords": [
+        "batch API",
+        "real time API",
+        "Claude batches"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-02",
+      "office_version": "bdf70dc915cb47f4",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q133/preview"
     }
   ]
 }

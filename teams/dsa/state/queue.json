@@ -32,7 +32,7 @@
         "cumulative sum",
         "range sum query immutable"
       ],
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "facts_to_verify": [
         "Prefix sum = running total (Wikipedia)",
@@ -76,7 +76,7 @@
         "left sum equals right sum",
         "running sum"
       ],
-      "status": "planned",
+      "status": "built",
       "qa_passed": false,
       "facts_to_verify": [
         "Problem paraphrased: leftmost index where left sum equals right sum; empty side = 0; none -> -1 (doocs 0724)",
@@ -88,6 +88,39 @@
       ],
       "script_file": "state/scripts/d012.txt",
       "script_locked": false
+    },
+    {
+      "id": "d013",
+      "track": "series",
+      "title": "Product of Array Except Self",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/d013.txt",
+      "script_locked": false,
+      "day": 13,
+      "format": "problem",
+      "hook_type": "direct_question",
+      "spoken_hook": "Product of Array Except Self में current index कैसे exclude करोगे?",
+      "hook_source": "Owner-requested daily production; roadmap order, 2026-11-02",
+      "sources": [
+        "https://leetcode.com/problems/product-of-array-except-self/description/"
+      ],
+      "facts_to_verify": [
+        "Official problem constraints support O(n), no division and output-excluded O(1). Exact displayed code run against 5000 random arrays with zeros and negatives; no Accepted result claimed."
+      ],
+      "visual_idea": "One concrete running example drawn with labelled objects, phrase aligned changes and readable Python for the DSA solution.",
+      "length_target_s": 133.0,
+      "cover_headline": "Product of Array Except Self",
+      "thumb_text": "SKIP YOURSELF",
+      "keywords": [
+        "product of array except self",
+        "LeetCode 238",
+        "prefix suffix products"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-02",
+      "office_version": "32d59af0dda229fc",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/dsa/library/d013/preview"
     }
   ]
 }

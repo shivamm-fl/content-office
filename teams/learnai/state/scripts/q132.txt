@@ -1,0 +1,17 @@
+Interviewer ने पूछा: API rate limit करे, तो retry कैसे करोगे? | तुरंत बार बार request भेजने से traffic और बढ़ता है। | Server को recover करने का समय देना होगा।
+
+मान लो hundred clients को एक साथ error मिला। | सब उसी second retry करें, तो hundred requests फिर साथ पहुँचेंगी। | इस example में retry खुद traffic की दूसरी wave बना रही है।
+
+पहला step: error का reason पढ़ो। | Rate limit requests या tokens की limit हो सकती है। | Provider के response में Retry-After हो, तो उसमें बताये समय से पहले request मत भेजो।
+
+दूसरा step: header न मिले और error retryable हो, तो exponential backoff लगाओ। | यानी हर failure के बाद wait बढ़ता है। | Example base delays one, two, four seconds रख सकते हो। ये हमारी policy है, provider guarantee नहीं।
+
+सभी clients को वही fixed delay दोगे, तो वे फिर साथ जागेंगे। | इसलिए jitter, यानी wait में random फर्क जोड़ो। | Example में clients one point two और one point eight seconds पर retry करेंगे।
+
+तीसरा step: maximum attempts और कुल deadline रखो। | Example: original request के बाद maximum three retries। | Deadline खत्म हो, तो failure साफ लौटाओ; background में endless loop मत चलाओ।
+
+एक request का retry काफी नहीं है। | अपने app की concurrency घटाओ, यानी एक साथ कम requests भेजो। | वरना नए calls और retries मिलकर उसी limit को फिर तोड़ देंगे।
+
+हर error retry करने लायक नहीं होता। | Spend cap खत्म हो तो wait करने से balance वापस नहीं आता। | और state बदलने वाली request दोबारा भेजने से पहले duplicate action से बचने का तरीका चाहिए।
+
+Interview में बोलो: पहले error और Retry-After पढ़ूँगा। | फिर bounded backoff with jitter, deadline और concurrency control लगाऊँगा। | Comments में बताओ: jitter clients को साथ जगाता है या अलग? रोज practical interview answers के लिए follow करो।
