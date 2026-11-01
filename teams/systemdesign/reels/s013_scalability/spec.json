@@ -1,0 +1,102 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O"
+  ],
+  "min": {
+    "A": 4,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3,
+    "H": 3,
+    "I": 3,
+    "J": 3,
+    "K": 3,
+    "L": 3,
+    "M": 3,
+    "N": 3,
+    "O": 3
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "F",
+      0,
+      0.3
+    ],
+    [
+      "dip",
+      "N",
+      0,
+      -0.1
+    ],
+    [
+      "ok",
+      "L",
+      0,
+      0.3
+    ],
+    [
+      "save",
+      "O",
+      1,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: 100{hundred} users पर चलने वाला app, 10{दस} लाख पर क्यों टूटता है?",
+      "B": "College के बाहर एक चाय का stall है। | 5{पाँच} दोस्त आएँ, तो चाय फटाफट मिलती है। || शाम को 500{five-hundred} students आ गए, तो लाइन गेट तक लग जाती है।",
+      "C": "App के साथ भी यही होता है, इसे scalability कहते हैं। || Scalability यानी load बढ़ने पर भी system ठीक चलता रहे। | Load यानी एक साथ आने वाला काम, जैसे requests।",
+      "D": "हिसाब देखो। || EXAMPLE: | मान लो एक server 100{hundred} requests per second सँभाल सकता है। | 100{hundred} users हैं, हर user 10{ten} seconds में एक request भेजता है। || तो एक second में 10{ten} requests आती हैं। | Server सिर्फ़ 10{ten} percent busy है।",
+      "E": "अब 10{दस} लाख users, उसी रफ़्तार से। || 10,00,000{ten-lakh} divided by 10{ten} equals 1,00,000{one-lakh}। | यानी 1{एक} लाख requests per second, और server की सीमा 100{hundred} है।",
+      "F": "हज़ार गुना ज़्यादा load आया, इसलिए app टूटा। || Code धीमा नहीं था, बस कोई एक चीज़ सबसे पहले भर गई।",
+      "G": "Server के अंदर CPU है, यानी सोचने वाला हिस्सा। | Memory है, यानी जो अभी याद रखना है। | और disk है, यानी जहाँ data रखा है। || Load बढ़ने पर जो सबसे कमज़ोर है, वो सबसे पहले भर जाता है।",
+      "H": "उसे bottleneck कहते हैं, यानी वो जगह जो पूरे system की speed तय करती है। | चाय के stall में वो चूल्हा है। || बाकी चीज़ें आधी खाली हों, तब भी लाइन वहीं रुकी रहती है।",
+      "I": "इसे सुधारने के 3{three} steps हैं।",
+      "J": "पहला step: पता करो कि CPU, memory और disk में से कौन सबसे पहले भर रहा है। | क्योंकि गलत चीज़ बढ़ाने से लाइन नहीं हिलती।",
+      "K": "दूसरा step: उसी की capacity बढ़ाओ। | server बड़ा करो, यानी vertical, या और servers लगाओ, यानी horizontal।",
+      "L": "तीसरा step: servers लगाए, तो भीड़ उनमें बाँट दो। | तब हर server पर load कम हो जाता है।",
+      "M": "पर एक catch है। || दोगुने servers से अक्सर दोगुनी speed नहीं मिलती, क्योंकि कुछ हिस्सा सबके बीच साझा रहता है, जैसे database। | वही अगला bottleneck बन जाता है।",
+      "N": "@emph Scalability का मतलब app का तेज़ होना नहीं है। | मतलब ये कि load बढ़े, तो क्या बढ़ाना पड़ेगा।",
+      "O": "अब तुम बताओ: | तुम्हारे app में सबसे पहले क्या भरेगा, CPU, memory या disk? | एक comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

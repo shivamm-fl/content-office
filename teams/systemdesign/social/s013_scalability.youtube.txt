@@ -1,0 +1,8 @@
+Scalability Explained in Hinglish: Why a Fast App Breaks at 10 Lakh Users (Day 13/150)
+
+Scalability is the property of a system to handle a growing amount of work; in software that often means adding resources. This video shows why an app that is fast for 100 users can fail at 10 lakh: every user adds work, and the one component that fills first (the bottleneck, where a single component limits the capacity of the whole system) sets the speed. Example arithmetic, invented numbers and not a real company's: a server that handles 100 requests per second is 10 percent busy with 100 users sending one request every 10 seconds; 10,00,000 users at the same rate send 1,00,000 requests per second, 1000 times the limit. Fix in three steps: find which of CPU, memory or disk fills first, grow that part (a bigger server is vertical scaling, more servers is horizontal scaling), and split the crowd across servers. The catch: adding hardware has diminishing returns, because some parts such as a shared database stay shared and become the next bottleneck.
+
+Sources:
+https://en.wikipedia.org/wiki/Scalability
+https://en.wikipedia.org/wiki/Bottleneck_%28software%29
+https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html

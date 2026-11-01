@@ -1,0 +1,18 @@
+Day 13/150: 100 users par chalne wala app 10 lakh par kyun toot jata hai? Jawab: ek cheez sabse pehle bhar jati hai.
+
+Scalability yaani load badhne par bhi system theek chalta rahe. Load yaani ek saath aane wala kaam, jaise requests.
+
+Example (invented numbers): ek server 100 requests per second sambhal sakta hai. 100 users, har user 10 second mein ek request: 10 requests per second, server sirf 10% busy. 10 lakh users par: 10,00,000 / 10 = 1,00,000 requests per second, yaani limit se 1000 guna zyada.
+
+Server ke andar CPU, memory aur disk hain. Jo sabse kamzor hai wo sabse pehle bharta hai, use bottleneck kehte hain.
+
+3 steps:
+1. Pata karo kaun sa hissa sabse pehle bhar raha hai.
+2. Usi ki capacity badhao: server bada karo (vertical) ya aur servers lagao (horizontal).
+3. Servers lagaye to bheed unmein baant do.
+
+Catch: dogune servers se aksar doguni speed nahi milti, kyunki kuch hissa (jaise database) sabke beech shared rehta hai.
+
+Sawal: tumhare app mein sabse pehle kya bharega, CPU, memory ya disk? Comment karo.
+
+#systemdesign #backend #interviewprep
