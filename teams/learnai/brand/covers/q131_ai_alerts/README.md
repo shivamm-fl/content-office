@@ -1,9 +1,9 @@
-# Cover template (v2)
+# Cover template (interview series v1)
 
-The starting point for every reel's cover. `scripts/new_reel.py` copies this folder to `brand/covers/<folder>/`; `scripts/render_cover.py` fills it and renders the image.
+The cover of every interview reel (q105 and up), owner decision 2026-10-20: the same look as a series day, because the interview reels are a series too, but the series has no end, so there is a **count and nothing else** (no total, no progress bar). No mascot.
 
-- Layout: a filled gold pill with the category only (no item number, owner decision 2026-10-16), a centred headline whose key words are gold, the LearnAI robot Bit (inline SVG, transparent) with a soft glow, the handle.
-- `python scripts/render_cover.py <folder> "AI ENGINEER ROADMAP" "How Does an LLM <em>Write Answers?</em>"` sets `#pill` and `#headline`, snapshots the composition and saves `brand/covers/<folder>.png` (1080x1920). Wrap the one to three key words of the headline in `<em></em>`; without it the last words are gold.
-- Headline: at most 8 English words, the topic or the question. Pill: the category in English only, no item number. Clean English only: no Hindi, no emoji, no other decoration. The robot is the only illustration.
-- YouTube thumbnail: a 16:9 composition (1280x720) with at most three English words, saved as `brand/yt_thumbs/<folder>.jpg`.
+- Layout: a filled gold pill with the category (AI ENGINEER INTERVIEW), a centred headline whose key words are gold, the label QUESTION with the question number in large gold digits, the handle.
+- `python scripts/render_cover.py q105_slug "AI ENGINEER INTERVIEW" "Temperature, Top-K, Top-P: <em>what is the difference?</em>"` takes the number from the folder name: the series is counted from its first reel under the ladder, so q105 is question 001, q106 is 002 (the id minus 104; owner 2026-10-20). q101 to q104 are older and keep the old cover. A variant of a reel (`q107_slug_b`, a trial test of question 001) shows the number of the question it repeats: add `--count 1`.
+- Headline: at most 8 English words, the question or the topic. Clean English only: no Hindi, no emoji.
+- Everything that matters is between y 260 and y 1660, because the profile grid shows the centre 3:4 of a reel cover.
 - The font file (Space Grotesk) is inside this folder in `fonts/`, because HyperFrames does not follow `../` paths. Colours come from `brand/tokens.css`.

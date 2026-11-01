@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="119.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="120.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,9 +41,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="119.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="119.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="119.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="120.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="120.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="120.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -132,12 +132,12 @@
       const c1 = chart(C, 70, 360, 940, 450, "ERRORS %", CYAN, 0, 6, 5, "5%", [1.2, 1.1, 1.0, 1.0, 1.1, 0.7, 1.6], CYAN, P("C", 1));
       c1.thrShow(at("C", "5"));
       [0, 1, 2, 3, 4, 5, 6].forEach(i => c1.pt(i, at("C", "1") + i * 0.2));
-      stamp(C, "0 ALERTS", 540, 590, GOOD, at("C", "baja"), 52);
+      stamp(C, "0 ALERTS", 760, 372, GOOD, at("C", "baja"), 40);
       const c2 = chart(C, 70, 850, 940, 450, "ANSWERS OK %", ACC, 60, 100, 80, "80%", [90, 89, 89, 94, 78, 74, 77], ACC, at("C", "paanchven"));
       c2.thrShow(at("C", "100") + 0.2);
       [0, 1, 2, 3].forEach(i => c2.pt(i, at("C", "90") + i * 0.15, ACC, i === 0 ? "90" : null));
       [4, 5, 6].forEach(i => c2.pt(i, at("C", "78") - 0.2 + (i - 4) * 0.25, HOT, i === 4 ? "78" : null));
-      stamp(C, "ALERT", 70 + c2.px(4), 1195, HOT, at("C", "78") + 0.3, 46);
+      stamp(C, "ALERT", 780, 862, HOT, at("C", "78") + 0.3, 40);
       M.fit(C, { y: 200, h: 1120 });
 
       // ============ D: classic signals ============
@@ -176,19 +176,19 @@
       const order = Array.from({ length: 100 }, (_, i) => i); for (let i = 99; i > 0; i--) { const j = Math.floor(rngf() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
       const bad = new Set(order.slice(0, 22)); const cells = [];
       for (let r = 0; r < 10; r++) for (let c = 0; c < 10; c++) { const k = r * 10 + c;
-        const d = el(F, `left:${80 + c * 92}px;top:${310 + r * 52}px;width:84px;height:44px;border-radius:10px;border:2px solid ${ca(MUTED, 0.7)};background:${ca(MUTED, 0.10)};display:flex;align-items:center;justify-content:center;font:800 30px ${COD}`);
+        const d = el(F, `left:${80 + c * 92}px;top:${300 + r * 56}px;width:84px;height:50px;border-radius:10px;border:2px solid ${ca(MUTED, 0.7)};background:${ca(MUTED, 0.10)};display:flex;align-items:center;justify-content:center;font:800 42px ${COD}`);
         show(d, at("F", "asli") + (k % 10) * 0.025 + Math.floor(k / 10) * 0.03, { opacity: 0 }, 0.25);
         const mk = el(d, "position:relative;width:auto;height:auto", bad.has(k) ? "✗" : "✓"); mk.style.color = bad.has(k) ? HOT : GOOD; tl.set(mk, { opacity: 0 }, 0);
         const tm = at("F", "pass") - 0.1 + (k * 0.011); paint(d, bad.has(k) ? HOT : GOOD, tm, 0.2); tl.to(mk, { opacity: 1, duration: 0.2, immediateRender: false }, tm); }
-      tag(F, "100 LIVE ANSWERS", 0, 838, 1080, at("F", "asli"), SOFT, 40);
-      M.box(F, { x: 290, y: 905, w: 500, h: 120, label: "EVAL", icon: "check", color: CYAN, size: 54 }).show(at("F", "eval"));
-      const fT = el(F, `left:100px;top:1090px;width:880px;height:84px;border-radius:14px;border:2.5px solid ${ca(MUTED, 0.7)};background:${ca(MUTED, 0.08)}`); show(fT, at("F", "80") - 0.2, { opacity: 0 }, 0.3);
-      const fB = el(F, `left:100px;top:1090px;width:686px;height:84px;border-radius:14px;background:${ca(HOT, 0.5)};border:2.5px solid ${HOT};transform-origin:0 50%`); tl.set(fB, { opacity: 0, scaleX: 0.02 }, 0);
+      tag(F, "100 LIVE ANSWERS", 0, 868, 1080, at("F", "asli"), SOFT, 40);
+      M.box(F, { x: 290, y: 925, w: 500, h: 120, label: "EVAL", icon: "check", color: CYAN, size: 54 }).show(at("F", "eval"));
+      const fT = el(F, `left:100px;top:1110px;width:880px;height:84px;border-radius:14px;border:2.5px solid ${ca(MUTED, 0.7)};background:${ca(MUTED, 0.08)}`); show(fT, at("F", "80") - 0.2, { opacity: 0 }, 0.3);
+      const fB = el(F, `left:100px;top:1110px;width:686px;height:84px;border-radius:14px;background:${ca(HOT, 0.5)};border:2.5px solid ${HOT};transform-origin:0 50%`); tl.set(fB, { opacity: 0, scaleX: 0.02 }, 0);
       tl.to(fB, { opacity: 1, scaleX: 1, duration: 0.7, ease: "power3.out", immediateRender: false }, at("F", "neeche") - 0.5);
-      el(F, `left:802px;top:1070px;width:5px;height:124px;background:${ACC}`).id = "fthr"; show(M.$("#fthr"), at("F", "80") - 0.2, { opacity: 0 }, 0.3);
-      tag(F, "78 PASS", 100, 1195, 400, at("F", "neeche"), HOT, 44);
-      tag(F, "LIMIT 80", 600, 1195, 400, at("F", "80"), ACC, 44);
-      stamp(F, "ALERT", 540, 1260, HOT, at("F", "bajta"), 50);
+      el(F, `left:802px;top:1090px;width:5px;height:124px;background:${ACC}`).id = "fthr"; show(M.$("#fthr"), at("F", "80") - 0.2, { opacity: 0 }, 0.3);
+      tag(F, "78 PASS", 100, 1215, 400, at("F", "neeche"), HOT, 44);
+      tag(F, "LIMIT 80", 600, 1215, 400, at("F", "80"), ACC, 44);
+      stamp(F, "ALERT", 540, 1280, HOT, at("F", "bajta"), 50);
       M.fit(F, { y: 200, h: 1120 });
 
       // ============ G: safety ============
@@ -201,7 +201,7 @@
         el(c, `left:30px;top:14px;font:800 36px ${COD};letter-spacing:.1em;color:${CYAN}`, title);
         [40, 46, 38, 44, 40, 45, 200].forEach((h, i) => { const last = i === 6; const b = el(c, `left:${66 + i * 124}px;top:${270 - h}px;width:88px;height:${h}px;border-radius:10px 10px 0 0;border:2.5px solid ${ca(last ? HOT : CYAN, 0.9)};background:${ca(last ? HOT : CYAN, last ? 0.3 : 0.2)};transform-origin:50% 100%`);
           tl.set(b, { opacity: 0, scaleY: 0.05 }, 0); tl.to(b, { opacity: 1, scaleY: 1, duration: last ? 0.45 : 0.4, ease: "power3.out", immediateRender: false }, last ? tJump : t0 + 0.2 + i * 0.08); });
-        el(c, `left:${66 + 6 * 124 - 70}px;top:56px;width:228px;text-align:center;font:800 38px ${COD};color:${HOT}`, "ALERT").id = "ga" + y; show(M.$("#ga" + y), tAlert, { opacity: 0, y: 10 }); };
+        el(c, `left:${66 + 6 * 124 - 250}px;top:70px;width:230px;text-align:right;font:800 38px ${COD};color:${HOT}`, "ALERT").id = "ga" + y; show(M.$("#ga" + y), tAlert, { opacity: 0, y: 10 }); };
       gBars(570, "BLOCKS / DAY", at("G", "wo") - 0.3, at("G", "achanak"), at("G", "alert"));
       gBars(900, "REFUSALS / DAY", at("G", "ya") - 0.3, at("G", "baar-baar"), at("G", "alert") + 0.15);
       tag(G, "SOMETHING CHANGED", 0, 1230, 1080, at("G", "badal"), ACC, 48);

@@ -1,0 +1,16 @@
+Raat 2 baje users bole jawab galat, aur dashboard green tha. Kaun se alerts lagaoge?
+
+Interview mein poochha jata hai: production mein AI app ke liye kaun se alerts lagaoge?
+
+Jawab: sirf errors nahi, chaar tarah ke alerts, kyunki AI app galat jawab dekar bhi error nahi dikhata.
+1. Classic signals: latency, traffic, errors, saturation (Google SRE book ke four golden signals).
+2. Cost: tokens ka bill, roz ka kharch dekho.
+3. Quality: roz kuch asli jawab eval se check karo, pass rate gire to alert.
+4. Safety: guardrail ya refusal achanak bahut badhe to alert.
+Phone sirf us par bajao jo urgent ho aur jis par tum kuch kar sako. Baaki dashboard par.
+
+Example (invented hafta): errors 1% ke aaspas rahe, 5% ka alert kabhi nahi baja. Par jawab ka pass rate 90 se 78 par aaya, aur 80% ke neeche ka alert paanchve din se bajta. Quality, cost aur safety alerts hamari recommended practice hain, kisi standard ka quote nahi.
+
+Tumhare app mein pehle kaun sa alert lagaoge: quality ya cost? Comment mein likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #LLMOps

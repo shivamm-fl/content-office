@@ -1,0 +1,8 @@
+AI app ke alerts: errors green, jawab galat? (AI interview)
+
+Interview mein poochha jata hai: production mein AI app ke liye kaun se alerts lagaoge? Jawab: sirf errors nahi, chaar tarah ke alerts. Pehla, classic signals: Google ki SRE book ke four golden signals latency, traffic, errors aur saturation. Doosra, cost: tokens ka bill. Teesra, quality: roz kuch asli jawab eval se check karo. Chautha, safety: guardrail ya refusal achanak badhe to alert. SRE book ke hisab se page tab karo jab condition urgent aur actionable ho; baaki dashboard par. Quality, cost aur safety alerts hamari recommended practice hain, SRE book ka quote nahi. Video ka hafta invented example hai.
+
+Is video mein: llm monitoring alerts, ai app production monitoring, llm observability, golden signals ai, ai engineer interview.
+
+Sources:
+https://sre.google/sre-book/monitoring-distributed-systems/
