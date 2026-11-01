@@ -89,7 +89,7 @@ export interface PostRecord {
 }
 export interface CalendarData {
   /** Private imports awaiting review; saving never makes an item postable. */
-  saved?: { item: string; title: string; track: string; duration_s: number; cover_url: string }[];
+  saved?: { item: string; title: string; track: string; duration_s: number; cover_url: string; version: string; approved: boolean; approved_at: number | null }[];
   team: string; publishing: boolean; now: number; today: string; clock: string;
   paused: boolean; window: [string, string]; slot_times: string[]; posts_per_slot: number; can_post_now: boolean; last_post_hours: number | null;
   ready: ReadyReel[]; days: CalendarDay[]; pipeline: PipelineItem[]; recent: PostedReel[]; posts: PostRecord[];
@@ -102,6 +102,8 @@ export interface CalendarData {
 export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string; trial?: boolean }
 /** What the owner sees when previewing a reel before it is posted: the video, the cover and the texts that would go out. */
 export interface PreviewInfo {
+  /** Imported-library review decisions apply only to this exact version. */
+  version?: string; approved?: boolean; approved_at?: number | null;
   item: string; title: string; video_url: string; cover_url: string | null; caption: string; youtube: string; duration_s: number | null;
   source: "office" | "released";
 }

@@ -41,6 +41,8 @@ Phone (PWA) ──► Cloudflare Worker (apps/api) ── one Office Durable Obj
 
 Locally rendered reels can be saved in the owner's private review library. The Calendar's **Saved reels** section reads `reel-library/<team>/manifest.json` from the existing KV namespace; its video and cover routes require the owner's normal session and support video byte ranges. An authenticated Cloudflare administrator imports immutable files and verifies their hashes before replacing the manifest. Saving creates no studio verdict, approval, schedule or publishing job. The local batch helper is `tools/import_blind75_office.py` (manifest only by default, `--upload` to save and verify).
 
+In a saved reel's preview, **Approve reel** saves the owner's decision and **Undo approval** reverses it. Decisions persist in the team's Durable Object, bound to the exact version, video, cover and reviewed texts. A changed import needs fresh approval. These review actions never start publishing.
+
 ```
 pnpm install
 pnpm --filter @office/web build          # the PWA (served by the Worker)

@@ -145,7 +145,8 @@ app.get("/api/teams/:team/calendar", async (c) => {
   const slug = teamOr404(c);
   if (!slug) return bad(c, 404, "no such team");
   const [calendar, library] = await Promise.all([office(c.env, slug).calendar(slug), loadLibrary(c.env.TRANSCRIPTS, slug)]);
-  return c.json({ ...calendar, saved: savedReels(slug, library) });
+  const approvals=await office(c.env,slug).libraryApprovals(slug,library);
+  return c.json({ ...calendar, saved: savedReels(slug, library, approvals) });
 });
 
 // Private review library. Files are imported with the administrator's existing KV permissions,
@@ -163,7 +164,17 @@ app.get("/api/teams/:team/library/:item/preview", async (c) => {
   const slug=teamOr404(c);
   if(!slug)return bad(c,404,"no such team");
   const saved=(await loadLibrary(c.env.TRANSCRIPTS,slug)).find(x=>x.item===c.req.param("item"));
-  return saved?c.json(libraryPreview(slug,saved)):bad(c,404,"not found");
+  if(!saved)return bad(c,404,"not found");
+  const approvals=await office(c.env,slug).libraryApprovals(slug,[saved]);
+  return c.json(libraryPreview(slug,saved,approvals[saved.item]));
+});
+app.post("/api/teams/:team/library/:item/approval", async(c)=>{
+  const slug=teamOr404(c);if(!slug)return bad(c,404,"no such team");
+  const body=await c.req.json<{version?:unknown;approved?:unknown}>().catch(()=>({} as {version?:unknown;approved?:unknown}));
+  if(typeof body.version!=="string"||!/^[a-f0-9]{16}$/.test(body.version)||typeof body.approved!=="boolean")
+    return bad(c,400,"The current version and an approval decision are required");
+  try {return c.json(await office(c.env,slug).setLibraryApproval(slug,c.req.param("item"),body.version,body.approved,c.get("owner")));}
+  catch(e){return bad(c,409,(e as Error).message);}
 });
 
 // Watch a reel before it is posted: its video, cover and the texts that would go out. For a reel released in the private publishing repo the

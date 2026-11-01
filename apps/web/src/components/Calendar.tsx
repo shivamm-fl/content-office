@@ -33,23 +33,35 @@ function CellRow({ c, team, paused, onPreview }: { c: CalendarCell; team: Team; 
 }
 
 /** Watch a reel (and read the texts that would go out) before it is posted. */
-function PreviewSheet({ office, item, title, reel, saved=false, onClose, onPost }: { office: Office; item: string; title: string; reel: ReadyReel | null; saved?: boolean; onClose: () => void; onPost: (r: ReadyReel) => void }) {
+function PreviewSheet({ office, item, title, reel, saved=false, onApprovalChange, onClose, onPost }: { office: Office; item: string; title: string; reel: ReadyReel | null; saved?: boolean; onApprovalChange?: () => Promise<void>; onClose: () => void; onPost: (r: ReadyReel) => void }) {
   const { loadPreview } = office;
   const [info, setInfo] = useState<PreviewInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [broken, setBroken] = useState(false);
+  const [approving,setApproving]=useState(false);
+  const [approvalError,setApprovalError]=useState("");
   useEffect(() => {
     let live = true;
     const request=saved?api<PreviewInfo>(`/api/teams/${office.state!.team.slug}/library/${item}/preview`):loadPreview(item);
     request.then((i) => { if (live) setInfo(i); }).catch((e: Error) => { if (live) setError(e.message); });
     return () => { live = false; };
   }, [loadPreview, item, saved, office.state!.team.slug]);
+  const decide=async()=>{
+    if(!info?.version)return;
+    setApproving(true);setApprovalError("");
+    try {
+      const decision=await api<{approved:boolean;approved_at:number|null;version:string}>(`/api/teams/${office.state!.team.slug}/library/${item}/approval`,{method:"POST",json:{version:info.version,approved:!info.approved}});
+      setInfo(current=>current?{...current,...decision}:current);
+      await onApprovalChange?.();
+    } catch(e){setApprovalError((e as Error).message);}finally{setApproving(false);}
+  };
   return (
     <div className="fixed inset-0 z-30 flex items-end bg-black/60" onClick={onClose}>
       <div className="safe-bottom mx-auto max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-t-2xl border border-wall bg-desk" onClick={(e) => e.stopPropagation()} role="dialog" aria-label={`Preview ${title}`}>
         <div className="px-4 pt-4">
           <p className="text-xs text-dim">{item}{info?.duration_s ? `, ${Math.round(info.duration_s)} s` : ""}</p>
           <p className="text-[15px] font-semibold leading-snug">{info?.title ?? title}</p>
+          {saved&&info&&<p className={`mt-1 text-xs ${info.approved?"text-[#6FD3A6]":"text-gold"}`}>{info.approved?"Approved":"Waiting for your approval"}</p>}
         </div>
         {info ? (
           <video src={info.video_url} poster={info.cover_url ?? undefined} controls playsInline preload="metadata" onError={() => setBroken(true)} className="mx-auto mt-3 block h-[58vh] w-full bg-black object-contain" />
@@ -65,9 +77,11 @@ function PreviewSheet({ office, item, title, reel, saved=false, onClose, onPost 
             ))}
           </div>
         )}
-        <div className="flex gap-2 px-4 py-3">
+        {approvalError&&<p role="alert" className="px-4 py-2 text-sm text-coral">{approvalError}</p>}
+        <div className="sticky bottom-0 flex gap-2 border-t border-wall bg-desk px-4 py-3">
+          {saved&&info&&<button disabled={approving} onClick={decide} className={`flex-1 rounded-lg py-2.5 text-sm font-semibold ${info.approved?"border border-wall text-paper":"bg-gold text-ink"}`}>{approving?"Saving…":info.approved?"Undo approval":"Approve reel"}</button>}
           {reel && <button onClick={() => onPost(reel)} className="flex-1 rounded-lg bg-gold py-2.5 text-sm font-semibold text-ink">Post this…</button>}
-          <button onClick={onClose} className={`rounded-lg border border-wall py-2.5 text-sm ${reel ? "px-5" : "flex-1"}`}>Close</button>
+          <button onClick={onClose} className={`rounded-lg border border-wall py-2.5 text-sm ${reel||saved ? "px-5" : "flex-1"}`}>Close</button>
         </div>
       </div>
     </div>
@@ -219,15 +233,15 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
 
         {!!cal?.saved?.length && <section aria-label="Saved reels">
           <h2 className="mb-1 text-sm text-paper">Saved reels · {cal.saved.length}</h2>
-          <p className="mb-3 text-[12.5px] text-dim">Covers, videos and captions saved in the Office for your review.</p>
+          <p className="mb-3 text-[12.5px] text-dim">Open a reel to review its video, cover and captions, then approve it.</p>
           <ul className="space-y-2.5">{cal.saved.map(r=><li key={r.item} className="flex items-center gap-3 rounded-xl border border-wall bg-desk p-3">
             <button onClick={()=>setPreview({item:r.item,title:r.title,saved:true})} aria-label={`Preview ${r.title}`} className="shrink-0">
               <img src={r.cover_url} alt={`${r.title} cover`} className="h-28 w-[63px] rounded border border-wall object-contain" loading="lazy" />
             </button>
             <div className="min-w-0 flex-1"><p className="text-[14px] font-medium leading-snug">{r.title}</p>
               <p className="mt-1 text-[11.5px] text-dim">{r.item} · {trackName(team,r.track)} · {r.duration_s}s</p>
-              <p className="mt-1 text-[11.5px] text-gold">Saved for review</p></div>
-            <button onClick={()=>setPreview({item:r.item,title:r.title,saved:true})} className="rounded-lg border border-wall px-3 py-2 text-xs">Preview</button>
+              <p className={`mt-1 text-[11.5px] ${r.approved?"text-[#6FD3A6]":"text-gold"}`}>{r.approved?"Approved":"Waiting for approval"}</p></div>
+            <button onClick={()=>setPreview({item:r.item,title:r.title,saved:true})} className="rounded-lg border border-wall px-3 py-2 text-xs">{r.approved?"View reel":"Review & approve"}</button>
           </li>)}</ul>
         </section>}
 
@@ -365,7 +379,7 @@ export function CalendarView({ office, focus }: { office: Office; focus: string 
       </div>
       {sheet && cal && <PostSheet cal={cal} reel={sheet} office={office} onClose={() => setSheet(null)} onDone={() => { setSheet(null); void load(); }} onPreview={() => { setPreview({ item: sheet.item, title: sheet.title }); setSheet(null); }} />}
       {preview && cal && (
-        <PreviewSheet office={office} item={preview.item} title={preview.title} saved={preview.saved} reel={preview.saved ? null : cal.ready.find((r) => r.item === preview.item) ?? null}
+        <PreviewSheet office={office} item={preview.item} title={preview.title} saved={preview.saved} onApprovalChange={load} reel={preview.saved ? null : cal.ready.find((r) => r.item === preview.item) ?? null}
           onClose={() => setPreview(null)} onPost={(r) => { setPreview(null); setSheet(r); }} />
       )}
     </Screen>

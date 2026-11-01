@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseLibrary, loadLibrary, assetKey, libraryPreview, savedReels, mediaResponse } from './library.ts';
+import { parseLibrary, loadLibrary, assetKey, libraryPreview, savedReels, mediaResponse, approvalMatches } from './library.ts';
 const item={item:'b001',title:'Two Sum',track:'blind75',version:'a'.repeat(16),folder:'b001_two_sum',duration_s:78,caption:'caption',youtube:'youtube',video_sha256:'a'.repeat(64),cover_sha256:'b'.repeat(64),saved_at:'2026-11-02'};
 test('invalid imported metadata cannot select arbitrary paths or URLs',()=>{
   assert.deepEqual(parseLibrary({items:[{...item,version:'../../private'},{...item,item:'../secret'},{...item,video_sha256:'bad'},{...item,duration_s:999}]}),[]);
@@ -24,4 +24,15 @@ test('private media returns exact full and seek bytes, including suffix ranges',
     const response=mediaResponse(bytes,'video/mp4','abc',range);assert.equal(response.status,206);assert.deepEqual([...new Uint8Array(await response.arrayBuffer())],want);
   }
   for(const range of ['bytes=5-','bytes=4-1','bytes=','bytes=-0','bytes=0-1,3-4','bytes=999999999999999999-'])assert.equal(mediaResponse(bytes,'video/mp4','abc',range).status,416);
+});
+test('approval is never inherited by a different version, video or cover',()=>{
+  const record={version:item.version,video_sha256:item.video_sha256,cover_sha256:item.cover_sha256,title:item.title,caption:item.caption,youtube:item.youtube,approved_at:123,approved_by:'owner'};
+  assert.equal(approvalMatches(item,record),true);
+  for(const changed of [{...item,version:'c'.repeat(16)},{...item,video_sha256:'d'.repeat(64)},{...item,cover_sha256:'e'.repeat(64)},{...item,caption:'different caption'},{...item,youtube:'new YouTube text'},{...item,title:'another title'}]){
+    assert.equal(approvalMatches(changed,record),false);
+    assert.equal(savedReels('dsa',[changed],{b001:record})[0].approved,false);
+    assert.equal(libraryPreview('dsa',changed,record).approved,false);
+  }
+  assert.equal(savedReels('dsa',[item])[0].approved,false);
+  assert.equal(savedReels('dsa',[item],{b001:record})[0].approved_at,123);
 });

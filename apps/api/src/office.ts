@@ -16,6 +16,7 @@ import { waitForSave } from "./save_gate";
 import { stallAction } from "./stall";
 import { findAnomalies } from "./health";
 import { TEAMS, team as getTeam } from "./teams";
+import { loadLibrary, approvalMatches, approvalKey, type LibraryApproval, type LibraryItem } from "./library";
 
 /** Id prefix of every floor's tracks to the floor (e r q learnai, d dsa, s systemdesign): the publishing repo's state holds the reels of all floors. */
 const claims = (): Record<string, string> => Object.fromEntries(Object.entries(TEAMS).flatMap(([slug, t]) => t.tracks.map((tr) => [tr.prefix, slug])));
@@ -543,6 +544,32 @@ export class Office extends DurableObject<Env> {
   }
 
   // ---------- calendar and posting: the owner posts from the office ----------
+  /** Review decisions for administrator-imported files, bound to the exact media version. */
+  async libraryApprovals(slug:string,items:LibraryItem[]):Promise<Record<string,LibraryApproval>> {
+    this.ensureTeam(slug);
+    const result:Record<string,LibraryApproval>={};
+    for(const item of items){
+      const raw=this.meta(approvalKey(item.item,item.version));
+      if(!raw)continue;
+      try { const record=JSON.parse(raw) as LibraryApproval;if(approvalMatches(item,record))result[item.item]=record; }
+      catch { /* a malformed saved decision must never imply approval */ }
+    }
+    return result;
+  }
+  async setLibraryApproval(slug:string,itemId:string,version:string,approved:boolean,actor:string) {
+    this.ensureTeam(slug);
+    const item=(await loadLibrary(this.env.TRANSCRIPTS,slug)).find(x=>x.item===itemId);
+    if(!item)throw new Error("Saved reel not found");
+    if(item.version!==version)throw new Error("This reel has changed. Reload its preview before approving.");
+    if(typeof approved!=="boolean")throw new Error("Approval must be true or false");
+    const key=approvalKey(item.item,item.version);
+    if(!approved){this.setMeta(key,null);return {approved:false,approved_at:null,version};}
+    const previous=(await this.libraryApprovals(slug,[item]))[itemId];
+    const record=previous??{version,video_sha256:item.video_sha256,cover_sha256:item.cover_sha256,title:item.title,caption:item.caption,youtube:item.youtube,approved_at:Date.now(),approved_by:actor};
+    this.setMeta(key,JSON.stringify(record));
+    return {approved:true,approved_at:record.approved_at,version};
+  }
+
   // Only owner-session routes reach these methods. An agent has no route to them, and the publishing repo's own workflow does the posting.
   private pub: { at: number; cfg: PostingConfig; status: Record<string, Phase5Entry> } | null = null;
 

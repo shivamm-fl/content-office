@@ -2,7 +2,18 @@
 // A saved reel never enters the publishing queue or implies studio/owner approval.
 export interface SavedReel {
   item: string; title: string; track: string; duration_s: number; cover_url: string;
+  version: string; approved: boolean; approved_at: number | null;
 }
+export interface LibraryApproval {
+  version: string; video_sha256: string; cover_sha256: string; approved_at: number; approved_by: string;
+  title: string; caption: string; youtube: string;
+}
+export function approvalMatches(item:LibraryItem,record:LibraryApproval|null|undefined):record is LibraryApproval {
+  return Boolean(record && record.version===item.version && record.video_sha256===item.video_sha256 &&
+    record.cover_sha256===item.cover_sha256 && record.title===item.title && record.caption===item.caption &&
+    record.youtube===item.youtube && Number.isFinite(record.approved_at) && typeof record.approved_by==='string');
+}
+export const approvalKey=(item:string,version:string)=>`library.approval.${item}.${version}`;
 export interface LibraryItem {
   item: string; title: string; track: string; version: string; folder: string;
   duration_s: number; caption: string; youtube: string;
@@ -34,14 +45,16 @@ export function parseLibrary(raw:unknown): LibraryItem[] {
 export async function loadLibrary(store:Store,team:string):Promise<LibraryItem[]> {
   return parseLibrary(await store.get(manifestKey(team),'json'));
 }
-export function savedReels(team:string,items:LibraryItem[]):SavedReel[] {
-  return items.map(({item,title,track,duration_s,version})=>({item,title,track,duration_s,
-    cover_url:`/api/teams/${team}/library/${item}/${version}/cover`}));
+export function savedReels(team:string,items:LibraryItem[],approvals:Record<string,LibraryApproval>={}):SavedReel[] {
+  return items.map(a=>({item:a.item,title:a.title,track:a.track,duration_s:a.duration_s,version:a.version,
+    approved:approvalMatches(a,approvals[a.item]),approved_at:approvalMatches(a,approvals[a.item])?approvals[a.item].approved_at:null,
+    cover_url:`/api/teams/${team}/library/${a.item}/${a.version}/cover`}));
 }
-export function libraryPreview(team:string,a:LibraryItem) {
+export function libraryPreview(team:string,a:LibraryItem,approval?:LibraryApproval) {
   const base=`/api/teams/${team}/library/${a.item}/${a.version}`;
   return {item:a.item,title:a.title,video_url:`${base}/video`,cover_url:`${base}/cover`,
-    caption:a.caption,youtube:a.youtube,duration_s:a.duration_s,source:'office' as const};
+    caption:a.caption,youtube:a.youtube,duration_s:a.duration_s,source:'office' as const,
+    version:a.version,approved:approvalMatches(a,approval),approved_at:approvalMatches(a,approval)?approval.approved_at:null};
 }
 // The same origin's video element uses authenticated byte-range requests to seek.
 export function mediaResponse(bytes:ArrayBuffer,type:string,etag:string,range:string|null):Response {
