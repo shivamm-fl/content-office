@@ -1,35 +1,59 @@
 {
   "items": [
     {
-      "id": "s012",
+      "id": "s013",
       "track": "series",
-      "day": 12,
-      "unit": "P1",
-      "title": "Ek request ka safar: click se jawab tak, Phase 1 ka poora map",
-      "format": "recap",
-      "hook_type": "surprising_fact",
-      "spoken_hook": "Request जाने से पहले ही, आठ चक्कर लग जाते हैं।",
-      "hook_source": "https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work",
-      "length_target_s": 140,
-      "cover_headline": "One Click, Eight Round Trips",
-      "thumb_text": "Click ke chakkar",
-      "script_file": "state/scripts/s012.txt",
-      "status": "planned",
-      "qa_passed": false,
-      "sources": [
-        "https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work",
-        "https://developer.mozilla.org/en-US/docs/Glossary/TCP_handshake",
-        "https://en.wikipedia.org/wiki/Load_balancing_(computing)",
-        "https://en.wikipedia.org/wiki/Single_point_of_failure",
-        "https://en.wikipedia.org/wiki/High_availability"
+      "day": 13,
+      "unit": "P2",
+      "title": "Scalability: ek user ke liye fast, das lakh ke liye nahi",
+      "format": "concept",
+      "hook_type": "interviewer_asked",
+      "one_idea": "Scalability means a system keeps working well as the load grows; one server that is fast for a single user hits a limit (its slowest resource), so the real question is what grows when load grows.",
+      "spoken_hook": "Interviewer ने पूछा: 100 users पर चलने वाला app, 10 लाख पर क्यों टूटता है?",
+      "hook_10s": "Interviewer ने पूछा: 100 users पर चलने वाला app, 10 लाख पर क्यों टूटता है? जवाब ये है: app वही रहता है, पर हर user थोड़ा काम माँगता है, और काम जोड़ने पर कोई एक चीज़ पहले भर जाती है। [frame 0: one server box with 3 tiny user dots, calm; then the dots multiply into a crowd at its door]",
+      "hook_candidates": [
+        {
+          "hook": "Interviewer ने पूछा: 100 users पर चलने वाला app, 10 लाख पर क्यों टूटता है?",
+          "formula": "interviewer_asked: one complete question"
+        },
+        {
+          "hook": "एक user के लिए fast, मतलब 10 लाख के लिए fast नहीं।",
+          "formula": "surprising_fact: corrects a belief"
+        },
+        {
+          "hook": "Sale के दिन आपका app क्यों अटकता है?",
+          "formula": "relatable_stake / direct_question: the viewer's own moment"
+        }
       ],
+      "hook_formula": "interviewer_asked: Interviewer ने पूछा opener with one self-contained question (least recently used of the last six, Day 9)",
+      "hook_source": "hook-writer interviewer_asked; the topic is the Wikipedia definition of scalability https://en.wikipedia.org/wiki/Scalability",
+      "visual_idea": "One server box drawn with three small bars inside (CPU, memory, disk). A few user dots send requests and the bars barely move; the dots grow to a crowd and the weakest bar fills to the top first and turns the box into the stuck point while the other bars stay half empty. Then a second copy of the box appears and the crowd splits between the two, and every bar drops.",
+      "everyday_anchor": "A chai stall that serves 5 friends smoothly but jams at the college gate at 5 pm when 500 students arrive, because one stove and one cashier cannot grow with the crowd.",
+      "example": "EXAMPLE (invented numbers, arithmetic shown): one server handles 100 requests per second; 100 users sending 1 request each per 10 seconds is 10 requests per second, so it is 10 percent busy. 10 lakh users at the same rate is 10,00,000 / 10 = 1,00,000 requests per second, which is 1,000 times the limit. Scaling means this gap is closed by adding capacity (more servers, or a bigger one), not by hoping the code is fast.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Scalability",
+        "https://en.wikipedia.org/wiki/Bottleneck_(software)",
+        "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/welcome.html"
+      ],
+      "facts_to_verify": [
+        "Scalability = property of a system to handle a growing amount of work, in software often by adding resources (Wikipedia Scalability).",
+        "A bottleneck is the point where one component caps the whole system's performance (Wikipedia Bottleneck (software)); the AWS page only supports that AWS has a performance efficiency pillar, claim nothing more from it.",
+        "Adding hardware can have diminishing returns (Wikipedia Scalability, Amdahl's law): say it in one line as the catch, no numbers.",
+        "The 100 requests per second limit and all user counts are EXAMPLE; recompute 10,00,000 / 10 = 1,00,000 and the 1,000x ratio.",
+        "Do not claim any real company's numbers; horizontal vs vertical is only named, not taught (that is its own day)."
+      ],
+      "length_target_s": 120,
+      "cover_headline": "Fast For One User, Not A Million",
+      "thumb_text": "One vs Million",
       "keywords": [
-        "what happens when you open a website",
-        "journey of a request system design",
-        "dns tcp http explained in hindi",
-        "system design basics recap",
-        "request flow load balancer server"
-      ]
+        "what is scalability in system design",
+        "scalability explained in hindi",
+        "app slow when many users",
+        "system design interview scalability",
+        "scalable system kya hota hai"
+      ],
+      "status": "planned",
+      "qa_passed": false
     }
   ]
 }
