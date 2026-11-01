@@ -1,0 +1,8 @@
+AI app slow hai? Time kahan gaya, tracing se dekho (AI interview)
+
+Interview mein poochha jata hai: chatbot ka jawab 20 second mein aata hai, time kahan gaya ye kaise dekhoge? Jawab: request ko trace karo. Har step ek span hai, jisme start aur end time hota hai. Ek request ke saare spans par ek trace id hota hai, aur child span apne parent span ko point karta hai. Spans ko time se sort karo, har ek ka share dekho aur sabse bade hisse ko pehle theek karo. Video ka example invented hai: 20 s mein rerank 31 %, order API timeout aur retry 29 %, LLM calls 36 %. Jo spans parallel chalte hain unka time jodne se total nahi banta, isliye sabse lamba raasta dekho.
+
+Is video mein: llm latency tracing, opentelemetry traces explained, why is my ai app slow, rag latency debugging, ai engineer interview.
+
+Sources:
+https://opentelemetry.io/docs/concepts/signals/traces/

@@ -1,0 +1,15 @@
+Chatbot ka jawab 20 second mein aata hai. Time kahan gaya, ye kaise dekhoge?
+
+Interview mein poochha jata hai: chatbot ka jawab 20 second mein aata hai, time kahan gaya ye kaise dekhoge?
+
+Jawab: request ko trace karo. Teen steps:
+1. Har kaam ek span: start aur end time ke saath. End minus start se us step ka time milta hai.
+2. Ek request ke saare spans par ek trace id lagao. Tab saare spans mil kar ek trace, yaani request ka poora rasta, banate hain.
+3. Spans ko time se sort karo aur har ek ka share dekho. Sabse bade hisse ko pehle theek karo.
+
+Example (invented numbers): total 20 s mein rerank 6.2 s (31 %), order API ka timeout aur retry 5.8 s (29 %), dono LLM calls 7.2 s (36 %). LLM akela suspect nahi tha.
+Dhyan rakho: jo spans saath-saath chalte hain, unka time jodne se total nahi banta. Sabse lamba raasta dekho.
+
+Tumhare app mein sabse slow hissa kaun sa hai: LLM, search ya tool? Comment mein likho. Roz ek naya interview sawal, follow karo.
+
+#AI #AIInterview #LLMTracing

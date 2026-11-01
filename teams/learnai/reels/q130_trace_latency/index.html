@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Interview: Ek request 20 second legi. Kahan time ja raha hai?</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="118" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="118" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="118" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="118" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I"], tag: "AI ENGINEER INTERVIEW" });   // order = scene ids from spec.json
+      Viz.install(M);   // diagram templates and building blocks: see the header of kit/viz.js (a shortcut, not a menu: custom SVG/GSAP is welcome)
+      const { tl, S, P, Ed, W } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, text, y, t, o) => { o = o || {}; const col = o.col || ACC, h = o.h || 56; const w = el(host, `left:0;top:${y}px;width:1080px;height:${h}px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;height:${h}px;padding:0 ${o.pad || 30}px;border-radius:999px;border:2px solid ${col};background:${ca(col, 0.10)};font:700 ${o.size || 34}px ${COD};letter-spacing:.14em;color:${col};white-space:nowrap">${text}</div>`;
+        return show(w, t, { opacity: 0, y: -14 }); };
+      const tag = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;font:800 ${size || 40}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: 12 });
+      const paint = (d, col, t, fill) => tl.to(d, { borderColor: ca(col, 0.95), backgroundColor: ca(col, fill == null ? 0.16 : fill), duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const bubble = (host, x, y, w, h, text, col, t, mine, size) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${mine ? "30px 30px 6px 30px" : "30px 30px 30px 6px"};border:2px solid ${ca(col, 0.6)};background:${ca(col, 0.12)};display:flex;align-items:center;justify-content:center;font:600 ${size || 42}px ${LAT};color:${TEXT};white-space:nowrap`, text); return show(d, t, { opacity: 0, y: 18 }); };
+      const pillAt = (host, text, x, y, w, t, col, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:64px;border-radius:32px;border:2px solid ${col};background:${ca(col, 0.10)};display:flex;align-items:center;justify-content:center;font:700 ${size || 34}px ${COD};letter-spacing:.1em;color:${col};white-space:nowrap`, text), t, { opacity: 0, y: -14 });
+      const grow = (bar, t, dur) => { tl.set(bar, { opacity: 0, scaleX: 0, transformOrigin: "0% 50%" }, 0); tl.to(bar, { opacity: 1, scaleX: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return bar; };
+      const fmt = (v) => v.toFixed(1);
+      // waterfall: one row per span (label, faint track, bar placed by start and length)
+      const wf = (host, o) => { const T = o.sc * 20; return o.rows.map((r, i) => { const y = o.y0 + i * o.pitch, bx = o.x0 + o.labW + r.s * o.sc, bw = Math.max(8, r.d * o.sc);
+        const lab = el(host, `left:${o.x0}px;top:${y}px;width:${o.labW - 12}px;height:${o.rowH}px;display:flex;align-items:center;font:800 ${o.ls || 40}px ${COD};color:#B4BED6;letter-spacing:.03em;white-space:nowrap`, r.n);
+        const trk = el(host, `left:${o.x0 + o.labW}px;top:${y}px;width:${T}px;height:${o.rowH}px;border-radius:14px;border:2px solid ${ca(MUTED, 0.35)};background:${ca(MUTED, 0.06)}`);
+        const bar = el(host, `left:${bx}px;top:${y + 8}px;width:${bw}px;height:${o.rowH - 16}px;border-radius:10px;border:2px solid ${r.col};background:${ca(r.col, 0.85)}`);
+        const inside = bw >= (o.minIn || 150), dl = el(host, `left:${inside ? bx : bx + bw + 14}px;top:${y}px;${inside ? `width:${bw}px;justify-content:center;` : ""}height:${o.rowH}px;display:flex;align-items:center;font:800 ${o.ds || 40}px ${COD};color:${inside ? "#0B1220" : TEXT};white-space:nowrap`, fmt(r.d) + " s");
+        tl.set([lab, trk, dl], { opacity: 0 }, 0); grow(bar, 0.05); tl.set(bar, { opacity: 0 }, 0);
+        return { lab, trk, bar, dl, y, bx, bw, r }; }); };
+      const rowIn = (w, t) => { tl.to([w.lab, w.trk], { opacity: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t); };
+      const barIn = (w, t, dur) => { tl.fromTo(w.bar, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); };
+      const colorBar = (w, col, t) => tl.to(w.bar, { borderColor: col, backgroundColor: ca(col, 0.85), duration: 0.3, ease: "power2.out", immediateRender: false }, t);
+      const durIn = (w, t) => tl.to(w.dl, { opacity: 1, duration: 0.3, immediateRender: false }, t);
+      const ring = (host, x, y, w, h, col, t) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:4px solid ${col}`), t, { opacity: 0 }, 0.3);
+      const XS = 60, LW = 250;
+
+      // ============ A: hook ============
+      M.hook(["20 seconds.", "Where did the time go?"], { size: 88, top: 215 });
+      bubble(A, 440, 480, 560, 100, "Where is my order?", CYAN, 0.05, true, 40);
+      bubble(A, 80, 610, 400, 100, "...", MUTED, 0.1, false, 52);
+      const tcard = glass(A, 140, 750, 800, 230, HOT); show(tcard, 0.02, { opacity: 0 }, 0.2);
+      M.icon(A, "clock", 190, 805, 120, HOT).show(0.02);
+      const tnum = el(tcard, `left:230px;top:0;width:540px;height:230px;display:flex;align-items:center;justify-content:center;font:800 130px ${COD};color:${HOT}`, "0.0 s"); tl.set(tnum, { opacity: 1 }, 0);
+      const tobj = { v: 0 }; tl.to(tobj, { v: 20, duration: 2.5, ease: "none", onUpdate: () => { tnum.textContent = fmt(tobj.v) + " s"; }, immediateRender: false }, 0.1);
+      const abar = el(A, `left:60px;top:1060px;width:960px;height:120px;border-radius:16px;border:3px solid ${ca(MUTED, 0.8)};background:${ca(MUTED, 0.25)};display:flex;align-items:center;justify-content:center;font:800 80px ${COD};color:${TEXT}`, "?");
+      show(abar, at("A", "time"), { opacity: 0, y: 18 });
+      tag(A, "WHERE?", 0, 1210, 1080, at("A", "kahan"), ACC, 64);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ============ B: the answer ============
+      // diagram: B
+      pillC(B, "YOUR ANSWER", 210, P("B", 0) + 0.05, { size: 42, h: 70 });
+      tag(B, "TRACE", 0, 300, 1080, at("B", "trace"), CYAN, 112);
+      const SEG = [[0.8, "SEARCH"], [6.2, "RERANK"], [2.4, "LLM 1"], [5.0, "TIMEOUT"], [0.8, "RETRY"], [4.8, "LLM 2"]];
+      const bone = el(B, `left:60px;top:470px;width:960px;height:130px;border-radius:16px;border:3px solid ${ca(MUTED, 0.8)};background:${ca(MUTED, 0.25)}`); show(bone, P("B", 0) + 0.2, { opacity: 0 });
+      let sx = 60; const bsegs = SEG.map(([d, n], i) => { const w = d / 20 * 960; const e = el(B, `left:${sx}px;top:470px;width:${Math.max(8, w - 4)}px;height:130px;border-radius:12px;border:3px solid ${i >= 3 && i < 5 ? HOT : CYAN};background:${ca(i >= 3 && i < 5 ? HOT : CYAN, 0.8)}`); sx += w; tl.set(e, { opacity: 0 }, 0); return e; });
+      bsegs.forEach((e, i) => tl.to(e, { opacity: 1, duration: 0.3, immediateRender: false }, at("B", "har") + i * 0.1));
+      tl.to(bone, { opacity: 0, duration: 0.3, immediateRender: false }, at("B", "har") + 0.7);
+      paint(bsegs[1], ACC, at("B", "sabse"), 0.9); tl.to(bsegs[1], { backgroundColor: ca(ACC, 0.9), duration: 0.3, immediateRender: false }, at("B", "sabse"));
+      tag(B, "BIGGEST", 40, 620, 400, at("B", "bade"), ACC, 48);
+      pillC(B, "FIX FIRST", 700, at("B", "pehle"), { size: 44, h: 70 });
+      [["1", "SPAN"], ["2", "TRACE ID"], ["3", "SORT"]].forEach(([n, l], i) => { const c = glass(B, 140, 840 + i * 150, 800, 124, i === 0 ? CYAN : i === 1 ? VIOLET : ACC); show(c, at("B", "teen") + i * 0.35, { opacity: 0, y: 20 });
+        el(c, `left:30px;top:0;height:124px;display:flex;align-items:center;font:800 70px ${COD};color:${ACC}`, n); el(c, `left:130px;top:0;height:124px;display:flex;align-items:center;font:800 58px ${COD};color:${TEXT};letter-spacing:.06em`, l); });
+      M.fit(B, { y: 200, h: 1110 });
+
+      // ============ C: the app + the total ============
+      // diagram: C
+      pillAt(C, "EXAMPLE", 700, 190, 280, P("C", 0) + 0.05, MUTED, 34);
+      const CR = [{ n: "SEARCH", s: 0, d: 0.8, col: MUTED }, { n: "RERANK", s: 0.8, d: 6.2, col: MUTED }, { n: "LLM 1", s: 7.0, d: 2.4, col: MUTED }, { n: "ORDER API", s: 9.4, d: 5.8, col: MUTED }, { n: "LLM 2", s: 15.2, d: 4.8, col: MUTED }];
+      const cw = wf(C, { x0: XS, labW: LW, sc: 35, y0: 380, pitch: 140, rowH: 112, rows: CR });
+      [at("C", "documents"), at("C", "rerank"), at("C", "LLM", 0), at("C", "API", 0), at("C", "LLM", 1)].forEach((t, i) => rowIn(cw[i], t));
+      cw.forEach((w, i) => barIn(w, at("C", "kul") + i * 0.12));
+      const ctot = tag(C, "TOTAL 20.0 s", 0, 270, 1080, at("C", "20"), HOT, 76);
+      const cq = tag(C, "LLM SLOW?", 0, 1190, 1080, at("C", "LLM", 2), HOT, 64); gone(cq, at("C", "LLM", 3) - 0.1);
+      [1, 3].forEach((i) => 0); colorBar(cw[2], CYAN, at("C", "LLM", 3)); colorBar(cw[4], CYAN, at("C", "LLM", 3) + 0.15);
+      const s1 = glass(C, 60, 1150, 460, 150, CYAN), s2 = glass(C, 560, 1150, 460, 150, ACC);
+      show(s1, at("C", "72")); show(s2, at("C", "128"));
+      el(s1, `left:0;top:8px;width:460px;text-align:center;font:800 70px ${COD};color:${CYAN}`, "7.2 s"); el(s1, `left:0;top:92px;width:460px;text-align:center;font:700 38px ${COD};color:${TEXT}`, "LLM · 36 %");
+      el(s2, `left:0;top:8px;width:460px;text-align:center;font:800 70px ${COD};color:${ACC}`, "12.8 s"); el(s2, `left:0;top:92px;width:460px;text-align:center;font:700 38px ${COD};color:${TEXT}`, "EVERYTHING ELSE");
+      [0, 1, 3].forEach((i) => paint(cw[i].trk, ACC, at("C", "128"), 0.12));
+      paint(cw[3].trk, ACC, at("C", "128"), 0.12);
+
+      // ============ D: spans ============
+      // diagram: D
+      pillAt(D, "EXAMPLE", 700, 190, 280, P("D", 0) + 0.05, MUTED, 34);
+      const DR = [{ n: "SEARCH", s: 0, d: 0.8, col: CYAN }, { n: "RERANK", s: 0.8, d: 6.2, col: CYAN }, { n: "LLM 1", s: 7.0, d: 2.4, col: CYAN }, { n: "TIMEOUT", s: 9.4, d: 5.0, col: HOT }, { n: "RETRY", s: 14.4, d: 0.8, col: HOT }, { n: "LLM 2", s: 15.2, d: 4.8, col: CYAN }];
+      const dw = wf(D, { x0: XS, labW: LW, sc: 35, y0: 300, pitch: 135, rowH: 108, rows: DR });
+      dw.forEach((w, i) => { rowIn(w, P("D", 0) + 0.05 + i * 0.1); barIn(w, at("D", "span") + i * 0.2); });
+      ring(D, XS + LW - 6, dw[1].y - 6, 722, 120, ACC, at("D", "yaani"));
+      const dst = tag(D, "START 0.8", dw[1].bx + dw[1].bw + 14, dw[1].y - 6, 400, at("D", "start"), ACC, 38); dst.style.textAlign = "left";
+      const den = tag(D, "END 7.0", dw[1].bx + dw[1].bw + 14, dw[1].y + 44, 400, at("D", "end"), ACC, 38); den.style.textAlign = "left";
+      gone(dst, at("D", "ghatao") - 0.2); gone(den, at("D", "ghatao") - 0.2);
+      const dsub = tag(D, "7.0 - 0.8 = 6.2", dw[1].bx + dw[1].bw + 10, dw[1].y + 24, 440, at("D", "ghatao"), ACC, 32); dsub.style.textAlign = "left";
+      gone(dsub, at("D", "number") - 0.2);
+      dw.forEach((w, i) => durIn(w, at("D", "number") + i * 0.1));
+      pillC(D, "6 SPANS", 1180, at("D", "6"), { size: 56, h: 84, pad: 44 });
+      ring(D, XS - 8, dw[3].y - 8, 972, 2 * 135 - 8 + 8 - 19, HOT, at("D", "retry"));
+      tag(D, "ORDER API", 790, dw[3].y - 52, 230, at("D", "retry"), HOT, 32);
+
+      // ============ E: trace id ============
+      // diagram: E
+      const ER = DR.map((r) => Object.assign({}, r));
+      const ew = wf(E, { x0: XS, labW: LW, sc: 28, y0: 330, pitch: 98, rowH: 82, rows: ER, ls: 36, ds: 34, minIn: 120 });
+      ew.forEach((w, i) => { rowIn(w, P("E", 0) + i * 0.05); barIn(w, P("E", 0) + 0.1 + i * 0.07); durIn(w, P("E", 0) + 0.5 + i * 0.05); });
+      const tid = tag(E, "TRACE ID: a91f", 0, 230, 1080, at("E", "id"), VIOLET, 66);
+      ew.forEach((w, i) => { const c = el(E, `left:890px;top:${w.y}px;width:130px;height:82px;border-radius:41px;border:2.5px solid ${VIOLET};background:${ca(VIOLET, 0.15)};display:flex;align-items:center;justify-content:center;font:800 38px ${COD};color:${VIOLET}`, "a91f"); show(c, at("E", "spans", 0) + i * 0.1, { opacity: 0, x: 20 }, 0.3); });
+      ring(E, XS - 10, 318, 970, 6 * 98 + 4, VIOLET, at("E", "trace", 1));
+      tag(E, "ONE TRACE", 0, 944, 1080, at("E", "poora"), VIOLET, 46);
+      [["b27c", [1, 3, 4, 6, 1, 5]], ["c40d", [0.5, 7, 2, 3, 0.5, 7]]].forEach(([id, segs], k) => { const y = 1040 + k * 90; let x = XS + LW; const lab = el(E, `left:${XS}px;top:${y}px;width:${LW - 12}px;height:64px;display:flex;align-items:center;font:800 36px ${COD};color:${MUTED}`, id); show(lab, at("E", "hazaron") + k * 0.2, { opacity: 0 });
+        segs.forEach((d, i) => { const w = d * 28; const s = el(E, `left:${x}px;top:${y}px;width:${w - 4}px;height:64px;border-radius:10px;border:2px solid ${ca(MUTED, 0.9)};background:${ca(MUTED, 0.3)}`); x += w; show(s, at("E", "hazaron") + k * 0.2 + i * 0.04, { opacity: 0 }, 0.3); }); });
+      tag(E, "x 1000s", 0, 1226, 1080, at("E", "requests"), MUTED, 50);
+
+      // ============ F: sort ============
+      // diagram: F
+      pillAt(F, "EXAMPLE", 700, 190, 280, P("F", 0) + 0.05, MUTED, 34);
+      const FR = [["SEARCH", 0.8, "4 %", CYAN], ["RERANK", 6.2, "31 %", CYAN], ["LLM 1", 2.4, "12 %", CYAN], ["ORDER API", 5.8, "29 %", HOT], ["LLM 2", 4.8, "24 %", CYAN]];
+      const ORD = [1, 3, 4, 2, 0]; const FP = 170, FY = 340, FS = 85; const frows = [];
+      FR.forEach(([n, d, pc, col], i) => { const row = el(F, `left:0;top:${FY + i * FP}px;width:1080px;height:140px`);
+        const lab = el(row, `left:${XS}px;top:0;width:250px;height:140px;display:flex;flex-direction:column;justify-content:center;font:800 42px ${COD};color:${TEXT};white-space:nowrap`, `${n}<span style="font:700 36px ${COD};color:#B4BED6">${fmt(d)} s</span>`);
+        let bar;
+        if (i === 3) { bar = el(row, `left:310px;top:10px;width:${5 * FS}px;height:120px;border-radius:10px;border:2px solid ${HOT};background:${ca(HOT, 0.85)}`); const rt = el(row, `left:${310 + 5 * FS}px;top:10px;width:${0.8 * FS}px;height:120px;border-radius:10px;border:2px solid ${ACC};background:${ca("#E0903A", 0.9)}`); tl.set(rt, { opacity: 0 }, 0); tl.to(rt, { opacity: 1, duration: 0.3, immediateRender: false }, P("F", 0) + 0.3); frows.rt = rt; }
+        else bar = el(row, `left:310px;top:10px;width:${d * FS}px;height:120px;border-radius:10px;border:2px solid ${col};background:${ca(col, 0.85)}`);
+        const pct = el(row, `left:${310 + d * FS + 18}px;top:0;height:140px;display:flex;align-items:center;font:800 56px ${COD};color:${TEXT};white-space:nowrap`, pc); tl.set(pct, { opacity: 0 }, 0);
+        tl.set([lab, bar], { opacity: 0 }, 0); tl.to([lab, bar], { opacity: 1, duration: 0.35, immediateRender: false }, P("F", 0) + 0.05 + i * 0.07);
+        frows.push({ row, lab, bar, pct }); });
+      FR.forEach((f, i) => tl.to(frows[i].row, { y: (ORD.indexOf(i) - i) * FP, duration: 0.8, ease: "power3.inOut", immediateRender: false }, at("F", "sort")));
+      const fpt = (i, t) => tl.to(frows[i].pct, { opacity: 1, duration: 0.3, immediateRender: false }, t);
+      fpt(1, at("F", "31")); fpt(3, at("F", "29")); fpt(4, at("F", "sabse")); fpt(2, at("F", "sabse") + 0.15); fpt(0, at("F", "sabse") + 0.3);
+      paint(frows[1].bar, ACC, at("F", "rerank"), 0.9); tl.to(frows[1].bar, { backgroundColor: ca(ACC, 0.9), borderColor: ACC, duration: 0.3, immediateRender: false }, at("F", "rerank"));
+      tl.to([frows[2].row, frows[4].row], { opacity: 0.4, duration: 0.3, immediateRender: false }, at("F", "LLM"));
+      pillC(F, "FIX FIRST", 1240, at("F", "pehle"), { size: 52, h: 76, pad: 44 });
+
+      // ============ G: parallel ============
+      // diagram: G
+      pillAt(G, "EXAMPLE", 700, 190, 280, P("G", 0) + 0.05, MUTED, 34);
+      pillC(G, "AT THE SAME TIME", 290, at("G", "saath-saath"), { size: 44, h: 70 });
+      const GX = 150, GS = 230;
+      const g1 = el(G, `left:${GX}px;top:430px;width:${3 * GS}px;height:150px;border-radius:12px;border:3px solid ${CYAN};background:${ca(CYAN, 0.85)};display:flex;align-items:center;padding-left:30px;font:800 42px ${COD};color:#0B1220;box-sizing:border-box`, "SEARCH A");
+      const g2 = el(G, `left:${GX}px;top:620px;width:${2 * GS}px;height:150px;border-radius:12px;border:3px solid ${CYAN};background:${ca(CYAN, 0.85)};display:flex;align-items:center;padding-left:30px;font:800 42px ${COD};color:#0B1220;box-sizing:border-box`, "SEARCH B");
+      grow(g1, at("G", "saath-saath")); grow(g2, at("G", "saath-saath") + 0.15);
+      const gl = el(G, `left:${GX}px;top:800px;width:${3 * GS}px;height:4px;background:${ca(MUTED, 0.7)}`); show(gl, at("G", "saath-saath"), { opacity: 0 });
+      [0, 1, 2, 3].forEach((k) => { const tk = el(G, `left:${GX + k * GS - 40}px;top:812px;width:80px;text-align:center;font:700 36px ${COD};color:#B4BED6`, k + " s"); show(tk, at("G", "saath-saath") + 0.2, { opacity: 0 }); });
+      const gd1 = tag(G, "3 s", GX + 3 * GS - 190, 430, 170, at("G", "3", 0), "#0B1220", 56), gd2 = tag(G, "2 s", GX + 2 * GS - 190, 620, 170, at("G", "2", 0), "#0B1220", 56);
+      gd1.style.height = gd2.style.height = "150px"; gd1.style.lineHeight = gd2.style.lineHeight = "150px";
+      const bad = tag(G, "3 + 2 = 5 s", 0, 900, 1080, at("G", "jodne"), HOT, 70);
+      const strike = el(G, `left:280px;top:942px;width:520px;height:6px;background:${HOT}`); show(strike, at("G", "banta"), { opacity: 0, scaleX: 0 }, 0.3);
+      gone(bad, at("G", "do"), 0.3); gone(strike, at("G", "do"), 0.3);
+      const brk = el(G, `left:${GX}px;top:880px;width:${3 * GS}px;height:30px;border:4px solid ${GOOD};border-top:none;border-radius:0 0 10px 10px`); show(brk, at("G", "total", 1), { opacity: 0 });
+      tag(G, "TOTAL 3 s", 0, 930, 1080, at("G", "total", 1), GOOD, 76);
+      ring(G, GX - 12, 418, 3 * GS + 24, 174, ACC, at("G", "lanba"));
+      pillC(G, "LONGEST PATH", 1130, at("G", "lanba"), { size: 52, h: 80, pad: 44 });
+
+      // ============ H: say this ============
+      pillC(H, "SAY THIS", 230, P("H", 0) + 0.05, { size: 46, h: 72 });
+      M.box(H, { x: 140, y: 380, w: 800, h: 240, label: "STEP = SPAN", icon: "clock", color: CYAN, size: 56 }).show(at("H", "step"));
+      M.box(H, { x: 140, y: 680, w: 800, h: 240, label: "ONE TRACE ID", icon: "bookmark", color: VIOLET, size: 56 }).show(at("H", "trace", 1));
+      M.box(H, { x: 140, y: 980, w: 800, h: 240, label: "BIGGEST FIRST", icon: "star", color: ACC, size: 56 }).show(at("H", "biggest"));
+
+      // ============ I: close ============
+      // diagram: I
+      tag(I, "SLOWEST PART?", 0, 250, 1080, P("I", 0) + 0.05, ACC, 76);
+      const iC = glass(I, 60, 380, 960, 640, CYAN); show(iC, P("I", 0) + 0.1, { opacity: 0, y: 20 });
+      el(iC, `left:36px;top:24px;font:800 50px ${COD};letter-spacing:.12em;color:${CYAN}`, "COMMENT");
+      [["LLM", 30, "LLM"], ["SEARCH", 330, "search"], ["TOOL", 630, "tool"]].forEach(([n, x, w]) => show(el(iC, `left:${x}px;top:130px;width:290px;height:170px;border-radius:85px;border:2.5px solid ${ca(CYAN, 0.85)};background:${ca(CYAN, 0.12)};display:flex;align-items:center;justify-content:center;font:800 58px ${COD};color:${CYAN}`, n), at("I", w) - 0.1, { opacity: 0, scale: 0.9 }));
+      show(el(iC, `left:36px;right:36px;bottom:44px;height:130px;border-radius:65px;border:1.5px solid rgba(150,175,215,.5);font:500 44px ${COD};color:#B4BED6;display:flex;align-items:center;padding:0 40px`, "Add a comment..."), at("I", "Comment") + 0.1, { opacity: 0 });
+      const fbt = el(I, `left:240px;top:1110px;width:600px;height:160px;border-radius:80px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 68px ${COD};letter-spacing:.06em`, "+  FOLLOW");
+      show(fbt, at("I", "follow") - 0.5, { opacity: 0 });
+      tl.to(fbt, { scale: 0.92, duration: 0.12, ease: "power2.out", immediateRender: false }, at("I", "follow")); tl.to(fbt, { scale: 1, duration: 0.2, ease: "power2.out", immediateRender: false }, at("I", "follow") + 0.12);
+      M.fit(I, { y: 200, h: 1120 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I);
+      M.finish({ kw: { trace: "cyan", span: "gold", spans: "gold", rerank: "gold", Rerank: "gold", LLM: "cyan", timeout: "hot", retry: "hot", percent: "gold", sort: "gold", parallel: "cyan", saath: "cyan", Comment: "gold", follow: "gold" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+    </script>
+  </body>
+</html>

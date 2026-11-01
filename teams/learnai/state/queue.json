@@ -1789,20 +1789,13 @@
       "unit": "H2",
       "title": "Interview: Ek request 20 second legi. Kahan time ja raha hai, tracing se kaise dekhoge?",
       "trap": "Looking at total latency only, not at the time of each step.",
-      "one_idea": "Say the question in full, then: a total of 20 s tells you nothing about where. Trace the request: every step (embed, search, rerank, each LLM call, each tool call and its retry) is a span with a start and an end; spans of one request share a trace id and nest as parent and child. Sort spans by duration and read the share of each. Fix the biggest share first (in the example the reranker is 31 %, and a timed-out tool plus its retry is 29 %, so the LLM is not the only suspect). Boundary: spans that run in parallel do not add up to the total, so read the critical path.",
+      "one_idea": "Trace the request: every step is a span with start and end; spans of one request share a trace id; sort spans by duration and fix the biggest share first; parallel spans do not add up, read the critical path.",
       "hook_type": "interviewer_asked",
       "spoken_hook": "Interviewer ने पूछा: Chatbot का जवाब 20 second में आता है, time कहाँ गया ये कैसे देखोगे?",
-      "hook_formula": "interviewer_asked (one complete question, as an interviewer says it; 16 words)",
-      "visual_idea": "A chat bubble with a 20.0 s timer from frame 0; the timer is cut into a horizontal bar of 7 coloured segments (a waterfall of spans) that slide in one by one with labels (embed, search, rerank, LLM, tool, retry, LLM); the longest segments get a ruler showing their percent; a trace id tag ties them together.",
-      "example": "EXAMPLE (invented trace, state/runs/q130_trace_run_output.txt): total 20.0 s = embed 0.3 + vector search 0.5 + rerank 6.2 (31.0 %) + LLM call 1 2.4 + order API timeout 5.0 (25.0 %) + retry 0.8 + LLM answer 4.8 (24.0 %); waiting on the tool including its retry 5.8 s = 29 %.",
+      "example": "EXAMPLE (invented trace, state/runs/q130_trace_run_output.txt): total 20.0 s; rerank 6.2 s (31 %), order API timeout + retry 5.8 s (29 %), LLM calls 7.2 s (36 %).",
       "sources": [
         "https://opentelemetry.io/docs/concepts/signals/traces/",
         "https://github.com/open-telemetry/semantic-conventions-genai"
-      ],
-      "facts_to_verify": [
-        "OpenTelemetry: a trace is the path of a request; spans are units of work with start and end, share a trace id, child spans point to a parent (fetched 2026-11-01)",
-        "OpenTelemetry has GenAI conventions for spans, metrics, events of GenAI clients, now in their own repo (fetched 2026-11-01); do not claim stable or exact attribute names",
-        "Numbers are an invented EXAMPLE"
       ],
       "length_target_s": 110,
       "cover_headline": "Where did the 20 seconds go",
@@ -1814,8 +1807,7 @@
         "rag latency debugging",
         "ai engineer interview"
       ],
-      "hook_source": "strategist, 2026-11-01",
-      "everyday_anchor": "A courier tracking page that shows how long the parcel waited at each hub, so you see which stop caused the delay and not just the late delivery."
+      "hook_source": "strategist, 2026-11-01"
     },
     {
       "id": "q131",
