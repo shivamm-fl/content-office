@@ -44,6 +44,66 @@
       ],
       "script_file": "state/scripts/d011.txt",
       "script_locked": false
+    },
+    {
+      "id": "d012",
+      "track": "series",
+      "day": 12,
+      "unit": "P2",
+      "format": "problem",
+      "title": "Pivot Index: left aur right ka sum barabar kahan",
+      "one_idea": "Pivot Index: keep a running left sum and get the right sum as total minus left minus current element, so the first index where the two sides are equal is found in one O(n) pass with O(1) extra space.",
+      "hook_type": "direct_question",
+      "spoken_hook": "Pivot Index problem: left और right का sum बराबर कहाँ?",
+      "hook_formula": "direct_question_problem_name",
+      "hook_source": "direct_question is the least used of the last six built days (only d008; interviewer_asked twice, surprising_fact twice, relatable_stake once); problem named by its standard name, one plain question, defined in the very next line",
+      "hook_10s": "Pivot Index problem: left और right का sum बराबर कहाँ? मतलब ऐसा index, जिसके बाईं तरफ के elements का sum और दाईं तरफ के elements का sum एक जैसा हो। [frame 0: array 1 7 3 6 5 6 with a marker over index 3, bracket 11 on the left and bracket 11 on the right]",
+      "hook_candidates": [
+        {
+          "formula": "direct_question_problem_name",
+          "text": "Pivot Index problem: left और right का sum बराबर कहाँ?"
+        },
+        {
+          "formula": "surprising_fact_payoff",
+          "text": "Pivot Index problem, हर index पर दो sum जोड़े बिना, एक loop में solve!"
+        },
+        {
+          "formula": "interviewer_asked_plain_question",
+          "text": "Interviewer ने पूछा: ऐसा index ढूँढो जिसके दोनों तरफ का sum बराबर हो।"
+        }
+      ],
+      "visual_idea": "Array 1 7 3 6 5 6 with two running boxes, left sum and right sum, and a scan marker moving index by index: right starts at 29 minus nothing, each step the current cell is taken out of the right box, the two boxes are compared, and at index 3 both read 11 and the marker locks; second panel shows [1,2,3] ending with no match and -1.",
+      "everyday_anchor": "none: developer audience, no everyday analogies (owner 2026-10-26)",
+      "example": "EXAMPLE array [1,7,3,6,5,6], total 29 (code output prints right after removing current element: i=0 right=27, i=1 right=20, i=2 right=17, i=3 left=11 right=11) -> index 3. [1,2,3] -> -1. [2,1,-1] -> 0 (empty left side is 0). n = 100000: re-summing both sides at every index is about 9,999,900,000 element reads (EXAMPLE, n*(n-1)) vs about 200,000 for the one pass.",
+      "pattern": "running left sum, right = total - left - current",
+      "check_question": "For [2,1,-1], which index is the pivot? (0, since left is empty = 0 and right is 1 + (-1) = 0)",
+      "sources": [
+        "https://raw.githubusercontent.com/doocs/leetcode/main/solution/0700-0799/0724.Find%20Pivot%20Index/README_EN.md",
+        "https://en.wikipedia.org/wiki/Prefix_sum"
+      ],
+      "length_target_s": 150,
+      "cover_headline": "Pivot Index: balance both sides in one pass",
+      "thumb_text": "Pivot Index",
+      "keywords": [
+        "find pivot index",
+        "pivot index leetcode 724",
+        "prefix sum problem",
+        "left sum equals right sum",
+        "running sum"
+      ],
+      "status": "planned",
+      "qa_passed": false,
+      "facts_to_verify": [
+        "Problem paraphrased: leftmost index where sum of elements to the left equals sum to the right; empty side = 0; none -> -1 (doocs 0724; LeetCode itself returns 403)",
+        "Examples [1,7,3,6,5,6] -> 3, [1,2,3] -> -1, [2,1,-1] -> 0 (doocs 0724 and run)",
+        "One pass, time O(n), space O(1) (doocs 0724)",
+        "Prefix sum = running totals (Wikipedia)",
+        "Code run: qa/d012/run.py, output qa/d012/run_output.txt; matches brute force on 5000 random arrays",
+        "n=100000 brute-force count is EXAMPLE arithmetic n*(n-1), say 'about 10 billion'",
+        "Return the LEFTMOST pivot (array with several valid pivots)"
+      ],
+      "script_file": "state/scripts/d012.txt",
+      "script_locked": false
     }
   ]
 }

@@ -1,0 +1,13 @@
+A: @hook Pivot Index problem: left और right का sum बराबर कहाँ?
+B: मतलब ऐसा index, | जिसके बाईं तरफ के elements का sum, | और दाईं तरफ के elements का sum एक जैसा हो। || Array है 1{one}, 7{seven}, 3{three}, 6{six}, 5{five}, 6{six}। || Index 3{three} पर left का sum 11{eleven} है, | और right का sum भी 11{eleven}।
+C: Brute force: | हर index पर left और right का sum अलग से निकालो। || 1{एक} लाख elements पर करीब 10{दस} अरब reads। || यह example का हिसाब है, | पर time O of n squared है। || Waste यह है कि left का sum हर बार शुरू से बन रहा है।
+D: Fix तीन steps में है। || पहला step: | पूरे array का total एक बार निकालो। || यहाँ total 29{twenty-nine} है।
+E: दूसरा step: | array पर चलो, | और left sum चलता रखो। || यह शुरू होता है 0{ज़ीरो} से, | क्योंकि शुरू में कुछ गिना ही नहीं।
+F: तीसरा step: | right sum दोबारा जोड़ना नहीं है। || Right equals total minus left minus current। || क्योंकि total में तीन हिस्से हैं: | left, | current, | और right।
+G: Index 0{zero}: | left 0{zero}, | current 1{one}, | right 29{twenty-nine} minus 0{zero} minus 1{one} equals 27{twenty-seven}। | बराबर नहीं। || Left में 1{one} जोड़ो।
+H: Index 1{one}: | right 20{twenty}। | Index 2{two}: | right 17{seventeen}। | Left अब 11{eleven} है। || दोनों बार बराबर नहीं।
+I: Index 3{three}: | left 11{eleven}, | current 6{six}, | right 29{twenty-nine} minus 11{eleven} minus 6{six} equals 11{eleven}। || Left बराबर right, | तो answer 3{three}।
+J: अब दो edge cases। || Array 1{one}, 2{two}, 3{three}: | कहीं sum बराबर नहीं बनता, | तो return करो minus 1{one}। || Array 2{two}, 1{one}, minus 1{one}: | index 0{zero} पर left खाली है, | और खाली side का sum 0{zero} होता है। || Right है 1{one} plus minus 1{one}, यानी 0{zero}, | तो answer 0{zero}।
+K: कई pivot हो सकते हैं, | और सबसे left वाला चाहिए। || इसलिए पहला match मिलते ही return कर दो।
+L: Cost: | array पर एक ही बार चलते हैं, | तो time O of n। || सिर्फ़ total और left sum रखते हैं, | तो extra space O of 1{one}। || 1{एक} लाख elements पर करीब 2{दो} लाख reads, | 10{दस} अरब की जगह।
+M: याद रखो: | left sum चलाते रहो, | और right equals total minus left minus current। || अब तुम्हारा turn! || Array है 1{one}, 2{two}, 3{three}, 3{three}। || Pivot index क्या होगा? || Answer comment करो। || जवाब है 2{two}, | क्योंकि left 1{one} plus 2{two} equals 3{three}, | और right में बचा 3{three}। || ऐसे ही DSA problems के लिए follow कर लो।
