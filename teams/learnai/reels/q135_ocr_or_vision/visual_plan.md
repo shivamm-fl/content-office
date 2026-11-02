@@ -1,0 +1,13 @@
+# Visual plan · 3 November 2026 production
+
+| Scene | Spoken beat | Picture | Labels | Built with |
+|---|---|---|---|---|
+| A | Words, but no meaning? | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | Scanned PDF, Extract text?, Understand diagram? | Custom SVG and phrase-aligned GSAP highlights |
+| B | One manual | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | EXAMPLE · 100 pages, 90 text, 10 diagrams | Custom SVG and phrase-aligned GSAP highlights |
+| C | OCR reads text | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | Image → text, Reset: hold 5s, Searchable text | Custom SVG and phrase-aligned GSAP highlights |
+| D | Relations matter | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | API → Queue → Worker, Labels alone, Relations | Custom SVG and phrase-aligned GSAP highlights |
+| E | Vision path | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | Question on image, Queue → Worker, Validate answer | Custom SVG and phrase-aligned GSAP highlights |
+| F | Layout tools too | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | Text + layout, Tables / headings, Check capability | Custom SVG and phrase-aligned GSAP highlights |
+| G | Route the pages | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | 90 → OCR, 10 → image reasoning, Measure workload | Custom SVG and phrase-aligned GSAP highlights |
+| H | Unreadable input | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | Blurred scan, No guessing, Review / rescan | Custom SVG and phrase-aligned GSAP highlights |
+| I | Interview answer | Scanned text pages and diagram pages take separate extraction routes; text becomes searchable while directional arrows preserve the diagram relationships. | Extraction, Visual relationships, Evaluate both | Custom SVG and phrase-aligned GSAP highlights |

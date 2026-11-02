@@ -1,0 +1,12 @@
+Load balancer kaise route karta hai?
+
+Day 15/150: Client request ek endpoint par aati hai; load balancer backend select karta hai. Request/response path, failed backend ke health checks, detection delay, remaining capacity aur balancer redundancy ko running diagram mein samjho. Capacity numbers illustrative hain.
+
+Comment karke batao: teen app servers se balancer ka failure khud solve hota hai?
+
+Sources:
+https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html
+https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
+
+Tags: load balancer,application load balancing,system design
+AI-assisted visuals and narration.

@@ -1,0 +1,13 @@
+{
+  "item": "q134",
+  "production_date_ist": "2026-11-03",
+  "verified_at_utc": "2026-11-02T12:54:43.041543+00:00",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+    "https://learn.microsoft.com/en-us/azure/api-management/llm-semantic-cache-lookup-policy"
+  ],
+  "claims_checked": true,
+  "reviewer": "Manual source/code verification by production agent",
+  "independent_automated_review": false,
+  "notes": "Prompt cache exact-prefix reuse is input processing, not answer caching. Semantic cache uses prompt vector proximity and a configured threshold. Seven-day vs three-day tenant policies are illustrative, not real policies. Tenant/version/expiry isolation is the stated app design, not an automatic provider guarantee. No savings percentage is claimed."
+}

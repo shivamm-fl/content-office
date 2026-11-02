@@ -1,0 +1,40 @@
+{
+  "item": "q134",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true
+  },
+  "duration_s": 115.0,
+  "video_sha256": "082e72402ae00d82fc95dc197e6e88f03d159a720a73721aed8311a6259c71ec",
+  "cover_sha256": "99f247b9b9a0bcc02a67fb75bc196d824cd7d8940e0e18b90edeef87a6a66e70",
+  "loudness": {
+    "input_i": "-13.92",
+    "input_tp": "-1.66",
+    "input_lra": "4.60",
+    "input_thresh": "-24.68",
+    "output_i": "-13.86",
+    "output_tp": "-1.57",
+    "output_lra": "4.20",
+    "output_thresh": "-24.55",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.14"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "Final MP4 scene frames inspected, including opening picture and late-scene arrowheads.",
+    "Illustrative examples are labelled and agree with narration.",
+    "Source-backed factual review and measured export/audio checks passed; no human listening or independent automated desk review claimed."
+  ]
+}

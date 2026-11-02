@@ -1,0 +1,13 @@
+# Visual plan · 3 November 2026 production
+
+| Scene | Spoken beat | Picture | Labels | Built with |
+|---|---|---|---|---|
+| A | Two different caches | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Processed prefix, Saved response, Different reuse | Custom SVG and phrase-aligned GSAP highlights |
+| B | Same support app | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Policy v1, When refund?, Check status? | Custom SVG and phrase-aligned GSAP highlights |
+| C | Prompt cache | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Exact prefix, Reuse processing, New question | Custom SVG and phrase-aligned GSAP highlights |
+| D | Still generate | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Cached prefix, Generate answer, Not a saved answer | Custom SVG and phrase-aligned GSAP highlights |
+| E | Semantic match | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Different wording, Similar meaning, Compare embeddings | Custom SVG and phrase-aligned GSAP highlights |
+| F | Reuse the answer | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Threshold, HIT → response, MISS → model | Custom SVG and phrase-aligned GSAP highlights |
+| G | The dangerous hit | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | EXAMPLE · tenant A: 7d, Tenant B: 3d, Do not cross tenants | Custom SVG and phrase-aligned GSAP highlights |
+| H | Control freshness | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Tenant boundary, Policy version, Expiry | Custom SVG and phrase-aligned GSAP highlights |
+| I | Interview answer | Identical policy-prefix cards feed fresh answer generation; similar question cards retrieve a saved response, with separate tenant and policy-version boundaries. | Input processing, Response reuse, Semantic cache? | Custom SVG and phrase-aligned GSAP highlights |

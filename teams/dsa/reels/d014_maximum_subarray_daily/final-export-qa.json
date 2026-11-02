@@ -1,0 +1,42 @@
+{
+  "item": "d014",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true,
+    "code_tested": true
+  },
+  "duration_s": 129.5,
+  "video_sha256": "6702c1572703479dfed50329689ee677da9468e91eda14e64ba5af358568a024",
+  "cover_sha256": "a64f748e6a8e5813e812ba50ba9a0f66fc1022e4ea83557e94668d5bc3a6968a",
+  "loudness": {
+    "input_i": "-13.92",
+    "input_tp": "-2.18",
+    "input_lra": "4.40",
+    "input_thresh": "-24.62",
+    "output_i": "-14.19",
+    "output_tp": "-2.41",
+    "output_lra": "3.90",
+    "output_thresh": "-24.84",
+    "normalization_type": "dynamic",
+    "target_offset": "0.19"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "Actual Python is readable and its loop/current/best highlights match narration.",
+    "Minus-one dry-run frame shows current 3, best 4 and the correct contiguous range.",
+    "All-negative example, 45-subarray count and one-pass complexity agree with the tested code."
+  ],
+  "code_frames_inspected": true
+}

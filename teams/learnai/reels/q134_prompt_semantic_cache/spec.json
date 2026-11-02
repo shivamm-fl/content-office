@@ -1,0 +1,50 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+    "https://learn.microsoft.com/en-us/azure/api-management/llm-semantic-cache-lookup-policy"
+  ],
+  "copy": {
+    "hi": {
+      "A": "Interviewer ने पूछा: prompt cache और semantic cache में क्या फर्क है? | Prompt cache processed prompt prefix reuse करता है। | Semantic cache मिलते meaning वाले question का saved response reuse कर सकता है।",
+      "B": "मान लो support chatbot हर request में वही लंबी refund policy भेजता है। | एक user पूछता है refund कब मिलेगा; दूसरा पूछता है refund status कैसे check करूँ। | Policy same है, लेकिन questions और answers अलग हैं।",
+      "C": "यहाँ exact matching prompt prefix का processing reuse होता है। | Prefix यानी शुरू वाला common हिस्सा। | Provider की caching conditions पूरी हों, तो repeated policy का processing reuse हो सकता है।",
+      "D": "नया answer फिर भी generate होगा। | Prompt cache पिछले user का answer नहीं उठाता। | Prompt cache hit और response cache hit अलग हैं।",
+      "E": "दो questions लो: refund कितने दिन में आता है, और refund आने में कितना time लगता है। | Wording अलग, meaning करीब है। | Semantic cache meaning की numerical representation, यानी embedding, से इन्हें compare कर सकता है।",
+      "F": "Similarity threshold और app checks allow करें तो saved response मिल सकता है। | Threshold मतलब reuse के लिए minimum similarity। | Hit पर response reuse; miss पर normal model call।",
+      "G": "लेकिन similarity सही answer की guarantee नहीं है। | मान लो tenant A की policy seven days, tenant B की three days है। | Same question होने पर भी A का seven-day answer B को देना गलत होगा।",
+      "H": "इसलिए tenant और policy version से cache isolate करूँगा। | Response की expiry, यानी कब expire होगा, भी रखूँगा। | बदलते या personalized data पर validity verify किये बिना cached answer नहीं दूँगा।",
+      "I": "Interview में कहो: prompt cache common input processing बचाता है; semantic cache similar question का response reuse करता है। | Wrong match और stale data अलग handle करूँगा। | Comments में बताओ: कौन answer reuse करता है? Practical interviews के लिए follow करो।"
+    }
+  }
+}

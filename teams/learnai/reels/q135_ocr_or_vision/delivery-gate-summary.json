@@ -1,0 +1,17 @@
+{
+  "item": "q135",
+  "hard_checks_passed": true,
+  "hard_failures": [],
+  "advisory_notes": [
+    {
+      "name": "visual review passed (mute test by a fresh reviewer)",
+      "ok": false,
+      "detail": "no review yet: run python scripts/visual_review.py q135"
+    },
+    {
+      "name": "facts checked against the sources (no high finding)",
+      "ok": false,
+      "detail": "no fact check yet: run python scripts/fact_review.py q135"
+    }
+  ]
+}

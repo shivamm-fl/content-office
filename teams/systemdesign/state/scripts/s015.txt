@@ -1,0 +1,19 @@
+Three servers हैं, user की request किस पर जाएगी? | Client को अलग अलग server addresses देने के बजाय एक endpoint देते हैं। | उसके पीछे load balancer request को चुने हुए backend तक पहुँचाता है।
+
+Example में API request slash orders है। | Client उसे load balancer को भेजता है। | Application load balancer जैसे reverse proxy setup में request backend तक जाती है और response वापस client तक आता है।
+
+मान लो A, B और C तीनों healthy हैं। | Balancer अपनी routing policy से एक target चुनता है; इस example में B चुना गया। | Server B request process करता है, सभी servers से वही काम कराना जरूरी नहीं।
+
+B ने order data वाला response भेजा। | वह balancer के रास्ते client को मिलता है। | Client के लिए entry point वही endpoint है; backend selection application infrastructure संभालती है।
+
+अब B खराब हो गया, लेकिन A और C चल रहे हैं। | नई requests B पर भेजते रहोगे तो errors मिलेंगे। | Balancer को backend की health जानने का तरीका चाहिए।
+
+इसके लिए configured health endpoint पर periodic checks चल सकते हैं। | Health check यानी server से उसका status पूछना। | Required checks fail होने पर B unhealthy mark होगा; healthy A और C available हों तो नई requests उनमें route की जा सकती हैं।
+
+Failure और उसे detect करने के बीच delay होता है। | इस दौरान कुछ requests fail हो सकती हैं; health check zero errors की guarantee नहीं देता। | All targets unhealthy हों तो behavior product और policy पर depend करता है।
+
+Balancer काम बाँटता है, server capacity अपने आप पैदा नहीं करता। | Example में तीन servers hundred requests per second each संभालें, तो ideal total three hundred है। | एक गिरा तो two hundred बचेंगे; actual capacity load test से confirm करनी होगी।
+
+Balancer खुद single point of failure बन जाए तो पीछे के servers भी काम नहीं आएँगे। | Production design में उसके failure को भी redundancy से handle करना होता है। | Managed setup की guarantees और limits अलग से verify करो।
+
+तो load balancer एक endpoint के पीछे requests route करता है और backend selection को client से अलग रखता है। | Comments में बताओ: तीन app servers होने से balancer का failure अपने आप solve हो जाता है? | रोज clear diagrams के साथ system design सीखने के लिए follow करो।

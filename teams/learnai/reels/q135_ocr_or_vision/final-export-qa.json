@@ -1,0 +1,39 @@
+{
+  "item": "q135",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 109.0,
+  "video_sha256": "a87769ffe189e8e883c73f00ac82cfae8a75129253f4ee7865def82c1aa37668",
+  "cover_sha256": "00712bfd055d254766381c6a16b3f2c7d966c7e7716093d604b6adc6268ad942",
+  "loudness": {
+    "input_i": "-13.92",
+    "input_tp": "-1.65",
+    "input_lra": "5.00",
+    "input_thresh": "-24.66",
+    "output_i": "-14.23",
+    "output_tp": "-1.00",
+    "output_lra": "4.80",
+    "output_thresh": "-24.92",
+    "normalization_type": "dynamic",
+    "target_offset": "0.23"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "OCR extraction, diagram relations and structured layout cases inspected in final MP4.",
+    "Original sample pages are illustrative; no measured OCR/vision run is claimed."
+  ]
+}

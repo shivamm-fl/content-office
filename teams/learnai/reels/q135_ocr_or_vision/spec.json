@@ -1,0 +1,50 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/layout?view=doc-intel-4.0.0",
+    "https://platform.claude.com/docs/en/build-with-claude/vision"
+  ],
+  "copy": {
+    "hi": {
+      "A": "PDF का text मिला, diagram का meaning गायब। | Interview में पूछा: scanned PDF के लिए OCR लोगे या vision model? | पहले देखूँगा कि सिर्फ text निकालना है, या image के relations भी समझने हैं।",
+      "B": "मान लो hundred-page manual है: ninety pages पर printed text, ten पर diagrams। | ये example counts हैं। | हर page को एक ही रास्ते से process करना जरूरी नहीं।",
+      "C": "पहला रास्ता OCR, यानी image से text पहचानना। | Printed line है: Reset, hold five seconds। | OCR इसे searchable text में बदलता है; extraction quality पहले check करूँगा।",
+      "D": "Diagram में API से queue और queue से worker तक arrows हैं। | Plain OCR labels पढ़ सकता है। | Labels की list में पूरा data flow नहीं मिलता; arrows की information भी चाहिए।",
+      "E": "ऐसे page पर vision model से पूछ सकते हैं: worker को data कहाँ से मिलता है? | Answer को diagram के arrows से validate करूँगा। | Model का confident होना proof नहीं है।",
+      "F": "OCR हमेशा plain text dump नहीं होता। | Document layout tools tables, headings और structure भी निकाल सकते हैं। | इसलिए table देखते ही vision जरूरी नहीं मानूँगा; tool की actual capability देखूँगा।",
+      "G": "इस example में text pages OCR, और image reasoning वाले pages vision route पर जाएँगे। | Cost और latency actual workload पर measure करूँगा। | Ninety और ten routing counts हैं, measured accuracy नहीं।",
+      "H": "Blurred scan में दोनों रास्ते गलत हो सकते हैं। | Field पढ़ा नहीं जा रहा तो number invent नहीं करूँगा; clearer scan या human review माँगूँगा। | Fixed sample पर सही text, table cells और diagram relations से output compare करूँगा।",
+      "I": "Interview में कहो: extraction के लिए OCR या document parser; visual relationships के लिए image reasoning। | Accuracy, cost और latency evaluate करके जरूरत पर दोनों use करूँगा। | Comments में बताओ: arrows समझने हैं, word list काफी होगी? Practical AI interviews के लिए follow करो।"
+    }
+  }
+}

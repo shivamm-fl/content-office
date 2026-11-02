@@ -1967,6 +1967,116 @@
       "production_date_ist": "2026-11-02",
       "office_version": "bdf70dc915cb47f4",
       "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q133/preview"
+    },
+    {
+      "id": "a016",
+      "track": "series",
+      "day": 16,
+      "unit": "D1",
+      "title": "Why Does a Chatbot Forget?",
+      "format": "concept",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/a016.txt",
+      "script_locked": false,
+      "hook_type": "direct_question",
+      "spoken_hook": "Chatbot पहले बताई order ID क्यों भूल गया?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+        "https://arxiv.org/abs/2307.03172",
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+      ],
+      "facts_to_verify": [
+        "Claude context documentation supports finite input/output token budgets; token counts in the 100-token window are explicitly invented teaching arithmetic, not a real model size or tokenizer run. Context curation and persistence are supported by the engineering post. Lost in the Middle supports the limited claim that fitting text does not guarantee perfect recall; no current-model performance number is generalized from it."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 112.0,
+      "cover_headline": "Why Does a Chatbot Forget?",
+      "thumb_text": "WHAT FITS?",
+      "keywords": [
+        "context window",
+        "LLM memory",
+        "token budget"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-03",
+      "office_version": "9551d224447abad7",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/a016/preview"
+    },
+    {
+      "id": "q134",
+      "track": "interview",
+      "day": null,
+      "unit": "H3",
+      "title": "Prompt Cache vs Semantic Cache",
+      "format": "question",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/q134.txt",
+      "script_locked": false,
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: prompt cache और semantic cache में क्या फर्क है?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+        "https://learn.microsoft.com/en-us/azure/api-management/llm-semantic-cache-lookup-policy"
+      ],
+      "facts_to_verify": [
+        "Prompt cache exact-prefix reuse is input processing, not answer caching. Semantic cache uses prompt vector proximity and a configured threshold. Seven-day vs three-day tenant policies are illustrative, not real policies. Tenant/version/expiry isolation is the stated app design, not an automatic provider guarantee. No savings percentage is claimed."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 115.0,
+      "cover_headline": "Prompt Cache vs Semantic Cache",
+      "thumb_text": "REUSE WHAT?",
+      "keywords": [
+        "prompt caching",
+        "semantic cache",
+        "AI engineer interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-03",
+      "question_number": 30,
+      "roadmap_index": 29,
+      "office_version": "02a89c3360585679",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q134/preview"
+    },
+    {
+      "id": "q135",
+      "track": "interview",
+      "day": null,
+      "unit": "I2",
+      "title": "Scanned PDF: OCR or Vision?",
+      "format": "question",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/q135.txt",
+      "script_locked": false,
+      "hook_type": "relatable_stake",
+      "spoken_hook": "PDF का text मिला, diagram का meaning गायब।",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/layout?view=doc-intel-4.0.0",
+        "https://platform.claude.com/docs/en/build-with-claude/vision"
+      ],
+      "facts_to_verify": [
+        "Azure layout documentation supports OCR plus structured layout/table extraction. Claude vision documentation supports image understanding and its accuracy limitations. 90 text + 10 diagram pages is illustrative routing, not measured throughput/accuracy or a real OCR/model run. The sample page and diagram are original illustrations. No claim that tables always require vision or that OCR always costs less."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 109.0,
+      "cover_headline": "Scanned PDF: OCR or Vision?",
+      "thumb_text": "READ OR REASON?",
+      "keywords": [
+        "OCR vs vision",
+        "scanned PDF",
+        "document AI"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-03",
+      "question_number": 31,
+      "roadmap_index": 30,
+      "office_version": "867e89a656e62be5",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q135/preview"
     }
   ]
 }

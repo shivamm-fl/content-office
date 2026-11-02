@@ -1,0 +1,12 @@
+Prompt cache vs semantic cache: fark?
+
+Prompt caching exact common prefix ka processing reuse karta hai; semantic cache similar question ka saved response reuse kar sakta hai. Dono ko same cache hit mat samjho. Tenant, policy version aur expiry checks wrong ya stale response reuse ko control karte hain.
+
+Comment karke batao: kaunsa cache answer reuse karta hai?
+
+Sources:
+https://platform.claude.com/docs/en/build-with-claude/prompt-caching
+https://learn.microsoft.com/en-us/azure/api-management/llm-semantic-cache-lookup-policy
+
+Tags: prompt caching,semantic cache,AI engineer interview
+AI-assisted visuals and narration.

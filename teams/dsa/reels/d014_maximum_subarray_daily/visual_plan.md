@@ -1,0 +1,14 @@
+# Visual plan · 3 November 2026 production
+
+| Scene | Spoken beat | Picture | Labels | Built with |
+|---|---|---|---|---|
+| A | Maximum Subarray? | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | Given array, Contiguous, Largest sum | Custom SVG and phrase-aligned GSAP highlights |
+| B | Adjacent elements | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | [4, -1, 2, 1], Sum = 6, No skipping | Custom SVG and phrase-aligned GSAP highlights |
+| C | Repeated sums | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | 9 × 10 / 2 = 45, Every start / end, O(n²) | Custom SVG and phrase-aligned GSAP highlights |
+| D | Extend or restart? | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | Previous: -2, Extend: -2 + 4 = 2, Restart: 4 | Custom SVG and phrase-aligned GSAP highlights |
+| E | One local decision | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | current = max(x, current+x), Best ending here, best = max(best, current) | Custom SVG and phrase-aligned GSAP highlights |
+| F | Dry run | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | 4 → current 4, -1 → current 3, 2 → 5; 1 → 6 | Custom SVG and phrase-aligned GSAP highlights |
+| G | Why two variables? | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | -5 → current 1, Last 4 → current 5, best stays 6 | Custom SVG and phrase-aligned GSAP highlights |
+| H | Actual Python | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | CODE | Custom SVG and phrase-aligned GSAP highlights |
+| I | All negative | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | [-5, -2, -8], Answer: -2, Zero is invalid | Custom SVG and phrase-aligned GSAP highlights |
+| J | Complexity | One number-cell array stays on screen; selected contiguous ranges, running ending sums, best-so-far values and highlighted actual Python prove each decision. | Time O(n), Extra O(1), [-1, -2] → ? | Custom SVG and phrase-aligned GSAP highlights |

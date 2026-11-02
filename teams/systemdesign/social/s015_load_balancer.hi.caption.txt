@@ -1,0 +1,7 @@
+Day 15/150: Load balancer ek endpoint ke peeche kya karta hai?
+
+Client request ek endpoint par aati hai; load balancer backend select karta hai. Request/response path, failed backend ke health checks, detection delay, remaining capacity aur balancer redundancy ko running diagram mein samjho. Capacity numbers illustrative hain.
+
+Comment karke batao: teen app servers se balancer ka failure khud solve hota hai?
+
+#SystemDesign #LoadBalancing #Backend

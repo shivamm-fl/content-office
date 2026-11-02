@@ -1,0 +1,40 @@
+{
+  "item": "s015",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 137.0,
+  "video_sha256": "16846394d34f4a529b7f84c883a0884240cbbe3db996c68c0e7b843e11672398",
+  "cover_sha256": "3fc029ebc85005bcd3940d2b41d77a63eeff89d007cb44c29cecab960f8152c3",
+  "loudness": {
+    "input_i": "-13.91",
+    "input_tp": "-1.43",
+    "input_lra": "4.40",
+    "input_thresh": "-24.61",
+    "output_i": "-14.16",
+    "output_tp": "-1.51",
+    "output_lra": "4.30",
+    "output_thresh": "-24.82",
+    "normalization_type": "dynamic",
+    "target_offset": "0.16"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "Final MP4 route selection and reverse-proxy response arrows inspected.",
+    "Health checks, detection delay, conditional unhealthy-target routing and ideal capacity arithmetic agree with narration.",
+    "Single-point-of-failure and redundancy caveat displayed without a zero-error guarantee."
+  ]
+}

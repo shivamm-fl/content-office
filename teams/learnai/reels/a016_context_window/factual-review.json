@@ -1,0 +1,14 @@
+{
+  "item": "a016",
+  "production_date_ist": "2026-11-03",
+  "verified_at_utc": "2026-11-02T12:54:42.985288+00:00",
+  "sources": [
+    "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+    "https://arxiv.org/abs/2307.03172",
+    "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+  ],
+  "claims_checked": true,
+  "reviewer": "Manual source/code verification by production agent",
+  "independent_automated_review": false,
+  "notes": "Claude context documentation supports finite input/output token budgets; token counts in the 100-token window are explicitly invented teaching arithmetic, not a real model size or tokenizer run. Context curation and persistence are supported by the engineering post. Lost in the Middle supports the limited claim that fitting text does not guarantee perfect recall; no current-model performance number is generalized from it."
+}

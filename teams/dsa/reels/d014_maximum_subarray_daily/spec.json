@@ -1,0 +1,53 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://leetcode.com/problems/maximum-subarray/description/",
+    "https://cp-algorithms.com/others/maximum_average_segment.html"
+  ],
+  "copy": {
+    "hi": {
+      "A": "Maximum Subarray problem में largest contiguous sum कैसे निकालोगे? | Given array: minus two, one, minus three, four, minus one, two, one, minus five, four।",
+      "B": "Contiguous मतलब बीच के elements skip नहीं कर सकते। | यहाँ four, minus one, two, one का sum six है। | हमें non-empty subarray का maximum sum लौटाना है, सारे positive elements अलग अलग चुनना valid नहीं।",
+      "C": "सीधा तरीका हर start से आगे चलकर running sum निकालना है। | Nine elements में forty five subarrays हैं। | General case में n times bracket n plus one, divided by two; यानी O n squared time।",
+      "D": "अब current element four पर आओ। | उससे ठीक पहले तक best ending sum minus two था। | उसे extend करो तो minus two plus four, यानी two। Four से नया subarray शुरू करो तो four। | Negative पुराना sum साथ लेने से answer घट रहा है।",
+      "E": "इसलिए हर index पर दो choices compare करो: current value से restart, या पिछला ending sum extend। | इनके maximum को current कहेंगे: best sum जो इसी index पर खत्म होता है। | Best नाम का दूसरा variable अब तक का सबसे बड़ा current रखेगा।",
+      "F": "Four पर current four, best four। | Minus one जोड़कर current three, best अभी four। | Two जोड़कर current five और best five। | One जोड़कर दोनों six।",
+      "G": "अब minus five पर current one हो जाएगा, लेकिन best six रहेगा। | Last four जोड़कर current five होगा; best फिर भी six। | इसलिए final current लौटाना गलत होगा; maximum कहीं पहले खत्म हो सकता है।",
+      "H": "यही actual Python solution है। | Current और best को first element से initialize करो। | Loop में restart और extend compare होते हैं, फिर best update होता है। | मैंने इसी code को examples और five thousand random arrays पर brute force से compare किया है।",
+      "I": "Given array: minus five, minus two, minus eight। | Answer minus two है। | Best को zero से initialize करोगे तो zero निकल सकता है, लेकिन empty subarray allowed नहीं है। First element से शुरुआत यह bug रोकती है।",
+      "J": "एक pass है: O n time और O one extra space। | इसे Kadane algorithm कहते हैं। | Comments में बताओ: Given array, minus one, minus two; maximum sum क्या है? | DSA को code और dry run के साथ सीखने के लिए follow करो।"
+    }
+  }
+}

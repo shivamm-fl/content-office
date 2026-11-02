@@ -121,6 +121,41 @@
       "production_date_ist": "2026-11-02",
       "office_version": "32d59af0dda229fc",
       "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/dsa/library/d013/preview"
+    },
+    {
+      "id": "d014",
+      "track": "series",
+      "day": 14,
+      "unit": "P2",
+      "title": "Maximum Subarray with Kadane",
+      "format": "problem",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/d014.txt",
+      "script_locked": false,
+      "hook_type": "direct_question",
+      "spoken_hook": "Maximum Subarray problem में largest contiguous sum कैसे निकालोगे?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://leetcode.com/problems/maximum-subarray/description/",
+        "https://cp-algorithms.com/others/maximum_average_segment.html"
+      ],
+      "facts_to_verify": [
+        "Official LeetCode 53 supports non-empty contiguous subarray, example sum 6 and O(n) follow-up. Own Kadane implementation uses no list slice, initializes from the first element, and matches brute force for 5000 seeded random arrays and all supplied examples. 9*10/2=45 subarrays; local ending sums 4,3,5,6,1,5 and best 6 are recomputed. No signed Accepted result is claimed or required for this daily series track."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 129.5,
+      "cover_headline": "Maximum Subarray with Kadane",
+      "thumb_text": "RESTART OR EXTEND?",
+      "keywords": [
+        "maximum subarray",
+        "Kadane algorithm",
+        "Python DSA"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-03",
+      "office_version": "6576fc4cb8105586",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/dsa/library/d014/preview"
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "item": "d014",
+  "production_date_ist": "2026-11-03",
+  "verified_at_utc": "2026-11-02T12:54:43.250951+00:00",
+  "sources": [
+    "https://leetcode.com/problems/maximum-subarray/description/",
+    "https://cp-algorithms.com/others/maximum_average_segment.html"
+  ],
+  "claims_checked": true,
+  "reviewer": "Manual source/code verification by production agent",
+  "independent_automated_review": false,
+  "notes": "Official LeetCode 53 supports non-empty contiguous subarray, example sum 6 and O(n) follow-up. Own Kadane implementation uses no list slice, initializes from the first element, and matches brute force for 5000 seeded random arrays and all supplied examples. 9*10/2=45 subarrays; local ending sums 4,3,5,6,1,5 and best 6 are recomputed. No signed Accepted result is claimed or required for this daily series track."
+}

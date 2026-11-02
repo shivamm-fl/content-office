@@ -1,0 +1,40 @@
+{
+  "item": "a016",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true
+  },
+  "duration_s": 112.0,
+  "video_sha256": "5d5154bd578aebe654996185ec7c3659b73ed769ffcaa09fbc45d9c969b546ae",
+  "cover_sha256": "796834d9736b880068bb10060551ab05d7d94d375ab149975b5818e708efefb0",
+  "loudness": {
+    "input_i": "-13.93",
+    "input_tp": "-2.41",
+    "input_lra": "4.30",
+    "input_thresh": "-24.71",
+    "output_i": "-13.84",
+    "output_tp": "-2.17",
+    "output_lra": "4.10",
+    "output_thresh": "-24.57",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.16"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_review_notes": [
+    "Final MP4 scene frames inspected, including opening picture and late-scene arrowheads.",
+    "Illustrative examples are labelled and agree with narration.",
+    "Source-backed factual review and measured export/audio checks passed; no human listening or independent automated desk review claimed."
+  ]
+}

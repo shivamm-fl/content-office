@@ -62,6 +62,41 @@
       "production_date_ist": "2026-11-02",
       "office_version": "02f6b7f266577b9f",
       "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/systemdesign/library/s014/preview"
+    },
+    {
+      "id": "s015",
+      "track": "series",
+      "day": 15,
+      "unit": "P2",
+      "title": "How a Load Balancer Routes Requests",
+      "format": "component",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/s015.txt",
+      "script_locked": false,
+      "hook_type": "direct_question",
+      "spoken_hook": "Three servers हैं, user की request किस पर जाएगी?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
+      ],
+      "facts_to_verify": [
+        "AWS ALB documentation supports request distribution to registered targets, health monitoring, and periodic configured checks. The example has A/C healthy and B failing; no universal all-targets-unhealthy behavior or zero-error guarantee is asserted. In fact, narration states product/policy dependence when all are unhealthy. Reverse-proxy return path is identified as that setup. 3*100=300 and loss to 200 are ideal illustrative capacity arithmetic, explicitly requiring a load test."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 137.0,
+      "cover_headline": "How a Load Balancer Routes Requests",
+      "thumb_text": "ONE ADDRESS",
+      "keywords": [
+        "load balancer",
+        "application load balancing",
+        "system design"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-03",
+      "office_version": "df63ba94c20e3940",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/systemdesign/library/s015/preview"
     }
   ]
 }

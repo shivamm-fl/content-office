@@ -1,0 +1,17 @@
+Chatbot पहले बताई order ID क्यों भूल गया? | मान लो chat की शुरुआत में तुमने order ID A seventeen दी थी। | बाद में model को भेजे गए text से वही message हट गया।
+
+Model का answer उस request में मिले context पर depend करता है। | Context में instructions, तुम्हारा question, भेजी हुई chat history और documents आ सकते हैं। | पूरी पुरानी chat अपने आप उसके सामने नहीं आ जाती।
+
+इस text की limit को context window कहते हैं। | इसे tokens में measure करते हैं; token text का एक छोटा piece है, हमेशा पूरा word नहीं। | यह example में working memory जैसा है, permanent storage नहीं।
+
+Budget समझने के लिए मान लो window hundred tokens की है। | Instructions ten, question ten, history thirty और documents thirty। | Input ने eighty tokens ले लिए। ये illustrative counts हैं, किसी real model की limit नहीं।
+
+Answer भी इसी context budget में जगह लेता है। | Twenty tokens answer के लिए रखो, तो eighty plus twenty, hundred। | Input से पूरी window भर दोगे, तो उतने ही बड़े answer की जगह नहीं बचेगी।
+
+अब twenty tokens की नई history और जोड़ दो। | Input hundred हो गया, लेकिन answer के twenty tokens भी चाहिए। | Total hundred twenty है; hundred की window में यह request वैसे नहीं समाएगी।
+
+तो app क्या करेगा? | जरूरी messages रखेगा, history की summary बनाएगा, या relevant document chunks ही भेजेगा। | Order ID जरूरी है तो उसे summary या request data में साफ रखो; बिना भेजे model से याद करने की उम्मीद मत रखो।
+
+लेकिन window में fit होना perfect recall की guarantee नहीं है। | अपने app में देखो कि actual request में order ID गई भी थी या नहीं। | Persistent memory चाहिए तो app को उसे store और जरूरत पर retrieve करना होगा।
+
+तो context window वह limited text है जो model अभी use कर सकता है। | Comments में बताओ: chat screen पर ID दिखना काफी है, या request में भी भेजनी होगी? | AI को practical तरीके से समझने के लिए follow करो।
