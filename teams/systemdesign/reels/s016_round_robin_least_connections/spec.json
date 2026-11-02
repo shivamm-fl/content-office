@@ -1,0 +1,46 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://nginx.org/en/docs/http/load_balancing.html"
+  ],
+  "copy": {
+    "hi": {
+      "A": "A पर six connections हैं, B पर one और C पर three। | नई request किस server पर जाएगी? | Answer सिर्फ counts से नहीं, load balancer की policy से भी तय होगा।",
+      "B": "इस example में तीनों servers healthy हैं और equal weights रखते हैं। | पहले round robin देखो: A, फिर B, फिर C, फिर वापस A। | यह turn के हिसाब से assignments बाँटता है।",
+      "C": "Six नए assignments हों, तो इस simplified sequence में A को two, B को two और C को two मिलेंगे। | लेकिन two requests मिलना और active load बराबर होना अलग हैं। | कोई request जल्दी खत्म होगी, कोई देर तक चलेगी।",
+      "D": "अब अपने original snapshot पर लौटो: A six, B one, C three active backend connections। | मान लो round robin का next pointer A पर है। | तब next assignment A को मिलेगा, भले उसके connections ज्यादा हैं।",
+      "E": "Least connections policy इसी snapshot में सबसे कम active connections वाला server देखेगी। | Counts six, one, three हैं, इसलिए B चुना जाएगा। | B accept करे तो उसकी count one से two होगी।",
+      "F": "यह varying connection lifetimes में useful हो सकता है। | लेकिन कम connections का मतलब जरूरी नहीं कम CPU या fastest response। | एक heavy request भी server busy कर सकती है; connection count load का proxy है।",
+      "G": "Similar capacity और similar durations हों तो round robin सरल choice हो सकता है। | Lifetimes अलग हों तो least connections evaluate कर सकते हैं। | Actual choice load tests से करो; weights और tie-breaking की details implementation पर depend करती हैं।",
+      "H": "तो round robin turns देखता है, least connections active connection counts। | Example में same snapshot पर RR ने A और least connections ने B चुना। | Comments में बताओ: fewer connections से fastest response guaranteed है? रोज clear diagrams के लिए follow करो।"
+    }
+  }
+}

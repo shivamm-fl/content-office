@@ -1,0 +1,13 @@
+{
+  "item": "d015",
+  "production_date_ist": "2026-11-04",
+  "verified_at_utc": "2026-11-02T19:34:04.284033+00:00",
+  "sources": [
+    "https://leetcode.com/problems/group-anagrams/description/",
+    "https://docs.python.org/3/library/collections.html#collections.defaultdict"
+  ],
+  "claims_checked": true,
+  "reviewer": "Manual source/code verification by production agent",
+  "independent_automated_review": false,
+  "notes": "LeetCode 49 specifies lowercase English strings, example anagram groups and arbitrary output order. The exact displayed Python is executed against independent sorted-signature grouping for 5000 seeded random cases and examples including empty strings, repeated characters and duplicates. Count tuples are hashable, dict buckets preserve duplicates. C total characters, n words: O(C+26n), fixed alphabet O(C+n); O(n) auxiliary keys and references, excluding original input storage. No Accepted proof claimed or required for daily DSA."
+}

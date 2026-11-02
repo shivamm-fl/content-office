@@ -1,0 +1,7 @@
+Day 15/150: Group Anagrams: count key se buckets banao
+
+Given array: ["eat","tea","tan","ate","nat","bat"]. Same letter counts wale words ek bucket mein jaate hain. Actual Python 26-count tuple ko dictionary key banata hai. Empty strings, duplicate words aur 5,000 seeded random cases sorted-key reference se verified hain. Fixed alphabet par O(C+n) time, O(n) extra space.
+
+Comment karke batao: aab aur abb same group mein aayenge?
+
+#DSA #Anagrams #Python

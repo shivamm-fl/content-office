@@ -1,0 +1,37 @@
+{
+  "item": "q137",
+  "production_date_ist": "2026-11-04",
+  "video_sha256": "e9703541e26ba8b4edb98d7c568bb9b48ddc73b39443a68bf0a7dd5fa447cd91",
+  "render_inputs": {
+    "index.html": "9e4b5c5d57a5047507d07cb43c4401101b06c1e54ef3c2aefbc4b9280ac1b06a",
+    "spec.json": "60257ee0cfcd6fe225b914c8e700c1e03375f43ed023c550888b66c4412ffa81",
+    "data.json": "96382003bbf8114c9809c7442543ed2cf6e046a7f82d86eaacbf134a4eebe44c",
+    "data.js": "6f60cff7b98f93048d41b05798377722f580e2bb00cd998796841ec5ab7d4824",
+    "vars.hi.json": "4cfeb003f69d4a0ecae53712e4b0df5e7511623a050d8f600f9a0b2627218d4b",
+    "kit/motion.js": "143c46704d4d15d38a85ab6e6cf78999fb4e14a76ced3d19ced89b79d78608a9",
+    "assets/gsap.min.js": "c174bfce53a729418d57a8ad8625e7247c793a22fef8e2851e3cfa3de9cd8280",
+    "audio/hi/voice.wav": "35780a9b90d12960046d6a85fe36fd32f2cff0f2ea70da71a40dfd82988bf054",
+    "audio/hi/bed.wav": "8e4a755140e7524f282005fd6dc190b5c88d4aea32bddf9ccaad5d2ed82ed6d4",
+    "audio/hi/sfx.wav": "e633fcc39f66ab7f8f32ab6671395868a401a0a444ce66226d27dda4f1a36b62"
+  },
+  "final_export_checked": true,
+  "voice": "Shivam Trainer",
+  "model": "eleven_flash_v2_5",
+  "tempo": 0.9,
+  "post_render_reference_metadata_correction": {
+    "reason": "The old overview/re-ranking URL returned HTTP404; replaced with the current official dnn/re-ranking page. Reference metadata only.",
+    "before_spec_sha256": "60257ee0cfcd6fe225b914c8e700c1e03375f43ed023c550888b66c4412ffa81",
+    "after_spec_sha256": "9f47790f920c2340f0fec6a1f88569530904ff0314b407cd96ef189440ce70a3",
+    "before_sources": [
+      "https://developers.google.com/machine-learning/recommendation/overview/candidate-generation",
+      "https://developers.google.com/machine-learning/recommendation/overview/re-ranking"
+    ],
+    "after_sources": [
+      "https://developers.google.com/machine-learning/recommendation/overview/candidate-generation",
+      "https://developers.google.com/machine-learning/recommendation/dnn/re-ranking"
+    ],
+    "narration_and_visuals_unchanged": true,
+    "unchanged_final_video_sha256": "e9703541e26ba8b4edb98d7c568bb9b48ddc73b39443a68bf0a7dd5fa447cd91"
+  },
+  "current_spec_sha256": "9f47790f920c2340f0fec6a1f88569530904ff0314b407cd96ef189440ce70a3"
+}

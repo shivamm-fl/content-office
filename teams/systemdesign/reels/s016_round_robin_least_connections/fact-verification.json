@@ -1,0 +1,30 @@
+{
+  "executed": true,
+  "illustrative": true,
+  "round_robin_assignments": [
+    "A",
+    "B",
+    "C",
+    "A",
+    "B",
+    "C"
+  ],
+  "assignment_counts": {
+    "A": 2,
+    "B": 2,
+    "C": 2
+  },
+  "snapshot": {
+    "A": 6,
+    "B": 1,
+    "C": 3
+  },
+  "rr_next_pointer": "A",
+  "rr_selected": "A",
+  "least_connections_selected": "B",
+  "after_lc_accept": {
+    "A": 6,
+    "B": 2,
+    "C": 3
+  }
+}

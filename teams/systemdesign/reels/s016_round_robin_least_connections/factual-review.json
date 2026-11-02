@@ -1,0 +1,12 @@
+{
+  "item": "s016",
+  "production_date_ist": "2026-11-04",
+  "verified_at_utc": "2026-11-02T19:34:04.314025+00:00",
+  "sources": [
+    "https://nginx.org/en/docs/http/load_balancing.html"
+  ],
+  "claims_checked": true,
+  "reviewer": "Manual source/code verification by production agent",
+  "independent_automated_review": false,
+  "notes": "NGINX documentation supports round-robin assignments and least-active-connection selection. Equal weights and healthy servers are stated assumptions. Own simulation verifies A/B/C/A/B/C gives two assignments each; for active snapshot6/1/3 and next pointer A, RR chooses A and LC chooses B, incrementing B to2. Counts are illustrative. Fewer connections is a proxy, not a guarantee of CPU load or fastest response. Weights/tie rules are not generalized."
+}

@@ -2077,6 +2077,115 @@
       "roadmap_index": 30,
       "office_version": "867e89a656e62be5",
       "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q135/preview"
+    },
+    {
+      "id": "a017",
+      "track": "series",
+      "day": 17,
+      "unit": "A3",
+      "title": "How AI Builds an Answer",
+      "format": "demo",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/a017.txt",
+      "script_locked": false,
+      "hook_type": "direct_question",
+      "spoken_hook": "AI पूरा answer एक साथ लिखता है?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://huggingface.co/docs/transformers/en/generation_strategies",
+        "https://huggingface.co/docs/transformers/en/kv_cache"
+      ],
+      "facts_to_verify": [
+        "Autoregressive generation selects and appends token pieces using the updated prefix. Selection rules vary; stop conditions and output limits can terminate generation. The sky pieces and 0.7/0.3 then 0.6/0.4 probabilities are original illustrative arithmetic, explicitly not an actual model/tokenizer run. No claim of separate HTTP request for every word or recomputing all past work is made."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 100.5,
+      "cover_headline": "How AI Builds an Answer",
+      "thumb_text": "NEXT PIECE?",
+      "keywords": [
+        "AI generation",
+        "next token prediction",
+        "LLM"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-04",
+      "office_version": "4a9a7da40a5ebbc8",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/a017/preview"
+    },
+    {
+      "id": "q136",
+      "track": "interview",
+      "day": null,
+      "unit": "I4",
+      "title": "Measure Speech Errors with WER",
+      "format": "question",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/q136.txt",
+      "script_locked": false,
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer पूछता है: speech-to-text की quality कैसे मापोगे?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-custom-speech-evaluate-data",
+        "https://huggingface.co/learn/audio-course/chapter5/evaluation"
+      ],
+      "facts_to_verify": [
+        "WER counts minimum word substitutions, deletions and insertions divided by reference word count. Own dynamic-programming edit distance verifies the example distance 3, with displayed valid 1D/1S/1I alignment and denominator 5; 60%. Second example distance2/reference1=200%. Both transcripts are illustrative, not a real ASR run. Fixed references and consistent normalization support comparisons; task/entity checks are additional evaluation criteria."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 101.5,
+      "cover_headline": "Measure Speech Errors with WER",
+      "thumb_text": "COUNT THE ERRORS",
+      "keywords": [
+        "word error rate",
+        "speech to text",
+        "AI interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-04",
+      "question_number": 32,
+      "roadmap_index": 31,
+      "office_version": "9823b96b6db0791e",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q136/preview"
+    },
+    {
+      "id": "q137",
+      "track": "interview",
+      "day": null,
+      "unit": "J1",
+      "title": "How Embeddings Recommend",
+      "format": "question",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/q137.txt",
+      "script_locked": false,
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Interviewer पूछता है: recommendations में embeddings कैसे काम आती हैं?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://developers.google.com/machine-learning/recommendation/overview/candidate-generation",
+        "https://developers.google.com/machine-learning/recommendation/dnn/re-ranking"
+      ],
+      "facts_to_verify": [
+        "Google course supports user/item embeddings in a shared space, similarity-based candidate retrieval and later ranking/filtering. Own arithmetic verifies all toy vector lengths1 and dot products .8,.6,.96, hence cosine equality for this toy. The displayed coordinate dimensions are not claimed to be real learned topic labels. Watched-item exclusion is the explicit app policy of this example, not a universal provider default. No real recommendation accuracy claim."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 110.5,
+      "cover_headline": "How Embeddings Recommend",
+      "thumb_text": "CLOSEST WINS?",
+      "keywords": [
+        "recommendation embeddings",
+        "vector similarity",
+        "AI interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-04",
+      "question_number": 33,
+      "roadmap_index": 32,
+      "office_version": "7850c9715b8894f6",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q137/preview"
     }
   ]
 }

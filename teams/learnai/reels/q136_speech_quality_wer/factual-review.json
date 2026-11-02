@@ -1,0 +1,13 @@
+{
+  "item": "q136",
+  "production_date_ist": "2026-11-04",
+  "verified_at_utc": "2026-11-02T19:34:04.116281+00:00",
+  "sources": [
+    "https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-custom-speech-evaluate-data",
+    "https://huggingface.co/learn/audio-course/chapter5/evaluation"
+  ],
+  "claims_checked": true,
+  "reviewer": "Manual source/code verification by production agent",
+  "independent_automated_review": false,
+  "notes": "WER counts minimum word substitutions, deletions and insertions divided by reference word count. Own dynamic-programming edit distance verifies the example distance 3, with displayed valid 1D/1S/1I alignment and denominator 5; 60%. Second example distance2/reference1=200%. Both transcripts are illustrative, not a real ASR run. Fixed references and consistent normalization support comparisons; task/entity checks are additional evaluation criteria."
+}

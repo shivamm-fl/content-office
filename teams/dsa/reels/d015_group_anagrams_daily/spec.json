@@ -1,0 +1,53 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://leetcode.com/problems/group-anagrams/description/",
+    "https://docs.python.org/3/library/collections.html#collections.defaultdict"
+  ],
+  "copy": {
+    "hi": {
+      "A": "Group Anagrams में words को सही buckets में कैसे रखोगे? | Given array: eat, tea, tan, ate, nat, bat। | इस problem में सारे words lowercase English letters के हैं।",
+      "B": "Anagrams में letters और उनकी counts same होती हैं, order बदल सकता है। | Eat, tea और ate एक group; tan और nat दूसरा; bat अकेला। | Groups का output order कुछ भी हो सकता है।",
+      "C": "हर नए word को पुराने groups से बार बार compare करने के बजाय signature बनाओ। | Sorted letters एक तरीका है: eat और tea दोनों aet बनते हैं। | Same signature वाले words एक dictionary bucket में डाल सकते हैं।",
+      "D": "Fixed twenty six letter alphabet में sorting की जगह counts ले सकते हैं। | Eat में a one, e one, t one; बाकी letters zero। | Tea और ate की counts भी यही होंगी, इसलिए key same होगी।",
+      "E": "Dictionary में इस count key की list में eat डालो, फिर tea और ate उसी list में जाएँगे। | Tan और nat के लिए a one, n one, t one की अलग key। | Bat की key में a, b और t one हैं; तीसरी bucket बनेगी।",
+      "F": "सिर्फ unique letters का set काफी नहीं। | A A B और A B B में letters same हैं, counts अलग हैं। | Frequency tuple यह फर्क पकड़ता है। Tuple immutable है, इसलिए Python dictionary key बन सकता है।",
+      "G": "यह पूरा actual Python solution है। | हर word के लिए twenty six zeros बनाओ, फिर हर character की count बढ़ाओ। | Tuple को key बनाकर उसी bucket में word append करो। | आखिर में dictionary की सारी lists लौटाओ।",
+      "H": "इसी code को examples और five thousand random word arrays पर sorted-signature reference से compare किया है। | Empty strings भी same all-zero key में एक group बनाती हैं। | Duplicate words खोने नहीं चाहिए; हम list में append करते हैं, set में नहीं।",
+      "I": "C total input characters और n words हों, तो time O C plus twenty six n है। | Fixed alphabet पर इसे O C plus n लिख सकते हैं। | Dictionary keys और stored string references worst case O n extra space लेते हैं; input strings copy नहीं करते।",
+      "J": "तो key में word का order नहीं, हर letter की count रखी। | Comments में बताओ: A A B और A B B को same group में रखोगे? | Actual code और dry run के साथ DSA सीखने के लिए follow करो।"
+    }
+  }
+}

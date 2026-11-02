@@ -1,0 +1,107 @@
+{
+  "code_executed": true,
+  "random_cases": 5000,
+  "examples": [
+    {
+      "input": [
+        "eat",
+        "tea",
+        "tan",
+        "ate",
+        "nat",
+        "bat"
+      ],
+      "actual": [
+        [
+          "eat",
+          "tea",
+          "ate"
+        ],
+        [
+          "tan",
+          "nat"
+        ],
+        [
+          "bat"
+        ]
+      ],
+      "expected": [
+        [
+          "eat",
+          "tea",
+          "ate"
+        ],
+        [
+          "tan",
+          "nat"
+        ],
+        [
+          "bat"
+        ]
+      ]
+    },
+    {
+      "input": [
+        "",
+        ""
+      ],
+      "actual": [
+        [
+          "",
+          ""
+        ]
+      ],
+      "expected": [
+        [
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "input": [
+        "aab",
+        "abb",
+        "baa"
+      ],
+      "actual": [
+        [
+          "aab",
+          "baa"
+        ],
+        [
+          "abb"
+        ]
+      ],
+      "expected": [
+        [
+          "aab",
+          "baa"
+        ],
+        [
+          "abb"
+        ]
+      ]
+    },
+    {
+      "input": [
+        "a",
+        "a"
+      ],
+      "actual": [
+        [
+          "a",
+          "a"
+        ]
+      ],
+      "expected": [
+        [
+          "a",
+          "a"
+        ]
+      ]
+    }
+  ],
+  "accepted_claim": false,
+  "code_sha256": "cc50ba16b61b48f5e0cadc70ad9230326db17ab365aa527ef0237776f62a62b9"
+}

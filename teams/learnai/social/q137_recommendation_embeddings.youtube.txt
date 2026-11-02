@@ -1,0 +1,12 @@
+Recommendation embeddings: score se final feed tak
+
+Toy unit vectors mein user (0.8,0.6), A (1,0), B (0,1), C (0.6,0.8) hain. Scores A .80, B .60, C .96. C already watched ho aur app use filter kare, toh top eligible item A hai. Similarity retrieval final feed decision ka ek step hai.
+
+Comment karke batao: highest similarity ka watched item dikhana zaroori hai?
+
+Sources:
+https://developers.google.com/machine-learning/recommendation/overview/candidate-generation
+https://developers.google.com/machine-learning/recommendation/dnn/re-ranking
+
+Tags: recommendation embeddings,vector similarity,AI interview
+AI-assisted visuals and narration.

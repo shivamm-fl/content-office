@@ -1,0 +1,41 @@
+{
+  "item": "s016",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 105.0,
+  "video_sha256": "28ef1c5fcd57c4b5e6999b3becef9fd6d7501e87304a32e84155d5f3ccc28dae",
+  "cover_sha256": "8324bdef8cdc8641ec244adf40f21f4020142f55139b1995194106841c00cbfd",
+  "loudness": {
+    "input_i": "-13.94",
+    "input_tp": "-1.99",
+    "input_lra": "4.50",
+    "input_thresh": "-24.66",
+    "output_i": "-13.94",
+    "output_tp": "-1.83",
+    "output_lra": "3.70",
+    "output_thresh": "-24.61",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.06"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_notes": [
+    "Same active snapshot A6 B1 C3 is preserved in the RR and LC comparison.",
+    "Round robin pointer routes to A; least connections routes to B and increments it from1 to2 in the narrated phase.",
+    "Equal-assignment sequence and the one-heavy-connection CPU counterexample use explicit illustrative assumptions.",
+    "Diagrams, arrows, counters, captions and final cover are readable without overlap."
+  ]
+}

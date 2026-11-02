@@ -1,0 +1,43 @@
+{
+  "item": "d015",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true,
+    "code_tested": true
+  },
+  "duration_s": 130.5,
+  "video_sha256": "e62015501a542ef54acbae013dea45d2a8a71fad45136dc373c0ea6a3584691d",
+  "cover_sha256": "0545522b47f6b6436040b5146c53054eb4e56066a916081f1675ef15b734add9",
+  "loudness": {
+    "input_i": "-13.92",
+    "input_tp": "-1.80",
+    "input_lra": "4.10",
+    "input_thresh": "-24.68",
+    "output_i": "-13.67",
+    "output_tp": "-1.33",
+    "output_lra": "3.80",
+    "output_thresh": "-24.38",
+    "normalization_type": "dynamic",
+    "target_offset": "-0.33"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "code_frames_inspected": true,
+  "visual_notes": [
+    "Full exact Python implementation is readable with no clipped update expression.",
+    "Code highlights align with count-loop, tuple-key append and return narration.",
+    "All three anagram buckets, partial count columns with other letters zero, set counterexample and duplicate handling are correct.",
+    "Complexity O(C+26n) and O(n) extra references/keys match executed code."
+  ]
+}

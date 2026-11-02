@@ -1,0 +1,23 @@
+{
+  "executed": true,
+  "illustrative_not_asr_run": true,
+  "example": {
+    "reference": "send the red file now",
+    "hypothesis": "send red files now please",
+    "minimum_edit_distance": 3,
+    "displayed_alignment": {
+      "deletions": 1,
+      "substitutions": 1,
+      "insertions": 1
+    },
+    "reference_words": 5,
+    "wer": 0.6
+  },
+  "boundary": {
+    "reference": "go",
+    "hypothesis": "go now now",
+    "distance": 2,
+    "reference_words": 1,
+    "wer": 2
+  }
+}

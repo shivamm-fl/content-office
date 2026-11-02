@@ -1,0 +1,47 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://huggingface.co/docs/transformers/en/generation_strategies",
+    "https://huggingface.co/docs/transformers/en/kv_cache"
+  ],
+  "copy": {
+    "hi": {
+      "A": "AI पूरा answer एक साथ लिखता है? | एक छोटा example लो: prompt है, Complete: The sky। | हमें समझना है कि इसके बाद text कैसे बढ़ता है।",
+      "B": "Model अभी मिले text से अगले token की probabilities निकालता है। | Token text का piece है; वह word, word का हिस्सा या punctuation हो सकता है। | इस simplified example में अगले pieces हैं, is और was।",
+      "C": "मान लो is की probability point seven और was की point three है। | ये teaching के लिए illustrative pieces और numbers हैं, actual model run नहीं। | इस step में हमारी selection rule is चुनती है।",
+      "D": "चुना हुआ piece text में जोड़ो: The sky is। | अब यही बढ़ा हुआ prefix अगले step का context है। | Model इस नए context के आधार पर फिर अगले token की probabilities देता है।",
+      "E": "अगले step में illustrative choices blue और clear हैं। | मान लो blue point six, clear point four; इस बार blue चुना गया। | Text अब The sky is blue है। पिछले step की probability table फिर से reuse नहीं हुई।",
+      "F": "यही loop है: next token score करो, token चुनो, prefix में जोड़ो, फिर repeat। | हमेशा सबसे likely token चुनना ही अकेला तरीका नहीं है; sampling जैसे दूसरे selection rules भी हैं। | आज focus इस repeat होने वाले generation loop पर है।",
+      "G": "Loop stop token, configured stop condition या output limit पर रुक सकता है। | Stop signal को answer के ordinary word की तरह दिखाना जरूरी नहीं। | Server एक generation request के अंदर कई token steps चला सकता है; हर word पर अलग HTTP call जरूरी नहीं।",
+      "H": "तो answer चुने हुए tokens जोड़कर बढ़ता है। | Comments में बताओ: is जोड़ने के बाद next step का context The sky होगा, या The sky is? | AI को concrete examples से समझने के लिए follow करो।"
+    }
+  }
+}

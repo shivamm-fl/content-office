@@ -1,0 +1,7 @@
+Day 16/150: Round robin ya least connections?
+
+Equal-weight healthy backends ke snapshot A6, B1, C3 par RR ka next pointer A ho toh A choose hoga; least connections B choose karega. Equal assignments equal active load nahi hain. Connection count CPU load ya fastest response ki guarantee nahi; workload par load test karo.
+
+Comment karke batao: fewer connections se fastest response guaranteed hai?
+
+#SystemDesign #LoadBalancing #Backend

@@ -1,0 +1,102 @@
+[
+  {
+    "input": [
+      "eat",
+      "tea",
+      "tan",
+      "ate",
+      "nat",
+      "bat"
+    ],
+    "actual": [
+      [
+        "eat",
+        "tea",
+        "ate"
+      ],
+      [
+        "tan",
+        "nat"
+      ],
+      [
+        "bat"
+      ]
+    ],
+    "expected": [
+      [
+        "eat",
+        "tea",
+        "ate"
+      ],
+      [
+        "tan",
+        "nat"
+      ],
+      [
+        "bat"
+      ]
+    ]
+  },
+  {
+    "input": [
+      "",
+      ""
+    ],
+    "actual": [
+      [
+        "",
+        ""
+      ]
+    ],
+    "expected": [
+      [
+        "",
+        ""
+      ]
+    ]
+  },
+  {
+    "input": [
+      "aab",
+      "abb",
+      "baa"
+    ],
+    "actual": [
+      [
+        "aab",
+        "baa"
+      ],
+      [
+        "abb"
+      ]
+    ],
+    "expected": [
+      [
+        "aab",
+        "baa"
+      ],
+      [
+        "abb"
+      ]
+    ]
+  },
+  {
+    "input": [
+      "a",
+      "a"
+    ],
+    "actual": [
+      [
+        "a",
+        "a"
+      ]
+    ],
+    "expected": [
+      [
+        "a",
+        "a"
+      ]
+    ]
+  }
+]
+5000 seeded cases match independent sorted-key reference.

@@ -1,0 +1,41 @@
+{
+  "item": "q137",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 110.5,
+  "video_sha256": "e9703541e26ba8b4edb98d7c568bb9b48ddc73b39443a68bf0a7dd5fa447cd91",
+  "cover_sha256": "79c4565397be35c58c2b9154340f106e4c90cbdead2b35a6693c4630edc4c703",
+  "loudness": {
+    "input_i": "-13.91",
+    "input_tp": "-1.84",
+    "input_lra": "3.30",
+    "input_thresh": "-24.58",
+    "output_i": "-14.16",
+    "output_tp": "-1.89",
+    "output_lra": "3.10",
+    "output_thresh": "-24.78",
+    "normalization_type": "dynamic",
+    "target_offset": "0.16"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_notes": [
+    "All four illustrative unit vectors use dimension axes, with readable labels and no invented real topic axes.",
+    "Coordinate multiplication yields C=.96, A=.80 and B=.60.",
+    "Watched C is filtered; the eligible top choice becomes A.",
+    "Corrected cover heading fits the branded cover."
+  ]
+}

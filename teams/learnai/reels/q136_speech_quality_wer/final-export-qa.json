@@ -1,0 +1,40 @@
+{
+  "item": "q136",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 101.5,
+  "video_sha256": "3ca5f90c34f8b251b354416efa92c7edf31c5832bdfe673eab3c9a1f8b5c64e1",
+  "cover_sha256": "2a37f7c94ca9ba41c523143efaa96b770290d8ac9709870af88c52237964469f",
+  "loudness": {
+    "input_i": "-13.91",
+    "input_tp": "-1.90",
+    "input_lra": "4.10",
+    "input_thresh": "-24.54",
+    "output_i": "-14.29",
+    "output_tp": "-2.37",
+    "output_lra": "4.00",
+    "output_thresh": "-24.87",
+    "normalization_type": "dynamic",
+    "target_offset": "0.29"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_notes": [
+    "Reference/hypothesis alignment, missing the, file to files and extra please are correct.",
+    "WER denominator5 and 60 percent, plus 200 percent insertion boundary, match executed checks.",
+    "Arrow spacing is clear in the final exported MP4."
+  ]
+}

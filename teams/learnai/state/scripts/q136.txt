@@ -1,0 +1,15 @@
+Interviewer पूछता है: speech-to-text की quality कैसे मापोगे? | कुछ clips सुनकर अच्छा लगा, इतना काफी नहीं। | Fixed test set के सही human transcripts से output compare करूँगा।
+
+Illustrative example लो, reference है: send the red file now। | Output है: send red files now please। | यह real speech model का measured result नहीं, metric समझने का example है।
+
+Reference का the गायब है: one deletion। | File की जगह files है: one substitution। | आखिर में please extra है: one insertion।
+
+Word error rate, यानी WER: substitutions plus deletions plus insertions, divided by reference words। | यहाँ three errors divided by five, यानी sixty percent। | Denominator output words नहीं, reference words हैं।
+
+Lower WER बेहतर है, लेकिन यह bounded accuracy percentage नहीं है। | Reference सिर्फ go हो, output go now now हो, तो two insertions divided by one। | WER two hundred percent हो सकता है।
+
+Fair comparison में same test clips और references रखूँगा। | Case, punctuation और numbers को normalize करने की policy दोनों outputs पर consistent होनी चाहिए। | Noise और accents के अलग slices भी देखूँगा, ताकि average failures न छिपाए।
+
+WER अकेला पूरा product result नहीं बताता। | Name या order ID का एक गलत word भी task बिगाड़ सकता है। | इसलिए critical entities, task success, latency और cost भी check करूँगा।
+
+Interview में कहो: fixed representative set पर WER measure करूँगा, फिर task-specific failures देखूँगा। | Example की minimum edit count code से भी verify की है। | Comments में बताओ: WER का denominator reference है या output? Practical interviews के लिए follow करो।

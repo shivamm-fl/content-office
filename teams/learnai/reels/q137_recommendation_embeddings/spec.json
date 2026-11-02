@@ -1,0 +1,47 @@
+{
+  "tts": "owner",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "audio": "v2",
+  "pace": 1.26,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5
+  },
+  "tail": {},
+  "cues": [],
+  "sources": [
+    "https://developers.google.com/machine-learning/recommendation/overview/candidate-generation",
+    "https://developers.google.com/machine-learning/recommendation/dnn/re-ranking"
+  ],
+  "copy": {
+    "hi": {
+      "A": "Interviewer पूछता है: recommendations में embeddings कैसे काम आती हैं? | User और items को same numerical space में represent कर सकते हैं। | फिर similarity से relevant candidates ढूँढते हैं, सिर्फ popular list नहीं देते।",
+      "B": "Toy two-dimensional example लो: user vector point eight, point six। | Item A, one zero; B, zero one; C, point six point eight। | ये illustrative coordinates हैं, real trained recommender के results नहीं।",
+      "C": "Real embeddings interactions और features से learned हो सकती हैं। | उनकी dimensions को अपने आप comedy और sports जैसे fixed meanings मत दे दो। | यहाँ axes सिर्फ dimension one और dimension two हैं।",
+      "D": "इन सभी example vectors की length one है, यानी normalized हैं। | इसलिए यहाँ dot product और cosine similarity same हैं। | Dot product में matching coordinates multiply करके जोड़ते हैं।",
+      "E": "C का score: point eight times point six, plus point six times point eight। | Point four eight plus point four eight, यानी point nine six। | A का point eight और B का point six है, तो similarity में C सबसे ऊपर।",
+      "F": "लेकिन मान लो user C पहले देख चुका है, और app watched items हटाता है। | C filter होगा; बचे हुए A और B में A का score ज्यादा है। | इस example में top eligible item A है, C नहीं।",
+      "G": "इसलिए embedding retrieval relevant candidates ढूँढने का एक step है। | Final ranking और filters freshness, eligibility या diversity जैसे product goals भी देख सकते हैं। | Similarity score अकेला best final recommendation की guarantee नहीं है।",
+      "H": "Interview में कहो: user और item vectors compare करके candidates लाऊँगा, फिर ranking और eligibility लगाऊँगा। | Toy scores और vector lengths code से verify हैं। | Comments में बताओ: highest similarity वाला watched item दिखाना जरूरी है? Practical AI interviews के लिए follow करो।"
+    }
+  }
+}

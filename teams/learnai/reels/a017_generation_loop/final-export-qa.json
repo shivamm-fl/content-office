@@ -1,0 +1,39 @@
+{
+  "item": "a017",
+  "passed": true,
+  "checks": {
+    "h264_1080x1920": true,
+    "aac_audio": true,
+    "duration": true,
+    "branded_cover": true,
+    "duration_matches_narration_timeline": true,
+    "requested_voice_settings": true,
+    "full_video_decode": true,
+    "audible_audio": true,
+    "frames_change": true,
+    "caption_lint": true
+  },
+  "duration_s": 100.5,
+  "video_sha256": "5648ea11ddc9eacc9e3238e5b6e320ee187cc0560ed08858911f78663fff7957",
+  "cover_sha256": "d87a04f1fc28fdb4f2079bd6e46379604de9c3e1537b61152c329a92142b7dd5",
+  "loudness": {
+    "input_i": "-13.91",
+    "input_tp": "-1.40",
+    "input_lra": "3.60",
+    "input_thresh": "-24.59",
+    "output_i": "-14.05",
+    "output_tp": "-1.55",
+    "output_lra": "3.10",
+    "output_thresh": "-24.65",
+    "normalization_type": "dynamic",
+    "target_offset": "0.05"
+  },
+  "visual_inspection": "passed final MP4 visual review",
+  "human_listened": false,
+  "owner_approved": false,
+  "published": false,
+  "visual_notes": [
+    "Updated prefix and illustrative probability choices append is and blue correctly.",
+    "Generation-loop arrows, stopping conditions and one-request distinction remain readable and separated from captions."
+  ]
+}

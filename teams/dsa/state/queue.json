@@ -156,6 +156,41 @@
       "production_date_ist": "2026-11-03",
       "office_version": "6576fc4cb8105586",
       "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/dsa/library/d014/preview"
+    },
+    {
+      "id": "d015",
+      "track": "series",
+      "day": 15,
+      "unit": "P2",
+      "title": "Group Anagrams with Count Keys",
+      "format": "problem",
+      "status": "built",
+      "qa_passed": true,
+      "script_file": "state/scripts/d015.txt",
+      "script_locked": false,
+      "hook_type": "direct_question",
+      "spoken_hook": "Group Anagrams में words को सही buckets में कैसे रखोगे?",
+      "hook_source": "Floor roadmap and existing owner teaching rules",
+      "sources": [
+        "https://leetcode.com/problems/group-anagrams/description/",
+        "https://docs.python.org/3/library/collections.html#collections.defaultdict"
+      ],
+      "facts_to_verify": [
+        "LeetCode 49 specifies lowercase English strings, example anagram groups and arbitrary output order. The exact displayed Python is executed against independent sorted-signature grouping for 5000 seeded random cases and examples including empty strings, repeated characters and duplicates. Count tuples are hashable, dict buckets preserve duplicates. C total characters, n words: O(C+26n), fixed alphabet O(C+n); O(n) auxiliary keys and references, excluding original input storage. No Accepted proof claimed or required for daily DSA."
+      ],
+      "visual_idea": "One concrete running example with labelled artifacts, accurate directional arrows, phrase-aligned highlights and actual readable Python on the coding lesson.",
+      "length_target_s": 130.5,
+      "cover_headline": "Group Anagrams with Count Keys",
+      "thumb_text": "SAME COUNTS?",
+      "keywords": [
+        "group anagrams",
+        "Python dictionary",
+        "DSA"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-04",
+      "office_version": "d6849d66d8668fea",
+      "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/dsa/library/d015/preview"
     }
   ]
 }
