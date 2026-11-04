@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Temperature: The Randomness Dial</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="93" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="93" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="93" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="93" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "150 DAYS OF AI" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px;background:${PANEL}` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, word, y, t, col = ACC) => {
+        const w = el(host, `left:80px;top:${y}px;width:920px;height:56px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;padding:0 30px;border-radius:999px;border:2px solid ${col};background:${ca(col, .1)};font:700 36px ${COD};letter-spacing:.12em;color:${col}">${word}</div>`;
+        return show(w, t, { opacity: 0, y: -14 });
+      };
+      const title = (host, x, y, txt, col) => el(host, `left:${x}px;top:${y}px;font:700 40px ${COD};letter-spacing:.14em;color:${col || MUTED}`, txt);
+      const tile = (host, x, y, w, h, txt, col, size) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:3px solid ${col};background:${ca(col, .14)};display:flex;align-items:center;justify-content:center;font:800 ${size || 60}px ${LAT};color:${TEXT};white-space:pre`, txt);
+      const mark = (row, col, t) => tl.to(row, { borderColor: col, backgroundColor: ca(col, .12), duration: .35, immediateRender: false }, t);
+      const unmark = (row, t) => tl.to(row, { borderColor: "rgba(0,0,0,0)", backgroundColor: "rgba(0,0,0,0)", duration: .3, immediateRender: false }, t);
+
+      // the toy model: four next-word options with invented scores, softmax(score / T)
+      const WORDS = ["cricket", "football", "chess", "hockey"], SC = [2, 1, 0.5, 0];
+      const sm = (T) => { const e = SC.map(s => Math.exp(s / T)), t = e.reduce((a, b) => a + b, 0); return e.map(x => 100 * x / t); };
+      const WCOL = [ACC, CYAN, CYAN, CYAN];
+
+      // the temperature dial: a gauge with a needle (angle -72..72 deg for T 0..2)
+      const ang = (T) => -72 + T / 2 * 144;
+      const dial = (host, x, y, s, a0) => {
+        const outer = el(host, `left:${x}px;top:${y}px;width:${400 * s}px;height:${290 * s}px`);
+        const inn = el(outer, `left:0;top:0;width:400px;height:290px;transform-origin:0 0;transform:scale(${s})`);
+        inn.insertAdjacentHTML("beforeend", `<svg width="400" height="240" viewBox="0 0 400 240" style="position:absolute;left:0;top:0"><path d="M 40 210 A 160 160 0 0 1 360 210" fill="none" stroke="#2A3A55" stroke-width="22" stroke-linecap="round"/></svg>`);
+        const needle = el(inn, `left:195px;top:60px;width:10px;height:150px;border-radius:5px;background:${ACC}`);
+        gsap.set(needle, { transformOrigin: "5px 150px", rotation: a0 });
+        el(inn, `left:182px;top:192px;width:36px;height:36px;border-radius:18px;background:${TEXT}`);
+        const ro = (txt, col) => el(inn, `left:30px;top:234px;width:340px;text-align:center;font:800 54px ${COD};color:${col || TEXT}`, txt);
+        return { outer, needle, ro };
+      };
+      const swing = (d, a, t, dur) => tl.to(d.needle, { rotation: a, duration: dur || 0.9, ease: "power2.inOut", immediateRender: false }, t);
+      // the die
+      const die = (host, x, y, sz, col) => {
+        const d = el(host, `left:${x}px;top:${y}px;width:${sz}px;height:${sz}px;border-radius:${sz * .2}px;border:3px solid ${col};background:${ca(col, .14)}`);
+        [[.25, .25], [.75, .25], [.5, .5], [.25, .75], [.75, .75]].forEach(([px, py]) => el(d, `left:${sz * px - sz * .07}px;top:${sz * py - sz * .07}px;width:${sz * .14}px;height:${sz * .14}px;border-radius:50%;background:${TEXT}`));
+        return d;
+      };
+      // option rows: word, bar, number
+      const rowsCard = (host, y, ph, ttl) => {
+        const c = glass(host, 80, y, 920, ph * 4 + 120, CYAN, 30); title(c, 34, 22, ttl);
+        const h = ph - 24;
+        const R = WORDS.map((w, i) => {
+          const row = el(c, `left:24px;top:${100 + i * ph}px;width:872px;height:${h}px;border-radius:20px;border:3px solid rgba(0,0,0,0)`);
+          const lab = el(row, `left:18px;top:0;width:250px;height:${h}px;display:flex;align-items:center;font:800 48px ${LAT};color:${TEXT}`, w);
+          const trk = el(row, `left:270px;top:${(h - 56) / 2}px;width:400px;height:56px;border-radius:12px;background:#233147`);
+          const fill = el(row, `left:270px;top:${(h - 56) / 2}px;width:400px;height:56px;border-radius:12px;background:${WCOL[i]};transform-origin:0 50%`);
+          const num = el(row, `left:680px;top:0;width:170px;height:${h}px;display:flex;align-items:center;justify-content:flex-end;font:800 50px ${COD};color:${TEXT}`, "");
+          return { row, lab, trk, fill, num };
+        });
+        return { c, R };
+      };
+
+      // diagram: A — the same question asked three times, three different answers.
+      M.hook(["Same sawal poocha,", "alag jawab kyun?"], { size: 84, top: 215, until: M.Ed("A", 0) + .25 });
+      const aP = glass(A, 80, 540, 920, 230, CYAN, 32); title(aP, 36, 26, "SAME PROMPT");
+      el(aP, `left:36px;top:100px;font:800 58px ${LAT};color:${TEXT}`, "Mera favourite khel hai ...");
+      show(aP, 0.05);
+      [["RUN 1", "cricket", ACC, 0.5], ["RUN 2", "hockey", CYAN, 1.0], ["RUN 3", "football", CYAN, 1.5]].forEach(([r, w, col, t], i) => {
+        const c = glass(A, 80, 810 + i * 160, 920, 130, col, 28);
+        el(c, `left:34px;top:40px;font:700 40px ${COD};letter-spacing:.12em;color:${MUTED}`, r);
+        tile(c, 300, 20, 400, 90, w, col, 56); show(c, t, { opacity: 0, y: 24 });
+      });
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B — a strict friend and a relaxed friend, then the dial.
+      const bq = glass(B, 80, 215, 920, 130, CYAN, 28);
+      el(bq, `left:0;top:30px;width:920px;text-align:center;font:800 56px ${LAT};color:${TEXT}`, "Kaun sa game pasand hai?");
+      show(bq, P("B", 0));
+      const friend = (y, name, col, picks, times, t0) => {
+        const c = glass(B, 80, y, 920, 230, col, 28); title(c, 34, 18, name, col);
+        picks.forEach(([w, wc], i) => show(tile(c, 34 + i * 292, 86, 262, 110, w, wc, 50), times[i], { opacity: 0, y: 20 }));
+        show(c, t0); return c;
+      };
+      friend(380, "STRICT FRIEND", CYAN, [["cricket", ACC], ["cricket", ACC], ["cricket", ACC]], [P("B", 1) + .3, P("B", 1) + .7, P("B", 1) + 1.1], P("B", 1));
+      friend(640, "RELAXED FRIEND", ACC, [["cricket", ACC], ["football", CYAN], ["cricket", ACC]], [P("B", 2) + .3, at("B", "football"), at("B", "football") + .5], P("B", 2));
+      const bd = dial(B, 340, 970, 1, ang(0.2));
+      const bPill1 = pillC(B, "TEMPERATURE", 900, P("B", 3));
+      const bPill2 = pillC(B, "SAME MODEL", 900, P("B", 4) + .2);
+      gone(bPill1, P("B", 4));
+      const r1 = bd.ro("T: LOW", CYAN), r2 = bd.ro("T: HIGH", ACC);
+      show(r1, P("B", 3)); tl.set(r2, { opacity: 0 }, 0); tl.to(r1, { opacity: 0, duration: .25, immediateRender: false }, P("B", 4) + .3); tl.to(r2, { opacity: 1, duration: .3, immediateRender: false }, P("B", 4) + .6);
+      show(bd.outer, P("B", 3));
+      swing(bd, ang(1.7), P("B", 4) + .3, 1.0);
+      M.fit(B, { y: 170, h: 1130 });
+
+      // diagram: C — each option gets an invented score.
+      pillC(C, "EXAMPLE", 205, P("C", 0));
+      const cp = glass(C, 80, 285, 920, 140, CYAN, 28);
+      el(cp, `left:0;top:34px;width:920px;text-align:center;font:800 56px ${LAT};color:${TEXT}`, "Mera favourite khel hai ...");
+      show(cp, P("C", 0));
+      const cr = rowsCard(C, 450, 160, "SCORE");
+      show(cr.c, P("C", 0) + .2);
+      const SCT = [at("C", "cricket"), at("C", "football"), at("C", "chess"), at("C", "hockey")];
+      cr.R.forEach((r, i) => {
+        tl.set([r.lab, r.trk], { opacity: 0 }, 0); tl.to([r.lab, r.trk], { opacity: 1, duration: .35, immediateRender: false }, P("C", 0) + .6 + i * .4);
+        tl.set(r.fill, { scaleX: 0 }, 0); tl.to(r.fill, { scaleX: SC[i] / 2, duration: .5, ease: "power3.out", immediateRender: false }, SCT[i] + .15);
+        r.num.textContent = ["2", "1", "0.5", "0"][i];
+        tl.set(r.num, { opacity: 0 }, 0); tl.to(r.num, { opacity: 1, duration: .3, immediateRender: false }, SCT[i] + .15);
+      });
+      show(el(C, `left:80px;top:1235px;width:920px;text-align:center;font:700 44px ${COD};letter-spacing:.1em;color:${MUTED}`, "INVENTED NUMBERS"), P("C", 2), { opacity: 0, y: 12 });
+      M.fit(C, { y: 170, h: 1130 });
+
+      // diagram: D — three steps: divide by T, percent, dice.
+      const dCard = (y, n, name, t0, draw) => {
+        const c = glass(D, 80, y, 920, 330, CYAN, 30);
+        el(c, `left:30px;top:30px;width:90px;height:90px;border-radius:45px;background:${ACC};color:#0B1220;display:flex;align-items:center;justify-content:center;font:800 56px ${LAT}`, n);
+        el(c, `left:150px;top:36px;font:800 60px ${LAT};color:${TEXT}`, name); draw(c); show(c, t0, { opacity: 0, y: 28 }); return c;
+      };
+      const T_ = `<span style="color:${ACC}">T</span>`;
+      dCard(215, "1", "DIVIDE BY T", P("D", 0), c => {
+        [["2", 190], ["1", 190], ["0.5", 240], ["0", 190]].reduce((x, [v, w], i) => { const k = tile(c, x, 150, w, 100, `${v} ÷ ${T_}`, CYAN, 52); show(k, P("D", 0) + .3 + i * .2, { opacity: 0, y: 20 }); return x + w + 14; }, 36);
+        const lb = el(c, `left:36px;top:262px;font:700 40px ${COD};letter-spacing:.1em;color:${ACC}`, "T = TEMPERATURE"); show(lb, P("D", 1), { opacity: 0, y: 10 });
+      });
+      dCard(575, "2", "PERCENT", P("D", 0) + .2, c => {
+        sm(1).forEach((p, i) => { const f = el(c, `left:36px;top:${146 + i * 42}px;width:${p * 8.5}px;height:30px;border-radius:8px;background:${WCOL[i]};transform-origin:0 50%`);
+          tl.set(f, { scaleX: 0 }, 0); tl.to(f, { scaleX: 1, duration: .5, ease: "power3.out", immediateRender: false }, P("D", 2) + .6 + i * .15); });
+        const tot = el(c, `left:600px;top:150px;width:290px;text-align:center;font:800 76px ${COD};color:${ACC}`, "= 100%"); show(tot, at("D", "sau") - .2, { opacity: 0, y: 14 });
+      });
+      const dd = dCard(935, "3", "DICE", P("D", 0) + .4, c => {
+        const dc = die(c, 40, 150, 120, ACC); c.__die = dc;
+        el(c, `left:200px;top:150px;font:800 90px ${LAT};color:${MUTED}`, "→");
+        const w = tile(c, 300, 150, 400, 120, "1 WORD", ACC, 60); show(w, at("D", "word"), { opacity: 0, y: 14 });
+        tl.fromTo(dc, { rotation: 0 }, { rotation: 360, duration: .7, ease: "power2.inOut", immediateRender: false }, at("D", "dice"));
+      });
+      M.fit(D, { y: 170, h: 1130 });
+
+      // diagram: E — turn the dial: the bars sharpen or flatten, the picks change.
+      const eDc = glass(E, 80, 215, 440, 320, CYAN, 30);
+      const ed = dial(eDc, 20, 4, 1, ang(1)); const eRo = ed.ro("T = 1", TEXT);
+      show(eDc, P("E", 0));
+      const ePc = glass(E, 540, 215, 460, 320, CYAN, 30); title(ePc, 28, 14, "3 TRIES");
+      const er = rowsCard(E, 565, 145, "NEXT WORD");
+      show(er.c, P("E", 0) + .2);
+      const st = { T: 1 };
+      const upd = () => { const p = sm(st.T); er.R.forEach((r, i) => { gsap.set(r.fill, { scaleX: p[i] / 100 }); r.num.textContent = p[i].toFixed(1) + "%"; }); gsap.set(ed.needle, { rotation: ang(st.T) }); eRo.textContent = "T = " + (Math.round(st.T * 10) / 10); };
+      upd();
+      [[1, .2, P("E", 1)], [.2, 1, P("E", 3)], [1, 2, P("E", 5)]].forEach(([a, b, t]) => tl.fromTo(st, { T: a }, { T: b, duration: .9, ease: "power2.inOut", onUpdate: upd, immediateRender: false }, t));
+      // picks
+      const picks = (list, t0, t1) => list.forEach((w, i) => { const k = tile(ePc, 20, 76 + i * 72, 420, 60, w, w === "cricket" ? ACC : CYAN, 40); show(k, t0 + i * .25, { opacity: 0, y: 12 }); if (t1) gone(k, t1); });
+      show(ePc, P("E", 2));
+      picks(["cricket", "cricket", "cricket"], P("E", 2), P("E", 3));
+      picks(["cricket", "football", "cricket"], P("E", 4), P("E", 5));
+      picks(["chess", "cricket", "hockey"], P("E", 6));
+      mark(er.R[1].row, CYAN, at("E", "football")); unmark(er.R[1].row, P("E", 5));
+      mark(er.R[3].row, ACC, at("E", "hockey"));
+      M.fit(E, { y: 170, h: 1130 });
+
+      // diagram: F — high T picks a wrong word in code; low T for facts, higher for ideas.
+      const fCard = (y, name, col) => { const c = glass(F, 80, y, 920, 410, col, 30); title(c, 34, 22, name, col); return c; };
+      const f1 = fCard(215, "FACTS · CODE", CYAN);
+      const fd1 = dial(f1, 30, 120, .8, ang(1.8)); const fr1 = fd1.ro("T HIGH", HOT), fr1b = fd1.ro("T LOW", GOOD);
+      const code = el(f1, `left:380px;top:120px;width:510px;height:130px;border-radius:16px;border:2px solid ${ca(MUTED, .5)};background:#0A1020`);
+      el(code, `left:26px;top:34px;font:700 54px ${COD};color:${TEXT};white-space:pre`, "total = a");
+      el(code, `left:386px;top:34px;font:700 54px ${COD};color:${TEXT};white-space:pre`, "b");
+      const opOk = el(code, `left:332px;top:34px;font:800 54px ${COD};color:${GOOD}`, "+"), opBad = el(code, `left:332px;top:34px;font:800 54px ${COD};color:${HOT}`, "-");
+      const wrong = el(f1, `left:380px;top:270px;font:800 52px ${LAT};color:${HOT}`, "✕  WRONG WORD"), right = el(f1, `left:380px;top:270px;font:800 52px ${LAT};color:${GOOD}`, "✓  RIGHT WORD");
+      show(f1, P("F", 0)); show(fd1.outer, P("F", 0)); tl.set([fr1b, right, opBad, wrong], { opacity: 0 }, 0); tl.set(opOk, { opacity: 1 }, 0);
+      tl.set(opOk, { opacity: 0 }, at("F", "galat")); tl.set(opBad, { opacity: 1 }, at("F", "galat")); tl.to(wrong, { opacity: 1, duration: .3, immediateRender: false }, at("F", "galat"));
+      tl.to(fr1, { opacity: 0, duration: .25, immediateRender: false }, at("F", "kam")); tl.to(fr1b, { opacity: 1, duration: .3, immediateRender: false }, at("F", "kam") + .6);
+      swing(fd1, ang(.2), at("F", "kam"), .9);
+      tl.set(opBad, { opacity: 0 }, at("F", "kam") + .7); tl.set(opOk, { opacity: 1 }, at("F", "kam") + .7); tl.set(wrong, { opacity: 0 }, at("F", "kam") + .7); tl.to(right, { opacity: 1, duration: .3, immediateRender: false }, at("F", "kam") + .7);
+      const f2 = fCard(655, "IDEAS · STORIES", ACC);
+      const fd2 = dial(f2, 30, 120, .8, ang(1.2)); const fr2 = fd2.ro("T HIGHER", ACC);
+      const fs1 = el(f2, `left:380px;top:120px;width:510px;font:800 52px ${LAT};color:${TEXT};line-height:1.25`, "A robot learned<br>to paint.");
+      const fs2 = el(f2, `left:380px;top:270px;font:800 52px ${LAT};color:${GOOD}`, "✓  MORE VARIETY");
+      show(f2, P("F", 1) + .5);
+      [fd2.outer, fs1, fs2].forEach((d, i) => show(d, P("F", 1) + .7 + i * .15));
+      M.fit(F, { y: 170, h: 1130 });
+
+      // diagram: G — the interview answer: percent → dice → word; low T sharp, high T flat.
+      pillC(G, "INTERVIEW", 205, P("G", 0));
+      const gF = glass(G, 80, 290, 920, 410, CYAN, 30);
+      const gc = (i, t, draw, lab) => { const x = 24 + i * 311; const cell = el(gF, `left:${x}px;top:30px;width:250px;height:350px`); draw(cell); el(cell, `left:0;top:290px;width:250px;text-align:center;font:800 44px ${LAT};color:${TEXT}`, lab); show(cell, t, { opacity: 0, y: 20 });
+        if (i < 2) show(el(gF, `left:${x + 250}px;top:120px;width:61px;text-align:center;font:800 64px ${LAT};color:${MUTED}`, "→"), t + .2, { opacity: 0, y: 6 }); };
+      gc(0, P("G", 0) + .5, c => sm(1).forEach((p, i) => el(c, `left:0;top:${50 + i * 52}px;width:${p * 3.9}px;height:34px;border-radius:8px;background:${WCOL[i]}`)), "PERCENT");
+      gc(1, at("G", "dice") - .1, c => die(c, 55, 50, 140, ACC), "DICE");
+      gc(2, at("G", "word"), c => tile(c, 0, 70, 250, 120, "cricket", ACC, 50), "1 WORD");
+      show(gF, P("G", 0) + .2);
+      const gW = glass(G, 80, 730, 920, 560, CYAN, 30); title(gW, 34, 20, "WHAT T DOES");
+      const bars = (x0, vals, t) => vals.forEach((p, i) => { const f = el(gW, `left:${x0 + i * 94}px;top:${450 - p * 2.7}px;width:70px;height:${p * 2.7}px;border-radius:10px 10px 0 0;background:${WCOL[i]};transform-origin:50% 100%`);
+        tl.set(f, { scaleY: 0 }, 0); tl.to(f, { scaleY: 1, duration: .55, ease: "power3.out", immediateRender: false }, t + i * .08); });
+      bars(60, sm(.2), at("G", "tez")); bars(520, sm(2), at("G", "sapat"));
+      show(el(gW, `left:30px;top:466px;width:420px;text-align:center;font:800 42px ${LAT};color:${TEXT}`, "LOW T · SHARP"), at("G", "tez"), { opacity: 0, y: 10 });
+      show(el(gW, `left:490px;top:466px;width:420px;text-align:center;font:800 42px ${LAT};color:${TEXT}`, "HIGH T · FLAT"), at("G", "sapat"), { opacity: 0, y: 10 });
+      show(gW, P("G", 2) - .1);
+      M.fit(G, { y: 170, h: 1130 });
+
+      // diagram: H — check yourself: cricket at T = 2? Comment and follow.
+      pillC(H, "CHECK YOURSELF", 205, P("H", 0));
+      const hr = rowsCard(H, 290, 135, "T = 2");
+      const p2 = sm(2);
+      hr.R.forEach((r, i) => { gsap.set(r.fill, { scaleX: p2[i] / 100 }); r.num.textContent = i ? p2[i].toFixed(1) + "%" : "?"; if (!i) r.num.style.color = ACC; });
+      show(hr.c, P("H", 0));
+      const hCm = glass(H, 80, 985, 920, 110, CYAN, 55);
+      el(hCm, `left:43px;top:30px;font:700 44px ${COD};color:#AEB9D1`, "COMMENT..."); show(hCm, at("H", "Comment"), { opacity: 0, y: 22 });
+      const hH = glass(H, 80, 1125, 920, 150, ACC, 28);
+      el(hH, `left:38px;top:48px;font:800 49px ${COD};color:${TEXT}`, "@ai.learnvora");
+      el(hH, `left:615px;top:40px;width:240px;height:85px;border-radius:43px;background:${ACC};display:flex;align-items:center;justify-content:center;font:800 39px ${COD};color:#0B1220`, "FOLLOW");
+      show(hH, at("H", "follow") - .5, { opacity: 0, y: 22 });
+      M.fit(H, { y: 170, h: 1130 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H);
+      M.finish({ kw: { sawal: "gold", alag: "hot", temperature: "gold", score: "cyan", percent: "cyan", dice: "gold", dial: "gold", ooncha: "hot", galat: "hot", kam: "good", comment: "gold", cricket: "gold", strict: "cyan", relaxed: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

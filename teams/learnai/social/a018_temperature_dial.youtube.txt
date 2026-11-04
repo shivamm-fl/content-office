@@ -1,0 +1,13 @@
+LLM temperature: same question, different answer kyun?
+
+Day 18/150: temperature next-word probabilities ko sharp ya flat karta hai. Toy example mein scores T se divide hote hain, percent bante hain, phir ek word sample hota hai. Low T par top word dominate karta hai, high T par answers badalte hain. Percentages invented example hain, real model ke nahi.
+
+Comment karke batao: T 2 par cricket kitne percent tha?
+
+Sources:
+https://huggingface.co/docs/transformers/en/main_classes/text_generation
+https://huggingface.co/blog/how-to-generate
+https://huggingface.co/docs/transformers/en/generation_strategies
+
+Tags: llm temperature,temperature in ai,softmax temperature
+AI-assisted visuals and narration.

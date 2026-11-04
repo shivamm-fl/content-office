@@ -1,0 +1,140 @@
+{
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      "B",
+      1,
+      0
+    ],
+    [
+      "pop",
+      "B",
+      2,
+      0
+    ],
+    [
+      "rise",
+      "B",
+      3,
+      0
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      2,
+      0
+    ],
+    [
+      "click",
+      "D",
+      3,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      3,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      5,
+      0
+    ],
+    [
+      "err",
+      "F",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "F",
+      2,
+      -0.1
+    ],
+    [
+      "ok",
+      "F",
+      2,
+      0.2
+    ],
+    [
+      "pop",
+      "H",
+      1,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Same सवाल पूछा, हर बार अलग जवाब क्यों?",
+      "B": "दोस्त से पूछो: कौन सा game पसंद है? | Strict दोस्त हर बार cricket बोलेगा. | Relaxed दोस्त कभी football भी बोल देगा. || AI में इसी ढील का नाम temperature है. | Model का मन नहीं बदला, बस चुनाव ढीला हुआ.",
+      "C": "Model अगला word चुनने से पहले हर option को एक score देता है. || \"मेरा favourite खेल है\" के बाद मान लो: cricket 2{two}, football 1{one}, chess 0.5{zero-point-five}, hockey 0{zero}. | ये numbers example हैं, real model के नहीं.",
+      "D": "पहला step: हर score को T से divide करो. | T यानी temperature का number. || दूसरा step: scores को percent में बदलो, ताकि कुल सौ बने. || तीसरा step: उन percent के हिसाब से dice घुमाओ, और एक word चुनो.",
+      "E": "अब dial घुमाते हैं. || T 0.2{zero-point-two} पर cricket 99.3{ninety-nine-point-three} percent. | लगभग हर बार वही जवाब. || T 1{one} पर cricket 57.9{fifty-seven-point-nine}, football 21.3{twenty-one-point-three}. | अब football भी निकलने लगा. || T 2{two} पर cricket 40.9{forty-point-nine}, hockey 15{fifteen} percent. | Bars लगभग बराबर हैं, इसलिए हर बार अलग जवाब.",
+      "F": "ध्यान रखो! T ऊँचा करना हमेशा अच्छा नहीं है. | Facts या code में गलत word चुनने का chance बढ़ता है. | वहाँ T कम रखते हैं. | Ideas और stories में थोड़ा ऊँचा.",
+      "G": "Interview में बोलना: || Model हर step पर percent बनाता है, dice से एक word चुनता है. | Temperature उन percent को तेज़ या सपाट करता है.",
+      "H": "अब बताओ: T 2{two} पर cricket कितने percent था? | Comment करो! AI ऐसे ही concrete examples से सीखने के लिए follow करो."
+    }
+  },
+  "hook_type": "direct_question",
+  "sources": [
+    "https://huggingface.co/docs/transformers/en/main_classes/text_generation",
+    "https://huggingface.co/blog/how-to-generate",
+    "https://huggingface.co/docs/transformers/en/generation_strategies"
+  ],
+  "tts": "owner",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

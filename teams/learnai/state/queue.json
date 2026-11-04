@@ -2195,37 +2195,20 @@
       "title": "Temperature: The Randomness Dial",
       "format": "demo",
       "status": "planned",
-      "one_idea": "Temperature is a dial applied to the model's scores before it picks the next token: the scores are divided by T and turned into probabilities, so a low T makes the top word dominate (the answer barely changes between runs) and a high T flattens the shortlist (rarer words get picked and answers vary). Same question, different answer = sampling with T above zero, not the model changing its mind.",
+      "one_idea": "Temperature is a dial applied to the model's scores before it picks the next token: scores divided by T and turned into probabilities; low T makes the top word dominate, high T flattens the shortlist. Same question, different answer = sampling with T above zero, not the model changing its mind.",
       "hook_type": "direct_question",
       "spoken_hook": "Same सवाल पूछा, हर बार अलग जवाब क्यों?",
-      "hook_source": "frustration the viewer knows (learnings 2026-10-27, a009), plain words",
-      "visual_idea": "Four labelled bars (cricket, football, chess, hockey) for the shortlist of the next word after 'Mera favourite khel hai'; a dial slides 0.2 -> 0.7 -> 1.0 -> 2.0 and the bars sharpen or flatten with the real percentages; a dice roll picks a bar; the same prompt asked three times shows three different picks at T=2.0 and the same pick at T=0.2.",
-      "everyday_anchor": "Asking a friend to pick a game: a strict friend always names his favourite, a relaxed one sometimes names another.",
-      "example": "EXAMPLE (invented scores, run in code, output in state/runs/a018_temperature_run_output.txt): scores cricket 2.0, football 1.0, chess 0.5, hockey 0.0. T=0.2: cricket 99.3%; T=0.7: 70.7 / 16.9 / 8.3 / 4.1; T=1.0: 57.9 / 21.3 / 12.9 / 7.8; T=2.0: 40.9 / 24.8 / 19.3 / 15.0. Toy numbers, not a real model.",
+      "hook_formula": "direct_question",
+      "length_target_s": 105,
+      "cover_headline": "Temperature: The Randomness Dial",
+      "thumb_text": "RANDOMNESS DIAL",
       "sources": [
         "https://huggingface.co/docs/transformers/en/main_classes/text_generation",
         "https://huggingface.co/blog/how-to-generate",
         "https://huggingface.co/docs/transformers/en/generation_strategies"
       ],
-      "facts_to_verify": [
-        "HF GenerationConfig: temperature is 'the value used to module the next token probabilities', default 1.0 if not set (fetched 2026-11-04)",
-        "HF blog: lowering the softmax temperature makes the distribution sharper; as temperature approaches zero sampling behaves like greedy decoding (fetched)",
-        "HF generation guide: sampling picks a token randomly from the probability distribution; greedy picks the most likely (fetched)",
-        "Do NOT claim temperature 0 gives identical output every time; do not claim a temperature range or default for any vendor API (not fetched)",
-        "All percentages are toy arithmetic (softmax of invented scores), run in code"
-      ],
-      "length_target_s": 105,
-      "cover_headline": "Temperature: The Randomness Dial",
-      "thumb_text": "RANDOMNESS DIAL",
-      "keywords": [
-        "llm temperature",
-        "temperature in ai",
-        "softmax temperature"
-      ],
-      "why_it_should_work": "Series days with a concrete frustration opener and a drawn dial; a011/a012 style. Roadmap note: q04/q105/q107 cover the interview angle; this day teaches the mechanism stand-alone.",
       "approval_status": "pending",
-      "production_date_ist": "2026-11-04",
-      "hook_formula": "direct_question"
+      "production_date_ist": "2026-11-04"
     },
     {
       "id": "q138",
