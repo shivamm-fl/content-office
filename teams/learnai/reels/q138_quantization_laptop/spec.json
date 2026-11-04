@@ -1,0 +1,112 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "err",
+      "C",
+      3,
+      0.2
+    ],
+    [
+      "click",
+      "D",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "D",
+      2,
+      -0.1
+    ],
+    [
+      "ok",
+      "E",
+      3,
+      0.2
+    ],
+    [
+      "ok",
+      "F",
+      3,
+      0.3
+    ],
+    [
+      "warn",
+      "G",
+      0,
+      0.2
+    ],
+    [
+      "ok",
+      "G",
+      1,
+      0.5
+    ],
+    [
+      "save",
+      "I",
+      1,
+      0.5
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Hugging Face quantization से model की memory घटाता है। | 7B{seven-B} model laptop पर कैसे चलाओगे?",
+      "B": "@emph तुम्हारा जवाब होना चाहिए: weights को कम bits में store करो, इसी को quantization बोलते हैं। | 3{three} steps हैं, एक-एक करके देखते हैं।",
+      "C": "मान लो laptop में 16{sixteen} GB memory है। | 7B{seven-B} model यानी 7{seven} billion weights, यानी model के अंदर के numbers। | Normal fp16 format में हर weight 2{two} bytes लेता है, तो 7{seven} billion times 2{two} bytes equals 14{fourteen} GB। | 16{sixteen} GB में से 14{fourteen} model ने ले लिए, सिस्टम और apps के लिए जगह नहीं बची। | सीधा चलाओगे, तो चलेगा नहीं।",
+      "D": "पहला step: memory निकालो। | Weight memory equals parameters times bytes per weight, क्योंकि हर weight को उतनी ही जगह चाहिए। | इसलिए memory घटानी है, तो bytes per weight घटाओ।",
+      "E": "दूसरा step: int8 पर आओ। | Int8 यानी हर weight सिर्फ 8{eight} bits का whole number, 1{one} byte। | Photo को lower quality में save करने जैसा है: file छोटी, picture लगभग वही। | अब 7{seven} billion times 1{one} byte, यानी 7{seven} GB।",
+      "F": "तीसरा step: int4 पर जाओ। | हर weight 4{four} bits, यानी आधा byte, तो 3.5{three-point-five} GB। | क्योंकि weights के अलावा model जवाब देते वक्त KV cache भी बनाता है, यानी अब तक की बातचीत का याद रखा हुआ हिस्सा। | उसे अलग memory चाहिए, इसलिए 16{sixteen} GB में 3.5{three-point-five} GB वाला model आराम से चलता है।",
+      "G": "एक boundary है: कम bits में कभी-कभी थोड़ी accuracy जा सकती है। | इसलिए quantized model को अपने ही task पर test करो, फिर use करो।",
+      "H": "@emph Interview में कहो: weight memory equals parameters times bytes per weight है। | 7B{seven-B} model fp16 में 14{fourteen} GB है, int4 में 3.5{three-point-five} GB, तो laptop पर चलता है; accuracy अपने task पर test करूँगा।",
+      "I": "Comments में बताओ: तुम्हारे laptop में कितनी GB memory है? | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, इसके लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!",
+  "sources": [
+    "https://huggingface.co/docs/transformers/en/quantization/overview",
+    "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
+  ]
+}

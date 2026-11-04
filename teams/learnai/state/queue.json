@@ -2218,27 +2218,20 @@
       "title": "7B Model on a Laptop: Quantization",
       "format": "question",
       "status": "planned",
-      "trap": "Assuming a 7B model simply fits on a laptop (or that quantization is free): the memory is parameters times bytes per weight, and fewer bits can cost some accuracy.",
-      "one_idea": "Quantization stores the weights in lower precision (fp16 -> int8 -> int4) so the model needs less memory. Weight memory = parameters x bytes per weight: a 7B model is 28 GB in fp32, 14 GB in fp16, 7 GB in int8, 3.5 GB in int4 (weights only; the KV cache and runtime need extra, so leave headroom). Boundary: fewer bits can lose some accuracy, so test the quantized model on your own task before shipping.",
       "hook_type": "company_specific",
       "company": "Hugging Face",
       "company_source": "https://huggingface.co/docs/transformers/en/quantization/overview",
       "spoken_hook": "Hugging Face quantization से model की memory घटाता है। 7B model laptop पर कैसे चलाओगे?",
-      "hook_formula": "company_specific (Hugging Face Transformers quantization docs, fetched 2026-11-04; the page supports only what quantization does, not that Hugging Face asks this in interviews)",
-      "hook_source": "strategist, 2026-11-04",
-      "visual_idea": "A laptop with a 16 GB memory bar; a 7B model block of 14 GB (fp16) barely fits; the weights shrink as the dial goes fp16 -> int8 -> int4 with the real GB (14, 7, 3.5) on the bar; then a headroom strip for KV cache; last a small 'test it' check mark.",
-      "everyday_anchor": "Saving a photo at lower quality so it takes less space on the phone.",
-      "example": "EXAMPLE (7B = 7 billion weights, laptop with 16 GB invented; arithmetic run in code, output in state/runs/q138_quant_run_output.txt): fp32 28.0 GB, fp16 14.0 GB, int8 7.0 GB, int4 3.5 GB (decimal GB, weights only).",
       "sources": [
         "https://huggingface.co/docs/transformers/en/quantization/overview",
         "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
       ],
       "facts_to_verify": [
-        "HF quantization overview: lowers memory requirements by storing weights in lower precision while trying to preserve accuracy; fp32 typical, fp16/bf16 popular, some methods go to int8/int4 (fetched 2026-11-04)",
-        "Page notes the picker shows whether a model fits including the KV cache (so weights are not the whole memory)",
-        "Accuracy loss size is NOT quoted: say 'can lose some accuracy, test it' only; no benchmark numbers",
+        "HF quantization overview: lowers memory by storing weights in lower precision while trying to preserve accuracy",
+        "KV cache needs extra memory",
         "GB figures are arithmetic, weights only"
       ],
+      "visual_idea": "laptop 16 GB bar; 7B block shrinks fp16->int8->int4",
       "length_target_s": 105,
       "cover_headline": "7B Model on a Laptop: Quantization",
       "thumb_text": "SHRINK THE MODEL",
@@ -2248,7 +2241,6 @@
         "run llm on laptop",
         "ai engineer interview"
       ],
-      "why_it_should_work": "company_specific is the least used of the last six q (0 of 6); q124 hold was the best of its pair (38 %, 15.2 s) so a second data point is useful.",
       "approval_status": "pending",
       "production_date_ist": "2026-11-04"
     },

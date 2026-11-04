@@ -1,0 +1,7 @@
+7B model laptop par kaise chalaoge?
+
+Hugging Face ke docs ke hisaab se quantization weights ko kam precision mein store karke memory ghatata hai. Weight memory = parameters x bytes per weight. Example: 16 GB laptop, 7B model fp16 mein 14 GB, int8 mein 7 GB, int4 mein 3.5 GB (sirf weights; KV cache alag). Kam bits mein accuracy thodi ja sakti hai, isliye apne task par test karo.
+
+Comment karke batao: tumhare laptop mein kitni GB memory hai?
+
+#AIEngineering #LLM #Learnvora

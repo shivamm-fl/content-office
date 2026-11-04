@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>7B Model on a Laptop: Quantization</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="112.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="112.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="112.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="112.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, TEXT, MUTED } = M;
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const SC = {}; "ABCDEFGHI".split("").forEach((k) => (SC[k] = M.$("#s" + k)));
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const MONO = "font-family:var(--code);font-weight:700;";
+      const txt = (host, x, y, w, size, color, html, extra) => el(host, `left:${x}px;top:${y}px;width:${w}px;text-align:center;${MONO}font-size:${size}px;color:${color};white-space:nowrap;${extra || ""}`, html);
+      const card = (host, x, y, w, h, col, extra) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:22px;border:2px solid ${M.ca(col, 0.55)};background:rgba(16,24,40,.92);${extra || ""}`);
+      const stamp = (host, label, cx, y, col, t) => { const d = el(host, `left:${cx}px;top:${y}px;padding:12px 32px;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.96);${MONO}font-size:52px;color:${col};white-space:nowrap`, label); gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const bitstrip = (host, x, y, n, sz, col, t, each) => { const out = []; for (let i = 0; i < n; i++) out.push(show(el(host, `left:${x + i * (sz + 8)}px;top:${y}px;width:${sz}px;height:${sz}px;border-radius:8px;background:${M.ca(col, 0.85)}`), t + i * (each || 0.05), { opacity: 0, scale: 0.7 })); return out; };
+      const PXG = 51.25, TX = 130, TW = 820, TH = 150;
+      // the laptop memory bar: reused in scenes A, C, E, F (same picture, state carried over)
+      function mem(host, oy, o) {
+        o = o || {}; const t0 = o.t0 ?? 0.1, TY = oy + 120;
+        const pan = el(host, `left:90px;top:${oy}px;width:900px;height:${o.h || 560}px;border-radius:24px;border:1.5px solid rgba(150,175,215,.35);background:rgba(16,24,40,.9)`);
+        show(pan, t0, { opacity: 0 });
+        const head = show(txt(host, TX, oy + 30, 420, 40, TEXT, "LAPTOP · 16 GB", "text-align:left"), t0 + 0.05, { opacity: 0 });
+        const ex = show(el(host, `left:720px;top:${oy + 28}px;padding:6px 20px;border:2px solid ${M.ca(ACC, .7)};border-radius:999px;${MONO}font-size:34px;color:${ACC}`, "EXAMPLE"), t0 + 0.1, { opacity: 0 });
+        const track = show(el(host, `left:${TX}px;top:${TY}px;width:${TW}px;height:${TH}px;border-radius:14px;border:2px solid rgba(150,175,215,.5);background:rgba(255,255,255,.03)`), t0 + 0.1, { opacity: 0 });
+        show(txt(host, TX, TY + TH + 12, 120, 36, MUTED, "0", "text-align:left"), t0 + 0.1, { opacity: 0 });
+        const t16 = show(txt(host, TX + TW - 200, TY + TH + 12, 200, 36, MUTED, "16 GB", "text-align:right"), t0 + 0.1, { opacity: 0 });
+        const w0 = (o.gb || 0) * PXG;
+        const blk = el(host, `left:${TX}px;top:${TY}px;height:${TH}px;width:${w0}px;border-radius:14px;background:${M.ca(ACC, .92)};overflow:hidden`);
+        tl.set(blk, { opacity: o.gb ? 0 : 0 }, 0);
+        if (o.gb) tl.to(blk, { opacity: 1, duration: 0.4, immediateRender: false }, t0 + 0.2);
+        let lastLab = null;
+        const lab = (text, t) => { const s = el(blk, `left:20px;top:0;height:${TH}px;line-height:${TH}px;${MONO}font-size:40px;color:#0B1220;white-space:nowrap`, text); tl.set(s, { opacity: 0 }, 0); tl.set(s, { opacity: 1 }, t); if (lastLab) tl.set(lastLab, { opacity: 0 }, t); lastLab = s; return s; };
+        if (o.lab) lab(o.lab, t0 + 0.2);
+        const fc = o.freeCol || GOOD;
+        const free = el(host, `left:${TX + w0}px;top:${TY}px;width:${TW - w0}px;height:${TH}px;border-radius:14px;border:3px dashed ${M.ca(fc, .8)};background:${M.ca(fc, .1)}`);
+        tl.set(free, { opacity: 0 }, 0);
+        const flab = txt(free, 0, 0, 0, 40, fc, o.freeLab ?? "FREE", `width:100%;height:${TH}px;line-height:${TH}px;left:0;top:0`);
+        const api = { pan, blk, free, TY, lab,
+          showFree: (t) => tl.to(free, { opacity: 1, duration: 0.4, immediateRender: false }, t),
+          hideFree: (t) => tl.to(free, { opacity: 0, duration: 0.25, immediateRender: false }, t),
+          grow: (t, gb, dur) => { tl.to(blk, { opacity: 1, width: gb * PXG, duration: dur || 0.8, ease: "power2.inOut", immediateRender: false }, t); tl.to(free, { left: TX + gb * PXG, width: TW - gb * PXG, duration: dur || 0.8, ease: "power2.inOut", immediateRender: false }, t); },
+          setFreeEnd: (t, gb, dur) => { tl.to(free, { left: TX + gb * PXG, width: TW - gb * PXG, duration: dur || 0.5, ease: "power2.inOut", immediateRender: false }, t); } };
+        if (o.freeNow) { tl.set(free, { opacity: 1 }, t0 + 0.3); }
+        return api;
+      }
+
+      // ---------------- A: hook ----------------
+      // diagram: A
+      M.hook(["7B model on", "a laptop?"], { size: 100, top: 190 });
+      const mA = mem(SC.A, 640, { t0: 0.05, h: 560 });
+      const pillHF = M.pill(SC.A, "HUGGING FACE", at("A", "Hugging"), { x: 60, y: 470, kind: "out", size: 38 });
+      const pillQ = M.pill(SC.A, "QUANTIZATION", at("A", "quantization"), { x: 520, y: 470, kind: "acc", size: 38 });
+      const bigA = el(SC.A, `left:${TX}px;top:${mA.TY}px;width:${14 * PXG}px;height:${TH}px;border-radius:14px;background:${M.ca(ACC, .92)};${MONO}font-size:50px;color:#0B1220;line-height:${TH}px;padding-left:20px;white-space:nowrap`, "7B MODEL");
+      show(bigA, at("A", "7B"), { opacity: 0, x: 60 });
+      const qA = show(txt(SC.A, 560, mA.TY + 330, 380, 100, HOT, "?"), at("A", "chalaoge"), { opacity: 0, scale: 0.8 });
+      show(txt(SC.A, 130, mA.TY + 330, 380, 40, MUTED, "WILL IT FIT?", "text-align:left"), at("A", "laptop"), { opacity: 0 });
+      show(txt(SC.A, 90, 1230, 900, 30, MUTED, "Source: Hugging Face docs"), 0.6, { opacity: 0 });
+
+      // ---------------- B: the answer in one idea, three steps ----------------
+      // diagram: B
+      show(txt(SC.B, 90, 400, 900, 44, MUTED, "ONE WEIGHT"), 6.85, { opacity: 0 });
+      const b16 = []; for (let i = 0; i < 16; i++) b16.push(show(el(SC.B, `left:${114 + (i % 8) * 108}px;top:${470 + Math.floor(i / 8) * 110}px;width:96px;height:96px;border-radius:14px;background:${M.ca(CYAN, .85)}`), 6.85 + i * 0.015, { opacity: 0, scale: 0.8 }));
+      const lbl16 = show(txt(SC.B, 90, 710, 900, 56, CYAN, "16 BITS"), 6.9, { opacity: 0 });
+      b16.slice(8).forEach((b) => tl.to(b, { opacity: 0, scale: 0.6, duration: 0.3, immediateRender: false }, at("B", "kam")));
+      b16.slice(4, 8).forEach((b) => tl.to(b, { opacity: 0, scale: 0.6, duration: 0.3, immediateRender: false }, at("B", "kam")));
+      b16.slice(0, 4).forEach((b) => tl.to(b, { x: 216, y: 55, duration: 0.5, ease: "power2.inOut", immediateRender: false }, at("B", "kam") + 0.2));
+      gone(lbl16, at("B", "kam"));
+      show(txt(SC.B, 90, 710, 900, 56, GOOD, "4 BITS"), at("B", "kam") + 0.3, { opacity: 0 });
+      const stQ = M.pill(SC.B, "QUANTIZATION", at("B", "quantization"), { x: 250, y: 830, kind: "acc", size: 60 });
+      ["1 · MEMORY MATH", "2 · INT8", "3 · INT4"].forEach((s, i) => M.pill(SC.B, s, [at("B", "steps"), at("B", "ek-ek"), at("B", "dekhte")][i] - 0.1, { x: 220, y: 970 + i * 120, kind: "out", size: 46, w: 640 }));
+
+      // ---------------- C: the problem, fp16 does not fit ----------------
+      // diagram: C
+      const mC = mem(SC.C, 300, { t0: 15.3, h: 900, freeCol: HOT, freeLab: "" });
+      const ySq = mC.TY + 330;
+      const sqs = []; for (let r = 0; r < 2; r++) for (let i = 0; i < 20; i++) sqs.push(show(el(SC.C, `left:${TX + i * 41}px;top:${ySq + r * 46}px;width:34px;height:34px;border-radius:7px;background:${M.ca(CYAN, .8)}`), at("C", "billion") + (r * 20 + i) * 0.012, { opacity: 0, scale: 0.7 }));
+      show(txt(SC.C, 90, ySq + 100, 900, 44, CYAN, "7B WEIGHTS"), at("C", "7B"), { opacity: 0 });
+      const c2 = M.pill(SC.C, "fp16 · 2 BYTES", at("C", "fp16"), { x: 250, y: ySq + 190, kind: "out", size: 44 });
+      show(txt(SC.C, 90, ySq + 300, 900, 56, ACC, "7B × 2 B = 14 GB"), at("C", "times"), { opacity: 0 });
+      mC.grow(at("C", "14"), 14, 0.9); mC.lab("14 GB", at("C", "14") + 0.5);
+      mC.showFree(at("C", "sistam") - 0.2);
+      show(txt(SC.C, 580, mC.TY + TH + 82, 380, 38, HOT, "SYSTEM + APPS", "text-align:right"), at("C", "sistam"), { opacity: 0 });
+      stamp(SC.C, "WON'T RUN", 340, mC.TY + TH + 70, HOT, at("C", "chalega"));
+
+      // ---------------- D: the formula and the lever ----------------
+      // diagram: D
+      M.pill(SC.D, "STEP 1", 35.7, { x: 60, y: 235, kind: "acc", size: 48 });
+      const cards = [["MEMORY", "GB", at("D", "memory", 1)], ["PARAMS", "7B", at("D", "parameters")], ["BYTES", "2 B", at("D", "bytes")]];
+      const cx = [90, 400, 710], cw = 260; const cdD = [];
+      cards.forEach((c, i) => { const cd = show(card(SC.D, cx[i], 360, cw, 260, i == 2 ? ACC : CYAN), i == 0 ? 35.8 : c[2] - 0.05, { opacity: 0, y: 30 }); cdD.push(cd);
+        show(txt(SC.D, cx[i], 395, cw, 42, MUTED, c[0]), i == 0 ? 35.9 : c[2], { opacity: 0 }); show(txt(SC.D, cx[i], 480, cw, 90, TEXT, c[1]), c[2] + 0.1, { opacity: 0 }); });
+      show(txt(SC.D, 350, 450, 50, 70, ACC, "="), at("D", "equals"), { opacity: 0 });
+      show(txt(SC.D, 660, 450, 50, 70, ACC, "×"), at("D", "times"), { opacity: 0 });
+      show(txt(SC.D, 90, 665, 900, 48, ACC, "BYTES PER WEIGHT"), at("D", "ghatani") - 0.2, { opacity: 0 });
+      show(el(SC.D, `left:370px;top:735px;${MONO}font-size:60px;color:${GOOD}`, "▼ LOWER"), at("D", "ghatao") - 0.3, { opacity: 0 });
+      [["fp16", 2, 560], ["int8", 1, 280], ["int4", 0.5, 140]].forEach((r, i) => { const y = 840 + i * 150; const tt = at("D", "ghatao") + i * 0.35 - 0.3;
+        show(txt(SC.D, 90, y + 20, 140, 48, TEXT, r[0], "text-align:left"), tt, { opacity: 0 });
+        show(el(SC.D, `left:240px;top:${y}px;width:${r[2]}px;height:100px;border-radius:12px;background:${M.ca(i == 2 ? GOOD : CYAN, .85)}`), tt, { opacity: 0, x: -30 });
+        show(txt(SC.D, 255 + r[2], y + 20, 220, 48, TEXT, r[1] + " B", "text-align:left"), tt + 0.1, { opacity: 0 }); });
+
+      // ---------------- E: int8 ----------------
+      // diagram: E
+      const mE = mem(SC.E, 300, { t0: 47.4, h: 900, gb: 14, lab: "14 GB" });
+      M.pill(SC.E, "INT8", at("E", "int8"), { x: 60, y: 190, kind: "acc", size: 52 });
+      const ey = mE.TY + 330;
+      const e8 = bitstrip(SC.E, 94, ey, 8, 96, GOOD, at("E", "8"), 0.06);
+      const e8l = show(txt(SC.E, 90, ey + 114, 900, 56, GOOD, "8 BITS = 1 BYTE"), at("E", "1"), { opacity: 0 });
+      [...e8, e8l].forEach((d) => gone(d, at("E", "Photo") - 0.1));
+      const phot = [];
+      const phL = show(card(SC.E, 90, ey, 400, 360, CYAN), at("E", "Photo"), { opacity: 0 });
+      const phR = show(card(SC.E, 590, ey, 400, 360, GOOD), at("E", "lower"), { opacity: 0 });
+      const iL = M.icon(SC.E, "image", 190, ey + 30, 200, CYAN), iR = M.icon(SC.E, "image", 725, ey + 60, 130, GOOD);
+      iL.show(at("E", "Photo")); iR.show(at("E", "lower"));
+      phot.push(show(el(SC.E, `left:130px;top:${ey + 250}px;width:320px;height:30px;border-radius:8px;background:${M.ca(CYAN, .8)}`), at("E", "Photo") + 0.2, { opacity: 0, x: -20 }));
+      phot.push(show(el(SC.E, `left:630px;top:${ey + 250}px;width:130px;height:30px;border-radius:8px;background:${M.ca(GOOD, .8)}`), at("E", "chhoti") - 0.2, { opacity: 0, x: -20 }));
+      phot.push(show(txt(SC.E, 90, ey + 295, 400, 36, MUTED, "FULL QUALITY"), at("E", "Photo") + 0.2, { opacity: 0 }));
+      phot.push(show(txt(SC.E, 590, ey + 295, 400, 36, MUTED, "LOWER QUALITY"), at("E", "lower") + 0.2, { opacity: 0 }));
+      phot.push(show(txt(SC.E, 490, ey + 140, 100, 70, ACC, "≈"), at("E", "wahi"), { opacity: 0 }));
+      [phL, phR, iL, iR, ...phot].forEach((d) => { if (d.hide) d.hide(at("E", "ab") - 0.1); else gone(d, at("E", "ab") - 0.1); });
+      show(txt(SC.E, 90, ey + 60, 900, 76, ACC, "7B × 1 B"), at("E", "ab"), { opacity: 0 });
+      mE.showFree(at("E", "ab"));
+      mE.grow(at("E", "byte"), 7, 0.9); mE.lab("7 GB", at("E", "GB") - 0.2);
+      show(txt(SC.E, 90, ey + 150, 900, 70, GOOD, "= 7 GB"), at("E", "GB") - 0.1, { opacity: 0 });
+
+      // ---------------- F: int4 + KV cache ----------------
+      // diagram: F
+      const mF = mem(SC.F, 300, { t0: 61.7, h: 900, gb: 7, lab: "7 GB", freeNow: true });
+      mF.free.style.left = (TX + 7 * PXG) + "px"; mF.free.style.width = (TW - 7 * PXG) + "px";
+      M.pill(SC.F, "INT4", at("F", "int4"), { x: 60, y: 190, kind: "acc", size: 52 });
+      const fy = mF.TY + 330;
+      const f4 = bitstrip(SC.F, 94, fy, 4, 96, GOOD, at("F", "4"), 0.08);
+      const f4l = show(txt(SC.F, 90, fy + 114, 900, 56, GOOD, "4 BITS = ½ BYTE"), at("F", "aadha"), { opacity: 0 });
+      mF.grow(at("F", "35") - 0.1, 3.5, 0.9); mF.lab("3.5 GB", at("F", "GB") - 0.2);
+      [...f4, f4l].forEach((d) => gone(d, at("F", "kyonki") - 0.1));
+      // KV cache block (schematic width)
+      const kv = el(SC.F, `left:${TX + 3.5 * PXG}px;top:${mF.TY}px;width:${5 * PXG}px;height:${TH}px;border-radius:0 14px 14px 0;background:${M.ca(CYAN, .85)};${MONO}font-size:38px;color:#0B1220;line-height:${TH}px;text-align:center;white-space:nowrap;overflow:hidden`, "KV CACHE");
+      show(kv, at("F", "KV"), { opacity: 0 });
+      tl.to(mF.free, { left: TX + 8.5 * PXG, width: TW - 8.5 * PXG, duration: 0.5, ease: "power2.inOut", immediateRender: false }, at("F", "KV"));
+      const chatI = M.icon(SC.F, "chat", 160, fy + 20, 150, CYAN); chatI.show(at("F", "baatchit") - 0.3);
+      show(txt(SC.F, 340, fy + 60, 600, 56, CYAN, "CHAT SO FAR", "text-align:left"), at("F", "baatchit") - 0.2, { opacity: 0 });
+      show(txt(SC.F, 340, fy + 135, 600, 40, MUTED, "↑ NEEDS ITS OWN SPACE", "text-align:left;color:#F3EFE6"), at("F", "alag"), { opacity: 0 });
+      stamp(SC.F, "RUNS ✓", 540, fy + 250, GOOD, at("F", "aaram"));
+
+      // ---------------- G: boundary ----------------
+      // diagram: G
+      show(txt(SC.G, 90, 380, 900, 44, MUTED, "ACCURACY"), 81.7, { opacity: 0 });
+      const gy = [450, 640];
+      [["fp16", 1, CYAN], ["int4", 0.9, ACC]].forEach((r, i) => { const tt = 81.8 + i * 0.5;
+        show(card(SC.G, 90, gy[i], 900, 150, r[2]), tt, { opacity: 0 });
+        show(txt(SC.G, 120, gy[i] + 45, 160, 52, TEXT, r[0], "text-align:left"), tt, { opacity: 0 });
+        show(el(SC.G, `left:300px;top:${gy[i] + 40}px;width:${i ? 560 * 0.9 : 560}px;height:70px;border-radius:10px;background:${M.ca(r[2], .8)}`), tt + 0.1, { opacity: 0, x: -30 }); });
+      const q4 = show(txt(SC.G, 830, 650, 120, 90, HOT, "?"), at("G", "accuracy"), { opacity: 0, scale: 0.8 });
+      show(card(SC.G, 90, 850, 900, 330, GOOD), at("G", "task") - 0.5, { opacity: 0 });
+      show(txt(SC.G, 120, 870, 520, 46, GOOD, "YOUR OWN TASK", "text-align:left"), at("G", "task") - 0.4, { opacity: 0 });
+      show(el(SC.G, `left:700px;top:872px;padding:4px 18px;border:2px solid ${M.ca(ACC, .7)};border-radius:999px;${MONO}font-size:34px;color:${ACC}`, "EXAMPLE"), at("G", "task") - 0.3, { opacity: 0 });
+      [["fp16", CYAN, 940, [1, 1, 1, 1, 1]], ["int4", ACC, 1050, [1, 1, 1, 1, 0]]].forEach(([nm, col, y, res]) => {
+        show(txt(SC.G, 120, y + 12, 150, 48, TEXT, nm, "text-align:left"), at("G", "task") - 0.3, { opacity: 0 });
+        res.forEach((ok, k) => show(el(SC.G, `left:${300 + k * 120}px;top:${y}px;width:100px;height:84px;border-radius:12px;background:${M.ca(ok ? GOOD : HOT, .85)};${MONO}font-size:52px;color:#0B1220;text-align:center;line-height:84px`, ok ? "✓" : "✗"), at("G", "test") + k * 0.12 + (nm == "int4" ? 0.7 : 0), { opacity: 0, scale: 0.8 })); });
+      gone(q4, at("G", "test") + 1.2);
+      stamp(SC.G, "CHECK, THEN USE", 540, 1200, GOOD, at("G", "phir"));
+
+      // ---------------- H: interview answer ----------------
+      // diagram: H
+      M.pill(SC.H, "INTERVIEW ANSWER", 89.7, { x: 60, y: 235, kind: "acc", size: 44 });
+      const h1 = show(card(SC.H, 90, 370, 900, 260, ACC), 89.75, { opacity: 0 });
+      show(txt(SC.H, 90, 400, 900, 44, MUTED, "WEIGHT MEMORY"), 89.8, { opacity: 0 });
+      show(txt(SC.H, 90, 490, 900, 80, TEXT, "PARAMS × BYTES"), at("H", "parameters"), { opacity: 0 });
+      show(card(SC.H, 90, 680, 900, 330, CYAN), at("H", "7B") - 0.1, { opacity: 0 });
+      show(txt(SC.H, 130, 720, 380, 84, TEXT, "14 GB"), at("H", "14"), { opacity: 0 });
+      show(txt(SC.H, 130, 820, 380, 44, MUTED, "fp16"), at("H", "fp16"), { opacity: 0 });
+      show(txt(SC.H, 440, 730, 200, 90, ACC, "→"), at("H", "int4") - 0.2, { opacity: 0 });
+      show(txt(SC.H, 570, 720, 380, 84, GOOD, "3.5 GB"), at("H", "35"), { opacity: 0 });
+      show(txt(SC.H, 570, 820, 380, 44, MUTED, "int4"), at("H", "int4"), { opacity: 0 });
+      show(txt(SC.H, 90, 910, 900, 60, GOOD, "LAPTOP ✓"), at("H", "laptop"), { opacity: 0 });
+      show(card(SC.H, 90, 1060, 900, 200, GOOD), at("H", "test") - 0.4, { opacity: 0 });
+      show(txt(SC.H, 90, 1120, 900, 68, GOOD, "TEST ON YOUR TASK"), at("H", "test") - 0.3, { opacity: 0 });
+
+      // ---------------- I: comment + follow ----------------
+      // diagram: I
+      const cc = show(card(SC.I, 120, 400, 840, 560, CYAN), 104.2, { opacity: 0 });
+      show(txt(SC.I, 120, 430, 840, 44, CYAN, "COMMENT KARO"), 104.3, { opacity: 0 });
+      [["8 GB", 0], ["16 GB", 1], ["32 GB", 2]].forEach(([l, i]) => M.pill(SC.I, l, at("I", "memory") + 0.2 + i * 0.35, { x: 190 + i * 250, y: 550, kind: "out", size: 44 }));
+      show(el(SC.I, `left:160px;top:810px;width:760px;height:90px;border-radius:45px;border:1.5px solid rgba(150,175,215,.35);${MONO}font-size:36px;color:#8592AD;display:flex;align-items:center;padding:0 34px`, "Add a comment..."), 104.9, { opacity: 0 });
+      const fb = M.pill(SC.I, "+  FOLLOW", at("I", "follow") - 0.4, { x: 340, y: 1060, kind: "acc", size: 52, w: 400 });
+      tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("I", "follow"));
+
+      M.finish({ kw: { quantization: "gold", int8: "cyan", int4: "cyan", kv: "cyan", "14": "gold", "35": "good", "7": "gold", test: "good", accuracy: "hot", memory: "gold", fp16: "cyan" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

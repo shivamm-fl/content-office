@@ -1,0 +1,12 @@
+7B model on a laptop: quantization
+
+Example: 16 GB laptop, 7B model. Weight memory = parameters x bytes per weight: fp16 14 GB, int8 7 GB, int4 3.5 GB (weights only, arithmetic, KV cache needs extra memory). Quantization stores weights in lower precision to cut memory; fewer bits can cost some accuracy, so test the quantized model on your own task.
+
+Comment karke batao: tumhare laptop mein kitni GB memory hai?
+
+Sources:
+https://huggingface.co/docs/transformers/en/quantization/overview
+https://huggingface.co/docs/transformers/en/main_classes/text_generation
+
+Tags: llm quantization,int4 int8 model,run llm on laptop,ai engineer interview
+AI-assisted visuals and narration.
