@@ -13,8 +13,7 @@
     "D",
     "E",
     "F",
-    "G",
-    "H"
+    "G"
   ],
   "min": {
     "A": 2.5,
@@ -23,25 +22,91 @@
     "D": 2.5,
     "E": 2.5,
     "F": 2.5,
-    "G": 2.5,
-    "H": 2.5
+    "G": 2.5
   },
   "tail": {},
-  "cues": [],
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      "B",
+      3,
+      0
+    ],
+    [
+      "pop",
+      "B",
+      4,
+      0
+    ],
+    [
+      "click",
+      "C",
+      0,
+      0
+    ],
+    [
+      "rise",
+      "C",
+      2,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      1,
+      0
+    ],
+    [
+      "click",
+      "D",
+      3,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      5,
+      0
+    ],
+    [
+      "pop",
+      "E",
+      3,
+      0
+    ],
+    [
+      "dip",
+      "F",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "G",
+      2,
+      0
+    ]
+  ],
   "sources": [
     "https://huggingface.co/docs/transformers/en/generation_strategies",
     "https://huggingface.co/docs/transformers/en/kv_cache"
   ],
   "copy": {
     "hi": {
-      "A": "AI पूरा answer एक साथ लिखता है? | एक छोटा example लो: prompt है, Complete: The sky। | हमें समझना है कि इसके बाद text कैसे बढ़ता है।",
-      "B": "Model अभी मिले text से अगले token की probabilities निकालता है। | Token text का piece है; वह word, word का हिस्सा या punctuation हो सकता है। | इस simplified example में अगले pieces हैं, is और was।",
-      "C": "मान लो is की probability point seven और was की point three है। | ये teaching के लिए illustrative pieces और numbers हैं, actual model run नहीं। | इस step में हमारी selection rule is चुनती है।",
-      "D": "चुना हुआ piece text में जोड़ो: The sky is। | अब यही बढ़ा हुआ prefix अगले step का context है। | Model इस नए context के आधार पर फिर अगले token की probabilities देता है।",
-      "E": "अगले step में illustrative choices blue और clear हैं। | मान लो blue point six, clear point four; इस बार blue चुना गया। | Text अब The sky is blue है। पिछले step की probability table फिर से reuse नहीं हुई।",
-      "F": "यही loop है: next token score करो, token चुनो, prefix में जोड़ो, फिर repeat। | हमेशा सबसे likely token चुनना ही अकेला तरीका नहीं है; sampling जैसे दूसरे selection rules भी हैं। | आज focus इस repeat होने वाले generation loop पर है।",
-      "G": "Loop stop token, configured stop condition या output limit पर रुक सकता है। | Stop signal को answer के ordinary word की तरह दिखाना जरूरी नहीं। | Server एक generation request के अंदर कई token steps चला सकता है; हर word पर अलग HTTP call जरूरी नहीं।",
-      "H": "तो answer चुने हुए tokens जोड़कर बढ़ता है। | Comments में बताओ: is जोड़ने के बाद next step का context The sky होगा, या The sky is? | AI को concrete examples से समझने के लिए follow करो।"
+      "A": "@hook AI पूरा answer एक साथ लिखता है? | नहीं, एक-एक piece जोड़कर बनाता है.",
+      "B": "समझो. AI को complete करना है: | The sky... || Model पहले अगले piece के options निकालता है. | is, 70{seventy} percent. | was, 30{thirty} percent. || ये numbers सिर्फ़ समझाने के लिए हैं, real model के नहीं.",
+      "C": "अब is चुना गया. | Text बना: The sky is. || ध्यान दो! अब ये बढ़ा हुआ text ही अगले step का input है.",
+      "D": "फिर options आए: | blue, 60{sixty} percent. | clear, 40{forty} percent. | इस बार blue चुना गया. || Text बना: The sky is blue. || बस यही पूरा loop है!",
+      "E": "Piece का नाम token है. | वो पूरा word हो सकता है, word का हिस्सा, या punctuation. || ये कब रुकता है? | जब stop token आए, | या output की limit पहुँच जाए.",
+      "F": "Interview में याद रखना: || एक: अगले token के options निकालो. || दो: एक चुनो, text में जोड़ो. || तीन: नए text के साथ फिर से repeat!",
+      "G": "अब बताओ: | blue चुनने के बाद अगला step किस text को देखेगा, | The sky, या The sky is blue? || Comment करो! AI ऐसे ही concrete examples से सीखने के लिए follow करो."
     }
-  }
+  },
+  "hook_type": "direct_question"
 }
