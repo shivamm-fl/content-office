@@ -1,0 +1,7 @@
+Fraud ke labels nahi hain, phir bhi unusual charges kaise pakdoge?
+
+Example: 20 normal charges Rs 500 ke aaspas aur ek Rs 50,000. Average aur standard deviation se z-score 4.47 aaya, flag ho gaya. Par Rs 40,000 ka doosra charge aaya toh standard deviation phool gaya, z-score 2.75 raha aur wo bach nikla. Median aur MAD se modified z-score (3.5 se upar flag) dono pakde gaye, 20 normal mein se ek bhi nahi. Flag fraud ka saboot nahi, human review ka case hai.
+
+Comment karke batao: tumne pehle average wala tareeka lagaya tha, haan ya nahi?
+
+#AIEngineering #AnomalyDetection #Learnvora

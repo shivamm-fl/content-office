@@ -2277,37 +2277,19 @@
       "title": "Fraud Without Labels: Anomaly Detection",
       "format": "question",
       "status": "planned",
-      "trap": "Flagging by average and standard deviation (z-score): a big charge inflates both, so a second big charge hides behind the first (masking).",
-      "one_idea": "With no fraud labels you cannot train a classifier, so define 'normal' from the data and flag what sits far from it (unsupervised anomaly detection). A mean and standard deviation z-score looks natural but breaks: one 50,000 charge pushes the std to about 10,500 and a second charge of 40,000 gets z 2.75, under the 3 line, and slips through. The median and MAD modified z-score (flag above 3.5, per NIST) caught both, and flagged none of the 20 normal charges. Boundary: for many features at once use an unsupervised model such as Isolation Forest, and treat flags as cases for a human to review, not proof of fraud.",
       "hook_type": "relatable_stake",
       "spoken_hook": "Fraud के labels नहीं हैं। फिर भी कैसे पकड़ोगे?",
       "hook_formula": "relatable_stake (a concrete job with no labels)",
       "hook_source": "strategist, 2026-11-04",
-      "visual_idea": "A column of 20 card charges around 500 plus one 50,000 card; a red z-score ruler flags it; then a second 40,000 card joins, the ruler stretches (std jumps) and the 40,000 card slips under the line; the median + MAD ruler stays put and flags both with red marks; closing strip: 'human review'.",
-      "everyday_anchor": "A class marks list where one topper's score drags the class average up so a second topper looks ordinary; the middle student's mark (median) does not move.",
-      "example": "EXAMPLE (invented amounts, 20 normal charges 480 to 530 plus 50000 and 40000, run in code, output in state/runs/q139_anomaly_run_output.txt): one big charge: mean 2861, std 10541, z 4.47 flagged; two big charges: mean 4550, std 12880, 50000 z 3.53 flagged, 40000 z 2.75 NOT flagged; modified z (median 506) 2782 and 2220, both flagged, 0 normal charges flagged.",
-      "sources": [
-        "https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h.htm",
-        "https://scikit-learn.org/stable/modules/outlier_detection.html"
-      ],
-      "facts_to_verify": [
-        "NIST handbook: z-score = number of standard deviations from the mean, can be misleading for small samples; masking can hide outliers; modified z-score with median and MAD, flag above 3.5 (Iglewicz and Hoaglin) (fetched 2026-11-04)",
-        "scikit-learn: outlier detection is unsupervised anomaly detection, estimators fit on unlabeled data; Isolation Forest isolates observations with random splits, anomalies get shorter paths (fetched 2026-11-04)",
-        "The modified z formula in the run uses 0.6745*(x-median)/MAD, NIST-recommended form",
-        "Flags are candidates for review; no accuracy or real fraud-rate claim"
-      ],
       "length_target_s": 110,
       "cover_headline": "Fraud Detection Without Labels",
       "thumb_text": "NO LABELS",
-      "keywords": [
-        "anomaly detection",
-        "fraud detection without labels",
-        "isolation forest",
-        "ai engineer interview"
-      ],
-      "why_it_should_work": "Different hook type from q138 as required; relatable_stake and interviewer_asked are close in our numbers (~58-61 % skip, 2026-10-18); a concrete masking number gives a proven-by-run surprise.",
       "approval_status": "pending",
-      "production_date_ist": "2026-11-04"
+      "production_date_ist": "2026-11-04",
+      "sources": [
+        "https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h.htm",
+        "https://scikit-learn.org/stable/modules/outlier_detection.html"
+      ]
     }
   ]
 }

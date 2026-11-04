@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Fraud Without Labels: Anomaly Detection</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="113" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="113" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="113" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="113" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+Viz.install(M);
+const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const at = (sc, w, n) => M.W(sc, w, n);
+const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+const MUT = "#8592AD", TXT = "#E8EDF6";
+const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+  if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:18px;font-size:34px;color:${col};text-align:left`; } return d; };
+const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t); return d; };
+const stamp = (host, txt, cx, y, col, t) => { const d = el(host, `left:${cx}px;top:${y}px;padding:10px 28px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 44px var(--code);color:${col};white-space:nowrap`, txt);
+  gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+const tag = (host, txt, x, y, col, t, size) => show(el(host, `left:${x}px;top:${y}px;padding:6px 22px;border-radius:999px;background:${col};color:#06101F;font:800 ${size || 36}px var(--lat);white-space:nowrap`, txt), t, { opacity: 0, scale: 0.8 });
+const chip = (host, x, y, w, lab, val, col, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:104px;border-radius:18px;border:2px solid ${M.ca(col, .6)};background:${M.ca(col, .10)}`);
+  el(d, `left:22px;top:6px;font:700 32px var(--lat);color:${MUT}`, lab); el(d, `left:22px;top:42px;font:800 52px var(--code);color:${col};white-space:nowrap`, val); return show(d, t); };
+
+// ---------- shared dot plot (B, C, F): broken axis, 20 normal charges piled near Rs 500 ----------
+const X = (v) => v <= 1000 ? 100 + v * 0.24 : 400 + (v - 30000) * 0.02636;
+const AXY = 1040;
+function strip(host, t0, pileAt) {
+  show(panel(host, 60, 430, 960, 810, CYAN), t0);
+  show(el(host, "left:100px;top:445px;padding:4px 20px;border:2px solid #F2B544;border-radius:999px;font:800 32px var(--lat);color:#F2B544", "EXAMPLE"), t0);
+  show(el(host, `left:100px;top:${AXY}px;width:240px;height:4px;background:${MUT}`), t0);
+  show(el(host, `left:400px;top:${AXY}px;width:580px;height:4px;background:${MUT}`), t0);
+  show(el(host, `left:352px;top:${AXY - 26}px;font:700 44px var(--code);color:${MUT}`, "//"), t0);
+  for (let i = 0; i < 20; i++) show(el(host, `left:213px;top:${AXY - 20 - i * 16}px;width:14px;height:14px;border-radius:50%;background:${CYAN}`), pileAt + i * (pileAt > t0 + 0.2 ? 0.04 : 0), { opacity: 0, scale: 0.3 });
+  show(el(host, `left:${X(500) - 60}px;top:${AXY + 18}px;font:700 36px var(--code);color:${TXT};white-space:nowrap`, "Rs 500"), pileAt + 0.3);
+}
+const bigDot = (host, v, t, col) => show(el(host, `left:${X(v) - 22}px;top:${AXY - 46}px;width:44px;height:44px;border-radius:50%;background:${col || ACC}`), t, { opacity: 0, scale: 0.3 });
+const rsLab = (host, txt, v, t) => show(el(host, `right:${1080 - Math.min(X(v) + 80, 1010)}px;top:${AXY + 18}px;font:700 36px var(--code);color:${TXT};white-space:nowrap`, txt), t);
+const thrLine = (host, v, txt, col, t) => { const w = el(host, `left:${X(v)}px;top:700px;width:6px;height:340px;background:${col}`);
+  el(w, `left:-45px;top:-58px;padding:4px 20px;border-radius:999px;background:${col};color:#06101F;font:800 36px var(--lat);white-space:nowrap`, txt); show(w, t, { opacity: 0, scaleY: 0.2, transformOrigin: "50% 100%" }); return w; };
+
+// ================= A: hook + ledger =================
+M.hook(["Fraud ke labels nahi", "Phir kaise pakdoge?"], { size: 92, top: 230 });
+// diagram: A
+{
+  const led = panel(A, 100, 480, 640, 750, CYAN, "CARD CHARGES");
+  el(led, "right:26px;top:22px;font:800 34px var(--lat);color:#F2B544", "FRAUD?");
+  const amts = ["Rs 510", "Rs 495", "Rs 502", "Rs 488", "Rs 520", "Rs 505", "Rs 50,000"]; const rows = [], qs = [];
+  amts.forEach((a, i) => { const r = el(led, `left:18px;top:${84 + i * 92}px;width:604px;height:80px;border-radius:14px;border:1.5px solid rgba(150,175,215,.3);background:rgba(150,175,215,.06)`);
+    el(r, "left:24px;top:12px;font:700 46px var(--code)", a); qs.push(el(r, "right:34px;top:8px;font:800 54px var(--code);color:#F2B544", "?")); rows.push(r); });
+  const nrm = at("A", "normal"); rows.slice(0, 6).forEach((r, i) => tl.to(r, { backgroundColor: M.ca(CYAN, .16), borderColor: M.ca(CYAN, .7), duration: 0.3, immediateRender: false }, nrm + i * 0.08));
+  show(el(A, `left:760px;top:${480 + 90}px;width:8px;height:${6 * 92 - 14}px;border-radius:4px;background:${CYAN}`), nrm + 0.1, { opacity: 0, scaleY: 0.2 });
+  tag(A, "NORMAL", 785, 480 + 84 + 235, CYAN, nrm + 0.2, 38);
+  tl.to(rows[6], { backgroundColor: M.ca(HOT, .18), borderColor: HOT, duration: 0.3, immediateRender: false }, at("A", "door"));
+  tl.set(qs[6], { opacity: 0 }, at("A", "flag")); show(el(rows[6], `right:30px;top:12px;font:800 44px var(--code);color:${HOT}`, "FLAG"), at("A", "flag"), { opacity: 0, scale: 0.8 });
+  tag(A, "OUTLIER", 770, 480 + 84 + 6 * 92 + 16, HOT, at("A", "outlier"), 38);
+  [0, 1, 2].forEach((k) => M.pill(A, `STEP ${k + 1}`, at("A", "steps") + k * 0.2 - 0.4, { x: 110 + k * 290, y: 1250, kind: "out", size: 40 }));
+}
+M.fit(A, { y: 460, h: 880 });
+
+// ================= B: z-score, one big charge =================
+// diagram: B
+{
+  strip(B, M.P("B", 0), at("B", "20"));
+  bigDot(B, 50000, at("B", "50000"), ACC); rsLab(B, "Rs 50,000", 50000, at("B", "50000"));
+  chip(B, 100, 510, 400, "MEAN", "2861", CYAN, at("B", "average"));
+  chip(B, 540, 510, 440, "STD", "10541", CYAN, at("B", "standard"));
+  const q = show(el(B, "left:530px;top:820px;font:800 52px var(--code);color:#F2B544;white-space:nowrap", "z = ?"), at("B", "z-score"));
+  show(el(B, `left:250px;top:900px;width:680px;height:6px;background:${ACC}`), at("B", "z-score"), { opacity: 0, scaleX: 0.1, transformOrigin: "0 50%" });
+  gone(q, at("B", "447") - 0.05); show(el(B, `left:530px;top:810px;font:800 60px var(--code);color:${HOT};white-space:nowrap`, "z = 4.47"), at("B", "447"));
+  thrLine(B, 34484, "z = 3", HOT, at("B", "3"));
+  tag(B, "FLAG", X(50000) - 55, AXY - 120, HOT, at("B", "flag"), 40);
+}
+M.fit(B, { y: 190, h: 1120 });
+
+// ================= C: masking =================
+// diagram: C
+{
+  const t0 = M.P("C", 0); strip(C, t0, t0);
+  show(el(C, `left:${X(50000) - 22}px;top:${AXY - 46}px;width:44px;height:44px;border-radius:50%;background:${HOT}`), t0); rsLab(C, "Rs 50,000", 50000, t0);
+  const m0 = chip(C, 100, 510, 400, "MEAN", "2861", CYAN, t0); const s0 = chip(C, 540, 510, 440, "STD", "10541", CYAN, t0);
+  const line = thrLine(C, 34484, "z = 3", HOT, t0);
+  bigDot(C, 40000, at("C", "40000"), ACC); const l40 = rsLab(C, "Rs 40,000", 40000, at("C", "40000") + 0.2); l40.style.right = "auto"; l40.style.left = (X(40000) - 100) + "px";
+  const ph = at("C", "phula"); gone(s0, ph); gone(m0, ph);
+  chip(C, 100, 510, 400, "MEAN", "4549", HOT, ph); chip(C, 540, 510, 440, "STD", "12880", HOT, ph);
+  tl.to(line, { x: X(43189) - X(34484), duration: 0.8, ease: "power3.inOut", immediateRender: false }, ph);
+  show(el(C, `left:${X(40000) - 270}px;top:880px;font:800 52px var(--code);color:${ACC};white-space:nowrap`, "z = 2.75"), at("C", "275"));
+  stamp(C, "MASKED", 480, 1130, HOT, at("C", "chhupa"));
+}
+M.fit(C, { y: 190, h: 1120 });
+
+// ---------- sorted bars (D, E) ----------
+const NORM = [480,481,484,487,492,495,500,500,500,502,506,506,511,513,517,518,519,520,524,526];
+const VALS = NORM.concat([40000, 50000]); const BX = (i) => 105 + i * 40; const BASE = 1000, BH = 420;
+function bars(host, t0, fr, cols) {
+  const bs = VALS.map((v, i) => { const b = el(host, `left:${BX(i)}px;top:${BASE - BH}px;width:30px;height:${BH}px;border-radius:6px 6px 0 0;background:${cols[i]};transform-origin:50% 100%`); tl.set(b, { scaleY: fr[i] }, 0); return show2(b, t0 + i * 0.04); });
+  el(host, `left:90px;top:${BASE}px;width:880px;height:4px;background:${MUT}`); show(host.lastChild, t0);
+  return bs;
+}
+const show2 = (d, t) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, ease: "power3.out", immediateRender: false }, t); return d; };
+const cut = (host, t0) => { [BX(20), BX(21)].forEach((x) => show(el(host, `left:${x - 4}px;top:${BASE - 200}px;width:38px;height:16px;background:#0E1626;transform:skewX(-30deg)`), t0)); };
+const kLab = (host, t) => { show(el(host, `left:${BX(20) - 20}px;top:${BASE - BH * 0.8 - 52}px;font:700 36px var(--code);color:${TXT}`, "40K"), t); show(el(host, `left:${BX(21) - 10}px;top:${BASE - BH - 52}px;font:700 36px var(--code);color:${TXT}`, "50K"), t); };
+const nfr = NORM.map((v) => 0.30 + (v - 480) / 46 * 0.08);
+
+// ================= D: median =================
+// diagram: D
+{
+  const t0 = M.P("D", 0); show(panel(D, 60, 430, 960, 810, CYAN), t0);
+  const av = show(el(D, `left:110px;top:500px;padding:6px 26px;border-radius:999px;border:3px solid ${HOT};font:800 44px var(--lat);color:${HOT};white-space:nowrap`, "AVERAGE"), t0);
+  show(el(D, `left:110px;top:${500 + 33}px;width:240px;height:4px;background:${HOT}`), at("D", "jagah"));
+  tag(D, "MEDIAN", 470, 500, GOOD, at("D", "median"), 44);
+  const cols = VALS.map((v, i) => i < 20 ? CYAN : HOT); const fr = nfr.concat([0.8, 1.0]);
+  const bs = bars(D, at("D", "charges"), fr, cols); cut(D, at("D", "charges") + 1.2); kLab(D, at("D", "charges") + 1.2);
+  const bt = at("D", "beech"); [10, 11].forEach((i) => tl.to(bs[i], { backgroundColor: ACC, duration: 0.3, immediateRender: false }, bt));
+  chip(D, 100, 1070, 400, "MEDIAN", "506", GOOD, bt + 0.2);
+  chip(D, 540, 1070, 440, "MEAN", "4549", HOT, at("D", "bade", 1));
+}
+M.fit(D, { y: 190, h: 1120 });
+
+// ================= E: MAD =================
+// diagram: E
+{
+  const t0 = M.P("E", 0); show(panel(E, 60, 430, 960, 810, CYAN), t0);
+  tag(E, "SPREAD", 110, 500, CYAN, t0, 44);
+  tag(E, "MAD", 460, 500, GOOD, at("E", "MAD"), 44);
+  const cols0 = VALS.map((v, i) => i === 10 || i === 11 ? ACC : i < 20 ? CYAN : HOT); const fr0 = nfr.concat([0.8, 1.0]);
+  const bs = bars(E, t0, fr0, cols0); cut(E, t0 + 0.8);
+  const dt = at("E", "doori"); const dev = VALS.map((v, i) => i < 20 ? Math.abs(v - 506) * 0.0125 : [0.8, 1.0][i - 20]);
+  bs.forEach((b, i) => { tl.to(b, { scaleY: Math.max(dev[i], 0.004), duration: 0.8, ease: "power3.inOut", immediateRender: false }, dt); if (i < 20) tl.to(b, { backgroundColor: CYAN, duration: 0.4, immediateRender: false }, dt); });
+  const lt = at("E", "median", 2); const ly = BASE - BH * 0.15;
+  show(el(E, `left:90px;top:${ly}px;width:880px;height:5px;background:${ACC}`), lt, { opacity: 0, scaleX: 0.2, transformOrigin: "0 50%" });
+  chip(E, 100, 1070, 400, "MAD", "12", GOOD, lt + 0.1);
+  chip(E, 540, 1070, 440, "STD", "12880", HOT, at("E", "phoolta"));
+}
+M.fit(E, { y: 190, h: 1120 });
+
+// ================= F: modified z =================
+// diagram: F
+{
+  const t0 = M.P("F", 0); strip(F, t0, t0);
+  const b1 = show(el(F, `left:${X(50000) - 22}px;top:${AXY - 46}px;width:44px;height:44px;border-radius:50%;background:${ACC}`), t0);
+  const b2 = show(el(F, `left:${X(40000) - 22}px;top:${AXY - 46}px;width:44px;height:44px;border-radius:50%;background:${ACC}`), t0);
+  rsLab(F, "Rs 50,000", 50000, t0); const l40 = rsLab(F, "Rs 40,000", 40000, t0); l40.style.right = "auto"; l40.style.left = (X(40000) - 100) + "px";
+  const ghost = thrLine(F, 43189, "z = 3", MUT, t0); tl.set(ghost, { opacity: 0.6 }, t0 + 0.6);
+  tag(F, "MODIFIED Z", 110, 520, GOOD, at("F", "modified"), 44);
+  thrLine(F, 571, "3.5", GOOD, at("F", "35"));
+  [[b1, 50000, "50000", 0], [b2, 40000, "40000", 0]].forEach(([b, v, w]) => { const tt = at("F", w); tl.to(b, { backgroundColor: HOT, duration: 0.3, immediateRender: false }, tt); tag(F, "FLAG", X(v) - 55, AXY - 120, HOT, tt, 40); });
+  chip(F, 100, 1120, 560, "NORMAL FLAGGED", "0 / 20", GOOD, at("F", "bhi"));
+}
+M.fit(F, { y: 190, h: 1120 });
+
+// ================= G: boundary =================
+// diagram: G
+{
+  const b1 = M.box(G, { x: 140, y: 300, w: 800, h: 170, label: "AMOUNT ONLY", sub: "median + MAD", icon: "numbers", color: CYAN, size: 50 }); b1.show(M.P("G", 0));
+  ["AMOUNT", "TIME", "LOCATION"].forEach((w, i) => M.pill(G, w, at("G", w === "AMOUNT" ? "Amount" : w === "TIME" ? "time" : "location") , { x: 100 + i * 300, y: 580, kind: "out", size: 44 }));
+  const b2 = M.box(G, { x: 140, y: 740, w: 800, h: 200, label: "ISOLATION FOREST", icon: "model", color: ACC, size: 50 }); b2.show(at("G", "Isolation"));
+  M.arrow(G, { from: [540, 660], to: [540, 735], color: ACC, w: 8 }).show(at("G", "Isolation") - 0.2, 0.3);
+  const b3 = M.box(G, { x: 90, y: 1080, w: 330, h: 150, label: "FLAG", icon: "warn", color: HOT, size: 48 }); b3.show(at("G", "flag"));
+  const b4 = M.box(G, { x: 540, y: 1070, w: 450, h: 170, label: "HUMAN REVIEW", icon: "user", color: GOOD, size: 44 }); b4.show(at("G", "human"));
+  M.arrow(G, { from: [425, 1155], to: [535, 1155], color: GOOD, w: 8 }).show(at("G", "human") - 0.2, 0.3);
+}
+M.fit(G, { y: 280, h: 980 });
+
+// ================= H: interview answer + close =================
+// diagram: H
+{
+  const t0 = M.P("H", 0); show(panel(H, 100, 230, 880, 600, CYAN, "INTERVIEW ANSWER"), t0);
+  const row = (y, txt, col, t) => show(el(H, `left:150px;top:${y}px;width:780px;height:110px;border-radius:16px;border:2.5px solid ${col};background:${M.ca(col, .12)};font:800 52px var(--lat);color:${col};display:flex;align-items:center;padding-left:40px;white-space:nowrap`, txt), t);
+  row(330, "MEDIAN", GOOD, at("H", "median")); row(470, "MAD", GOOD, at("H", "MAD"));
+  const r3 = row(610, "AVERAGE + STD", HOT, at("H", "average"));
+  show(el(H, `left:170px;top:${610 + 53}px;width:540px;height:5px;background:${HOT}`), at("H", "bigad"), { opacity: 0, scaleX: 0.1, transformOrigin: "0 50%" });
+  const cc = panel(H, 120, 870, 840, 340, CYAN, "COMMENT KARO"); show(cc, at("H", "Comments"));
+  M.pill(cc, "HAAN", at("H", "haan"), { x: 150, y: 110, kind: "out", size: 44 }); M.pill(cc, "NAHI", at("H", "nahi", 1), { x: 450, y: 110, kind: "out", size: 44 });
+  show(el(cc, "left:40px;right:40px;bottom:34px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 32px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 30px", "Add a comment..."), at("H", "Comments") + 0.4, { opacity: 0 });
+  const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 340, y: 1235, kind: "acc", size: 42 });
+  tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+}
+M.fit(H, { y: 220, h: 1080 });
+
+M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
+M.finish({ kw: { fraud: "gold", labels: "gold", outlier: "hot", flag: "hot", median: "cyan", mad: "cyan", average: "hot", masked: "hot", step: "gold", fraud: "gold", human: "good" } });
+window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

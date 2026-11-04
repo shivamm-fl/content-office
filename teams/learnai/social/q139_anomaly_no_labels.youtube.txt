@@ -1,0 +1,12 @@
+Fraud Without Labels: Median + MAD
+
+Fraud ke labels nahi hain, toh normal charge data se tay karo aur door baithe charge ko flag karo. Invented example: 20 normal charges Rs 500 ke aaspas, Rs 50,000 aur Rs 40,000. Average + standard deviation ka z-score 4.47 pehle charge ko pakadta hai, par doosra charge 2.75 par bach jata hai (masking). Median + MAD ka modified z-score (3.5 se upar flag) dono ko pakadta hai. Flags human review ke cases hain, fraud ka proof nahi; kai features ke liye Isolation Forest jaisa model.
+
+Comment karke batao: tumne pehle average wala tareeka lagaya tha, haan ya nahi?
+
+Sources:
+https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h.htm
+https://scikit-learn.org/stable/modules/outlier_detection.html
+
+Tags: anomaly detection,fraud detection without labels,isolation forest,ai engineer interview
+AI-assisted visuals and narration.
