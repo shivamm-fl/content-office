@@ -1,7 +1,4 @@
-one big charge n=21 mean=2861 std=10541 median=505
-  value 50000 z=4.47 flagged(|z|>3)=True  modified_z=3338.4 flagged(>3.5)=True
-  normal values flagged by modified z: 0
-two big charges n=22 mean=4550 std=12880 median=506
-  value 50000 z=3.53 flagged(|z|>3)=True  modified_z=2782.0 flagged(>3.5)=True
-  value 40000 z=2.75 flagged(|z|>3)=False  modified_z=2219.9 flagged(>3.5)=True
-  normal values flagged by modified z: 0
+one big charge | mean 2861 std 10541 | z of big charges [4.47] | normal flagged by z>3: 0
+  median 506 MAD 12 | modified z of big [2782] | normal flagged by modz>3.5: 0
+two big charges | mean 4549 std 12880 | z of big charges [3.53, 2.75] | normal flagged by z>3: 0
+  median 506.0 MAD 12.5 | modified z of big [2671, 2131] | normal flagged by modz>3.5: 0
