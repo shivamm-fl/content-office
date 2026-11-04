@@ -318,6 +318,26 @@
       "production_status": "delivered",
       "reel": "q137",
       "owner_approval": "pending"
+    },
+    {
+      "n": 33,
+      "arc": "Production",
+      "unit": "H4",
+      "title": "Interview: 7B model laptop par chalana hai. Quantization kya karta hai?",
+      "trap": "Assuming a 7B model simply fits on a laptop (or that quantization is free): the memory is parameters times bytes per weight, and fewer bits can cost some accuracy.",
+      "status": "planned",
+      "reel": "q138",
+      "note": "Added by the strategist 2026-11-04 because the ladder (n=1..32) was used up; owner may change or remove."
+    },
+    {
+      "n": 34,
+      "arc": "Beyond text",
+      "unit": "J2",
+      "title": "Interview: Fraud ke labels nahi hain. Anomaly detection kaise karoge?",
+      "trap": "Flagging by average and standard deviation (z-score): a big charge inflates both, so a second big charge hides behind the first (masking).",
+      "status": "planned",
+      "reel": "q139",
+      "note": "Added by the strategist 2026-11-04 because the ladder (n=1..32) was used up; owner may change or remove."
     }
   ]
 }

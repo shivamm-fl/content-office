@@ -2186,6 +2186,128 @@
       "roadmap_index": 32,
       "office_version": "7850c9715b8894f6",
       "office_preview": "https://content-office.learnai-ai.workers.dev/api/teams/learnai/library/q137/preview"
+    },
+    {
+      "id": "a018",
+      "track": "series",
+      "day": 18,
+      "unit": "C5",
+      "title": "Temperature: The Randomness Dial",
+      "format": "demo",
+      "status": "planned",
+      "one_idea": "Temperature is a dial applied to the model's scores before it picks the next token: the scores are divided by T and turned into probabilities, so a low T makes the top word dominate (the answer barely changes between runs) and a high T flattens the shortlist (rarer words get picked and answers vary). Same question, different answer = sampling with T above zero, not the model changing its mind.",
+      "hook_type": "direct_question",
+      "spoken_hook": "Same सवाल पूछा, हर बार अलग जवाब क्यों?",
+      "hook_source": "frustration the viewer knows (learnings 2026-10-27, a009), plain words",
+      "visual_idea": "Four labelled bars (cricket, football, chess, hockey) for the shortlist of the next word after 'Mera favourite khel hai'; a dial slides 0.2 -> 0.7 -> 1.0 -> 2.0 and the bars sharpen or flatten with the real percentages; a dice roll picks a bar; the same prompt asked three times shows three different picks at T=2.0 and the same pick at T=0.2.",
+      "everyday_anchor": "Asking a friend to pick a game: a strict friend always names his favourite, a relaxed one sometimes names another.",
+      "example": "EXAMPLE (invented scores, run in code, output in state/runs/a018_temperature_run_output.txt): scores cricket 2.0, football 1.0, chess 0.5, hockey 0.0. T=0.2: cricket 99.3%; T=0.7: 70.7 / 16.9 / 8.3 / 4.1; T=1.0: 57.9 / 21.3 / 12.9 / 7.8; T=2.0: 40.9 / 24.8 / 19.3 / 15.0. Toy numbers, not a real model.",
+      "sources": [
+        "https://huggingface.co/docs/transformers/en/main_classes/text_generation",
+        "https://huggingface.co/blog/how-to-generate",
+        "https://huggingface.co/docs/transformers/en/generation_strategies"
+      ],
+      "facts_to_verify": [
+        "HF GenerationConfig: temperature is 'the value used to module the next token probabilities', default 1.0 if not set (fetched 2026-11-04)",
+        "HF blog: lowering the softmax temperature makes the distribution sharper; as temperature approaches zero sampling behaves like greedy decoding (fetched)",
+        "HF generation guide: sampling picks a token randomly from the probability distribution; greedy picks the most likely (fetched)",
+        "Do NOT claim temperature 0 gives identical output every time; do not claim a temperature range or default for any vendor API (not fetched)",
+        "All percentages are toy arithmetic (softmax of invented scores), run in code"
+      ],
+      "length_target_s": 105,
+      "cover_headline": "Temperature: The Randomness Dial",
+      "thumb_text": "RANDOMNESS DIAL",
+      "keywords": [
+        "llm temperature",
+        "temperature in ai",
+        "softmax temperature"
+      ],
+      "why_it_should_work": "Series days with a concrete frustration opener and a drawn dial; a011/a012 style. Roadmap note: q04/q105/q107 cover the interview angle; this day teaches the mechanism stand-alone.",
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-04",
+      "hook_formula": "direct_question"
+    },
+    {
+      "id": "q138",
+      "track": "interview",
+      "day": null,
+      "unit": "H4",
+      "title": "7B Model on a Laptop: Quantization",
+      "format": "question",
+      "status": "planned",
+      "trap": "Assuming a 7B model simply fits on a laptop (or that quantization is free): the memory is parameters times bytes per weight, and fewer bits can cost some accuracy.",
+      "one_idea": "Quantization stores the weights in lower precision (fp16 -> int8 -> int4) so the model needs less memory. Weight memory = parameters x bytes per weight: a 7B model is 28 GB in fp32, 14 GB in fp16, 7 GB in int8, 3.5 GB in int4 (weights only; the KV cache and runtime need extra, so leave headroom). Boundary: fewer bits can lose some accuracy, so test the quantized model on your own task before shipping.",
+      "hook_type": "company_specific",
+      "company": "Hugging Face",
+      "company_source": "https://huggingface.co/docs/transformers/en/quantization/overview",
+      "spoken_hook": "Hugging Face quantization से model की memory घटाता है। 7B model laptop पर कैसे चलाओगे?",
+      "hook_formula": "company_specific (Hugging Face Transformers quantization docs, fetched 2026-11-04; the page supports only what quantization does, not that Hugging Face asks this in interviews)",
+      "hook_source": "strategist, 2026-11-04",
+      "visual_idea": "A laptop with a 16 GB memory bar; a 7B model block of 14 GB (fp16) barely fits; the weights shrink as the dial goes fp16 -> int8 -> int4 with the real GB (14, 7, 3.5) on the bar; then a headroom strip for KV cache; last a small 'test it' check mark.",
+      "everyday_anchor": "Saving a photo at lower quality so it takes less space on the phone.",
+      "example": "EXAMPLE (7B = 7 billion weights, laptop with 16 GB invented; arithmetic run in code, output in state/runs/q138_quant_run_output.txt): fp32 28.0 GB, fp16 14.0 GB, int8 7.0 GB, int4 3.5 GB (decimal GB, weights only).",
+      "sources": [
+        "https://huggingface.co/docs/transformers/en/quantization/overview",
+        "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
+      ],
+      "facts_to_verify": [
+        "HF quantization overview: lowers memory requirements by storing weights in lower precision while trying to preserve accuracy; fp32 typical, fp16/bf16 popular, some methods go to int8/int4 (fetched 2026-11-04)",
+        "Page notes the picker shows whether a model fits including the KV cache (so weights are not the whole memory)",
+        "Accuracy loss size is NOT quoted: say 'can lose some accuracy, test it' only; no benchmark numbers",
+        "GB figures are arithmetic, weights only"
+      ],
+      "length_target_s": 105,
+      "cover_headline": "7B Model on a Laptop: Quantization",
+      "thumb_text": "SHRINK THE MODEL",
+      "keywords": [
+        "llm quantization",
+        "int4 int8 model",
+        "run llm on laptop",
+        "ai engineer interview"
+      ],
+      "why_it_should_work": "company_specific is the least used of the last six q (0 of 6); q124 hold was the best of its pair (38 %, 15.2 s) so a second data point is useful.",
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-04"
+    },
+    {
+      "id": "q139",
+      "track": "interview",
+      "day": null,
+      "unit": "J2",
+      "title": "Fraud Without Labels: Anomaly Detection",
+      "format": "question",
+      "status": "planned",
+      "trap": "Flagging by average and standard deviation (z-score): a big charge inflates both, so a second big charge hides behind the first (masking).",
+      "one_idea": "With no fraud labels you cannot train a classifier, so define 'normal' from the data and flag what sits far from it (unsupervised anomaly detection). A mean and standard deviation z-score looks natural but breaks: one 50,000 charge pushes the std to about 10,500 and a second charge of 40,000 gets z 2.75, under the 3 line, and slips through. The median and MAD modified z-score (flag above 3.5, per NIST) caught both, and flagged none of the 20 normal charges. Boundary: for many features at once use an unsupervised model such as Isolation Forest, and treat flags as cases for a human to review, not proof of fraud.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Fraud के labels नहीं हैं। फिर भी कैसे पकड़ोगे?",
+      "hook_formula": "relatable_stake (a concrete job with no labels)",
+      "hook_source": "strategist, 2026-11-04",
+      "visual_idea": "A column of 20 card charges around 500 plus one 50,000 card; a red z-score ruler flags it; then a second 40,000 card joins, the ruler stretches (std jumps) and the 40,000 card slips under the line; the median + MAD ruler stays put and flags both with red marks; closing strip: 'human review'.",
+      "everyday_anchor": "A class marks list where one topper's score drags the class average up so a second topper looks ordinary; the middle student's mark (median) does not move.",
+      "example": "EXAMPLE (invented amounts, 20 normal charges 480 to 530 plus 50000 and 40000, run in code, output in state/runs/q139_anomaly_run_output.txt): one big charge: mean 2861, std 10541, z 4.47 flagged; two big charges: mean 4550, std 12880, 50000 z 3.53 flagged, 40000 z 2.75 NOT flagged; modified z (median 506) 2782 and 2220, both flagged, 0 normal charges flagged.",
+      "sources": [
+        "https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h.htm",
+        "https://scikit-learn.org/stable/modules/outlier_detection.html"
+      ],
+      "facts_to_verify": [
+        "NIST handbook: z-score = number of standard deviations from the mean, can be misleading for small samples; masking can hide outliers; modified z-score with median and MAD, flag above 3.5 (Iglewicz and Hoaglin) (fetched 2026-11-04)",
+        "scikit-learn: outlier detection is unsupervised anomaly detection, estimators fit on unlabeled data; Isolation Forest isolates observations with random splits, anomalies get shorter paths (fetched 2026-11-04)",
+        "The modified z formula in the run uses 0.6745*(x-median)/MAD, NIST-recommended form",
+        "Flags are candidates for review; no accuracy or real fraud-rate claim"
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Fraud Detection Without Labels",
+      "thumb_text": "NO LABELS",
+      "keywords": [
+        "anomaly detection",
+        "fraud detection without labels",
+        "isolation forest",
+        "ai engineer interview"
+      ],
+      "why_it_should_work": "Different hook type from q138 as required; relatable_stake and interviewer_asked are close in our numbers (~58-61 % skip, 2026-10-18); a concrete masking number gives a proven-by-run surprise.",
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-04"
     }
   ]
 }

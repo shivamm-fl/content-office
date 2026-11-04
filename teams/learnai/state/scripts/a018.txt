@@ -1,0 +1,8 @@
+Same सवाल पूछा, हर बार अलग जवाब क्यों?
+दोस्त से पूछो: कौन सा game पसंद है? | Strict दोस्त हर बार cricket बोलेगा. | Relaxed दोस्त कभी football भी बोल देगा. || AI में इसी ढील का नाम temperature है. | Model का मन नहीं बदला, बस चुनाव ढीला हुआ.
+Model अगला word चुनने से पहले हर option को एक score देता है. || "मेरा favourite खेल है" के बाद मान लो: cricket 2{two}, football 1{one}, chess 0.5{zero-point-five}, hockey 0{zero}. | ये numbers example हैं, real model के नहीं.
+पहला step: हर score को T से divide करो. | T यानी temperature का number. || दूसरा step: scores को percent में बदलो, ताकि कुल सौ बने. || तीसरा step: उन percent के हिसाब से dice घुमाओ, और एक word चुनो.
+अब dial घुमाते हैं. || T 0.2{zero-point-two} पर cricket 99.3{ninety-nine-point-three} percent. | लगभग हर बार वही जवाब. || T 1{one} पर cricket 57.9{fifty-seven-point-nine}, football 21.3{twenty-one-point-three}. | अब football भी निकलने लगा. || T 2{two} पर cricket 40.9{forty-point-nine}, hockey 15{fifteen} percent. | Bars लगभग बराबर हैं, इसलिए हर बार अलग जवाब.
+ध्यान रखो! T ऊँचा करना हमेशा अच्छा नहीं है. | Facts या code में गलत word चुनने का chance बढ़ता है. | वहाँ T कम रखते हैं. | Ideas और stories में थोड़ा ऊँचा.
+Interview में बोलना: || Model हर step पर percent बनाता है, dice से एक word चुनता है. | Temperature उन percent को तेज़ या सपाट करता है.
+अब बताओ: T 2{two} पर cricket कितने percent था? | Comment करो! AI ऐसे ही concrete examples से सीखने के लिए follow करो.

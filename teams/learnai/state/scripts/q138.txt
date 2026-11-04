@@ -1,0 +1,17 @@
+Hugging Face quantization से model की memory घटाता है। 7B{seven-B} model laptop पर कैसे चलाओगे?
+
+तुम्हारा जवाब होना चाहिए: weights को कम bits में store करो, इसी को quantization बोलते हैं। | 3{three} steps हैं, एक-एक करके देखते हैं।
+
+मान लो laptop में 16{sixteen} GB memory है। | 7B{seven-B} model यानी 7{seven} billion weights, यानी model के अंदर के numbers। | Normal fp16 format में हर weight 2{two} bytes लेता है, तो 7{seven} billion times 2{two} bytes equals 14{fourteen} GB। | 16{sixteen} GB में से 14{fourteen} model ने ले लिए, सिस्टम और apps के लिए जगह नहीं बची। सीधा चलाओगे, तो चलेगा नहीं।
+
+पहला step: memory निकालो। | Weight memory equals parameters times bytes per weight, क्योंकि हर weight को उतनी ही जगह चाहिए। | इसलिए memory घटानी है, तो bytes per weight घटाओ।
+
+दूसरा step: int8 पर आओ। | Int8 यानी हर weight सिर्फ 8{eight} bits का whole number, 1{one} byte। | Photo को lower quality में save करने जैसा है: file छोटी, picture लगभग वही। | अब 7{seven} billion times 1{one} byte, यानी 7{seven} GB।
+
+तीसरा step: int4 पर जाओ। | हर weight 4{four} bits, यानी आधा byte, तो 3.5{three-point-five} GB। | क्योंकि weights के अलावा model जवाब देते वक्त KV cache भी बनाता है, यानी अब तक की बातचीत का याद रखा हुआ हिस्सा। | उसे अलग memory चाहिए, इसलिए 16{sixteen} GB में 3.5{three-point-five} GB वाला model आराम से चलता है।
+
+एक boundary है: कम bits में कभी-कभी थोड़ी accuracy जा सकती है। | इसलिए quantized model को अपने ही task पर test करो, फिर use करो।
+
+Interview में कहो: weight memory equals parameters times bytes per weight है। | 7B{seven-B} model fp16 में 14{fourteen} GB है, int4 में 3.5{three-point-five} GB, तो laptop पर चलता है; accuracy अपने task पर test करूँगा।
+
+Comments में बताओ: तुम्हारे laptop में कितनी GB memory है? | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, इसके लिए follow करो।

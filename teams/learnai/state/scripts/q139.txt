@@ -1,0 +1,19 @@
+@hook Fraud के labels नहीं हैं। | फिर भी कैसे पकड़ोगे?
+
+पहले data से तय करो कि normal charge कैसा दिखता है, फिर जो उससे बहुत दूर बैठे उसे flag करो। | ऐसी value को outlier बोलते हैं। | इसके 3{three} steps हैं।
+
+मान लो 20{twenty} normal charges हैं, पाँच सौ रुपये के आसपास, और एक charge 50000{पचास-हज़ार} रुपये का। | आसान तरीका: z-score, यानी एक charge average से कितने standard deviation दूर है। | Standard deviation यानी charges average से कितना बिखरे हैं। | इस 50000{पचास-हज़ार} का z-score 4.47{four-point-four-seven} है, 3{three} से ऊपर, तो flag हो गया।
+
+लेकिन अब 40000{चालीस-हज़ार} रुपये का एक और charge आ जाता है। | बड़े charges standard deviation को खुद फुला देते हैं, इसलिए 40000{चालीस-हज़ार} का z-score सिर्फ़ 2.75{two-point-seven-five} आता है, 3{three} की line के नीचे। | पहला बड़ा charge दूसरे को छुपा देता है, और वो बच निकलता है।
+
+तो पहला step: average की जगह median लो। | Median यानी charges छोटे से बड़े लगाओ, तो बीच वाला। | बीच वाला बड़े charge से हिलता नहीं, इसलिए ये पाँच सौ के पास ही रहता है।
+
+दूसरा step: बिखराव भी median से नापो, इसे MAD बोलते हैं। | MAD यानी हर charge की median से दूरी, और उनका median। | ये भी नहीं फूलता, क्योंकि इसमें भी बीच वाला ही चलता है।
+
+तीसरा step: modified z-score निकालो और 3.5{three-point-five} से ऊपर flag करो। | नतीजा: 50000{पचास-हज़ार} और 40000{चालीस-हज़ार} दोनों पकड़े गए, और 20{twenty} normal charges में से एक भी नहीं।
+
+एक boundary: ये सिर्फ़ amount के लिए है। | Amount, time, location सब साथ हों, तो Isolation Forest जैसा model लगाते हैं। | और flag का मतलब fraud नहीं, वो human के review का case है।
+
+@emph Interview में कहो: labels नहीं हैं, तो मैं median और MAD से data का normal तय करूँगा, क्योंकि average और standard deviation बड़े outliers से खुद बिगड़ जाते हैं।
+
+Comments में बताओ: तुमने पहले average वाला तरीका लगाया था, हाँ या नहीं? | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।

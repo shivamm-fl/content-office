@@ -1,0 +1,8 @@
+Same sawal pucha, har baar alag jawab kyun?
+Dost se pucho: kaun sa game pasand hai? | Strict dost har baar cricket bolega. | Relaxed dost kabhi football bhi bol dega. || AI mein isi dheel ka naam temperature hai. | Model ka mann nahi badla, bas chunav dheela hua.
+Model agla word chunne se pehle har option ko ek score deta hai. || "Mera favourite khel hai" ke baad maan lo: cricket 2, football 1, chess 0.5, hockey 0. | Ye numbers example hain, real model ke nahi.
+Pehla step: har score ko T se divide karo. | T yaani temperature ka number. || Doosra step: scores ko percent mein badlo, taaki kul sau bane. || Teesra step: un percent ke hisaab se dice ghumao, aur ek word chuno.
+Ab dial ghumate hain. || T 0.2 par cricket 99.3 percent. | Lagbhag har baar wahi jawab. || T 1 par cricket 57.9, football 21.3. | Ab football bhi nikalne laga. || T 2 par cricket 40.9, hockey 15 percent. | Bars lagbhag barabar hain, isliye har baar alag jawab.
+Dhyan rakho! T ooncha karna hamesha achha nahi hai. | Facts ya code mein galat word chunne ka chance badhta hai. | Wahan T kam rakhte hain. | Ideas aur stories mein thoda ooncha.
+Interview mein bolna: || Model har step par percent banata hai, dice se ek word chunta hai. | Temperature un percent ko tez ya sapaat karta hai.
+Ab batao: T 2 par cricket kitne percent tha? | Comment karo! AI aise hi concrete examples se seekhne ke liye follow karo.

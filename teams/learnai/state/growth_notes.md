@@ -91,3 +91,9 @@ Types: stake q118, q120, q122, q125, q128 (n=5) median skip 66.7 %; asked q119, 
 Do: a014 (attention) line 1 is one picture or scene, the same word meaning two things in two sentences, no "attention" or "transformer" before the first teaching line; about 100 s. q130 asked, q131 stake; both 100 to 115 s.
 Experiment: a014 opens on a two-sentence picture (same word, two meanings), bar skip under 58 % and watch 14 s or more; q131 stake opens on a concrete night-time alert scene, no jargon in line 1, bar skip under 59 %. Miss on n=1 is a hint.
 Owner decision: none needed.
+
+## 2026-11-04 (growth analyst, hook reads for a018, q138, q139)
+Numbers: series since a008 sits at 62 to 66 % skip (n=5); only concrete number or scene opens (a005, a007) beat 58 %. Asked-type hooks 60 to 63 % skip (n=5); q128 jargon-free scene 57.9 % (n=1). Devanagari first lines 84 to 89 % skip (n=3, hint).
+a018: friend-scene teaching is good; hook is a "kyun?" question in Devanagari, suggested Roman spelling or a number first.
+q138: lead with the 7B on 16 GB laptop scene, not "Hugging Face quantization". q139: keep hook, check Roman hookscore.
+Owner decision: none needed.
