@@ -1,0 +1,11 @@
+Claude Code Big Repo Kaise Padhta Hai?
+
+Coding agent poora repo context mein nahi daalta: Anthropic ki engineering post ke hisaab se agent halke identifiers (jaise file paths) rakhta hai aur zarurat par tools se data load karta hai. Claude Code mein CLAUDE.md shuru mein context mein aati hai, aur glob aur grep jaise tools se baaki files just-in-time milti hain. Example (invented): 5000 files ka toy repo, login error auth.py mein, grep ek line deta hai.
+
+Comment karke batao: tumne grep pehle istemal kiya hai, haan ya nahi?
+
+Sources:
+https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+
+Tags: claude code,coding agent context,grep glob agent,ai engineer interview
+AI-assisted visuals and narration.

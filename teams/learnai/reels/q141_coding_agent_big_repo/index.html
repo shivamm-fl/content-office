@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Coding Agent in a Big Repo</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="96" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="96" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="96" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="96" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+Viz.install(M);
+const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const at = (sc, w, n) => M.W(sc, w, n);
+const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+const MUT = "#8592AD", TXT = "#E8EDF6";
+const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+  if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:18px;font-size:34px;color:${col};text-align:left`; } return d; };
+const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t); return d; };
+const stamp = (host, txt, cx, y, col, t) => { const d = el(host, `left:${cx}px;top:${y}px;padding:10px 28px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 44px var(--code);color:${col};white-space:nowrap`, txt);
+  gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+const tag = (host, txt, x, y, col, t, size) => show(el(host, `left:${x}px;top:${y}px;padding:6px 22px;border-radius:999px;background:${col};color:#06101F;font:800 ${size || 36}px var(--lat);white-space:nowrap`, txt), t, { opacity: 0, scale: 0.8 });
+const example = (host, x, y, t) => show(el(host, `left:${x}px;top:${y}px;padding:4px 20px;border:2px solid #F2B544;border-radius:999px;font:800 32px var(--lat);color:#F2B544;white-space:nowrap`, "EXAMPLE"), t);
+const tile = (host, x, y, s, col, a) => el(host, `left:${x}px;top:${y}px;width:${s}px;height:${s}px;border-radius:${Math.round(s / 6)}px;border:2px solid ${M.ca(col, .6)};background:${M.ca(col, a == null ? .14 : a)}`);
+const hl = (d, col, t) => tl.to(d, { backgroundColor: M.ca(col, .22), borderColor: col, duration: 0.3, immediateRender: false }, t);
+const bar = (host, y, txt, t) => { const b = show(el(host, `left:90px;top:${y}px;width:900px;height:96px;border-radius:48px;border:2px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .08)}`), t);
+  el(b, `left:36px;top:14px;font:700 46px var(--code);white-space:nowrap`, txt); return b; };
+// small helper: an inner file grid (cols x rows) with a seeded pick; returns tiles
+function grid(host, x0, y0, cols, rows, s, gap, t0, stag) { const out = [];
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) { const d = tile(host, x0 + c * (s + gap), y0 + r * (s + gap), s, CYAN); show(d, t0 + (r * cols + c) * (stag || 0), { opacity: 0, scale: 0.6 }); out.push(d); }
+  return out; }
+
+// ================= A: hook + repo =================
+M.hook(["Claude Code ka", "bada repo?"], { size: 96, top: 240 });
+// diagram: A
+{
+  const pa = show(panel(A, 100, 520, 880, 640, CYAN, "REPO"), 0.05);
+  example(A, 770, 535, 0.1);
+  const ts = grid(A, 160, 600, 7, 5, 92, 18, 0.1, 0.012);
+  const gold = [8, 17, 26];
+  gold.forEach((i, k) => hl(ts[i], ACC, at("A", "wahi") + k * 0.12));
+  tag(A, "PATHS", 130, 1190, CYAN, at("A", "raaste"), 40);
+  tag(A, "LIGHT", 330, 1190, GOOD, at("A", "halke"), 40);
+  [0, 1, 2].forEach((k) => M.pill(A, `${k + 1}`, at("A", "3") + k * 0.2, { x: 640 + k * 110, y: 1180, kind: "out", size: 50 }));
+}
+M.fit(A, { y: 460, h: 860 });
+
+// ================= B: stuff everything =================
+// diagram: B
+{
+  show(bar(B, 215, "? login error", M.P("B", 0)), M.P("B", 0));
+  const rp = show(panel(B, 100, 350, 880, 330, CYAN, "REPO"), M.P("B", 0) + 0.2);
+  tag(B, "5000 FILES", 700, 366, CYAN, at("B", "5000"), 34); example(B, 480, 366, at("B", "5000"));
+  const rt = grid(B, 150, 450, 12, 3, 52, 12, M.P("B", 0) + 0.3, 0.01);
+  const gi = 14; // the one file we need
+  const cw = show(panel(B, 100, 860, 880, 440, CYAN, "CONTEXT WINDOW"), at("B", "saari") - 0.2);
+  const arr = M.arrow(B, { from: [540, 700], to: [540, 850], color: CYAN, w: 10 }); arr.show(at("B", "saari"), 0.3);
+  const ct = grid(B, 150, 950, 17, 5, 36, 10, 0, 0); // window tiles, appear on "daal"
+  const dT = at("B", "daal");
+  ct.forEach((d, i) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.2, ease: "power3.out", immediateRender: false }, dT + i * 0.018); });
+  tl.to(rt.filter((_, i) => i !== gi), { opacity: 0.45, duration: 0.4, immediateRender: false }, dT);
+  // the needed file: gold in the repo and buried in the window
+  const wi = 40; hl(rt[gi], ACC, at("B", "1")); hl(ct[wi], ACC, at("B", "1"));
+  tag(B, "auth.py", 150, 700, ACC, at("B", "1"), 38);
+  tl.to(ct.filter((_, i) => i !== wi), { opacity: 0.35, backgroundColor: M.ca(HOT, .22), borderColor: M.ca(HOT, .7), duration: 0.5, immediateRender: false }, at("B", "bekar"));
+  tl.to(cw, { borderColor: HOT, duration: 0.3, immediateRender: false }, at("B", "dab"));
+  const st = stamp(B, "TOO MUCH", 540, 740, HOT, at("B", "galat") - 0.2);
+}
+M.fit(B, { y: 190, h: 1120 });
+
+// ================= C: CLAUDE.md up front =================
+// diagram: C
+{
+  show(panel(C, 100, 300, 880, 760, CYAN, "CONTEXT WINDOW"), M.P("C", 0));
+  const note = show(panel(C, 160, 380, 760, 400, ACC, "CLAUDE.md"), at("C", "CLAUDEmd"), { opacity: 0, y: -60 });
+  M.icon(note, "doc", 640, 14, 70, ACC);
+  const lines = [["auth/", "login"], ["billing/", "payments"], ["utils/", "helpers"]];
+  lines.forEach(([a, b], i) => show(el(note, `left:40px;top:${120 + i * 86}px;font:700 50px var(--code);white-space:nowrap`, `<span style="color:${CYAN}">${a}</span> <span style="color:${MUT}">→</span> ${b}`), at("C", "folder") + i * 0.35, { opacity: 0, x: -20 }));
+  example(C, 700, 316, M.P("C", 1));
+  const free = show(el(C, `left:160px;top:830px;width:760px;height:170px;border-radius:24px;border:3px dashed ${M.ca(CYAN, .45)};font:700 44px var(--lat);color:${MUT};display:flex;align-items:center;justify-content:center`, "FREE SPACE"), at("C", "chhoti"));
+  tag(C, "SMALL", 160, 1090, GOOD, at("C", "chhoti"), 42);
+  tag(C, "EVERY TASK", 420, 1090, ACC, at("C", "har"), 42);
+}
+M.fit(C, { y: 250, h: 1060 });
+
+// ================= D: glob =================
+// diagram: D
+{
+  const sb = bar(D, 215, "", M.P("D", 0));
+  const gt = el(sb, "left:36px;top:14px;font:700 46px var(--code);white-space:nowrap", `<span style="color:${ACC}">glob</span> **/auth*`); tl.set(gt, { opacity: 0 }, 0); tl.to(gt, { opacity: 1, duration: 0.3, immediateRender: false }, at("D", "glob"));
+  const pl = show(panel(D, 100, 350, 880, 800, CYAN, "FILE PATHS"), M.P("D", 0) + 0.2);
+  const paths = ["src/auth.py", "src/billing.py", "tests/test_auth.py", "src/utils.py", "docs/setup.md", "src/auth_utils.py", "src/models.py", "README.md"];
+  const hit = [0, 2, 5];
+  const rows = paths.map((p, i) => { const r = show(el(pl, `left:30px;top:${80 + i * 82}px;width:820px;height:68px;border-radius:14px;border:2px solid rgba(150,175,215,.3);background:rgba(150,175,215,.06)`), M.P("D", 0) + 0.5 + i * 0.1);
+    el(r, "left:26px;top:8px;font:700 42px var(--code);white-space:nowrap", p); return r; });
+  const tt = at("D", "auth");
+  rows.forEach((r, i) => { if (hit.includes(i)) hl(r, ACC, tt + hit.indexOf(i) * 0.1); else tl.to(r, { opacity: 0.25, duration: 0.3, immediateRender: false }, tt); });
+  example(D, 740, 366, M.P("D", 0) + 0.5);
+  tag(D, "PATHS ONLY", 130, 1210, CYAN, at("D", "raaste"), 42);
+  tag(D, "CHEAP", 560, 1210, GOOD, at("D", "sasta"), 42);
+}
+M.fit(D, { y: 190, h: 1120 });
+
+// ================= E: grep =================
+// diagram: E
+{
+  const sb = bar(E, 215, `<span style="color:${ACC}">grep</span> "login failed"`, M.P("E", 0));
+  const cp = show(panel(E, 90, 345, 900, 470, CYAN, "auth.py"), M.P("E", 0) + 0.3);
+  example(E, 750, 362, M.P("E", 0) + 0.3);
+  const code = [["10", "def login(u, p):"], ["11", "  ok = check(u, p)"], ["12", "  if not ok:"], ["13", '    raise Err("login failed")'], ["14", "  return session(u)"]];
+  const crow = code.map(([n, t], i) => { const r = show(el(cp, `left:24px;top:${78 + i * 76}px;width:850px;height:66px;border-radius:12px;border:2px solid transparent`), M.P("E", 0) + 0.6 + i * 0.12);
+    el(r, `left:16px;top:8px;font:600 40px var(--code);white-space:pre;color:${TXT}`, `<span style="color:${MUT}">${n}</span>  ${t}`); return r; });
+  hl(crow[3], ACC, at("E", "line"));
+  tag(E, "1 MATCH", 130, 850, ACC, at("E", "line"), 42);
+  const cx = show(panel(E, 90, 960, 900, 340, CYAN, "CONTEXT"), at("E", "sirf"));
+  const c1 = show(el(cx, `left:40px;top:100px;width:380px;height:160px;border-radius:18px;border:2.5px solid ${M.ca(CYAN, .7)};background:${M.ca(CYAN, .12)};font:700 40px var(--code);display:flex;align-items:center;justify-content:center`, "CLAUDE.md"), at("E", "sirf"));
+  const c2 = show(el(cx, `left:460px;top:100px;width:380px;height:160px;border-radius:18px;border:2.5px solid ${ACC};background:${M.ca(ACC, .16)};font:700 40px var(--code);display:flex;align-items:center;justify-content:center`, "auth.py"), at("E", "kholta"), { opacity: 0, y: -80 });
+}
+M.fit(E, { y: 190, h: 1120 });
+
+// ================= F: keep it short =================
+// diagram: F
+{
+  show(panel(F, 100, 320, 880, 900, CYAN, "CONTEXT WINDOW"), M.P("F", 0));
+  const card = show(panel(F, 170, 410, 740, 280, ACC, "CLAUDE.md"), M.P("F", 0) + 0.2);
+  const sh = tag(F, "SHORT", 700, 250, GOOD, at("F", "chhoti"), 42); gone(sh, at("F", "likh")); tag(F, "TOO BIG", 640, 250, HOT, at("F", "likh") + 0.3, 42);
+  [0, 1, 2].forEach((i) => show(el(card, `left:40px;top:${96 + i * 56}px;width:${620 - i * 120}px;height:22px;border-radius:11px;background:${M.ca(CYAN, .55)}`), at("F", "chhoti") + i * 0.1));
+  // it swells with the whole repo
+  const t1 = at("F", "likh");
+  tl.to(card, { height: 780, duration: 1.1, ease: "power2.inOut", immediateRender: false }, t1);
+  for (let i = 3; i < 12; i++) show(el(card, `left:40px;top:${96 + i * 56}px;width:${720 - (i * 97) % 300}px;height:22px;border-radius:11px;background:${M.ca(HOT, .5)}`), t1 + 0.2 + (i - 3) * 0.08);
+  tl.to(card, { borderColor: HOT, duration: 0.4, immediateRender: false }, t1 + 0.3);
+  stamp(F, "SAME MISTAKE", 540, 1245, HOT, at("F", "galti"));
+}
+M.fit(F, { y: 200, h: 1110 });
+
+// ================= G: the answer as a flow =================
+// diagram: G
+{
+  const ys = [210, 485, 760, 1035];
+  const defs = [["CLAUDE.md", "notes up front", "doc", CYAN, "CLAUDEmd"], ["GLOB", "find paths", "search", CYAN, "glob"], ["GREP", "find lines", "code", CYAN, "grep"], ["OPEN FILE", "only what matters", "check", GOOD, "kholunga"]];
+  const bx = defs.map(([l, s, ic, col, w], i) => { const b = M.box(G, { x: 140, y: ys[i], w: 800, h: 205, label: l, icon: ic, color: col, size: 54, }); b.show(M.P("G", 0) + i * 0.25); return b; });
+  [0, 1, 2].forEach((i) => M.arrow(G, { from: [540, ys[i] + 210], to: [540, ys[i + 1] - 4], color: CYAN, w: 8 }).show(at("G", defs[i + 1][4]) - 0.2, 0.3));
+}
+M.fit(G, { y: 200, h: 1100 });
+
+// ================= H: comment + follow =================
+// diagram: H
+{
+  const cc = panel(H, 120, 330, 840, 600, CYAN, "COMMENT KARO"); show(cc, M.P("H", 0));
+  M.pill(cc, "HAAN", at("H", "haan"), { x: 150, y: 220, kind: "out", size: 56 }); M.pill(cc, "NAHI", at("H", "nahi", 1), { x: 470, y: 220, kind: "out", size: 56 });
+  show(el(cc, "left:40px;right:40px;bottom:36px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 32px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 30px", "Add a comment..."), M.P("H", 0) + 0.4, { opacity: 0, y: 0 });
+  const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 330, y: 1035, kind: "acc", size: 50 });
+  tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+}
+M.fit(H, { y: 250, h: 1000 });
+
+M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
+M.finish({ kw: { repo: "cyan", poora: "hot", raaste: "gold", halke: "good", glob: "gold", grep: "gold", "CLAUDE.md": "cyan", galat: "hot", dab: "hot", chhoti: "good", sasta: "good", galti: "hot", haan: "good" } });
+window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
