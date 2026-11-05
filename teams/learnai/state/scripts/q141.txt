@@ -1,0 +1,17 @@
+@hook Anthropic का Claude Code बड़ा repo कैसे पढ़ता है?
+
+जवाब: वो पूरा repo पढ़ता ही नहीं। | Files के रास्ते हल्के रखता है, और ज़रूरत पड़ने पर सिर्फ़ वही files खोलता है। | इसके 3{three} steps हैं।
+
+मान लो repo में 5000{five-thousand} files हैं, और सवाल है: login error कहाँ raise होता है? | आसान तरीका: सारी files context window में डाल दो, यानी model एक बार में जितना text देख सकता है। | पर जवाब सिर्फ़ 1{एक} file में है, बाकी 4999{four-thousand-nine-hundred-ninety-nine} files बेकार हैं, और उनके बीच ज़रूरी line दब जाती है। | इसलिए पूरा repo डालना गलत है।
+
+तो पहला step: एक छोटी CLAUDE.md file शुरू में ही context में रखो। | इसमें project की ज़रूरी बातें होती हैं, जैसे कौन सा folder क्या करता है, क्योंकि ये हर काम में चाहिए।
+
+दूसरा step: files ढूँढने के लिए glob चलाओ। | Glob यानी नाम के pattern से files खोजना, जैसे सब auth वाली files। | इसमें सिर्फ़ file के रास्ते आते हैं, अंदर का text नहीं, इसलिए ये सस्ता है।
+
+तीसरा step: अब grep चलाओ। | Grep यानी files के अंदर text खोजना। | "login failed" grep करो, तो auth.py में 1{एक} line मिलती है, और Claude Code सिर्फ़ वही file खोलता है, क्योंकि चाहिए ही वही थी।
+
+एक boundary: CLAUDE.md छोटी रखो। | उसमें पूरा repo लिख दिया, तो वही पूरा repo डालने वाली गलती वापस आ गई।
+
+@emph Interview में कहो: मैं CLAUDE.md जैसी छोटी notes शुरू में रखूँगा, और बाकी files glob और grep से ज़रूरत पड़ने पर खोलूँगा, क्योंकि पूरा repo context में डालने से ज़रूरी बात दब जाती है।
+
+Comments में बताओ: grep पहले इस्तेमाल किया है, हाँ या नहीं? | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।

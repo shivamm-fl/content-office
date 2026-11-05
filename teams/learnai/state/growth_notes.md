@@ -97,3 +97,10 @@ Numbers: series since a008 sits at 62 to 66 % skip (n=5); only concrete number o
 a018: friend-scene teaching is good; hook is a "kyun?" question in Devanagari, suggested Roman spelling or a number first.
 q138: lead with the 7B on 16 GB laptop scene, not "Hugging Face quantization". q139: keep hook, check Roman hookscore.
 Owner decision: none needed.
+
+## 2026-11-05 (growth analyst, standup for a019, q140, q141)
+Numbers: a013 (172.5 s) 513 views, 69.2 % skip, 10.0 s; a014 (two-meaning picture) 646 views, 74.0 %, 8.8 s: both missed the 58 % bar, picture-first has not beaten 62 % in 7 series reels since a008 (a015 66.6 %; a016 78 % and a017 78.6 % are hours old, 250 views, hint only). q129 58.9 %, 12.9 s, 1,511 views; q130 (stake, 20 s complaint) 59.6 %, 14.3 s, 1,690 views; q131 (night alert) 62.3 %, 13.6 s.
+Pattern: q128 to q131 (scene or situation opens, n=4) median skip 59.9 %; q132 to q137 (short bare questions like "Batch API ya real-time API?", n=6) median 69.9 %, watch 6 to 12 s. Gap 10 points, small n, order effects possible: keep all types, do not retire; stop the bare short-question opener.
+Do: q140 and q141 open on a concrete scene or number (not a bare topic question), full question by second 10; a019 line 1 a number (top-k 3 vs 50), about 100 s.
+Experiment: q140 stake hook with a concrete scene plus one number; q141 asked as contrast. Bar: q140 skip under 62 %, watch 12 s or more; n=1 is a hint.
+Owner decision: none needed.

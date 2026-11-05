@@ -1,0 +1,6 @@
+sharp (Delhi ki capital hai ___)
+ top_k=3 keeps ['Delhi', 'Dilli', 'India'] mass=0.94
+ top_p=0.90 keeps ['Delhi', 'Dilli'] count=2 mass=0.90
+flat (Chai ke saath ___ )
+ top_k=3 keeps ['biscuit', 'samosa', 'pakoda'] mass=0.60
+ top_p=0.90 keeps ['biscuit', 'samosa', 'pakoda', 'rusk', 'bun', 'maggi'] count=6 mass=1.00

@@ -1,0 +1,9 @@
+@hook 6{छह} options में से, AI ने सिर्फ़ 3{तीन} रखे। क्यों?
+AI अगला word चुनने से पहले, | options की एक shortlist बनाता है। || और उसे छोटा करने के दो तरीके हैं: | top-k और top-p।
+मान लो वाक्य है: | चाय के साथ... || Model हर word को एक probability देता है, | यानी उसके आने का chance। || biscuit, 22{twenty-two} percent। | samosa, 20{twenty} percent। | pakoda, 18{eighteen} percent। | और rusk, bun, maggi, इनसे कम। || ये numbers सिर्फ़ समझाने के लिए हैं, | real model के नहीं।
+पहला तरीका, top-k। || k यानी गिनती। | Top-k 3{three} का मतलब: | सबसे ऊपर के 3{three} words रखो, बाकी हटा दो। || यहाँ biscuit, samosa, pakoda बचे। | Model अब सिर्फ़ इन्हीं में से चुनेगा, | क्योंकि बेतुके words कभी चुने ही नहीं जाने चाहिए।
+दूसरा तरीका, top-p। || p यानी total chance। | Top-p 90{ninety} percent का मतलब: | ऊपर से words जोड़ते जाओ, | जब chance का total 90{ninety} percent पहुँचे, | वहीं रुक जाओ।
+अब एक पक्का वाक्य लो: | दिल्ली की capital है... || Delhi, 80{eighty} percent। | Dilli, 10{ten} percent। | दोनों मिलाकर 90{ninety} percent, | तो top-p ने सिर्फ़ 2{दो} words रखे। || पर top-k 3{three} फिर भी तीसरा word India भी रख लेता है, | जिसकी ज़रूरत ही नहीं थी।
+उल्टा, चाय वाली list में top-p 90{ninety} percent को सभी 6{छह} words चाहिए, | क्योंकि सब का chance बराबर के आसपास है। || और top-k 3{three} ने 40{forty} percent chance फेंक दिया।
+मतलब: | top-k की गिनती fixed रहती है, | top-p model के भरोसे के हिसाब से घटती-बढ़ती है। || Model पक्का हो, तो shortlist छोटी। | उलझन हो, तो बड़ी।
+अब बताओ: | चाय वाली list में top-p 50{fifty} percent हो, | तो कितने words बचेंगे? | Comment करो! || ऐसे concepts आसानी से समझने के लिए follow करो।

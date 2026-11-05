@@ -1360,6 +1360,45 @@
       "production_date_ist": "2026-11-04",
       "owner_approved": false,
       "published": false
+    },
+    {
+      "id": "a019",
+      "day": 19,
+      "title": "Top-k and Top-p: Trimming the Shortlist",
+      "track": "series",
+      "status": "planned",
+      "topic": "After the model scores every possible next word, top-k keeps a fixed number of best words and top-p keeps the smallest group whose chances add up to p; the model then picks only from that shortlist. Top-k is a fixed coun",
+      "hook_formula": "direct_question",
+      "planned": "2026-11-05",
+      "production_date_ist": "2026-11-05",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "q140",
+      "day": null,
+      "title": "Guardrails: Stop Harmful Questions",
+      "track": "interview",
+      "status": "planned",
+      "topic": "One line in the system prompt ('refuse harmful requests') is a single wall that a user can talk past; a production chatbot layers guards: screen the input with a cheap classifier, a system prompt that says how to refuse,",
+      "hook_formula": "interviewer_asked",
+      "planned": "2026-11-05",
+      "production_date_ist": "2026-11-05",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "q141",
+      "day": null,
+      "title": "Coding Agent in a Big Repo",
+      "track": "interview",
+      "status": "planned",
+      "topic": "A coding agent does not paste the whole repo into the context; it keeps light pointers (file paths) and fetches just in time with search tools (glob to find files, grep to find lines), reading only the few files that mat",
+      "hook_formula": "company_specific",
+      "planned": "2026-11-05",
+      "production_date_ist": "2026-11-05",
+      "owner_approved": false,
+      "published": false
     }
   ]
 }

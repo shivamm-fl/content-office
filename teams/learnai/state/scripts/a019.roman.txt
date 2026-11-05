@@ -1,0 +1,9 @@
+6 options mein se, AI ne sirf 3 rakhe. Kyun?
+AI agla word chunne se pehle, options ki ek shortlist banata hai. Aur use chhota karne ke do tarike hain: top-k aur top-p.
+Maan lo vaakya hai: chai ke saath... Model har word ko ek probability deta hai, yaani uske aane ka chance. biscuit, 22 percent. samosa, 20 percent. pakoda, 18 percent. Aur rusk, bun, maggi, inse kam. Ye numbers sirf samjhane ke liye hain, real model ke nahi.
+Pehla tarika, top-k. k yaani ginti. Top-k 3 ka matlab: sabse upar ke 3 words rakho, baaki hata do. Yahan biscuit, samosa, pakoda bache. Model ab sirf inhi mein se chunega, kyunki betuke words kabhi chune hi nahi jaane chahiye.
+Doosra tarika, top-p. p yaani total chance. Top-p 90 percent ka matlab: upar se words jodte jao, jab chance ka total 90 percent pahunche, wahin ruk jao.
+Ab ek pakka vaakya lo: Delhi ki capital hai... Delhi, 80 percent. Dilli, 10 percent. Dono milakar 90 percent, to top-p ne sirf 2 words rakhe. Par top-k 3 phir bhi teesra word India bhi rakh leta hai, jiski zaroorat hi nahi thi.
+Ulta, chai wali list mein top-p 90 percent ko saare 6 words chahiye, kyunki sab ka chance barabar ke aaspaas hai. Aur top-k 3 ne 40 percent chance phenk diya.
+Matlab: top-k ki ginti fixed rehti hai, top-p model ke bharose ke hisaab se ghatti-badhti hai. Model pakka ho, to shortlist chhoti. Uljhan ho, to badi.
+Ab batao: chai wali list mein top-p 50 percent ho, to kitne words bachenge? Comment karo! Aise concepts aasaani se samajhne ke liye follow karo.

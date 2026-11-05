@@ -2265,6 +2265,117 @@
         "https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h.htm",
         "https://scikit-learn.org/stable/modules/outlier_detection.html"
       ]
+    },
+    {
+      "id": "a019",
+      "track": "series",
+      "day": 19,
+      "unit": "C6",
+      "title": "Top-k and Top-p: Trimming the Shortlist",
+      "format": "demo",
+      "status": "planned",
+      "one_idea": "After the model scores every possible next word, top-k keeps a fixed number of best words and top-p keeps the smallest group whose chances add up to p; the model then picks only from that shortlist. Top-k is a fixed count, top-p adapts to how sure the model is.",
+      "hook_type": "direct_question",
+      "spoken_hook": "6 options mein se AI ne sirf 3 rakhe. Kyun?",
+      "hook_formula": "direct_question (concrete number scene)",
+      "hook_source": "strategist 2026-11-05, growth note 2026-11-04",
+      "visual_idea": "Six word cards sorted by bar height under 'Chai ke saath ___'; a cut line drops all but 3 (top-k), then a filling jar of probability stops at 90 percent (top-p); the same two tools on a sharp 'Delhi ki capital hai ___' list where top-p keeps 2 and top-k still keeps 3.",
+      "example": "Toy probabilities (illustrative, not a real model), computed in state/runs/a019_topk_topp_run.py. Sharp: Delhi .80, Dilli .10, India .04, city .03, Mumbai .02, old .01 -> top_k=3 keeps Delhi, Dilli, India (mass 0.94); top_p=0.90 keeps Delhi, Dilli (2 words, mass 0.90). Flat: biscuit .22, samosa .20, pakoda .18, rusk .15, bun .13, maggi .12 -> top_k=3 keeps biscuit, samosa, pakoda (mass 0.60, drops 40 percent); top_p=0.90 keeps all 6 (mass 1.00). Real output printed by the script.",
+      "sources": [
+        "https://huggingface.co/blog/how-to-generate",
+        "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
+      ],
+      "facts_to_verify": [
+        "HF blog (fetched 2026-11-05): Top-K filters the K most likely next words and redistributes mass; drawback: it does not dynamically adapt the number of words. Top-p picks from the smallest set of words whose cumulative probability exceeds p.",
+        "HF GenerationConfig (fetched 2026-11-05): top_k default 50, top_p default 1.0, temperature default 1.0 if the model's generation_config.json does not set them (library defaults, not every provider's).",
+        "All probabilities are toy numbers computed in code, labelled illustrative."
+      ],
+      "length_target_s": 100,
+      "cover_headline": "Top-k and Top-p: Trimming the Shortlist",
+      "thumb_text": "TRIM THE SHORTLIST",
+      "keywords": [
+        "top-k sampling",
+        "top-p nucleus sampling",
+        "llm sampling",
+        "how ai picks next word"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-05",
+      "everyday_anchor": "Typing a message on your phone keyboard, it shows only the top 3 suggested words, not the whole dictionary."
+    },
+    {
+      "id": "q140",
+      "track": "interview",
+      "day": null,
+      "unit": "G6",
+      "title": "Guardrails: Stop Harmful Questions",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "One line in the system prompt ('refuse harmful requests') is a single wall that a user can talk past; a production chatbot layers guards: screen the input with a cheap classifier, a system prompt that says how to refuse, a check on the output, and monitoring that feeds back into the other layers.",
+      "trap": "Relying on one system-prompt sentence (or one filter) as the whole safety plan.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: chatbot harmful sawalon ka jawab na de, ye kaise pakka karoge?",
+      "hook_formula": "interviewer_asked (one full question)",
+      "hook_source": "strategist 2026-11-05 (asked: 2 of last six q, below stake 3)",
+      "visual_idea": "A message walks a corridor: Gate 1 input screen (small classifier stamps pass/block), Gate 2 chatbot with its system prompt, Gate 3 output check; a single-wall version beside it where one clever phrase walks around the wall; a log book at the end feeding arrows back to the gates.",
+      "example": "A bank-help chatbot: user hides a harmful ask inside a role-play. Toy flow only, no numbers: gate 1 flags it as harmful (is_harmful true), so gate 2 never sees it; if it slipped through, gate 3 blocks the reply; the blocked case is logged to tighten gate 1. No figures shown.",
+      "sources": [
+        "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-05: Anthropic docs list harmlessness screens (a lightweight model pre-screens user input, structured output constrains it to a simple classification), input validation, prompt engineering (system prompt that says how to refuse), responding to repeat offenders, continuous monitoring, and 'Combine strategies' via chain safeguards. The page also says the attacks include jailbreaks/direct injection (user is adversary) and indirect injection. The page does not itself say one layer alone is insufficient in those words: say 'the docs layer them' not 'the docs warn'.",
+        "Output screening is our own teaching step, not named on that page: label it as ours."
+      ],
+      "length_target_s": 105,
+      "cover_headline": "Guardrails: Stopping Harmful Questions",
+      "thumb_text": "LAYER YOUR GUARDS",
+      "keywords": [
+        "llm guardrails",
+        "jailbreak",
+        "ai safety interview",
+        "ai engineer interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-05",
+      "everyday_anchor": "A security guard at a society gate checks visitors at the gate, and again at the lift, instead of trusting one board that says 'no entry for strangers'."
+    },
+    {
+      "id": "q141",
+      "track": "interview",
+      "day": null,
+      "unit": "F10",
+      "title": "Coding Agent in a Big Repo",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "A coding agent does not paste the whole repo into the context; it keeps light pointers (file paths) and fetches just in time with search tools (glob to find files, grep to find lines), reading only the few files that matter, while a small notes file is loaded up front.",
+      "trap": "Stuffing the entire repo into the context window up front.",
+      "hook_type": "company_specific",
+      "company": "Anthropic",
+      "company_source": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+      "spoken_hook": "Anthropic ka Claude Code bada repo kaise padhta hai?",
+      "hook_formula": "company_specific (fetched page)",
+      "hook_source": "strategist 2026-11-05 (company_specific: 1 of last six q, the least used)",
+      "visual_idea": "A folder tree of many files; the wrong way pours every file into a small context box that overflows; the right way shows a map of paths, a glob search lighting up three files, a grep pointing at two lines, and only those pieces entering the box beside a small CLAUDE.md note.",
+      "example": "Toy repo with file names like auth.py, billing.py, utils.py; task: 'where is the login error raised?'. grep for the error text finds 1 line in auth.py; the agent reads that file only. Toy names, no token counts shown (or counts computed in code before use).",
+      "sources": [
+        "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-05: Anthropic's post says agents with the just-in-time approach keep lightweight identifiers and load data when needed; Claude Code uses a hybrid: CLAUDE.md files are dropped into context up front, while primitives like glob and grep let it retrieve files just-in-time; for databases it uses targeted queries and head/tail without loading full objects.",
+        "Toy file names only; no claim about size limits of any repo."
+      ],
+      "length_target_s": 105,
+      "cover_headline": "Coding Agent in a Big Repo",
+      "thumb_text": "FETCH, DON'T STUFF",
+      "keywords": [
+        "claude code",
+        "coding agent context",
+        "grep glob agent",
+        "ai engineer interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-05",
+      "everyday_anchor": "Looking for one recipe in a big cookbook: you use the index to find the page, you do not read every page first."
     }
   ]
 }
