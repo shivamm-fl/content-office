@@ -1,0 +1,154 @@
+{
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      "A",
+      0,
+      1
+    ],
+    [
+      "pop",
+      "B",
+      3,
+      0
+    ],
+    [
+      "tick",
+      "C",
+      4,
+      0
+    ],
+    [
+      "tick",
+      "C",
+      5,
+      0
+    ],
+    [
+      "tick",
+      "C",
+      6,
+      0
+    ],
+    [
+      "slice",
+      "D",
+      3,
+      0.3
+    ],
+    [
+      "ok",
+      "D",
+      4,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      3,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      5,
+      0
+    ],
+    [
+      "tick",
+      "F",
+      2,
+      0
+    ],
+    [
+      "tick",
+      "F",
+      3,
+      0
+    ],
+    [
+      "ok",
+      "F",
+      5,
+      0
+    ],
+    [
+      "dip",
+      "F",
+      6,
+      -0.1
+    ],
+    [
+      "err",
+      "G",
+      2,
+      0
+    ],
+    [
+      "dip",
+      "H",
+      1,
+      -0.1
+    ],
+    [
+      "pop",
+      "I",
+      3,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook 6{छह} options में से, AI ने सिर्फ़ 3{तीन} रखे। क्यों?",
+      "B": "AI अगला word चुनने से पहले, | options की एक shortlist बनाता है। || और उसे छोटा करने के दो तरीके हैं: | top-k और top-p।",
+      "C": "मान लो वाक्य है: | चाय के साथ... || Model हर word को एक probability देता है, | यानी उसके आने का chance। || biscuit, 22{twenty-two} percent। | samosa, 20{twenty} percent। | pakoda, 18{eighteen} percent। | और rusk, bun, maggi, इनसे कम। || ये numbers सिर्फ़ समझाने के लिए हैं, | real model के नहीं।",
+      "D": "पहला तरीका, top-k। || k यानी गिनती। | Top-k 3{three} का मतलब: | सबसे ऊपर के 3{three} words रखो, बाकी हटा दो। || यहाँ biscuit, samosa, pakoda बचे। | Model अब सिर्फ़ इन्हीं में से चुनेगा, | क्योंकि बेतुके words कभी चुने ही नहीं जाने चाहिए।",
+      "E": "दूसरा तरीका, top-p। || p यानी total chance। | Top-p 90{ninety} percent का मतलब: | ऊपर से words जोड़ते जाओ, | जब chance का total 90{ninety} percent पहुँचे, | वहीं रुक जाओ।",
+      "F": "अब एक पक्का वाक्य लो: | दिल्ली की capital है... || Delhi, 80{eighty} percent। | Dilli, 10{ten} percent। | दोनों मिलाकर 90{ninety} percent, | तो top-p ने सिर्फ़ 2{दो} words रखे। || पर top-k 3{three} फिर भी तीसरा word India भी रख लेता है, | जिसकी ज़रूरत ही नहीं थी।",
+      "G": "उल्टा, चाय वाली list में top-p 90{ninety} percent को सभी 6{छह} words चाहिए, | क्योंकि सब का chance बराबर के आसपास है। || और top-k 3{three} ने 40{forty} percent chance फेंक दिया।",
+      "H": "मतलब: | top-k की गिनती fixed रहती है, | top-p model के भरोसे के हिसाब से घटती-बढ़ती है। || Model पक्का हो, तो shortlist छोटी। | उलझन हो, तो बड़ी।",
+      "I": "अब बताओ: | चाय वाली list में top-p 50{fifty} percent हो, | तो कितने words बचेंगे? | Comment करो! || ऐसे concepts आसानी से समझने के लिए follow करो।"
+    }
+  },
+  "hook_type": "direct_question",
+  "sources": [
+    "https://huggingface.co/blog/how-to-generate",
+    "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
+  ],
+  "tts": "owner",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

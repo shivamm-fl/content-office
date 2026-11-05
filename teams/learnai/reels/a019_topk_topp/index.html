@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Top-k and Top-p: Trimming the Shortlist</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="104" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="104" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="104" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="104" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "150 DAYS OF AI" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px;background:${PANEL}` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, word, y, t, col = ACC) => {
+        const w = el(host, `left:80px;top:${y}px;width:920px;height:56px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;padding:0 30px;border-radius:999px;border:2px solid ${col};background:${ca(col, .1)};font:700 36px ${COD};letter-spacing:.12em;color:${col}">${word}</div>`;
+        return show(w, t, { opacity: 0, y: -14 });
+      };
+      const title = (host, x, y, txt, col) => el(host, `left:${x}px;top:${y}px;font:700 40px ${COD};letter-spacing:.14em;color:${col || MUTED}`, txt);
+      const tile = (host, x, y, w, h, txt, col, size) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:3px solid ${col};background:${ca(col, .14)};display:flex;align-items:center;justify-content:center;font:800 ${size || 60}px ${LAT};color:${TEXT};white-space:pre`, txt);
+      const mark = (row, col, t) => tl.to(row, { borderColor: col, backgroundColor: ca(col, .12), duration: .35, immediateRender: false }, t);
+      const unmark = (row, t) => tl.to(row, { borderColor: "rgba(0,0,0,0)", backgroundColor: "rgba(0,0,0,0)", duration: .3, immediateRender: false }, t);
+      const die = (host, x, y, sz, col) => {
+        const d = el(host, `left:${x}px;top:${y}px;width:${sz}px;height:${sz}px;border-radius:${sz * .2}px;border:3px solid ${col};background:${ca(col, .14)}`);
+        [[.25, .25], [.75, .25], [.5, .5], [.25, .75], [.75, .75]].forEach(([px, py]) => el(d, `left:${sz * px - sz * .07}px;top:${sz * py - sz * .07}px;width:${sz * .14}px;height:${sz * .14}px;border-radius:50%;background:${TEXT}`));
+        return d;
+      };
+
+      // toy lists (state/runs/a019_topk_topp_run.py): next-word chances, sorted high to low
+      const CHAI = [["biscuit", 22], ["samosa", 20], ["pakoda", 18], ["rusk", 15], ["bun", 13], ["maggi", 12]];
+      const SHARP = [["Delhi", 80], ["Dilli", 10], ["India", 4], ["city", 3], ["Mumbai", 2], ["old", 1]];
+      // a ranked list card: rank badge, word, bar of true relative length, percent
+      const listCard = (host, y, items, rowH, ttl, hd) => {
+        hd = hd || 100;
+        const c = glass(host, 80, y, 920, hd + items.length * rowH + 20, CYAN, 30); const tt = title(c, 34, 20, ttl);
+        const mx = items[0][1], h = rowH - 16;
+        const R = items.map(([w, p], i) => {
+          const row = el(c, `left:24px;top:${hd + i * rowH}px;width:872px;height:${h}px;border-radius:18px;border:3px solid rgba(0,0,0,0)`);
+          const rank = el(row, `left:12px;top:${(h - 52) / 2}px;width:52px;height:52px;border-radius:26px;border:3px solid rgba(0,0,0,0);box-sizing:border-box;background:${ca(MUTED, .3)};color:${TEXT};display:flex;align-items:center;justify-content:center;font:800 36px ${COD}`, i + 1);
+          const lab = el(row, `left:84px;top:0;width:240px;height:${h}px;display:flex;align-items:center;font:800 46px ${LAT};color:${TEXT}`, w);
+          const trk = el(row, `left:330px;top:${(h - 48) / 2}px;width:360px;height:48px;border-radius:10px;background:#233147`);
+          const fill = el(row, `left:330px;top:${(h - 48) / 2}px;width:${Math.max(6, 360 * p / mx)}px;height:48px;border-radius:10px;background:${CYAN};transform-origin:0 50%`);
+          const num = el(row, `left:700px;top:0;width:150px;height:${h}px;display:flex;align-items:center;justify-content:flex-end;font:800 46px ${COD};color:${TEXT}`, p + "%");
+          tl.set([lab, trk, fill, num], { opacity: 0 }, 0); tl.set(fill, { scaleX: 0 }, 0);
+          return { row, rank, lab, trk, fill, num };
+        });
+        return { c, R, tt, hd, rowH };
+      };
+      // word + track at tLab, bar + number at tBar (tBar null: the bar fills with the word, no number)
+      const rowIn = (r, tLab, tBar, noNum) => {
+        tl.to([r.lab, r.trk], { opacity: 1, duration: .35, immediateRender: false }, tLab);
+        const tb = tBar == null ? tLab + .15 : tBar;
+        tl.set(r.fill, { opacity: 1 }, tb); tl.to(r.fill, { scaleX: 1, duration: .5, ease: "power3.out", immediateRender: false }, tb);
+        if (!noNum) tl.to(r.num, { opacity: 1, duration: .3, immediateRender: false }, tb);
+      };
+      const dim = (L, idx, t, op) => idx.forEach(i => tl.to(L.R[i].row, { opacity: op || .28, duration: .4, immediateRender: false }, t));
+      const undim = (L, idx, t) => dim(L, idx, t, 1);
+      const gold = (L, idx, t) => idx.forEach(i => tl.to(L.R[i].rank, { borderColor: ACC, color: ACC, duration: .3, immediateRender: false }, t));
+      const cutLine = (L, after, t) => { const l = el(L.c, `left:10px;top:${L.hd + after * L.rowH - 11}px;width:852px;height:6px;border-radius:3px;background:${ACC};transform-origin:0 50%`); tl.set(l, { scaleX: 0 }, 0); tl.to(l, { scaleX: 1, duration: .4, ease: "power3.out", immediateRender: false }, t); return l; };
+      // running-total meter with a marker at mk percent
+      const meter = (host, y, mk) => {
+        const c = glass(host, 80, y, 920, 100, CYAN, 26);
+        const trk = el(c, `left:24px;top:24px;width:872px;height:52px;border-radius:12px;background:#233147;overflow:hidden`);
+        const fill = el(trk, `left:0;top:0;width:872px;height:52px;background:${ca(CYAN, .5)};transform-origin:0 50%`);
+        const txt = el(c, `left:44px;top:0;height:100px;display:flex;align-items:center;font:800 44px ${COD};color:${TEXT}`, "0%");
+        const mx = 24 + 872 * mk / 100;
+        const mkA = el(c, `left:${mx - 3}px;top:10px;width:6px;height:80px;border-radius:3px;background:${ACC}`);
+        const mkB = el(c, `left:${mx - 100}px;top:0;width:90px;height:100px;display:flex;align-items:center;justify-content:flex-end;font:800 40px ${COD};color:${ACC}`, mk + "%");
+        const st = { v: 0 }; const upd = () => { gsap.set(fill, { scaleX: st.v / 100 }); txt.textContent = Math.round(st.v) + "%"; }; upd();
+        const to = (a, b, t, dur) => tl.fromTo(st, { v: a }, { v: b, duration: dur || .4, ease: "power2.out", onUpdate: upd, immediateRender: false }, t);
+        const col = (cc, t) => tl.to(fill, { backgroundColor: ca(cc, .5), duration: .3, immediateRender: false }, t);
+        const lost = (from, to2, t, lbl) => { const s = el(trk, `left:${872 * from / 100}px;top:0;width:${872 * (to2 - from) / 100}px;height:52px;background:${ca(HOT, .6)};display:flex;align-items:center;justify-content:center;font:800 36px ${COD};color:${TEXT}`, lbl); show(s, t, { opacity: 0 }, .4); };
+        return { c, to, col, lost, txt, hideMark: (t) => gone([mkA, mkB], t) };
+      };
+      const promptChip = (host, txt, t) => { const k = glass(host, 80, 285, 920, 110, CYAN, 28); el(k, `left:0;top:26px;width:920px;text-align:center;font:800 52px ${LAT};color:${TEXT}`, txt); return show(k, t); };
+
+      // diagram: A — six ranked next words, only the top 3 stay lit.
+      M.hook(["6 options mein se,", "AI ne 3 rakhe. Kyun?"], { size: 80, top: 215, until: M.Ed("A", 0) + .25 });
+      const aL = listCard(A, 520, CHAI, 112, "NEXT WORD", 80);
+      show(aL.c, 0.05, { opacity: 0 }, .3);
+      aL.R.forEach((r, i) => { rowIn(r, .15 + i * .1, null, true); });
+      gold(aL, [0, 1, 2], at("A", "sirf")); dim(aL, [3, 4, 5], at("A", "rakhe"));
+      const aT = el(aL.c, `left:560px;top:12px;width:330px;text-align:right;font:800 58px ${COD};color:${ACC}`, "6 → 3"); show(aT, at("A", "rakhe"), { opacity: 0, y: 8 });
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B — all words narrowed to a shortlist; two ways to trim it.
+      const bG = glass(B, 80, 215, 920, 440, CYAN, 30); title(bG, 34, 18, "ALL WORDS");
+      const BW = ["the","chai","cat","blue","run","sky","tea","moon","fast","door","milk","rain","book","tree","fish","road","song","gold","hand","star"];
+      const bPick = [1, 6, 10, 12, 15, 18];
+      const bT = BW.map((w, i) => { const t = tile(bG, 30 + (i % 5) * 174, 80 + Math.floor(i / 5) * 84, 164, 70, w, MUTED, 38); tl.set(t, { opacity: 0 }, 0); tl.to(t, { opacity: 1, duration: .3, immediateRender: false }, P("B", 0) + .1 + i * .04); return t; });
+      show(bG, P("B", 0), { opacity: 0 }, .3);
+      bPick.forEach((k, i) => tl.to(bT[k], { borderColor: ACC, backgroundColor: ca(ACC, .18), duration: .3, immediateRender: false }, at("B", "shortlist") + i * .08));
+      const bAr = show(el(B, `left:80px;top:662px;width:920px;text-align:center;font:800 80px ${LAT};color:${MUTED}`, "↓"), at("B", "shortlist"), { opacity: 0, y: -10 });
+      const bS = glass(B, 80, 760, 920, 290, ACC, 30); title(bS, 34, 18, "SHORTLIST", ACC);
+      CHAI.forEach(([w], i) => show(tile(bS, 30 + (i % 3) * 290, 80 + Math.floor(i / 3) * 96, 280, 82, w, ACC, 44), at("B", "shortlist") + .3 + i * .1, { opacity: 0, y: 14 }));
+      show(bS, at("B", "shortlist") + .2);
+      show(tile(B, 80, 1090, 440, 120, "TOP-K", CYAN, 62), at("B", "top-k"), { opacity: 0, y: 20 });
+      show(tile(B, 560, 1090, 440, 120, "TOP-P", ACC, 62), at("B", "top-p"), { opacity: 0, y: 20 });
+      M.fit(B, { y: 170, h: 1130 });
+
+      // diagram: C — the chance of each next word after "Chai ke saath ___" (toy numbers).
+      pillC(C, "EXAMPLE", 205, P("C", 0));
+      promptChip(C, "Chai ke saath ___", P("C", 0));
+      const cL = listCard(C, 415, CHAI, 112, "CHANCE");
+      show(cL.c, P("C", 1));
+      const cBar = [at("C", "22"), at("C", "20"), at("C", "18"), at("C", "rusk"), at("C", "bun"), at("C", "maggi")];
+      cL.R.forEach((r, i) => rowIn(r, at("C", "word") + i * .12, cBar[i]));
+      show(el(cL.c, `left:420px;top:22px;width:470px;text-align:right;font:700 36px ${COD};letter-spacing:.1em;color:${MUTED}`, "TOY NUMBERS"), at("C", "numbers"), { opacity: 0, y: 8 });
+      M.fit(C, { y: 170, h: 1130 });
+
+      // diagram: D — top-k: count from the top, keep K, drop the rest.
+      pillC(D, "TOP-K", 205, at("D", "top-k"), CYAN);
+      const dChip = promptChip(D, "Chai ke saath ___", P("D", 0)); gone(dChip, at("D", "Top-k") - .4);
+      const dL = listCard(D, 415, CHAI, 112, "CHANCE");
+      show(dL.c, P("D", 0), { opacity: 0 }, .3);
+      dL.R.forEach((r, i) => rowIn(r, P("D", 0) + .1 + i * .06, P("D", 0) + .2 + i * .06));
+      const dK = glass(D, 80, 285, 440, 110, ACC, 28); el(dK, `left:0;top:20px;width:440px;text-align:center;font:800 60px ${COD};color:${ACC}`, "K = 3"); show(dK, at("D", "Top-k"));
+      const dDie = glass(D, 560, 285, 440, 110, CYAN, 28); die(dDie, 40, 22, 64, ACC); el(dDie, `left:130px;top:0;width:290px;height:110px;display:flex;align-items:center;font:800 44px ${COD};color:${TEXT}`, "PICK 1"); show(dDie, at("D", "inhin"));
+      const dCut = cutLine(dL, 3, at("D", "rakho"));
+      gold(dL, [0, 1, 2], at("D", "rakho")); dim(dL, [3, 4, 5], at("D", "hata"));
+      [0, 1, 2].forEach((i, k) => mark(dL.R[i].row, GOOD, [at("D", "biscuit"), at("D", "samosa"), at("D", "pakoda")][k]));
+      [3, 4, 5].forEach(i => mark(dL.R[i].row, HOT, at("D", "betuke")));
+      M.fit(D, { y: 170, h: 1130 });
+
+      // diagram: E — top-p: add chances from the top until the running total reaches p.
+      pillC(E, "TOP-P", 205, P("E", 0), ACC);
+      const eChip = promptChip(E, "Chai ke saath ___", P("E", 0)); gone(eChip, at("E", "p") - .4);
+      const eP = glass(E, 80, 285, 920, 110, ACC, 28); el(eP, `left:0;top:26px;width:920px;text-align:center;font:800 52px ${COD};color:${ACC}`, "P = TOTAL CHANCE"); show(eP, at("E", "p")); gone(eP, at("E", "90") - .1);
+      const eL = listCard(E, 415, CHAI, 112, "CHANCE");
+      show(eL.c, P("E", 0), { opacity: 0 }, .3);
+      eL.R.forEach((r, i) => rowIn(r, P("E", 0) + .1 + i * .06, P("E", 0) + .2 + i * .06));
+      const eM = meter(E, 285, 90); show(eM.c, at("E", "90"));
+      const eT = [at("E", "upar") + .1, at("E", "upar") + .65, at("E", "jodte"), at("E", "jodte") + .5, at("E", "jaao") + .1, at("E", "pahunche")], eV = [0, 22, 42, 60, 75, 88, 100];
+      eT.forEach((t, i) => { eM.to(eV[i], eV[i + 1], t); mark(eL.R[i].row, GOOD, t); gold(eL, [i], t); });
+      eM.col(GOOD, eT[5] + .2);
+      pillC(E, "STOP", 1225, at("E", "vahin"), HOT);
+      M.fit(E, { y: 170, h: 1130 });
+
+      // diagram: F — a sure model: top-p stops at 2 words, top-k 3 keeps one it did not need.
+      pillC(F, "SURE MODEL", 205, P("F", 0), GOOD);
+      const fChip = promptChip(F, "Bharat ki capital hai ___", P("F", 0)); gone(fChip, at("F", "Delhi") - .1);
+      const fL = listCard(F, 415, SHARP, 112, "CHANCE");
+      show(fL.c, P("F", 0), { opacity: 0 }, .3);
+      const fBar = [at("F", "80"), at("F", "10")];
+      fL.R.forEach((r, i) => rowIn(r, at("F", "hai") + i * .08, i < 2 ? fBar[i] : at("F", "hai") + .3 + i * .08));
+      const fM = meter(F, 285, 90); show(fM.c, at("F", "Delhi"));
+      fM.to(0, 80, at("F", "80") + .1); fM.to(80, 90, at("F", "10") + .1); fM.col(GOOD, at("F", "milakar"));
+      mark(fL.R[0].row, GOOD, at("F", "80")); mark(fL.R[1].row, GOOD, at("F", "10"));
+      gold(fL, [0, 1], at("F", "sirf"));
+      dim(fL, [2, 3, 4, 5], at("F", "2"));
+      const fT1 = pillC(F, "TOP-P: 2 WORDS", 1225, at("F", "2"), GOOD); gone(fT1, at("F", "top-k") + .6);
+      const fT2 = pillC(F, "TOP-K: 3 WORDS", 1225, at("F", "top-k") + .8, CYAN); gone(fT2, at("F", "jiski") - .1);
+      undim(fL, [2], at("F", "top-k") + .8); mark(fL.R[2].row, HOT, at("F", "India")); gold(fL, [2], at("F", "India"));
+      const fT3 = pillC(F, "NOT NEEDED", 1225, at("F", "jiski"), HOT);
+      M.fit(F, { y: 170, h: 1130 });
+
+      // diagram: G — an unsure model: top-p needs all 6 words, top-k 3 throws away 40 percent.
+      pillC(G, "UNSURE MODEL", 205, P("G", 0), ACC);
+      const gChip = promptChip(G, "Chai ke saath ___", P("G", 0)); gone(gChip, at("G", "top-p") - .1);
+      const gL = listCard(G, 415, CHAI, 112, "CHANCE");
+      show(gL.c, P("G", 0), { opacity: 0 }, .3);
+      gL.R.forEach((r, i) => rowIn(r, P("G", 0) + .1 + i * .06, P("G", 0) + .2 + i * .06));
+      const gM = meter(G, 285, 90); show(gM.c, at("G", "top-p"));
+      const gV = [0, 22, 42, 60, 75, 88, 100];
+      gV.slice(0, 6).forEach((v, i) => { const t = at("G", "90") + .1 + i * .36; gM.to(v, gV[i + 1], t, .3); mark(gL.R[i].row, GOOD, t); gold(gL, [i], t); });
+      gM.col(GOOD, at("G", "90") + 2.3);
+      const gT1 = pillC(G, "KEEPS ALL 6", 1225, at("G", "chahiye"), GOOD); gone(gT1, at("G", "barabar") - .4);
+      const gT2 = pillC(G, "ALMOST EQUAL", 1225, at("G", "barabar"), CYAN); gone(gT2, at("G", "top-k") - .2);
+      const t3 = at("G", "top-k");
+      gL.R.forEach((r, i) => { unmark(r.row, t3); });
+      cutLine(gL, 3, t3 + .3); dim(gL, [3, 4, 5], at("G", "ne"));
+      tl.to(gL.R.map(r => r.rank), { borderColor: "rgba(0,0,0,0)", color: TEXT, duration: .2, immediateRender: false }, t3); gold(gL, [0, 1, 2], t3 + .3);
+      gM.col(CYAN, t3); gM.to(100, 60, at("G", "ne") + .1, .5); gM.hideMark(at("G", "ne")); gM.lost(60, 100, at("G", "40") , "40% LOST");
+      pillC(G, "TOP-K: 3", 1225, t3 + .2, CYAN);
+      M.fit(G, { y: 170, h: 1130 });
+
+      // diagram: H — the shortlist size: top-k fixed at 3, top-p 2 for a sure model, 6 for an unsure one.
+      const hCard = (y, name, col, tK, tP, nP, tShow) => {
+        const c = glass(H, 80, y, 920, 520, col, 30); title(c, 34, 22, name, col); show(c, tShow);
+        [["TOP-K", 130, 3, CYAN, tK], ["TOP-P", 320, nP, ACC, tP]].forEach(([lab, ty, n, cc, tt]) => {
+          el(c, `left:30px;top:${ty + 25}px;font:700 40px ${COD};letter-spacing:.1em;color:${cc}`, lab);
+          for (let k = 0; k < 6; k++) { el(c, `left:${290 + k * 102}px;top:${ty}px;width:90px;height:90px;border-radius:16px;border:3px solid ${ca(MUTED, .4)}`); }
+          for (let k = 0; k < n; k++) { const t = el(c, `left:${290 + k * 102}px;top:${ty}px;width:90px;height:90px;border-radius:16px;border:3px solid ${cc};background:${ca(cc, .35)}`); show(t, tt + k * .12, { opacity: 0, y: 12 }); }
+        });
+        return c;
+      };
+      const h1 = hCard(215, "SURE MODEL", CYAN, at("H", "top-k"), at("H", "top-p"), 2, P("H", 0));
+      const h2 = hCard(770, "UNSURE MODEL", ACC, at("H", "ghatti-badhti") + .5, at("H", "ghatti-badhti") + 1.0, 6, P("H", 0) + .3);
+      tl.to(h1, { borderColor: GOOD, duration: .3, immediateRender: false }, at("H", "pakka"));
+      tl.to(h2, { borderColor: HOT, duration: .3, immediateRender: false }, at("H", "uljhan"));
+      M.fit(H, { y: 170, h: 1130 });
+
+      // diagram: I — check yourself: top-p 50 percent on the tea list. Comment and follow.
+      pillC(I, "CHECK YOURSELF", 205, P("I", 0));
+      const iM = meter(I, 285, 50); iM.txt.textContent = "TOP-P = 50%"; show(iM.c, P("I", 0));
+      const iL = listCard(I, 395, CHAI, 90, "CHANCE", 90);
+      show(iL.c, P("I", 0), { opacity: 0 }, .3);
+      iL.R.forEach((r, i) => rowIn(r, P("I", 0) + .1 + i * .06, P("I", 0) + .2 + i * .06));
+      show(el(iL.c, `left:520px;top:18px;width:370px;text-align:right;font:800 46px ${COD};color:${ACC}`, "KEPT = ?"), at("I", "kitne"), { opacity: 0, y: 8 });
+      const iCm = glass(I, 80, 1065, 920, 100, CYAN, 50);
+      el(iCm, `left:43px;top:28px;font:700 44px ${COD};color:#AEB9D1`, "COMMENT..."); show(iCm, at("I", "Comment"), { opacity: 0, y: 22 });
+      const iH = glass(I, 80, 1185, 920, 120, ACC, 28);
+      el(iH, `left:38px;top:34px;font:800 49px ${COD};color:${TEXT}`, "@ai.learnvora");
+      el(iH, `left:615px;top:18px;width:240px;height:85px;border-radius:43px;background:${ACC};display:flex;align-items:center;justify-content:center;font:800 39px ${COD};color:#0B1220`, "FOLLOW");
+      show(iH, at("I", "follow") - .5, { opacity: 0, y: 22 });
+      M.fit(I, { y: 170, h: 1130 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I);
+      M.finish({ kw: { options: "gold", rakhe: "gold", shortlist: "cyan", "top-k": "cyan", "top-p": "gold", probability: "cyan", ginti: "cyan", chance: "gold", fixed: "cyan", hata: "hot", betuke: "hot", ruk: "good", pakka: "good", uljhan: "hot", comment: "gold", sirf: "gold", phenk: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

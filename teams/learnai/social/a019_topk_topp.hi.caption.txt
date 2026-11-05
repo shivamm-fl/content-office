@@ -1,0 +1,7 @@
+Day 19/150: 6 options mein se AI ne sirf 3 rakhe, kyun?
+
+AI next word chunne se pehle options ki shortlist banata hai. Top-k hamesha fixed count rakhta hai, jaise top 3 words. Top-p tab tak words jodta hai jab tak unke chance ka total p percent na ho jaye, isliye model pakka ho to shortlist chhoti, uljhan ho to badi. Chai wali list aur Delhi wali list ke percent toy numbers hain, real model ke nahi.
+
+Comment karke batao: chai wali list mein top-p 50 percent ho to kitne words bachenge?
+
+#AIEngineering #LLM #Learnvora

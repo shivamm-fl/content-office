@@ -1,0 +1,12 @@
+Top-k vs top-p: how an LLM trims its shortlist
+
+Day 19/150: before picking the next word, a language model can cut its options to a shortlist. Top-k keeps a fixed number of the most likely words. Top-p (nucleus sampling) keeps the smallest group of words whose chances add up to p, so the shortlist size adapts to how sure the model is. The percentages in the reel are invented toy numbers, not from a real model.
+
+Comment karke batao: chai wali list mein top-p 50 percent ho to kitne words bachenge?
+
+Sources:
+https://huggingface.co/blog/how-to-generate
+https://huggingface.co/docs/transformers/en/main_classes/text_generation
+
+Tags: top-k sampling,top-p sampling,nucleus sampling,llm sampling
+AI-assisted visuals and narration.

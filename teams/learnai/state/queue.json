@@ -2278,17 +2278,11 @@
       "hook_type": "direct_question",
       "spoken_hook": "6 options mein se AI ne sirf 3 rakhe. Kyun?",
       "hook_formula": "direct_question (concrete number scene)",
-      "hook_source": "strategist 2026-11-05, growth note 2026-11-04",
-      "visual_idea": "Six word cards sorted by bar height under 'Chai ke saath ___'; a cut line drops all but 3 (top-k), then a filling jar of probability stops at 90 percent (top-p); the same two tools on a sharp 'Delhi ki capital hai ___' list where top-p keeps 2 and top-k still keeps 3.",
-      "example": "Toy probabilities (illustrative, not a real model), computed in state/runs/a019_topk_topp_run.py. Sharp: Delhi .80, Dilli .10, India .04, city .03, Mumbai .02, old .01 -> top_k=3 keeps Delhi, Dilli, India (mass 0.94); top_p=0.90 keeps Delhi, Dilli (2 words, mass 0.90). Flat: biscuit .22, samosa .20, pakoda .18, rusk .15, bun .13, maggi .12 -> top_k=3 keeps biscuit, samosa, pakoda (mass 0.60, drops 40 percent); top_p=0.90 keeps all 6 (mass 1.00). Real output printed by the script.",
+      "visual_idea": "Six word cards sorted by bar height under 'Chai ke saath ___'; cut line keeps 3 (top-k), then a jar of probability stops at 90 percent (top-p); same two tools on a sharp Delhi list.",
+      "example": "Toy probabilities (illustrative), state/runs/a019_topk_topp_run.py",
       "sources": [
         "https://huggingface.co/blog/how-to-generate",
         "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
-      ],
-      "facts_to_verify": [
-        "HF blog (fetched 2026-11-05): Top-K filters the K most likely next words and redistributes mass; drawback: it does not dynamically adapt the number of words. Top-p picks from the smallest set of words whose cumulative probability exceeds p.",
-        "HF GenerationConfig (fetched 2026-11-05): top_k default 50, top_p default 1.0, temperature default 1.0 if the model's generation_config.json does not set them (library defaults, not every provider's).",
-        "All probabilities are toy numbers computed in code, labelled illustrative."
       ],
       "length_target_s": 100,
       "cover_headline": "Top-k and Top-p: Trimming the Shortlist",
@@ -2299,9 +2293,8 @@
         "llm sampling",
         "how ai picks next word"
       ],
-      "approval_status": "pending",
       "production_date_ist": "2026-11-05",
-      "everyday_anchor": "Typing a message on your phone keyboard, it shows only the top 3 suggested words, not the whole dictionary."
+      "approval_status": "pending"
     },
     {
       "id": "q140",
