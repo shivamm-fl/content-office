@@ -1,0 +1,7 @@
+Chatbot harmful sawalon ka jawab na de, ye kaise pakka karoge? Ek system prompt line kaafi nahi.
+
+Example: bank help chatbot, user villain role-play mein harmful ask chhupa deta hai, aur ek line ki deewar ke aaspas se nikal jata hai. Isliye layers lagao: 1) input screen, ek chhota sasta classifier jo is_harmful true ya false label de. 2) system prompt jo batata hai refuse kaise karna hai. 3) output check, reply user tak jaane se pehle (ye hamara apna step hai). Koi layer 100 percent nahi hoti, isliye block hue cases log karo aur pehli layer tight karo.
+
+Comment karke batao: tumhare chatbot mein abhi kitni layers hain, 1, 2 ya 3?
+
+#AIEngineering #LLMGuardrails #Learnvora

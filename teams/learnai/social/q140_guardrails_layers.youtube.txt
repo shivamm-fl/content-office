@@ -1,0 +1,11 @@
+Guardrails: Layer Your Chatbot Defences
+
+Chatbot harmful sawalon ka jawab na de, ye interview mein kaise samjhaoge? Sirf system prompt ki ek line ek deewar hai jiske aaspas se user nikal sakta hai. Teen layers: input screen (chhota classifier jo is_harmful true/false label de), system prompt jo refuse karne ka tareeka bhi likhe, aur output check (hamara apna teaching step, docs ki list mein nahi). Koi layer 100 percent nahi, isliye blocked cases log karo aur pehli layer ko tight karo. Example toy bank chatbot hai, koi numbers nahi.
+
+Comment karke batao: tumhare chatbot mein abhi kitni layers hain, 1, 2 ya 3?
+
+Sources:
+https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks
+
+Tags: llm guardrails,jailbreak,ai safety interview,ai engineer interview
+AI-assisted visuals and narration.

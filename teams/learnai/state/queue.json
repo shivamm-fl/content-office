@@ -2304,33 +2304,26 @@
       "title": "Guardrails: Stop Harmful Questions",
       "format": "question",
       "status": "planned",
-      "one_idea": "One line in the system prompt ('refuse harmful requests') is a single wall that a user can talk past; a production chatbot layers guards: screen the input with a cheap classifier, a system prompt that says how to refuse, a check on the output, and monitoring that feeds back into the other layers.",
-      "trap": "Relying on one system-prompt sentence (or one filter) as the whole safety plan.",
       "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: chatbot harmful sawalon ka jawab na de, ye kaise pakka karoge?",
-      "hook_formula": "interviewer_asked (one full question)",
-      "hook_source": "strategist 2026-11-05 (asked: 2 of last six q, below stake 3)",
-      "visual_idea": "A message walks a corridor: Gate 1 input screen (small classifier stamps pass/block), Gate 2 chatbot with its system prompt, Gate 3 output check; a single-wall version beside it where one clever phrase walks around the wall; a log book at the end feeding arrows back to the gates.",
-      "example": "A bank-help chatbot: user hides a harmful ask inside a role-play. Toy flow only, no numbers: gate 1 flags it as harmful (is_harmful true), so gate 2 never sees it; if it slipped through, gate 3 blocks the reply; the blocked case is logged to tighten gate 1. No figures shown.",
+      "spoken_hook": "Interviewer ने पूछा: chatbot harmful सवालों का जवाब न दे, ये कैसे पक्का करोगे?",
+      "hook_formula": "interviewer_asked",
+      "hook_source": "scriptwriter, 2026-11-05",
+      "length_target_s": 105,
+      "cover_headline": "Guardrails: Stopping <em>Harmful Questions</em>",
+      "thumb_text": "LAYER YOUR GUARDS",
+      "one_idea": "One system-prompt line is a single wall a user can talk past; layer guards: input screen, system prompt that says how to refuse, output check (our own step), and monitoring that feeds back.",
+      "trap": "Relying on one system-prompt sentence (or one filter) as the whole safety plan.",
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-05",
       "sources": [
         "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks"
       ],
-      "facts_to_verify": [
-        "Fetched 2026-11-05: Anthropic docs list harmlessness screens (a lightweight model pre-screens user input, structured output constrains it to a simple classification), input validation, prompt engineering (system prompt that says how to refuse), responding to repeat offenders, continuous monitoring, and 'Combine strategies' via chain safeguards. The page also says the attacks include jailbreaks/direct injection (user is adversary) and indirect injection. The page does not itself say one layer alone is insufficient in those words: say 'the docs layer them' not 'the docs warn'.",
-        "Output screening is our own teaching step, not named on that page: label it as ours."
-      ],
-      "length_target_s": 105,
-      "cover_headline": "Guardrails: Stopping Harmful Questions",
-      "thumb_text": "LAYER YOUR GUARDS",
       "keywords": [
         "llm guardrails",
         "jailbreak",
         "ai safety interview",
         "ai engineer interview"
-      ],
-      "approval_status": "pending",
-      "production_date_ist": "2026-11-05",
-      "everyday_anchor": "A security guard at a society gate checks visitors at the gate, and again at the lift, instead of trusting one board that says 'no entry for strangers'."
+      ]
     },
     {
       "id": "q141",
