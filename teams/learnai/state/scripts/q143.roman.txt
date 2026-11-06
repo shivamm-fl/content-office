@@ -1,0 +1,19 @@
+Interviewer ne poocha: Hugging Face Hub par bahut saare models hain, tum apne project ke liye kaun sa chunoge?
+
+Hub yaani wo website, jahan log apne models rakhte hain.
+
+Tumhara jawab: download count nahi, task aur licence se chhanto, model card padho, aur apne examples par chalakar chuno. Ye 3 steps hain.
+
+Maan lo project hai: customer messages mein pehchanna ki shikayat hai ya nahi. Sabse zyada downloads wala model aasaan lagta hai, par download count sirf ye batata hai ki kitne logon ne uthaya, ye nahi ki wo tumhare kaam ka hai. Wo kisi aur task ka ho sakta hai.
+
+Pehla step: Hub ke filters lagao, task aur licence. Task yahan text classification, yaani text ko label dena, jaise shikayat. Licence yaani istemaal ki ijazat ke niyam, jaise apache-2.0 ya mit. Kyunki galat task ka model kaam kar hi nahi sakta, aur galat licence ho to product mein nahi chala sakte.
+
+Doosra step: bache models ka model card padho, yaani us model ke page ka README. Usme hona chahiye: kis kaam ke liye bana hai, kahan kamzor hai, kis data par train hua, aur evaluation results. Isse 2 ya 3 chuno, jo tumhari machine mein aaye.
+
+Teesra step: apne 20 asli messages lo, jinka sahi jawab tumhe pata hai, aur har shortlisted model par chalao. Kyunki card ke results kisi aur ke data par hain, tumhare data par nahi. Jiske sabse zyada jawab sahi niklein, wahi tumhara model.
+
+Ek boundary: licence mein bas "other" likha ho, to uska link kholkar padho. Wo unka apna niyam hai.
+
+Interview mein kaho: Main downloads dekhkar nahi chunoonga. Task aur licence se chhantoonga, model card padhkar shortlist banaoonga, aur apne examples par chalakar jo sabse achha nikle wahi loonga.
+
+Tum kis task ka model dhoondh rahe ho, classification, chatbot ya image? Comment karo. Roz ek naya interview sawal, poore jawab ke saath, follow karo.

@@ -1,0 +1,15 @@
+@hook तुमने पूछा, chatbot ने वही line 3{तीन} बार लिखी। क्यों?
+
+Model हर बार सबसे likely word ही उठाता है, इसे greedy चुनना कहते हैं। || तो वही word बार-बार जीत जाता है, और loop बन जाता है। | इसका fix है repetition penalty, यानी जो word पहले आ चुका है उसका score घटा दो।
+
+मान लो model ने अब तक लिखा: चाय गरम है, चाय... || अब अगला word चुनना है। | Model हर word को एक score देता है, यानी उसके आने का chance। || चाय, 47{forty-seven} percent। | पीनी, 26{twenty-six} percent। | है, 17{seventeen} percent। | गरम, 10{ten} percent। || ये numbers सिर्फ़ समझाने के लिए हैं, real model के नहीं।
+
+Greedy उठाता है चाय, और अगली बार भी चाय ही ऊपर रहता है। || यही loop है। अब fix देखो।
+
+Penalty एक number है, जो चाय जैसे पहले आ चुके words का score घटाता है। || 1.0{one-point-zero} का मतलब कोई penalty नहीं, और उससे ऊपर जितना, उतनी सख़्त।
+
+1.2{one-point-two} पर चाय 35{thirty-five} percent, पीनी 31{thirty-one} percent। | चाय अब भी ऊपर है, तो loop चलता रहेगा। || 1.5{one-point-five} पर चाय 24{twenty-four} percent, पीनी 36{thirty-six} percent। | अब पीनी जीता, और वाक्य आगे बढ़ा। || घटाने का ये rule मेरा अपना है, library का असली formula नहीं। | असली models में 1.2{one-point-two} के आसपास से शुरू करने की सलाह दी जाती है।
+
+एक boundary: penalty ज़्यादा रखी, तो जो word सच में दोबारा आना चाहिए, वो भी दब जाता है। | जैसे no_repeat_ngram_size, यानी n words की हर जोड़ी सिर्फ़ एक बार आ सकती है। | इसे 2{two} रखो, तो New York पूरे text में सिर्फ़ एक बार लिखा जा सकता है।
+
+तुम्हारे chatbot ने कभी एक ही line बार-बार लिखी है, हाँ या नहीं? Comment करो। | ऐसे concepts आसानी से समझने के लिए follow करो।

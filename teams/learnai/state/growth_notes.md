@@ -104,3 +104,10 @@ Pattern: q128 to q131 (scene or situation opens, n=4) median skip 59.9 %; q132 t
 Do: q140 and q141 open on a concrete scene or number (not a bare topic question), full question by second 10; a019 line 1 a number (top-k 3 vs 50), about 100 s.
 Experiment: q140 stake hook with a concrete scene plus one number; q141 asked as contrast. Bar: q140 skip under 62 %, watch 12 s or more; n=1 is a hint.
 Owner decision: none needed.
+
+## 2026-11-06 (growth analyst, standup for a020, q142, q143)
+Numbers: series a015 to a018 (n=4) median skip 72.3 % (66.6, 77.8, 73.7, 70.8), watch 6.6 to 9.0 s, 254 to 1,184 views: worse than a008 to a012 (62 to 66 %). a019, q140, q141 are not synced (0 or missing). q132 to q139 (short bare questions, n=8) median skip 69.7 %, watch 9.1 s; q128 to q131 (scene or situation, n=4) 60.0 %, 13.5 s. Best of the new: q132 1,708 views, 68 %, 11.9 s; q138 66.3 %, 12.1 s, 11 shares. Saves hold up (q136 3.8, q137 2.4, q134 2.8 per 100 reach) even when skip is high: the content is fine, the first line loses people.
+Experiments closed on n=1 each: a013 69.2 %/10.0 s and a014 74.1 %/8.7 s missed; q129 58.9 % (hold 41.1 %) passed skip, 12.9 s missed; q130 59.7 %/14.3 s near miss; q131 62.3 % missed skip, 13.7 s passed; q138 66.3 %/12.1 s and a018 70.8 %/9.0 s missed. Company hook (n=4) median 64.4 %, no better than stake or asked: keep testing, retire nothing (gap under 10 points).
+Do: stop bare "X ya Y?" openers; line 1 a full sentence with a "you" scene and one number; keep q142 and q143 at 105 to 115 s; a020 about 100 s.
+Experiment: full-sentence scene hook on a020, q142 (stake), q143 (asked contrast). Bar: q142 and q143 skip at or under 62 % and watch 12 s or more; a020 skip at or under 62 %, watch 10 s or more. n=1 is a hint.
+Owner decision: none needed.

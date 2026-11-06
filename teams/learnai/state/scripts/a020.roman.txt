@@ -1,0 +1,15 @@
+Tumne poocha, chatbot ne wahi line 3 baar likhi. Kyun?
+
+Model har baar sabse likely word hi uthata hai, ise greedy chunna kehte hain. To wahi word baar-baar jeet jaata hai, aur loop ban jaata hai. Iska fix hai repetition penalty, yaani jo word pehle aa chuka hai uska score ghata do.
+
+Maan lo model ne ab tak likha: chai garam hai, chai... Ab agla word chunna hai. Model har word ko ek score deta hai, yaani uske aane ka chance. chai, 47 percent. peeni, 26 percent. hai, 17 percent. garam, 10 percent. Ye numbers sirf samjhane ke liye hain, real model ke nahi.
+
+Greedy uthata hai chai, aur agli baar bhi chai hi upar rehta hai. Yahi loop hai.
+
+Penalty ek number hai, jo chai jaise pehle aa chuke words ka score ghatata hai. 1.0 ka matlab koi penalty nahi, aur usse upar jitna, utni sakht.
+
+1.2 par chai 35 percent, peeni 31 percent. Chai ab bhi upar hai, to loop chalta rahega. 1.5 par chai 24 percent, peeni 36 percent. Ab peeni jeeta, aur vaakya aage badha. Ghatane ka ye rule mera apna hai, library ka asli formula nahi. Asli models mein 1.2 ke aaspaas se shuru karne ki salah di jaati hai.
+
+Ek boundary: penalty zyada rakhi, to jo word sach mein dobara aana chahiye, wo bhi dab jaata hai. Jaise no_repeat_ngram_size, yaani n words ki har jodi sirf ek baar aa sakti hai. Ise 2 rakho, to New York poore text mein sirf ek baar likha ja sakta hai.
+
+Tumhare chatbot ne kabhi ek hi line baar-baar likhi hai, haan ya nahi? Comment karo. Aise concepts aasaani se samajhne ke liye follow karo.

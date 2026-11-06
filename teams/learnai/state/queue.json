@@ -2362,6 +2362,126 @@
       "approval_status": "pending",
       "production_date_ist": "2026-11-05",
       "everyday_anchor": "Looking for one recipe in a big cookbook: you use the index to find the page, you do not read every page first."
+    },
+    {
+      "id": "a020",
+      "track": "series",
+      "day": 20,
+      "unit": "C7",
+      "title": "Repetition Penalty: Stop the Loop",
+      "format": "demo",
+      "status": "planned",
+      "one_idea": "Left to always pick the single most likely word (greedy), a model can fall into a loop and repeat the same sentence. A repetition penalty lowers the score of words already used, so a fresh word can win; 1.0 means no penalty, above 1.0 penalises, around 1.2 is the paper's suggestion; too strong a penalty or an n-gram ban can hurt words that must repeat (New York).",
+      "hook_type": "direct_question",
+      "spoken_hook": "तुमने पूछा, chatbot ने वही line 3 बार लिखी। क्यों?",
+      "hook_formula": "direct_question (frustration the viewer knows)",
+      "hook_source": "strategist 2026-11-06; learning 2026-10-27 (start from a frustration the viewer knows)",
+      "visual_idea": "A chat bubble that prints the same sentence three times, then four word cards with bars: the already-used card's bar shrinks as a dial goes 1.0 to 1.2 to 1.5 and the top card changes; a small 'New York' pair shows why a hard ban is risky.",
+      "example": "Toy scores (illustrative, not a real model): chai 47%, peeni 26%, hai 17%, garam 10% at penalty 1.0; chai 35% / peeni 31% at 1.2 (chai still on top); chai 24% / peeni 36% at 1.5 (peeni on top). Computed in state/runs/a020_repetition_run.py, output in state/runs/a020_repetition_run_output.txt. The divide rule is the toy's own, not claimed as the library formula.",
+      "everyday_anchor": "A friend who tells the same story at every chai: you ask him to skip the parts he already told.",
+      "sources": [
+        "https://huggingface.co/docs/transformers/en/generation_strategies",
+        "https://huggingface.co/blog/how-to-generate",
+        "https://huggingface.co/docs/transformers/en/main_classes/text_generation",
+        "https://huggingface.co/docs/transformers/en/internal/generation_utils"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-06: HF generation_strategies: greedy search picks the most likely token each step and 'begins to repeat itself' on longer outputs; sampling reduces repetition.",
+        "HF how-to-generate: greedy output loops on 'I'm not sure if I'll ever be able to walk with my dog'; no_repeat_ngram_size=2 removes the loop but must be used carefully, a city like New York could then appear only once.",
+        "HF GenerationConfig: repetition_penalty 1.0 means no penalty; no_repeat_ngram_size: all n-grams of that size can occur only once.",
+        "HF RepetitionPenaltyLogitsProcessor: above 1.0 penalises previously generated tokens (the prompt counts by default for decoder-only models); the CTRL paper's authors suggest around 1.2. The exact formula was NOT verified from a page: do not state it as the library's rule.",
+        "Toy numbers are from a run (state/runs/a020_repetition_run_output.txt) and labelled illustrative."
+      ],
+      "length_target_s": 100,
+      "cover_headline": "Repetition Penalty: Stop the Loop",
+      "thumb_text": "STOP THE LOOP",
+      "keywords": [
+        "repetition penalty",
+        "llm repeating itself",
+        "no_repeat_ngram_size",
+        "how ai picks next word"
+      ],
+      "production_date_ist": "2026-11-06",
+      "approval_status": "pending"
+    },
+    {
+      "id": "q142",
+      "track": "interview",
+      "day": null,
+      "unit": "I3",
+      "title": "Image Generation: Noise to Photo",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "A diffusion model does not paste stored photos together. It starts from pure random noise and, in a loop of steps (the docs example uses 25), a model predicts the noise in the picture and a scheduler removes a bit of it, so a clearer image appears; the text prompt, turned into text embeddings, steers every step. Stable Diffusion does this in a smaller latent space and decodes to the image at the end.",
+      "trap": "Thinking the model pastes together stored photos instead of removing noise step by step.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "तुमने prompt लिखा, noise 25 steps में photo बना। कैसे?",
+      "hook_formula": "relatable_stake (a concrete scene: static turns into a picture)",
+      "hook_source": "strategist 2026-11-06 (relatable_stake: oldest of the last six q; growth analyst: open on a concrete scene)",
+      "visual_idea": "A square of TV-like static; a prompt card 'a cat on a sofa' feeds in; 25 small frames in a row, each a little clearer, until a cat appears; wrong-way card (a shelf of stored photos being glued) crossed out; a loop arrow labelled predict noise, remove a bit.",
+      "example": "Prompt 'a cat on a sofa': start from random noise the size of the output, run the loop for 25 steps (docs example value), each step predicts the noise residual and the scheduler takes a bit away. No quality or speed numbers shown.",
+      "everyday_anchor": "A sculptor who sees the statue inside a rough block and chips a little away each pass, with the prompt as the picture in mind.",
+      "sources": [
+        "https://huggingface.co/docs/diffusers/en/using-diffusers/write_own_pipeline",
+        "https://huggingface.co/docs/diffusers/en/stable_diffusion"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-06 (HF Diffusers 'Understanding pipelines, models and schedulers'): the pipeline denoises by taking random noise the size of the desired output and passing it through the model several times; at each timestep the model predicts the noise residual and the scheduler uses it to predict a less noisy image; repeated to the end of the inference steps. The example sets num_inference_steps = 25 for Stable Diffusion.",
+        "Same page: Stable Diffusion is a text-to-image latent diffusion model working in a lower-dimensional representation; a text encoder turns the prompt into embeddings that condition the UNet; a decoder (VAE) converts back to an image; guidance_scale sets how much weight the prompt gets.",
+        "HF Diffusers performance page: denoising is the most computationally demanding part; fewer steps is faster but can lower quality; a faster scheduler needs about 20-25 steps.",
+        "Do not claim anything about how the model was trained beyond what the pages say; the training explanation (noise added to real images, model learns to predict it) needs one more fetched source (HF diffusion course unit 1 text did not load) or is labelled as the usual description."
+      ],
+      "length_target_s": 105,
+      "cover_headline": "Image Generation: Noise to Photo",
+      "thumb_text": "NOISE TO PHOTO",
+      "keywords": [
+        "diffusion model",
+        "text to image",
+        "stable diffusion explained",
+        "ai engineer interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-06"
+    },
+    {
+      "id": "q143",
+      "track": "interview",
+      "day": null,
+      "unit": "J3",
+      "title": "Choosing a Hugging Face Model",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "Do not pick by download count or hype. Filter the Hub by task, library and licence, read the model card (intended use, limitations, training data, evaluation results, licence), shortlist two or three that fit your size budget, then run each on your own test examples and choose by that result.",
+      "trap": "Picking by download count or hype instead of task, size, licence and your own test.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Hugging Face Hub पर बहुत सारे models हैं, तुम अपने project के लिए कौन सा चुनोगे?",
+      "hook_formula": "interviewer_asked (full self-contained question)",
+      "hook_source": "strategist 2026-11-06 (interviewer_asked: next least used after q142; scene of a long search list on screen from frame 0)",
+      "visual_idea": "A search results list scrolling endlessly; a funnel with three filter gates (task, licence, size); a model card with four labelled boxes (use, limits, data, eval); finally two models run on the same five test questions and a scoreboard picks one.",
+      "example": "Project: classify customer messages as complaint or not. Filter task = text classification, licence allows commercial use, size fits the machine; read the card; run the 2 shortlisted models on 20 of your own messages and compare. Toy project, no real model names or scores unless fetched and run.",
+      "everyday_anchor": "Hiring from a stack of CVs: filter by the role, read the details, then give the shortlist the same small test task.",
+      "sources": [
+        "https://huggingface.co/docs/hub/en/model-cards",
+        "https://huggingface.co/docs/hub/en/repositories-licenses",
+        "https://huggingface.co/docs/hub/en/models-the-hub"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-06 (HF Hub model cards): a model card is the README.md of a model repo; it should describe the model, intended uses and limitations (including biases), training parameters, datasets used and evaluation results.",
+        "Same page: metadata lets users filter models on the Hub by task (pipeline_tag), library, licence, dataset and base model; the licence is displayed on the model page; a custom licence uses license: other with a name and link.",
+        "HF licences page: respect a project's licence before using its code or data; the list includes apache-2.0, mit, openrail variants, llama and gemma licences.",
+        "The Hub's model count is NOT stated here; the hook says 'bahut saare' on purpose. 'Test on your own examples' is the engineer's practice (teacher's advice), not a Hub doc claim."
+      ],
+      "length_target_s": 105,
+      "cover_headline": "Choosing a Hugging Face Model",
+      "thumb_text": "TEST, DON'T TRUST",
+      "keywords": [
+        "hugging face models",
+        "how to choose a model",
+        "model card licence",
+        "ai engineer interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-06"
     }
   ]
 }

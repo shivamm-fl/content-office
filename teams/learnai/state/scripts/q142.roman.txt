@@ -1,0 +1,19 @@
+Tumne prompt likha, noise 25 steps mein photo bana. Kaise?
+
+Interviewer yahi poochega: diffusion model, yaani image banane wala model, noise se photo kaise banata hai?
+
+Tumhara jawab: wo stored photos jodta nahi. Noise se shuru karta hai, aur har step mein thoda noise hata deta hai. Iske 3 steps hain.
+
+Pehle galat soch dekho: model ke paas photos ki shelf hai, jinhe jodkar wo nayi photo banata hai. Par shuruaat mein koi photo hai hi nahi. Sirf random noise hai, TV ki static jaisi.
+
+Pehla step: noise banao, utne hi size ka jitni final image hogi. Kyunki isme koi photo chhupi nahi hai, image ka har hissa aage banta hai.
+
+Doosra step: ek loop chalao, is example mein 25 baar. Har baar model andaza lagata hai ki picture mein kitna noise hai, aur scheduler, yaani jo tay karta hai kitna noise hatana hai, thoda sa hata deta hai. Thoda-thoda isliye, kyunki steps kam karo to image jaldi banti hai, par quality gir sakti hai.
+
+Teesra step: prompt har step ko disha deta hai. Text encoder prompt ko text embeddings mein badalta hai, yaani words ke numbers. Kyunki bina prompt ke noise hatkar koi bhi photo ban sakti hai.
+
+Ek boundary: Stable Diffusion ye loop poori image par nahi, ek chhote compressed roop par chalata hai, jise latent space kehte hain. Aakhir mein decoder use image mein badalta hai, kyunki denoising sabse bhaari hissa hai.
+
+Interview mein kaho: Diffusion model stored photos nahi jodta. Wo random noise se shuru karke, prompt ke hisaab se har step mein thoda noise hatata hai, aur aakhir mein decoder use image bana deta hai.
+
+Tumne kaun sa image tool use kiya hai? Comment mein naam likho. Roz ek naya interview sawal, poore jawab ke saath, follow karo.

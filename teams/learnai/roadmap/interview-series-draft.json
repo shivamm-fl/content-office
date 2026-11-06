@@ -365,8 +365,9 @@
       "unit": "I3",
       "title": "Interview: Image generation model text se photo kaise banata hai? Diffusion ka idea kya hai?",
       "trap": "Thinking the model pastes together stored photos instead of removing noise step by step.",
-      "status": "todo",
-      "note": "Added by the strategist 2026-11-05 because the ladder (n=1..34) was used up; owner may change or remove."
+      "status": "planned",
+      "note": "Added by the strategist 2026-11-05 because the ladder (n=1..34) was used up; owner may change or remove.",
+      "reel": "q142"
     },
     {
       "n": 38,
@@ -374,8 +375,45 @@
       "unit": "J3",
       "title": "Interview: Hugging Face par hazaaron models hain. Apne project ke liye kaun sa chunoge?",
       "trap": "Picking by download count or hype instead of task, size, licence and your own test.",
+      "status": "planned",
+      "note": "Added by the strategist 2026-11-05 because the ladder (n=1..34) was used up; owner may change or remove.",
+      "reel": "q143"
+    },
+    {
+      "n": 39,
+      "arc": "Production",
+      "unit": "H5",
+      "title": "Interview: Provider badalna hai. OpenAI-compatible API ka matlab kya hai, code kitna badlega?",
+      "trap": "Assuming 'compatible' means identical: base URL and model name change, but features, limits and error details can still differ, so you test before switching.",
       "status": "todo",
-      "note": "Added by the strategist 2026-11-05 because the ladder (n=1..34) was used up; owner may change or remove."
+      "note": "Added by the strategist 2026-11-06 because the ladder (n=1..38) was used up; units not covered in the last 60 days; owner may change or remove."
+    },
+    {
+      "n": 40,
+      "arc": "Beyond text",
+      "unit": "I5",
+      "title": "Interview: Text-to-speech voice assistant banana hai. Text se awaaz kaise banti hai, aur kya dhyan rakhoge?",
+      "trap": "Judging only by how natural one sentence sounds, and ignoring latency, pronunciation of names and consent for cloned voices.",
+      "status": "todo",
+      "note": "Added by the strategist 2026-11-06 because the ladder (n=1..38) was used up; units not covered in the last 60 days; owner may change or remove."
+    },
+    {
+      "n": 41,
+      "arc": "Beyond text",
+      "unit": "I6",
+      "title": "Interview: Lambi video ko AI se samjhana hai. Poori video model ko doge ya frames chunoge?",
+      "trap": "Sending every frame: cost and context explode; sample frames plus the transcript instead.",
+      "status": "todo",
+      "note": "Added by the strategist 2026-11-06 because the ladder (n=1..38) was used up; units not covered in the last 60 days; owner may change or remove."
+    },
+    {
+      "n": 42,
+      "arc": "Tools and agents",
+      "unit": "F8",
+      "title": "Interview: Apna MCP server banana hai. Usme kya-kya expose karoge: tools, resources ya prompts?",
+      "trap": "Exposing everything as a tool instead of choosing between tools (actions), resources (data) and prompts (templates).",
+      "status": "todo",
+      "note": "Added by the strategist 2026-11-06 because the ladder (n=1..38) was used up; units not covered in the last 60 days; owner may change or remove."
     }
   ]
 }
