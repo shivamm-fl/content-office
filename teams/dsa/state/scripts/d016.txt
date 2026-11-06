@@ -1,0 +1,21 @@
+Top K Frequent Elements: sorting के बिना O(n) में! | Given array: one, one, one, two, two, three, four, four, four, four; k equals two।
+
+हमें array की दो सबसे frequent values लौटानी हैं। | Four चार बार आया, one तीन बार, two दो बार और three एक बार। | इसलिए answer four और one है; problem में top k का answer unique होता है और order कुछ भी हो सकता है।
+
+सीधा तरीका हर value के लिए पूरा array दोबारा scan करना है, यानी O n squared time। | बेहतर तरीका: एक pass में hash map से counts बनाओ, फिर सारे distinct value और count pairs को sort करो। | यह O n log n है, और यही follow-up में बेहतर करने को कहा जाता है।
+
+Bottleneck यह है कि sorting सारी distinct values को order करती है, जबकि हमें सिर्फ top k चाहिए। | मान लो n one hundred thousand है, तो sorting में लगभग one point seven million steps लगेंगे।
+
+बीच का रास्ता size k का min heap है: O n log k time। | पर किसी भी value की count one से n के बीच ही हो सकती है।
+
+इसलिए count को ही index बना दो। | Buckets की list बनाओ, जिसमें bucket c में वे values जाएँगी जिनकी count c है। | फिर c को n से one तक उतरो, और k values मिलते ही रुक जाओ।
+
+अब dry run। | Counts: four की four, one की three, two की two, three की one। | Bucket four में four, bucket three में one, bucket two में two, bucket one में three। | Array की length ten है, तो walk ten से शुरू होती है; ten से five तक buckets खाली हैं। | Bucket four से four मिला, output four। | Bucket three से one मिला, output four, one; size k के बराबर है, तो return।
+
+यह actual Python solution है। | मैंने इसे चलाया है: example पर output four, one आता है।
+
+same count वाली values एक ही bucket में आती हैं। | उनके बीच कोई order तय नहीं है, और इसकी ज़रूरत भी नहीं, क्योंकि answer unique guaranteed है।
+
+Counting, buckets और walk तीनों linear हैं: time O n, extra space O n।
+
+Comments में बताओ: Given array one, one, one, two, two, three और k equals one पर कौन सा bucket पहले मिलेगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।
