@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Choosing a Hugging Face Model</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="109" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="109" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="109" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="109" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const at = (sc, w, n) => M.W(sc, w, n);
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const MUT = "#8592AD", TXT = "#E8EDF6";
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:18px;font-size:34px;color:${col};text-align:left`; } return d; };
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t); return d; };
+      const stamp = (host, txt, cx, y, col, t) => { const d = el(host, `left:${cx}px;top:${y}px;padding:10px 28px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 44px var(--code);color:${col};white-space:nowrap`, txt);
+        gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const tag = (host, txt, x, y, col, t, size) => show(el(host, `left:${x}px;top:${y}px;padding:6px 22px;border-radius:999px;background:${col};color:#06101F;font:800 ${size || 36}px var(--lat);white-space:nowrap`, txt), t, { opacity: 0, scale: 0.8 });
+      const example = (host, x, y, t) => show(el(host, `left:${x}px;top:${y}px;padding:4px 20px;border:2px solid #F2B544;border-radius:999px;font:800 32px var(--lat);color:#F2B544;white-space:nowrap`, "EXAMPLE"), t);
+      const hl = (d, col, t) => tl.to(d, { backgroundColor: M.ca(col, .22), borderColor: col, duration: 0.3, immediateRender: false }, t);
+      const mrow = (host, x, y, w, h, col) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;border:2px solid ${M.ca(col, .35)};background:${M.ca(col, .07)}`);
+
+      // ================= A: hook + endless Hub list =================
+      M.hook(["Interviewer:", "Kaun sa model?"], { size: 96, top: 240 });
+      // diagram: A
+      {
+        const pa = show(panel(A, 100, 520, 880, 520, CYAN, "HUB"), 0.05);
+        const clip = el(pa, "left:20px;top:80px;width:840px;height:410px;overflow:hidden"); clip.setAttribute("data-layout-allow-overflow", "");
+        const list = el(clip, "left:0;top:0;width:840px;height:1700px"); list.setAttribute("data-layout-allow-overflow", "");
+        const names = ["model-a1", "model-b7", "model-c3", "model-d2", "model-e9", "model-f4", "model-g8", "model-h5", "model-i6", "model-j1", "model-k3", "model-l7", "model-m2", "model-n5", "model-o8", "model-p4", "model-q6", "model-r9", "model-s1", "model-t3"];
+        names.forEach((n, i) => { const r = mrow(list, 0, i * 86, 840, 72, CYAN); el(r, "left:24px;top:10px;font:700 40px var(--code);white-space:nowrap", n); M.icon(r, "model", 740, 8, 54, CYAN); });
+        tl.fromTo(list, { y: 0 }, { y: -1200, duration: 17, ease: "none", immediateRender: false }, 0.1);
+        example(A, 700, 535, 0.1);
+        tl.to(pa, { borderColor: ACC, duration: 0.3, immediateRender: false }, at("A", "Hub", 1));
+        [["TASK", "task", 100, CYAN], ["LICENCE", "licence", 520, CYAN], ["MODEL CARD", "card", 100, ACC], ["TEST", "chalakar", 520, GOOD]].forEach(([t, w, x, c], i) => M.pill(A, t, at("A", w), { x: x, y: 1090 + (i > 1 ? 100 : 0), kind: "out", size: 46 }));
+        [0, 1, 2].forEach((k) => M.pill(A, `${k + 1}`, at("A", "3") + k * 0.2, { x: 330 + k * 140, y: 1300, kind: "acc", size: 50 }));
+      }
+      M.fit(A, { y: 460, h: 880 });
+
+      // ================= B: downloads trap =================
+      // diagram: B
+      {
+        const pj = show(panel(B, 100, 230, 880, 420, CYAN, "PROJECT"), M.P("B", 0));
+        example(B, 700, 245, M.P("B", 0));
+        const msgs = [["refund nahi mila!", "COMPLAINT", HOT], ["thanks, great", "NOT", GOOD], ["order late hai", "COMPLAINT", HOT]];
+        msgs.forEach(([t, l, c], i) => { const r = show(el(pj, `left:30px;top:${80 + i * 100}px;width:820px;height:84px;border-radius:42px;border:2px solid ${M.ca(c, .5)};background:${M.ca(c, .08)}`), at("B", "messages") + i * 0.3 - 0.2);
+          el(r, "left:34px;top:14px;font:600 40px var(--lat);white-space:nowrap", t); el(r, `right:30px;top:20px;font:800 34px var(--lat);color:${c};white-space:nowrap`, l); });
+        const mc = show(panel(B, 100, 720, 880, 480, ACC, "MODEL X"), at("B", "downloads"));
+        el(mc, `left:40px;top:100px;font:700 38px var(--lat);color:${MUT};white-space:nowrap`, "DOWNLOADS");
+        const bt = el(mc, `left:40px;top:150px;width:800px;height:70px;border-radius:14px;background:${M.ca(CYAN, .1)};border:2px solid ${M.ca(CYAN, .35)}`);
+        const bf = el(bt, `left:0;top:0;width:800px;height:70px;border-radius:12px;background:${ACC};transform-origin:0 50%`);
+        tl.fromTo(bf, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out", immediateRender: false }, at("B", "zyada"));
+        tag(mc, "TOP", 700, 250, ACC, at("B", "aasaan"), 40);
+        const pe = tag(mc, "PEOPLE PICKED IT", 40, 250, CYAN, at("B", "uthaya"), 38);
+        const tg = tag(mc, "TASK: IMAGE", 40, 340, HOT, at("B", "task", 1), 44);
+        tl.to(bf, { backgroundColor: M.ca(HOT, .55), duration: 0.4, immediateRender: false }, at("B", "task", 1));
+        tl.to(mc, { borderColor: HOT, duration: 0.3, immediateRender: false }, at("B", "task", 1));
+      }
+      M.fit(B, { y: 200, h: 1100 });
+
+      // ================= C: filters =================
+      // diagram: C
+      {
+        const f1 = show(el(C, `left:100px;top:230px;padding:10px 28px;border-radius:999px;border:3px solid ${CYAN};font:800 42px var(--lat);white-space:nowrap;color:${CYAN}`, "TASK: text-class"), at("C", "task"));
+        const f2 = show(el(C, `left:560px;top:230px;padding:10px 28px;border-radius:999px;border:3px solid ${ACC};font:800 42px var(--lat);white-space:nowrap;color:${ACC}`, "LICENCE"), at("C", "Licence"));
+        example(C, 760, 320, M.P("C", 0));
+        const rows = [["model-a", "text-class", "apache-2.0"], ["model-b", "image", "mit"], ["model-c", "text-class", "cc-by-nc-4.0"], ["model-d", "text-gen", "apache-2.0"], ["model-e", "text-class", "mit"], ["model-f", "audio", "apache-2.0"]];
+        const rr = rows.map(([n, t, l], i) => { const r = show(mrow(C, 100, 380 + i * 140, 880, 120, CYAN), M.P("C", 0) + 0.2 + i * 0.1);
+          el(r, "left:22px;top:12px;font:700 38px var(--code);white-space:nowrap", n);
+          const a = el(r, `left:22px;top:62px;font:700 34px var(--code);color:${CYAN};white-space:nowrap`, t);
+          const b = el(r, `left:440px;top:62px;font:700 34px var(--code);color:${MUT};white-space:nowrap`, l);
+          return { r, a, b }; });
+        [1, 3, 5].forEach((i) => tl.to(rr[i].r, { opacity: 0.25, duration: 0.4, immediateRender: false }, at("C", "classification")));
+        [0, 2, 4].forEach((i) => tl.to(rr[i].a, { color: GOOD, duration: 0.3, immediateRender: false }, at("C", "classification")));
+        tl.to(rr[0].b, { color: GOOD, duration: 0.3, immediateRender: false }, M.P("C", 2) + 0.9);
+        tl.to(rr[4].b, { color: GOOD, duration: 0.3, immediateRender: false }, at("C", "mit"));
+        const stc = show(el(rr[2].r, `right:24px;top:10px;font:800 36px var(--lat);color:${HOT}`, "✗ NO USE"), at("C", "galat", 1));
+        tl.to(rr[2].r, { borderColor: HOT, backgroundColor: M.ca(HOT, .14), duration: 0.3, immediateRender: false }, at("C", "galat", 1));
+        [0, 4].forEach((i) => hl(rr[i].r, ACC, at("C", "product")));
+      }
+      M.fit(C, { y: 200, h: 1110 });
+
+      // ================= D: model card =================
+      // diagram: D
+      {
+        const cp = show(panel(D, 100, 230, 880, 770, ACC, "README.md"), at("D", "card"));
+        const defs = [["USE", "check", GOOD, "kaam", 0, 0], ["LIMITS", "warn", HOT, "kamzor", 1, 0], ["DATA", "db", CYAN, "data", 0, 1], ["EVAL", "numbers", ACC, "evaluation", 1, 1]];
+        defs.forEach(([l, ic, c, w, cx, cy]) => { const b = M.box(cp, { x: 40 + cx * 420, y: 100 + cy * 330, w: 380, h: 290, label: l, icon: ic, color: c, size: 48 }); b.show(at("D", w, w === "data" ? 0 : 0)); });
+        const s1 = show(el(D, `left:140px;top:1060px;width:360px;height:120px;border-radius:18px;border:2.5px solid ${ACC};background:${M.ca(ACC, .12)};font:700 44px var(--code);display:flex;align-items:center;justify-content:center`, "model-a"), at("D", "2"));
+        const s2 = show(el(D, `left:580px;top:1060px;width:360px;height:120px;border-radius:18px;border:2.5px solid ${ACC};background:${M.ca(ACC, .12)};font:700 44px var(--code);display:flex;align-items:center;justify-content:center`, "model-e"), at("D", "3"));
+        tag(D, "FITS YOUR MACHINE", 230, 1210, GOOD, at("D", "machine"), 44);
+        example(D, 700, 245, at("D", "card"));
+      }
+      M.fit(D, { y: 200, h: 1110 });
+
+      // ================= E: own test =================
+      // diagram: E
+      {
+        const mp = show(panel(E, 100, 230, 880, 250, CYAN, "YOUR 20 MESSAGES"), M.P("E", 0));
+        example(E, 700, 245, M.P("E", 0));
+        const mt = [];
+        for (let i = 0; i < 20; i++) { const d = el(mp, `left:${30 + (i % 10) * 82}px;top:${90 + Math.floor(i / 10) * 70}px;width:68px;height:56px;border-radius:12px;border:2px solid ${M.ca(CYAN, .6)};background:${M.ca(CYAN, .12)};font:700 28px var(--code);color:${GOOD};text-align:center;line-height:52px`, "✓"); show(d, at("E", "20") + i * 0.02, { opacity: 0, scale: 0.7 }); mt.push(d); }
+        tag(E, "ANSWERS KNOWN", 100, 495, GOOD, at("E", "jawab"), 34);
+        const wrong = { a: [3, 7, 12], b: [1, 2, 5, 8, 11, 14, 18] };
+        const mk = (key, x, name, res, t0) => {
+          const p = show(panel(E, x, 560, 430, 560, ACC, name), at("E", "shortlisted") - 0.1);
+          const cells = [];
+          for (let i = 0; i < 20; i++) { const bad = wrong[key].includes(i); const c = el(p, `left:${35 + (i % 5) * 76}px;top:${100 + Math.floor(i / 5) * 76}px;width:64px;height:64px;border-radius:12px;border:2px solid ${M.ca(MUT, .4)};background:${M.ca(MUT, .08)}`);
+            tl.to(c, { backgroundColor: M.ca(bad ? HOT : GOOD, .45), borderColor: bad ? HOT : GOOD, duration: 0.2, immediateRender: false }, t0 + i * 0.05); cells.push(c); }
+          const sc = show(el(p, `left:0;width:430px;top:430px;text-align:center;font:800 78px var(--code);color:${TXT}`, res), t0 + 1.2);
+          return p; };
+        const pa_ = mk("a", 100, "MODEL A", "17/20", at("E", "chalao"));
+        const pb_ = mk("b", 550, "MODEL B", "13/20", at("E", "chalao"));
+        const th = tag(E, "THEIR DATA", 600, 1165, HOT, at("E", "kisi"), 40); gone(th, at("E", "tumhare") - 0.05);
+        tag(E, "YOUR DATA", 640, 1165, GOOD, at("E", "tumhare"), 40);
+        tl.to(pa_, { borderColor: ACC, duration: 0.2, immediateRender: false }, at("E", "wahi"));
+        tl.to(pb_, { opacity: 0.4, duration: 0.4, immediateRender: false }, at("E", "wahi"));
+        stamp(E, "WINNER", 330, 1165, ACC, at("E", "wahi"));
+      }
+      M.fit(E, { y: 200, h: 1110 });
+
+      // ================= F: licence other =================
+      // diagram: F
+      {
+        const yp = show(panel(F, 100, 260, 880, 440, CYAN, "README.md"), M.P("F", 0));
+        const lines = [["license:", "other", HOT, 0], ["license_name:", "their-licence", TXT, 1], ["license_link:", "https://…", ACC, 2]];
+        const ln = lines.map(([k, v, c, i]) => { const r = show(el(yp, `left:30px;top:${100 + i * 100}px;width:820px;height:76px;border-radius:12px;border:2px solid transparent`), M.P("F", 0) + 0.2 + i * 0.2);
+          el(r, `left:16px;top:10px;font:600 40px var(--code);white-space:pre;color:${MUT}`, `${k} <span style="color:${c}">${v}</span>`); return r; });
+        hl(ln[0], HOT, at("F", "other"));
+        M.arrow(F, { from: [540, 710], to: [540, 880], color: ACC, w: 10 }).show(at("F", "kholkar"), 0.3);
+        hl(ln[2], ACC, at("F", "link"));
+        const dc = show(panel(F, 220, 890, 640, 280, ACC, "THEIR RULES"), at("F", "kholkar"));
+        M.icon(dc, "doc", 270, 100, 120, ACC);
+        stamp(F, "READ IT", 540, 1210, GOOD, at("F", "padho"));
+      }
+      M.fit(F, { y: 220, h: 1080 });
+
+      // ================= G: the answer =================
+      // diagram: G
+      {
+        const ys = [200, 425, 650, 875, 1100];
+        const defs = [["DOWNLOADS", "star", HOT, "downloads"], ["FILTER", "search", CYAN, "Task"], ["MODEL CARD", "doc", CYAN, "card"], ["OWN TEST", "check", CYAN, "examples"], ["BEST WINS", "star", GOOD, "sabse"]];
+        const bx = defs.map(([l, ic, col, w], i) => { const b = M.box(G, { x: 140, y: ys[i], w: 800, h: 190, label: l, icon: ic, color: col, size: 54 }); b.show(M.P("G", 0) + (i ? 0.15 * i : 0)); return b; });
+        const x1 = el(G, `left:140px;top:${ys[0] + 148}px;width:600px;margin-left:100px;height:8px;border-radius:4px;background:${HOT}`); show(x1, at("G", "nahi"), { opacity: 0, scaleX: 0 });
+        [0, 1, 2, 3].forEach((i) => { if (i) M.arrow(G, { from: [540, ys[i] + 192], to: [540, ys[i + 1] - 4], color: CYAN, w: 8 }).show(at("G", defs[i + 1][3]) - 0.2, 0.3); });
+      }
+      M.fit(G, { y: 200, h: 1100 });
+
+      // ================= H: comment + follow =================
+      // diagram: H
+      {
+        const cc = panel(H, 120, 330, 840, 600, CYAN, "COMMENT KARO"); show(cc, M.P("H", 0));
+        [["CLASSIFICATION", "classification"], ["CHATBOT", "chatbot"], ["IMAGE", "image"]].forEach(([t, w], i) => M.pill(cc, t, at("H", w), { x: 150, y: 130 + i * 100, kind: "out", size: 48 }));
+        show(el(cc, "left:40px;right:40px;bottom:36px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 32px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 30px", "Add a comment..."), M.P("H", 0) + 0.4, { opacity: 0, y: 0 });
+        const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 330, y: 1035, kind: "acc", size: 50 });
+        tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+      }
+      M.fit(H, { y: 250, h: 1000 });
+
+      M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
+      M.finish({ kw: { Hub: "cyan", download: "hot", downloads: "hot", task: "gold", licence: "gold", card: "cyan", examples: "good", galat: "hot", README: "cyan", evaluation: "gold", sahi: "good", other: "hot", wahi: "good", chununga: "good", nahi: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

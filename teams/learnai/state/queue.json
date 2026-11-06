@@ -2456,21 +2456,14 @@
       "hook_type": "interviewer_asked",
       "spoken_hook": "Interviewer ने पूछा: Hugging Face Hub पर बहुत सारे models हैं, तुम अपने project के लिए कौन सा चुनोगे?",
       "hook_formula": "interviewer_asked (full self-contained question)",
-      "hook_source": "strategist 2026-11-06 (interviewer_asked: next least used after q142; scene of a long search list on screen from frame 0)",
-      "visual_idea": "A search results list scrolling endlessly; a funnel with three filter gates (task, licence, size); a model card with four labelled boxes (use, limits, data, eval); finally two models run on the same five test questions and a scoreboard picks one.",
-      "example": "Project: classify customer messages as complaint or not. Filter task = text classification, licence allows commercial use, size fits the machine; read the card; run the 2 shortlisted models on 20 of your own messages and compare. Toy project, no real model names or scores unless fetched and run.",
-      "everyday_anchor": "Hiring from a stack of CVs: filter by the role, read the details, then give the shortlist the same small test task.",
+      "visual_idea": "A search results list scrolling endlessly from frame 0; a funnel with three filter gates; a model card with four labelled boxes; two models run on the same test messages and a scoreboard picks one.",
+      "example": "Project: classify customer messages as complaint or not. Toy project, no real model names or scores.",
       "sources": [
         "https://huggingface.co/docs/hub/en/model-cards",
         "https://huggingface.co/docs/hub/en/repositories-licenses",
         "https://huggingface.co/docs/hub/en/models-the-hub"
       ],
-      "facts_to_verify": [
-        "Fetched 2026-11-06 (HF Hub model cards): a model card is the README.md of a model repo; it should describe the model, intended uses and limitations (including biases), training parameters, datasets used and evaluation results.",
-        "Same page: metadata lets users filter models on the Hub by task (pipeline_tag), library, licence, dataset and base model; the licence is displayed on the model page; a custom licence uses license: other with a name and link.",
-        "HF licences page: respect a project's licence before using its code or data; the list includes apache-2.0, mit, openrail variants, llama and gemma licences.",
-        "The Hub's model count is NOT stated here; the hook says 'bahut saare' on purpose. 'Test on your own examples' is the engineer's practice (teacher's advice), not a Hub doc claim."
-      ],
+      "facts_to_verify": [],
       "length_target_s": 105,
       "cover_headline": "Choosing a Hugging Face Model",
       "thumb_text": "TEST, DON'T TRUST",

@@ -1,0 +1,118 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "tick",
+      "B",
+      0,
+      0.8
+    ],
+    [
+      "err",
+      "B",
+      1,
+      1.5
+    ],
+    [
+      "dip",
+      "C",
+      0,
+      -0.1
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0.5
+    ],
+    [
+      "tick",
+      "D",
+      1,
+      0.5
+    ],
+    [
+      "pop",
+      "D",
+      2,
+      0.3
+    ],
+    [
+      "tick",
+      "E",
+      0,
+      0.8
+    ],
+    [
+      "ok",
+      "E",
+      2,
+      0.5
+    ],
+    [
+      "warn",
+      "F",
+      0,
+      0.6
+    ],
+    [
+      "dip",
+      "G",
+      0,
+      -0.1
+    ],
+    [
+      "pop",
+      "H",
+      0,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: Hugging Face Hub पर बहुत सारे models हैं, तुम अपने project के लिए कौन सा चुनोगे? | Hub यानी वो website, जहाँ लोग अपने models रखते हैं। | तुम्हारा जवाब: download count नहीं, task और licence से छाँटो, model card पढ़ो, और अपने examples पर चलाकर चुनो। | ये 3{three} steps हैं।",
+      "B": "मान लो project है: customer messages में पहचानना कि शिकायत है या नहीं। | सबसे ज़्यादा downloads वाला model आसान लगता है, पर download count सिर्फ़ ये बताता है कि कितने लोगों ने उठाया, ये नहीं कि वो तुम्हारे काम का है। | वो किसी और task का हो सकता है।",
+      "C": "पहला step: Hub के filters लगाओ, task और licence। | Task यहाँ text classification, यानी text को label देना, जैसे शिकायत। | Licence यानी इस्तेमाल की इजाज़त के नियम, जैसे apache-2.0{apache-two-point-zero} या mit। | क्योंकि गलत task का model काम कर ही नहीं सकता, और गलत licence हो तो product में नहीं चला सकते।",
+      "D": "दूसरा step: बचे models का model card पढ़ो, यानी उस model के page का README। | उसमें होना चाहिए: किस काम के लिए बना है, कहाँ कमज़ोर है, किस data पर train हुआ, और evaluation results। | इससे 2{two} या 3{three} चुनो, जो तुम्हारी machine में आएँ।",
+      "E": "तीसरा step: अपने 20{twenty} असली messages लो, जिनका सही जवाब तुम्हें पता है, और हर shortlisted model पर चलाओ। | क्योंकि card के results किसी और के data पर हैं, तुम्हारे data पर नहीं। | जिसके सबसे ज़्यादा जवाब सही निकलें, वही तुम्हारा model।",
+      "F": "एक boundary: licence में बस \"other\" लिखा हो, तो उसका link खोलकर पढ़ो। | वो उनका अपना नियम है।",
+      "G": "@emph Interview में कहो: मैं downloads देखकर नहीं चुनूँगा। | Task और licence से छाँटूँगा, model card पढ़कर shortlist बनाऊँगा, और अपने examples पर चलाकर जो सबसे अच्छा निकले वही लूँगा।",
+      "H": "तुम किस task का model ढूँढ रहे हो, classification, chatbot या image? Comment करो। | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!",
+  "hook_type": "interviewer_asked"
+}

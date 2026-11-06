@@ -1,0 +1,13 @@
+Hugging Face Model Kaise Chunein?
+
+Hugging Face Hub par model chunne ka tareeka: download count se nahi, task aur licence se filter karo, model card padho (Hugging Face docs ke hisaab se model card model repo ki README.md hai jisme intended use, limitations, training data aur evaluation results hone chahiye), 2 ya 3 models shortlist karo, phir apne examples par test karke chuno. Test-on-your-own-examples engineer ki salah hai, Hub docs ka claim nahi. Licence "other" ho to custom licence ka link padho. Example (invented): customer messages mein shikayat pehchanne ka toy project, 17/20 aur 13/20 sirf example hain.
+
+Comment karke batao: tum kis task ka model dhoondh rahe ho, classification, chatbot ya image?
+
+Sources:
+https://huggingface.co/docs/hub/en/model-cards
+https://huggingface.co/docs/hub/en/repositories-licenses
+https://huggingface.co/docs/hub/en/models-the-hub
+
+Tags: hugging face models,how to choose a model,model card licence,ai engineer interview
+AI-assisted visuals and narration.
