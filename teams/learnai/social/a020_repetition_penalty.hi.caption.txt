@@ -1,0 +1,7 @@
+Day 20/150: chatbot ne wahi line 3 baar likhi, kyun?
+
+Model har baar sabse likely word uthaye (greedy), to wahi word baar-baar jeet jata hai aur loop ban jata hai. Repetition penalty us word ka score ghata deti hai jo pehle aa chuka hai: 1.0 ka matlab koi penalty nahi, usse upar jitna, utni sakht. Chai wali list ke percent toy numbers hain aur ghatane ka rule bhi toy hai, library ka asli formula nahi. Bahut zyada penalty ya no_repeat_ngram_size jaisi ban un words ko bhi dabati hai jinhe dobara aana chahiye, jaise New York.
+
+Comment karke batao: kya tumhare chatbot ne kabhi ek hi line baar-baar likhi hai?
+
+#AIEngineering #LLM #Learnvora
