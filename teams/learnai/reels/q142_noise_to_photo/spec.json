@@ -1,0 +1,111 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "tick",
+      "A",
+      1,
+      0.5
+    ],
+    [
+      "dip",
+      "B",
+      0,
+      -0.1
+    ],
+    [
+      "err",
+      "B",
+      1,
+      0.6
+    ],
+    [
+      "tick",
+      "C",
+      0,
+      0.8
+    ],
+    [
+      "tick",
+      "D",
+      0,
+      0.8
+    ],
+    [
+      "ok",
+      "D",
+      1,
+      1
+    ],
+    [
+      "pop",
+      "E",
+      1,
+      0.3
+    ],
+    [
+      "dip",
+      "F",
+      0,
+      -0.1
+    ],
+    [
+      "ok",
+      "G",
+      0,
+      0.8
+    ],
+    [
+      "pop",
+      "H",
+      0,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook तुमने prompt लिखा, noise 25{twenty-five} steps में photo बना। कैसे? || Interviewer यही पूछेगा: diffusion model, यानी image बनाने वाला model, noise से photo कैसे बनाता है?",
+      "B": "तुम्हारा जवाब: वो stored photos जोड़ता नहीं। | Noise से शुरू करता है, और हर step में थोड़ा noise हटाता है। | इसके 3{three} steps हैं। || पहले गलत सोच देखो: model के पास photos की shelf है, जिन्हें जोड़कर वो नई photo बनाता है। | पर शुरुआत में कोई photo है ही नहीं। | सिर्फ़ random noise है, TV की static जैसी।",
+      "C": "पहला step: noise बनाओ, उतने ही size का जितनी final image होगी। | क्योंकि इसमें कोई photo छुपी नहीं है, image का हर हिस्सा आगे बनता है।",
+      "D": "दूसरा step: एक loop चलाओ, इस example में 25{twenty-five} बार। | हर बार model अंदाज़ा लगाता है कि picture में कितना noise है, और scheduler, यानी जो तय करता है कितना noise हटाना है, थोड़ा सा हटा देता है। | थोड़ा-थोड़ा इसलिए, क्योंकि steps कम करो तो image जल्दी बनती है, पर quality गिर सकती है।",
+      "E": "तीसरा step: prompt हर step को दिशा देता है। | Text encoder prompt को text embeddings में बदलता है, यानी words के numbers। | क्योंकि बिना prompt के noise हटकर कोई भी photo बन सकती है।",
+      "F": "एक boundary: Stable Diffusion ये loop पूरी image पर नहीं, एक छोटे compressed रूप पर चलाता है, जिसे latent space कहते हैं। | आख़िर में decoder उसे image में बदलता है। क्योंकि denoising सबसे भारी हिस्सा है।",
+      "G": "@emph Interview में कहो: Diffusion model stored photos नहीं जोड़ता। | वो random noise से शुरू करके, prompt के हिसाब से हर step में थोड़ा noise हटाता है, और आख़िर में decoder उसे image बना देता है।",
+      "H": "तुमने कौन सा image tool use किया है? Comment में नाम लिखो। | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

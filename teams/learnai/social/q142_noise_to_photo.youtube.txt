@@ -1,0 +1,12 @@
+Diffusion Model: Noise Se Photo Kaise Banti Hai?
+
+Interview mein poochha jaata hai: diffusion model noise se photo kaise banata hai? Jawab: wo stored photos jodta nahi. Hugging Face Diffusers docs ke hisaab se wo random noise se shuru karta hai (output ke size ka), aur har timestep par model noise residual predict karta hai aur scheduler ek kam noisy image nikalta hai. Docs ke Stable Diffusion example mein 25 steps hain. Text encoder prompt ko text embeddings mein badalta hai jo UNet ko steer karte hain. Stable Diffusion ek latent diffusion model hai: loop chhote representation par chalta hai aur decoder use image mein badalta hai. Docs ke hisaab se denoising sabse bhaari hissa hai, aur steps kam karne se speed badhti hai par quality gir sakti hai.
+
+Comment karke batao: tumne kaun sa image tool use kiya hai?
+
+Sources:
+https://huggingface.co/docs/diffusers/en/using-diffusers/write_own_pipeline
+https://huggingface.co/docs/diffusers/en/stable_diffusion
+
+Tags: diffusion model,text to image,stable diffusion explained,ai engineer interview
+AI-assisted visuals and narration.

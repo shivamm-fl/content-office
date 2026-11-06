@@ -1,0 +1,7 @@
+Diffusion model noise se photo kaise banata hai?
+
+Wo stored photos jodta nahi. Wo random noise se shuru karta hai (TV static jaisi). Phir ek loop chalta hai, is docs example mein 25 baar: model andaza lagata hai ki picture mein kitna noise hai, aur scheduler thoda sa hata deta hai. Prompt text embeddings (words ke numbers) ban kar har step ko disha deta hai. Stable Diffusion ye loop ek chhote compressed roop (latent space) par chalata hai, aur aakhir mein decoder use image bana deta hai. Steps kam karo to image jaldi banti hai, par quality gir sakti hai.
+
+Comment karke batao: tumne kaun sa image tool use kiya hai?
+
+#AIEngineering #DiffusionModel #Learnvora

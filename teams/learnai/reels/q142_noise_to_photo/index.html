@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Image Generation: Noise to Photo</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="101.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="101.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="101.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="101.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+Viz.install(M);
+const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const at = (sc, w, n) => M.W(sc, w, n);
+const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+const MUT = "#8592AD", TXT = "#E8EDF6";
+const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+  if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:26px;top:18px;font-size:34px;color:${col};text-align:left`; } return d; };
+const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t); return d; };
+const stamp = (host, txt, cx, y, col, t) => { const d = el(host, `left:${cx}px;top:${y}px;padding:10px 28px;border:3px solid ${col};border-radius:12px;background:rgba(14,18,30,.95);font:700 44px var(--code);color:${col};white-space:nowrap`, txt);
+  gsap.set(d, { xPercent: -50 }); return show(d, t, { opacity: 0, scale: 1.08 }); };
+const tag = (host, txt, x, y, col, t, size) => show(el(host, `left:${x}px;top:${y}px;padding:6px 22px;border-radius:999px;background:${col};color:#06101F;font:800 ${size || 36}px var(--lat);white-space:nowrap`, txt), t, { opacity: 0, scale: 0.8 });
+const example = (host, x, y, t) => show(el(host, `left:${x}px;top:${y}px;padding:4px 20px;border:2px solid #F2B544;border-radius:999px;font:800 32px var(--lat);color:#F2B544;white-space:nowrap`, "EXAMPLE"), t);
+const ring = (d, col, t) => tl.to(d, { borderColor: col, duration: 0.3, immediateRender: false }, t);
+// seeded random so the static is the same on every seek
+let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+const CAT = `<svg viewBox="0 0 640 640" width="100%" height="100%"><rect width="640" height="640" fill="#1E2C48"/><rect x="40" y="300" width="560" height="150" rx="40" fill="#8F5A80"/><rect x="60" y="400" width="520" height="190" rx="36" fill="#7A4A6A"/><path d="M450 440 C 560 440 570 330 520 320" stroke="#F2B544" stroke-width="30" fill="none" stroke-linecap="round"/><ellipse cx="320" cy="430" rx="140" ry="95" fill="#F2B544"/><circle cx="320" cy="300" r="82" fill="#F2B544"/><polygon points="255,245 262,170 320,228" fill="#F2B544"/><polygon points="385,245 378,170 320,228" fill="#F2B544"/><circle cx="293" cy="293" r="10" fill="#0B1220"/><circle cx="347" cy="293" r="10" fill="#0B1220"/><polygon points="310,322 330,322 320,334" fill="#E88CA0"/></svg>`;
+// a picture frame: the cat underneath, a layer of static tiles on top; setP(p) clears the static (0 = pure noise, 1 = clean photo)
+function frame(host, x, y, s, n, withCat) {
+  const box = el(host, `left:${x}px;top:${y}px;width:${s}px;height:${s}px;border-radius:14px;border:4px solid ${M.ca(CYAN, .6)};overflow:hidden;background:#101828`);
+  if (withCat) el(box, "left:0;top:0;width:100%;height:100%", CAT);
+  const ts = s / n, tiles = [];
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) { const v = 50 + Math.floor(rnd() * 150);
+    const t = el(box, `left:${c * ts}px;top:${r * ts}px;width:${ts + 1}px;height:${ts + 1}px;background:rgb(${v},${v},${Math.min(255, v + 12)})`); tiles.push({ t, k: rnd() }); }
+  const setP = (p) => tiles.forEach((o) => { o.t.style.opacity = Math.max(0, Math.min(1, 1 - (p - o.k * 0.55) / 0.45)); });
+  setP(0);
+  const run = (t0, dur, p0, p1, cb) => { const o = { p: p0 }; setP(p0);
+    tl.fromTo(o, { p: p0 }, { p: p1, duration: dur, ease: "none", immediateRender: false, onUpdate: () => { setP(o.p); if (cb) cb(o.p); } }, t0); };
+  return { box, setP, run };
+}
+
+// ================= A: hook =================
+M.hook(["Noise se", "photo kaise?"], { size: 100, top: 240 });
+// diagram: A
+{
+  const pc = show(el(A, `left:240px;top:520px;width:600px;height:96px;border-radius:20px;border:3px solid ${ACC};background:${M.ca(ACC, .12)};font:700 50px var(--code);color:${TXT};display:flex;align-items:center;justify-content:center;white-space:nowrap`, "a cat on a sofa"), 0.05);
+  M.arrow(A, { from: [540, 625], to: [540, 700], color: ACC, w: 10 }).show(0.3, 0.3);
+  const f = frame(A, 230, 690, 620, 10, true);
+  tag(A, "NOISE", 190, 1335, HOT, at("A", "noise"), 44);
+  tag(A, "25 STEPS", 520, 1335, ACC, at("A", "25"), 44);
+  tag(A, "?", 880, 1335, CYAN, at("A", "kaise"), 44);
+  M.pill(A, "INTERVIEW QUESTION", at("A", "Interviewer"), { x: 190, y: 1420, kind: "out", size: 46 });
+}
+M.fit(A, { y: 460, h: 860 });
+
+// ================= B: answer + wrong idea =================
+// diagram: B
+{
+  const f = frame(B, 340, 215, 400, 8, true);
+  show(f.box, 0.05);
+  tag(B, "START", 120, 235, HOT, at("B", "shuru"), 42);
+  f.run(at("B", "thoda"), 1.2, 0, 0.35);
+  f.run(at("B", "sirf"), 0.4, 0.35, 0);
+  [0, 1, 2].forEach((k) => M.pill(B, `${k + 1}`, at("B", "3") + k * 0.25, { x: 800 + k * 0, y: 215 + k * 120, kind: "out", size: 56 }));
+  const sh = show(panel(B, 100, 745, 880, 440, CYAN, "STORED PHOTOS"), at("B", "shelf") - 0.3);
+  const cols = ["#4CC38A", "#5BC0EB", "#F2B544", "#9A8CEB", "#E8596B", "#5BC0EB"];
+  cols.forEach((c, i) => { const t = el(sh, `left:${40 + (i % 3) * 280}px;top:${90 + Math.floor(i / 3) * 170}px;width:250px;height:140px;border-radius:12px;border:2px solid ${M.ca(c, .7)};background:${M.ca(c, .22)}`); M.icon(t, "image", 95, 35, 70, c); show(t, at("B", "shelf") + i * 0.1, { opacity: 0, y: 12 }); });
+  M.arrow(B, { from: [540, 1195], to: [540, 1270], color: HOT, w: 10 }).show(at("B", "jodkar"), 0.3);
+  show(el(B, `left:300px;top:1280px;width:480px;height:110px;border-radius:16px;border:3px dashed ${M.ca(HOT, .7)};font:700 42px var(--lat);color:${HOT};display:flex;align-items:center;justify-content:center`, "NEW PHOTO?"), at("B", "nayi"));
+  stamp(B, "NO PHOTO YET", 540, 655, HOT, at("B", "koi"));
+  tag(B, "STATIC", 750, 590, CYAN, at("B", "static"), 42);
+}
+M.fit(B, { y: 190, h: 1120 });
+
+// ================= C: step 1, noise of the output size =================
+// diagram: C
+{
+  const f = frame(C, 300, 215, 480, 8, true); show(f.box, M.P("C", 0));
+  tag(C, "NOISE", 150, 235, HOT, at("C", "noise"), 42);
+  M.arrow(C, { from: [540, 710], to: [540, 790], color: CYAN, w: 10 }).show(at("C", "size"), 0.3);
+  tag(C, "SAME SIZE", 700, 725, CYAN, at("C", "size"), 40);
+  show(el(C, `left:300px;top:800px;width:480px;height:480px;border-radius:14px;border:4px dashed ${M.ca(ACC, .8)};font:700 44px var(--lat);color:${ACC};display:flex;align-items:center;justify-content:center`, "OUTPUT SIZE"), at("C", "final"));
+  stamp(C, "NO PHOTO INSIDE", 540, 440, HOT, at("C", "chhupi"));
+  const q = [[300, 215], [540, 215], [300, 455], [540, 455]].map(([x, y]) => el(C, `left:${x}px;top:${y}px;width:240px;height:240px;border:3px solid ${ACC};border-radius:8px`));
+  q.forEach((d, i) => show(d, at("C", "hissa") + i * 0.18, { opacity: 0, scale: 0.9 }));
+  tag(C, "EVERY PART", 700, 1330, ACC, at("C", "hissa"), 40);
+}
+M.fit(C, { y: 190, h: 1120 });
+
+// ================= D: step 2, the loop =================
+// diagram: D
+{
+  const f = frame(D, 260, 300, 560, 10, true); show(f.box, M.P("D", 0));
+  const cnt = show(el(D, `left:0;width:1080px;top:215px;text-align:center;font:800 56px var(--code);color:${ACC}`, "STEP 1 / 25"), M.P("D", 0));
+  const t0 = at("D", "25"), dur = at("D", "hata", 1) - t0 + 0.3;
+  f.run(t0, dur, 0, 1, (p) => { cnt.textContent = "STEP " + Math.max(1, Math.round(p * 25)) + " / 25"; });
+  example(D, 80, 300, M.P("D", 0) + 0.2);
+  const m = M.box(D, { x: 100, y: 960, w: 400, h: 170, label: "MODEL", icon: "model", color: CYAN, size: 48 }); m.show(at("D", "andaza") - 0.2);
+  const s = M.box(D, { x: 580, y: 960, w: 400, h: 170, label: "SCHEDULER", icon: "gear", color: GOOD, size: 44 }); s.show(at("D", "scheduler") - 0.2);
+  M.arrow(D, { from: [505, 1045], to: [575, 1045], color: CYAN, w: 8 }).show(at("D", "scheduler"), 0.3);
+  tag(D, "PREDICT NOISE", 90, 1155, CYAN, at("D", "andaza"), 38);
+  tag(D, "REMOVE A BIT", 590, 1155, GOOD, at("D", "thoda", 1), 38);
+  tag(D, "FEWER STEPS = FASTER", 90, 1260, GOOD, at("D", "kam"), 38);
+  tag(D, "QUALITY MAY DROP", 600, 1260, HOT, at("D", "gir"), 38);
+}
+M.fit(D, { y: 190, h: 1120 });
+
+// ================= E: step 3, the prompt steers =================
+// diagram: E
+{
+  show(el(E, `left:240px;top:215px;width:600px;height:96px;border-radius:20px;border:3px solid ${ACC};background:${M.ca(ACC, .12)};font:700 50px var(--code);color:${TXT};display:flex;align-items:center;justify-content:center;white-space:nowrap`, "a cat on a sofa"), M.P("E", 0));
+  M.arrow(E, { from: [540, 320], to: [540, 390], color: ACC, w: 10 }).show(at("E", "Text"), 0.3);
+  M.box(E, { x: 190, y: 400, w: 700, h: 140, label: "TEXT ENCODER", icon: "model", color: CYAN, size: 46 }).show(at("E", "encoder"));
+  M.arrow(E, { from: [540, 550], to: [540, 620], color: CYAN, w: 10 }).show(at("E", "embeddings"), 0.3);
+  const nums = show(el(E, `left:190px;top:630px;width:700px;height:100px;border-radius:18px;border:2.5px solid ${M.ca(CYAN, .7)};background:${M.ca(CYAN, .1)};font:700 44px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, "[0.2, -1.1, 0.7, …]"), at("E", "embeddings"));
+  tag(E, "WORDS → NUMBERS", 300, 745, CYAN, at("E", "numbers"), 36); example(E, 760, 640, at("E", "numbers"));
+  M.arrow(E, { from: [540, 810], to: [540, 880], color: ACC, w: 10 }).show(at("E", "disha"), 0.3);
+  const f = frame(E, 320, 890, 440, 8, true); show(f.box, at("E", "disha") - 0.2);
+  f.run(at("E", "disha"), 5, 0, 0.75);
+  tag(E, "STEERS EVERY STEP", 100, 1020, ACC, at("E", "har"), 34);
+  stamp(E, "NO PROMPT = ANY PHOTO", 540, 1350, HOT, at("E", "bina"));
+}
+M.fit(E, { y: 190, h: 1120 });
+
+// ================= F: latent space + decoder =================
+// diagram: F
+{
+  const lat = el(F, `left:360px;top:215px;width:360px;height:360px;border-radius:14px;border:4px solid ${M.ca(CYAN, .6)};overflow:hidden`);
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) { const v = 70 + Math.floor(rnd() * 120); el(lat, `left:${c * 90}px;top:${r * 90}px;width:91px;height:91px;background:rgb(${v - 20},${v},${Math.min(255, v + 60)})`); }
+  show(lat, M.P("F", 0));
+  tag(F, "LATENT SPACE", 345, 590, CYAN, at("F", "latent"), 40);
+  tag(F, "SMALL", 130, 380, GOOD, at("F", "chhote"), 40);
+  tag(F, "25× LOOP", 740, 380, ACC, at("F", "loop"), 40);
+  tag(F, "HEAVIEST PART", 305, 670, HOT, at("F", "denoising"), 40);
+  M.arrow(F, { from: [540, 750], to: [540, 820], color: CYAN, w: 10 }).show(at("F", "decoder"), 0.3);
+  M.box(F, { x: 240, y: 830, w: 600, h: 130, label: "DECODER", icon: "gear", color: GOOD, size: 46 }).show(at("F", "decoder"));
+  M.arrow(F, { from: [540, 970], to: [540, 1040], color: GOOD, w: 10 }).show(at("F", "image", 1), 0.3);
+  const f = frame(F, 270, 1050, 540, 4, true); f.setP(1); show(f.box, at("F", "image", 1));
+}
+M.fit(F, { y: 190, h: 1120 });
+
+// ================= G: the answer =================
+// diagram: G
+{
+  const ys = [200, 400, 600, 800, 1000];
+  const defs = [["STORED PHOTOS", HOT, "image", "nahi"], ["RANDOM NOISE", CYAN, "star", "random"], ["PROMPT", ACC, "doc", "prompt"], ["REMOVE NOISE x STEPS", CYAN, "gear", "thoda"], ["DECODER → IMAGE", GOOD, "check", "decoder"]];
+  defs.forEach(([l, col, ic, w], i) => { const b = M.box(G, { x: 140, y: ys[i], w: 800, h: 160, label: l, icon: ic, color: col, size: 46 }); b.show(i === 0 ? at("G", "stored") : at("G", w)); });
+  stamp(G, "NO", 880, 215, HOT, at("G", "nahi"));
+}
+M.fit(G, { y: 200, h: 1100 });
+
+// ================= H: comment + follow =================
+// diagram: H
+{
+  const cc = panel(H, 120, 330, 840, 600, CYAN, "COMMENT KARO"); show(cc, M.P("H", 0));
+  M.pill(cc, "TOOL NAME", at("H", "naam"), { x: 250, y: 220, kind: "out", size: 56 });
+  show(el(cc, "left:40px;right:40px;bottom:36px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.35);font:500 32px var(--code);color:#8592AD;display:flex;align-items:center;padding:0 30px", "Add a comment..."), M.P("H", 0) + 0.4, { opacity: 0, y: 0 });
+  const fb = M.pill(H, "+  FOLLOW", at("H", "follow") - 0.4, { x: 330, y: 1035, kind: "acc", size: 50 });
+  tl.fromTo(fb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow"));
+}
+M.fit(H, { y: 250, h: 1000 });
+
+M.wipe(M.S.B); M.wipe(M.S.C); M.wipe(M.S.D); M.wipe(M.S.E); M.wipe(M.S.F); M.wipe(M.S.G); M.wipe(M.S.H);
+M.finish({ kw: { noise: "hot", photo: "gold", stored: "hot", static: "cyan", loop: "gold", scheduler: "good", prompt: "gold", embeddings: "cyan", latent: "cyan", decoder: "good", denoising: "hot", jodta: "hot" } });
+window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
