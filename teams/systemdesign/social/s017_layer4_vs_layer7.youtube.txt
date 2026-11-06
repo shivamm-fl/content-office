@@ -1,0 +1,13 @@
+Layer 4 vs Layer 7 load balancer: port ya URL?
+
+Day 17/150: Layer 4 sirf IP aur port dekhkar connection ko server tak bhejta hai. Layer 7 HTTP request (URL path, host, header) padhta hai, isliye /pay aur /images ko alag server groups mein bhej sakta hai. Trade-off: content ke hisaab se routing, ya typical design mein har request par kam kaam. Example ke naam aur groups invented hain.
+
+Comment karke batao: host ke hisaab se traffic baantna ho, toh Layer 4 ya Layer 7?
+
+Sources:
+https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html
+https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html
+https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-udp-load-balancer/
+
+Tags: layer 4 vs layer 7,load balancer,alb vs nlb,system design
+AI-assisted visuals and narration.

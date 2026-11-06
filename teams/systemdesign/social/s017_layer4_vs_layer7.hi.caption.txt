@@ -1,0 +1,7 @@
+Day 17/150: Layer 4 ya Layer 7 load balancer?
+
+Layer 4 sirf IP aur port dekhkar connection ko server tak bhejta hai. Layer 7 HTTP request padhta hai, isliye /pay aur /images ko alag server groups mein bhej sakta hai. Trade-off: content ke hisaab se routing, ya typical design mein har request par kam kaam.
+
+Comment karke batao: host ke hisaab se traffic baantna ho, toh Layer 4 ya Layer 7?
+
+#SystemDesign #LoadBalancing #Backend

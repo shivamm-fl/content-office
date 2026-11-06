@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Layer 4 vs Layer 7 Load Balancers</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="127.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="127.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="127.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="127.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J","K"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 017 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J, K] = SC.map((k) => M.$("#s" + k));
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${cx - w / 2}px;width:${w}px;top:${y}px;height:${h || 76}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 40}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const sv = (kind, size, col) => `<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${Viz.ICONS[kind](col)}</svg>`;
+      const ico = (host, kind, cx, cy, size, col, t) => show(el(host, `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`, sv(kind, size, col)), t, { opacity: 0, scale: 0.8, y: 0 });
+      const mv = (d, dx, dy, t, dur) => tl.to(d, { x: dx, y: dy, duration: dur || 0.7, ease: "power2.inOut", immediateRender: false }, t);
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M29 17L12 46M35 17l17 29"/></g>`;
+      Viz.ICONS.eyeoff = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4 32C14 16 50 16 60 32 50 48 14 48 4 32z"/><circle cx="32" cy="32" r="7"/><path d="M10 56L54 8" stroke-width="6"/></g>`;
+      Viz.ICONS.unlock = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="12" y="28" width="40" height="28" rx="6"/><path d="M20 28V20a12 12 0 0 1 24 0"/></g><circle cx="32" cy="42" r="4" fill="${c}"/>`;
+      Viz.ICONS.door = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M16 56V8h32v48M8 56h48"/></g><circle cx="40" cy="34" r="3.5" fill="${c}"/>`;
+      const S = M.S;
+
+      // ===== A: hook. Two kinds of request land on ONE server =====
+      // diagram: A
+      M.hook(["/pay और /images", "एक ही server पर"], { size: 92, top: 230 });
+      const aPay = show(el(A, `left:120px;top:520px;width:360px;height:96px;border-radius:16px;border:3px solid ${ACC};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 52px var(--code);color:${ACC}`, "/pay"), 0.05, { opacity: 0, y: 14 });
+      const aImg = show(el(A, `left:600px;top:520px;width:360px;height:96px;border-radius:16px;border:3px solid ${CYAN};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 52px var(--code);color:${CYAN}`, "/images"), 0.1, { opacity: 0, y: 14 });
+      const aSrv = M.box(A, { x: 290, y: 880, w: 500, h: 240, label: "ONE SERVER", icon: "server", color: HOT, size: 46 }); aSrv.show(0.15);
+      M.arrow(A, { from: [300, 626], to: [440, 874], color: ACC, w: 10 }).show(0.3, 0.4);
+      M.arrow(A, { from: [780, 626], to: [640, 874], color: CYAN, w: 10 }).show(0.5, 0.4);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: the balancer cannot tell the requests apart =====
+      // diagram: B
+      const bLB = M.box(B, { x: 250, y: 430, w: 580, h: 210, label: "LOAD BALANCER", icon: "balancer", color: ACC, size: 44 }); bLB.show(M.P("B", 0));
+      const bPay = chip(B, "/pay", 300, 250, 300, ACC, at("B", "payment", 0), 52, 90);
+      const bImg = chip(B, "/images", 780, 250, 300, CYAN, at("B", "photos"), 52, 90);
+      M.arrow(B, { from: [300, 346], to: [420, 424], color: ACC, w: 8 }).show(at("B", "payment", 0) + 0.2, 0.3);
+      M.arrow(B, { from: [780, 346], to: [660, 424], color: CYAN, w: 8 }).show(at("B", "photos") + 0.2, 0.3);
+      const bS = [70, 395, 720].map((x, i) => M.box(B, { x, y: 880, w: 290, h: 220, label: i === 0 ? "PAY" : "SERVER", icon: "server", color: i === 0 ? ACC : GREY, size: 42 }));
+      bS.forEach((b, i) => b.show(M.P("B", 0) + 0.1 * i));
+      stamp(B, "PAYMENT ONLY", 215, 1135, ACC, at("B", "alag"), 36, 360);
+      bS[0].glow(at("B", "alag"), ACC);
+      [[215, 874], [540, 874], [865, 874]].map(([c, d], i) => M.arrow(B, { from: [540, 646], to: [c, d], color: GREY, w: 6, dash: true }).show(at("B", "baantta") + 0.15 * i, 0.3));
+      const bEye = ico(B, "eyeoff", 930, 535, 150, HOT, at("B", "pata"));
+      tl.to(bPay, { borderColor: GREY, color: GREY, duration: 0.3, immediateRender: false }, at("B", "pata") + 0.1);
+      tl.to(bImg, { borderColor: GREY, color: GREY, duration: 0.3, immediateRender: false }, at("B", "pata") + 0.1);
+      const bLost = chip(B, "/pay", 540, 660, 200, ACC, at("B", "cheez"), 40, 64);
+      mv(bLost, 325, 80, at("B", "cheez") + 0.3, 0.7);
+      ico(B, "cross", 975, 770, 70, HOT, at("B", "hai", 2) - 0.1);
+      bS[2].glow(at("B", "hai", 2) - 0.1, HOT);
+      M.fit(B);
+
+      // ===== C: layer 7 reads inside the request, layer 4 only the outside =====
+      // diagram: C
+      const cL7 = M.box(C, { x: 220, y: 290, w: 640, h: 190, label: "LAYER 7", sub: "READS URL", icon: "eye", color: CYAN, size: 54, subsize: 40 }); cL7.show(M.P("C", 0));
+      show(el(C, `left:220px;top:530px;width:640px;height:330px;border-radius:20px;border:3px solid ${GREY};background:#16203A;box-sizing:border-box`), M.P("C", 0) + 0.1, { opacity: 0, y: 14 });
+      show(el(C, `left:250px;top:555px;width:580px;height:100px;border-radius:14px;border:2.5px solid ${M.ca(GREY, 0.8)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 46px var(--code);color:${INK}`, "IP : PORT"), M.P("C", 0) + 0.2, { opacity: 0, y: 12 });
+      show(el(C, `left:250px;top:675px;width:580px;height:160px;border-radius:14px;border:2.5px dashed ${M.ca(GREY, 0.8)};box-sizing:border-box`), M.P("C", 0) + 0.3, { opacity: 0, y: 12 });
+      const cIn = show(el(C, `left:410px;top:710px;width:260px;height:90px;border-radius:14px;border:3px solid ${ACC};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 50px var(--code);color:${ACC}`, "/pay"), at("C", "balancer"), { opacity: 0, y: 12 });
+      M.arrow(C, { from: [540, 486], to: [540, 524], color: CYAN, w: 8 }).show(M.P("C", 0) + 0.3, 0.2);
+      ring(C, 410, 710, 260, 90, CYAN, at("C", "path"), at("C", "Layer") - 0.1);
+      ring(C, 220, 290, 640, 190, CYAN, at("C", "7"), at("C", "Layer") - 0.1);
+      const cL4 = M.box(C, { x: 220, y: 940, w: 640, h: 190, label: "LAYER 4", sub: "IP + PORT", icon: "numbers", color: CYAN, size: 54, subsize: 40 }); cL4.show(at("C", "Layer"));
+      M.arrow(C, { from: [540, 934], to: [540, 866], color: CYAN, w: 8 }).show(at("C", "Layer"), 0.3);
+      ring(C, 220, 940, 640, 190, CYAN, at("C", "4"));
+      ring(C, 250, 555, 580, 100, CYAN, at("C", "IP"));
+      const cCov = show(el(C, `left:250px;top:675px;width:580px;height:160px;border-radius:14px;background:rgba(14,18,30,.9)`), at("C", "port"), { opacity: 0, y: 0 });
+      ico(C, "eyeoff", 540, 755, 110, HOT, at("C", "fark"));
+      M.fit(C);
+
+      // ===== D: courier sorter, then the layer 4 envelope =====
+      // diagram: D
+      const dParcel = show(el(D, `left:220px;top:300px;width:640px;height:300px;border-radius:18px;border:3px solid ${GREY};background:#1d2742;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 110px var(--code);color:${INK}`, "DELHI"), M.P("D", 0));
+      const dTape = show(el(D, `left:520px;top:300px;width:40px;height:300px;background:${M.ca(ACC, 0.55)}`), M.P("D", 0) + 0.1, { opacity: 0, y: 0 });
+      const dSort = M.box(D, { x: 220, y: 700, w: 640, h: 220, label: "SORTER", icon: "eye", color: CYAN, size: 54 }); dSort.show(M.P("D", 0) + 0.2);
+      const dTruck = M.box(D, { x: 220, y: 1020, w: 640, h: 200, label: "TRUCK", icon: "arrow", color: GOOD, size: 50 }); dTruck.show(M.P("D", 0) + 0.3);
+      const dA1 = M.arrow(D, { from: [540, 606], to: [540, 694], color: GREY, w: 10 }); dA1.show(at("D", "sorter"), 0.3);
+      const dRing = ring(D, 220, 300, 640, 300, ACC, at("D", "shahar"), at("D", "aage") - 0.05);
+      const dA2 = M.arrow(D, { from: [540, 926], to: [540, 1014], color: GOOD, w: 10 }); dA2.show(at("D", "bhej"), 0.3);
+      const dOld = [dParcel, dTape, dRing];
+      const tL = at("D", "Layer", 0) + 0.1;
+      const dL4 = stamp(D, "LAYER 4", 540, 250, CYAN, tL, 46, 320);
+      M.pill(D, "EXAMPLE", tL + 0.2, { x: 740, y: 262, size: 30, kind: "out" });
+      const dEnv = show(el(D, `left:180px;top:340px;width:720px;height:580px;border-radius:20px;border:3px solid ${CYAN};background:#16203A;box-sizing:border-box`), tL, { opacity: 0, y: 14 });
+      el(dEnv, "left:0;top:0;width:720px;height:150px;overflow:hidden", `<svg width="720" height="150" viewBox="0 0 720 150"><path d="M0 0L360 140L720 0" fill="none" stroke="${M.ca(CYAN, 0.7)}" stroke-width="4"/></svg>`);
+      [["IP", "203.0.113.7", "address"], ["PORT", "443", "port"], ["PROTOCOL", "TCP", "protocol"]].forEach(([l, v, w], i) => {
+        const r = el(dEnv, `left:40px;top:${180 + i * 130}px;width:640px;height:108px;border-radius:14px;border:2.5px solid ${M.ca(GREY, 0.8)};box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:700 46px var(--code);color:${INK}`, `<span style="color:#AEB9D0">${l}</span><span>${v}</span>`);
+        show(r, w === "address" ? at("D", "IP") : at("D", w), { opacity: 0, y: 12 }); });
+      ico(D, "door", 330, 1100, 150, ACC, at("D", "Port", 0));
+      chip(D, "DOOR NUMBER", 660, 1062, 420, ACC, at("D", "Port", 0) + 0.15, 40);
+      ring(D, 220, 650, 640, 108, ACC, at("D", "Port", 0), at("D", "Port", 0) + 2.2);
+      goneAll(dOld, tL - 0.1);
+      dSort.hide(tL - 0.1); dTruck.hide(tL - 0.1); dA1.hide(tL - 0.1); dA2.hide(tL - 0.1);
+      M.fit(D);
+
+      // ===== E: layer 4 keeps one connection on one server and never opens the envelope =====
+      // diagram: E
+      show(el(E, `left:190px;top:280px;width:700px;height:330px;border-radius:20px;border:3px solid ${CYAN};background:#16203A;box-sizing:border-box`), M.P("E", 0), { opacity: 0, y: 14 });
+      show(el(E, `left:225px;top:305px;width:630px;height:100px;border-radius:14px;border:2.5px solid ${M.ca(GREY, 0.8)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 46px var(--code);color:${INK}`, "IP : PORT"), M.P("E", 0) + 0.1, { opacity: 0, y: 12 });
+      show(el(E, `left:225px;top:425px;width:630px;height:155px;border-radius:14px;border:2.5px dashed ${M.ca(GREY, 0.8)};box-sizing:border-box`), M.P("E", 0) + 0.2, { opacity: 0, y: 12 });
+      const eI1 = chip(E, "/pay", 400, 465, 220, ACC, M.P("E", 0) + 0.3, 40, 76), eI2 = chip(E, "/images", 680, 465, 260, CYAN, M.P("E", 0) + 0.3, 40, 76);
+      [eI1, eI2].forEach((c) => { tl.to(c, { opacity: 0.4, duration: 0.2, immediateRender: false }, M.P("E", 0) + 0.8); });
+      const eLB = M.box(E, { x: 290, y: 690, w: 500, h: 190, label: "LAYER 4", icon: "balancer", color: CYAN, size: 48 }); eLB.show(M.P("E", 0));
+      M.arrow(E, { from: [540, 616], to: [540, 684], color: CYAN, w: 8 }).show(at("E", "connection", 0), 0.3);
+      const eS1 = M.box(E, { x: 160, y: 1000, w: 330, h: 190, label: "SERVER 1", icon: "server", color: GOOD, size: 38 }); eS1.show(M.P("E", 0) + 0.1);
+      const eS2 = M.box(E, { x: 590, y: 1000, w: 330, h: 190, label: "SERVER 2", icon: "server", color: GREY, size: 38 }); eS2.show(M.P("E", 0) + 0.2);
+      M.arrow(E, { from: [440, 886], to: [330, 994], color: GOOD, w: 12 }).show(at("E", "ek", 1), 0.4);
+      stamp(E, "SAME SERVER", 325, 1215, GOOD, at("E", "usi"), 36, 380);
+      tl.to([eI1, eI2], { opacity: 1, duration: 0.2, immediateRender: false }, at("E", "andar"));
+      ico(E, "eyeoff", 955, 445, 110, HOT, at("E", "nahi") - 0.6);
+      stamp(E, "NOT READ", 780, 905, HOT, at("E", "nahi"), 38, 320);
+      M.fit(E);
+
+      // ===== F: second sorter opens the parcel; layer 7 reads the HTTP request =====
+      // diagram: F
+      const fParcel = show(el(F, `left:220px;top:300px;width:640px;height:240px;border-radius:18px;border:3px solid ${GREY};background:#1d2742;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 80px var(--code);color:${INK}`, "PARCEL"), M.P("F", 0));
+      const fTape = show(el(F, `left:520px;top:300px;width:40px;height:240px;background:${M.ca(ACC, 0.55)}`), M.P("F", 0) + 0.1, { opacity: 0, y: 0 });
+      const fSlip = show(el(F, `left:190px;top:600px;width:700px;height:170px;border-radius:14px;border:3px solid ${HOT};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:24px;font:800 66px var(--code);color:${HOT}`, sv("eye", 80, CYAN) + "FRAGILE"), at("F", "kholkar"));
+      gone(fTape, at("F", "kholkar"));
+      const fC1 = M.box(F, { x: 120, y: 920, w: 400, h: 210, label: "COUNTER 1", icon: "text", color: GREY, size: 40 }); fC1.show(M.P("F", 0) + 0.2);
+      const fC2 = M.box(F, { x: 560, y: 920, w: 400, h: 210, label: "COUNTER 2", icon: "warn", color: HOT, size: 40 }); fC2.show(M.P("F", 0) + 0.3);
+      const fA = M.arrow(F, { from: [700, 776], to: [760, 914], color: HOT, w: 10 }); fA.show(at("F", "alag"), 0.3);
+      const fOld = [fSlip, fParcel];
+      const tF = at("F", "Layer");
+      const fL7 = stamp(F, "LAYER 7", 330, 250, CYAN, tF, 46, 340);
+      M.pill(F, "EXAMPLE", tF + 0.2, { x: 640, y: 262, size: 30, kind: "out" });
+      const fReq = show(el(F, `left:140px;top:340px;width:800px;height:720px;border-radius:20px;border:3px solid ${CYAN};background:#16203A;box-sizing:border-box`), tF, { opacity: 0, y: 14 });
+      el(fReq, `left:0;width:800px;top:22px;text-align:center;font:700 44px var(--code);color:${CYAN}`, "HTTP REQUEST");
+      [["PATH", "/pay", ACC, "path"], ["HOST", "shop.example", INK, "host"], ["HEADER", "lang: hi", INK, "header"]].forEach(([l, v, c, w], i) => {
+        const r = el(fReq, `left:40px;top:${100 + i * 195}px;width:720px;height:160px;border-radius:14px;border:2.5px solid ${M.ca(GREY, 0.8)};box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font:700 52px var(--code);color:${c}`, `<span style="color:#AEB9D0">${l}</span><span>${v}</span>`);
+        show(r, at("F", w, 0), { opacity: 0, y: 12 }); });
+      goneAll(fOld, tF - 0.55);
+      fC1.hide(tF - 0.1); fC2.hide(tF - 0.1); fA.hide(tF - 0.1);
+      ring(F, 180, 440, 720, 160, ACC, at("F", "Path"), at("F", "host", 1) - 0.1);
+      ring(F, 180, 635, 720, 160, CYAN, at("F", "host", 1), at("F", "header", 1) - 0.1);
+      ring(F, 180, 830, 720, 160, GOOD, at("F", "header", 1), at("F", "jaankari") + 0.8);
+      M.fit(F);
+
+      // ===== G: the rule, with two server groups (EXAMPLE) =====
+      // diagram: G
+      M.pill(G, "EXAMPLE", M.P("G", 0), { x: 380, y: 240, size: 44 });
+      const gPay = chip(G, "/pay", 290, 400, 300, ACC, M.P("G", 0) + 0.2, 48), gImg = chip(G, "/images", 790, 400, 300, CYAN, M.P("G", 0) + 0.3, 48);
+      const gLB = M.box(G, { x: 270, y: 580, w: 540, h: 170, label: "LAYER 7", icon: "balancer", color: CYAN, size: 46 }); gLB.show(M.P("G", 0) + 0.1);
+      M.arrow(G, { from: [290, 482], to: [400, 574], color: ACC, w: 8 }).show(M.P("G", 0) + 0.4, 0.3);
+      M.arrow(G, { from: [790, 482], to: [680, 574], color: CYAN, w: 8 }).show(M.P("G", 0) + 0.5, 0.3);
+      const grp = (x, col, name, n) => { const p = panel(G, x, 900, 440, 330, col, name); p.style.cssText += ""; for (let i = 0; i < n; i++) { const s = el(p, `left:${40 + i * 130}px;top:100px;width:110px;height:110px`, sv("server", 110, col)); } return p; };
+      const gP = show(grp(70, ACC, "PAYMENTS", 2), at("G", "naam") + 0.1, { opacity: 0, y: 14 }), gI = show(grp(570, CYAN, "IMAGES", 3), at("G", "naam") + 0.2, { opacity: 0, y: 14 });
+      M.arrow(G, { from: [380, 756], to: [290, 894], color: ACC, w: 12 }).show(at("G", "payments"), 0.4);
+      M.arrow(G, { from: [700, 756], to: [790, 894], color: CYAN, w: 12 }).show(at("G", "/images"), 0.4);
+      const gBlk = show(el(G, `left:610px;top:1140px;width:360px;height:70px;border-radius:14px;border:3px dashed ${HOT};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 40px var(--code);color:${ACC}`, "/pay"), at("G", "photos"), { opacity: 0, y: 10 });
+      const gX = ico(G, "cross", 935, 1175, 56, HOT, at("G", "nahi"));
+      M.fit(G);
+
+      // ===== H: HTTPS hides the path until layer 7 decrypts =====
+      // diagram: H
+      const hCard = show(el(H, `left:170px;top:340px;width:740px;height:280px;border-radius:18px;border:3px solid ${CYAN};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 50px;font:700 60px var(--code);color:${INK}`, `<span style="color:#AEB9D0">PATH</span><span style="color:${ACC}">/pay</span>`), M.P("H", 0), { opacity: 0, y: 14 });
+      stamp(H, "HTTPS", 540, 250, CYAN, at("H", "HTTPS"), 44, 300);
+      const hCover = show(el(H, `left:170px;top:340px;width:740px;height:280px;border-radius:18px;background:#243456;border:3px solid ${CYAN};box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:34px;font:800 70px var(--code);color:${GREY}`, sv("lock", 130, CYAN) + "▒▒▒▒"), at("H", "encrypted"), { opacity: 0, y: 0 });
+      const hLB = M.box(H, { x: 270, y: 760, w: 540, h: 220, label: "LAYER 7", icon: "balancer", color: CYAN, size: 50 }); hLB.show(M.P("H", 0) + 0.2);
+      M.arrow(H, { from: [540, 626], to: [540, 754], color: CYAN, w: 10 }).show(at("H", "7") + 0.1, 0.4);
+      stamp(H, "DECRYPT", 390, 1080, ACC, at("H", "decrypt"), 52, 440);
+      ico(H, "unlock", 790, 1130, 150, GOOD, at("H", "decrypt"));
+      gone(hCover, at("H", "decrypt") + 0.1);
+      ring(H, 170, 340, 740, 280, GOOD, at("H", "path", 1), at("H", "paata") + 1.2);
+      ico(H, "eye", 930, 870, 100, CYAN, at("H", "path", 1));
+      M.fit(H);
+
+      // ===== I: the trade-off =====
+      // diagram: I
+      const LITE = "#AEB9D0";
+      const iP7 = panel(I, 80, 290, 920, 480, CYAN, "LAYER 7"); show(iP7, M.P("I", 0));
+      const iP4 = panel(I, 80, 810, 920, 480, GREY, "LAYER 4"); show(iP4, M.P("I", 0) + 0.1);
+      const cards7 = [["/pay", ACC], ["/images", CYAN], ["/pay", ACC], ["/images", CYAN]];
+      cards7.forEach(([t, c], i) => { const k = el(iP7, `left:${42 + i * 213}px;top:110px;width:195px;height:110px;border-radius:14px;border:3px solid ${c};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 36px var(--code);color:${c}`, t); show(k, at("I", "content") + 0.1 * i, { opacity: 0, y: 12 });
+        const e = el(iP7, `left:${97 + i * 213}px;top:240px;width:85px;height:85px`, sv("eye", 85, CYAN)); show(e, at("I", "har", 0) + 0.2 * i, { opacity: 0, scale: 0.7, y: 0 }); });
+      stamp(iP7, "READS EACH", 460, 370, CYAN, at("I", "padhni"), 40, 420);
+      cards7.forEach((_, i) => { const k = el(iP4, `left:${42 + i * 213}px;top:110px;width:195px;height:110px;border-radius:14px;border:3px solid ${GREY};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 34px var(--code);color:${LITE}`, "IP:PORT"); show(k, at("I", "layer") + 0.1 * i, { opacity: 0, y: 12 }); });
+      M.pill(iP4, "TYPICAL DESIGN", at("I", "Typical"), { x: 250, y: 250, size: 38, kind: "out" });
+      stamp(iP4, "LESS WORK", 460, 370, GOOD, at("I", "kam"), 44, 380);
+      M.fit(I);
+
+      // ===== J: the rule =====
+      // diagram: J
+      stamp(J, "THE RULE", 540, 235, ACC, M.P("J", 0), 46, 360);
+      const jA = panel(J, 60, 320, 960, 420, CYAN); show(jA, M.P("J", 0) + 0.1);
+      const jB = panel(J, 60, 790, 960, 420, GREY); show(jB, M.P("J", 0) + 0.2);
+      chip(J, "PATH", 210, 400, 240, ACC, at("J", "Path"), 44, 84); chip(J, "HOST", 210, 530, 240, ACC, at("J", "host"), 44, 84);
+      const jL7 = M.box(J, { x: 440, y: 400, w: 250, h: 220, label: "LAYER 7", icon: "eye", color: CYAN, size: 36 }); jL7.show(M.P("J", 0) + 0.3);
+      M.arrow(J, { from: [336, 520], to: [434, 510], color: CYAN, w: 10 }).show(at("J", "alag"), 0.3);
+      const dotsAt = (host, spec, t) => spec.forEach(([x, y, c], i) => { const d = el(host, `left:${x}px;top:${y}px;width:60px;height:60px;border-radius:50%;background:${c}`); show(d, t + 0.08 * i, { opacity: 0, scale: 0.6, y: 0 }); });
+      M.arrow(J, { from: [696, 510], to: [744, 510], color: CYAN, w: 8 }).show(at("J", "group"), 0.25);
+      dotsAt(J, [[770, 420, ACC], [850, 420, ACC], [770, 540, CYAN], [850, 540, CYAN], [930, 540, CYAN]], at("J", "group"));
+      chip(J, "CONNECTIONS", 210, 960, 300, GREY, at("J", "connections"), 30, 84);
+      const jL4 = M.box(J, { x: 440, y: 850, w: 250, h: 220, label: "LAYER 4", icon: "numbers", color: GREY, size: 36 }); jL4.show(M.P("J", 0) + 0.4);
+      M.arrow(J, { from: [366, 1000], to: [434, 960], color: GREY, w: 10 }).show(at("J", "baantne"), 0.3);
+      M.arrow(J, { from: [696, 960], to: [744, 960], color: GREY, w: 8 }).show(at("J", "baantne") + 0.2, 0.25);
+      dotsAt(J, [[770, 900, ACC], [850, 900, CYAN], [930, 900, ACC], [770, 1000, CYAN], [850, 1000, ACC]], at("J", "baantne") + 0.3);
+      jL7.glow(at("J", "layer", 0), CYAN); jL4.glow(at("J", "layer", 1), CYAN);
+      M.fit(J);
+
+      // ===== K: comment + follow =====
+      // diagram: K
+      const kc = panel(K, 90, 290, 900, 780, CYAN, "COMMENT"); show(kc, M.P("K", 0));
+      stamp(K, "SPLIT BY HOST?", 540, 400, ACC, at("K", "host"), 48, 700);
+      M.box(K, { x: 130, y: 540, w: 380, h: 300, label: "LAYER 4", icon: "numbers", color: GREY, size: 44 }).show(at("K", "layer", 0));
+      M.box(K, { x: 570, y: 540, w: 380, h: 300, label: "LAYER 7", icon: "eye", color: CYAN, size: 44 }).show(at("K", "layer", 1));
+      show(el(K, "left:130px;width:820px;top:930px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.5);font:500 34px var(--code);color:#AEB9D0;display:flex;align-items:center;padding:0 34px;box-sizing:border-box", "Add a comment..."), M.P("K", 2), { opacity: 0 });
+      const kf = M.pill(K, "+  FOLLOW", at("K", "follow") - 0.4, { x: 340, y: 1150, size: 60, kind: "acc" });
+      tl.fromTo(kf, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("K", "follow"));
+      M.fit(K);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { server: "hot", EXAMPLE: "gold", layer: "cyan", port: "gold", path: "gold", host: "gold", header: "gold", decrypt: "gold", encrypted: "hot", fragile: "hot", follow: "gold", comment: "cyan", "trade-off": "gold" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+
+    </script>
+  </body>
+</html>

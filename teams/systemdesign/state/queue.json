@@ -7,56 +7,34 @@
       "unit": "P2",
       "title": "Layer 4 vs Layer 7 Load Balancers",
       "format": "trade-off",
-      "one_idea": "A layer 4 load balancer routes each connection using only IP addresses and ports, while a layer 7 load balancer reads the HTTP request (URL, host, header) and so can send /pay and /images to different servers; the trade-off is content-aware routing against doing less work per request in a typical design.",
+      "one_idea": "L4 routes per connection on IP and port; L7 reads the HTTP request (path, host, header) so /pay and /images can go to different servers; trade-off content-aware routing vs less work per request in a typical design.",
       "hook_type": "relatable_stake",
       "spoken_hook": "/pay और /images request, दोनों एक ही server पर।",
-      "hook_10s": "/pay और /images request, दोनों एक ही server पर। मान लो तुम्हारे app में payment भी आती है और photos भी। तुम्हें payment के servers अलग चाहिए, पर load balancer को पता ही नहीं कि request किस चीज़ की है। [frame 0: one user, two arrows labelled /pay and /images entering one balancer box and both landing on the same server]",
-      "hook_candidates": [
-        {
-          "formula": "relatable_stake",
-          "text": "/pay और /images request, दोनों एक ही server पर।"
-        },
-        {
-          "formula": "interviewer_asked",
-          "text": "Interviewer ने पूछा: load balancer URL देखकर route करे, तो कौन सा layer चाहिए?"
-        },
-        {
-          "formula": "surprising_fact",
-          "text": "एक load balancer URL पढ़ सकता है, दूसरा सिर्फ port देखता है।"
-        }
-      ],
-      "hook_formula": "relatable_stake: the viewer's own app with payment and image traffic landing on one server, plain statement, no question after it",
-      "hook_source": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html (ALB routes on URL path)",
-      "visual_idea": "Two balancer boxes side by side. The layer 4 box sees each request as a sealed envelope with only IP:port written on it and sends all envelopes round the same pool; the layer 7 box opens the envelope, reads the URL on the letter inside, and sorts /pay to a payments server group and /images to an images server group.",
-      "everyday_anchor": "A courier hub: one sorter reads only the city on the parcel; another opens the parcel slip and sends fragile items to a separate counter.",
-      "example": "EXAMPLE: users hit /pay and /images; a layer 7 balancer routes by path to two server groups. Names and groups are invented.",
+      "hook_source": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html",
       "sources": [
         "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html",
         "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html",
-        "https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-udp-load-balancer/",
-        "https://en.wikipedia.org/wiki/OSI_model",
-        "https://en.wikipedia.org/wiki/Load_balancing_(computing)"
+        "https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-udp-load-balancer/"
       ],
-      "facts_to_verify": [
-        "Researcher fetched 2026-11-06: AWS NLB works at layer 4, routes each TCP connection to one target for its life, picks by protocol, IPs and ports; ALB works at layer 7 and routes by path, host, header, method, query; HTTPS listener terminates and decrypts; NGINX stream = layer 4 TCP/UDP, HTTP = layer 7.",
-        "OSI Wikipedia fetch confirmed transport-layer and application-layer sections, not the numbering table: re-fetch the layer table or cite the AWS lines for 'layer 4 / layer 7' numbering.",
-        "NOT supported by any page, so do not claim: L4 is faster, cheaper, or never touches TLS. NLB also supports TLS listeners. Say 'does less work per request' only as a labelled typical design, or drop it. No cost or speed numbers.",
-        "Phrase L4 as 'routes on connection-level info (IPs, ports, protocol)', not 'cannot ever see the URL'.",
-        "Layer 7 needing to decrypt HTTPS to read the path is supported (ALB HTTPS listener terminates; Wikipedia: HTTPS request terminated at the balancer for content switching)."
-      ],
-      "length_target_s": 120,
+      "length_target_s": 150,
       "cover_headline": "Layer 4 vs Layer 7 Load Balancers",
       "thumb_text": "PORT OR URL?",
-      "keywords": [
-        "layer 4 vs layer 7 load balancer",
-        "l4 vs l7 load balancing explained",
-        "alb vs nlb",
-        "system design load balancer interview",
-        "load balancer kya hota hai hindi"
-      ],
       "status": "planned",
       "qa_passed": false,
-      "script_locked": false
+      "script_file": "state/scripts/s017.txt",
+      "script_locked": false,
+      "keywords": [
+        "layer 4 vs layer 7 load balancer",
+        "alb vs nlb",
+        "load balancer kya hota hai hindi"
+      ],
+      "visual_idea": "Two balancer boxes: the layer 4 box sees each request as a sealed envelope with only IP:port written on it; the layer 7 box opens the envelope, reads the URL on the letter inside, and sorts /pay to a payments group and /images to an images group.",
+      "everyday_anchor": "A courier hub: one sorter reads only the city on the parcel; another opens the parcel slip and sends fragile items to a separate counter.",
+      "example": "EXAMPLE: users hit /pay and /images; a layer 7 balancer routes by path to two server groups. Names and groups are invented.",
+      "hook_formula": "relatable_stake: the viewer's own app with payment and image traffic landing on one server, plain statement",
+      "facts_to_verify": [
+        "AWS: NLB fourth layer, ALB seventh layer, path/host/header routing, ALB HTTPS listener decrypts; NGINX: layer 4 proxying of TCP connections. L4 less work only as 'typical design'."
+      ]
     }
   ]
 }
