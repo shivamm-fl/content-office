@@ -1,11 +1,21 @@
-A: @hook /pay और /images request, दोनों एक ही server पर।
-B: मान लो तुम्हारे app में payment भी आती है और photos भी | तुम्हें payment के servers अलग चाहिए, पर load balancer, यानी जो requests को servers में बाँटता है, उसे पता ही नहीं कि request किस चीज़ की है।
-C: इसका हल है कि balancer request का URL path पढ़े, और ये layer 7{seven} करता है। || Layer 4{four} सिर्फ़ IP और port देखता है, इसलिए ये फ़र्क नहीं कर पाता। | दोनों को एक-एक करके देखते हैं।
-D: Courier hub सोचो। | पहला sorter सिर्फ़ parcel पर लिखा शहर देखता है और आगे भेज देता है। || Layer 4{four} load balancer ऐसा ही है। | वो connection की जानकारी देखता है: IP address, port और protocol। | Port यानी server का दरवाज़ा नंबर।
-E: एक connection आता है, तो वो उसे एक server को दे देता है, और connection चलने तक वो उसी server पर रहता है। | अंदर /pay लिखा है या /images, ये इस routing में नहीं देखा जाता।
-F: दूसरा sorter parcel खोलकर अंदर की slip पढ़ता है, और fragile सामान अलग counter पर भेजता है। || Layer 7{seven} load balancer ऐसा है। | वो HTTP request पढ़ता है: URL path, host और header। | Path यानी /pay जैसा हिस्सा, host यानी कौन सी website, header यानी request के साथ गई extra जानकारी।
-G: EXAMPLE: | नाम और groups मैंने बनाए हैं। || Rule लिखो: /pay वाली requests payments servers को, और /images वाली images servers को। | अब payment कभी photos के servers पर नहीं जाएगी।
-H: पर HTTPS में अंदर का हिस्सा encrypted होता है। | इसलिए layer 7{seven} को balancer पर ही HTTPS खोलनी यानी decrypt करनी पड़ती है, तभी वो path पढ़ पाता है।
-I: यही trade-off है। || Layer 7{seven} content के हिसाब से route करता है, पर हर request पढ़नी पड़ती है। | Typical design में layer 4{four} सिर्फ़ connection की जानकारी पर route करता है, तो उसका काम हर request पर कम होता है।
-J: तो rule ये है। | Path या host के हिसाब से अलग group चाहिए, तो layer 7{seven}. | बस connections बाँटने हैं, तो layer 4{four}.
-K: अब तुम बताओ: | तुम्हें host के हिसाब से traffic बाँटना है, तो layer 4{four} या layer 7{seven}? | comment में लिखो। || ऐसे और system design concepts के लिए follow करो।
+@hook /pay और /images request, दोनों एक ही server पर।
+
+मान लो तुम्हारे app में payment भी आती है और photos भी | तुम्हें payment के servers अलग चाहिए, पर load balancer, यानी जो requests को servers में बाँटता है, उसे पता ही नहीं कि request किस चीज़ की है।
+
+इसका हल है कि balancer request का URL path पढ़े, और ये layer 7{seven} करता है। || Layer 4{four} सिर्फ़ IP और port देखता है, इसलिए ये फ़र्क नहीं कर पाता। | दोनों को एक-एक करके देखते हैं।
+
+Courier hub सोचो। | पहला sorter सिर्फ़ parcel पर लिखा शहर देखता है और आगे भेज देता है। || Layer 4{four} load balancer ऐसा ही है। | वो connection की जानकारी देखता है: IP address, port और protocol। | Port यानी server का दरवाज़ा नंबर।
+
+एक connection आता है, तो वो उसे एक server को दे देता है, और connection चलने तक वो उसी server पर रहता है। | अंदर /pay लिखा है या /images, ये इस routing में नहीं देखा जाता।
+
+दूसरा sorter parcel खोलकर अंदर की slip पढ़ता है, और fragile सामान अलग counter पर भेजता है। || Layer 7{seven} load balancer ऐसा है। | वो HTTP request पढ़ता है: URL path, host और header। | Path यानी /pay जैसा हिस्सा, host यानी कौन सी website, header यानी request के साथ गई extra जानकारी।
+
+EXAMPLE: | नाम और groups मैंने बनाए हैं। || Rule लिखो: /pay वाली requests payments servers को, और /images वाली images servers को। | अब payment कभी photos के servers पर नहीं जाएगी।
+
+पर HTTPS में अंदर का हिस्सा encrypted होता है। | इसलिए layer 7{seven} को balancer पर ही HTTPS खोलनी यानी decrypt करनी पड़ती है, तभी वो path पढ़ पाता है।
+
+यही trade-off है। || Layer 7{seven} content के हिसाब से route करता है, पर हर request पढ़नी पड़ती है। | Typical design में layer 4{four} सिर्फ़ connection की जानकारी पर route करता है, तो उसका काम हर request पर कम होता है।
+
+तो rule ये है। | Path या host के हिसाब से अलग group चाहिए, तो layer 7{seven}. | बस connections बाँटने हैं, तो layer 4{four}.
+
+अब तुम बताओ: | तुम्हें host के हिसाब से traffic बाँटना है, तो layer 4{four} या layer 7{seven}? | comment में लिखो। || ऐसे और system design concepts के लिए follow करो।
