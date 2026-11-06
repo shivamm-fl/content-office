@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Top K Frequent Elements</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="142" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+        <div class="beat" id="sL"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="142" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="142" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="142" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J","K","L"], tag: "DSA 016/150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const AMB = "#E9B44C", VIO = "#9A8CEB";
+      const $s = (k) => M.$("#s" + k);
+      const [A, B, C, D, E, F, G, H, I, J, K, L] = "ABCDEFGHIJKL".split("").map($s);
+      const cp = (sc, i) => REEL.hi.caps.filter((c) => c.scene === sc)[i].s;
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size, ts) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, String(from)); const o = { v: from };
+        show(d, ts == null ? segs[0][0] - 0.3 : ts, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const tint = (d, t, col, fill) => tl.to(d, { borderColor: M.ca(col, .9), backgroundColor: M.ca(col, fill == null ? .28 : fill), duration: 0.3, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t);
+      const bigtxt = (host, css, txt, col, size, t) => show(lab(host, css, txt, col, size), t, { opacity: 0 });
+      const ghost = (host, x, y, w, h) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px dashed rgba(150,175,215,.35)`);
+      const chip = (host, x, y, w, h, txt, col, t, fs) => show(tile(host, x, y, w, h, txt, col, fs || 56), t, { opacity: 0, y: 18 });
+      const base = (sc, h) => { const p = panel(sc, 60, 230, 960, h || 1010, CYAN, null); show(p, ST[sc.id.slice(1)] + 0.05); return p; };
+      // a lit tile: dim from the start, lit on its word
+      const lt = (host, x, y, w, h, txt, col, fs, t, s0) => { const d = tile(host, x, y, w, h, txt, col, fs); dimIn(d, s0 + 0.1, 0.28); lit(d, t); return d; };
+
+      const VAL = [1,1,1,2,2,3,4,4,4,4];
+      const VC = { 1: CYAN, 2: AMB, 3: VIO, 4: ACC };
+      const CX = (i) => 24 + i * 92;
+      // ten-cell array row coloured by value; cells dim from the start, lit on their word
+      const arr10 = (host, ya, times, s0, h) => { h = h || 110;
+        VAL.forEach((v, i) => { ghost(host, CX(i), ya, 86, h); });
+        VAL.forEach((v, i) => show(lab(host, `left:${CX(i)}px;width:86px;top:${ya + h + 6}px`, i, "#8FA0BE", 32), 0.1, { opacity: 0 }));
+        return VAL.map((v, i) => { const d = tile(host, CX(i), ya, 86, h, v, VC[v], 60); dimIn(d, s0 + 0.1, 0.28); lit(d, times[i]); return d; }); };
+      // ten buckets 1..10: ghost + tile + index under
+      const bucketRow = (host, ya, h, s0, t) => { const b = [];
+        for (let c = 1; c <= 10; c++) { const i = c - 1; ghost(host, CX(i), ya, 86, h);
+          const d = tile(host, CX(i), ya, 86, h, "", CYAN, 40); dimIn(d, s0 + 0.1, t == null ? 0.35 : 0.3); b.push(d);
+          show(lab(host, `left:${CX(i)}px;width:86px;top:${ya + h + 6}px`, c, "#B8C4DC", 36), 0.1, { opacity: 0 }); }
+        return b; };
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      const code = (host, x, y, w, lines, fs, lh, s0) => {
+        const h = lines.length * lh + 36;
+        show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(8,13,26,.9);border:2px solid ${M.ca(CYAN, .35)}`), s0 + 0.1);
+        const Ls = lines.map((s, i) => show(el(host, `left:${x + 10}px;top:${y + 18 + i * lh}px;width:${w - 20}px;height:${lh}px;border-radius:8px;font:500 ${fs}px/${lh}px var(--code);color:#9FB0CC;white-space:pre;padding-left:12px;box-sizing:border-box`, esc(s)), s0 + 0.15, { opacity: 0 }));
+        const on = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: M.ca(ACC, .25), color: "#FFFFFF", duration: 0.3, immediateRender: false }, t); };
+        const off = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: "rgba(233,180,76,0)", color: "#9FB0CC", duration: 0.3, immediateRender: false }, t); };
+        return { on, off, h }; };
+      const seqTile = (host, x, y, w, h, col, fs, seq) => seq.map(([txt, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = seq[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[1]); return d; });
+
+      // diagram: A
+      // ===== A: hook. the array, k, and the promise
+      M.hook(["TOP K FREQUENT", "No sort: O(n)"], { size: 80, top: 250 });
+      const pa = panel(A, 60, 500, 960, 600, CYAN, null); show(pa, 0.02);
+      bigtxt(pa, "left:0;width:960px;top:30px", "GIVEN ARRAY", "#B8C4DC", 40, cp("A", 11) - 0.3);
+      arr10(pa, 100, [13,14,15,16,17,18,19,20,21,22].map((k) => cp("A", k)), 0);
+      lt(pa, 24, 330, 440, 130, "K = 2", ACC, 70, cp("A", 24), 0);
+      lt(pa, 498, 330, 440, 130, "NO SORT", GOOD, 60, cp("A", 4), 0);
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B
+      // ===== B: counts and the answer
+      const b0 = ST.B; const pb = base(B, 960);
+      const bR = arr10(pb, 20, VAL.map((v, i) => b0 + 0.1 + i * 0.04), b0, 90);
+      const BW = 175; // width per count
+      [[4, 4, 10], [1, 3, 14], [2, 2, 17], [3, 1, 21]].forEach(([v, c, k], r) => { const y = 190 + r * 120;
+        lt(pb, 24, y, 100, 100, v, VC[v], 56, cp("B", k - 1), b0);
+        const bar = tile(pb, 140, y, c * BW - 10, 100, "×" + c, VC[v], 52); dimIn(bar, b0 + 0.1, 0.22); lit(bar, cp("B", k + 1)); bar._r = r; if (r < 2) ring(bar, cp("B", 25 + 2 * r), GOOD); else dim(bar, cp("B", 27), 0.3); });
+      bigtxt(pb, "left:24px;width:916px;top:690px", "COUNT = FREQUENCY", "#B8C4DC", 38, cp("B", 9));
+      lt(pb, 24, 770, 440, 100, "ANSWER UNIQUE", GOOD, 40, cp("B", 35), b0);
+      lt(pb, 498, 770, 440, 100, "ORDER: ANY", AMB, 40, cp("B", 41), b0);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C
+      // ===== C: brute force O(n^2), then hash map + sort O(n log n)
+      const c0 = ST.C; const pc = base(C, 1000);
+      lt(pc, 24, 20, 916, 90, "SCAN ALL, PER VALUE", ACC, 44, cp("C", 2), c0);
+      arr10(pc, 140, VAL.map(() => c0 + 0.1), c0, 80);
+      const cR = el(pc, `left:${CX(0) - 5}px;top:134px;width:96px;height:92px;border-radius:12px;border:5px solid ${ACC}`); dimIn(cR, c0 + 0.5, 1);
+      [[6, 7.4], [7.4, 8.7], [8.7, 10.1]].forEach(([a, b], n) => { const t0 = cp("C", 6) + n * 1.45; tl.set(cR, { left: CX(0) - 5 }, t0); tl.to(cR, { left: CX(9) - 5, duration: 1.2, ease: "none", immediateRender: false }, t0); });
+      lt(pc, 24, 270, 916, 110, "O(n²)", HOT, 70, cp("C", 15), c0);
+      const bk0 = el(pc, `left:24px;top:420px;width:916px;height:6px;border-radius:3px;background:rgba(150,175,215,.35)`); show(bk0, c0 + 0.1, { opacity: 0 });
+      lt(pc, 24, 460, 916, 90, "COUNT MAP, THEN SORT", ACC, 44, cp("C", 17), c0);
+      lt(pc, 24, 580, 270, 110, "COUNTS", CYAN, 44, cp("C", 25), c0);
+      lt(pc, 345, 580, 270, 110, "SORT", AMB, 44, cp("C", 35), c0);
+      lt(pc, 666, 580, 270, 110, "PAIRS", CYAN, 44, cp("C", 33), c0);
+      [[298, "→"], [619, "→"]].forEach(([x, t]) => { const a = bigtxt(pc, `left:${x}px;width:44px;top:604px`, t, "#B8C4DC", 50, c0 + 0.1); });
+      lt(pc, 24, 730, 916, 110, "O(n log n)", HOT, 66, cp("C", 42), c0);
+      lt(pc, 24, 870, 916, 90, "FOLLOW-UP: BETTER?", GOOD, 44, cp("C", 48), c0);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D
+      // ===== D: bottleneck: sorting orders all; we need only top k; 1.7M steps
+      const d0 = ST.D; const pd = base(D, 990);
+      const dRows = [[4, 4], [1, 3], [2, 2], [3, 1]].map(([v, c], r) => lt(pd, 24, 20 + r * 95, 916, 80, `${v}  ×${c}`, VC[v], 46, d0 + 0.2, d0));
+      dRows.forEach((d, r) => tint(d, cp("D", 5), HOT, .2));
+      lt(pd, 24, 410, 916, 80, "SORT ORDERS ALL", HOT, 44, cp("D", 5), d0);
+      dRows.slice(0, 2).forEach((d) => tint(d, cp("D", 15), GOOD, .3)); dRows.slice(2).forEach((d) => dim(d, cp("D", 15), 0.3));
+      lt(pd, 24, 510, 916, 80, "WE NEED: TOP K", GOOD, 44, cp("D", 15), d0);
+      lt(pd, 24, 640, 916, 90, "n = 100,000", CYAN, 54, cp("D", 20), d0);
+      M.pill(pd, "EXAMPLE", cp("D", 20), { x: 690, y: 745, w: 250, kind: "out", size: 30 });
+      bigtxt(pd, "left:24px;width:440px;top:768px;text-align:left", "STEPS", HOT, 42, cp("D", 27)).style.textAlign = "left";
+      counter(pd, "left:24px;width:916px;top:820px", 0, [[cp("D", 29), cp("D", 33), 1700000]], HOT, 110, cp("D", 27));
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E
+      // ===== E: min heap O(n log k); counts only range 1..n
+      const e0 = ST.E; const pe = base(E, 900);
+      lt(pe, 24, 20, 916, 90, "MIN HEAP, SIZE K", ACC, 46, cp("E", 6), e0);
+      ghost(pe, 24, 140, 916, 120); [0, 1].forEach((i) => lt(pe, 190 + i * 350, 155, 160, 90, i ? "?" : "?", CYAN, 50, cp("E", 6) + 0.2 + i * 0.2, e0));
+      lt(pe, 24, 290, 916, 100, "O(n log k)", AMB, 64, cp("E", 13), e0);
+      const bk1 = el(pe, `left:24px;top:430px;width:916px;height:6px;border-radius:3px;background:rgba(150,175,215,.35)`); show(bk1, e0 + 0.1, { opacity: 0 });
+      lt(pe, 24, 470, 916, 80, "POSSIBLE COUNTS", CYAN, 44, cp("E", 20), e0);
+      for (let c = 1; c <= 10; c++) { const i = c - 1; ghost(pe, CX(i), 590, 86, 110); lt(pe, CX(i), 590, 86, 110, c === 10 ? "n" : c, CYAN, 50, cp("E", 21) + (i / 9) * (cp("E", 23) - cp("E", 21)), e0); }
+      lt(pe, 24, 740, 916, 90, "ONLY 1 … n", GOOD, 50, cp("E", 25), e0);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F
+      // ===== F: count as the bucket index; walk from n down to 1; stop at k
+      const f0 = ST.F; const pf = base(F, 930);
+      lt(pf, 24, 20, 916, 100, "COUNT = INDEX", ACC, 64, cp("F", 4), f0);
+      bigtxt(pf, "left:24px;width:916px;top:150px", "BUCKETS", "#B8C4DC", 40, cp("F", 7));
+      const fB = bucketRow(pf, 210, 150, f0);
+      fB.forEach((d, i) => lit(d, cp("F", 7) + 0.3 + i * 0.05));
+      lt(pf, 24, 440, 916, 90, "BUCKET c = COUNT c", CYAN, 46, cp("F", 20), f0);
+      ring(fB[2], cp("F", 13), ACC);
+      const fR = el(pf, `left:${CX(9) - 5}px;top:204px;width:96px;height:162px;border-radius:14px;border:5px solid ${ACC}`); dimIn(fR, cp("F", 22), 1);
+      tl.to(fR, { left: CX(0) - 5, duration: 2.0, ease: "none", immediateRender: false }, cp("F", 23));
+      lt(pf, 24, 570, 916, 90, "WALK n → 1", AMB, 50, cp("F", 23), f0);
+      lt(pf, 24, 700, 916, 100, "STOP AT K", GOOD, 60, cp("F", 31), f0);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G
+      // ===== G: dry run, counts then buckets (with the code that does it)
+      const g0 = ST.G; const pg = base(G, 1010);
+      bigtxt(pg, "left:24px;width:916px;top:16px", "COUNTS", "#B8C4DC", 40, g0 + 0.1);
+      const gC = [[4, 4, 4], [1, 3, 7], [2, 2, 10], [3, 1, 13]].map(([v, c, k], i) => lt(pg, 24 + i * 232, 70, 220, 110, `${v} ×${c}`, VC[v], 52, cp("G", k), g0));
+      bigtxt(pg, "left:24px;width:916px;top:215px", "BUCKETS", "#B8C4DC", 40, g0 + 0.1);
+      const gB = bucketRow(pg, 270, 150, g0, 0.5); gB.forEach((d) => lit(d, g0 + 0.3));
+      [[4, 4, 17], [1, 3, 21], [2, 2, 25], [3, 1, 29]].forEach(([v, c, k], n) => { const i = [4, 1, 2, 3].indexOf(v);
+        const d = tile(pg, 24 + i * 232 + 73, 190, 74, 74, v, VC[v], 44); show(d, cp("G", k) - 0.3, { opacity: 0 });
+        tl.to(d, { left: CX(c - 1) + 6, top: 270 + 38, duration: 0.55, ease: "power2.inOut", immediateRender: false }, cp("G", k));
+        tint(gB[c - 1], cp("G", k) + 0.5, VC[v], .22); });
+      const gK = code(pg, 24, 500, 916, ["cnt = Counter(nums)", "for v, c in cnt.items():", "    buckets[c].append(v)"], 40, 58, g0);
+      gK.on(0, 0, cp("G", 3)); gK.off(0, 0, cp("G", 16)); gK.on(1, 2, cp("G", 16));
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H
+      // ===== H: dry run, the walk from 10 down, output [4, 1]
+      const h0 = ST.H; const ph = base(H, 1030);
+      bigtxt(ph, "left:24px;width:916px;top:14px", "BUCKETS", "#B8C4DC", 38, h0 + 0.1);
+      const hB = bucketRow(ph, 60, 140, h0, 0.5); hB.forEach((d) => lit(d, h0 + 0.3));
+      const hCh = {};
+      [[4, 4], [3, 1], [2, 2], [1, 3]].forEach(([c, v]) => { const d = tile(ph, CX(c - 1) + 6, 60 + 33, 74, 74, v, VC[v], 44); show(d, h0 + 0.3, { opacity: 0 }); tint(hB[c - 1], h0 + 0.3, VC[v], .22); hCh[c] = d; });
+      const hW = el(ph, `left:${CX(9) - 5}px;top:54px;width:96px;height:152px;border-radius:14px;border:5px solid ${ACC}`); dimIn(hW, h0 + 0.5, 1);
+      tl.set(hW, { left: CX(9) - 5 }, cp("H", 7));
+      tl.to(hW, { left: CX(4) - 5, duration: cp("H", 14) - cp("H", 7), ease: "none", immediateRender: false }, cp("H", 7));
+      tl.to(hW, { left: CX(3) - 5, duration: 0.4, ease: "power2.inOut", immediateRender: false }, cp("H", 19));
+      tl.to(hW, { left: CX(2) - 5, duration: 0.4, ease: "power2.inOut", immediateRender: false }, cp("H", 26));
+      bigtxt(ph, `left:${CX(4)}px;width:${CX(9) + 86 - CX(4)}px;top:252px`, "EMPTY", HOT, 38, cp("H", 16));
+      bigtxt(ph, "left:24px;width:300px;top:300px;text-align:left", "OUTPUT", "#B8C4DC", 38, h0 + 0.1).style.textAlign = "left";
+      [0, 1].forEach((i) => ghost(ph, 24 + i * 110, 350, 100, 100));
+      bigtxt(ph, "left:330px;width:300px;top:370px", "K = 2", ACC, 50, h0 + 0.1);
+      [[4, 4, 0, 22], [1, 3, 1, 30]].forEach(([v, c, i, k]) => tl.to(hCh[c], { left: 24 + i * 110 + 13, top: 350 + 13, duration: 0.5, ease: "power2.inOut", immediateRender: false }, cp("H", k) + 0.1));
+      lt(ph, 24, 480, 916, 90, "LEN = K → RETURN", GOOD, 50, cp("H", 38), h0);
+      const hK = code(ph, 24, 610, 916, ["for c in range(len(nums), 0, -1):", "    for v in buckets[c]:", "        out.append(v)", "        if len(out) == k:", "            return out"], 34, 54, h0);
+      hK.on(0, 0, cp("H", 6)); hK.off(0, 0, cp("H", 19)); hK.on(1, 2, cp("H", 19)); hK.off(1, 2, cp("H", 34)); hK.on(3, 4, cp("H", 34));
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I
+      // ===== I: the full Python solution, run output
+      const i0 = ST.I; const pi = base(I, 1040);
+      const SRC = ["from collections import Counter", "", "def topKFrequent(nums, k):", "    cnt = Counter(nums)", "    buckets = [[] for _ in range(len(nums) + 1)]", "    for v, c in cnt.items():", "        buckets[c].append(v)", "    out = []", "    for c in range(len(nums), 0, -1):", "        for v in buckets[c]:", "            out.append(v)", "            if len(out) == k:", "                return out"];
+      const iK = code(pi, 24, 20, 916, SRC, 30, 50, i0);
+      const iT = [["", i0], ["COUNT", cp("I", 0)], ["BUCKETS", cp("I", 2)], ["FILL", cp("I", 4)], ["WALK", cp("I", 8)], ["STOP AT K", cp("I", 12) + 1.2]];
+      iK.on(2, 3, cp("I", 0)); iK.off(2, 3, cp("I", 2)); iK.on(4, 4, cp("I", 2)); iK.off(4, 4, cp("I", 4)); iK.on(5, 6, cp("I", 4)); iK.off(5, 6, cp("I", 8)); iK.on(7, 9, cp("I", 8)); iK.off(7, 9, cp("I", 12) + 1.2); iK.on(10, 12, cp("I", 12) + 1.2);
+      seqTile(pi, 24, 740, 440, 100, ACC, 46, iT.slice(1));
+      lt(pi, 498, 740, 440, 100, "REAL RUN", CYAN, 40, cp("I", 5), i0);
+      lt(pi, 24, 870, 916, 110, "OUTPUT: [4, 1]", GOOD, 64, cp("I", 11), i0);
+      M.fit(I, { y: 200, h: 1100 });
+
+      // diagram: J
+      // ===== J: same count, same bucket
+      const j0 = ST.J; const pj = base(J, 720);
+      M.pill(pj, "EXAMPLE", cp("J", 0), { x: 690, y: 20, w: 250, kind: "out", size: 30 });
+      bigtxt(pj, "left:24px;width:420px;top:30px", "BUCKET 3", CYAN, 44, j0 + 0.1);
+      ghost(pj, 24, 100, 420, 280); tile(pj, 24, 100, 420, 280, "", CYAN, 40).style.opacity = 0.0;
+      const jb = lt(pj, 24, 100, 420, 280, "", CYAN, 40, j0 + 0.3, j0);
+      chip(pj, 64, 190, 150, 150, 5, AMB, cp("J", 3), 70); chip(pj, 254, 190, 150, 150, 7, VIO, cp("J", 6), 70);
+      lt(pj, 480, 110, 458, 110, "ORDER: ANY", AMB, 52, cp("J", 13), j0);
+      lt(pj, 480, 260, 458, 110, "NOT NEEDED", HOT, 52, cp("J", 19), j0);
+      lt(pj, 24, 450, 916, 120, "ANSWER UNIQUE", GOOD, 64, cp("J", 23), j0);
+      M.fit(J, { y: 200, h: 1100 });
+
+      // diagram: K
+      // ===== K: complexity
+      const k0 = ST.K; const pk = base(K, 820);
+      [["COUNT", 24, 0], ["BUCKETS", 340, 1], ["WALK", 656, 3]].forEach(([t, x, k]) => { lt(pk, x, 40, 280, 130, t, CYAN, 46, cp("K", k), k0); lt(pk, x, 200, 280, 100, "O(n)", GOOD, 54, cp("K", k) + 0.5, k0); });
+      lt(pk, 24, 400, 916, 130, "TIME  O(n)", GOOD, 76, cp("K", 9), k0);
+      lt(pk, 24, 580, 916, 130, "SPACE  O(n)", AMB, 76, cp("K", 13), k0);
+      M.fit(K, { y: 200, h: 1100 });
+
+      // diagram: L
+      // ===== L: comment question + follow
+      const l0 = ST.L; const pl = base(L, 940);
+      const lV = [1,1,1,2,2,3]; lV.forEach((v, i) => { ghost(pl, 24 + i * 156, 20, 140, 120); const d = tile(pl, 24 + i * 156, 20, 140, 120, v, VC[v], 64); dimIn(d, l0 + 0.1, 0.28); lit(d, cp("L", 5 + i)); });
+      lt(pl, 24, 190, 440, 100, "K = 1", ACC, 56, cp("L", 14), l0);
+      bigtxt(pl, "left:24px;width:916px;top:330px", "BUCKETS", "#B8C4DC", 38, l0 + 0.1);
+      for (let c = 1; c <= 6; c++) { ghost(pl, 24 + (c - 1) * 156, 380, 140, 130); lt(pl, 24 + (c - 1) * 156, 380, 140, 130, "?", HOT, 60, cp("L", 16), l0); bigtxt(pl, `left:${24 + (c - 1) * 156}px;width:140px;top:520px`, c, "#B8C4DC", 36, l0 + 0.1); }
+      lt(pl, 24, 590, 916, 100, "WHICH FIRST?", HOT, 60, cp("L", 18), l0);
+      const lCb = el(pl, "left:24px;top:720px;width:916px;height:84px;border-radius:50px;border:1.5px solid rgba(150,175,215,.35);font:500 40px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 30px", "Add a comment..."); show(lCb, cp("L", 2), { opacity: 0 });
+      const lFb = M.pill(pl, "+  FOLLOW", cp("L", 31) - 0.4, { x: 240, y: 840, w: 480, kind: "acc", size: 56 });
+      tl.fromTo(lFb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, cp("L", 31));
+      M.fit(L, { y: 200, h: 1100 });
+
+      ["B","C","D","E","F","G","H","I","J","K","L"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { Top: "gold", Frequent: "gold", sorting: "hot", O: "good", Bottleneck: "hot", heap: "cyan", count: "cyan", index: "gold", bucket: "cyan", buckets: "cyan", Buckets: "cyan", linear: "good", unique: "good", Counts: "cyan", return: "good", squared: "hot", million: "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

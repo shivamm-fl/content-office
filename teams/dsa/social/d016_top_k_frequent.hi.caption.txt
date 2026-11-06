@@ -1,0 +1,9 @@
+Day 16/150: Top K Frequent Elements: sorting ke bina O(n) mein!
+
+Top K Frequent Elements mein array ki k sabse frequent values return karni hoti hain. Seedha tarika har value ke liye poora array scan karna hai, to time O(n^2) lagta hai. Hash map se counts banake sort karo to O(n log n) aata hai. Bottleneck yeh hai ki sorting saari distinct values ko order karti hai, jabki sirf top k chahiye. Fix: kisi bhi value ki count 1 se n ke beech hi hoti hai, to count ko hi bucket index bana do.
+
+Example nums = [1, 1, 1, 2, 2, 3, 4, 4, 4, 4], k = 2: counts {1: 3, 2: 2, 3: 1, 4: 4}. Bucket 4 mein 4, bucket 3 mein 1, bucket 2 mein 2, bucket 1 mein 3. Walk 10 se shuru hoti hai, 10 se 5 tak buckets khaali hain, bucket 4 se 4 mila, bucket 3 se 1 mila, output [4, 1] aur size k ke barabar hote hi return. Same count wali values ek hi bucket mein aati hain, unka order tay nahi hota aur zarurat bhi nahi, kyunki answer unique guaranteed hai. Counting, buckets aur walk teeno linear hain: time O(n), extra space O(n). Actual Python code video mein hai, example par chalaya hai.
+
+Ab tumhara turn: nums [1, 1, 1, 2, 2, 3] aur k = 1 par kaun sa bucket pehle milega? Comment mein likho.
+
+#dsa #topkfrequent #interviewprep

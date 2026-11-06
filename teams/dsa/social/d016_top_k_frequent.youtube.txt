@@ -1,0 +1,9 @@
+Top K Frequent Elements in O(n): Count, Then Buckets
+
+Top K Frequent Elements asks for the k most frequent values of an integer array, in any order, and the answer is guaranteed to be unique. Re-scanning the array for every value is O(n^2). Counting with a hash map and sorting the pairs is O(n log n). A min heap of size k gives O(n log k). Because any count lies between 1 and n, the count itself can be a bucket index: put each value in the bucket numbered by its count, then walk the buckets from n down to 1 and stop after k values. Example: nums = [1, 1, 1, 2, 2, 3, 4, 4, 4, 4], k = 2 gives counts {1: 3, 2: 2, 3: 1, 4: 4} and the output [4, 1] (the code shown was run). Counting, filling the buckets and the walk are each linear, so this version takes O(n) time and O(n) extra space (our own analysis). Example arithmetic: for n = 100,000, sorting is about 1.7 million steps.
+
+Sources:
+https://leetcode.doocs.org/en/lc/347/
+https://docs.python.org/3/library/collections.html#collections.Counter
+https://docs.python.org/3/library/heapq.html
+https://en.wikipedia.org/wiki/Bucket_sort

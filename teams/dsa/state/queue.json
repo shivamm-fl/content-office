@@ -7,39 +7,15 @@
       "unit": "P2",
       "title": "Top K Frequent Elements: count karo, phir frequency ke buckets",
       "format": "problem",
-      "one_idea": "Top K Frequent Elements: count every value with a hash map, then use the count itself as a bucket index so the top k come out in O(n) without sorting.",
+      "status": "built",
+      "script_file": "state/scripts/d016.txt",
+      "script_locked": false,
       "hook_type": "surprising_fact",
       "spoken_hook": "Top K Frequent Elements: sorting के बिना O(n) में!",
-      "hook_10s": "Top K Frequent Elements: sorting के बिना O(n) में! Pehle hash map se har value ka count निकालते हैं, फिर count को ही index बनाकर buckets में रखते हैं. [frame 0: array [1,1,1,2,2,3,4,4,4,4] on top, a count table 4:4, 1:3, 2:2, 3:1 below, and a row of empty buckets labelled 1..10]",
-      "hook_candidates": [
-        {
-          "formula": "surprising_fact_payoff",
-          "text": "Top K Frequent Elements: sorting के बिना O(n) में!"
-        },
-        {
-          "formula": "interviewer_asked",
-          "text": "Interviewer ने पूछा: array में top k frequent elements, O(n log n) से बेहतर कैसे?"
-        },
-        {
-          "formula": "direct_question",
-          "text": "Top K Frequent Elements में sort के बिना top k कैसे निकालोगे?"
-        }
-      ],
       "hook_formula": "surprising_fact_payoff",
-      "hook_source": "Same plain-payoff form as d009 (Contains Duplicate), standard problem name per the 2026-10-26 owner rule; LeetCode 347 follow-up asks for better than O(n log n). Chosen because the last six built days used direct_question four times (d012-d015), relatable_stake once (d010) and interviewer_asked once (d011); surprising_fact was last used on d009.",
-      "visual_idea": "The array row [1,1,1,2,2,3,4,4,4,4] feeds a count table (value: count); then a row of buckets indexed 1 to 10 where each value drops into the bucket numbered by its count, and a pointer walks the buckets from 10 down to 1, collecting values until k=2 are picked; beside it a sort-everything bar of about 17n steps shrinks against the bucket bar of about 2n.",
-      "everyday_anchor": "none: the owner's rule (2026-10-26) is technical register for working engineers with no everyday analogies; the idea is explained by the count table and bucket index only.",
-      "example": "EXAMPLE nums=[1,1,1,2,2,3,4,4,4,4], k=2: counts {1:3, 2:2, 3:1, 4:4}; buckets[4]=[4], buckets[3]=[1], buckets[2]=[2], buckets[1]=[3]; walking from 10 down gives [4, 1]. Also [1,1,1,2,2,3] k=2 gives [1, 2]; [1] k=1 gives [1]. For n=100000 (EXAMPLE) sorting all counts ~1700000 steps (n log2 n) versus ~200000 for count plus bucket pass.",
-      "approach_order": [
-        "problem: return the k most frequent values, answer unique, any order",
-        "brute force: count each value by rescanning the array for every element, O(n^2), or count once and sort all (value,count) pairs, O(n log n) which the follow-up forbids",
-        "bottleneck: sorting orders all distinct values though only the top k are needed",
-        "optimization 1: min heap of size k, O(n log k) (Counter.most_common(k) does this)",
-        "optimization 2: a count can only be 1..n, so use count as a bucket index: buckets[c] = values with count c; walk c from n down to 1 until k values are collected, O(n) time",
-        "dry run on the example",
-        "complexity: time O(n), extra space O(n) for the counter and n+1 buckets"
-      ],
-      "code_to_show": "from collections import Counter\n\ndef topKFrequent(nums, k):\n    cnt = Counter(nums)\n    buckets = [[] for _ in range(len(nums) + 1)]\n    for v, c in cnt.items():\n        buckets[c].append(v)\n    out = []\n    for c in range(len(nums), 0, -1):\n        for v in buckets[c]:\n            out.append(v)\n            if len(out) == k:\n                return out",
+      "hook_source": "Plain payoff form, same as d009",
+      "one_idea": "Top K Frequent Elements: count every value with a hash map, then use the count itself as a bucket index so the top k come out in O(n) without sorting.",
+      "visual_idea": "The array row feeds a count table (value: count); then a row of buckets indexed 1 to 10 where each value drops into the bucket numbered by its count, and a pointer walks the buckets from 10 down to 1 until k=2 are picked; actual Python code visible in readable chunks synced to the voice.",
       "sources": [
         "https://leetcode.doocs.org/en/lc/347/",
         "https://docs.python.org/3/library/collections.html#collections.Counter",
@@ -47,29 +23,17 @@
         "https://en.wikipedia.org/wiki/Bucket_sort"
       ],
       "facts_to_verify": [
-        "Problem paraphrased from the doocs mirror of LeetCode 347 (leetcode.com returned 403 this session): k most frequent elements, answer unique and any order, 1 <= n <= 10^5, -10^4 <= nums[i] <= 10^4, follow-up asks for better than O(n log n). Builder re-checks against the problem page if reachable.",
-        "Hash table + min heap of size k is O(n log k) time, O(k) heap space per the doocs page; the same page says Counter.most_common(k) does this heap selection. The Python Counter docs fetched do NOT state its complexity: do not claim it from the docs, cite doocs only.",
-        "Bucket approach O(n) time and O(n) extra space is the planner's own analysis (counts lie in 1..n, one pass to count, one pass over n+1 buckets plus the distinct values); the doocs page gives no bucket solution and Wikipedia's bucket sort gives O(n) average only for k~n buckets. Label as derived, never as a quoted source. Say 'extra space O(n)', counter and buckets.",
-        "The exact displayed Python was run this session: output Counter({4: 4, 1: 3, 2: 2, 3: 1}), topK([1,1,1,2,2,3,4,4,4,4],2) = [4, 1], topK([1],1) = [1], topK([5,5,6,6,6,7],2) = [6, 5], and 5000 seeded-free random arrays (values -5..5, n<=30) matched the sorted top-k count multiset. Builder reruns it and shows the real output on screen.",
-        "Tie caveat: the problem guarantees a unique answer, so ties at the k boundary never occur; the code's tie order is arbitrary and the reel must not claim an order among equal counts.",
-        "Heapq docs: nlargest/nsmallest perform best for small n, sorted() is better for larger n; heappush/heappop big-O is not stated in the docs (only 'logarithmic' in the Theory section) so do not quote log k for push from the docs.",
-        "Step counts 1700000 vs 200000 for n=100000 are EXAMPLE arithmetic (n*17 vs 2n), not measured timings.",
-        "Per the 2026-11-01 coding-reel number rule only if the owner applies it to series days: current series rule is Hindi-word numbers; builder follows the newest owner instruction for series reels (state/learnings.md says Hindi words), and says 'Given array' only if the owner extends it. No Accepted proof is required or claimed for daily DSA."
+        "Problem paraphrased from doocs mirror of LeetCode 347. Heap O(n log k) per doocs. Bucket O(n) time and O(n) extra space is our own derived analysis. Code was run: [4, 1] (qa/d016/run_output.txt). 1.7 million vs n log n is EXAMPLE arithmetic."
       ],
-      "length_target_s": 135,
+      "length_target_s": 160,
       "cover_headline": "Top K Frequent Elements Without Sorting",
       "thumb_text": "NO SORT NEEDED",
       "keywords": [
         "top k frequent elements",
         "leetcode 347",
         "bucket sort python",
-        "Counter most_common",
         "DSA hinglish"
-      ],
-      "why_it_should_work": "No own numbers exist yet; it breaks the run of four direct_question hooks (d012-d015) by testing the plain-payoff surprising_fact on a problem day against d009, and it carries the O(n) payoff plus the standard problem name in the first line.",
-      "status": "planned",
-      "script_file": "state/scripts/d016.txt",
-      "script_locked": false
+      ]
     }
   ]
 }
