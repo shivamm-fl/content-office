@@ -1,0 +1,13 @@
+A: @hook Server मर गया, फिर भी request वहीं जाती रही।
+B: Dhaba का manager हर cook से पूछता है: ready? | जो जवाब नहीं देता, उसे order slip मिलना बंद। || Load balancer, यानी जो requests को servers में बाँटता है, ठीक यही करता है।
+C: वो हर server को एक छोटी test request भेजता है, इसे health check कहते हैं। | Server ठीक है, तो जवाब आ जाता है।
+D: EXAMPLE: | मान लो 4{four} servers हैं, और requests बारी-बारी से सब पर जाती हैं। || एक server मर गया, पर balancer को अभी पता नहीं। | तो हर 4{four} में से 1{एक} request fail होगी, यानी 25{twenty-five} percent.
+E: पहला step: | balancer हर कुछ seconds पर हर server को health check भेजता है। | AWS में default है, हर 30{thirty} seconds.
+F: दूसरा step: | जवाब न आए, तो वो एक failure गिना जाता है। | एक ही बार पर server नहीं निकलता, क्योंकि जवाब network की गड़बड़ से भी छूट सकता है। | लगातार 2{two} failures आए, तब server unhealthy माना जाता है।
+G: तीसरा step: | अब balancer उसे requests देना बंद कर देता है, और बाकी 3{three} servers काम सँभाल लेते हैं। | इसे failover कहते हैं, यानी एक fail हो, तो दूसरा अपने आप काम उठा ले।
+H: चौथा step: | balancer मरे server को भी check भेजता रहता है। | लगातार 5{five} बार सही जवाब आए, तो वो वापस आ जाता है।
+I: अब hook का जवाब। || Server मरने से निकलने तक requests जाती रहती हैं, और ये समय है interval times threshold. | 30{thirty} seconds times 2{two} checks, यानी default settings में लगभग 60{sixty} seconds.
+J: Interval 5{five} seconds कर दो, तो ये लगभग 10{ten} seconds रह जाता है, पर health checks 6{six} गुना हो जाते हैं। | और threshold बहुत कम रखा, तो धीमा पर ज़िंदा server भी बाहर हो सकता है, इसे false positive कहते हैं।
+K: अब एक catch। | AWS में किसी group के सारे servers unhealthy हो जाएँ, तो balancer fail open करता है, यानी health देखे बिना सबको requests भेजने लगता है।
+L: तो rule ये है। | जल्दी पकड़ना है, तो checks ज़्यादा; checks कम रखने हैं, तो मरा server थोड़ी देर requests खाएगा।
+M: अब तुम बताओ: | check हर 10{ten} seconds पर है और 3{three} failures चाहिए, तो मरे server को लगभग कितनी देर requests जाएँगी? | comment में लिखो। || ऐसे और system design concepts के लिए follow करो।
