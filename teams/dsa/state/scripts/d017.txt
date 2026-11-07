@@ -1,0 +1,19 @@
+Sort करके solve किया, interviewer बोला O(n) चाहिए! | Problem: unsorted array में सबसे लंबा consecutive run, जैसे one, two, three, four, उसकी length निकालनी है।
+
+Given array: one hundred, four, two hundred, one, three, two। | One, two, three, four का run बनता है, तो answer four है।
+
+Sort करके एक scan में run गिन लो, यह चल जाएगा। | पर sorting O n log n है, और वही total time बन जाता है। | O n चाहिए, तो sorting छोड़नी पड़ेगी।
+
+Sort सिर्फ इसलिए थी कि x के बाद x plus one पास में मिले। | यह काम hash set average O one में कर देता है: x plus one in set। | पर हर number से walk शुरू की, तो one से two thousand वाले array में लगभग two million lookups होंगे। | यह एक example है।
+
+इसलिए walk सिर्फ run के start से शुरू करो। | Start वह x है जिसका x minus one set में नहीं है। | Four का left neighbour three set में है, तो four बीच में है, start नहीं।
+
+Code में पहले set बनाओ, और हर x पर check करो: x minus one not in set। | अगर start है, तो y को x पर रखो, और while y plus one in set, y बढ़ाओ। | फिर best में max लो y minus x plus one का, और best return करो।
+
+अब dry run। | One hundred: ninety-nine नहीं है, तो start है; one hundred and one नहीं मिला, length one। | Four, three, two skip होते हैं, क्योंकि उनके left neighbour set में हैं। | One: zero नहीं है, तो start है; two, three, four मिलते हैं, length four। | Two hundred से length one, तो best four है। | मैंने code चलाया है: output four आता है।
+
+अब cost, यह हमारा अपना reasoning है। | हर run का एक ही start है, और walk उसी से चलती है। | इसलिए हर number ज़्यादा से ज़्यादा एक बार walk होता है, बाकी पर बस एक check लगता है। | उसी array में लगभग four thousand lookups, two million नहीं।
+
+Time O n, extra space O n, क्योंकि set में सारे numbers हैं। | Duplicates set में एक बार आते हैं, इसलिए answer नहीं बदलता।
+
+Comments में बताओ: Given array zero, three, seven, two, five, eight, four, six, zero, one का answer कितना आएगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।
