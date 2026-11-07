@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>The Right Chunk at Rank 17</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="66.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="x c" id="a_t" style="top:190px; font-size:72px;">sahi chunk mila, par <span class="red">prompt tak nahi</span></div>
+          <div class="x mut" id="a_pl" style="left:60px; top:375px; font-size:48px;">PROMPT (top 5)</div>
+          <div id="a_top"></div>
+          <div id="a_cut" style="position:absolute; left:60px; top:610px; width:960px; height:0; border-top:6px dashed #E8596B;"></div>
+          <div class="x mut" id="a_rl" style="left:60px; top:640px; font-size:48px;">bahar reh gaye</div>
+          <div id="a_low"></div>
+          <div class="x c green" id="a_17" style="top:920px; font-size:110px;">SAHI CHUNK: #17</div>
+          <div class="x c red" id="a_w" style="top:1080px; font-size:66px;">galat jawab · galti model ki nahi</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="chip" id="b_t" style="left:240px; top:190px; width:600px; border:3px solid #5BC0EB; color:#5BC0EB; font-size:56px;">BETTER: top 20</div>
+          <div id="b_grid"></div>
+          <div class="x c red" id="b_4" style="top:640px; font-size:96px;">tokens 4× · bill 4×</div>
+          <div class="x c" id="b_d" style="top:800px; font-size:64px;">19 bekaar chunks mein<br/><span class="gold">sahi wala dab gaya</span></div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="chip" id="c_t" style="left:240px; top:190px; width:600px; background:#4CC38A; color:#0B1220; font-size:56px;">BEST: RERANKER</div>
+          <div class="x c mut" id="c_an" style="top:310px; font-size:48px;">resumes: shortlist → interview → top 5</div>
+          <div class="box" id="c_f1" style="left:140px; top:420px; width:800px; height:150px; border:4px solid #5BC0EB; background:rgba(91,192,235,.08); font-size:66px;">retriever: 50 chunks</div>
+          <div class="x c" id="c_a1" style="top:580px; font-size:70px;">↓</div>
+          <div class="box" id="c_f2" style="left:140px; top:670px; width:800px; height:190px; border:4px solid #F2B544; background:rgba(242,181,68,.08); font-size:58px;"><div class="gold">RERANKER</div><div style="font-size:46px;">sawal + chunk padhkar score</div></div>
+          <div class="x c" id="c_a2" style="top:870px; font-size:70px;">↓</div>
+          <div class="box" id="c_f3" style="left:340px; top:960px; width:400px; height:140px; border:4px solid #4CC38A; background:rgba(76,195,138,.08); font-size:66px; color:#4CC38A;">top 5</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:200px; font-size:64px;">sahi chunk <span class="red">chhootne</span> ki dar</div>
+          <div class="x mut" id="d_l1" style="left:90px; top:330px; width:420px; text-align:center; font-size:50px;">bina rerank</div>
+          <div class="x mut" id="d_l2" style="left:570px; top:330px; width:420px; text-align:center; font-size:50px;">rerank ke saath</div>
+          <div class="x red" id="d_v1" style="left:90px; top:410px; width:420px; text-align:center; font-size:110px;">2.9%</div>
+          <div class="x green" id="d_v2" style="left:570px; top:410px; width:420px; text-align:center; font-size:110px;">1.9%</div>
+          <div class="bar" id="d_b1" style="left:200px; top:560px; width:200px; height:550px; background:#E8596B;"></div>
+          <div class="bar" id="d_b2" style="left:680px; top:749px; width:200px; height:361px; background:#4CC38A;"></div>
+          <div class="src" style="top:1150px; font-size:44px;">Source: Anthropic blog</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="card" id="e_1" style="left:60px; top:220px; width:960px; height:330px; border-color:#F2B544;">
+            <div class="x gold" style="left:50px; top:36px; font-size:60px;">HYBRID SEARCH</div>
+            <div class="x" style="left:50px; top:120px; font-size:56px;">vectors + keyword search</div>
+            <div class="x red" style="left:50px; top:210px; font-size:56px;">naya keyword index banao</div>
+          </div>
+          <div class="card" id="e_2" style="left:60px; top:590px; width:960px; height:330px; border-color:#4CC38A;">
+            <div class="x green" style="left:50px; top:36px; font-size:60px;">RERANKER</div>
+            <div class="x" style="left:50px; top:120px; font-size:56px;">bas ek extra step</div>
+            <div class="x green" style="left:50px; top:210px; font-size:56px;">index chhue bina · kal ship</div>
+          </div>
+          <div class="chip" id="e_3" style="left:240px; top:970px; width:600px; background:#4CC38A; color:#0B1220; font-size:60px;">PEHLE RERANKER</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="card" id="f_1" style="left:60px; top:330px; width:960px; height:250px; border-color:#4CC38A;">
+            <div class="x green" style="left:50px; top:40px; font-size:66px;">1. reranker</div>
+            <div class="x" style="left:50px; top:140px; font-size:56px;">index nahi chhoona</div>
+          </div>
+          <div class="card" id="f_2" style="left:60px; top:620px; width:960px; height:250px; border-color:#F2B544;">
+            <div class="x gold" style="left:50px; top:40px; font-size:66px;">2. hybrid search</div>
+            <div class="x" style="left:50px; top:140px; font-size:56px;">sahi chunk list mein upar</div>
+          </div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:280px; font-size:150px;">50 → 500</div>
+          <div class="x c" id="g_2" style="top:500px; font-size:84px;">chunks rerank kiye</div>
+          <div class="x c red" id="g_3" style="top:640px; font-size:110px;">kya bigdega?</div>
+          <div class="chip" id="g_c" style="left:290px; top:880px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="66.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="66.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="66.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows the top-5 prompt window and the right chunk stuck at 17
+      const box = (parent, cls, label, x, y, w, h, fs, col) => {
+        const d = document.createElement("div"); d.className = "tok " + cls; d.style.cssText += ";left:" + x + "px;top:" + y + "px;width:" + w + "px;height:" + h + "px;" + (col ? "border-color:" + col + ";" : "");
+        const n = document.createElement("div"); n.className = "x"; n.textContent = label; n.style.cssText += ";left:0;width:" + w + "px;top:" + (h / 2 - fs * 0.55) + "px;text-align:center;font-size:" + fs + "px;";
+        d.appendChild(n); q(parent).appendChild(d); return d;
+      };
+      [1, 2, 3, 4, 5].forEach((v, i) => box("#a_top", "atop", String(v), 60 + i * 195, 440, 180, 140, 64, "#F2B544"));
+      ["6", "…", "16", "17", "18"].forEach((v, i) => box("#a_low", "alow" + (v === "17" ? " a17" : ""), v, 60 + i * 195, 720, 180, 140, 64, v === "17" ? "#4CC38A" : null));
+      tl.to(".a17", { backgroundColor: "rgba(76,195,138,.3)", scale: 1.1, duration: 0.3 }, at("A", "17"));
+      show("#a_17", at("A", "17"), { s: 1.3 });
+      show("#a_w", at("A", "galat"), { s: 1 });
+      // B: better: send the top 20
+      show("#b_t", at("B", "better"), { s: 1 });
+      for (let i = 0; i < 20; i++) box("#b_grid", "bg" + (i === 16 ? " b17" : ""), String(i + 1), 60 + (i % 5) * 195, 300 + Math.floor(i / 5) * 80, 180, 68, 44, i === 16 ? "#4CC38A" : null);
+      tl.fromTo(".bg", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.03 }, at("B", "20"));
+      show("#b_4", at("B", "tokens"), { s: 1.3 });
+      tl.to(".bg:not(.b17)", { opacity: 0.5, duration: 0.3 }, at("B", "19"));
+      show("#b_d", at("B", "19"), { s: 1 });
+      // C: best: retrieve 50, rerank, keep 5
+      show("#c_t", at("C", "best"), { s: 1 });
+      show("#c_an", at("C", "jaise"), { s: 1 });
+      show("#c_f1", at("C", "retriever"), { s: 1 });
+      show("#c_a1", at("C", "reranker", 1) - 0.2, { s: 1 });
+      show("#c_f2", at("C", "reranker", 1), { s: 1.1 });
+      show("#c_a2", at("C", "top", 1) - 0.2, { s: 1 });
+      show("#c_f3", at("C", "top", 1), { s: 1.3 });
+      // D: Anthropic's numbers, failure rate with and without reranking
+      show("#d_t", S.D + 0.05, { s: 1 });
+      const grow = (el, t) => tl.fromTo(el, { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power2.out" }, t);
+      show(["#d_l1", "#d_v1"], at("D", "2.9"), { s: 1 }); grow("#d_b1", at("D", "2.9"));
+      show(["#d_l2", "#d_v2"], at("D", "1.9"), { s: 1 }); grow("#d_b2", at("D", "1.9"));
+      // E: which fix ships first
+      show("#e_1", at("E", "hybrid"), { s: 1 });
+      show("#e_2", at("E", "reranker"), { s: 1 });
+      show("#e_3", at("E", "pehle"), { s: 1.3 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "pehle"), { s: 1 });
+      show("#f_2", at("F", "phir"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "50"), { s: 1.2 });
+      show("#g_2", at("G", "chunks"), { s: 1 });
+      show("#g_3", at("G", "kya"), { s: 1.3 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { "17": "hot", reranker: "gold", reranking: "gold", hybrid: "cyan", galat: "hot", top: "cyan" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

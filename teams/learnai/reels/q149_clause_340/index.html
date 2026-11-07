@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Clause 340 of 900k Tokens</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="62.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="card" id="a_c" style="left:60px; top:220px; width:960px; height:240px; border-color:#E8596B;">
+            <div class="x mut" style="left:50px; top:36px; font-size:50px;">CONTRACT</div>
+            <div class="x red" style="left:50px; top:106px; font-size:96px;">9 lakh tokens</div>
+          </div>
+          <div class="card" id="a_m" style="left:60px; top:490px; width:960px; height:200px; border-color:#5BC0EB;">
+            <div class="x mut" style="left:50px; top:30px; font-size:50px;">MODEL KI JAGAH</div>
+            <div class="x cyan" style="left:50px; top:96px; font-size:80px;">128 thousand</div>
+          </div>
+          <div class="x c gold" id="a_q" style="top:760px; font-size:96px;">"clause 340 mein<br/>kya likha hai?"</div>
+          <div class="x c" id="a_k" style="top:1010px; font-size:110px;">KAISE?</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="card" id="b_1" style="left:60px; top:220px; width:960px; height:300px;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">IDEA 1</div>
+            <div class="x" style="left:50px; top:110px; font-size:70px;">poora contract chipkao</div>
+          </div>
+          <div class="x red" id="b_1n" style="left:110px; top:420px; font-size:64px;">FIT NAHI</div>
+          <div class="card" id="b_2" style="left:60px; top:570px; width:960px; height:300px; border-color:#4CC38A;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">IDEA 2</div>
+            <div class="x" style="left:50px; top:110px; font-size:70px;">Claude Opus 5.5</div>
+            <div class="x green" style="left:50px; top:200px; font-size:64px;">10 lakh tokens ki jagah</div>
+          </div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" id="c_1" style="top:210px; font-size:68px;">har sawal: <span class="red">9 lakh</span> input tokens</div>
+          <div class="x c mut" id="c_2" style="top:330px; font-size:60px;">$4 / million tokens</div>
+          <div class="x c gold" id="c_3" style="top:440px; font-size:180px;">$3.60</div>
+          <div class="x c" id="c_3t" style="top:650px; font-size:60px;">ek sawal</div>
+          <div class="card" id="c_4" style="left:60px; top:780px; width:960px; height:250px; border-color:#E8596B;">
+            <div class="x mut" style="left:0; width:960px; top:40px; text-align:center; font-size:52px;">1,000 sawal / din</div>
+            <div class="x red" style="left:0; width:960px; top:110px; text-align:center; font-size:100px;">$3,600 / din</div>
+          </div>
+          <div class="src" style="top:1080px; font-size:44px;">Source: Claude pricing docs</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:200px; font-size:96px;">KITAB KA INDEX</div>
+          <div class="card" id="d_toc" style="left:60px; top:340px; width:960px; height:560px;">
+            <div class="x mut" style="left:50px; top:40px; font:600 54px 'JetBrains Mono',monospace;">clause 1 · definitions</div>
+            <div class="x mut" style="left:50px; top:130px; font:600 54px 'JetBrains Mono',monospace;">clause 2 · parties</div>
+            <div class="x mut" style="left:50px; top:220px; font:600 54px 'JetBrains Mono',monospace;">...</div>
+            <div class="x" id="d_340" style="left:50px; top:310px; font:700 58px 'JetBrains Mono',monospace;">clause 340 · fees</div>
+            <div class="x mut" style="left:50px; top:400px; font:600 54px 'JetBrains Mono',monospace;">...</div>
+          </div>
+          <div class="chip" id="d_meta" style="left:110px; top:950px; width:860px; background:#F2B544; color:#0B1220; font:700 50px 'JetBrains Mono',monospace;">metadata: clause = 340</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="card" id="e_1" style="left:60px; top:210px; width:960px; height:230px; border-color:#F2B544;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">clause 340</div>
+            <div class="x" style="left:50px; top:110px; font-size:66px;">"as defined in <span class="gold">clause 2</span>"</div>
+          </div>
+          <div class="x c" id="e_2" style="top:480px; font-size:72px;">+ clause 2 bhi bhejo</div>
+          <div class="x c green" id="e_3" style="top:610px; font-size:96px;">~5,000 tokens</div>
+          <div class="x c" id="e_4" style="top:760px; font-size:140px;"><span class="red">$3.60</span> → <span class="green">2¢</span></div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="x c" id="f_1" style="top:320px; font-size:76px;">poora document <span class="red">mat bharo</span></div>
+          <div class="x c gold" id="f_2" style="top:450px; font-size:84px;">structure se retrieve</div>
+          <div class="card" id="f_3" style="left:60px; top:600px; width:960px; height:150px; border-color:#5BC0EB;"><div class="x" style="left:50px; top:40px; font-size:62px;">clause number → <span class="cyan">clause</span></div></div>
+          <div class="card" id="f_4" style="left:60px; top:780px; width:960px; height:150px; border-color:#4CC38A;"><div class="x" style="left:50px; top:40px; font-size:62px;">+ uske <span class="green">references</span></div></div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:260px; font-size:96px;">"termination ke<br/>saare rules?"</div>
+          <div class="x c red" id="g_2" style="top:520px; font-size:76px;">koi clause number nahi</div>
+          <div class="x c" id="g_3" style="top:660px; font-size:96px; white-space:nowrap;">kaise dhoondhoge?</div>
+          <div class="chip" id="g_c" style="left:290px; top:960px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="62.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="62.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="62.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows 9 lakh against 128 thousand; then the question
+      tl.fromTo(["#a_c", "#a_m"], { scale: 1.05 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_q", at("A", "user"), { s: 1.1 });
+      show("#a_k", at("A", "kaise"), { s: 1.4 });
+      // B: idea 1 does not fit; idea 2, a 1M-token model
+      show("#b_1", at("B", "pahla"), { s: 1 });
+      show("#b_1n", at("B", "fit"), { s: 1.6, y: 0 });
+      show("#b_2", at("B", "doosra"), { s: 1 });
+      // C: what idea 2 costs
+      show("#c_1", at("C", "har"), { s: 1 });
+      show("#c_2", at("C", "4"), { s: 1 });
+      show("#c_3", at("C", "3.6"), { s: 1.5, y: 0 });
+      show("#c_3t", at("C", "3.6") + 0.2, { s: 1 });
+      show("#c_4", at("C", "1,000"), { s: 1 });
+      // D: the book index: clause number as metadata
+      show("#d_t", at("D", "kitab"), { s: 1 });
+      show("#d_toc", at("D", "contract"), { s: 1 });
+      show("#d_meta", at("D", "metadata"), { s: 1.2 });
+      tl.to("#d_340", { color: "#F2B544", scale: 1.06, duration: 0.3 }, at("D", "340"));
+      // E: the referenced definition too; the new price
+      show("#e_1", at("E", "clause"), { s: 1 });
+      show("#e_2", at("E", "definition"), { s: 1 });
+      show("#e_3", at("E", "5,000"), { s: 1.2 });
+      show("#e_4", at("E", "2", 1), { s: 1.5, y: 0 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "poora"), { s: 1 });
+      show("#f_2", at("F", "structure"), { s: 1.1 });
+      show("#f_3", at("F", "clause"), { s: 1 });
+      show("#f_4", at("F", "references"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "termination"), { s: 1.1 });
+      show("#g_2", at("G", "koi"), { s: 1 });
+      show("#g_3", at("G", "kaise"), { s: 1.2 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { "340": "gold", laakh: "hot", "3.6": "hot", metadata: "cyan", index: "cyan", cents: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

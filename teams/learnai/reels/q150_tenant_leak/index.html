@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Company B Salary Sheet</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="61.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="card" id="a_q" style="left:60px; top:220px; width:960px; height:180px; border-color:#5BC0EB;">
+            <div class="x mut" style="left:50px; top:30px; font-size:46px;">COMPANY A · search</div>
+            <div class="x" style="left:50px; top:92px; font-size:62px;">"Q3 hiring plan"</div>
+          </div>
+          <div class="card" id="a_r" style="left:60px; top:440px; width:960px; height:200px; border-color:#E8596B;">
+            <div class="x mut" style="left:50px; top:30px; font-size:46px;">result #1</div>
+            <div class="x red" style="left:50px; top:96px; font:700 58px 'JetBrains Mono',monospace;">companyB_salary.xlsx</div>
+          </div>
+          <div class="chip" id="a_leak" style="left:700px; top:400px; width:280px; background:#E8596B; color:#0B1220; font-size:60px; transform:rotate(-6deg);">LEAK</div>
+          <div class="x c gold" id="a_k" style="top:700px; font-size:150px;">KYUN?</div>
+          <div class="chip" id="a_i" style="left:110px; top:920px; width:860px; border:3px solid #E8EDF6; color:#E8EDF6; font-size:52px;">300 companies · 1 vector index</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="card" id="b_p" style="left:60px; top:220px; width:960px; height:300px;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">system prompt</div>
+            <div class="x" style="left:50px; top:120px; font-size:60px; white-space:nowrap;">"sirf isi company ka data"</div>
+          </div>
+          <div class="strike" id="b_s" style="left:100px; top:370px; width:780px;"></div>
+          <div class="x c red" id="b_n" style="top:580px; font-size:110px;">KAAM NAHI KAREGA</div>
+          <div class="x c" id="b_w" style="top:740px; font-size:66px;">jo chunks diye,<br/>model <span class="gold">padhega hi</span></div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:190px; font-size:70px;">JAB TAK filter <span class="gold">DB ke andar</span> nahi</div>
+          <div id="c_lk"></div>
+          <div class="chip" id="c_id" style="left:200px; top:900px; width:680px; background:#F2B544; color:#0B1220; font-size:56px;">guard: ID card dekho</div>
+          <div class="x c mut" id="c_no" style="top:1030px; font-size:60px;">"aap kaun ho?" <span class="red">nahi poochta</span></div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="card" id="d_ch" style="left:60px; top:210px; width:960px; height:170px;">
+            <div class="x" style="left:50px; top:52px; font:600 56px 'JetBrains Mono',monospace;">chunk.tenant_id = <span class="cyan">"A"</span></div>
+          </div>
+          <div class="card" id="d_q" style="left:60px; top:420px; width:960px; height:300px; border-color:#4CC38A;">
+            <div class="x mut" style="left:50px; top:36px; font:500 46px 'JetBrains Mono',monospace;">har search:</div>
+            <div class="x" style="left:50px; top:110px; font:600 54px 'JetBrains Mono',monospace;">filter tenant_id ==</div>
+            <div class="x green" style="left:50px; top:190px; font:700 56px 'JetBrains Mono',monospace;">login_token.company</div>
+          </div>
+          <div class="x red" id="d_u" style="left:60px; top:780px; font:600 54px 'JetBrains Mono',monospace;">user_text.company</div>
+          <div class="strike" id="d_us" style="left:60px; top:808px; width:560px;"></div>
+          <div class="x red" id="d_un" style="left:660px; top:780px; font-size:56px;">NAHI</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:190px; font-size:96px;">AB COST</div>
+          <div class="card" id="e_1" style="left:60px; top:320px; width:960px; height:300px; border-color:#4CC38A;">
+            <div class="x green" style="left:50px; top:36px; font-size:56px;">NAMESPACE PER TENANT</div>
+            <div class="x" style="left:50px; top:120px; font-size:56px;">data alag</div>
+            <div class="x" style="left:50px; top:200px; font-size:56px;">search sirf usi mein</div>
+          </div>
+          <div class="card" id="e_2" style="left:60px; top:660px; width:960px; height:380px; border-color:#E8596B;">
+            <div class="x red" style="left:50px; top:36px; font-size:56px;">1 NAMESPACE + FILTER</div>
+            <div class="x" style="left:50px; top:120px; font-size:56px;">search poora namespace scan</div>
+            <div class="x gold" style="left:50px; top:210px; font-size:64px;">299 companies ka kharcha</div>
+          </div>
+          <div class="src" style="top:1090px; font-size:44px;">Source: Pinecone multitenancy docs</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="x c" id="f_1" style="top:320px; font-size:76px;">prompt <span class="red">nahi</span>, <span class="green">database</span></div>
+          <div class="card" id="f_2" style="left:60px; top:470px; width:960px; height:140px; border-color:#5BC0EB;"><div class="x" style="left:50px; top:36px; font-size:60px;">tenant ID → <span class="cyan">login se</span></div></div>
+          <div class="card" id="f_3" style="left:60px; top:640px; width:960px; height:140px; border-color:#4CC38A;"><div class="x" style="left:50px; top:36px; font-size:60px;">filter → <span class="green">query mein</span></div></div>
+          <div class="card" id="f_4" style="left:60px; top:810px; width:960px; height:140px; border-color:#F2B544;"><div class="x" style="left:50px; top:36px; font-size:60px;">bade tenants → <span class="gold">alag namespace</span></div></div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:260px; font-size:110px;">SEMANTIC CACHE</div>
+          <div class="x c" id="g_2" style="top:410px; font-size:76px;">sab companies mein shared</div>
+          <div class="x c red" id="g_3" style="top:560px; font-size:110px;">kya leak hoga?</div>
+          <div class="chip" id="g_c" style="left:290px; top:820px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="61.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="61.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="61.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows company A's search returning company B's salary sheet
+      tl.fromTo(["#a_q", "#a_r"], { scale: 1.05 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo("#a_leak", { scale: 1.3 }, { scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, at("A", "khul"));
+      show("#a_k", at("A", "kyun"), { s: 1.5, y: 0 });
+      show("#a_i", at("A", "300"), { s: 1 });
+      // B: a prompt rule does not isolate tenants
+      show("#b_p", S.B + 0.05, { s: 1 });
+      wipe("#b_s", at("B", "nahi"), 0.3);
+      show("#b_n", at("B", "nahi"), { s: 1.3 });
+      show("#b_w", at("B", "model"), { s: 1 });
+      // C: unless the database filters; the bank locker room
+      show("#c_t", S.C + 0.05, { s: 1 });
+      const lk = q("#c_lk");
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+        const d = document.createElement("div"); d.className = "tok lk" + (r === 1 && c === 1 ? " mine" : "");
+        d.style.cssText += ";left:" + (90 + c * 310) + "px;top:" + (390 + r * 165) + "px;width:280px;height:145px;";
+        const n = document.createElement("div"); n.className = "x mut"; n.textContent = (r === 1 && c === 1) ? "TUMHARA" : "#" + (101 + r * 3 + c);
+        n.style.cssText += ";left:0;width:280px;top:44px;text-align:center;font-size:48px;";
+        d.appendChild(n); lk.appendChild(d);
+      }
+      tl.fromTo(".lk", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.25, stagger: 0.04 }, at("C", "bank"));
+      show("#c_id", at("C", "guard"), { s: 1.2 });
+      tl.to(".lk.mine", { borderColor: "#4CC38A", backgroundColor: "rgba(76,195,138,.25)", duration: 0.3 }, at("C", "locker", 1));
+      tl.to(".lk.mine .x", { color: "#4CC38A", duration: 0.3 }, at("C", "locker", 1));
+      tl.to(".lk:not(.mine)", { opacity: 0.35, duration: 0.3 }, at("C", "locker", 1));
+      show("#c_no", at("C", "customer"), { s: 1 });
+      // D: tenant id on every chunk, filter from the login token
+      show("#d_ch", at("D", "chunk"), { s: 1 });
+      show("#d_q", at("D", "search"), { s: 1 });
+      show("#d_u", at("D", "user"), { s: 1 });
+      wipe("#d_us", at("D", "nahi"), 0.3);
+      show("#d_un", at("D", "nahi"), { s: 1.3 });
+      // E: cost: namespace per tenant vs one namespace + filter
+      show("#e_t", S.E + 0.05, { s: 1 });
+      show("#e_1", at("E", "pinecone"), { s: 1 });
+      show("#e_2", at("E", "ek"), { s: 1 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "tenant"), { s: 1 });
+      show("#f_2", at("F", "tenant", 1), { s: 1 });
+      show("#f_3", at("F", "filter"), { s: 1 });
+      show("#f_4", at("F", "bade"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "semantic"), { s: 1.1 });
+      show("#g_2", at("G", "sab"), { s: 1 });
+      show("#g_3", at("G", "kya"), { s: 1.3 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { filter: "gold", database: "cyan", tenant: "gold", namespace: "cyan", login: "green", leak: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

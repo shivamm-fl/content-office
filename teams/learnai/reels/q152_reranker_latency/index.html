@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Reranker Made It 3 Seconds</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="65" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="x c green" id="a_1" style="top:220px; font-size:130px;">ACCURACY +9</div>
+          <div class="x c red" id="a_2" style="top:400px; font-size:130px;">LATENCY 3 s</div>
+          <div class="x c gold" id="a_3" style="top:590px; font-size:100px;">ab kya karoge?</div>
+          <div class="x mut" id="a_l1" style="left:60px; top:780px; font-size:50px;">p95 · pehle</div>
+          <div class="hbar" id="a_b1" style="left:60px; top:850px; width:128px; height:90px; background:#5BC0EB;"></div>
+          <div class="x cyan" id="a_v1" style="left:210px; top:860px; font-size:60px;">400 ms</div>
+          <div class="x mut" id="a_l2" style="left:60px; top:980px; font-size:50px;">p95 · reranker ke saath</div>
+          <div class="hbar" id="a_b2" style="left:60px; top:1050px; width:960px; height:90px; background:#E8596B;"></div>
+          <div class="x" id="a_v2" style="left:800px; top:1060px; font-size:60px; color:#0B1220;">3 s</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="x c" id="b_1" style="top:260px; font-size:100px;">RERANKER HATAO</div>
+          <div class="strike" id="b_s1" style="left:130px; top:312px; width:820px;"></div>
+          <div class="x c" id="b_2" style="top:460px; font-size:100px;">SIRF BADA GPU</div>
+          <div class="strike" id="b_s2" style="left:150px; top:512px; width:780px;"></div>
+          <div class="x c gold" id="b_3" style="top:720px; font-size:90px;">pehle samjho:<br/>time kahan ja raha?</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:190px; font-size:62px;">har document = <span class="gold">poora model</span></div>
+          <div class="x c mut" id="c_an" style="top:290px; font-size:54px;">examiner: copies jitni, time utna</div>
+          <div id="c_grid"></div>
+          <div class="card" id="c_sb" style="left:60px; top:800px; width:960px; height:330px; border-color:#F2B544;">
+            <div class="x mut" style="left:50px; top:30px; font-size:48px;">10 hazaar sentences</div>
+            <div class="x" style="left:50px; top:100px; font-size:62px;">cross-encoder: <span class="red">~65 ghante</span></div>
+            <div class="x" style="left:50px; top:190px; font-size:62px;">bi-encoder: <span class="green">~5 seconds</span></div>
+          </div>
+          <div class="src" style="top:1160px; font-size:44px;">Source: Sentence Transformers docs</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="chip" id="d_t" style="left:140px; top:190px; width:800px; background:#4CC38A; color:#0B1220; font-size:56px;">FIX 1 · KAM DOCUMENTS</div>
+          <div class="x c" id="d_q" style="top:310px; font-size:58px;">sahi doc top 25 mein kitni baar?</div>
+          <div id="d_grid"></div>
+          <div class="x c gold" id="d_4" style="top:940px; font-size:110px;">100 → 25</div>
+          <div class="x c green" id="d_k" style="top:1080px; font-size:70px;">kaam 4× kam</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="chip" id="e_t" style="left:90px; top:190px; width:900px; background:#F2B544; color:#0B1220; font-size:52px;">FIX 2 · ZAROORAT PAR RERANK</div>
+          <div class="card" id="e_1" style="left:60px; top:330px; width:960px; height:290px; border-color:#4CC38A;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">pehla result saaf aage?</div>
+            <div class="x hl" style="left:50px; top:110px; font-size:62px;">0.91 · 0.42 · 0.40</div>
+            <div class="x green" style="left:50px; top:200px; font-size:58px;">→ seedha bhejo</div>
+          </div>
+          <div class="card" id="e_2" style="left:60px; top:660px; width:960px; height:290px; border-color:#F2B544;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">uljha hua sawal?</div>
+            <div class="x" style="left:50px; top:110px; font-size:62px;">0.61 · 0.60 · 0.59</div>
+            <div class="x gold" style="left:50px; top:200px; font-size:58px;">→ rerank</div>
+          </div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="x c" id="f_1" style="top:320px; font-size:66px;">reranker ka cost =<br/><span class="gold">documents ki ginti</span></div>
+          <div class="card" id="f_2" style="left:60px; top:560px; width:960px; height:140px; border-color:#4CC38A;"><div class="x" style="left:50px; top:36px; font-size:60px;">kam documents</div></div>
+          <div class="card" id="f_3" style="left:60px; top:730px; width:960px; height:140px; border-color:#F2B544;"><div class="x" style="left:50px; top:36px; font-size:60px;">sirf zaroorat par rerank</div></div>
+          <div class="x c green" id="f_4" style="top:930px; font-size:80px;">accuracy + speed</div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:280px; font-size:110px;">25 documents</div>
+          <div class="x c red" id="g_2" style="top:440px; font-size:100px;">accuracy −2</div>
+          <div class="x c" id="g_3" style="top:620px; font-size:100px;">kya karoge?</div>
+          <div class="chip" id="g_c" style="left:290px; top:860px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="65" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="65" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="65" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows +9 accuracy and 3 s latency; then the p95 bars
+      tl.fromTo(["#a_1", "#a_2"], { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_3", at("A", "ab"), { s: 1.2 });
+      show(["#a_l1", "#a_v1"], at("A", "400"), { s: 1 }); wipe("#a_b1", at("A", "400"), 0.3);
+      show("#a_l2", at("A", "3", 1), { s: 1 }); wipe("#a_b2", at("A", "3", 1), 0.7); show("#a_v2", at("A", "3", 1) + 0.6, { s: 1 });
+      // B: not removing it, not just a bigger GPU
+      show("#b_1", S.B + 0.05, { s: 1 });
+      wipe("#b_s1", at("B", "nahi"), 0.3);
+      show("#b_2", at("B", "sirf"), { s: 1 });
+      wipe("#b_s2", at("B", "nahi", 1), 0.3);
+      show("#b_3", at("B", "pehle"), { s: 1.1 });
+      // C: one full model pass per document; the 65 hours example
+      const cells = (parent, cls) => { for (let i = 0; i < 100; i++) { const d = document.createElement("div"); d.className = "tok " + cls + (i < 25 ? " keep" : ""); d.style.cssText += ";left:" + (60 + (i % 10) * 97) + "px;top:" + (390 + Math.floor(i / 10) * 38) + "px;width:86px;height:28px;border-width:0;background:#5BC0EB;"; q(parent).appendChild(d); } };
+      show("#c_t", S.C + 0.05, { s: 1 });
+      cells("#c_grid", "cg");
+      tl.fromTo(".cg", { opacity: 0 }, { opacity: 1, duration: 0.15, stagger: 0.012 }, at("C", "document"));
+      show("#c_an", at("C", "jaise"), { s: 1 });
+      show("#c_sb", at("C", "sentence"), { s: 1 });
+      // D: rerank 25 instead of 100
+      show("#d_t", S.D + 0.05, { s: 1 });
+      show("#d_q", at("D", "pehle"), { s: 1 });
+      cells("#d_grid", "dg");
+      tl.fromTo(".dg", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.005 }, at("D", "pehle") + 0.3);
+      tl.to(".dg.keep", { backgroundColor: "#4CC38A", duration: 0.3 }, at("D", "25"));
+      show("#d_4", at("D", "100"), { s: 1.3 });
+      tl.to(".dg:not(.keep)", { opacity: 0.12, duration: 0.4 }, at("D", "25", 1));
+      show("#d_k", at("D", "kaam"), { s: 1.2 });
+      // E: rerank only when the top results are close
+      show("#e_t", S.E + 0.05, { s: 1 });
+      show("#e_1", at("E", "retriever"), { s: 1 });
+      show("#e_2", at("E", "rerank"), { s: 1 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "reranker"), { s: 1 });
+      show("#f_2", at("F", "kam"), { s: 1 });
+      show("#f_3", at("F", "sirf"), { s: 1 });
+      show("#f_4", at("F", "accuracy"), { s: 1.2 });
+      // G: question
+      show("#g_1", at("G", "25"), { s: 1.1 });
+      show("#g_2", at("G", "accuracy"), { s: 1.1 });
+      show("#g_3", at("G", "kya"), { s: 1.2 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { reranker: "gold", latency: "hot", accuracy: "green", "65": "hot", ghante: "hot", "25": "green" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   1,
+   0
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "C",
+   3,
+   -0.1
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   2,
+   -0.1
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "E",
+   3,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "F",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "G",
+   2,
+   -0.1
+  ],
+  [
+   "ok",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://docs.pinecone.io/guides/index-data/implement-multitenancy"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "wont_work_unless",
+ "copy": {
+  "hi": {
+   "A": "@hook Company A ने search किया, और Company B की salary sheet खुल गई। क्यों? | 300{three-hundred} companies का data एक ही vector index में था।",
+   "B": "Prompt में 'सिर्फ़ इसी company का data use करो' लिखना काम नहीं करेगा। | Model को जो chunks दिए, वो उन्हें पढ़ेगा ही।",
+   "C": "जब तक filter database के अंदर नहीं लगता। | Bank का locker room सोचो: | vault एक है, पर guard तुम्हारा ID देखकर सिर्फ़ तुम्हारा locker खोलता है। | वो customer से नहीं पूछता, आप कौन हो?",
+   "D": "Code में: हर chunk पर tenant ID, | और हर search में filter: tenant ID बराबर login वाली company। | User के text से नहीं, login token से।",
+   "E": "अब cost। | Pinecone की सलाह: हर tenant का अलग namespace, data अलग, search सिर्फ़ उसी में। | एक namespace में filter लगाओ, तो search फिर भी पूरा namespace scan करती है, | यानी बाकी 299{two-ninety-nine} companies के data का भी खर्चा।",
+   "F": "Interview line: | tenant isolation prompt का काम नहीं, database का है। | Tenant ID login से, filter query में, और बड़े tenants का अलग namespace।",
+   "G": "अब बताओ: | Semantic cache सब companies में shared है, | वहाँ क्या leak हो सकता है? | Comment करो।"
+  }
+ }
+}

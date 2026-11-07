@@ -1,0 +1,130 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   1,
+   0
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "B",
+   3,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   2,
+   0
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "D",
+   3,
+   0
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   2,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://developers.openai.com/api/docs/guides/batch"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "better_best",
+ "copy": {
+  "hi": {
+   "A": "@hook 5{पाँच} करोड़ documents इसी हफ़्ते embed करने हैं, और API को 9{नौ} दिन लगेंगे। क्या करोगे? | API एक minute में सिर्फ़ 4,000{four-thousand} लेती है।",
+   "B": "Better तरीका: Batch API। | OpenAI की docs: batch, normal API से 50{fifty} percent सस्ता, | और उसकी rate limit अलग pool से आती है। | तो normal limit के साथ-साथ batch भी चलाओ।",
+   "C": "एक batch में 50{fifty} thousand inputs तक, | हर batch 24{चौबीस} घंटे के अंदर पूरा। | 5{पाँच} करोड़ यानी 1,000{एक-हज़ार} batches।",
+   "D": "पर best तरीका embed करने से पहले आता है। | पहला: duplicates हटाओ। | एक ही PDF के दस versions, वही email footer, वही templates। | Hash निकालो, एक बार embed करो।",
+   "E": "दूसरा: सब कुछ आज नहीं चाहिए। | जो documents लोग सच में search करते हैं, वो आज। | बाकी background में, batch से।",
+   "F": "Interview line: | पहले कम embed करो, dedupe और priority से। | जो बचे, वो batch API से आधे दाम में, अलग limit पर।",
+   "G": "अब बताओ: | Embedding 1,024{ten-twenty-four} से 256{two-fifty-six} numbers की कर दी, | तो क्या बचेगा, और क्या खोओगे? | Comment करो।"
+  }
+ }
+}

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Swapping Embedding Models Live</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="63" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="x c gold" id="a_1" style="top:220px; font-size:120px;">20 CRORE<br/>VECTORS</div>
+          <div class="x c" id="a_2" style="top:500px; font-size:64px;">search <span class="red">1 second bhi band nahi</span></div>
+          <div class="x c cyan" id="a_3" style="top:610px; font-size:76px;">+ naya embedding model</div>
+          <div class="chip" id="a_4" style="left:110px; top:780px; width:860px; border:3px solid #E8EDF6; color:#E8EDF6; font-size:54px;">re-embed + overwrite?</div>
+          <div class="strike" id="a_s" style="left:140px; top:818px; width:800px;"></div>
+          <div class="x c red" id="a_g" style="top:920px; font-size:110px;">SEARCH TOOTEGI</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:190px; font-size:80px;">har model ka <span class="gold">apna naksha</span></div>
+          <div class="card" id="b_m1" style="left:60px; top:320px; width:465px; height:520px; border-color:#5BC0EB;">
+            <div class="x cyan" style="left:0; width:465px; top:24px; text-align:center; font-size:48px;">PURANA</div>
+            <div class="x" style="left:0; width:465px; top:84px; text-align:center; font-size:46px;">768 numbers</div>
+          </div>
+          <div class="card" id="b_m2" style="left:555px; top:320px; width:465px; height:520px; border-color:#F2B544;">
+            <div class="x gold" style="left:0; width:465px; top:24px; text-align:center; font-size:48px;">QWEN3 EMBED</div>
+            <div class="x" style="left:0; width:465px; top:84px; text-align:center; font-size:46px;">1,024 numbers</div>
+          </div>
+          <div id="b_g"></div>
+          <div class="x c" id="b_rc" style="top:880px; font-size:64px;">row 3, col 4 → <span class="red">alag jagah</span></div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:200px; font-size:76px;">aadhe purane, aadhe naye</div>
+          <div class="hbar" id="c_b1" style="left:60px; top:340px; width:480px; height:160px; background:#5BC0EB;"></div>
+          <div class="hbar" id="c_b2" style="left:540px; top:340px; width:480px; height:160px; background:#F2B544;"></div>
+          <div class="x" id="c_l1" style="left:60px; top:520px; width:480px; text-align:center; font-size:52px;">purana naksha</div>
+          <div class="x" id="c_l2" style="left:540px; top:520px; width:480px; text-align:center; font-size:52px;">naya naksha</div>
+          <div class="x c" id="c_q" style="top:640px; font-size:64px;">query <span class="gold">naye</span> naksha mein bani</div>
+          <div class="x c red" id="c_k" style="top:800px; font-size:150px;">KACHRA</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:190px; font-size:76px;">purane ke <span class="green">bagal mein</span> naya</div>
+          <div class="box" id="d_v1" style="left:60px; top:320px; width:440px; height:220px; border:5px solid #5BC0EB; background:rgba(91,192,235,.08); font-size:64px;"><div class="cyan">v1</div><div style="font-size:46px;">live</div></div>
+          <div class="box" id="d_v2" style="left:580px; top:320px; width:440px; height:220px; border:5px solid #F2B544; background:rgba(242,181,68,.08); font-size:64px;"><div class="gold">v2</div><div style="font-size:46px;">naya model</div></div>
+          <div class="x c" id="d_n" style="top:590px; font-size:60px;">naye documents → <span class="cyan">v1</span> + <span class="gold">v2</span></div>
+          <div class="x mut" id="d_bl" style="left:60px; top:720px; font-size:52px;">backfill · 20 crore</div>
+          <div style="position:absolute; left:60px; top:800px; width:960px; height:90px; border-radius:22px; background:#1B2538;"></div>
+          <div class="hbar" id="d_bf" style="left:60px; top:800px; width:960px; height:90px; background:#F2B544;"></div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="chip" id="e_c" style="left:140px; top:190px; width:800px; border:3px solid #E8EDF6; color:#E8EDF6; font-size:52px;">asli queries par compare</div>
+          <div class="box" id="e_al" style="left:340px; top:330px; width:400px; height:150px; border:5px solid #4CC38A; background:rgba(76,195,138,.1); font-size:60px; color:#4CC38A;">search alias</div>
+          <div class="box" id="e_v1" style="left:60px; top:620px; width:400px; height:180px; border:5px solid #5BC0EB; font-size:72px;"><div class="cyan">v1</div></div>
+          <div class="box" id="e_v2" style="left:620px; top:620px; width:400px; height:180px; border:5px solid #F2B544; font-size:72px;"><div class="gold">v2</div></div>
+          <div id="e_ptr" style="position:absolute; left:536px; top:480px; width:8px; height:150px; background:#4CC38A; border-radius:4px; transform-origin:50% 0; transform:rotate(38deg);"></div>
+          <div class="x c green" id="e_at" style="top:860px; font-size:76px;">atomic · zero downtime</div>
+          <div class="x c mut" id="e_rb" style="top:980px; font-size:56px;">v1 rollback ke liye rakho</div>
+          <div class="src" style="top:1090px; font-size:44px;">Source: Elastic docs, aliases</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="x c" id="f_1" style="top:320px; font-size:70px;">do models ke vectors<br/><span class="red">kabhi mix nahi</span></div>
+          <div class="chip" id="f_2" style="left:60px; top:560px; width:465px; background:#5BC0EB; color:#0B1220; font-size:48px;">side-by-side</div>
+          <div class="chip" id="f_3" style="left:555px; top:560px; width:465px; background:#F2B544; color:#0B1220; font-size:48px;">backfill</div>
+          <div class="chip" id="f_4" style="left:60px; top:680px; width:465px; background:#E8EDF6; color:#0B1220; font-size:48px;">compare</div>
+          <div class="chip" id="f_5" style="left:555px; top:680px; width:465px; background:#4CC38A; color:#0B1220; font-size:48px;">atomic switch</div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c" id="g_1" style="top:260px; font-size:84px;">backfill ke time</div>
+          <div class="x c red" id="g_2" style="top:380px; font-size:150px;">RAM 2×</div>
+          <div class="x c gold" id="g_3" style="top:600px; font-size:96px;">kaise kam karoge?</div>
+          <div class="chip" id="g_c" style="left:290px; top:840px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="63" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="63" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="63" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows 20 crore vectors; then the overwrite plan struck out
+      tl.fromTo("#a_1", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_2", at("A", "search"), { s: 1 });
+      show("#a_3", at("A", "embedding"), { s: 1 });
+      show("#a_4", at("A", "sab"), { s: 1 });
+      wipe("#a_s", at("A", "galat"), 0.3);
+      show("#a_g", at("A", "galat"), { s: 1.5, y: 0 });
+      // B: every model has its own map: the same cell means different things
+      show("#b_t", S.B + 0.05, { s: 1 });
+      show("#b_m1", at("B", "purana"), { s: 1 });
+      show("#b_m2", at("B", "qwen3"), { s: 1 });
+      const map = (x0, word, cls) => {
+        for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+          const d = document.createElement("div"); d.className = "tok mc " + cls + (r === 2 && c === 3 ? " hit" : "");
+          d.style.cssText += ";left:" + (x0 + 40 + c * 98) + "px;top:" + (480 + r * 70) + "px;width:88px;height:60px;";
+          q("#b_g").appendChild(d);
+        }
+        const l = document.createElement("div"); l.className = "x " + cls + "l"; l.textContent = "(3,4) = " + word;
+        l.style.cssText += ";left:" + x0 + "px;width:465px;top:770px;text-align:center;font-size:50px;color:#F2B544;";
+        q("#b_g").appendChild(l);
+      };
+      map(60, "cricket", "m1"); map(555, "biryani", "m2");
+      tl.fromTo(".mc.m1", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.02 }, at("B", "purana") + 0.2);
+      tl.fromTo(".mc.m2", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.02 }, at("B", "qwen3") + 0.2);
+      tl.to(".mc.hit", { backgroundColor: "#F2B544", borderColor: "#F2B544", duration: 0.3 }, at("B", "row"));
+      tl.fromTo([".m1l", ".m2l"], { opacity: 0 }, { opacity: 1, duration: 0.3 }, at("B", "column"));
+      show("#b_rc", at("B", "doosre"), { s: 1 });
+      // C: half old, half new: garbage
+      show("#c_t", S.C + 0.05, { s: 1 });
+      wipe("#c_b2", at("C", "naye"), 0.4); show("#c_l2", at("C", "naye"), { s: 1 });
+      wipe("#c_b1", at("C", "purane"), 0.4); show("#c_l1", at("C", "purane"), { s: 1 });
+      show("#c_q", at("C", "query"), { s: 1 });
+      show("#c_k", at("C", "kachra"), { s: 1.8, y: 0 });
+      // D: a new index next to the old one, dual write, backfill
+      show("#d_t", S.D + 0.05, { s: 1 });
+      show("#d_v1", at("D", "purane"), { s: 1 });
+      show("#d_v2", at("D", "naya"), { s: 1.1 });
+      show("#d_n", at("D", "documents"), { s: 1 });
+      show("#d_bl", at("D", "purane", 1), { s: 1 });
+      wipe("#d_bf", at("D", "background"), 1.6);
+      // E: compare, then flip the alias atomically
+      show("#e_c", at("E", "asli"), { s: 1 });
+      tl.set("#e_ptr", { rotation: 38, transformOrigin: "50% 0%" }, 0);
+      show(["#e_al", "#e_v1", "#e_v2"], at("E", "naya"), { s: 1 });
+      show("#e_ptr", at("E", "naya") + 0.1, { s: 1, y: 0 });
+      tl.to("#e_ptr", { rotation: -38, duration: 0.35, ease: "back.out(2)" }, at("E", "jhatke"));
+      show("#e_at", at("E", "atomic"), { s: 1.2 });
+      show("#e_rb", at("E", "purana"), { s: 1 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "do"), { s: 1 });
+      show("#f_2", at("F", "side-by-side"), { s: 1 });
+      show("#f_3", at("F", "backfill"), { s: 1 });
+      show("#f_4", at("F", "compare"), { s: 1 });
+      show("#f_5", at("F", "atomic"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "backfill"), { s: 1 });
+      show("#g_2", at("G", "ram"), { s: 1.4 });
+      show("#g_3", at("G", "kaise"), { s: 1.1 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { naksha: "gold", nakshe: "gold", alias: "green", atomic: "green", kachra: "hot", galat: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

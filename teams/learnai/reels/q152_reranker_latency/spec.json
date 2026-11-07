@@ -1,0 +1,136 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "ok",
+   "A",
+   2,
+   0
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "B",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   3,
+   0
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   2,
+   0
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   2,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://sbert.net/examples/cross_encoder/applications/README.html"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "not_a_neither_b",
+ "copy": {
+  "hi": {
+   "A": "@hook Accuracy 9{nine} points ऊपर, latency 3{three} seconds: अब क्या करोगे? | Reranker लगाते ही p95 latency 400{four-hundred} milliseconds से 3{three} seconds हो गई, | और product को दोनों चाहिए।",
+   "B": "Reranker हटाना जवाब नहीं, accuracy चली जाएगी। | सिर्फ़ बड़ा GPU लेना भी नहीं। | पहले समझो, time जा कहाँ रहा है।",
+   "C": "Reranker हर document को सवाल के साथ अलग से पढ़ता है। | जैसे examiner हर copy पूरी पढ़े: copies जितनी, time उतना। | Sentence Transformers की docs का example: | 10{दस} हज़ार sentences, cross-encoder से करीब 65{पैंसठ} घंटे, bi-encoder से 5{five} seconds।",
+   "D": "Fix 1{one}: कम documents rerank करो। | पहले check करो, सही document कितनी बार retriever के top 25{twenty-five} में पहले से होता है। | ज़्यादातर बार हो, तो 100{hundred} की जगह 25{twenty-five}: काम 4{चार} गुना कम।",
+   "E": "Fix 2{two}: हर सवाल पर reranker मत चलाओ। | Retriever का पहला result बाकी से साफ़ आगे हो, तो सीधा भेज दो। | Rerank सिर्फ़ उलझे हुए सवालों पर।",
+   "F": "Interview line: | reranker का cost documents की गिनती से बढ़ता है। | कम documents, और सिर्फ़ ज़रूरत पर rerank: accuracy भी, speed भी।",
+   "G": "अब बताओ: | 25{twenty-five} documents पर accuracy 2{two} points गिर गई, | तो क्या करोगे? | Comment करो।"
+  }
+ }
+}
