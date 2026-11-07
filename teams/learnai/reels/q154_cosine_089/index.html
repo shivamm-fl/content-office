@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Cosine 0.84 Means Nothing</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="72.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="card" id="a_s1" style="left:60px; top:210px; width:960px; height:190px;">
+            <div class="x" style="left:50px; top:36px; width:860px; font-size:54px; line-height:1.15;">"My roof is leaking after the rain."</div>
+          </div>
+          <div class="card" id="a_s2" style="left:60px; top:420px; width:960px; height:190px;">
+            <div class="x" style="left:50px; top:36px; width:860px; font-size:54px; line-height:1.15;">"My laptop battery drains too fast."</div>
+          </div>
+          <div class="x c gold" id="a_c" style="top:650px; font-size:130px;">cosine = 0.84</div>
+          <div class="x c" id="a_q" style="top:830px; font-size:96px;">84% same?</div>
+          <div class="strike" id="a_st" style="left:290px; top:880px; width:500px;"></div>
+          <div class="x c red" id="a_no" style="top:980px; font-size:110px;">PERCENT NAHI</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="chip" id="b_t" style="left:240px; top:190px; width:600px; border:3px solid #F2B544; color:#F2B544; font-size:54px;">humne khud naapa</div>
+          <div class="card" id="b_r1" style="left:60px; top:320px; width:960px; height:200px; border-color:#E8596B;">
+            <div class="x mut" style="left:50px; top:40px; font:600 46px 'JetBrains Mono',monospace;">multilingual-e5-small</div>
+            <div class="x red" style="left:50px; top:100px; font-size:80px;">0.84</div>
+          </div>
+          <div class="card" id="b_r2" style="left:60px; top:560px; width:960px; height:200px; border-color:#4CC38A;">
+            <div class="x mut" style="left:50px; top:40px; font:600 46px 'JetBrains Mono',monospace;">Qwen3-Embedding-0.6B</div>
+            <div class="x green" style="left:50px; top:100px; font-size:80px;">0.46</div>
+          </div>
+          <div class="x c gold" id="b_h" style="top:810px; font-size:76px;">sentences wahi, number aadha</div>
+          <div class="src" style="top:930px; font-size:44px;">Measured by us · 7 Nov 2026</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:190px; font-size:70px;">cosine = do arrows ka <span class="gold">angle</span></div>
+          <div class="chip" id="c_st" style="left:110px; top:300px; width:860px; border:3px solid #E8EDF6; color:#E8EDF6; font-size:48px;">stadium: sab ek hi screen ki taraf</div>
+          <div id="c_arrows"></div>
+          <div class="x c gold" id="c_p" style="top:1010px; font-size:72px;">koi bhi do arrows = paas</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:190px; font-size:70px;">aur sabse mazedar</div>
+          <div class="chip" id="d_k1" style="left:90px; top:300px; width:420px; background:#E8596B; color:#0B1220; font-size:46px;">kachra ANDAR</div>
+          <div class="chip" id="d_k2" style="left:570px; top:300px; width:420px; background:#E8596B; color:#0B1220; font-size:46px;">sahi jawab BAHAR</div>
+          <div class="bar" id="d_b1" style="left:190px; top:496px; width:240px; height:504px; background:#E8596B;"></div>
+          <div class="x" id="d_v1" style="left:190px; top:520px; width:240px; text-align:center; font-size:72px; color:#0B1220;">0.84</div>
+          <div class="bar" id="d_b2" style="left:650px; top:532px; width:240px; height:468px; background:#4CC38A;"></div>
+          <div class="x" id="d_v2" style="left:650px; top:556px; width:240px; text-align:center; font-size:72px; color:#0B1220;">0.78</div>
+          <div id="d_th" style="position:absolute; left:110px; top:518px; width:860px; height:0; border-top:6px dashed #F2B544; transform-origin:0 50%;"></div>
+          <div class="x gold" id="d_thl" style="left:870px; top:440px; font-size:56px;">0.8</div>
+          <div style="position:absolute; left:110px; top:1000px; width:860px; height:6px; background:#26324B;"></div>
+          <div class="x" id="d_l1" style="left:110px; top:1020px; width:400px; text-align:center; font-size:48px;">E-five<br/><span class="mut">bemel jodi</span></div>
+          <div class="x" id="d_l2" style="left:570px; top:1020px; width:400px; text-align:center; font-size:48px;">Qwen3<br/><span class="mut">sahi jodi (PIN)</span></div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="card" id="e_1" style="left:60px; top:210px; width:960px; height:270px; border-color:#F2B544;">
+            <div class="x" style="left:50px; top:40px; width:860px; font-size:58px;">1. bemel jodiyon ka average = <span class="gold">floor</span></div>
+            <div class="x mut" id="e_1b" style="left:50px; top:170px; font-size:54px;">E-five 0.76 · Qwen3 0.33</div>
+          </div>
+          <div class="card" id="e_2" style="left:60px; top:520px; width:960px; height:150px; border-color:#5BC0EB;"><div class="x" style="left:50px; top:40px; font-size:58px;">2. score nahi, <span class="cyan">ranking</span> padho</div></div>
+          <div class="card" id="e_3" style="left:60px; top:710px; width:960px; height:150px; border-color:#4CC38A;"><div class="x" style="left:50px; top:40px; font-size:58px;">3. threshold = <span class="green">labelled examples</span></div></div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="x c" id="f_1" style="top:320px; font-size:76px;">cosine ≠ <span class="red">probability</span></div>
+          <div class="x c gold" id="f_2" style="top:460px; font-size:80px;">har model ka apna floor</div>
+          <div class="x c green" id="f_3" style="top:600px; font-size:76px;">threshold → calibrate</div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:280px; font-size:120px;">MODEL BADLA</div>
+          <div class="x c" id="g_2" style="top:460px; font-size:90px;">purana 0.8 threshold<br/>rakhoge?</div>
+          <div class="chip" id="g_c" style="left:290px; top:800px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="72.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="72.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="72.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows the two unrelated sentences and 0.84
+      tl.fromTo(["#a_s1", "#a_s2", "#a_c"], { scale: 1.05 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_q", at("A", "kya"), { s: 1.2 });
+      wipe("#a_st", at("A", "nahi"), 0.3);
+      show("#a_no", at("A", "nahi"), { s: 1.5, y: 0 });
+      // B: our measurement: same pair, two models
+      show("#b_t", at("B", "hamne"), { s: 1 });
+      show("#b_r1", at("B", "multilingual"), { s: 1 });
+      show("#b_r2", at("B", "qwen3"), { s: 1 });
+      show("#b_h", at("B", "sentences", 1), { s: 1.1 });
+      // C: cosine is an angle; in some models every arrow leans the same way
+      show("#c_t", at("C", "cosine"), { s: 1 });
+      const ar = q("#c_arrows");
+      [-15, -11, -7, -4, 0, 3, 6, 10, 14].forEach((r, i) => {
+        const d = document.createElement("div"); d.className = "arw" + (i === 1 || i === 7 ? " pair" : "");
+        d.style.cssText = "position:absolute;left:537px;top:470px;width:6px;height:480px;border-radius:3px;background:#5BC0EB;transform-origin:50% 100%;transform:rotate(" + r + "deg);";
+        ar.appendChild(d);
+      });
+      tl.fromTo(".arw", { scaleY: 0 }, { scaleY: 1, duration: 0.3, stagger: 0.06, ease: "power2.out" }, at("C", "saare"));
+      show("#c_st", at("C", "stadium"), { s: 1 });
+      tl.to(".arw.pair", { backgroundColor: "#F2B544", duration: 0.3 }, at("C", "koi"));
+      tl.to(".arw:not(.pair)", { opacity: 0.35, duration: 0.3 }, at("C", "koi"));
+      show("#c_p", at("C", "koi"), { s: 1.1 });
+      // D: the 0.8 threshold lets garbage in on one model and throws the right answer out on the other
+      const grow = (el, t) => tl.fromTo(el, { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power2.out" }, t);
+      show("#d_t", S.D + 0.05, { s: 1 });
+      grow("#d_b1", at("D", "e-five")); show(["#d_v1", "#d_l1"], at("D", "e-five") + 0.3, { s: 1 });
+      grow("#d_b2", at("D", "qwen3")); show(["#d_v2", "#d_l2"], at("D", "qwen3") + 0.3, { s: 1 });
+      wipe("#d_th", at("D", "0.8"), 0.5); show("#d_thl", at("D", "0.8"), { s: 1.2 });
+      show("#d_k1", at("D", "kachra"), { s: 1.2 });
+      show("#d_k2", at("D", "sahi"), { s: 1.2 });
+      // E: the fix
+      show("#e_1", at("E", "apne"), { s: 1 });
+      show("#e_1b", at("E", "floor"), { s: 1 });
+      show("#e_2", at("E", "score"), { s: 1 });
+      show("#e_3", at("E", "threshold"), { s: 1 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "cosine"), { s: 1 });
+      show("#f_2", at("F", "har"), { s: 1 });
+      show("#f_3", at("F", "threshold"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "model"), { s: 1.1 });
+      show("#g_2", at("G", "purana"), { s: 1 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { "0.84": "hot", "0.46": "green", "0.78": "green", cosine: "gold", floor: "gold", threshold: "cyan", kachra: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
