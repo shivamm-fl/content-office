@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>The Fake Citation</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="64" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="card" id="a_bub" style="left:60px; top:220px; width:960px; height:400px;">
+            <div class="x mut" style="left:50px; top:40px; font-size:48px;">SUPPORT BOT</div>
+            <div class="x" style="left:50px; top:120px; width:860px; font-size:72px; line-height:1.12;">Refund policy <span class="gold">section 7.3</span> ke hisaab se refund nahi milega.</div>
+          </div>
+          <div class="chip" id="a_fake" style="left:620px; top:170px; width:340px; background:#E8596B; color:#0B1220; font-size:64px; transform:rotate(-8deg);">FAKE</div>
+          <div class="x c red" id="a_nope" style="top:700px; font-size:96px;">SECTION 7.3<br/>EXIST HI NAHI KARTA</div>
+          <div id="a_real" style="position:absolute; left:0; top:0; width:1080px; height:1300px; opacity:0;">
+            <div class="chip" style="left:190px; top:200px; width:700px; border:3px solid #F2B544; color:#F2B544; font-size:48px;">REAL CASE · CURSOR · 2025</div>
+            <div class="card" id="a_q1" style="left:60px; top:330px; width:960px; height:330px;">
+              <div class="x mut" style="left:50px; top:36px; font-size:46px;">AI support bot:</div>
+              <div class="x" style="left:50px; top:110px; width:860px; font-size:60px; line-height:1.12;">"One device per subscription, <span class="red">core security feature</span>"</div>
+            </div>
+            <div class="card" id="a_q2" style="left:60px; top:690px; width:960px; height:200px; border-color:#4CC38A;">
+              <div class="x mut" style="left:50px; top:30px; font-size:46px;">Cursor:</div>
+              <div class="x green" style="left:50px; top:96px; font-size:68px;">"We have no such policy."</div>
+            </div>
+            <div class="chip" id="a_cancel" style="left:90px; top:930px; width:900px; background:#E8596B; color:#0B1220; font-size:46px;">users ne subscription cancel kiye</div>
+            <div class="src" style="top:1050px; font-size:44px;">Source: news reports, Apr 2025</div>
+          </div>
+          <div class="x c gold" id="a_where" style="top:430px; font-size:150px;">PEHLE<br/>KAHAN<br/>DEKHOGE?</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="x c" id="b_1" style="top:260px; font-size:110px;">MODEL BADLO</div>
+          <div class="strike" id="b_s1" style="left:150px; top:315px; width:780px;"></div>
+          <div class="x c" id="b_2" style="top:470px; font-size:62px; white-space:nowrap;">PROMPT: <span class="mut">"jhooth mat bolna"</span></div>
+          <div class="strike" id="b_s2" style="left:90px; top:500px; width:900px;"></div>
+          <div class="x c green" id="b_3" style="top:720px; font-size:110px;">PEHLE DEKHO</div>
+          <div class="x c gold" id="b_4" style="top:880px; font-size:84px;">model ke saamne<br/>kya rakha gaya</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:190px; font-size:100px;">OPEN BOOK EXAM</div>
+          <div class="card" id="c_ans" style="left:60px; top:330px; width:960px; height:180px; border-color:#F2B544;">
+            <div class="x" style="left:0; width:960px; top:52px; text-align:center; font-size:72px;">"<span class="gold">Page 212</span> ke hisaab se..."</div>
+          </div>
+          <div class="x c red" id="c_no" style="top:545px; font-size:76px;">book mein page 212 nahi</div>
+          <div class="box" id="c_p1" style="left:70px; top:680px; width:290px; height:230px; background:#1B2538; border:4px solid #26324B;"><div class="pg" style="font-size:84px;">p.45</div><div class="ck cyan" style="font-size:52px;">chunk 1</div></div>
+          <div class="box" id="c_p2" style="left:395px; top:680px; width:290px; height:230px; background:#1B2538; border:4px solid #26324B;"><div class="pg" style="font-size:84px;">p.46</div><div class="ck cyan" style="font-size:52px;">chunk 2</div></div>
+          <div class="box" id="c_p3" style="left:720px; top:680px; width:290px; height:230px; background:#1B2538; border:4px solid #26324B;"><div class="pg" style="font-size:84px;">p.47</div><div class="ck cyan" style="font-size:52px;">chunk 3</div></div>
+          <div class="x c mut" id="c_open" style="top:940px; font-size:60px;">saamne khule pages</div>
+          <div class="x c cyan" id="c_rag" style="top:940px; font-size:72px;">= RETRIEVED CHUNKS</div>
+          <div class="chip" id="c_log" style="left:140px; top:1080px; width:800px; background:#F2B544; color:#0B1220; font-size:64px;">1. RETRIEVAL LOG KHOLO</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="x c" id="d_q" style="top:200px; font-size:88px;">7.3 chunks mein tha?</div>
+          <div class="x c red" id="d_no" style="top:320px; font-size:170px;">NAHI</div>
+          <div class="x c gold" id="d_gen" style="top:530px; font-size:84px;">model ne khud banaya</div>
+          <div class="card" id="d_code" style="left:60px; top:680px; width:960px; height:450px;">
+            <div class="x mut" style="left:50px; top:36px; font:500 46px 'JetBrains Mono',monospace;">FIX</div>
+            <div class="x" id="d_l1" style="left:50px; top:120px; font:600 54px 'JetBrains Mono',monospace;">allowed = <span class="cyan">retrieved IDs</span></div>
+            <div class="x" id="d_l2" style="left:50px; top:220px; font:600 54px 'JetBrains Mono',monospace;">if citation not in allowed:</div>
+            <div class="x red" id="d_l3" style="left:110px; top:320px; font:700 62px 'JetBrains Mono',monospace;">reject()</div>
+          </div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="x c" id="e_q" style="top:200px; font-size:88px;">7.3 chunks mein tha?</div>
+          <div class="x c green" id="e_yes" style="top:320px; font-size:170px;">HAAN</div>
+          <div class="x c gold" id="e_idx" style="top:530px; font-size:100px;">INDEX KI GALTI</div>
+          <div class="card" id="e_file" style="left:60px; top:700px; width:960px; height:220px;">
+            <div class="x" style="left:50px; top:40px; font:600 54px 'JetBrains Mono',monospace;">refund_policy_<span class="red">DRAFT</span>.pdf</div>
+            <div class="x mut" style="left:50px; top:130px; font-size:50px;">section 7.3 · ab bhi index mein</div>
+          </div>
+          <div class="strike" id="e_strike" style="left:90px; top:800px; width:900px;"></div>
+          <div class="chip" id="e_fix" style="left:140px; top:990px; width:800px; background:#4CC38A; color:#0B1220; font-size:58px;">DRAFT HATAO → RE-INDEX</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="card" id="f_1" style="left:60px; top:320px; width:960px; height:180px; border-color:#5BC0EB;">
+            <div class="x" style="left:0; width:960px; top:52px; text-align:center; font-size:68px;">retriever ne <span class="cyan">kya bheja?</span></div>
+          </div>
+          <div class="card" id="f_2" style="left:60px; top:550px; width:465px; height:470px; border-color:#E8596B;">
+            <div class="x" style="left:0; width:465px; top:50px; text-align:center; font-size:56px;">citation<br/>usmein</div>
+            <div class="x red" style="left:0; width:465px; top:190px; text-align:center; font-size:84px;">NAHI</div>
+            <div class="x gold" style="left:0; width:465px; top:310px; text-align:center; font-size:56px;">GENERATION<br/>ki galti</div>
+          </div>
+          <div class="card" id="f_3" style="left:555px; top:550px; width:465px; height:470px; border-color:#4CC38A;">
+            <div class="x" style="left:0; width:465px; top:50px; text-align:center; font-size:56px;">citation<br/>usmein</div>
+            <div class="x green" style="left:0; width:465px; top:190px; text-align:center; font-size:84px;">THI</div>
+            <div class="x gold" style="left:0; width:465px; top:310px; text-align:center; font-size:56px;">INDEX<br/>ki galti</div>
+          </div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c cyan" id="g_1" style="top:280px; font-size:100px;">CHUNK: section 5</div>
+          <div class="x c red" id="g_2" style="top:450px; font-size:100px;">BOT: section 7</div>
+          <div class="x c gold" id="g_3" style="top:660px; font-size:150px;">GALTI KISKI?</div>
+          <div class="chip" id="g_c" style="left:290px; top:920px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="64" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="64" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="64" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows the bot's answer; then FAKE, then the real Cursor case, then the question
+      tl.fromTo("#a_bub", { scale: 1.05 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo("#a_fake", { scale: 1.3 }, { scale: 1, duration: 0.3, ease: "back.out(2)", immediateRender: false }, at("A", "aisa"));
+      show("#a_nope", at("A", "aisa") + 0.2, { s: 1.2 });
+      hide(["#a_bub", "#a_fake", "#a_nope"], at("A", "cursor") - 0.15);
+      tl.to("#a_real", { opacity: 1, duration: 0.25 }, at("A", "cursor"));
+      show("#a_q1", at("A", "cursor") + 0.1, { s: 1 });
+      show("#a_q2", at("A", "bana"), { s: 1 });
+      show("#a_cancel", at("A", "subscription"), { s: 1.2 });
+      hide("#a_real", at("A", "pehle") - 0.15);
+      show("#a_where", at("A", "pehle"), { s: 1.3 });
+      // B: not the model, not the prompt
+      show("#b_1", S.B + 0.05, { s: 1 });
+      wipe("#b_s1", at("B", "nahi"), 0.3);
+      show("#b_2", at("B", "prompt"), { s: 1 });
+      wipe("#b_s2", at("B", "nahi", 1), 0.3);
+      show("#b_3", at("B", "pehle"), { s: 1.3 });
+      show("#b_4", at("B", "saamne"), { s: 1 });
+      // C: open book exam -> retrieved chunks
+      show("#c_t", at("C", "open"), { s: 1 });
+      show("#c_ans", at("C", "likha"), { s: 1 });
+      show("#c_no", at("C", "nahi"), { s: 1.2 });
+      show("#c_p1", at("C", "kaunse"), { s: 1.2 });
+      show("#c_p2", at("C", "pages"), { s: 1.2 });
+      show("#c_p3", at("C", "khule"), { s: 1.2 });
+      show("#c_open", at("C", "khule") + 0.2, { s: 1 });
+      tl.fromTo(".ck", { opacity: 0 }, { opacity: 1, duration: 0.3 }, at("C", "rag"));
+      tl.to(".pg", { opacity: 0.35, duration: 0.3 }, at("C", "rag"));
+      tl.to(["#c_p1", "#c_p2", "#c_p3"], { borderColor: "#5BC0EB", duration: 0.3 }, at("C", "rag"));
+      hide("#c_open", at("C", "retrieved") - 0.2);
+      show("#c_rag", at("C", "retrieved"), { s: 1.2 });
+      show("#c_log", at("C", "retrieval"), { s: 1.3 });
+      // D: not in the chunks -> the model made it up -> only cite what was retrieved
+      show("#d_q", at("D", "section"), { s: 1 });
+      show("#d_no", at("D", "nahi"), { s: 1.6, y: 0 });
+      show("#d_gen", at("D", "khud"), { s: 1.1 });
+      show("#d_code", at("D", "fix"), { s: 1 });
+      show("#d_l1", at("D", "retrieved"), { s: 1 });
+      show("#d_l2", at("D", "citation"), { s: 1 });
+      show("#d_l3", at("D", "reject"), { s: 1.5 });
+      // E: in the chunks -> an old draft is still in the index
+      show("#e_q", at("E", "chunks"), { s: 1 });
+      show("#e_yes", at("E", "tha"), { s: 1.6, y: 0 });
+      show("#e_idx", at("E", "index"), { s: 1.2 });
+      show("#e_file", at("E", "purana"), { s: 1 });
+      wipe("#e_strike", at("E", "hatao"), 0.35);
+      show("#e_fix", at("E", "fix"), { s: 1.2 });
+      // F: the interview answer
+      show("#f_chip", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "pehle"), { s: 1 });
+      show("#f_2", at("F", "citation"), { s: 1 });
+      show("#f_3", at("F", "thi"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "chunk"), { s: 1 });
+      show("#g_2", at("G", "bot"), { s: 1 });
+      show("#g_3", at("G", "galti"), { s: 1.4 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { "7.3": "hot", retrieved: "cyan", chunks: "cyan", retrieval: "cyan", index: "gold", generation: "gold", galti: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
