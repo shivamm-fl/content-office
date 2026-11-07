@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Small Model, Big Brain</title>
+    <title>Distillation: Smart or Chori?</title>
     <script src="assets/gsap.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="kit/motion.css" />
@@ -31,7 +31,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="85" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="103" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,13 +41,14 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA" style="opacity:1"></div>
         <div class="beat" id="sB"></div>
         <div class="beat" id="sC"></div>
         <div class="beat" id="sD"></div>
         <div class="beat" id="sE"></div>
         <div class="beat" id="sF"></div>
         <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -56,13 +57,13 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="85" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="85" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="85" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="103" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="103" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="103" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const ORDER = ["A","B","C","D","E","F","G"];
+      const ORDER = ["A","B","C","D","E","F","G","H"];
       const M = Mo.init({ order: ORDER, tag: "AI SAMJHO" });
       Viz.install(M);
       const {tl,S,P,Ed,W,ACC,GOOD,HOT,CYAN,TEXT,MUTED}=M;
@@ -105,24 +106,37 @@
       function draw(e,t){e.setAttribute("pathLength","1000");e.style.strokeDasharray="1000";tl.fromTo(e,{strokeDashoffset:1000},{strokeDashoffset:0,duration:.65,ease:"power2.out",immediateRender:false},t)}
       function tile(h,x,y,w,ht,txt,color,t){const e=panel(h,x,y,w,ht,txt,50,color);on(e,t);return e}
 
-      // diagram: A — big teacher and compact student, visible at frame zero.
-      const A=sc.A; heading(A,"SMALL MODEL · BIG BRAIN");
-      panel(A,80,360,440,610,"",48,TEXT,true);panel(A,560,465,380,505,"",48,TEXT,true);
-      dotField(A,132,432,11,10,22,10,0,true);dotField(A,616,540,11,6,22,7,0,true);
-      label(A,112,775,370,85,"BERT",72,ACC,true);label(A,572,780,350,90,"DistilBERT",58,CYAN,true);
-      on(label(A,100,900,400,64,"TEACHER",46,ACC),W("A","teacher"));
-      on(label(A,560,900,370,64,"STUDENT",46,CYAN),W("A","student"));
-      stat(A,70,1040,300,190,"40%","chhota",GOOD,W("A","40"));
-      stat(A,390,1040,300,190,"60%","fast",CYAN,W("A","60"));
-      stat(A,710,1040,300,190,"97%","samajh",ACC,W("A","97"));
-      // diagram: B — one dot means a million parameters.
-      const B=sc.B;heading(B,"KITNE PARAMETERS?");
-      panel(B,70,305,940,370,"",44,TEXT,true);panel(B,70,715,940,370,"",44,TEXT,true);
-      dotField(B,130,362,11,10,22,8,0,true);dotField(B,130,772,11,6,22,8,0,true);
-      M.count(B,110,W("B","110"),{x:560,y:390,w:390,size:138,suffix:"M",color:ACC,dur:.7});
-      M.count(B,66,W("B","66"),{x:560,y:805,w:390,size:138,suffix:"M",color:CYAN,dur:.7});
-      label(B,570,555,370,70,"TEACHER",45,ACC,true);label(B,570,950,370,70,"STUDENT",45,CYAN,true);
-      on(panel(B,100,1125,880,125,"1 dot = 1M model numbers",52,TEXT),P("B",2));
+      // A — the reported chat is already readable on frame zero.
+      const A=sc.A; heading(A,"KIMI K3 NE KYA KAHA?");
+      const chat=panel(A,70,300,940,710,"",44,TEXT,true);
+      label(chat,45,30,850,84,"Kimi K3",68,ACC,true);
+      panel(chat,45,155,610,135,"Tum kaun ho?",61,TEXT,true);
+      const reply=panel(chat,175,335,690,210,"",58,CYAN);
+      on(reply,W("A","Claude"));
+      const replyText=label(reply,35,25,620,150,"Main Claude hoon,\nAnthropic ka AI",57,CYAN,true);
+      replyText.style.overflow="hidden";
+      replyText.style.whiteSpace="pre-line";
+      tl.fromTo(replyText,{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:1.25,ease:"steps(24)",immediateRender:false},W("A","Claude"));
+      const report=panel(A,140,1045,800,100,"reported chat · X · July 2026",47,MUTED);
+      on(report,W("A","July"));
+      tl.to(report,{borderColor:ACC,color:ACC,duration:.3,immediateRender:false},W("A","viral"));
+      on(label(A,70,1160,940,120,"DISTILLATION?",112,ACC),W("A","distillation"));
+      // B — teacher answers train a smaller student; legitimate in-house copies split off.
+      const B=sc.B;heading(B,"DISTILLATION");
+      const teacher=panel(B,70,335,480,325,"",78,ACC);on(teacher,P("B",0));
+      label(teacher,30,15,420,105,"TEACHER",75,ACC,true);
+      dotField(teacher,90,170,10,3,17,12,0,true);
+      on(label(B,535,430,110,110,"→",90,ACC),W("B","javabon"));
+      on(label(B,485,535,200,65,"jawab",45,ACC),W("B","javabon"));
+      const student=panel(B,660,380,340,230,"",65,CYAN);on(student,W("B","student"));
+      label(student,15,10,310,90,"STUDENT",61,CYAN,true);
+      dotField(student,65,100,9,2,15,9,0,true);
+      on(panel(B,255,690,570,110,"normal + legal",57,GOOD),W("B","jaayaz"));
+      const source=panel(B,90,865,350,230,"BIG MODEL",68,ACC);on(source,W("B","badi"));
+      on(label(B,435,925,160,110,"→",85,ACC),W("B","chhote"));
+      const cheap1=panel(B,600,830,190,165,"SMALL\n₹",52,GOOD);on(cheap1,W("B","chhote"));
+      const cheap2=panel(B,800,1015,190,165,"SMALL\n₹",52,GOOD);on(cheap2,W("B","saste"));
+      on(label(B,570,1195,420,75,"2 smaller, cheaper",48,GOOD),W("B","saste"));
       // diagram: C — ordinary training gives one answer.
       const C=sc.C;heading(C,"ONE ANSWER ONLY");
       const sentence=panel(C,65,335,950,415,"I drink ____",98,TEXT,true);
@@ -136,70 +150,80 @@
       bar(D,125,600,820,"coffee",.30,ACC,W("D","Coffee"));
       bar(D,125,780,820,"water",.09,CYAN,W("D","Water"));
       bar(D,125,960,820,"petrol",.002,HOT,W("D","Petrol"));
-      // diagram: E — complete pattern beats a single winner.
-      const E=sc.E;heading(E,"EK ANSWER vs FULL PATTERN");
-      panel(E,65,315,440,565,"",46,TEXT,true);panel(E,525,315,490,565,"",46,TEXT,true);
-      label(E,85,340,400,72,"SIRF TEA",52,MUTED,true);
-      label(E,545,340,450,72,"TEACHER",52,ACC,true);
-      on(label(E,90,445,145,70,"tea",48,GOOD),P("E",0));
-      const onlyTrack=n(E,245,453,205,54,"","background:#26354D;border-radius:12px",true);
-      const onlyFill=n(onlyTrack,0,0,205,54,"","background:"+GOOD+";border-radius:12px;transform-origin:left center",true);
-      tl.fromTo(onlyFill,{scaleX:0},{scaleX:1,duration:.65,ease:"power3.out",immediateRender:false},P("E",0));
-      on(label(E,120,555,330,75,"100%",74,GOOD),P("E",0));
-      on(label(E,90,720,390,75,"baaki? pata nahi",46,MUTED),P("E",2));
-      function teacherRow(y,name,v,color,pct,mark,t){
-        on(label(E,565,y,350,52,name+(mark?"  "+mark:""),44,color),t);
-        const track=n(E,565,y+55,350,42,"","background:#26354D;border-radius:10px",true);
-        const fill=n(track,0,0,350,42,"","background:"+color+";border-radius:10px;transform-origin:left center",true);
+      // E — the student learns the teacher's whole answer shape.
+      const E=sc.E;heading(E,"COPY THE SHAPE");
+      panel(E,65,345,450,755,"",44,TEXT,true);
+      panel(E,565,345,450,755,"",44,TEXT,true);
+      label(E,85,365,410,85,"TEACHER",56,ACC,true);
+      label(E,585,365,410,85,"STUDENT",56,CYAN,true);
+      function shapeRow(x,y,name,v,color,pct,t){
+        const row=panel(E,x,y,400,132,"",44,TEXT);
+        on(row,t);
+        label(row,10,8,160,58,name,44,color,true);
+        const track=n(row,195,20,180,42,"","background:#26354D;border-radius:10px",true);
+        const fill=n(track,0,0,180,42,"","background:"+color+";border-radius:10px;transform-origin:left center",true);
         tl.fromTo(fill,{scaleX:0},{scaleX:v,duration:.65,ease:"power3.out",immediateRender:false},t);
-        on(label(E,925,y+51,80,52,pct,44,color),t);
+        label(row,225,70,150,50,pct,44,color,true);
       }
-      teacherRow(420,"tea",.60,GOOD,"60%","✓ best",P("E",1));
-      teacherRow(530,"coffee",.30,ACC,"30%","~ okay",W("E","coffee"));
-      teacherRow(640,"water",.09,CYAN,"9%","",P("E",3));
-      teacherRow(750,"petrol",.002,HOT,"~0%","✕ no",W("E","petrol"));
-      on(label(E,360,890,360,58,"student copies ↓",48,CYAN),P("E",6));
-      panel(E,65,960,950,330,"",44,TEXT,true);
-      label(E,100,965,880,58,"STUDENT",50,CYAN,true);
-      function patternRow(host,x,y,w,name,v,color,pct,t){
-        on(label(host,x,y,150,62,name,44,TEXT),t);
-        const track=n(host,x+160,y+9,w-245,44,"","background:#26354D;border-radius:10px",true);
-        const fill=n(track,0,0,w-245,44,"","background:"+color+";border-radius:10px;transform-origin:left center",true);
-        tl.fromTo(fill,{scaleX:0},{scaleX:v,duration:.65,ease:"power3.out",immediateRender:false},t);
-        on(label(host,x+w-82,y,82,62,pct,44,color),t);
-      }
-      function studentRow(y,name,v,color,pct){patternRow(E,105,y,870,name,v,color,pct,P("E",7))}
-      studentRow(1025,"tea",.60,GOOD,"60%");studentRow(1088,"coffee",.30,ACC,"30%");
-      studentRow(1151,"water",.09,CYAN,"9%");studentRow(1214,"petrol",.002,HOT,"~0%");
-      // diagram: F — transfer probability shape, then carry student on phone.
-      const F=sc.F;heading(F,"KNOWLEDGE DISTILLATION");
-      const ft=panel(F,80,355,390,210,"BERT\nTEACHER",67,ACC);on(ft,P("F",0));
-      on(label(F,465,405,95,110,"→",90,ACC),P("F",1));
-      const fp=panel(F,560,300,440,330,"",55,CYAN);on(fp,P("F",1));
-      label(fp,30,12,380,62,"chances",56,CYAN,true);
-      [[.60,GOOD,"60"],[.30,ACC,"30"],[.09,CYAN,"9"],[.002,HOT,"~0"]].forEach((a,i)=>{
-        const y=82+i*60;label(fp,20,y,85,55,a[2],48,a[1],true);
-        const track=n(fp,115,y+8,290,40,"","background:#26354D;border-radius:9px",true);
-        const fill=n(track,0,0,290,40,"","background:"+a[1]+";border-radius:9px;transform-origin:left center",true);
-        tl.fromTo(fill,{scaleX:0},{scaleX:a[0],duration:.6,ease:"power3.out",immediateRender:false},P("F",1));
+      const shape=[["tea",.60,GOOD,"60%"],["coffee",.30,ACC,"30%"],["water",.09,CYAN,"9%"],["petrol",.002,HOT,"~0%"]];
+      shape.forEach((r,i)=>shapeRow(90,465+i*150,...r,i===0?W("E","tea"):i===1?W("E","coffee"):i===2?P("E",2):W("E","petrol")));
+      shape.forEach((r,i)=>shapeRow(590,465+i*150,...r,W("E","chhota")+i*.15));
+      on(panel(E,205,1140,670,115,"student ≈ teacher",62,GOOD),W("E","karib"));
+      // F — the rival's probability bars are locked away; only text crosses.
+      const F=sc.F;heading(F,"COPYING ANOTHER MODEL");
+      panel(F,65,330,410,245,"OTHER COMPANY'S\nMODEL",44,ACC,true);
+      panel(F,615,330,400,930,"",44,CYAN,true);
+      label(F,630,355,370,110,"STUDENT",75,CYAN,true);
+      const wall=panel(F,490,315,115,945,"",44,MUTED,true);
+      wall.style.background="#34435D";
+      label(F,475,605,145,115,"🔒",87,HOT,true);
+      label(F,70,625,395,65,"ANSWER SHEET",49,MUTED,true);
+      [[.60,GOOD],[.30,ACC],[.09,CYAN]].forEach((r,i)=>{
+        const track=n(F,100,715+i*82,320,49,"","background:#26354D;border-radius:10px",true);
+        n(track,0,0,320*r[0],49,"","background:"+r[1]+";border-radius:10px",true);
       });
-      const fs=panel(F,80,820,390,230,"DistilBERT\nSTUDENT",59,GOOD);on(fs,P("F",3));
-      on(label(F,465,865,120,105,"→",92,ACC),P("F",3));
-      const phone=panel(F,605,635,380,690,"",44,TEXT);phone.style.borderRadius="48px";phone.style.borderWidth="8px";on(phone,W("F","phone"));
-      panel(phone,35,215,310,185,"DistilBERT\n66M",65,GOOD,true);
-      label(phone,40,470,300,95,"phone app",53,ACC,true);
-      on(label(F,85,1130,430,90,"small + fast",62,GOOD),P("F",5));
-      // diagram: G — a teacher mistake propagates.
-      const G=sc.G;heading(G,"TEACHER GALAT HO TOH?");
-      panel(G,70,325,440,680,"",44,TEXT,true);panel(G,570,325,440,680,"",44,TEXT,true);
-      label(G,100,350,380,75,"TEACHER",49,ACC,true);label(G,600,350,380,75,"STUDENT",49,CYAN,true);
-      bar(G,110,505,360,"tea",.22,GOOD,P("G",1));bar(G,110,650,360,"petrol",.78,HOT,P("G",1));
-      bar(G,610,505,360,"tea",.22,GOOD,P("G",2));bar(G,610,650,360,"petrol",.78,HOT,P("G",2));
-      on(label(G,470,730,140,135,"→",120,HOT),P("G",2));
-      on(panel(G,175,1060,730,140,"?  COMMENT MEIN BATAO",55,ACC),P("G",3));
+      function answerCard(y,txt,color,t,emphasis=false){
+        const card=panel(F,110,y,370,140,txt,44,color);
+        on(card,t);
+        tl.to(card,{x:520,duration:1.0,ease:"power2.inOut",immediateRender:false},t+.12);
+        if(emphasis)tl.to(card,{borderColor:HOT,color:HOT,backgroundColor:"#351622",duration:.35,immediateRender:false},t+1.1);
+        return card;
+      }
+      answerCard(660,"likhe hue jawab",TEXT,P("F",1));
+      answerCard(805,"writing style",CYAN,W("F","style"));
+      answerCard(950,"sochne ka tarika",CYAN,W("F","tarika"));
+      answerCard(1095,"Main Claude hoon",HOT,W("F","Claude"),true);
+      // G — attribution and scale, then the safety lock falls off the copy.
+      const G=sc.G;heading(G,"ANTHROPIC KA AAROP");
+      on(panel(G,205,295,670,100,"aarop · Feb 2026",55,HOT),W("G","February"));
+      on(panel(G,65,435,300,135,"DeepSeek",51,ACC),W("G","DeepSeek"));
+      on(panel(G,390,435,300,135,"Moonshot",51,ACC),W("G","Moonshot"));
+      on(panel(G,715,435,300,135,"MiniMax",51,ACC),W("G","MiniMax"));
+      function counter(x,y,target,unit,sub,t,dec=0){
+        const box=panel(G,x,y,450,230,"",44,TEXT);on(box,t);
+        const num=label(box,10,15,430,120,"0 "+unit,70,ACC,true);
+        label(box,20,140,410,70,sub,47,TEXT,true);
+        for(let i=0;i<=5;i++){
+          const value=target*i/5;
+          const text=(dec?value.toFixed(dec):Math.round(value).toLocaleString("en-IN"))+(unit?" "+unit:"");
+          tl.set(num,{textContent:text},t+i*.2);
+        }
+      }
+      counter(65,615,24000,"","fake accounts",W("G","24"));
+      counter(565,615,1.6,"crore+","chats",W("G","1"),1);
+      const copy=panel(G,255,915,570,200,"COPIED MODEL",69,CYAN);on(copy,P("G",4));
+      const lock=label(G,455,965,170,130,"🔒",105,GOOD);on(lock,W("G","safety"));
+      tl.to(lock,{x:350,y:155,rotation:35,opacity:0,duration:.85,ease:"power2.in",immediateRender:false},W("G","taale"));
+      // H — close on the owner's question.
+      const H=sc.H;heading(H,"TUM BATAO");
+      on(panel(H,85,365,910,380,"Smart tarika\nya chori?",82,ACC),P("H",1));
+      on(panel(H,95,830,420,170,"SMART",81,GOOD),W("H","smart"));
+      on(panel(H,565,830,420,170,"CHORI",81,HOT),W("H","chori"));
+      on(panel(H,205,1090,670,140,"COMMENT KARO ↓",64,CYAN),W("H","Comment"));
 
-      for(const k of ["B","C","D","E","F","G"]) M.wipe(S[k]);
-      M.finish({kw:{bert:"gold",teacher:"gold",student:"cyan",tea:"good",coffee:"gold",petrol:"hot",distillation:"gold",phone:"cyan"}});
+      for(const k of ["B","C","D","E","F","G","H"]) M.wipe(S[k]);
+      M.finish({kw:{kimi:"gold",claude:"hot",distillation:"gold",teacher:"gold",student:"cyan",tea:"good",coffee:"gold",petrol:"hot",safety:"hot",smart:"good",chori:"hot"}});
+      window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
     </script>
   </body>

@@ -100,7 +100,8 @@
   ]
  ],
  "sources": [
-  "https://research.google/blog/looking-back-at-speculative-decoding/"
+  "https://research.google/blog/looking-back-at-speculative-decoding/",
+  "https://docs.vllm.ai/en/latest/features/speculative_decoding/"
  ],
  "hook_type": "direct_question",
  "template": "better_best_rehook",
@@ -111,7 +112,7 @@
    "C": "Best way में एक छोटा model | आगे के कुछ tokens फटाफट guess करता है। | फिर बड़ा model उन सब guesses को | एक साथ check करता है, | एक ही बार में। || इसे speculative decoding कहते हैं, | यानी अंदाज़े से आगे लिखना।",
    "D": "पर रुको। | Check करना भी तो काम है। | तो time बचा कहाँ से? || यहीं असली राज़ है। | आज की chips, memory से एक byte पढ़ने के time में | सैकड़ों calculations कर लेती हैं। | बड़े model का time ज़्यादातर weights पढ़ने में जाता है। || तो weights एक बार पढ़ लिए, | फिर एक token check करो या पाँच, | खर्चा लगभग वही।",
    "E": "Example देखो। | सवाल: What is the square root of 7{seven}? | जवाब शुरू होता है: The square root of 7{seven}। | ये हिस्सा आसान है, words सवाल में ही थे। | छोटा model इसे guess करता है, | बड़ा model check करता है: सही, सही, सही। || जहाँ छोटा model गलत निकला, | वहाँ से उसके guesses फेंक दिए जाते हैं, | और बड़ा model अपना token लिख देता है।",
-   "F": "Google के paper में, | 11{eleven} billion parameters वाले T5 model ने, | 60{sixty} million वाले छोटे T5 से guess करवाकर, | लगभग 3{तीन} गुना speed पाई।",
+   "F": "Google के test में speed लगभग 3{तीन} गुना हुई। | आज ये Google Search के AI Overviews में चलती है, | और vLLM जैसे open-source AI servers में, | यानी models चलाने वाले software में, | ये built-in है।",
    "G": "अब सोचो: | अगर छोटा model हर guess गलत करे, | तो speed क्या होगी? | Slow, या normal जितनी? | Comment करो।"
   }
  }

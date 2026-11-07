@@ -9,5 +9,7 @@ Idea: a small drafter proposes tokens and the large model checks a batch during 
 | C | draft and check | Small block writes five ghost tokens; one large scan turns them green together. | small draft, 5 guesses, big check, 1 read | Custom pipeline |
 | D | memory cost | Memory-to-chip pipe feeds one byte against hundreds of operations; read time dwarfs compute; one and five share a cost bar. | 1 byte, 100s ops, weights read, ~same cost | Custom bars |
 | E | square root | Question feeds a large draft grid. Correct prefix chips turn green; only the wrong “3” chip gets a red cross, the following draft chip fades, and the big model supplies its own gold “2.65” token below. | square root of 7, draft, 3 ✗, 2.65 | Custom token line |
-| F | T5 result | 11B and 60M blocks feed one answer; speed counter reaches about 3x. | T5-XXL · 11B, T5-small · 60M, ~3x | Custom comparison |
+| F | 3 guna; AI Overviews; vLLM; software | A large ~3x appears on “3”. The Google AI Overviews and vLLM built-in chips follow on their spoken words; the software explanation appears on “software.” | ~3x, Google AI Overviews, vLLM · built-in, models chalane wala software | Custom result cards |
 | G | all wrong? | Five large bright red crosses remain visible after rejection; Slow and Normal options ask for a comment. | all wrong?, Slow, Normal, COMMENT | Custom quiz |
+
+The root and audio durations match the new 111.5 s track. Existing A–E and G visuals use word and phrase timings from the new `data.json`.

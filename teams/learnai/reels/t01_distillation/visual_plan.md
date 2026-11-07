@@ -1,13 +1,16 @@
 # Visual plan — distillation
 
-Idea: a smaller model learns the teacher's probability pattern, not just the winning answer.
+Idea: a legitimate teacher-to-student method becomes contentious when the teacher belongs to another company and only its written answers are available.
 
-| Scene | Spoken | Picture and changes | Labels | Build |
-|---|---|---|---|---|
-| A | 40% smaller, 60% faster, 97% | BERT and compact DistilBERT dot blocks fill frame zero. Three number chips count in; teacher and student labels attach. | BERT, DistilBERT, 40% chhota, 60% fast, 97% samajh | Custom DOM grids, M.count |
-| B | 110M versus 66M | Two broad dot fields and counters occupy the full picture zone; the dot key is a large readable card. | 110M, 66M, 1 dot = 1M model numbers | Custom dots |
-| C | normal training: tea | A large sentence card leaves the blank; on “tea,” a single oversized “tea ✓” card appears below and holds. | I drink ___ every morning, tea ✓ | Custom cards |
-| D | full answer sheet | Four probability bars grow individually on tea, coffee, water and petrol. | tea 60%, coffee 30%, water 9%, petrol ~0% | Custom bars |
-| E | information in all numbers | SIRF TEA has one 100% bar and “baaki? pata nahi.” Best, okay and no attach to the teacher rows. The student’s four bars grow to the same 60/30/9/~0 shape and colours. | sirf tea, teacher, student, best, okay, no, percentages | Custom bars |
-| F | knowledge distillation | Teacher points to a four bar “chances” chart; the compact student points into a large phone outline containing DistilBERT. | teacher, chances, student, phone app | Custom flow |
-| G | teacher wrong? | Wrong tall teacher bar transfers to the student and a question lands over the copied error. | Teacher galat?, student bhi?, COMMENT | Custom chart |
+| Scene | Spoken trigger | Picture and changes | Labels |
+|---|---|---|---|
+| A | Kimi K3; Claude; July / viral; distillation | A large chat is visible at frame zero. The reply types in on “Claude”; a reported-chat chip appears on “July” and brightens on “viral”; the gold question lands on “distillation.” | Kimi K3; Tum kaun ho?; Main Claude hoon, Anthropic ka AI; reported chat · X · July 2026; DISTILLATION? |
+| B | teacher; javabon; student; jaayaz; chhote / saste | A large teacher sends a “jawab” arrow to a smaller student. The green legitimacy chip arrives; one big model branches into two smaller cheap copies. | TEACHER; STUDENT; jawab; normal + legal; BIG MODEL; SMALL ₹ |
+| C | tea; bas itna | The large “I drink ____ every morning” card remains. A single oversized tea card arrives on the answer. | I drink ____ every morning; tea ✓ |
+| D | tea; Coffee; Water; Petrol | Four probability bars grow on their spoken examples. | tea 60%; coffee 30%; water 9%; petrol ~0% |
+| E | tea; coffee; petrol; chhota; karib | Teacher bars carry the full probability shape. Student bars copy their lengths and colors as the narration reaches the small student; the scene ends with the comparison label. | TEACHER; STUDENT; student ≈ teacher |
+| F | answer sheet; jawab; style; tarika; Claude | A wall and lock keep the other model's probabilities away from the student. Only answer cards cross into the student, where style, reasoning and the red “Main Claude hoon” card accumulate. | OTHER COMPANY'S MODEL; STUDENT; Main Claude hoon |
+| G | DeepSeek; Moonshot; MiniMax; 24; 1; safety / taale | The February allegation and three company chips appear. The 24,000 account and 1.6 crore+ chat counters rise; a lock falls off the copied model. | aarop · Feb 2026; 24,000 fake accounts; 1.6 crore+ chats; COPIED MODEL |
+| H | smart; chori; Comment | A choice card asks the audience to decide; the two answer buttons and comment prompt arrive on their words. | Smart tarika ya chori?; SMART; CHORI; COMMENT KARO |
+
+All motion uses the new word or phrase timings in `data.json`. Picture content stays within y 170–1300; all visible text is at least 44 px.

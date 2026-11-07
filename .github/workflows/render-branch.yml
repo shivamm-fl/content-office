@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        reel: [t01_distillation, t02_lora, t03_accuracy_trap, t04_speculative_decoding, t05_relu]
+        reel: [t01_distillation, t02_lora, t04_speculative_decoding]
     env: { GH_TOKEN: "${{ github.token }}", TEAM: learnai, AUDIO_TAG: render-t-templates-20261107, REEL: "${{ matrix.reel }}" }
     steps:
       - uses: actions/checkout@v4

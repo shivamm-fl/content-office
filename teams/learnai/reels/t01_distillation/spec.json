@@ -14,7 +14,8 @@
   "D",
   "E",
   "F",
-  "G"
+  "G",
+  "H"
  ],
  "min": {
   "A": 2.5,
@@ -23,7 +24,8 @@
   "D": 2.5,
   "E": 2.5,
   "F": 2.5,
-  "G": 2.5
+  "G": 2.5,
+  "H": 2.5
  },
  "cues": [
   [
@@ -39,21 +41,15 @@
    0
   ],
   [
-   "pop",
+   "dip",
    "A",
-   2,
-   0
-  ],
-  [
-   "click",
-   "B",
-   0,
-   0
-  ],
-  [
-   "click",
-   "B",
    4,
+   -0.1
+  ],
+  [
+   "click",
+   "B",
+   2,
    0
   ],
   [
@@ -87,33 +83,53 @@
    0
   ],
   [
-   "dip",
+   "click",
    "F",
-   0,
-   -0.1
+   1,
+   0
+  ],
+  [
+   "pop",
+   "F",
+   5,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   1,
+   0
   ],
   [
    "pop",
    "G",
    2,
    0
+  ],
+  [
+   "pop",
+   "H",
+   2,
+   0
   ]
  ],
  "sources": [
-  "https://arxiv.org/abs/1910.01108",
+  "https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks",
+  "https://wikitechlibrary.com/kimi-k3-claude-identity-distillation-controversy/",
   "https://arxiv.org/abs/1503.02531"
  ],
  "hook_type": "surprising_fact",
  "template": "results_first",
  "copy": {
   "hi": {
-   "A": "@hook BERT नाम के AI model से 40{forty} percent छोटा model, | 60{sixty} percent ज़्यादा fast, | और समझ फिर भी 97{ninety-seven} percent वही। || ये बना कैसे? | एक teacher और एक student से।",
-   "B": "Teacher है BERT, | 110{one-hundred-ten} million parameters वाला। | Parameters यानी model के अंदर के numbers, | जो training में set होते हैं। || Student है DistilBERT, | सिर्फ़ 66{sixty-six} million parameters।",
-   "C": "अब student को पढ़ाओ। | Sentence है: I drink blank every morning। || Normal training में student को बस सही answer मिलता है: | tea। | बस इतना।",
+   "A": "@hook Moonshot के AI, Kimi K3 से पूछा गया: तुम कौन हो? | और उसने खुद को Claude बताया, | Anthropic का AI। || July में ये chat X पर viral हुई। | एक model, किसी और model का नाम क्यों लेगा? | शक जाता है एक technique पर: distillation।",
+   "B": "Distillation यानी एक बड़े, smart model के जवाबों पर | दूसरे model को train करना। | बड़ा model teacher, सीखने वाला student। || ये आम और जायज़ तरीका है: | बड़ी AI companies अपने ही बड़े models से | छोटे और सस्ते models ऐसे ही बनाती हैं।",
+   "C": "अंदर से समझो। | Sentence है: I drink blank every morning। || Normal training में student को बस सही जवाब मिलता है: | tea। | बस इतना।",
    "D": "Distillation में student को teacher की पूरी answer sheet मिलती है। | मान लो teacher कहता है: | tea, 60{sixty} percent। | Coffee, 30{thirty} percent। | Water, 9{nine} percent। | Petrol, लगभग zero।",
-   "E": "असली पढ़ाई इन्हीं numbers में है। | एक ही sentence से student सीखता है | कि tea सबसे सही है, | coffee भी चल जाएगी, | और petrol का यहाँ कोई काम नहीं। || सिर्फ़ tea बताते, तो ये सब छूट जाता। | इसीलिए हर example से student ज़्यादा सीखता है, | और छोटा होकर भी teacher के करीब पहुँच जाता है।",
-   "F": "इसे कहते हैं knowledge distillation: | छोटा model, बड़े model की probabilities, | यानी हर option के chances, | copy करना सीखता है। || फायदा? | छोटा model सस्ता और तेज़ चलता है। | DistilBERT के paper में इसे एक phone app में भी चलाकर देखा गया।",
-   "G": "अब सोचो: | अगर teacher ही किसी सवाल पर गलत हो, | तो student क्या सीखेगा? | Comment में बताओ।"
+   "E": "एक ही sentence से student सीखता है | कि tea सबसे सही है, | coffee भी चल जाएगी, | और petrol का यहाँ कोई काम नहीं। || इसीलिए छोटा student भी | बड़े teacher के करीब पहुँच जाता है।",
+   "F": "पर किसी दूसरी company के model की answer sheet नहीं मिलती। | बाहर से बस उसके लिखे हुए जवाब मिलते हैं। || तो student उन्हीं जवाबों पर train होता है, | और सब copy कर लेता है: | लिखने का style, सोचने का तरीका, | और कभी-कभी, मैं Claude हूँ वाली line भी।",
+   "G": "February में Anthropic ने DeepSeek, Moonshot और MiniMax पर इल्ज़ाम लगाया: | करीब 24{चौबीस} हज़ार fake accounts से | Claude के साथ 1{एक} करोड़ 60{साठ} लाख से ज़्यादा बातचीत करके, | उसकी काबिलियत निकालने का। || और ऐसे copy हुए models में, | safety वाले ताले अक्सर पीछे छूट जाते हैं।",
+   "H": "अब तुम बताओ: | किसी दूसरे model के जवाबों से सीखना, | smart तरीका है, या चोरी? | Comment करो।"
   }
  }
 }

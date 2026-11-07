@@ -31,7 +31,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="109" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="111" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,7 +41,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA" style="opacity:1"></div>
         <div class="beat" id="sB"></div>
         <div class="beat" id="sC"></div>
         <div class="beat" id="sD"></div>
@@ -56,9 +56,9 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="109" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="109" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="109" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="111" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="111" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="111" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
@@ -106,19 +106,19 @@
 
       // diagram: A — the enormous base and three answers.
       const A=sc.A;heading(A,"KITNE NUMBERS BADLENGE?");
-      label(A,80,275,920,280,"175B",235,ACC,true);
-      label(A,170,560,740,75,"GPT-3 PARAMETERS",52,MUTED,true);
+      label(A,80,275,920,280,"2.8T",235,ACC,true);
+      label(A,170,560,740,75,"Kimi K3 · parameters",52,MUTED,true);
       const all=panel(A,75,660,930,160,"SAARE ✗",78,HOT);on(all,W("A","saare"));
       const half=panel(A,75,835,930,160,"AADHE ✗",78,HOT);on(half,W("A","aadhe"));
-      const tiny=panel(A,75,1010,930,170,"10,000x KAM ✓",76,GOOD);on(tiny,W("A","10"));
+      const tiny=panel(A,75,1010,930,170,"1% SE BHI KAM ✓",76,GOOD);on(tiny,W("A","1"));
       on(line(all,115,78,700,9,HOT),W("A","nahi"));
       on(line(half,115,78,700,9,HOT),W("A","nahi",1));
       on(panel(A,250,1200,580,105,"1–10  ×  1–10",64,ACC),W("A","पहाड़े"));
-      // diagram: B — copies of 175B are costly.
+      // diagram: B — fresh 2.8T copies are costly.
       const B=sc.B;heading(B,"HAR TASK = NAYI COPY?");
-      const base=panel(B,100,325,880,310,"GPT-3 · 175B",110,ACC,true);
-      on(panel(B,105,690,590,180,"Support bot · 175B",58,CYAN),W("B","Support"));
-      on(panel(B,105,910,590,180,"Legal bot · 175B",58,CYAN),W("B","legal"));
+      const base=panel(B,100,325,880,310,"Kimi K3 · 2.8T",93,ACC,true);
+      on(panel(B,105,690,590,180,"Support bot · 2.8T",58,CYAN),W("B","Support"));
+      on(panel(B,105,910,590,180,"Legal bot · 2.8T",58,CYAN),W("B","legal"));
       label(B,750,745,230,70,"COST",48,HOT,true);
       const meter=n(B,765,825,165,350,"","background:#26354D;border-radius:20px",true);
       const rise=n(meter,0,0,165,350,"","background:"+HOT+";border-radius:20px;transform-origin:bottom center",true);
@@ -136,12 +136,12 @@
         else {const number=label(q,0,0,78,78,String(v),44,edge?ACC:TEXT,false);
           if(r===0)topNumbers.push({q,number});else if(c===0)sideNumbers.push({q,number});else inside.push(number);}
       }
-      const hundred=on(label(C,300,1213,480,90,"100 numbers",68,ACC),W("C","100"));
+      const hundred=on(label(C,300,1170,480,90,"100 numbers",68,ACC),W("C","100"));
       topNumbers.forEach(({q,number})=>{tl.to(q,{backgroundColor:"#5B461F",borderColor:ACC,duration:.3,immediateRender:false},W("C","lists"));on(number,W("C","lists"))});
       sideNumbers.forEach(({q,number})=>{tl.to(q,{backgroundColor:"#5B461F",borderColor:ACC,duration:.3,immediateRender:false},W("C","lists"));on(number,W("C","lists"))});
       tl.fromTo(inside,{opacity:0},{opacity:1,duration:.2,stagger:.023,immediateRender:false},W("C","multiply"));
       off(hundred,W("C","20"));
-      on(panel(C,235,1208,610,100,"20 → 100",78,GOOD),W("C","20"));
+      on(panel(C,235,1170,610,100,"20 → 100",78,GOOD),W("C","20"));
       // diagram: D — frozen W and a low-rank correction.
       const D=sc.D;heading(D,"FREEZE W · TRAIN ΔW");
       const Wbox=panel(D,70,310,520,520,"W\n1000 × 1000\n= 10 LAKH",70,ACC,true);
@@ -150,40 +150,41 @@
       on(label(D,590,445,100,120,"+",110,GOOD),W("D","correction"));
       const delta=panel(D,700,365,300,300,"ΔW",100,GOOD);on(delta,W("D","correction"));
       const tall=panel(D,115,790,70,500,"",57,CYAN);on(tall,W("D","patli"));
-      on(label(D,195,1195,225,85,"1000 × 8",52,CYAN),W("D","1000",2));
+      on(label(D,190,1195,280,85,"1000 × 4",52,CYAN),W("D","4"));
       on(label(D,300,990,100,110,"×",105,ACC),W("D","multiply"));
       const wide=panel(D,440,1045,520,70,"",57,CYAN);on(wide,W("D","aur"));
-      on(label(D,500,1140,400,85,"8 × 1000",52,CYAN),W("D","aur"));
+      on(label(D,500,1140,400,85,"4 × 1000",52,CYAN),W("D","aur"));
       on(label(D,680,845,300,90,"= ΔW",72,GOOD),W("D","multiply"));
-      // diagram: E — 16,000 is a narrow 1.6% of a million.
+      // diagram: E — 8,000 is a narrow 0.8% of a million.
       const E=sc.E;heading(E,"TRAINABLE NUMBERS");
-      panel(E,85,305,910,135,"8,000 + 8,000",78,CYAN,true);
-      on(label(E,135,440,810,110,"= 16,000",120,GOOD),W("E","16"));
+      panel(E,85,305,910,135,"4,000 + 4,000",78,CYAN,true);
+      on(label(E,135,440,810,110,"= 8,000",120,GOOD),W("E","8"));
       const area=panel(E,190,555,700,700,"",44,TEXT,true);
       label(area,45,35,610,80,"10 LAKH TOTAL",56,MUTED,true);
-      const sliver=n(area,25,125,12,540,"","background:"+ACC+";border-radius:6px",true);
+      const sliver=n(area,25,125,5.4,540,"","background:"+ACC+";border-radius:6px",true);
       tl.fromTo(sliver,{scaleY:0,transformOrigin:"top center"},{scaleY:1,duration:.55,immediateRender:false},P("E",3));
-      on(label(area,80,305,540,130,"1.6%",124,ACC),P("E",3));
-      on(panel(E,260,1145,560,85,"rank 8 = motai",52,ACC),W("E","rank"));
+      on(label(area,80,305,540,130,"0.8%",124,ACC),W("E","percent"));
+      on(panel(E,260,1145,560,85,"rank 4 = motai",52,ACC),W("E","rank"));
       // diagram: F — benefits, and tiny files plugged into one base.
       const F=sc.F;heading(F,"EK BASE · CHHOTI FILES");
-      on(panel(F,75,305,930,150,"10,000x · kam numbers",65,GOOD),P("F",0));
-      on(panel(F,75,475,930,150,"3x · kam GPU",65,CYAN),P("F",1));
-      on(panel(F,75,645,930,150,"= full quality",65,ACC),P("F",2));
-      panel(F,115,835,850,190,"GPT-3 · ONE BASE",78,ACC,true);
-      const support=panel(F,65,1100,290,125,"Support +Δ",56,GOOD);
-      const legal=panel(F,395,1100,290,125,"Legal +Δ",56,CYAN);
-      const hindi=panel(F,725,1100,290,125,"Hindi +Δ",56,ACC);
-      [support,legal,hindi].forEach(file=>on(file,P("F",3)));
+      on(label(F,95,270,890,75,"FIRST TRIED ON A BIG MODEL",49,ACC),P("F",0));
+      on(panel(F,75,365,930,135,"10,000x kam numbers",65,GOOD),W("F","10"));
+      on(panel(F,75,520,930,135,"3x kam GPU",65,CYAN),W("F","3"));
+      on(panel(F,75,675,930,135,"= full quality",65,ACC),W("F","quality"));
+      const oneBase=panel(F,115,835,850,190,"ONE BIG BASE MODEL",78,ACC);on(oneBase,P("F",4));
+      const support=panel(F,65,1100,290,150,"Support +Δ",49,GOOD);
+      const legal=panel(F,395,1100,290,150,"Legal +Δ",49,CYAN);
+      const hindi=panel(F,725,1100,290,150,"Hindi +Δ",49,ACC);
+      [support,legal,hindi].forEach(file=>on(file,P("F",4)));
       [support,legal,hindi].forEach((file,i)=>{
         const plug=line(F,210+i*330,1010,9,95,i===0?GOOD:i===1?CYAN:ACC);
-        const t=P("F",3)+.55+i*.9;
+        const t=P("F",4)+.3+i*.65;
         on(plug,t);
         tl.to(file,{y:-80,duration:.36,ease:"power3.out",immediateRender:false},t);
         tl.to(file,{y:0,duration:.36,ease:"power3.inOut",immediateRender:false},t+.48);
         off(plug,t+.65);
       });
-      on(label(F,290,1240,500,65,"swap tiny files",48,GOOD),P("F",4));
+      on(label(F,290,1250,500,50,"swap tiny files",44,GOOD),P("F",5));
       // diagram: G — rank-one count quiz.
       const G=sc.G;heading(G,"RANK 1 QUIZ");
       const q1=panel(G,145,355,300,580,"1000 × 1",62,CYAN,true);
@@ -194,6 +195,7 @@
 
       for(const k of ["B","C","D","E","F","G"]) M.wipe(S[k]);
       M.finish({kw:{lora:"gold",parameters:"cyan",freeze:"hot",rank:"gold",correction:"good",gpu:"cyan",quality:"good",comment:"gold"}});
+      window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
     </script>
   </body>

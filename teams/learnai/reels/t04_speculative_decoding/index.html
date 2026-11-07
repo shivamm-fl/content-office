@@ -31,7 +31,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="107.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="111.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -41,7 +41,7 @@
       <div id="cam">
         <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
              Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA"></div>
+        <div class="beat" id="sA" style="opacity:1"></div>
         <div class="beat" id="sB"></div>
         <div class="beat" id="sC"></div>
         <div class="beat" id="sD"></div>
@@ -56,9 +56,10 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="107.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="107.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="107.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="111.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="111.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="111.5" data-track-index="22" data-volume="1"></audio>
+
     </div>
 
     <script>
@@ -173,13 +174,15 @@
       tl.to(draft[7],{opacity:.12,duration:.3,immediateRender:false},P("E",7));
       on(label(E,235,1025,610,65,"BIG MODEL TOKEN",54,ACC),P("E",8));
       on(panel(E,255,1100,570,160,"2.65",112,ACC),P("E",8));
-      // diagram: F — paper's T5 scale comparison.
-      const F=sc.F;heading(F,"GOOGLE PAPER RESULT");
-      const big=panel(F,90,345,900,370,"T5-XXL\n11B",105,ACC,true);
-      on(label(F,170,735,740,75,"11 BILLION PARAMETERS",54,ACC),P("F",1));
-      const small=panel(F,260,790,560,190,"T5-small · 60M",66,CYAN);on(small,P("F",2));
-      on(label(F,360,995,360,90,"→",100,GOOD),P("F",2));
-      on(panel(F,275,1100,530,150,"~3x SPEED",93,GOOD),P("F",3));
+      // F — the measured speed gain and where the technique runs today.
+      const F=sc.F;heading(F,"SPEED IN PRACTICE");
+      on(label(F,90,330,900,280,"~3x",240,GOOD),W("F","3"));
+      on(panel(F,95,690,890,155,"Google AI Overviews",66,ACC),W("F","Google",1));
+      const vllm=panel(F,95,875,890,155,"",73,CYAN);on(vllm,W("F","vLLM"));
+      label(vllm,85,20,340,115,"vLLM ·",73,CYAN,true);
+      on(label(vllm,430,20,360,115,"built-in",73,CYAN),W("F","built-in"));
+      const software=label(F,150,1080,780,130,"models chalane wala\nsoftware",51,MUTED);
+      software.style.whiteSpace="pre-line";on(software,W("F","software"));
       // diagram: G — if all guesses fail, they are rejected.
       const G=sc.G;heading(G,"HAR GUESS GALAT?");
       const bad=[];for(let i=0;i<5;i++){const mark=panel(G,70+i*194,360,185,190,"✕",122,HOT,true);mark.style.background="#351622";mark.style.border="5px solid #E8596B";bad.push(mark)}
@@ -191,6 +194,7 @@
 
       for(const k of ["B","C","D","E","F","G"]) M.wipe(S[k]);
       M.finish({kw:{better:"cyan",best:"gold",fast:"good",weights:"gold",token:"cyan",check:"good",memory:"cyan",speed:"good"}});
+      window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
     </script>
   </body>
