@@ -7,6 +7,7 @@ Owner, 2026-11-07, after rejecting the older reels as boring ("no value, no hook
 - **Current only.** Use the models and news people talk about now (Kimi K3, GPT-6 Astra, Claude Opus 5.5, Qwen3.5, last weeks' research). BERT, GPT-3 or T5 as the example is an instant reject ("Adam baba ke zamane ke examples").
 - **Interview questions must be real ones.** The cost, latency and failure questions an AI engineer gets in a production interview (prefill vs decode, hidden reasoning tokens), not a definition a child could answer.
 - Check `state/covered.json` and the queue so the topic is new.
+- **Pick the day and the id from the publisher's real status, not from the queue.** Read `state/phase5_status.json` of the publishing repo first: on 2026-11-07 the queue still said a018 and a019 were planned, but both were already posted, so a second Day 18 was built and the Calendar hid it as published. The right reel was Day 20.
 
 ## 2. Write the script (45 to 70 s)
 
