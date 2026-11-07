@@ -1,0 +1,112 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   1,
+   0
+  ],
+  [
+   "dip",
+   "A",
+   2,
+   -0.1
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "rise",
+   "B",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   4,
+   -0.1
+  ],
+  [
+   "pop",
+   "E",
+   2,
+   0
+  ]
+ ],
+ "sources": [
+  "https://developers.openai.com/api/docs/guides/reasoning"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "results_first",
+ "copy": {
+  "hi": {
+   "A": "@hook जवाब सिर्फ़ 162{one-sixty-two} tokens का। | Bill आया 1186{eleven-eighty-six} output tokens का, | तो बाकी 1024{ten-twenty-four} tokens कहाँ गए?",
+   "B": "ये हैं reasoning tokens। | Reasoning model जवाब देने से पहले अंदर ही अंदर सोचता है, | और वो सोच भी tokens में लिखी जाती है।",
+   "C": "दिक्कत ये है: | ये tokens तुम्हें दिखते नहीं, | पर इनका पैसा output tokens के rate पर लगता है, | और ये context window की जगह भी खाते हैं। | मुश्किल सवाल पर ये सोच कुछ सौ से लेकर दसियों हज़ार tokens तक जा सकती है।",
+   "D": "Interview में तीन बातें बोलो। | पहला: usage में reasoning tokens की गिनती देखो। | दूसरा: आसान सवाल पर reasoning effort कम रखो। | तीसरा: max output tokens की limit सोचकर रखो, | वरना सोचते-सोचते limit खत्म, और जवाब ही नहीं मिलेगा।",
+   "E": "अब बताओ: | Hi का जवाब देने के लिए, | reasoning effort high रखोगे या low? | Comment करो।"
+  }
+ }
+}

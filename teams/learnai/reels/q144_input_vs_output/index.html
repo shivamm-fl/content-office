@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Input vs Output Tokens</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="54" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="box cyan" id="a_in" style="left:60px; top:240px; width:430px; height:400px; border:5px solid #5BC0EB; background:rgba(91,192,235,.08);"><div style="font-size:130px;">1000</div><div>tokens</div><div style="font-size:70px; margin-top:10px;">INPUT</div></div>
+          <div class="x" style="left:490px; top:400px; width:100px; text-align:center; font-size:64px;">vs</div>
+          <div class="box gold" id="a_out" style="left:590px; top:240px; width:430px; height:400px; border:5px solid #F2B544; background:rgba(242,181,68,.08);"><div style="font-size:130px;">1000</div><div>tokens</div><div style="font-size:70px; margin-top:10px;">OUTPUT</div></div>
+          <div class="chip" id="a_slow" style="left:100px; top:690px; width:350px; border:3px solid #E8EDF6; color:#E8EDF6;">SLOW?</div>
+          <div class="chip" id="a_cost" style="left:630px; top:690px; width:350px; border:3px solid #E8EDF6; color:#E8EDF6;">MEHENGA?</div>
+          <div class="x c" id="a_eq" style="top:850px; font-size:130px;">BARABAR?</div>
+          <div class="strike" id="a_strike" style="left:230px; top:915px; width:620px;"></div>
+          <div class="x c red" id="a_galat" style="top:1040px; font-size:150px;">GALAT</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="x c cyan" id="b_t" style="top:200px; font-size:100px;">INPUT PADHNA</div>
+          <div id="b_grid"></div>
+          <div class="chip" id="b_one" style="left:140px; top:790px; width:800px; background:#5BC0EB; color:#0B1220; font-size:62px;">1 PASS · SAB EK SAATH</div>
+          <div class="x c gold" id="b_pre" style="top:930px; font-size:160px;">PREFILL</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c gold" id="c_t" style="top:200px; font-size:100px;">OUTPUT LIKHNA</div>
+          <div id="c_row"></div>
+          <div class="card" id="c_w" style="left:80px; top:450px; width:920px; height:240px; overflow:hidden;">
+            <div class="x c" style="left:0; width:920px; top:78px; font-size:84px; color:#5E6B85;">WEIGHTS</div>
+            <div id="c_sweep" style="position:absolute; left:-180px; top:0; width:180px; height:240px; background:linear-gradient(90deg, rgba(242,181,68,0), rgba(242,181,68,.8), rgba(242,181,68,0));"></div>
+          </div>
+          <div class="x c" id="c_note" style="top:730px; font-size:60px;">har token = <span class="gold">saare weights</span> padho</div>
+          <div class="x c gold" id="c_dec" style="top:850px; font-size:160px;">DECODE</div>
+          <div class="x c red" id="c_k" style="top:1070px; font-size:110px;">× 1000 chakkar</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="x c" style="top:200px; font-size:110px;">BILL</div>
+          <div class="x c mut" id="d_sub" style="top:330px; font-size:52px;">Claude Opus 5.5 · har 10 lakh tokens</div>
+          <div class="x cyan" id="d_inl" style="left:80px; top:420px; font-size:62px;">INPUT</div>
+          <div class="hbar" id="d_in" style="left:80px; top:500px; width:176px; height:120px; background:#5BC0EB;"></div>
+          <div class="x" id="d_inv" style="left:290px; top:516px; font-size:84px;">$4</div>
+          <div class="x gold" id="d_outl" style="left:80px; top:660px; font-size:62px;">OUTPUT</div>
+          <div class="hbar" id="d_out" style="left:80px; top:740px; width:880px; height:120px; background:#F2B544;"></div>
+          <div class="x" id="d_outv" style="left:80px; top:756px; width:850px; text-align:right; font-size:84px; color:#0B1220;">$20</div>
+          <div class="x c red" id="d_5x" style="top:900px; font-size:210px;">5x</div>
+          <div class="x c" id="d_5t" style="top:1110px; font-size:66px;">output <span class="red">mehenga</span></div>
+          <div class="src" style="top:1240px;">Source: Claude pricing docs</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="chip" id="e_chip" style="left:240px; top:200px; width:600px; background:#F2B544; color:#0B1220;">INTERVIEW ANSWER</div>
+          <div class="card" id="e_1" style="left:60px; top:340px; width:960px; height:190px;"><div class="x" style="left:50px; top:55px; font-size:80px;"><span class="cyan">INPUT</span> → parallel</div></div>
+          <div class="card" id="e_2" style="left:60px; top:560px; width:960px; height:190px;"><div class="x" style="left:50px; top:55px; font-size:80px;"><span class="gold">OUTPUT</span> → ek-ek token</div></div>
+          <div class="x c" id="e_3" style="top:820px; font-size:86px;">lamba <span class="red">JAWAB</span> &gt; lamba prompt</div>
+          <div class="x c mut" id="e_4" style="top:950px; font-size:66px;">time + paisa, dono</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="x c" id="f_1" style="top:260px; font-size:112px;">Chatbot <span class="gold">TEZ</span> karna hai?</div>
+          <div class="chip" id="f_a" style="left:60px; top:640px; width:400px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:50px;">PROMPT chhota</div>
+          <div class="chip" id="f_b" style="left:560px; top:640px; width:400px; border:4px solid #F2B544; color:#F2B544; font-size:50px;">JAWAB chhota</div>
+          <div class="chip" id="f_c" style="left:290px; top:960px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="54" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="54" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="54" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 already shows the two boxes
+      tl.fromTo(["#a_in", "#a_out"], { scale: 1.05 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_slow", at("A", "slow"), { s: 0.8 });
+      show("#a_cost", at("A", "mahnga"), { s: 0.8 });
+      show("#a_eq", at("A", "barabar") - 0.1, { s: 1.3 });
+      wipe("#a_strike", at("A", "galat"), 0.3);
+      show("#a_galat", at("A", "galat"), { s: 1.8, y: 0 });
+      // B: prefill, 60 tokens light together
+      const bg = q("#b_grid");
+      for (let i = 0; i < 60; i++) { const d = document.createElement("div"); d.className = "tok btok"; d.style.cssText += ";left:" + (80 + (i % 10) * 92) + "px;top:" + (330 + Math.floor(i / 10) * 72) + "px;width:80px;height:58px;"; bg.appendChild(d); }
+      show("#b_t", S.B + 0.05, { s: 1 });
+      tl.fromTo(".btok", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.01 }, at("B", "model"));
+      tl.to(".btok", { backgroundColor: "#5BC0EB", borderColor: "#5BC0EB", duration: 0.25 }, at("B", "ek", 1));
+      show("#b_one", at("B", "parallel"), { s: 1 });
+      show("#b_pre", at("B", "prefill") - 0.1, { s: 1.5 });
+      // C: decode, one token at a time, each one sweeps the weights
+      const cr = q("#c_row");
+      for (let i = 0; i < 10; i++) { const d = document.createElement("div"); d.className = "tok ctok"; d.style.cssText += ";left:" + (80 + i * 92) + "px;top:330px;width:80px;height:80px;opacity:0;"; cr.appendChild(d); }
+      show("#c_t", S.C + 0.05, { s: 1 });
+      const t0 = at("C", "ek-ek");
+      qa(".ctok").forEach((d, i) => {
+        const t = t0 + i * 1.12;
+        tl.fromTo(d, { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, backgroundColor: "#F2B544", borderColor: "#F2B544", duration: 0.25, immediateRender: false }, t);
+        tl.fromTo("#c_sweep", { x: 0 }, { x: 1100, duration: 0.8, ease: "none", immediateRender: false }, t);
+      });
+      show("#c_note", at("C", "weights"), { s: 1 });
+      show("#c_dec", at("C", "decode") - 0.1, { s: 1.5 });
+      show("#c_k", at("C", "1000", 1), { s: 1.4 });
+      // D: the bill
+      show("#d_sub", at("D", "claude"), { s: 1 });
+      show("#d_inl", at("D", "input"), { s: 1 });
+      wipe("#d_in", at("D", "4"), 0.4);
+      show("#d_inv", at("D", "dollar"), { s: 1.3 });
+      show("#d_outl", at("D", "output"), { s: 1 });
+      wipe("#d_out", at("D", "20"), 0.8);
+      show("#d_outv", at("D", "dollar", 1), { s: 1.3 });
+      show("#d_5x", at("D", "paanch") - 0.1, { s: 1.6 });
+      show("#d_5t", at("D", "mahnga"), { s: 1 });
+      // E: the interview answer
+      show("#e_chip", at("E", "interview"), { s: 0.8 });
+      show("#e_1", at("E", "input"), { s: 0.9 });
+      show("#e_2", at("E", "output"), { s: 0.9 });
+      show("#e_3", at("E", "lanba"), { s: 1.3 });
+      show("#e_4", at("E", "time"), { s: 1 });
+      // F: question
+      show("#f_1", at("F", "chatbot"), { s: 1.2 });
+      show("#f_a", at("F", "prompt"), { s: 0.8 });
+      show("#f_b", at("F", "jawab"), { s: 0.8 });
+      show("#f_c", at("F", "comment"), { s: 0.8 });
+      M.finish({ kw: { output: "gold", input: "cyan", prefill: "cyan", decode: "gold", mahnga: "hot", galat: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

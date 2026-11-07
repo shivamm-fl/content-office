@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Temperature, Actually</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="55.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="x c gold" id="a_t" style="top:200px; font-size:132px;">TEMPERATURE</div>
+          <div style="position:absolute; left:140px; top:400px; width:800px; height:26px; border-radius:13px; background:linear-gradient(90deg,#5BC0EB,#F2B544,#E8596B);"></div>
+          <div id="a_knob" style="position:absolute; left:120px; top:383px; width:60px; height:60px; border-radius:30px; background:#E8EDF6; box-shadow:0 0 0 8px rgba(232,237,246,.15);"></div>
+          <div class="x c" id="a_cre" style="top:520px; font-size:110px;">CREATIVE?</div>
+          <div class="strike" id="a_s1" style="left:250px; top:585px; width:580px;"></div>
+          <div class="x c" id="a_sma" style="top:690px; font-size:110px;">SMART?</div>
+          <div class="strike" id="a_s2" style="left:330px; top:755px; width:420px;"></div>
+          <div class="x c mut" id="a_act" style="top:880px; font-size:64px;">actually:</div>
+          <div class="x c" id="a_bh" style="top:970px; font-size:90px;">top option pe<br/>kitna <span class="gold">BHAROSA</span></div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="card" id="b_s" style="left:60px; top:210px; width:960px; height:250px;">
+            <div class="x" style="left:0; width:960px; top:40px; text-align:center; font-size:76px;">Main roz subah</div>
+            <div class="x" style="left:0; width:960px; top:130px; text-align:center; font-size:76px;"><span class="gold">_____</span> peeta hoon</div>
+          </div>
+          <div class="x c mut" id="b_sc" style="top:540px; font-size:64px;">model ke scores</div>
+          <div class="x" id="b_c1" style="left:100px; top:640px; width:240px; text-align:center;"><div style="font-size:64px;">chai</div><div class="gold" style="font-size:170px;">2</div></div>
+          <div class="x" id="b_c2" style="left:420px; top:640px; width:240px; text-align:center;"><div style="font-size:64px;">coffee</div><div class="gold" style="font-size:170px;">1</div></div>
+          <div class="x" id="b_c3" style="left:740px; top:640px; width:240px; text-align:center;"><div style="font-size:64px;">paani</div><div class="gold" style="font-size:170px;">0</div></div>
+        </div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD">
+          <div class="chip" id="d_div" style="left:300px; top:340px; width:420px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">scores ÷ 0.5</div>
+        </div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF">
+          <div class="card" id="f_l" style="left:60px; top:200px; width:450px; height:640px;">
+            <div class="x gold" style="left:0; width:450px; top:30px; text-align:center; font-size:64px;">T KAM</div>
+            <div class="bar" style="left:60px; top:160px; width:90px; height:380px; background:#F2B544;"></div>
+            <div class="bar" style="left:180px; top:490px; width:90px; height:50px; background:#F2B544; opacity:.5;"></div>
+            <div class="bar" style="left:300px; top:530px; width:90px; height:10px; background:#F2B544; opacity:.3;"></div>
+            <div class="x" style="left:0; width:450px; top:560px; text-align:center; font-size:56px;">sharp</div>
+          </div>
+          <div class="card" id="f_r" style="left:570px; top:200px; width:450px; height:640px;">
+            <div class="x red" style="left:0; width:450px; top:30px; text-align:center; font-size:64px;">T ZYADA</div>
+            <div class="bar" style="left:60px; top:300px; width:90px; height:240px; background:#E8596B;"></div>
+            <div class="bar" style="left:180px; top:360px; width:90px; height:180px; background:#E8596B; opacity:.75;"></div>
+            <div class="bar" id="f_p" style="left:300px; top:410px; width:90px; height:130px; background:#E8596B; opacity:.55;"></div>
+            <div class="x" style="left:0; width:450px; top:560px; text-align:center; font-size:56px;">flat</div>
+          </div>
+          <div class="chip" id="f_pa" style="left:610px; top:870px; width:370px; background:#5BC0EB; color:#0B1220; font-size:52px;">paani bhi!</div>
+          <div class="x c gold" id="f_z" style="top:1010px; font-size:90px;">T → 0 = hamesha TOP</div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c" id="g_1" style="top:260px; font-size:110px;">T = 2 · <span class="gold">100 baar</span></div>
+          <div class="x c" id="g_2" style="top:470px; font-size:130px;"><span class="cyan">PAANI</span> kitni baar?</div>
+          <div class="chip" id="g_c" style="left:290px; top:900px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+        <!-- one chart shared by scenes C, D, E (shown from C, hidden at F) -->
+        <div id="chart" style="position:absolute; left:0; top:0; width:1080px; height:1300px; opacity:0;">
+          <div class="x c gold" id="t1" style="top:190px; font-size:130px;">T = 1</div>
+          <div class="x c gold" id="t05" style="top:190px; font-size:130px; opacity:0;">T = 0.5</div>
+          <div class="x c gold" id="t2" style="top:190px; font-size:130px; opacity:0;">T = 2</div>
+          <div class="x" id="v1" style="left:100px; top:450px; width:240px; text-align:center; font-size:84px;">0%</div>
+          <div class="x" id="v2" style="left:420px; top:450px; width:240px; text-align:center; font-size:84px;">0%</div>
+          <div class="x" id="v3" style="left:740px; top:450px; width:240px; text-align:center; font-size:84px;">0%</div>
+          <div class="bar" id="k1" style="left:120px; top:560px; width:200px; height:620px; background:#F2B544;"></div>
+          <div class="bar" id="k2" style="left:440px; top:560px; width:200px; height:620px; background:#F2B544; opacity:.8;"></div>
+          <div class="bar" id="k3" style="left:760px; top:560px; width:200px; height:620px; background:#5BC0EB;"></div>
+          <div style="position:absolute; left:80px; top:1180px; width:920px; height:6px; background:#26324B;"></div>
+          <div class="x" style="left:100px; top:1200px; width:240px; text-align:center; font-size:60px;">chai</div>
+          <div class="x" style="left:420px; top:1200px; width:240px; text-align:center; font-size:60px;">coffee</div>
+          <div class="x" style="left:740px; top:1200px; width:240px; text-align:center; font-size:60px;">paani</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="55.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="55.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="55.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "DAY 18/150" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: not creative, not smart: confidence in the top option
+      tl.fromTo("#a_knob", { x: 0 }, { x: 740, duration: 1.4, ease: "power2.inOut" }, 0.1);
+      show("#a_cre", at("A", "creative") - 0.1, { s: 1.3 });
+      wipe("#a_s1", at("A", "nahi"), 0.3);
+      show("#a_sma", at("A", "smart") - 0.1, { s: 1.3 });
+      wipe("#a_s2", at("A", "nahi", 1), 0.3);
+      show("#a_act", at("A", "actually"), { s: 1 });
+      show("#a_bh", at("A", "wo", 1), { s: 1.2 });
+      tl.fromTo("#a_bh .gold", { scale: 1 }, { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 }, at("A", "bharosa"));
+      // B: the sentence and the scores
+      show("#b_s", at("B", "main") - 0.3, { s: 0.95 });
+      show("#b_sc", at("B", "scores"), { s: 1 });
+      show("#b_c1", at("B", "chai"), { s: 1.4 });
+      show("#b_c2", at("B", "coffee"), { s: 1.4 });
+      show("#b_c3", at("B", "paani"), { s: 1.4 });
+      // C, D, E: one chart, the bars change shape with the temperature
+      tl.set("#chart", { opacity: 1 }, S.C);
+      tl.set("#chart", { opacity: 0 }, S.F);
+      tl.set(["#k1", "#k2", "#k3"], { scaleY: 0 }, 0);
+      tl.set(["#v1", "#v2", "#v3"], { opacity: 0 }, 0);
+      const P = [{ v: 0 }, { v: 0 }, { v: 0 }];
+      const fmt = (v) => (v > 0 && v < 2 ? "<2%" : Math.round(v) + "%");
+      const step = (i, pct, t) => {
+        tl.to("#k" + (i + 1), { scaleY: pct / 100, duration: 0.6, ease: "power2.out" }, t);
+        tl.to(P[i], { v: pct, duration: 0.6, ease: "power2.out", onUpdate: () => { q("#v" + (i + 1)).textContent = fmt(P[i].v); } }, t);
+        tl.to("#v" + (i + 1), { opacity: 1, duration: 0.2 }, t);
+      };
+      ["chai", "coffee", "paani"].forEach((w, i) => step(i, [66.52, 24.47, 9.0][i], at("C", w)));
+      tl.to("#t1", { opacity: 0, duration: 0.15 }, at("D", "temperature"));
+      show("#t05", at("D", "temperature") + 0.1, { s: 1.4 });
+      show("#d_div", at("D", "divide"), { s: 1 });
+      ["chai", "coffee", "paani"].forEach((w, i) => step(i, [86.68, 11.73, 1.59][i], at("D", w)));
+      tl.to("#t05", { opacity: 0, duration: 0.15 }, at("E", "temperature"));
+      show("#t2", at("E", "temperature") + 0.1, { s: 1.4 });
+      ["chai", "coffee", "paani"].forEach((w, i) => step(i, [50.65, 30.72, 18.63][i], at("E", w)));
+      // F: sharp vs flat
+      show("#f_l", at("F", "kam"), { s: 0.9 });
+      show("#f_r", at("F", "zyada"), { s: 0.9 });
+      show("#f_pa", at("F", "paani"), { s: 1.3 });
+      tl.to("#f_p", { backgroundColor: "#5BC0EB", opacity: 1, duration: 0.3 }, at("F", "paani"));
+      show("#f_z", at("F", "zero"), { s: 1.3 });
+      // G: question
+      show("#g_1", at("G", "temperature"), { s: 1.2 });
+      show("#g_2", at("G", "paani"), { s: 1.4 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { temperature: "gold", chai: "gold", paani: "cyan", bharosa: "gold", nahi: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
