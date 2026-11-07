@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI ne AI ka dimaag khola</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      .x { position:absolute; font-family:"Space Grotesk","Noto Sans Devanagari",sans-serif; font-weight:700; color:#E8EDF6; line-height:1.04; letter-spacing:-.02em; }
+      .c { left:40px; width:1000px; text-align:center; }
+      .gold { color:#F2B544; } .red { color:#E8596B; } .green { color:#4CC38A; } .cyan { color:#5BC0EB; } .mut { color:#8592AD; }
+      .card { position:absolute; background:#111A2C; border:3px solid #26324B; border-radius:36px; }
+      .shot { position:absolute; left:60px; width:960px; border-radius:20px; overflow:hidden; box-shadow:0 30px 90px rgba(0,0,0,.55); background:#fff; transform-origin:50% 50%; }
+      .shot img { display:block; width:960px; }
+      .hl { position:absolute; background:rgba(242,181,68,.55); mix-blend-mode:multiply; border-radius:6px; transform-origin:0 50%; }
+      .src { position:absolute; left:60px; width:960px; text-align:right; font:500 36px "JetBrains Mono",monospace; color:#8592AD; }
+      .chip { position:absolute; padding:14px 30px; border-radius:999px; font:700 50px "Space Grotesk",sans-serif; text-align:center; }
+      .grid { position:absolute; display:grid; font:500 40px "JetBrains Mono",monospace; color:#5E6B85; text-align:center; }
+      .grid div { padding:4px 0; border-radius:8px; }
+      .blk { position:absolute; border-radius:32px; text-align:center; font:700 60px "Space Grotesk",sans-serif; }
+      .bub { position:absolute; left:80px; padding:20px 34px; border-radius:34px; background:#1B2538; font:600 52px "Space Grotesk",sans-serif; color:#C5CEDD; }
+      .layer { position:absolute; left:90px; width:900px; height:150px; border:5px solid #26324B; border-radius:24px; background:#111A2C; overflow:hidden; }
+      .layer .lab { position:absolute; left:30px; top:44px; font:700 52px "Space Grotesk",sans-serif; color:#E8EDF6; }
+      .stripe { position:absolute; top:0; width:70px; height:150px; background:#E8596B; transform-origin:50% 50%; }
+      .row { position:absolute; left:60px; width:840px; font:700 62px "Space Grotesk",sans-serif; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="68.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- A: hook -->
+        <div class="beat" id="sA">
+          <div class="x c" id="a_t1" style="top:200px;">
+            <div style="font-size:104px;">AI ne AI ka</div>
+            <div class="gold" style="font-size:124px; white-space:nowrap;">DIMAAG KHOLA</div>
+          </div>
+          <div class="x c" id="a_zero" style="top:580px; font-size:96px;">training: <span class="red">ZERO</span></div>
+          <div class="x c mut" id="a_lab" style="top:790px; font-size:56px;">MATH SCORE</div>
+          <div class="x c" id="a_num" style="top:860px; font-size:240px;">7.9%</div>
+        </div>
+
+        <!-- B: weights + training -->
+        <div class="beat" id="sB">
+          <div class="grid" id="b_grid" style="left:60px; top:220px; width:960px; grid-template-columns:repeat(6, 160px); row-gap:6px;"></div>
+          <div class="chip" id="b_w" style="left:240px; top:520px; width:600px; background:#0B1220; border:5px solid #F2B544; color:#F2B544; font-size:130px; padding:20px 0;">WEIGHTS</div>
+          <div class="card" id="b_train" style="left:60px; top:1040px; width:960px; height:240px;">
+            <div class="x" style="left:40px; top:30px; font-size:60px;">TRAINING</div>
+            <div class="x mut" style="left:420px; top:42px; font-size:46px;">laakhon examples</div>
+            <div style="position:absolute; left:40px; top:140px; width:880px; height:56px; border-radius:28px; background:#1B2538;"></div>
+            <div id="b_fill" style="position:absolute; left:40px; top:140px; width:880px; height:56px; border-radius:28px; background:#F2B544; transform-origin:0 50%;"></div>
+          </div>
+        </div>
+
+        <!-- C: MIT, Astra reads Qwen -->
+        <div class="beat" id="sC">
+          <div id="c_paper">
+            <div class="shot" id="c_shot" style="top:200px;"><img src="assets/shot_mit_title.png" alt="" />
+              <div class="hl" id="c_hl" style="left:495px; top:62px; width:340px; height:66px;"></div>
+            </div>
+            <div class="src" id="c_src" style="top:650px;">Source: MIT CSAIL blog · 2 Nov 2026</div>
+            <div class="x c" id="c_drop" style="top:760px; font-size:84px;">training wala tareeka: <span class="red">CHHODA</span></div>
+          </div>
+          <div id="c_lab">
+            <div class="blk" id="c_astra" style="left:60px; top:300px; width:420px; height:420px; border:6px solid #F2B544; background:rgba(242,181,68,.08); color:#F2B544; padding-top:150px; box-sizing:border-box;">GPT-6<br/>ASTRA</div>
+            <div class="blk" id="c_qwen" style="left:600px; top:310px; width:420px; height:420px; border:6px solid #5BC0EB; background:rgba(91,192,235,.08); color:#5BC0EB;">
+              <div style="margin-top:22px;">QWEN</div>
+              <div class="grid" id="c_qgrid" style="left:30px; top:110px; width:360px; grid-template-columns:repeat(2, 180px); row-gap:8px; font-size:40px;"></div>
+            </div>
+            <div id="c_beam" style="position:absolute; left:480px; top:500px; width:120px; height:16px; border-radius:8px; background:#F2B544; transform-origin:0 50%;"></div>
+            <div class="x c" id="c_read" style="top:750px; font-size:64px;">Astra ne Qwen ke weights <span class="gold">padhe</span></div>
+            <div class="x c gold" id="c_term" style="top:880px; font-size:120px;">WEIGHT-SPACE<br/>PROGRAMMING</div>
+            <div class="x c" id="c_def" style="top:1150px; font-size:58px;">AI → AI ke weights <span class="gold">padhe + likhe</span></div>
+          </div>
+        </div>
+
+        <!-- D: the loop and the edit -->
+        <div class="beat" id="sD">
+          <div id="d_loop">
+            <div class="chip" id="d_tag" style="left:80px; top:200px; background:#E8596B; color:#0B1220;">QWEN · LOOP</div>
+            <div class="bub dl" style="top:320px;">"Wait, let me check again..."</div>
+            <div class="bub dl" style="top:430px;">"Wait, let me check again..."</div>
+            <div class="bub dl" style="top:540px;">"Wait, let me check again..."</div>
+            <div class="bub dl" style="top:650px;">"Wait, let me check again..."</div>
+            <div class="x c red" id="d_93" style="top:790px; font-size:220px;">93%</div>
+            <div class="x c" id="d_93t" style="top:1030px; font-size:60px;">sawaalon mein jawab tak <span class="red">nahi</span></div>
+          </div>
+          <div id="d_fix">
+            <div class="layer" id="d_l1" style="top:230px;"><div class="lab">LAYER 15</div>
+              <div class="stripe" style="left:380px;"></div><div class="stripe" style="left:560px;"></div><div class="stripe" style="left:740px;"></div></div>
+            <div class="layer" id="d_l2" style="top:420px;"><div class="lab">LAYER 19</div>
+              <div class="stripe" style="left:420px;"></div><div class="stripe" style="left:620px;"></div><div class="stripe" style="left:790px;"></div></div>
+            <div class="x c green" id="d_gone" style="top:620px; font-size:84px;">LOOP HATAYA</div>
+            <div class="x c" id="d_n" style="top:760px; font-size:140px;">0</div>
+            <div class="x c mut" id="d_nl" style="top:920px; font-size:56px;">weights badle</div>
+            <div class="x c" id="d_pct" style="top:1040px; font-size:80px;">model ka sirf <span class="gold">0.016%</span></div>
+          </div>
+        </div>
+
+        <!-- E: result + limit -->
+        <div class="beat" id="sE">
+          <div class="shot" id="e_shot" style="top:200px;"><img src="assets/shot_mit_result.png" alt="" />
+            <div class="hl" id="e_hl" style="left:14px; top:104px; width:374px; height:40px;"></div>
+          </div>
+          <div class="src" style="top:385px;">Source: MIT CSAIL blog</div>
+          <div class="x c" id="e_big" style="top:460px; font-size:150px;">7.9% <span class="mut">→</span> <span class="green" id="e_48">48.1%</span></div>
+          <div class="card" id="e_limit" style="left:60px; top:700px; width:960px; height:560px; border-color:#E8596B;">
+            <div class="x red" style="left:60px; top:40px; font-size:84px;">PAR LIMIT</div>
+            <div class="row green" id="e_r1" style="top:200px;">✓ rukawat hata sakta hai</div>
+            <div class="row red" id="e_r2" style="top:340px;">✗ nayi kaabiliyat nahi daal sakta</div>
+          </div>
+        </div>
+
+        <!-- F: question -->
+        <div class="beat" id="sF">
+          <div class="x c" id="f_1" style="top:260px; font-size:100px;">Agar AI, AI ko</div>
+          <div class="x c" id="f_2" style="top:390px; font-size:100px;"><span class="gold">khud theek</span> karne lage</div>
+          <div class="x c" id="f_3" style="top:620px; font-size:120px;">toh AI <span class="gold">ENGINEERS</span></div>
+          <div class="x c" id="f_4" style="top:760px; font-size:120px;">ka kaam <span class="red">kya?</span></div>
+          <div class="chip" id="f_cmt" style="left:290px; top:1080px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="68.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="68.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="68.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      // weight-number grids (deterministic, no Math.random)
+      let seed = 7; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+      const num = () => { const v = (rnd() * 2 - 1) * (rnd() < 0.15 ? 4 : 0.6); return (v < 0 ? "-" : " ") + Math.abs(v).toFixed(3); };
+      const fill = (id, n) => { const g = document.getElementById(id); for (let i = 0; i < n; i++) { const d = document.createElement("div"); d.textContent = num(); g.appendChild(d); } };
+      fill("b_grid", 6 * 14); fill("c_qgrid", 2 * 4);
+
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F"], tag: "AI SAMJHO" });
+      const { tl, S } = M;
+      const CAPS = window.REEL.hi.caps;
+      const clean = (t) => t.replace(/[,।?:!"“”]+$/, "").replace(/\.$/, "").toLowerCase();
+      const at = (sc, w, n) => { const m = CAPS.filter((c) => c.scene === sc && clean(c.t) === w.toLowerCase()); if (!m.length) throw new Error(`word ${w} not in ${sc}`); return (m[n || 0] || m[m.length - 1]).s; };
+      const q = (s) => document.querySelector(s), qa = (s) => [...document.querySelectorAll(s)];
+      const show = (el, t, o = {}) => tl.fromTo(el, { opacity: 0, scale: o.s ?? 1.2, y: o.y ?? 26 }, { opacity: 1, scale: 1, y: 0, duration: o.d ?? 0.32, ease: o.ease || "back.out(1.7)" }, t);
+      const hide = (el, t, d) => tl.to(el, { opacity: 0, duration: d ?? 0.2, ease: "power1.in" }, t);
+      const wipe = (el, t, d) => tl.fromTo(el, { scaleX: 0 }, { scaleX: 1, duration: d ?? 0.45, ease: "power2.out" }, t);
+      const count = (el, from, to, t, dur, fmt) => { const o = { v: from }; q(el).textContent = fmt(from); tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate: () => { q(el).textContent = fmt(o.v); } }, t); };
+      const push = (el, t, dur) => tl.fromTo(el, { scale: 1 }, { scale: 1.06, duration: dur, ease: "none" }, t);
+
+      // ---------- A ----------
+      tl.fromTo("#a_t1", { scale: 1.06 }, { scale: 1, duration: 0.6, ease: "power2.out" }, 0);
+      show("#a_zero", at("A", "training"), { s: 1.4 });
+      show("#a_lab", at("A", "score") - 0.2, { s: 1 });
+      show("#a_num", at("A", "7.9") - 0.1, { s: 1.3 });
+      count("#a_num", 7.9, 48, at("A", "48") - 0.15, 0.7, (v) => (v < 47.9 ? v.toFixed(1) : "48") + "%");
+      tl.to("#a_num", { color: "#4CC38A", duration: 0.3 }, at("A", "48"));
+
+      // ---------- B ----------
+      qa("#b_grid div").forEach((d, i) => tl.fromTo(d, { opacity: 0 }, { opacity: 1, duration: 0.15 }, at("B", "numbers") - 0.6 + Math.floor(i / 6) * 0.07));
+      show("#b_w", at("B", "weights"), { s: 1.5 });
+      hide("#b_w", at("B", "training") - 0.2);
+      show("#b_train", at("B", "training"), { s: 1 });
+      wipe("#b_fill", at("B", "laakhon"), 3.0);
+      [5, 17, 28, 34, 41, 52, 60, 66, 73, 80, 9, 22, 47, 58, 70].forEach((k, j) => { const d = q("#b_grid").children[k]; const t0 = at("B", "examples") + j * 0.18; tl.to(d, { color: "#F2B544", backgroundColor: "rgba(242,181,68,.15)", duration: 0.15 }, t0); });
+
+      // ---------- C ----------
+      tl.fromTo("#c_shot", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, S.C + 0.05);
+      push("#c_shot", S.C + 0.05, 3.5);
+      show("#c_src", at("C", "mit"), { s: 1 });
+      wipe("#c_hl", at("C", "researchers"), 0.5);
+      show("#c_drop", at("C", "chhod"), { s: 1.3 });
+      hide("#c_paper", at("C", "gpt-6") - 0.2);
+      show("#c_astra", at("C", "gpt-6"), { s: 0.8 });
+      show("#c_qwen", at("C", "qwen"), { s: 0.8 });
+      wipe("#c_beam", at("C", "padhne"), 0.4);
+      tl.fromTo("#c_beam", { opacity: 0.4 }, { opacity: 1, duration: 0.3, yoyo: true, repeat: 5 }, at("C", "padhne") + 0.4);
+      show("#c_read", at("C", "padhne") + 0.1, { s: 1 });
+      [1, 2, 5, 6].forEach((k, j) => { const d = q("#c_qgrid").children[k]; tl.to(d, { color: "#0B1220", backgroundColor: "#F2B544", duration: 0.15 }, at("C", "numbers") + j * 0.2); });
+      hide("#c_read", at("C", "weight-space") - 0.2);
+      show("#c_term", at("C", "weight-space") - 0.1, { s: 1.4 });
+      show("#c_def", at("C", "ek", 1), { s: 1 });
+
+      // ---------- D ----------
+      show("#d_tag", at("D", "qwen"), { s: 1 });
+      qa(".dl").forEach((el, i) => show(el, at("D", "qwen") + 0.4 + i * 0.6, { s: 0.9, y: 20 }));
+      show("#d_93", at("D", "93") - 0.1, { s: 1.5 });
+      show("#d_93t", at("D", "93") + 0.4, { s: 1 });
+      hide("#d_loop", at("D", "astra") - 0.2);
+      show("#d_l1", at("D", "do"), { s: 0.9 });
+      show("#d_l2", at("D", "layers"), { s: 0.9 });
+      qa("#d_fix .stripe").forEach((el) => tl.fromTo(el, { opacity: 0.55 }, { opacity: 1, duration: 0.2, yoyo: true, repeat: 3 }, at("D", "loop")));
+      qa("#d_fix .stripe").forEach((el, i) => tl.to(el, { scaleY: 0, opacity: 0, duration: 0.3, ease: "power2.in" }, at("D", "hata") + i * 0.06));
+      tl.to(["#d_l1", "#d_l2"], { borderColor: "#4CC38A", duration: 0.3 }, at("D", "hata") + 0.3);
+      show("#d_gone", at("D", "hata") + 0.2, { s: 1.3 });
+      show("#d_n", at("D", "kul"), { s: 1 });
+      show("#d_nl", at("D", "kul") + 0.2, { s: 1 });
+      count("#d_n", 0, 131072, at("D", "1"), 1.2, (v) => Math.round(v).toLocaleString("en-IN"));
+      show("#d_pct", at("D", "0.016"), { s: 1.3 });
+
+      // ---------- E ----------
+      tl.fromTo("#e_shot", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, S.E + 0.05);
+      push("#e_shot", S.E + 0.05, 3.5);
+      wipe("#e_hl", at("E", "7.9"), 0.6);
+      show("#e_big", at("E", "7.9"), { s: 1.2 });
+      tl.fromTo("#e_48", { opacity: 0.25 }, { opacity: 1, duration: 0.3 }, at("E", "48.1"));
+      show("#e_limit", at("E", "limit") - 0.1, { s: 0.9 });
+      show("#e_r1", at("E", "rukavat"), { s: 1.1 });
+      show("#e_r2", at("E", "kaabiliyat") - 0.1, { s: 1.1 });
+
+      // ---------- F ----------
+      show("#f_1", at("F", "agar"), { s: 1 });
+      show("#f_2", at("F", "theek"), { s: 1.2 });
+      show("#f_3", at("F", "engineers") - 0.2, { s: 1.3 });
+      show("#f_4", at("F", "kaam"), { s: 1.3 });
+      show("#f_cmt", at("F", "comment"), { s: 0.8 });
+
+      M.finish({ kw: { weights: "gold", astra: "gold", qwen: "cyan", training: "hot", loop: "hot", engineers: "gold", "48": "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

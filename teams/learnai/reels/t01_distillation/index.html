@@ -8,30 +8,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>Distillation: Smart or Chori?</title>
+    <title>Copy karke bana AI?</title>
     <script src="assets/gsap.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="kit/motion.css" />
     <script src="kit/motion.js"></script>
-    <script src="kit/viz.js"></script>
     <style>
       @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
       @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
       @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
-
-      .v{position:absolute;box-sizing:border-box;font-family:var(--lat);font-weight:700;line-height:1.12;color:#E8EDF6}
-      .panel{background:#111C2F;border:2px solid #34435D;border-radius:28px}
-      .soft{background:#17243A;border:2px solid #34435D;border-radius:22px}
-      .gold{color:#F2B544}.green{color:#4CC38A}.red{color:#E8596B}.cyan{color:#5BC0EB}
-      .mono{font-family:var(--code)}
-      .center{display:flex;align-items:center;justify-content:center;text-align:center}
-      .dot{position:absolute;border-radius:50%;background:#4B5A72}
-      .plot{position:absolute;overflow:visible}
-      #tag,#handle{font-size:44px;letter-spacing:0}
+      .x { position:absolute; font-family:"Space Grotesk","Noto Sans Devanagari",sans-serif; font-weight:700; color:#E8EDF6; line-height:1.04; letter-spacing:-.02em; }
+      .c { left:40px; width:1000px; text-align:center; }
+      .gold { color:#F2B544; } .red { color:#E8596B; } .green { color:#4CC38A; } .cyan { color:#5BC0EB; } .mut { color:#8592AD; }
+      .card { position:absolute; background:#111A2C; border:3px solid #26324B; border-radius:36px; }
+      .shot { position:absolute; left:60px; width:960px; border-radius:20px; overflow:hidden; box-shadow:0 30px 90px rgba(0,0,0,.55); background:#fff; transform-origin:50% 50%; }
+      .shot img { display:block; width:960px; }
+      .hl { position:absolute; background:rgba(242,181,68,.55); mix-blend-mode:multiply; border-radius:6px; transform-origin:0 50%; }
+      .src { position:absolute; left:60px; width:960px; text-align:right; font:500 36px "JetBrains Mono",monospace; color:#8592AD; }
+      .chip { position:absolute; padding:14px 30px; border-radius:999px; font:700 50px "Space Grotesk",sans-serif; text-align:center; }
+      .bub { position:absolute; padding:26px 38px; border-radius:40px; font:600 60px "Space Grotesk",sans-serif; line-height:1.15; }
+      .sheet { position:absolute; width:420px; height:600px; background:#F3EFE4; border-radius:18px; box-shadow:0 24px 60px rgba(0,0,0,.5); }
+      .sheet .roll { position:absolute; left:30px; top:30px; font:700 46px "JetBrains Mono",monospace; color:#1B2433; }
+      .sheet .ln { position:absolute; left:30px; height:18px; border-radius:9px; background:#C9C3B3; transform-origin:0 50%; }
+      .sheet .ink { background:#24324A; }
+      .blk { position:absolute; border-radius:32px; display:flex; align-items:center; justify-content:center; text-align:center; font:700 54px "Space Grotesk",sans-serif; }
+      .flow { position:absolute; padding:10px 24px; border-radius:999px; font:700 44px "Space Grotesk",sans-serif; background:#F2B544; color:#0B1220; }
+      .tag2 { position:absolute; padding:10px 26px; border-radius:999px; font:700 46px "Space Grotesk",sans-serif; border:3px solid #5BC0EB; color:#5BC0EB; background:rgba(91,192,235,.1); }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="103" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="49.5" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -39,16 +45,100 @@
       </div>
 
       <div id="cam">
-        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
-             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
-        <div class="beat" id="sA" style="opacity:1"></div>
-        <div class="beat" id="sB"></div>
-        <div class="beat" id="sC"></div>
-        <div class="beat" id="sD"></div>
-        <div class="beat" id="sE"></div>
-        <div class="beat" id="sF"></div>
-        <div class="beat" id="sG"></div>
-        <div class="beat" id="sH"></div>
+        <!-- A: hook + recreated chat -->
+        <div class="beat" id="sA">
+          <div class="x c" id="a_hook" style="top:190px; transform-origin:50% 0;">
+            <div style="font-size:96px;">Ye AI khud ko</div>
+            <div class="red" style="font-size:200px; line-height:1;">CLAUDE</div>
+            <div style="font-size:96px;">bata raha hai</div>
+          </div>
+          <div class="card" id="a_chat" style="left:70px; top:520px; width:940px; height:760px;">
+            <div class="x" style="left:50px; top:40px; font-size:64px;">Kimi K3</div>
+            <div class="x mut" style="left:330px; top:58px; font:500 36px 'JetBrains Mono',monospace;">recreated · viral chat</div>
+            <div class="chip" id="a_viral" style="left:50px; top:150px; font-size:44px; border:3px solid #F2B544; color:#F2B544;">VIRAL ON X · JULY 2026</div>
+            <div class="bub" id="a_user" style="right:50px; top:300px; background:#1F4E79; color:#fff;">Tum kaun ho?</div>
+            <div class="bub" id="a_dots" style="left:50px; top:470px; background:#1B2538; color:#8592AD;">• • •</div>
+            <div class="bub" id="a_reply" style="left:50px; top:470px; width:760px; background:#1B2538; color:#E8EDF6;">Main <span class="red" id="a_claude" style="display:inline-block;">Claude</span> hoon, Anthropic ka AI</div>
+          </div>
+        </div>
+
+        <!-- B: why another name? exam copy -->
+        <div class="beat" id="sB">
+          <div class="x c" id="b_q" style="top:230px;">
+            <div class="gold" style="font-size:380px; line-height:1;">?</div>
+            <div style="font-size:88px; margin-top:30px;">Doosre ka <span class="red">NAAM</span> kyun?</div>
+          </div>
+          <div id="b_exam">
+            <div class="x green" style="left:80px; top:220px; width:420px; text-align:center; font-size:60px;">TOPPER</div>
+            <div class="x red" style="left:580px; top:220px; width:420px; text-align:center; font-size:60px;">COPY</div>
+            <div class="sheet" style="left:80px; top:320px; transform:rotate(-3deg);">
+              <div class="roll">ROLL NO: 23</div>
+              <div class="ln ink" style="top:130px; width:340px;"></div><div class="ln ink" style="top:190px; width:300px;"></div><div class="ln ink" style="top:250px; width:350px;"></div>
+              <div class="ln ink" style="top:310px; width:260px;"></div><div class="ln ink" style="top:370px; width:330px;"></div><div class="ln ink" style="top:430px; width:290px;"></div><div class="ln ink" style="top:490px; width:220px;"></div>
+            </div>
+            <div class="sheet" id="b_copy" style="left:580px; top:320px; transform:rotate(3deg);">
+              <div class="roll">ROLL NO: <span id="b_roll" class="red">23</span></div>
+              <div class="ln" style="top:130px; width:340px;"></div><div class="ln" style="top:190px; width:300px;"></div><div class="ln" style="top:250px; width:350px;"></div>
+              <div class="ln" style="top:310px; width:260px;"></div><div class="ln" style="top:370px; width:330px;"></div><div class="ln" style="top:430px; width:290px;"></div><div class="ln" style="top:490px; width:220px;"></div>
+              <div class="ln ink cp" style="top:130px; width:340px;"></div><div class="ln ink cp" style="top:190px; width:300px;"></div><div class="ln ink cp" style="top:250px; width:350px;"></div>
+              <div class="ln ink cp" style="top:310px; width:260px;"></div><div class="ln ink cp" style="top:370px; width:330px;"></div><div class="ln ink cp" style="top:430px; width:290px;"></div><div class="ln ink cp" style="top:490px; width:220px;"></div>
+            </div>
+            <div class="x c red" id="b_stamp" style="top:1010px; font-size:92px; transform:rotate(-5deg);">ROLL NO. BHI COPY!</div>
+          </div>
+        </div>
+
+        <!-- C: distillation -->
+        <div class="beat" id="sC">
+          <div class="x c gold" id="c_title" style="top:190px; font-size:132px;">DISTILLATION</div>
+          <div id="c_flow">
+            <div class="blk" id="c_big" style="left:60px; top:430px; width:400px; height:400px; border:5px solid #F2B544; color:#F2B544; background:rgba(242,181,68,.08);">BADA<br/>MODEL</div>
+            <div class="blk" id="c_small" style="left:740px; top:520px; width:280px; height:240px; border:5px solid #5BC0EB; color:#5BC0EB; background:rgba(91,192,235,.08);">CHHOTA<br/>MODEL</div>
+            <div class="flow cflow" style="left:470px; top:600px;">jawab</div><div class="flow cflow" style="left:470px; top:600px;">jawab</div><div class="flow cflow" style="left:470px; top:600px;">jawab</div>
+            <div class="tag2 ctag" style="left:470px; top:690px;">style</div><div class="tag2 ctag" style="left:470px; top:690px;">tone</div>
+            <div class="tag2 ctag" style="left:470px; top:690px; border-color:#E8596B; color:#E8596B; background:rgba(232,89,107,.1);">naam</div>
+            <div class="x c" id="c_habit" style="top:900px; font-size:76px;">jawab + <span class="cyan">aadatein</span> bhi</div>
+          </div>
+          <div id="c_def">
+            <div class="x c green" id="c_also" style="top:370px; font-size:70px;">Companies khud bhi karti hain</div>
+            <div class="shot" id="c_shot" style="top:500px;"><img src="assets/shot_anthropic_definition.png" alt="" />
+              <div class="hl" id="c_hl1" style="left:505px; top:80px; width:415px; height:40px;"></div>
+              <div class="hl" id="c_hl2" style="left:14px; top:119px; width:605px; height:40px;"></div>
+            </div>
+            <div class="src" id="c_src" style="top:790px;">Source: anthropic.com</div>
+            <div class="x c" id="c_cheap" style="top:880px; font-size:64px;">bada model → <span class="gold">chhota + sasta</span></div>
+          </div>
+          <div id="c_split">
+            <div class="blk" id="c_ok" style="left:60px; top:470px; width:450px; height:420px; border:5px solid #4CC38A; color:#4CC38A; background:rgba(76,195,138,.08); flex-direction:column;"><div style="font-size:150px; line-height:1;">✓</div>APNA MODEL</div>
+            <div class="blk" id="c_bad" style="left:570px; top:470px; width:450px; height:420px; border:5px solid #E8596B; color:#E8596B; background:rgba(232,89,107,.08); flex-direction:column;"><div style="font-size:150px; line-height:1;">✗</div>KISI AUR KA</div>
+            <div class="x c" id="c_fight" style="top:960px; font-size:84px;">jhagda <span class="red">yahan</span> hai</div>
+          </div>
+        </div>
+
+        <!-- D: Anthropic's numbers -->
+        <div class="beat" id="sD">
+          <div class="shot" id="d_shot" style="top:190px;"><img src="assets/shot_anthropic_title.png" alt="" />
+            <div class="hl" id="d_hl" style="left:400px; top:14px; width:292px; height:46px;"></div>
+          </div>
+          <div class="src" style="top:355px;">Source: anthropic.com · 23 Feb 2026</div>
+          <div class="chip" id="d_ds" style="left:60px; top:430px; width:300px; border:3px solid #8592AD; color:#E8EDF6;">DeepSeek</div>
+          <div class="chip" id="d_ms" style="left:390px; top:430px; width:300px; border:3px solid #8592AD; color:#E8EDF6;">Moonshot</div>
+          <div class="chip" id="d_mm" style="left:720px; top:430px; width:300px; border:3px solid #8592AD; color:#E8EDF6;">MiniMax</div>
+          <div class="x c" id="d_c1" style="top:560px;"><div id="d_n1" style="font-size:136px;">24,000</div><div class="mut" style="font-size:54px;">fake accounts</div></div>
+          <div class="x c" id="d_c2" style="top:790px;"><div id="d_n2" style="font-size:136px;">1.6 crore</div><div class="mut" style="font-size:54px;">baar Claude se baat</div></div>
+          <div class="card" id="d_c3" style="left:120px; top:1030px; width:840px; height:250px; border-color:#F2B544; background:rgba(242,181,68,.08);">
+            <div class="x gold" style="left:0; width:840px; top:28px; text-align:center; font-size:56px;">MOONSHOT (KIMI) AKELE</div>
+            <div class="x" id="d_n3" style="left:0; width:840px; top:100px; text-align:center; font-size:124px;">34 lakh+</div>
+          </div>
+        </div>
+
+        <!-- E: question -->
+        <div class="beat" id="sE">
+          <div class="x c mut" id="e_ab" style="top:240px; font-size:70px;">Ab tum batao</div>
+          <div class="x c green" id="e_smart" style="top:400px; font-size:220px;">SMART</div>
+          <div class="x c" id="e_ya" style="top:660px; font-size:96px;">ya</div>
+          <div class="x c red" id="e_chori" style="top:790px; font-size:220px;">CHORI?</div>
+          <div class="chip" id="e_cmt" style="left:290px; top:1110px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
       </div>
 
       <div id="prog"><div id="progfill"></div></div>
@@ -57,173 +147,87 @@
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
 
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="103" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="103" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="103" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="49.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="49.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="49.5" data-track-index="22" data-volume="1"></audio>
     </div>
 
     <script>
-      const ORDER = ["A","B","C","D","E","F","G","H"];
-      const M = Mo.init({ order: ORDER, tag: "AI SAMJHO" });
-      Viz.install(M);
-      const {tl,S,P,Ed,W,ACC,GOOD,HOT,CYAN,TEXT,MUTED}=M;
-      const sc={}; for(const k of ORDER) sc[k]=M.$("#s"+k);
-      // All entrances and changes use the recorded phrase or word timing.
-      function n(h,x,y,w,ht,txt,sty="",visible=false){
-        const e=M.mk("v",h,txt); e.style.cssText+=";left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px;"+sty+(visible?";opacity:1":";opacity:0"); return e;
-      }
-      function on(e,t){tl.fromTo(e,{opacity:0,y:22},{opacity:1,y:0,duration:.42,ease:"power3.out",immediateRender:false},t);return e}
-      function off(e,t){tl.to(e,{opacity:0,y:-18,duration:.28,ease:"power2.in",immediateRender:false},t)}
-      function panel(h,x,y,w,ht,txt,sz=55,color=TEXT,visible=false){
-        return n(h,x,y,w,ht,txt,"background:#111C2F;border:2px solid #34435D;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;padding:20px;font-size:"+sz+"px;color:"+color,visible);
-      }
-      function label(h,x,y,w,ht,txt,sz=48,color=TEXT,visible=false){
-        return n(h,x,y,w,ht,txt,"display:flex;align-items:center;justify-content:center;text-align:center;font-size:"+sz+"px;color:"+color,visible);
-      }
-      function heading(h,txt){return label(h,70,174,940,100,txt,62,ACC,true)}
-      function line(h,x,y,w,ht,color,visible=false){return n(h,x,y,w,ht,"","background:"+color+";border-radius:99px",visible)}
-      function stat(h,x,y,w,ht,num,sub,color,t){
-        const a=panel(h,x,y,w,ht,"",44,color); on(a,t);
-        const top=label(a,10,10,w-20,ht*.58,num.endsWith("%")?"0%":num,Math.min(105,ht*.43),color,true);
-        if(num.endsWith("%")){const v={n:0};tl.fromTo(v,{n:0},{n:parseInt(num,10),duration:.8,ease:"power3.out",onUpdate:()=>{top.textContent=Math.round(v.n)+"%"}},t)}
-        label(a,10,ht*.6,w-20,ht*.28,sub,44,TEXT,true);
-        return a;
-      }
-      function bar(h,x,y,w,name,percent,color,t){
-        const lw=w<600?125:200, tw=w-lw-110;
-        const lab=label(h,x,y,lw,74,name,45,TEXT);on(lab,t);
-        const track=n(h,x+lw,y+8,tw,60,"","background:#26354D;border-radius:15px",true);
-        const f=n(track,0,0,tw,60,"","background:"+color+";border-radius:15px;transform-origin:left center",true);
-        tl.fromTo(f,{scaleX:0},{scaleX:percent,duration:.65,ease:"power3.out",immediateRender:false},t);
-        const val=label(h,x+w-100,y,100,74,Math.round(percent*100)+"%",44,color);on(val,t);
-        return {fill:f,track,lab,val};
-      }
-      function dotField(h,x,y,cols,rows,d,gap,red=0,visible=true){
-        const a=[],bad=[]; for(let i=0;i<cols*rows;i++){const e=n(h,x+(i%cols)*(d+gap),y+Math.floor(i/cols)*(d+gap),d,d,"","background:"+(i<red?HOT:"#4B5A72")+";border-radius:50%",visible);a.push(e);if(i<red)bad.push(e)}return {all:a,bad};
-      }
-      function svg(h,x,y,w,ht){const e=document.createElementNS("http://www.w3.org/2000/svg","svg");e.setAttribute("viewBox","0 0 "+w+" "+ht);e.classList.add("plot");e.style.cssText="left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px";h.appendChild(e);return e}
-      function path(s,d,color=ACC,sw=9){const e=document.createElementNS("http://www.w3.org/2000/svg","path");e.setAttribute("d",d);e.setAttribute("fill","none");e.setAttribute("stroke",color);e.setAttribute("stroke-width",sw);e.setAttribute("stroke-linecap","round");e.setAttribute("stroke-linejoin","round");s.appendChild(e);return e}
-      function draw(e,t){e.setAttribute("pathLength","1000");e.style.strokeDasharray="1000";tl.fromTo(e,{strokeDashoffset:1000},{strokeDashoffset:0,duration:.65,ease:"power2.out",immediateRender:false},t)}
-      function tile(h,x,y,w,ht,txt,color,t){const e=panel(h,x,y,w,ht,txt,50,color);on(e,t);return e}
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E"], tag: "AI SAMJHO" });
+      const { tl, S } = M;
+      const CAPS = window.REEL.hi.caps;
+      const clean = (t) => t.replace(/[,।?:!"“”]+$/, "").replace(/\.$/, "").toLowerCase();
+      const at = (sc, w, n) => { const m = CAPS.filter((c) => c.scene === sc && clean(c.t) === w.toLowerCase()); if (!m.length) throw new Error(`word ${w} not in ${sc}`); return (m[n || 0] || m[m.length - 1]).s; };
+      const q = (s) => document.querySelector(s), qa = (s) => [...document.querySelectorAll(s)];
+      const show = (el, t, o = {}) => tl.fromTo(el, { opacity: 0, scale: o.s ?? 1.2, y: o.y ?? 26 }, { opacity: 1, scale: 1, y: 0, duration: o.d ?? 0.32, ease: o.ease || "back.out(1.7)" }, t);
+      const hide = (el, t, d) => tl.to(el, { opacity: 0, duration: d ?? 0.2, ease: "power1.in" }, t);
+      const wipe = (el, t, d) => tl.fromTo(el, { scaleX: 0 }, { scaleX: 1, duration: d ?? 0.45, ease: "power2.out" }, t);
+      const count = (el, from, to, t, dur, fmt) => { const o = { v: from }; q(el).textContent = fmt(from); tl.to(o, { v: to, duration: dur, ease: "power2.out", onUpdate: () => { q(el).textContent = fmt(o.v); } }, t); };
+      const push = (el, t, dur) => tl.fromTo(el, { scale: 1 }, { scale: 1.06, duration: dur, ease: "none" }, t);
 
-      // A — the reported chat is already readable on frame zero.
-      const A=sc.A; heading(A,"KIMI K3 NE KYA KAHA?");
-      const chat=panel(A,70,300,940,710,"",44,TEXT,true);
-      label(chat,45,30,850,84,"Kimi K3",68,ACC,true);
-      panel(chat,45,155,610,135,"Tum kaun ho?",61,TEXT,true);
-      const reply=panel(chat,175,335,690,210,"",58,CYAN);
-      on(reply,W("A","Claude"));
-      const replyText=label(reply,35,25,620,150,"Main Claude hoon,\nAnthropic ka AI",57,CYAN,true);
-      replyText.style.overflow="hidden";
-      replyText.style.whiteSpace="pre-line";
-      tl.fromTo(replyText,{clipPath:"inset(0 100% 0 0)"},{clipPath:"inset(0 0% 0 0)",duration:1.25,ease:"steps(24)",immediateRender:false},W("A","Claude"));
-      const report=panel(A,140,1045,800,100,"reported chat · X · July 2026",47,MUTED);
-      on(report,W("A","July"));
-      tl.to(report,{borderColor:ACC,color:ACC,duration:.3,immediateRender:false},W("A","viral"));
-      on(label(A,70,1160,940,120,"DISTILLATION?",112,ACC),W("A","distillation"));
-      // B — teacher answers train a smaller student; legitimate in-house copies split off.
-      const B=sc.B;heading(B,"DISTILLATION");
-      const teacher=panel(B,70,335,480,325,"",78,ACC);on(teacher,P("B",0));
-      label(teacher,30,15,420,105,"TEACHER",75,ACC,true);
-      dotField(teacher,90,170,10,3,17,12,0,true);
-      on(label(B,535,430,110,110,"→",90,ACC),W("B","javabon"));
-      on(label(B,485,535,200,65,"jawab",45,ACC),W("B","javabon"));
-      const student=panel(B,660,380,340,230,"",65,CYAN);on(student,W("B","student"));
-      label(student,15,10,310,90,"STUDENT",61,CYAN,true);
-      dotField(student,65,100,9,2,15,9,0,true);
-      on(panel(B,255,690,570,110,"normal + legal",57,GOOD),W("B","jaayaz"));
-      const source=panel(B,90,865,350,230,"BIG MODEL",68,ACC);on(source,W("B","badi"));
-      on(label(B,435,925,160,110,"→",85,ACC),W("B","chhote"));
-      const cheap1=panel(B,600,830,190,165,"SMALL\n₹",52,GOOD);on(cheap1,W("B","chhote"));
-      const cheap2=panel(B,800,1015,190,165,"SMALL\n₹",52,GOOD);on(cheap2,W("B","saste"));
-      on(label(B,570,1195,420,75,"2 smaller, cheaper",48,GOOD),W("B","saste"));
-      // diagram: C — ordinary training gives one answer.
-      const C=sc.C;heading(C,"ONE ANSWER ONLY");
-      const sentence=panel(C,65,335,950,415,"I drink ____",98,TEXT,true);
-      label(sentence,40,275,870,90,"every morning",62,MUTED,true);
-      const ans=panel(C,170,805,740,300,"tea ✓",150,GOOD);on(ans,W("C","tea"));
-      on(label(C,185,1160,710,85,"sirf ek answer",58,MUTED),P("C",4));
-      // diagram: D — teacher's full answer sheet, each row on its spoken item.
-      const D=sc.D;heading(D,"TEACHER KI ANSWER SHEET");
-      panel(D,75,305,930,920,"",44,TEXT,true);
-      bar(D,125,420,820,"tea",.60,GOOD,W("D","tea"));
-      bar(D,125,600,820,"coffee",.30,ACC,W("D","Coffee"));
-      bar(D,125,780,820,"water",.09,CYAN,W("D","Water"));
-      bar(D,125,960,820,"petrol",.002,HOT,W("D","Petrol"));
-      // E — the student learns the teacher's whole answer shape.
-      const E=sc.E;heading(E,"COPY THE SHAPE");
-      panel(E,65,345,450,755,"",44,TEXT,true);
-      panel(E,565,345,450,755,"",44,TEXT,true);
-      label(E,85,365,410,85,"TEACHER",56,ACC,true);
-      label(E,585,365,410,85,"STUDENT",56,CYAN,true);
-      function shapeRow(x,y,name,v,color,pct,t){
-        const row=panel(E,x,y,400,132,"",44,TEXT);
-        on(row,t);
-        label(row,10,8,160,58,name,44,color,true);
-        const track=n(row,195,20,180,42,"","background:#26354D;border-radius:10px",true);
-        const fill=n(track,0,0,180,42,"","background:"+color+";border-radius:10px;transform-origin:left center",true);
-        tl.fromTo(fill,{scaleX:0},{scaleX:v,duration:.65,ease:"power3.out",immediateRender:false},t);
-        label(row,225,70,150,50,pct,44,color,true);
-      }
-      const shape=[["tea",.60,GOOD,"60%"],["coffee",.30,ACC,"30%"],["water",.09,CYAN,"9%"],["petrol",.002,HOT,"~0%"]];
-      shape.forEach((r,i)=>shapeRow(90,465+i*150,...r,i===0?W("E","tea"):i===1?W("E","coffee"):i===2?P("E",2):W("E","petrol")));
-      shape.forEach((r,i)=>shapeRow(590,465+i*150,...r,W("E","chhota")+i*.15));
-      on(panel(E,205,1140,670,115,"student ≈ teacher",62,GOOD),W("E","karib"));
-      // F — the rival's probability bars are locked away; only text crosses.
-      const F=sc.F;heading(F,"COPYING ANOTHER MODEL");
-      panel(F,65,330,410,245,"OTHER COMPANY'S\nMODEL",44,ACC,true);
-      panel(F,615,330,400,930,"",44,CYAN,true);
-      label(F,630,355,370,110,"STUDENT",75,CYAN,true);
-      const wall=panel(F,490,315,115,945,"",44,MUTED,true);
-      wall.style.background="#34435D";
-      label(F,475,605,145,115,"🔒",87,HOT,true);
-      label(F,70,625,395,65,"ANSWER SHEET",49,MUTED,true);
-      [[.60,GOOD],[.30,ACC],[.09,CYAN]].forEach((r,i)=>{
-        const track=n(F,100,715+i*82,320,49,"","background:#26354D;border-radius:10px",true);
-        n(track,0,0,320*r[0],49,"","background:"+r[1]+";border-radius:10px",true);
-      });
-      function answerCard(y,txt,color,t,emphasis=false){
-        const card=panel(F,110,y,370,140,txt,44,color);
-        on(card,t);
-        tl.to(card,{x:520,duration:1.0,ease:"power2.inOut",immediateRender:false},t+.12);
-        if(emphasis)tl.to(card,{borderColor:HOT,color:HOT,backgroundColor:"#351622",duration:.35,immediateRender:false},t+1.1);
-        return card;
-      }
-      answerCard(660,"likhe hue jawab",TEXT,P("F",1));
-      answerCard(805,"writing style",CYAN,W("F","style"));
-      answerCard(950,"sochne ka tarika",CYAN,W("F","tarika"));
-      answerCard(1095,"Main Claude hoon",HOT,W("F","Claude"),true);
-      // G — attribution and scale, then the safety lock falls off the copy.
-      const G=sc.G;heading(G,"ANTHROPIC KA AAROP");
-      on(panel(G,205,295,670,100,"aarop · Feb 2026",55,HOT),W("G","February"));
-      on(panel(G,65,435,300,135,"DeepSeek",51,ACC),W("G","DeepSeek"));
-      on(panel(G,390,435,300,135,"Moonshot",51,ACC),W("G","Moonshot"));
-      on(panel(G,715,435,300,135,"MiniMax",51,ACC),W("G","MiniMax"));
-      function counter(x,y,target,unit,sub,t,dec=0){
-        const box=panel(G,x,y,450,230,"",44,TEXT);on(box,t);
-        const num=label(box,10,15,430,120,"0 "+unit,70,ACC,true);
-        label(box,20,140,410,70,sub,47,TEXT,true);
-        for(let i=0;i<=5;i++){
-          const value=target*i/5;
-          const text=(dec?value.toFixed(dec):Math.round(value).toLocaleString("en-IN"))+(unit?" "+unit:"");
-          tl.set(num,{textContent:text},t+i*.2);
-        }
-      }
-      counter(65,615,24000,"","fake accounts",W("G","24"));
-      counter(565,615,1.6,"crore+","chats",W("G","1"),1);
-      const copy=panel(G,255,915,570,200,"COPIED MODEL",69,CYAN);on(copy,P("G",4));
-      const lock=label(G,455,965,170,130,"🔒",105,GOOD);on(lock,W("G","safety"));
-      tl.to(lock,{x:350,y:155,rotation:35,opacity:0,duration:.85,ease:"power2.in",immediateRender:false},W("G","taale"));
-      // H — close on the owner's question.
-      const H=sc.H;heading(H,"TUM BATAO");
-      on(panel(H,85,365,910,380,"Smart tarika\nya chori?",82,ACC),P("H",1));
-      on(panel(H,95,830,420,170,"SMART",81,GOOD),W("H","smart"));
-      on(panel(H,565,830,420,170,"CHORI",81,HOT),W("H","chori"));
-      on(panel(H,205,1090,670,140,"COMMENT KARO ↓",64,CYAN),W("H","Comment"));
+      // ---------- A ----------
+      tl.fromTo("#a_hook", { scale: 1.05 }, { scale: 1, duration: 0.6, ease: "power2.out" }, 0);
+      tl.to("#a_hook", { scale: 0.6, y: -30, duration: 0.45, ease: "power2.inOut" }, at("A", "viral") - 0.3);
+      tl.fromTo("#a_chat", { opacity: 0, y: 120 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, at("A", "viral") - 0.3);
+      show("#a_viral", at("A", "viral"));
+      show("#a_user", at("A", "tum"), { s: 0.8, y: 30 });
+      show("#a_dots", at("A", "jawab"), { s: 0.9 });
+      hide("#a_dots", at("A", "main") - 0.05, 0.05);
+      show("#a_reply", at("A", "main"), { s: 0.85, y: 30 });
+      tl.fromTo("#a_claude", { scale: 1 }, { scale: 1.3, duration: 0.22, yoyo: true, repeat: 1, ease: "power1.inOut" }, at("A", "claude", 1));
 
-      for(const k of ["B","C","D","E","F","G","H"]) M.wipe(S[k]);
-      M.finish({kw:{kimi:"gold",claude:"hot",distillation:"gold",teacher:"gold",student:"cyan",tea:"good",coffee:"gold",petrol:"hot",safety:"hot",smart:"good",chori:"hot"}});
-      window.__timelines = window.__timelines || {};
+      // ---------- B ----------
+      show("#b_q", at("B", "ek"), { s: 1.4 });
+      hide("#b_q", at("B", "exam") - 0.15);
+      tl.fromTo("#b_exam", { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, at("B", "exam") - 0.1);
+      qa("#b_copy .cp").forEach((el, i) => wipe(el, at("B", "copy") + i * 0.14, 0.3));
+      tl.fromTo("#b_roll", { opacity: 0, scale: 2 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, at("B", "roll"));
+      show("#b_stamp", at("B", "copy", 1), { s: 1.8, y: 0 });
+
+      // ---------- C ----------
+      show("#c_title", at("C", "distillation") - 0.15, { s: 1.5 });
+      show("#c_small", at("C", "chhota"));
+      show("#c_big", at("C", "bade"));
+      qa(".cflow").forEach((el, i) => { const t0 = at("C", "jawab") + i * 0.55; tl.fromTo(el, { opacity: 0, x: -40 }, { opacity: 1, x: 40, duration: 0.25 }, t0); tl.to(el, { x: 150, opacity: 0, duration: 0.6, ease: "power1.in" }, t0 + 0.25); });
+      qa(".ctag").forEach((el, i) => { const t0 = at("C", "aadten") + i * 0.3; tl.fromTo(el, { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.25 }, t0); tl.to(el, { x: 300 + i * 0, y: 120 + i * 0, opacity: 0, duration: 0.5, ease: "power1.in" }, t0 + 0.55); });
+      show("#c_habit", at("C", "aadten") + 0.2);
+      hide("#c_flow", at("C", "companies") - 0.2);
+      show("#c_also", at("C", "companies"));
+      tl.fromTo("#c_shot", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, at("C", "companies") + 0.1);
+      push("#c_shot", at("C", "companies") + 0.1, 4.5);
+      show("#c_src", at("C", "companies") + 0.3, { s: 1 });
+      wipe("#c_hl1", at("C", "apne"), 0.5);
+      wipe("#c_hl2", at("C", "chhota", 1), 0.6);
+      show("#c_cheap", at("C", "sasta"));
+      hide("#c_def", at("C", "jhagda") - 0.2);
+      show("#c_ok", at("C", "jhagda"), { s: 0.8 });
+      show("#c_bad", at("C", "kisi"), { s: 0.8 });
+      show("#c_fight", at("C", "kisi") + 0.2);
+
+      // ---------- D ----------
+      tl.fromTo("#d_shot", { opacity: 0, y: -40 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, S.D + 0.05);
+      push("#d_shot", S.D + 0.05, 3.5);
+      wipe("#d_hl", at("D", "daava"), 0.5);
+      show("#d_ds", at("D", "deepseek"), { s: 0.7 });
+      show("#d_ms", at("D", "moonshot"), { s: 0.7 });
+      show("#d_mm", at("D", "minimax"), { s: 0.7 });
+      show("#d_c1", at("D", "24") - 0.1, { s: 1 });
+      count("#d_n1", 0, 24000, at("D", "24"), 0.7, (v) => Math.round(v).toLocaleString("en-US"));
+      show("#d_c2", at("D", "1") - 0.1, { s: 1 });
+      count("#d_n2", 0, 1.6, at("D", "1"), 0.9, (v) => v.toFixed(1) + " crore");
+      tl.to("#d_ms", { backgroundColor: "#F2B544", color: "#0B1220", borderColor: "#F2B544", duration: 0.25 }, at("D", "moonshot", 1));
+      show("#d_c3", at("D", "kimi"), { s: 0.9 });
+      count("#d_n3", 0, 34, at("D", "34"), 0.6, (v) => Math.round(v) + " lakh+");
+      tl.to("#d_c3", { borderColor: "#E8596B", duration: 0.25 }, at("D", "kaabiliyat"));
+
+      // ---------- E ----------
+      show("#e_ab", at("E", "ab"), { s: 1 });
+      show("#e_smart", at("E", "smart"), { s: 1.6 });
+      show("#e_ya", at("E", "ya"), { s: 1 });
+      show("#e_chori", at("E", "chori"), { s: 1.6 });
+      show("#e_cmt", at("E", "comment"), { s: 0.8 });
+
+      M.finish({ kw: { claude: "hot", kimi: "gold", distillation: "gold", copy: "hot", moonshot: "gold", smart: "good", chori: "hot" } });
       window.__timelines["main"] = tl;
     </script>
   </body>

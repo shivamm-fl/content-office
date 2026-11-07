@@ -1,7 +1,7 @@
 {
  "tts": "owner",
  "owner_model": "eleven_flash_v2_5",
- "owner_tempo": 0.9,
+ "owner_tempo": 1.0,
  "prime": "सुनो, ये बहुत interesting है!",
  "audio": "v2",
  "pace": 1.26,
@@ -12,20 +12,14 @@
   "B",
   "C",
   "D",
-  "E",
-  "F",
-  "G",
-  "H"
+  "E"
  ],
  "min": {
-  "A": 2.5,
-  "B": 2.5,
-  "C": 2.5,
-  "D": 2.5,
-  "E": 2.5,
-  "F": 2.5,
-  "G": 2.5,
-  "H": 2.5
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0
  },
  "cues": [
   [
@@ -37,26 +31,38 @@
   [
    "pop",
    "A",
-   1,
-   0
-  ],
-  [
-   "dip",
-   "A",
-   4,
-   -0.1
-  ],
-  [
-   "click",
-   "B",
    2,
    0
   ],
   [
    "rise",
-   "C",
+   "B",
    1,
    0
+  ],
+  [
+   "pop",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "C",
+   4,
+   -0.1
   ],
   [
    "tick",
@@ -65,71 +71,31 @@
    0
   ],
   [
-   "tick",
+   "pop",
    "D",
    3,
    0
   ],
   [
-   "tick",
-   "D",
-   4,
-   0
-  ],
-  [
-   "ok",
+   "pop",
    "E",
    1,
-   0
-  ],
-  [
-   "click",
-   "F",
-   1,
-   0
-  ],
-  [
-   "pop",
-   "F",
-   5,
-   0
-  ],
-  [
-   "tick",
-   "G",
-   1,
-   0
-  ],
-  [
-   "pop",
-   "G",
-   2,
-   0
-  ],
-  [
-   "pop",
-   "H",
-   2,
    0
   ]
  ],
  "sources": [
   "https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks",
-  "https://wikitechlibrary.com/kimi-k3-claude-identity-distillation-controversy/",
-  "https://arxiv.org/abs/1503.02531"
+  "https://wikitechlibrary.com/kimi-k3-claude-identity-distillation-controversy/"
  ],
  "hook_type": "surprising_fact",
  "template": "results_first",
  "copy": {
   "hi": {
-   "A": "@hook Moonshot के AI, Kimi K3 से पूछा गया: तुम कौन हो? | और उसने खुद को Claude बताया, | Anthropic का AI। || July में ये chat X पर viral हुई। | एक model, किसी और model का नाम क्यों लेगा? | शक जाता है एक technique पर: distillation।",
-   "B": "Distillation यानी एक बड़े, smart model के जवाबों पर | दूसरे model को train करना। | बड़ा model teacher, सीखने वाला student। || ये आम और जायज़ तरीका है: | बड़ी AI companies अपने ही बड़े models से | छोटे और सस्ते models ऐसे ही बनाती हैं।",
-   "C": "अंदर से समझो। | Sentence है: I drink blank every morning। || Normal training में student को बस सही जवाब मिलता है: | tea। | बस इतना।",
-   "D": "Distillation में student को teacher की पूरी answer sheet मिलती है। | मान लो teacher कहता है: | tea, 60{sixty} percent। | Coffee, 30{thirty} percent। | Water, 9{nine} percent। | Petrol, लगभग zero।",
-   "E": "एक ही sentence से student सीखता है | कि tea सबसे सही है, | coffee भी चल जाएगी, | और petrol का यहाँ कोई काम नहीं। || इसीलिए छोटा student भी | बड़े teacher के करीब पहुँच जाता है।",
-   "F": "पर किसी दूसरी company के model की answer sheet नहीं मिलती। | बाहर से बस उसके लिखे हुए जवाब मिलते हैं। || तो student उन्हीं जवाबों पर train होता है, | और सब copy कर लेता है: | लिखने का style, सोचने का तरीका, | और कभी-कभी, मैं Claude हूँ वाली line भी।",
-   "G": "February में Anthropic ने DeepSeek, Moonshot और MiniMax पर इल्ज़ाम लगाया: | करीब 24{चौबीस} हज़ार fake accounts से | Claude के साथ 1{एक} करोड़ 60{साठ} लाख से ज़्यादा बातचीत करके, | उसकी काबिलियत निकालने का। || और ऐसे copy हुए models में, | safety वाले ताले अक्सर पीछे छूट जाते हैं।",
-   "H": "अब तुम बताओ: | किसी दूसरे model के जवाबों से सीखना, | smart तरीका है, या चोरी? | Comment करो।"
+   "A": "@hook ये AI खुद को Claude बता रहा है। | X पर viral हुई एक chat में, Chinese company Moonshot के AI, Kimi K3 से पूछा: तुम कौन हो? | जवाब आया: मैं Claude हूँ, Anthropic का AI।",
+   "B": "एक AI, दूसरे का नाम क्यों लेगा? | Exam में किसी की copy रटोगे, | तो उसका roll number भी copy हो जाता है।",
+   "C": "AI में इसे distillation कहते हैं: | छोटा model, बड़े model के जवाब पढ़-पढ़कर सीखता है, | और साथ में उसकी आदतें भी। | Companies खुद भी यही करती हैं, अपने बड़े model से छोटा और सस्ता model बनाने के लिए। | झगड़ा तब है, जब copy किसी और की हो।",
+   "D": "Anthropic का दावा है: | DeepSeek, Moonshot और MiniMax ने | 24{चौबीस} हज़ार fake accounts से | Claude से 1{एक} करोड़ 60{साठ} लाख बार बात की। | इनमें Kimi वाली Moonshot के अकेले 34{चौंतीस} लाख से ज़्यादा, | Claude की काबिलियत copy करने के लिए।",
+   "E": "अब बताओ: | ये smart है, या चोरी? | Comment करो।"
   }
  }
 }
