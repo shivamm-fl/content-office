@@ -1,0 +1,109 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   2,
+   0
+  ],
+  [
+   "click",
+   "B",
+   1,
+   0
+  ],
+  [
+   "rise",
+   "C",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   0,
+   -0.1
+  ],
+  [
+   "tick",
+   "D",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   3,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "E",
+   1,
+   -0.1
+  ],
+  [
+   "pop",
+   "F",
+   2,
+   0
+  ]
+ ],
+ "sources": [
+  "https://rikiyat.github.io/blog/weight-space-programming/"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "results_first",
+ "copy": {
+  "hi": {
+   "A": "@hook एक AI ने दूसरे AI का दिमाग खोला, और उसे खुद ठीक कर दिया। | कोई training नहीं, | और math का score 7.9{seven-point-nine} percent से सीधा 48{forty-eight} percent।",
+   "B": "हर AI model अंदर से numbers का ढेर है, | जिन्हें weights कहते हैं। | अब तक इन्हें बदलने का एक ही तरीका था: training, | यानी लाखों examples दिखाओ, और numbers धीरे-धीरे खुद adjust हों।",
+   "C": "2{two} November को MIT के researchers ने ये तरीका ही छोड़ दिया। | उन्होंने GPT-6 Astra को एक छोटे model, Qwen के weights पढ़ने दिए, | और Astra ने खुद तय किया कि कौन से numbers बदलने हैं। | इसे weight-space programming कहते हैं: एक AI, दूसरे AI के weights खुद पढ़ता और लिखता है।",
+   "D": "Qwen की problem थी: वो एक ही बात बार-बार दोहराता रहता था, | और 93{ninety-three} percent सवालों में जवाब तक पहुँचता ही नहीं था। | Astra ने दो layers के अंदर इस loop का pattern ढूँढा, और उसे हटा दिया। | कुल 1{एक} लाख 31{इकतीस} हज़ार weights, यानी पूरे model का सिर्फ़ 0.016{zero-point-zero-one-six} percent।",
+   "E": "नतीजा: score 7.9{seven-point-nine} से 48.1{forty-eight-point-one} percent। | पर limit भी है: | ये model की रुकावट हटा सकता है, | नई काबिलियत डाल नहीं सकता।",
+   "F": "अब सोचो: | अगर AI, AI को खुद ठीक करने लगे, | तो AI engineers का काम क्या होगा? | Comment करो।"
+  }
+ }
+}

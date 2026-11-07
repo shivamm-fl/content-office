@@ -18,7 +18,7 @@ for f in (tpl / "assets").iterdir():
     shutil.copy(f, dst / "assets" / f.name)
 for f in (ROOT / "brand" / "fonts").glob("*.ttf"):
     shutil.copy(f, dst / "fonts" / f.name)
-for f in ["motion.css", "motion.js", "viz.js"]:
+for f in ["motion.css", "motion.js", "viz.js", "fx.css", "fx.js"]:   # fx.*: helpers of the hand-built reels (docs-notes/reel-playbook-v4.md)
     shutil.copy(kit / f, dst / "kit" / f)
 shutil.copy(tpl / "hyperframes.json", dst / "hyperframes.json"); shutil.copy(tpl / "package.json", dst / "package.json")
 (dst / "vars.hi.json").write_text(json.dumps({"lang": "hi", "voiceSrc": "audio/hi/voice.wav", "bedSrc": "audio/hi/bed.wav", "sfxSrc": "audio/hi/sfx.wav"}))

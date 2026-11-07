@@ -1,0 +1,11 @@
+1000 tokens input ya 1000 tokens output: kaunsa slow, kaunsa mehenga?
+
+Input ek saath padha jata hai (prefill): saare tokens ek hi pass mein, parallel. Output ek-ek token banta hai (decode): har naye token ke liye poora model phir chalta hai aur saare weights memory se padhne padte hain.
+
+Bill mein bhi yahi dikhta hai: Claude Opus 5.5 par 10 lakh input tokens $4, aur 10 lakh output tokens $20. Output 5 guna mehenga.
+
+Interview answer: lamba jawab, lambe prompt se zyada time aur paisa khaata hai.
+
+Chatbot tez karna ho to prompt chhota karoge ya jawab? Comment karo.
+
+Sources: NVIDIA inference optimization blog, Claude pricing docs

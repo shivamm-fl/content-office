@@ -1,0 +1,117 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   2,
+   0
+  ],
+  [
+   "dip",
+   "A",
+   3,
+   -0.1
+  ],
+  [
+   "click",
+   "B",
+   1,
+   0
+  ],
+  [
+   "ok",
+   "B",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   4,
+   0
+  ],
+  [
+   "click",
+   "D",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   3,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "F",
+   2,
+   0
+  ]
+ ],
+ "sources": [
+  "https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/",
+  "https://platform.claude.com/docs/en/about-claude/pricing",
+  "https://research.google/blog/looking-back-at-speculative-decoding/"
+ ],
+ "hook_type": "direct_question",
+ "template": "common_belief_contradict",
+ "copy": {
+  "hi": {
+   "A": "@hook 1000{thousand} tokens input, या 1000{thousand} tokens output: | कौनसा slow है, और कौनसा महँगा? | ज़्यादातर लोग कहते हैं: बराबर। | गलत।",
+   "B": "Input एक साथ पढ़ा जाता है। | Model पूरे 1000{thousand} tokens एक ही बार में, parallel में process करता है। | इसे prefill कहते हैं।",
+   "C": "पर output एक-एक token बनता है। | हर नए token के लिए पूरा model फिर से चलता है, | और हर बार सारे weights memory से पढ़ने पड़ते हैं। | इसे decode कहते हैं। | 1000{thousand} output tokens, यानी 1000{thousand} बार ये चक्कर।",
+   "D": "और यही bill में दिखता है। | Claude Opus 5.5{five-point-five} पर 10{दस} लाख input tokens 4{four} dollar के, | और 10{दस} लाख output tokens 20{twenty} dollar के। | Output, पाँच गुना महँगा।",
+   "E": "Interview में एक line में बोलो: | input parallel में पढ़ा जाता है, output एक-एक token में लिखा जाता है, | इसलिए लंबा जवाब, लंबे prompt से ज़्यादा time और पैसा खाता है।",
+   "F": "अब बताओ: | Chatbot तेज़ करना हो, | तो prompt छोटा करोगे या जवाब? | Comment करो।"
+  }
+ }
+}

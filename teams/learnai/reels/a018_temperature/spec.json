@@ -1,0 +1,113 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   1,
+   -0.1
+  ],
+  [
+   "dip",
+   "A",
+   3,
+   -0.1
+  ],
+  [
+   "pop",
+   "A",
+   4,
+   0
+  ],
+  [
+   "click",
+   "B",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "ok",
+   "F",
+   0,
+   0
+  ],
+  [
+   "rise",
+   "F",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "G",
+   2,
+   0
+  ]
+ ],
+ "sources": [
+  "https://huggingface.co/docs/transformers/main_classes/text_generation",
+  "https://huggingface.co/blog/how-to-generate"
+ ],
+ "hook_type": "direct_question",
+ "template": "not_a_neither_b_actually_c",
+ "copy": {
+  "hi": {
+   "A": "@hook Temperature बढ़ाने से AI creative बनता है? | नहीं। | Smart बनता है? | वो भी नहीं। | Actually वो बस ये तय करता है कि model अपने top option पर कितना भरोसा करे।",
+   "B": "मान लो model को अगला word चुनना है: | Main roz subah blank peeta hoon। | Model के scores हैं: chai 2{two}, coffee 1{one}, paani zero।",
+   "C": "Temperature 1{one} पर ये scores chances बनते हैं: | chai 67{sixty-seven} percent, | coffee 24{twenty-four}, | paani 9{nine}।",
+   "D": "अब temperature 0.5{zero-point-five} करो, यानी scores को 0.5{zero-point-five} से divide करो: | chai 87{eighty-seven} percent, | coffee 12{twelve}, | paani दो percent से भी कम।",
+   "E": "और temperature 2{two} करो: | chai लगभग 51{fifty-one}, | coffee 31{thirty-one}, | paani 19{nineteen}।",
+   "F": "यानी temperature कम, तो top option और भारी। | Temperature ज़्यादा, तो सारे options बराबरी के करीब, | और कभी-कभी paani भी चुना जाएगा। | और temperature zero के पास, model हर बार सिर्फ़ top option उठाता है।",
+   "G": "अब बताओ: | Temperature 2{two} पर सौ बार पूछो, | तो लगभग कितनी बार paani आएगा? | Comment करो।"
+  }
+ }
+}

@@ -1,0 +1,9 @@
+Jawab sirf 162 tokens ka, bill 1186 output tokens ka. Baaki 1024 kahan gaye?
+
+Ye reasoning tokens hain: reasoning model jawab se pehle andar sochta hai, aur wo soch bhi tokens mein likhi jaati hai. Ye dikhte nahi, par output tokens ke rate par bill hote hain aur context window ki jagah bhi khaate hain. Mushkil sawaal par ye kuch sau se dasiyon hazaar tokens tak ja sakte hain.
+
+Interview mein 3 baatein: usage mein reasoning tokens ki ginti dekho, aasaan sawaal par reasoning effort low rakho, aur max output tokens soch ke rakho, warna jawab hi nahi milega.
+
+"Hi" ka jawab dene ke liye effort high rakhoge ya low? Comment karo.
+
+Source: OpenAI reasoning docs (unka example: 1186 output tokens, jinmein 1024 reasoning)

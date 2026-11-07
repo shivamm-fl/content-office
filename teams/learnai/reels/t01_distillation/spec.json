@@ -1,0 +1,101 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   2,
+   0
+  ],
+  [
+   "rise",
+   "B",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "C",
+   4,
+   -0.1
+  ],
+  [
+   "tick",
+   "D",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   3,
+   0
+  ],
+  [
+   "pop",
+   "E",
+   1,
+   0
+  ]
+ ],
+ "sources": [
+  "https://www.anthropic.com/news/detecting-and-preventing-distillation-attacks",
+  "https://wikitechlibrary.com/kimi-k3-claude-identity-distillation-controversy/"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "results_first",
+ "copy": {
+  "hi": {
+   "A": "@hook ये AI खुद को Claude बता रहा है। | X पर viral हुई एक chat में, Chinese company Moonshot के AI, Kimi K3 से पूछा: तुम कौन हो? | जवाब आया: मैं Claude हूँ, Anthropic का AI।",
+   "B": "एक AI, दूसरे का नाम क्यों लेगा? | Exam में किसी की copy रटोगे, | तो उसका roll number भी copy हो जाता है।",
+   "C": "AI में इसे distillation कहते हैं: | छोटा model, बड़े model के जवाब पढ़-पढ़कर सीखता है, | और साथ में उसकी आदतें भी। | Companies खुद भी यही करती हैं, अपने बड़े model से छोटा और सस्ता model बनाने के लिए। | झगड़ा तब है, जब copy किसी और की हो।",
+   "D": "Anthropic का दावा है: | DeepSeek, Moonshot और MiniMax ने | 24{चौबीस} हज़ार fake accounts से | Claude से 1{एक} करोड़ 60{साठ} लाख बार बात की। | इनमें Kimi वाली Moonshot के अकेले 34{चौंतीस} लाख से ज़्यादा, | Claude की काबिलियत copy करने के लिए।",
+   "E": "अब बताओ: | ये smart है, या चोरी? | Comment करो।"
+  }
+ }
+}

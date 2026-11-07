@@ -1,0 +1,11 @@
+Input vs output tokens: kaunsa slow, kaunsa mehenga?
+
+Input ek saath padha jata hai (prefill), output ek-ek token banta hai (decode) aur har token ke liye saare weights memory se padhne padte hain. Claude Opus 5.5 par 10 lakh input tokens $4, output tokens $20: output 5 guna mehenga. Interview answer: lamba jawab, lambe prompt se zyada time aur paisa khaata hai.
+
+Chatbot tez karna ho to prompt chhota karoge ya jawab?
+
+Sources:
+https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/
+https://platform.claude.com/docs/en/about-claude/pricing
+
+AI-assisted visuals and narration.

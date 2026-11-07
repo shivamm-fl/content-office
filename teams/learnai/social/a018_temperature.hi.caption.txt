@@ -1,0 +1,12 @@
+Day 18/150: Temperature AI ko creative ya smart nahi banata.
+
+Wo bas ye tay karta hai ki model apne top option par kitna bharosa kare. Scores: chai 2, coffee 1, paani 0.
+T = 1: chai 67%, coffee 24%, paani 9%
+T = 0.5: chai 87%, coffee 12%, paani 2% se kam
+T = 2: chai 51%, coffee 31%, paani 19%
+
+Temperature kam = top option aur bhaari. Zyada = saare options barabari ke kareeb. Zero ke paas = hamesha top option.
+
+T = 2 par 100 baar poochho to lagbhag kitni baar paani aayega? Comment karo.
+
+Sources: Hugging Face generation docs, "How to generate text" (Hugging Face blog)

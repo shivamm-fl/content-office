@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>The Hidden Reasoning Bill</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="47" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="card" id="a_ans" style="left:140px; top:200px; width:800px; height:380px;">
+            <div class="x mut" style="left:0; width:800px; top:36px; text-align:center; font-size:56px;">JAWAB DIKHA</div>
+            <div class="x" style="left:0; width:800px; top:110px; text-align:center; font-size:200px;">162</div>
+            <div class="x mut" style="left:0; width:800px; top:310px; text-align:center; font-size:48px;">tokens</div>
+          </div>
+          <div id="a_bill" style="position:absolute; left:140px; top:640px; width:800px; height:620px; background:#F3EFE4; border-radius:28px; box-shadow:0 24px 60px rgba(0,0,0,.5);">
+            <div class="x" style="left:50px; top:40px; font-size:64px; color:#1B2433;">BILL</div>
+            <div class="x" style="left:50px; top:130px; font-size:48px; color:#5E6B85;">output tokens</div>
+            <div class="x" id="a_n" style="left:50px; top:190px; font-size:170px; color:#1B2433;">162</div>
+            <div style="position:absolute; left:50px; top:390px; width:700px; height:4px; background:#C9C3B3;"></div>
+            <div class="x red" id="a_miss" style="left:50px; top:420px; font-size:110px;">1024 ???</div>
+            <div class="x red" id="a_where" style="left:50px; top:540px; font-size:52px;">kahan gaye?</div>
+          </div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="x c gold" id="b_t" style="top:190px; font-size:130px;">REASONING<br/>TOKENS</div>
+          <div class="card" id="b_box" style="left:60px; top:500px; width:960px; height:540px;">
+            <div class="x mut" style="left:50px; top:36px; font-size:50px;">model ke andar ki soch</div>
+            <div class="x bth" style="left:50px; top:130px; font:500 50px 'JetBrains Mono',monospace; color:#8592AD;">pehle sawaal samjho...</div>
+            <div class="x bth" style="left:50px; top:220px; font:500 50px 'JetBrains Mono',monospace; color:#8592AD;">ye tareeka? nahi...</div>
+            <div class="x bth" style="left:50px; top:310px; font:500 50px 'JetBrains Mono',monospace; color:#8592AD;">dusra try karo...</div>
+            <div class="x bth" style="left:50px; top:400px; font:500 50px 'JetBrains Mono',monospace; color:#8592AD;">check: sahi hai?</div>
+          </div>
+          <div class="chip" id="b_eq" style="left:240px; top:1110px; width:600px; background:#F2B544; color:#0B1220; font-size:60px;">SOCH = TOKENS</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="card" id="c_1" style="left:60px; top:200px; width:960px; height:170px; border-color:#E8596B;"><div class="x" style="left:50px; top:48px; font-size:70px;">tumhe dikhte: <span class="red">NAHI</span></div></div>
+          <div class="card" id="c_2" style="left:60px; top:400px; width:960px; height:170px; border-color:#F2B544;"><div class="x" style="left:50px; top:48px; font-size:70px;">paisa: <span class="gold">OUTPUT rate</span></div></div>
+          <div class="card" id="c_3" style="left:60px; top:600px; width:960px; height:170px; border-color:#5BC0EB;"><div class="x" style="left:50px; top:48px; font-size:70px;"><span class="cyan">context</span> ki jagah bhi</div></div>
+          <div class="x c" id="c_hard" style="top:840px; font-size:64px;">mushkil sawaal par soch:</div>
+          <div id="c_track" style="position:absolute; left:80px; top:950px; width:920px; height:90px; border-radius:45px; background:#1B2538;"></div>
+          <div class="hbar" id="c_range" style="left:80px; top:950px; width:920px; height:90px; background:linear-gradient(90deg,#5BC0EB,#F2B544,#E8596B);"></div>
+          <div class="x" id="c_lo" style="left:80px; top:1060px; font-size:60px;">100s</div>
+          <div class="x red" id="c_hi" style="left:600px; top:1060px; width:400px; text-align:right; font-size:60px;">10,000s</div>
+          <div class="src" style="top:1240px;">Source: OpenAI reasoning docs</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="chip" id="d_chip" style="left:190px; top:200px; width:700px; background:#F2B544; color:#0B1220;">INTERVIEW · 3 BAATEIN</div>
+          <div class="card" id="d_1" style="left:60px; top:330px; width:960px; height:170px;"><div class="x gold" style="left:44px; top:40px; font-size:84px;">1</div><div class="x" style="left:130px; top:50px; font-size:60px;">usage mein <span class="cyan">reasoning tokens</span></div></div>
+          <div class="card" id="d_2" style="left:60px; top:530px; width:960px; height:170px;"><div class="x gold" style="left:44px; top:40px; font-size:84px;">2</div><div class="x" style="left:130px; top:50px; font-size:60px;">aasaan sawaal: effort <span class="green">LOW</span></div></div>
+          <div class="card" id="d_3" style="left:60px; top:730px; width:960px; height:170px;"><div class="x gold" style="left:44px; top:40px; font-size:84px;">3</div><div class="x" style="left:130px; top:50px; font-size:60px;">max output tokens: <span class="gold">soch ke</span></div></div>
+          <div class="card" id="d_warn" style="left:60px; top:960px; width:960px; height:280px; border-color:#E8596B; background:rgba(232,89,107,.08);">
+            <div class="x red" style="left:0; width:960px; top:40px; text-align:center; font-size:76px;">LIMIT KHATAM</div>
+            <div class="x" id="d_gone" style="left:0; width:960px; top:140px; text-align:center; font-size:84px;">= JAWAB GAYAB</div>
+          </div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="x c" id="e_1" style="top:260px; font-size:120px;">"Hi" ka jawab</div>
+          <div class="x c mut" id="e_2" style="top:420px; font-size:64px;">reasoning effort?</div>
+          <div class="chip" id="e_hi" style="left:80px; top:620px; width:400px; border:4px solid #E8596B; color:#E8596B; font-size:64px;">HIGH</div>
+          <div class="chip" id="e_lo" style="left:560px; top:620px; width:400px; border:4px solid #4CC38A; color:#4CC38A; font-size:64px;">LOW</div>
+          <div class="chip" id="e_c" style="left:290px; top:960px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="47" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="47" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="47" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the visible answer at frame 0, then the bill
+      tl.fromTo("#a_ans", { scale: 1.05 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo("#a_bill", { opacity: 0, y: 140 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, at("A", "bill") - 0.1);
+      count("#a_n", 162, 1186, at("A", "1186"), 0.8, (v) => String(Math.round(v)));
+      show("#a_miss", at("A", "1024") - 0.1, { s: 1.5 });
+      show("#a_where", at("A", "kahan"), { s: 1 });
+      // B: hidden thinking
+      show("#b_t", at("B", "reasoning") - 0.1, { s: 1.4 });
+      show("#b_box", at("B", "reasoning", 1), { s: 0.95 });
+      qa(".bth").forEach((el, i) => show(el, at("B", "andar") + i * 0.6, { s: 1, y: 14 }));
+      show("#b_eq", at("B", "tokens", 1), { s: 1.3 });
+      // C: three facts and the range
+      show("#c_1", at("C", "dikhte"), { s: 0.9 });
+      show("#c_2", at("C", "paisa"), { s: 0.9 });
+      show("#c_3", at("C", "context"), { s: 0.9 });
+      show("#c_hard", at("C", "mushkil"), { s: 1 });
+      show("#c_track", at("C", "mushkil"), { s: 1, y: 0 });
+      show("#c_lo", at("C", "kuch"), { s: 1 });
+      wipe("#c_range", at("C", "kuch"), 1.6);
+      show("#c_hi", at("C", "dasiyon"), { s: 1.4 });
+      // D: interview answer
+      show("#d_chip", at("D", "interview"), { s: 0.8 });
+      show("#d_1", at("D", "pahla"), { s: 0.9 });
+      show("#d_2", at("D", "doosra"), { s: 0.9 });
+      show("#d_3", at("D", "teesra"), { s: 0.9 });
+      show("#d_warn", at("D", "varna"), { s: 0.9 });
+      show("#d_gone", at("D", "jawab"), { s: 1.5 });
+      // E: question
+      show("#e_1", at("E", "hi"), { s: 1.2 });
+      show("#e_2", at("E", "reasoning"), { s: 1 });
+      show("#e_hi", at("E", "high"), { s: 0.8 });
+      show("#e_lo", at("E", "low"), { s: 0.8 });
+      show("#e_c", at("E", "comment"), { s: 0.8 });
+      M.finish({ kw: { reasoning: "gold", tokens: "gold", output: "gold", nahi: "hot", limit: "hot", low: "good", high: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
