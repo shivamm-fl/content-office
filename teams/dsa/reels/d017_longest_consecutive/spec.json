@@ -1,0 +1,95 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5,
+    "K": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "E",
+      0,
+      -0.1
+    ],
+    [
+      "ok",
+      "H",
+      1,
+      0.2
+    ],
+    [
+      "err",
+      "D",
+      2,
+      0.3
+    ],
+    [
+      "save",
+      "K",
+      1,
+      0.4
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Sort करके solve किया, | interviewer बोला O of n चाहिए! || Problem: | unsorted array में सबसे लंबा consecutive run, | जैसे one, two, three, four, | उसकी length निकालनी है।",
+      "B": "Given array: | one hundred, four, two hundred, one, three, two। || One, two, three, four का run बनता है, | तो answer four है।",
+      "C": "Sort करके एक scan में run गिन लो, | यह चल जाएगा। || पर sorting O of n log n है, | और वही total time बन जाता है। || O of n चाहिए, | तो sorting छोड़नी पड़ेगी।",
+      "D": "Sort सिर्फ इसलिए थी कि | x के बाद x plus one पास में मिले। || यह काम hash set average O of one में कर देता है: | x plus one in set। || पर हर number से walk शुरू की, | तो one से two thousand वाले array में | लगभग two million lookups होंगे। || यह एक example है।",
+      "E": "@emph इसलिए walk सिर्फ run के start से शुरू करो। || Start वह x है | जिसका x minus one set में नहीं है। || Four का left neighbour three set में है, | तो four बीच में है, | start नहीं।",
+      "F": "Code में पहले set बनाओ, | और हर x पर check करो: | x minus one not in set। || अगर start है, | तो y को x पर रखो, | और while y plus one in set, | y बढ़ाओ। || फिर best में max लो | y minus x plus one का, | और best return करो।",
+      "G": "अब dry run। || One hundred: ninety-nine नहीं है, | तो start है; | one hundred and one नहीं मिला, | length one। || Four, three, two skip होते हैं, | क्योंकि उनके left neighbour set में हैं।",
+      "H": "One: zero नहीं है, | तो start है; | two, three, four मिलते हैं, | length four। || Two hundred से length one, | तो best four है। || मैंने code चलाया है: | output four आता है।",
+      "I": "अब cost, | यह हमारा अपना reasoning है। || हर run का एक ही start है, | और walk उसी से चलती है। || इसलिए हर number ज़्यादा से ज़्यादा एक बार walk होता है, | बाकी पर बस एक check लगता है। || उसी array में लगभग four thousand lookups, | two million नहीं।",
+      "J": "@emph Time O of n, | extra space O of n, | क्योंकि set में सारे numbers हैं। || Duplicates set में एक बार आते हैं, | इसलिए answer नहीं बदलता।",
+      "K": "Comments में बताओ: | Given array zero, three, seven, two, five, eight, four, six, zero, one का | answer कितना आएगा? || Code और dry run के साथ DSA सीखने के लिए follow करो।"
+    }
+  },
+  "sources": [
+    "https://leetcode.doocs.org/en/lc/128/",
+    "https://en.wikipedia.org/wiki/Hash_table",
+    "https://docs.python.org/3/faq/design.html#how-are-dictionaries-implemented-in-cpython"
+  ],
+  "prime": "सुनो, ये बहुत interesting है!"
+}

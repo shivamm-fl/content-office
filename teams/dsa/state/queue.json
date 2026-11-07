@@ -13,37 +13,17 @@
       "hook_type": "relatable_stake",
       "spoken_hook": "Sort करके solve किया, interviewer बोला O(n) चाहिए!",
       "hook_formula": "wrong_way_first",
-      "hook_source": "Same stake idea as d005 and d010 (own attempt hits the limit); next line states the problem, no filler between hook and teaching",
-      "hook_10s": "Sort करके solve किया, interviewer बोला O(n) चाहिए! Problem: unsorted array में सबसे लंबा consecutive run, जैसे 1, 2, 3, 4, उसकी length निकालनी है। [frame 0: six unsorted numbers in a row, then a sorted row with a red O(n log n) tag next to a green O(n) target]",
-      "hook_candidates": [
-        {
-          "formula": "wrong_way_first",
-          "text": "Sort करके solve किया, interviewer बोला O(n) चाहिए!"
-        },
-        {
-          "formula": "surprising_fact_payoff",
-          "text": "Longest Consecutive Sequence: sorting के बिना O(n) में!"
-        },
-        {
-          "formula": "interviewer_question",
-          "text": "Interviewer ने पूछा: unsorted array में सबसे लंबा consecutive run कैसे निकालोगे?"
-        }
-      ],
+      "hook_source": "Relatable stake: sorted solution rejected in interview; least used hook type of last six",
       "one_idea": "Longest Consecutive Sequence: put all numbers in a hash set and start counting only from numbers whose x-1 is not in the set, so every number is walked at most once and no sorting is needed.",
-      "visual_idea": "A number line with the array values as filled cells and gaps empty; each cell checks its left neighbour: cells with a filled left neighbour are greyed out (not a start), cells with an empty left neighbour get a start flag and a pointer slides right counting while the next cell is filled, with the run length shown. Actual Python code visible in readable chunks synced to the voice.",
-      "everyday_anchor": "none: audience is working engineers (owner 2026-10-26); the picture is the number line, not an analogy.",
-      "example": "EXAMPLE nums = [100, 4, 200, 1, 3, 2]: set lookups find run starts 1, 100, 200 (4, 3, 2 have a left neighbour), run from 1 is 1,2,3,4 so the answer is 4. [0,3,7,2,5,8,4,6,0,1] gives 9. Counted: 9 lookups for the 6 numbers. Without the skip check on [1..2000] there are 2,001,000 set lookups vs 4,000 with it (EXAMPLE).",
+      "visual_idea": "A number line with the array values as filled cells and gaps empty; cells with a filled left neighbour are greyed out, cells with an empty left neighbour get a start flag and a pointer slides right counting while the next cell is filled, with the run length shown. Actual Python code visible in readable chunks synced to the voice.",
+      "example": "EXAMPLE nums = [100, 4, 200, 1, 3, 2]: run starts 1, 100, 200; run from 1 is 1,2,3,4 so the answer is 4. [0,3,7,2,5,8,4,6,0,1] gives 9. Without the skip check on [1..2000] there are 2,001,000 set lookups vs 4,000 with it (EXAMPLE).",
       "sources": [
         "https://leetcode.doocs.org/en/lc/128/",
         "https://en.wikipedia.org/wiki/Hash_table",
         "https://docs.python.org/3/faq/design.html#how-are-dictionaries-implemented-in-cpython"
       ],
       "facts_to_verify": [
-        "Problem paraphrased from the doocs mirror of LeetCode 128 (LeetCode page 403); constraints 0 <= n <= 10^5, values -10^9..10^9, required O(n); the doocs page states O(n) time and O(n) space for the hash-set solution.",
-        "Average O(1) hash lookup: Wikipedia hash table (Theta(1) average, O(n) worst) and Python FAQ (O(1) assumes distinct hash values). The Python wiki TimeComplexity set table could not be fetched (redirect page only), so set membership is stated as 'same hashing as dict', not quoted from a set page.",
-        "The 'each number is walked at most once, so O(n) total' reasoning is our own derivation (each run is counted only from its start; runs do not overlap), labelled as such; the doocs page only says each number is visited a constant number of times.",
-        "Run the code and show its real output: fast code matched a brute force (list scan) and a sort-based check on 5000 random arrays; outputs 4, 9, 0 (empty), 1 ([5,5,5]), 7.",
-        "Duplicates are handled by the set; empty array returns 0. 2,001,000 vs 4,000 lookups is EXAMPLE arithmetic on [1..2000]."
+        "Problem paraphrased from doocs mirror of LeetCode 128. Hash set average O(1) lookup per Wikipedia/Python FAQ. O(n) time and O(n) extra space is our own derived analysis. Code was run: 4, 9, 0 (qa/d017/run_output.txt). 2 million vs 4 thousand lookups is EXAMPLE arithmetic on [1..2000]."
       ],
       "length_target_s": 150,
       "cover_headline": "Longest Consecutive Sequence in O(n)",
