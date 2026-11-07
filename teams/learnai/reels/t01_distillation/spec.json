@@ -1,0 +1,119 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 0.9,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.5,
+  "B": 2.5,
+  "C": 2.5,
+  "D": 2.5,
+  "E": 2.5,
+  "F": 2.5,
+  "G": 2.5
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "A",
+   2,
+   0
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "click",
+   "B",
+   4,
+   0
+  ],
+  [
+   "rise",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   3,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   4,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   1,
+   0
+  ],
+  [
+   "dip",
+   "F",
+   0,
+   -0.1
+  ],
+  [
+   "pop",
+   "G",
+   2,
+   0
+  ]
+ ],
+ "sources": [
+  "https://arxiv.org/abs/1910.01108",
+  "https://arxiv.org/abs/1503.02531"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "results_first",
+ "copy": {
+  "hi": {
+   "A": "@hook BERT नाम के AI model से 40{forty} percent छोटा model, | 60{sixty} percent ज़्यादा fast, | और समझ फिर भी 97{ninety-seven} percent वही। || ये बना कैसे? | एक teacher और एक student से।",
+   "B": "Teacher है BERT, | 110{one-hundred-ten} million parameters वाला। | Parameters यानी model के अंदर के numbers, | जो training में set होते हैं। || Student है DistilBERT, | सिर्फ़ 66{sixty-six} million parameters।",
+   "C": "अब student को पढ़ाओ। | Sentence है: I drink blank every morning। || Normal training में student को बस सही answer मिलता है: | tea। | बस इतना।",
+   "D": "Distillation में student को teacher की पूरी answer sheet मिलती है। | मान लो teacher कहता है: | tea, 60{sixty} percent। | Coffee, 30{thirty} percent। | Water, 9{nine} percent। | Petrol, लगभग zero।",
+   "E": "असली पढ़ाई इन्हीं numbers में है। | एक ही sentence से student सीखता है | कि tea सबसे सही है, | coffee भी चल जाएगी, | और petrol का यहाँ कोई काम नहीं। || सिर्फ़ tea बताते, तो ये सब छूट जाता। | इसीलिए हर example से student ज़्यादा सीखता है, | और छोटा होकर भी teacher के करीब पहुँच जाता है।",
+   "F": "इसे कहते हैं knowledge distillation: | छोटा model, बड़े model की probabilities, | यानी हर option के chances, | copy करना सीखता है। || फायदा? | छोटा model सस्ता और तेज़ चलता है। | DistilBERT के paper में इसे एक phone app में भी चलाकर देखा गया।",
+   "G": "अब सोचो: | अगर teacher ही किसी सवाल पर गलत हो, | तो student क्या सीखेगा? | Comment में बताओ।"
+  }
+ }
+}

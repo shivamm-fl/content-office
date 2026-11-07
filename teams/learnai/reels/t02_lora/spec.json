@@ -1,0 +1,118 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 0.9,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.5,
+  "B": 2.5,
+  "C": 2.5,
+  "D": 2.5,
+  "E": 2.5,
+  "F": 2.5,
+  "G": 2.5
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "A",
+   3,
+   0
+  ],
+  [
+   "rise",
+   "A",
+   4,
+   0
+  ],
+  [
+   "click",
+   "B",
+   3,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   4,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   7,
+   0
+  ],
+  [
+   "click",
+   "D",
+   4,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   7,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "F",
+   0,
+   -0.1
+  ],
+  [
+   "pop",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://arxiv.org/abs/2106.09685"
+ ],
+ "hook_type": "direct_question",
+ "template": "not_a_neither_b_actually_c",
+ "copy": {
+  "hi": {
+   "A": "@hook GPT-3 को नया काम सिखाने के लिए, | क्या उसके सारे 175{one-hundred-seventy-five} billion numbers बदलने पड़ेंगे? || सारे नहीं। | आधे भी नहीं। | Actually, 10{दस} हज़ार गुना कम। | और ये होता है पहाड़े वाली एक trick से।",
+   "B": "पहले problem समझो। | Model के अंदर के इन numbers को parameters कहते हैं। | सारे train करोगे, | तो हर नए काम के लिए 175{one-hundred-seventy-five} billion numbers की नई copy। | Support bot के लिए एक, | legal bot के लिए एक। | बहुत महँगा।",
+   "C": "अब 1{एक} से 10{दस} तक के पहाड़े, | एक table में सोचो। | 10{ten} by 10{ten}, | यानी 100{hundred} numbers। || पर ये 100{hundred} numbers रटने नहीं पड़ते। | बस दो lists चाहिए: | ऊपर 1{एक} से 10{दस}, | साइड में 1{एक} से 10{दस}। | Row का number, column के number से multiply करो, | पूरी table तैयार। || 20{twenty} numbers से 100{hundred} numbers।",
+   "D": "LoRA, यानी Low-Rank Adaptation, यही करता है। | Model के अंदर बड़ी tables होती हैं, | जिन्हें weight matrix कहते हैं। | मान लो एक table 1000{thousand} by 1000{thousand}, | यानी 10{दस} लाख numbers। || LoRA इसे छूता ही नहीं, freeze कर देता है। | इसके बगल में एक correction table बनाता है, | दो पतली tables को multiply करके: | 1000{thousand} by 8{eight}, | और 8{eight} by 1000{thousand}।",
+   "E": "Training में सिर्फ़ इन पतली tables के numbers बदलते हैं: | कुल 16{सोलह} हज़ार। | 10{दस} लाख में से 16{सोलह} हज़ार, | यानी 1.6{one-point-six} percent। || ये 8{eight}, यानी पतली table की मोटाई, | rank कहलाती है। | Low-rank का मतलब यही: पतली tables।",
+   "F": "GPT-3 पर इससे train होने वाले numbers 10{दस} हज़ार गुना कम हुए, | GPU memory 3{तीन} गुना कम, | और quality पूरे model की training के बराबर या बेहतर। || ऊपर से हर नए काम की बस एक छोटी correction file, | बड़ा model एक ही रहता है।",
+   "G": "अब बताओ: | 10{ten} by 10{ten} की table के लिए 20{twenty} numbers लगे। | 1000{thousand} by 1000{thousand} की table, rank 1{one} पर, | कितने numbers से बनेगी? | Comment करो।"
+  }
+ }
+}

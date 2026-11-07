@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>99% Accuracy, Zero Fraud Caught</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+
+      .v{position:absolute;box-sizing:border-box;font-family:var(--lat);font-weight:700;line-height:1.12;color:#E8EDF6}
+      .panel{background:#111C2F;border:2px solid #34435D;border-radius:28px}
+      .soft{background:#17243A;border:2px solid #34435D;border-radius:22px}
+      .gold{color:#F2B544}.green{color:#4CC38A}.red{color:#E8596B}.cyan{color:#5BC0EB}
+      .mono{font-family:var(--code)}
+      .center{display:flex;align-items:center;justify-content:center;text-align:center}
+      .dot{position:absolute;border-radius:50%;background:#4B5A72}
+      .plot{position:absolute;overflow:visible}
+      #tag,#handle{font-size:44px;letter-spacing:0}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="100.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="100.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="100.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="100.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const ORDER = ["A","B","C","D","E","F","G"];
+      const M = Mo.init({ order: ORDER, tag: "AI SAMJHO" });
+      Viz.install(M);
+      const {tl,S,P,Ed,W,ACC,GOOD,HOT,CYAN,TEXT,MUTED}=M;
+      const sc={}; for(const k of ORDER) sc[k]=M.$("#s"+k);
+      // All entrances and changes use the recorded phrase or word timing.
+      function n(h,x,y,w,ht,txt,sty="",visible=false){
+        const e=M.mk("v",h,txt); e.style.cssText+=";left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px;"+sty+(visible?";opacity:1":";opacity:0"); return e;
+      }
+      function on(e,t){tl.fromTo(e,{opacity:0,y:22},{opacity:1,y:0,duration:.42,ease:"power3.out",immediateRender:false},t);return e}
+      function off(e,t){tl.to(e,{opacity:0,y:-18,duration:.28,ease:"power2.in",immediateRender:false},t)}
+      function panel(h,x,y,w,ht,txt,sz=55,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"background:#111C2F;border:2px solid #34435D;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;padding:20px;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function label(h,x,y,w,ht,txt,sz=48,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"display:flex;align-items:center;justify-content:center;text-align:center;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function heading(h,txt){return label(h,70,174,940,100,txt,62,ACC,true)}
+      function line(h,x,y,w,ht,color,visible=false){return n(h,x,y,w,ht,"","background:"+color+";border-radius:99px",visible)}
+      function stat(h,x,y,w,ht,num,sub,color,t){
+        const a=panel(h,x,y,w,ht,"",44,color); on(a,t);
+        label(a,10,10,w-20,ht*.58,num,Math.min(105,ht*.43),color,true);
+        label(a,10,ht*.6,w-20,ht*.28,sub,44,TEXT,true);
+        return a;
+      }
+      function bar(h,x,y,w,name,percent,color,t){
+        const lw=w<600?125:200, tw=w-lw-110;
+        const lab=label(h,x,y,lw,74,name,45,TEXT);on(lab,t);
+        const track=n(h,x+lw,y+8,tw,60,"","background:#26354D;border-radius:15px",true);
+        const f=n(track,0,0,tw,60,"","background:"+color+";border-radius:15px;transform-origin:left center",true);
+        tl.fromTo(f,{scaleX:0},{scaleX:percent,duration:.65,ease:"power3.out",immediateRender:false},t);
+        const val=label(h,x+w-100,y,100,74,Math.round(percent*100)+"%",44,color);on(val,t);
+        return {fill:f,track,lab,val};
+      }
+      function dotField(h,x,y,cols,rows,d,gap,red=0,visible=true){
+        const a=[],bad=[]; for(let i=0;i<cols*rows;i++){const e=n(h,x+(i%cols)*(d+gap),y+Math.floor(i/cols)*(d+gap),d,d,"","background:"+(i<red?HOT:"#4B5A72")+";border-radius:50%",visible);a.push(e);if(i<red)bad.push(e)}return {all:a,bad};
+      }
+      function svg(h,x,y,w,ht){const e=document.createElementNS("http://www.w3.org/2000/svg","svg");e.setAttribute("viewBox","0 0 "+w+" "+ht);e.classList.add("plot");e.style.cssText="left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px";h.appendChild(e);return e}
+      function path(s,d,color=ACC,sw=9){const e=document.createElementNS("http://www.w3.org/2000/svg","path");e.setAttribute("d",d);e.setAttribute("fill","none");e.setAttribute("stroke",color);e.setAttribute("stroke-width",sw);e.setAttribute("stroke-linecap","round");e.setAttribute("stroke-linejoin","round");s.appendChild(e);return e}
+      function draw(e,t){e.setAttribute("pathLength","1000");e.style.strokeDasharray="1000";tl.fromTo(e,{strokeDashoffset:1000},{strokeDashoffset:0,duration:.65,ease:"power2.out",immediateRender:false},t)}
+      function tile(h,x,y,w,ht,txt,color,t){const e=panel(h,x,y,w,ht,txt,50,color);on(e,t);return e}
+
+      // diagram: A — a perfect-looking score from a SAFE-only stamp.
+      const A=sc.A;heading(A,"ACCURACY TRAP");
+      label(A,70,300,940,290,"99%",260,ACC,true);
+      label(A,90,605,900,90,"ACCURACY",82,TEXT,true);
+      const robot=panel(A,250,800,580,300,"SAFE",125,GOOD,true);
+      panel(robot,100,45,100,55,"●",50,CYAN,true);panel(robot,380,45,100,55,"●",50,CYAN,true);
+      on(panel(A,300,1140,480,100,"shandaar?",57,ACC),P("A",1));
+      on(label(A,185,1035,710,95,"sirf SAFE bolta hai",55,HOT),P("A",2));
+      // diagram: B — thousand payments, ten frauds, no fraud caught.
+      const B=sc.B;heading(B,"1,000 UPI PAYMENTS");
+      const g=dotField(B,80,320,40,25,14,9,10,true);
+      on(label(B,120,930,400,80,"10 FRAUD",54,HOT),W("B","10"));
+      on(label(B,570,930,400,80,"SAB SAFE",54,GOOD),W("B","safe"));
+      tl.to(g.all.slice(10),{backgroundColor:GOOD,duration:.55,stagger:{each:.0005},immediateRender:false},W("B","990"));
+      on(panel(B,90,1045,410,145,"990 / 1000",72,GOOD),P("B",5));
+      on(panel(B,560,1045,430,145,"FRAUD: 0",75,HOT),W("B","Zero"));
+      // diagram: C — one rare percent hides inside the average.
+      const C=sc.C;heading(C,"ACCURACY = SAHI / KUL");
+      panel(C,80,320,920,350,"",45,TEXT,true);
+      label(C,150,380,780,100,"990 / 1000 = 99%",92,ACC,true);
+      const strips=[];for(let i=0;i<100;i++)strips.push(n(C,85+i*9.1,730,7.4,270,"","background:"+(i===0?HOT:GOOD)+";border-radius:3px",true));
+      on(label(C,80,1020,330,80,"1% FRAUD",55,HOT),P("C",2));
+      on(panel(C,430,1015,590,155,"ALWAYS NO = 99%",59,ACC),P("C",3));
+      on(label(C,160,1200,760,75,"aur do sawaal →",50,CYAN),P("C",4));
+      // diagram: D — recall and precision inspect different denominators.
+      const D=sc.D;heading(D,"DO SAWAAL");
+      const rc=panel(D,75,315,930,410,"",44,TEXT,true);
+      label(rc,45,20,840,90,"RECALL",72,ACC,true);
+      const circ1=n(rc,75,130,250,250,"10\nfraud","border:7px solid "+HOT+";border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;font-size:52px",true);
+      const circ2=n(rc,435,130,250,250,"8\ncaught","border:7px solid "+GOOD+";border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;font-size:52px",true);
+      on(label(D,385,480,100,100,"→",80,ACC),P("D",1));
+      const pc=panel(D,75,790,930,410,"",44,TEXT,true);
+      label(pc,45,20,840,90,"PRECISION",72,CYAN,true);
+      n(pc,75,130,250,250,"20\nalarms","border:7px solid "+ACC+";border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;font-size:52px",true);
+      n(pc,435,130,250,250,"8\nfraud","border:7px solid "+GOOD+";border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;font-size:52px",true);
+      on(label(D,385,940,100,100,"→",80,CYAN),P("D",5));
+      // diagram: E — twenty alarms, eight genuine frauds.
+      const E=sc.E;heading(E,"MODEL 2 · 20 ALARMS");
+      const g2=dotField(E,80,305,40,25,14,9,10,true);
+      const ringed=g2.all.slice(0,8).concat(g2.all.slice(10,22));
+      tl.to(ringed,{boxShadow:"0 0 0 5px "+ACC,scale:1.2,duration:.3,stagger:.035,immediateRender:false},W("E","20"));
+      tl.to(g2.all.slice(0,8),{backgroundColor:HOT,scale:1.4,duration:.4,immediateRender:false},W("E","8"));
+      function metricRow(y,name,percent,value,color,t){
+        label(E,95,y,235,75,name,52,TEXT,true);
+        const track=n(E,340,y+10,485,60,"","background:#26354D;border-radius:14px",true);
+        const fill=n(track,0,0,485,60,"","background:"+color+";border-radius:14px;transform-origin:left center",true);
+        tl.fromTo(fill,{scaleX:0},{scaleX:percent,duration:.7,ease:"power3.out",immediateRender:false},t);
+        on(label(E,830,y,170,75,value,55,color),t);
+      }
+      metricRow(930,"Recall",.8,"80%",GOOD,W("E","80"));
+      metricRow(1035,"Precision",.4,"40%",ACC,W("E","40"));
+      metricRow(1140,"Accuracy",.986,"98.6%",CYAN,P("E",7));
+      // diagram: F — better recall despite slightly lower accuracy.
+      const F=sc.F;heading(F,"KAUN SA MODEL?");
+      panel(F,65,315,460,300,"MODEL 1\n99% ACC\n0% RECALL",59,HOT,true);
+      panel(F,555,315,460,300,"MODEL 2\n98.6% ACC\n80% RECALL",59,GOOD,true);
+      label(F,150,675,780,75,"ALARM THRESHOLD",54,ACC,true);
+      const track=n(F,130,775,820,28,"","background:#34435D;border-radius:20px",true);
+      const knob=n(F,470,740,90,90,"","background:"+ACC+";border-radius:50%",true);
+      tl.to(knob,{x:-260,duration:.65,ease:"power3.out",immediateRender:false},W("F","recall"));
+      on(label(F,110,840,400,85,"recall ↑",60,GOOD),W("F","recall"));
+      on(label(F,570,840,400,85,"precision ↓",60,HOT),W("F","precision"));
+      on(panel(F,80,1040,440,160,"fraud chhoota",53,HOT),P("F",7));
+      on(panel(F,560,1040,440,160,"customer pareshan",53,ACC),P("F",7));
+      // diagram: G — ask for the bank decision.
+      const G=sc.G;heading(G,"TUM BANK HO");
+      panel(G,80,380,430,560,"99%\nACCURACY\n0% RECALL",67,HOT,true);
+      panel(G,570,380,430,560,"98.6%\nACCURACY\n80% RECALL",67,GOOD,true);
+      on(panel(G,210,1030,660,140,"KAUNSA MODEL?",75,ACC),P("G",1));
+      on(panel(G,300,1200,480,85,"COMMENT + KYUN",47,CYAN),P("G",4));
+
+      for(const k of ["B","C","D","E","F","G"]) M.wipe(S[k]);
+      M.finish({kw:{accuracy:"gold",safe:"good",fraud:"hot",recall:"good",precision:"cyan",alarm:"gold",zero:"hot",comment:"gold"}});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

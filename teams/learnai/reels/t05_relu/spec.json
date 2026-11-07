@@ -1,0 +1,127 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 0.9,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.5,
+  "B": 2.5,
+  "C": 2.5,
+  "D": 2.5,
+  "E": 2.5,
+  "F": 2.5,
+  "G": 2.5,
+  "H": 2.5
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   1,
+   -0.1
+  ],
+  [
+   "pop",
+   "A",
+   4,
+   0
+  ],
+  [
+   "click",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "B",
+   3,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   0,
+   0
+  ],
+  [
+   "rise",
+   "D",
+   3,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   5,
+   0
+  ],
+  [
+   "click",
+   "E",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   3,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   4,
+   0
+  ],
+  [
+   "ok",
+   "F",
+   6,
+   0
+  ],
+  [
+   "pop",
+   "H",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://developers.google.com/machine-learning/crash-course/neural-networks/activation-functions"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "wont_work_unless",
+ "copy": {
+  "hi": {
+   "A": "@hook तुम सौ layers का neural network बना लो, | वो एक सीधी line से ज़्यादा कुछ नहीं सीखेगा। || जब तक हर layer के बाद | एक छोटा सा function नहीं लगाओगे: | ReLU।",
+   "B": "पहले देखो layer करती क्या है। | Input को किसी number से multiply करती है, | और कुछ जोड़ देती है। || Layer one: x{एक्स} times 2{two}, plus 1{one}। | Layer two: उसका result times 3{three}, plus 4{four}।",
+   "C": "दोनों मिलाओ, | तो बचता है: 6{six} x{एक्स} plus 7{seven}। | फिर से एक multiply, एक जोड़। | दो layers, काम एक layer का। || सौ layers भी लगा दो, | नतीजा एक सीधी line।",
+   "D": "पर असली दुनिया सीधी नहीं है। | बिजली का bill देखो: | सर्दी में heater, गर्मी में AC। | दोनों तरफ़ bill ज़्यादा, | और बीच में, मान लो 24{twenty-four} degree पर, सबसे कम। || ये V shape है। | सीधी line या तो ऊपर जाती है या नीचे, | V नहीं बना सकती।",
+   "E": "यहाँ आता है ReLU। | Rule बस इतना: | number negative है, तो zero। | वरना वही number। || ये एक मोड़ देता है: | zero तक flat, फिर ऊपर।",
+   "F": "अब दो ReLU जोड़ो। | पहले में डालो temperature minus 24{twenty-four}, | दूसरे में 24{twenty-four} minus temperature। || 30{thirty} degree पर: पहला देता है 6{six}, दूसरा zero। | 18{eighteen} degree पर: पहला zero, दूसरा 6{six}। | 24{twenty-four} पर दोनों zero। || V बन गया, बिल्कुल bill जैसा।",
+   "G": "हर ReLU एक मोड़ है। | हज़ारों ReLU, यानी हज़ारों मोड़, | और मोड़ जोड़-जोड़कर network बहुत complicated curves भी बना लेता है। || Layers के बीच लगने वाले ऐसे function को | activation function कहते हैं।",
+   "H": "अब बताओ: | ReLU हटाकर सौ layers लगाओ, | तो वो कितनी layers के बराबर काम करेंगी? | Comment करो।"
+  }
+ }
+}

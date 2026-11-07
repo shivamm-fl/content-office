@@ -1,0 +1,38 @@
+# Render only: a push to a render/** branch renders the listed reels on GitHub runners and uploads the mp4s as
+# workflow artifacts. No agent session, no voice spend, no commit, no publishing. The voice, bed and sfx tracks are
+# gitignored, so they come from a draft release (one <reel>_audio.tgz per reel) named in AUDIO_TAG.
+# This file lives only on render/** branches; main and the office workflows are untouched.
+name: render-branch
+run-name: "render ${{ github.ref_name }}"
+on:
+  push:
+    branches: ["render/**"]
+permissions: { contents: write }   # write is what lets the job token read a draft release
+concurrency: { group: "render-${{ github.ref_name }}", cancel-in-progress: true }
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        reel: [t01_distillation, t02_lora, t03_accuracy_trap, t04_speculative_decoding, t05_relu]
+    env: { GH_TOKEN: "${{ github.token }}", TEAM: learnai, AUDIO_TAG: render-t-templates-20261107, REEL: "${{ matrix.reel }}" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Tools
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - name: Audio from the draft release
+        run: |
+          gh release download "$AUDIO_TAG" -R "$GITHUB_REPOSITORY" -p "${REEL}_audio.tgz" -D /tmp
+          tar -xzf "/tmp/${REEL}_audio.tgz" -C "teams/$TEAM/reels/$REEL"
+          ls -la "teams/$TEAM/reels/$REEL/audio/hi"
+      - name: Render
+        working-directory: teams/${{ env.TEAM }}
+        run: mkdir -p out && python3 scripts/render_reel.py "reels/$REEL" "out/$REEL" hi
+      - name: Check the file
+        run: ffprobe -v error -show_entries format=duration:stream=codec_name,width,height -of compact "teams/$TEAM/out/${REEL}_hi.mp4"
+      - uses: actions/upload-artifact@v4
+        with: { name: "${{ matrix.reel }}", path: "teams/${{ env.TEAM }}/out/${{ matrix.reel }}_hi.mp4", retention-days: 14 }

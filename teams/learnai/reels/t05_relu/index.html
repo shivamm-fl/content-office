@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Why 100 Layers Need ReLU</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+
+      .v{position:absolute;box-sizing:border-box;font-family:var(--lat);font-weight:700;line-height:1.12;color:#E8EDF6}
+      .panel{background:#111C2F;border:2px solid #34435D;border-radius:28px}
+      .soft{background:#17243A;border:2px solid #34435D;border-radius:22px}
+      .gold{color:#F2B544}.green{color:#4CC38A}.red{color:#E8596B}.cyan{color:#5BC0EB}
+      .mono{font-family:var(--code)}
+      .center{display:flex;align-items:center;justify-content:center;text-align:center}
+      .dot{position:absolute;border-radius:50%;background:#4B5A72}
+      .plot{position:absolute;overflow:visible}
+      #tag,#handle{font-size:44px;letter-spacing:0}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="94.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="94.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="94.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="94.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const ORDER = ["A","B","C","D","E","F","G","H"];
+      const M = Mo.init({ order: ORDER, tag: "AI SAMJHO" });
+      Viz.install(M);
+      const {tl,S,P,Ed,W,ACC,GOOD,HOT,CYAN,TEXT,MUTED}=M;
+      const sc={}; for(const k of ORDER) sc[k]=M.$("#s"+k);
+      // All entrances and changes use the recorded phrase or word timing.
+      function n(h,x,y,w,ht,txt,sty="",visible=false){
+        const e=M.mk("v",h,txt); e.style.cssText+=";left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px;"+sty+(visible?";opacity:1":";opacity:0"); return e;
+      }
+      function on(e,t){tl.fromTo(e,{opacity:0,y:22},{opacity:1,y:0,duration:.42,ease:"power3.out",immediateRender:false},t);return e}
+      function off(e,t){tl.to(e,{opacity:0,y:-18,duration:.28,ease:"power2.in",immediateRender:false},t)}
+      function panel(h,x,y,w,ht,txt,sz=55,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"background:#111C2F;border:2px solid #34435D;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;padding:20px;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function label(h,x,y,w,ht,txt,sz=48,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"display:flex;align-items:center;justify-content:center;text-align:center;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function heading(h,txt){return label(h,70,174,940,100,txt,62,ACC,true)}
+      function line(h,x,y,w,ht,color,visible=false){return n(h,x,y,w,ht,"","background:"+color+";border-radius:99px",visible)}
+      function stat(h,x,y,w,ht,num,sub,color,t){
+        const a=panel(h,x,y,w,ht,"",44,color); on(a,t);
+        label(a,10,10,w-20,ht*.58,num,Math.min(105,ht*.43),color,true);
+        label(a,10,ht*.6,w-20,ht*.28,sub,44,TEXT,true);
+        return a;
+      }
+      function bar(h,x,y,w,name,percent,color,t){
+        const lw=w<600?125:200, tw=w-lw-110;
+        const lab=label(h,x,y,lw,74,name,45,TEXT);on(lab,t);
+        const track=n(h,x+lw,y+8,tw,60,"","background:#26354D;border-radius:15px",true);
+        const f=n(track,0,0,tw,60,"","background:"+color+";border-radius:15px;transform-origin:left center",true);
+        tl.fromTo(f,{scaleX:0},{scaleX:percent,duration:.65,ease:"power3.out",immediateRender:false},t);
+        const val=label(h,x+w-100,y,100,74,Math.round(percent*100)+"%",44,color);on(val,t);
+        return {fill:f,track,lab,val};
+      }
+      function dotField(h,x,y,cols,rows,d,gap,red=0,visible=true){
+        const a=[],bad=[]; for(let i=0;i<cols*rows;i++){const e=n(h,x+(i%cols)*(d+gap),y+Math.floor(i/cols)*(d+gap),d,d,"","background:"+(i<red?HOT:"#4B5A72")+";border-radius:50%",visible);a.push(e);if(i<red)bad.push(e)}return {all:a,bad};
+      }
+      function svg(h,x,y,w,ht){const e=document.createElementNS("http://www.w3.org/2000/svg","svg");e.setAttribute("viewBox","0 0 "+w+" "+ht);e.classList.add("plot");e.style.cssText="left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px";h.appendChild(e);return e}
+      function path(s,d,color=ACC,sw=9){const e=document.createElementNS("http://www.w3.org/2000/svg","path");e.setAttribute("d",d);e.setAttribute("fill","none");e.setAttribute("stroke",color);e.setAttribute("stroke-width",sw);e.setAttribute("stroke-linecap","round");e.setAttribute("stroke-linejoin","round");s.appendChild(e);return e}
+      function draw(e,t){e.setAttribute("pathLength","1000");e.style.strokeDasharray="1000";tl.fromTo(e,{strokeDashoffset:1000},{strokeDashoffset:0,duration:.65,ease:"power2.out",immediateRender:false},t)}
+      function tile(h,x,y,w,ht,txt,color,t){const e=panel(h,x,y,w,ht,txt,50,color);on(e,t);return e}
+
+      // diagram: A — a hundred linear slabs still produce one line.
+      const A=sc.A;heading(A,"100 LAYERS = EK LINE");
+      const tower=[];for(let i=0;i<100;i++)tower.push(n(A,110,335+i*7.1,330,5,"","background:"+(i%10===0?ACC:"#41516A")+";border-radius:3px",true));
+      label(A,120,1060,320,80,"100 LAYERS",59,ACC,true);
+      const ag=svg(A,500,385,475,570);path(ag,"M45 500 L420 70","#4B5A72",11);
+      const activeLine=path(ag,"M45 500 L420 70",CYAN,11);draw(activeLine,P("A",1));
+      path(ag,"M45 510 L45 40 M45 510 L430 510","#667892",5);
+      label(A,540,1000,400,85,"SEEDHI LINE",58,CYAN,true);
+      on(label(A,610,900,230,80,"≠ CURVE",56,HOT),P("A",2));
+      tl.to(tower.filter((_,i)=>i%10===0),{backgroundColor:ACC,scaleX:1.15,duration:.38,stagger:.025,immediateRender:false},P("A",3));
+      on(panel(A,530,1110,380,120,"ReLU",82,ACC),W("A","ReLU"));
+      // diagram: B — multiply then add, twice.
+      const B=sc.B;heading(B,"LAYER KYA KARTI HAI?");
+      const input=panel(B,350,305,380,145,"x",105,ACC,true);
+      on(label(B,440,460,200,90,"↓",90,CYAN),P("B",1));
+      const l1=panel(B,175,575,730,230,"×2  +1",104,CYAN);on(l1,P("B",1));
+      on(label(B,70,825,350,85,"multiply + add",50,ACC),P("B",2));
+      tl.to(l1,{borderColor:ACC,duration:.35,immediateRender:false},P("B",3));
+      on(label(B,440,820,200,90,"↓",90,ACC),P("B",4));
+      const l2=panel(B,175,940,730,230,"×3  +4",104,GOOD);on(l2,P("B",4));
+      // diagram: C — composition collapses.
+      const C=sc.C;heading(C,"DO LAYERS → EK");
+      const algebra=panel(C,115,310,850,155,"3(2x + 1) + 4",84,CYAN,true);
+      on(label(C,285,462,510,70,"↓",86,ACC),P("C",1));
+      const merged=panel(C,180,545,720,175,"6x + 7",135,GOOD);on(merged,P("C",1));
+      on(label(C,220,720,640,72,"multiply + add",56,CYAN),P("C",2));
+      tl.to(algebra,{opacity:.3,duration:.4,immediateRender:false},P("C",3));
+      const cg=svg(C,140,795,800,405);
+      path(cg,"M55 350 L55 35 M55 350 L750 350","#667892",6);
+      path(cg,"M80 325 L710 65",ACC,12);
+      on(label(C,125,1200,420,75,"100 layers bhi",55,MUTED),P("C",4));
+      on(label(C,575,1200,380,75,"sirf line",54,HOT),P("C",5));
+      // diagram: D — bill rises on both cold and hot sides.
+      const D=sc.D;heading(D,"BILL SEEDHA NAHI");
+      const dg=svg(D,90,335,900,740);
+      path(dg,"M75 610 L75 45 M75 610 L840 610","#667892",6);
+      const v=path(dg,"M100 110 L450 560 L815 80",GOOD,13);draw(v,P("D",3));
+      label(D,105,990,220,80,"10°C",54,CYAN,true);
+      label(D,430,990,220,80,"24°C",54,ACC,true);
+      label(D,745,990,220,80,"40°C",54,HOT,true);
+      on(panel(D,100,1115,330,110,"HEATER",56,CYAN),P("D",2));
+      on(panel(D,650,1115,330,110,"AC",65,HOT),P("D",2));
+      const fit=path(dg,"M105 420 L810 250",HOT,8);fit.setAttribute("stroke-dasharray","18 20");
+      tl.fromTo(fit,{opacity:0},{opacity:1,duration:.45,immediateRender:false},P("D",6));
+      on(label(D,430,580,210,145,"✕",155,HOT),P("D",7));
+      // diagram: E — ReLU makes a hinge at zero.
+      const E=sc.E;heading(E,"ReLU = EK MOD");
+      const eg=svg(E,85,335,910,640);
+      path(eg,"M90 560 L90 50 M90 400 L850 400","#667892",6);
+      const relu=path(eg,"M105 400 L450 400 L840 70",ACC,15);draw(relu,P("E",4));
+      label(E,390,895,200,70,"0",65,TEXT,true);
+      on(panel(E,90,1030,415,130,"negative → 0",54,CYAN),P("E",2));
+      on(panel(E,575,1030,415,130,"positive → x",54,GOOD),P("E",3));
+      on(label(E,310,1190,460,80,"max(0, x)",68,ACC),P("E",5));
+      // diagram: F — two hinges sum to the bill's V.
+      const F=sc.F;heading(F,"DO ReLU → V");
+      const f1=svg(F,80,315,920,250);
+      path(f1,"M30 205 L880 205","#667892",4);
+      const h1=path(f1,"M60 205 L520 205 L830 40",CYAN,10);draw(h1,P("F",1));
+      label(F,110,325,650,70,"ReLU(t − 24)",60,CYAN,true);
+      const f2=svg(F,80,635,920,250);
+      path(f2,"M30 205 L880 205","#667892",4);
+      const h2=path(f2,"M60 40 L405 205 L850 205",GOOD,10);draw(h2,P("F",2));
+      label(F,110,645,650,70,"ReLU(24 − t)",60,GOOD,true);
+      on(panel(F,545,495,425,108,"30°: 6 + 0",58,ACC),P("F",3));
+      on(panel(F,545,810,425,108,"18°: 0 + 6",58,ACC),P("F",4));
+      on(label(F,440,915,200,85,"+",105,ACC),P("F",5));
+      const fv=svg(F,160,995,760,220);const vl=path(fv,"M50 35 L380 195 L710 35",ACC,14);draw(vl,P("F",6));
+      // diagram: G — many local hinges approximate a complex curve.
+      const G=sc.G;heading(G,"MANY HINGES → CURVE");
+      const gg=svg(G,90,330,900,680);
+      path(gg,"M55 610 L55 50 M55 610 L850 610","#667892",6);
+      const segments=["M60 500 L165 345","M165 345 L250 395","M250 395 L345 170","M345 170 L445 245","M445 245 L550 130","M550 130 L665 420","M665 420 L770 335","M770 335 L840 470"];
+      segments.forEach((s,i)=>{const q=path(gg,s,i%2?CYAN:ACC,12);draw(q,i<2?P("G",0):i<5?P("G",1):P("G",2))});
+      on(panel(G,180,1080,720,145,"ACTIVATION FUNCTION",58,GOOD),P("G",4));
+      // diagram: H — without activation, a stack collapses to one.
+      const H=sc.H;heading(H,"ReLU HATAO?");
+      const slabs=[];for(let i=0;i<40;i++)slabs.push(n(H,120,335+i*13,350,8,"","background:"+(i%5===0?ACC:"#465670")+";border-radius:5px",true));
+      on(label(H,475,575,135,115,"→",120,ACC),P("H",1));
+      on(panel(H,610,460,350,260,"? LAYER",78,GOOD),P("H",2));
+      on(panel(H,210,1020,660,150,"100 = ? LAYERS",79,ACC),P("H",2));
+      on(panel(H,310,1200,460,85,"COMMENT",51,CYAN),P("H",3));
+
+      for(const k of ["B","C","D","E","F","G","H"]) M.wipe(S[k]);
+      M.finish({kw:{layers:"gold",line:"cyan",relu:"gold",multiply:"cyan",bill:"hot",zero:"good",activation:"good",comment:"gold"}});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

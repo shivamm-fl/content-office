@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Same Answer, 3x Faster</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+
+      .v{position:absolute;box-sizing:border-box;font-family:var(--lat);font-weight:700;line-height:1.12;color:#E8EDF6}
+      .panel{background:#111C2F;border:2px solid #34435D;border-radius:28px}
+      .soft{background:#17243A;border:2px solid #34435D;border-radius:22px}
+      .gold{color:#F2B544}.green{color:#4CC38A}.red{color:#E8596B}.cyan{color:#5BC0EB}
+      .mono{font-family:var(--code)}
+      .center{display:flex;align-items:center;justify-content:center;text-align:center}
+      .dot{position:absolute;border-radius:50%;background:#4B5A72}
+      .plot{position:absolute;overflow:visible}
+      #tag,#handle{font-size:44px;letter-spacing:0}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="107.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="107.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="107.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="107.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const ORDER = ["A","B","C","D","E","F","G"];
+      const M = Mo.init({ order: ORDER, tag: "AI SAMJHO" });
+      Viz.install(M);
+      const {tl,S,P,Ed,W,ACC,GOOD,HOT,CYAN,TEXT,MUTED}=M;
+      const sc={}; for(const k of ORDER) sc[k]=M.$("#s"+k);
+      // All entrances and changes use the recorded phrase or word timing.
+      function n(h,x,y,w,ht,txt,sty="",visible=false){
+        const e=M.mk("v",h,txt); e.style.cssText+=";left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px;"+sty+(visible?";opacity:1":";opacity:0"); return e;
+      }
+      function on(e,t){tl.fromTo(e,{opacity:0,y:22},{opacity:1,y:0,duration:.42,ease:"power3.out",immediateRender:false},t);return e}
+      function off(e,t){tl.to(e,{opacity:0,y:-18,duration:.28,ease:"power2.in",immediateRender:false},t)}
+      function panel(h,x,y,w,ht,txt,sz=55,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"background:#111C2F;border:2px solid #34435D;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;padding:20px;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function label(h,x,y,w,ht,txt,sz=48,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"display:flex;align-items:center;justify-content:center;text-align:center;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function heading(h,txt){return label(h,70,174,940,100,txt,62,ACC,true)}
+      function line(h,x,y,w,ht,color,visible=false){return n(h,x,y,w,ht,"","background:"+color+";border-radius:99px",visible)}
+      function stat(h,x,y,w,ht,num,sub,color,t){
+        const a=panel(h,x,y,w,ht,"",44,color); on(a,t);
+        label(a,10,10,w-20,ht*.58,num,Math.min(105,ht*.43),color,true);
+        label(a,10,ht*.6,w-20,ht*.28,sub,44,TEXT,true);
+        return a;
+      }
+      function bar(h,x,y,w,name,percent,color,t){
+        const lw=w<600?125:200, tw=w-lw-110;
+        const lab=label(h,x,y,lw,74,name,45,TEXT);on(lab,t);
+        const track=n(h,x+lw,y+8,tw,60,"","background:#26354D;border-radius:15px",true);
+        const f=n(track,0,0,tw,60,"","background:"+color+";border-radius:15px;transform-origin:left center",true);
+        tl.fromTo(f,{scaleX:0},{scaleX:percent,duration:.65,ease:"power3.out",immediateRender:false},t);
+        const val=label(h,x+w-100,y,100,74,Math.round(percent*100)+"%",44,color);on(val,t);
+        return {fill:f,track,lab,val};
+      }
+      function dotField(h,x,y,cols,rows,d,gap,red=0,visible=true){
+        const a=[],bad=[]; for(let i=0;i<cols*rows;i++){const e=n(h,x+(i%cols)*(d+gap),y+Math.floor(i/cols)*(d+gap),d,d,"","background:"+(i<red?HOT:"#4B5A72")+";border-radius:50%",visible);a.push(e);if(i<red)bad.push(e)}return {all:a,bad};
+      }
+      function svg(h,x,y,w,ht){const e=document.createElementNS("http://www.w3.org/2000/svg","svg");e.setAttribute("viewBox","0 0 "+w+" "+ht);e.classList.add("plot");e.style.cssText="left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px";h.appendChild(e);return e}
+      function path(s,d,color=ACC,sw=9){const e=document.createElementNS("http://www.w3.org/2000/svg","path");e.setAttribute("d",d);e.setAttribute("fill","none");e.setAttribute("stroke",color);e.setAttribute("stroke-width",sw);e.setAttribute("stroke-linecap","round");e.setAttribute("stroke-linejoin","round");s.appendChild(e);return e}
+      function draw(e,t){e.setAttribute("pathLength","1000");e.style.strokeDasharray="1000";tl.fromTo(e,{strokeDashoffset:1000},{strokeDashoffset:0,duration:.65,ease:"power2.out",immediateRender:false},t)}
+      function tile(h,x,y,w,ht,txt,color,t){const e=panel(h,x,y,w,ht,txt,50,color);on(e,t);return e}
+
+      // diagram: A — two chats, same answer, different pace.
+      const A=sc.A;const hook=label(A,60,205,960,125,"AI ka jawab tez kaise?",80,ACC,true);
+      hook.style.whiteSpace="nowrap";hook.style.letterSpacing="-.035em";
+      const slow=panel(A,70,365,940,290,"",44,TEXT,true);
+      label(slow,30,12,880,70,"NORMAL · BIG MODEL",54,MUTED,true);
+      const fast=panel(A,70,680,940,290,"",44,TEXT,true);
+      label(fast,30,12,880,70,"SMALL + BIG",57,GOOD,true);
+      [slow,fast].forEach((lane,i)=>{
+        panel(lane,35,115,270,110,"The",58,i?GOOD:TEXT,true);
+        panel(lane,325,115,330,110,"answer",58,i?GOOD:TEXT,true);
+        on(panel(lane,675,115,220,110,"is…",58,i?GOOD:TEXT),i?W("A","Best"):W("A","Better"));
+      });
+      const better=panel(A,90,1005,900,205,"",58,CYAN);on(better,W("A","Better"));
+      label(better,30,8,840,78,"BETTER WAY · ◈ small model",59,CYAN,true);
+      label(better,30,102,840,75,"fast · kam samajhdar",54,TEXT,true);
+      off(better,W("A","Best")-.4);
+      const best=panel(A,90,1005,900,205,"",58,GOOD);on(best,W("A","Best"));
+      label(best,30,8,840,78,"BEST WAY · chhota + bada",60,GOOD,true);
+      label(best,30,102,840,75,"2–3x speed",64,ACC,true);
+      on(panel(A,150,1220,780,105,"Google AI Overviews",55,CYAN),W("A","Google"));
+      // diagram: B — every token repeats the weight read.
+      const B=sc.B;heading(B,"ONE TOKEN = ONE READ");
+      const weight=panel(B,85,535,910,430,"WEIGHTS",122,ACC,true);
+      const toks=["AI","writes","one","token","…"];
+      const times=[P("B",1),P("B",2),P("B",3),P("B",4),P("B",6)];
+      toks.forEach((w,i)=>on(panel(B,75+i*188,315,180,140,w,48,CYAN),times[i]));
+      const sweep=n(B,100,565,115,370,"","background:linear-gradient(90deg,transparent,#5BC0EB 50%,transparent);box-shadow:0 0 65px #5BC0EB;border-radius:12px",false);
+      times.forEach(t=>{tl.fromTo(sweep,{opacity:0,x:0},{opacity:.88,x:765,duration:.44,ease:"none",immediateRender:false},t);tl.to(sweep,{opacity:0,duration:.13,immediateRender:false},t+.44)});
+      on(panel(B,95,1050,890,160,"100 tokens = 100 reads",65,HOT),P("B",6));
+      // diagram: C — draft five, verify them in one sweep.
+      const C=sc.C;heading(C,"DRAFT 5 · CHECK ONCE");
+      const sm=panel(C,75,345,360,210,"SMALL\nDRAFT",62,CYAN,true);
+      const chips=[];for(let i=0;i<5;i++){const e=panel(C,83+i*188,660,166,155,String(i+1),68,MUTED);chips.push(e)}
+      tl.fromTo(chips,{opacity:0,y:25},{opacity:1,y:0,duration:.28,stagger:.08,immediateRender:false},P("C",1));
+      const bg=panel(C,645,345,360,210,"BIG\nCHECK",62,ACC);on(bg,P("C",2));
+      const scan=line(C,88,875,895,18,ACC);on(scan,P("C",3));
+      tl.to(chips,{color:GOOD,borderColor:GOOD,duration:.35,stagger:.06,immediateRender:false},P("C",4));
+      on(panel(C,280,1035,520,145,"1 WEIGHT READ",75,GOOD),P("C",4));
+      on(label(C,170,1200,740,78,"SPECULATIVE DECODING",49,ACC),P("C",5));
+      // diagram: D — moving weights dominates checking arithmetic.
+      const D=sc.D;heading(D,"CHECK BHI KAAM HAI?");
+      const mem=panel(D,70,340,390,270,"MEMORY\n1 BYTE",66,CYAN,true);
+      const chip=panel(D,620,340,390,270,"CHIP\n100s OPS",66,GOOD,true);
+      const checkQ=on(label(D,165,625,750,70,"CHECK = KAAM?",57,HOT),P("D",1));off(checkQ,P("D",2));
+      const timeQ=on(label(D,170,625,740,70,"TIME KAHAN BACHA?",48,ACC),P("D",2));off(timeQ,P("D",4));
+      on(label(D,450,410,170,110,"→",110,ACC),P("D",4));
+      label(D,85,715,910,72,"TIME PER BIG MODEL READ",52,ACC,true);
+      const cost=n(D,90,815,900,130,"","background:#26354D;border-radius:20px",true);
+      const read=n(cost,0,0,825,130,"","background:"+ACC+";border-radius:20px",true);
+      const calc=n(cost,825,0,75,130,"","background:"+CYAN+";border-radius:20px",true);
+      tl.fromTo(read,{scaleX:0,transformOrigin:"left center"},{scaleX:1,duration:.65,immediateRender:false},P("D",6));
+      on(label(D,115,845,700,75,"WEIGHTS PADHNA",57,"#0B1220"),P("D",6));
+      on(panel(D,115,1040,390,145,"1 token",64,CYAN),P("D",8));
+      on(panel(D,575,1040,390,145,"5 tokens",64,GOOD),P("D",8));
+      on(label(D,330,1190,420,75,"~SAME COST",60,ACC),P("D",9));
+      // diagram: E — accept prefix, reject tail, write a replacement.
+      const E=sc.E;heading(E,"REAL EXAMPLE");
+      const question=panel(E,85,300,910,190,"What is the\nsquare root of 7?",67,ACC,true);
+      on(label(E,220,500,640,65,"SAME WORDS AS QUESTION",49,CYAN),P("E",1));
+      const tokens=["The","square","root","of","7","is","3","more"];
+      const draft=[];tokens.forEach((w,i)=>{const e=panel(E,80+(i%4)*230,600+Math.floor(i/4)*160,210,128,w,56,MUTED);draft.push(e)});
+      tl.fromTo(draft,{opacity:0,y:18},{opacity:1,y:0,duration:.3,stagger:.07,immediateRender:false},P("E",2));
+      on(label(E,220,925,640,70,"SMALL MODEL DRAFT",55,CYAN),P("E",4));
+      tl.to(draft.slice(0,6),{color:GOOD,borderColor:GOOD,duration:.25,stagger:.08,immediateRender:false},P("E",5));
+      tl.to(draft[6],{color:HOT,borderColor:HOT,duration:.24,immediateRender:false},P("E",6));
+      on(label(draft[6],130,18,70,85,"✕",84,HOT),P("E",6));
+      tl.to(draft[7],{opacity:.12,duration:.3,immediateRender:false},P("E",7));
+      on(label(E,235,1025,610,65,"BIG MODEL TOKEN",54,ACC),P("E",8));
+      on(panel(E,255,1100,570,160,"2.65",112,ACC),P("E",8));
+      // diagram: F — paper's T5 scale comparison.
+      const F=sc.F;heading(F,"GOOGLE PAPER RESULT");
+      const big=panel(F,90,345,900,370,"T5-XXL\n11B",105,ACC,true);
+      on(label(F,170,735,740,75,"11 BILLION PARAMETERS",54,ACC),P("F",1));
+      const small=panel(F,260,790,560,190,"T5-small · 60M",66,CYAN);on(small,P("F",2));
+      on(label(F,360,995,360,90,"→",100,GOOD),P("F",2));
+      on(panel(F,275,1100,530,150,"~3x SPEED",93,GOOD),P("F",3));
+      // diagram: G — if all guesses fail, they are rejected.
+      const G=sc.G;heading(G,"HAR GUESS GALAT?");
+      const bad=[];for(let i=0;i<5;i++){const mark=panel(G,70+i*194,360,185,190,"✕",122,HOT,true);mark.style.background="#351622";mark.style.border="5px solid #E8596B";bad.push(mark)}
+      tl.to(bad,{opacity:.7,y:55,duration:.45,stagger:.06,immediateRender:false},P("G",1));
+      on(panel(G,115,690,850,140,"BIG MODEL STILL WRITES",62,ACC),P("G",2));
+      on(panel(G,100,930,410,180,"SLOW",84,HOT),P("G",3));
+      on(panel(G,570,930,410,180,"NORMAL",84,GOOD),P("G",3));
+      on(panel(G,315,1185,450,95,"COMMENT",53,CYAN),P("G",4));
+
+      for(const k of ["B","C","D","E","F","G"]) M.wipe(S[k]);
+      M.finish({kw:{better:"cyan",best:"gold",fast:"good",weights:"gold",token:"cyan",check:"good",memory:"cyan",speed:"good"}});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

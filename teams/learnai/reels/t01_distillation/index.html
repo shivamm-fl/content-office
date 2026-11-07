@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Small Model, Big Brain</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+
+      .v{position:absolute;box-sizing:border-box;font-family:var(--lat);font-weight:700;line-height:1.12;color:#E8EDF6}
+      .panel{background:#111C2F;border:2px solid #34435D;border-radius:28px}
+      .soft{background:#17243A;border:2px solid #34435D;border-radius:22px}
+      .gold{color:#F2B544}.green{color:#4CC38A}.red{color:#E8596B}.cyan{color:#5BC0EB}
+      .mono{font-family:var(--code)}
+      .center{display:flex;align-items:center;justify-content:center;text-align:center}
+      .dot{position:absolute;border-radius:50%;background:#4B5A72}
+      .plot{position:absolute;overflow:visible}
+      #tag,#handle{font-size:44px;letter-spacing:0}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="85" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="85" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="85" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="85" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const ORDER = ["A","B","C","D","E","F","G"];
+      const M = Mo.init({ order: ORDER, tag: "AI SAMJHO" });
+      Viz.install(M);
+      const {tl,S,P,Ed,W,ACC,GOOD,HOT,CYAN,TEXT,MUTED}=M;
+      const sc={}; for(const k of ORDER) sc[k]=M.$("#s"+k);
+      // All entrances and changes use the recorded phrase or word timing.
+      function n(h,x,y,w,ht,txt,sty="",visible=false){
+        const e=M.mk("v",h,txt); e.style.cssText+=";left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px;"+sty+(visible?";opacity:1":";opacity:0"); return e;
+      }
+      function on(e,t){tl.fromTo(e,{opacity:0,y:22},{opacity:1,y:0,duration:.42,ease:"power3.out",immediateRender:false},t);return e}
+      function off(e,t){tl.to(e,{opacity:0,y:-18,duration:.28,ease:"power2.in",immediateRender:false},t)}
+      function panel(h,x,y,w,ht,txt,sz=55,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"background:#111C2F;border:2px solid #34435D;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;padding:20px;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function label(h,x,y,w,ht,txt,sz=48,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"display:flex;align-items:center;justify-content:center;text-align:center;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function heading(h,txt){return label(h,70,174,940,100,txt,62,ACC,true)}
+      function line(h,x,y,w,ht,color,visible=false){return n(h,x,y,w,ht,"","background:"+color+";border-radius:99px",visible)}
+      function stat(h,x,y,w,ht,num,sub,color,t){
+        const a=panel(h,x,y,w,ht,"",44,color); on(a,t);
+        const top=label(a,10,10,w-20,ht*.58,num.endsWith("%")?"0%":num,Math.min(105,ht*.43),color,true);
+        if(num.endsWith("%")){const v={n:0};tl.fromTo(v,{n:0},{n:parseInt(num,10),duration:.8,ease:"power3.out",onUpdate:()=>{top.textContent=Math.round(v.n)+"%"}},t)}
+        label(a,10,ht*.6,w-20,ht*.28,sub,44,TEXT,true);
+        return a;
+      }
+      function bar(h,x,y,w,name,percent,color,t){
+        const lw=w<600?125:200, tw=w-lw-110;
+        const lab=label(h,x,y,lw,74,name,45,TEXT);on(lab,t);
+        const track=n(h,x+lw,y+8,tw,60,"","background:#26354D;border-radius:15px",true);
+        const f=n(track,0,0,tw,60,"","background:"+color+";border-radius:15px;transform-origin:left center",true);
+        tl.fromTo(f,{scaleX:0},{scaleX:percent,duration:.65,ease:"power3.out",immediateRender:false},t);
+        const val=label(h,x+w-100,y,100,74,Math.round(percent*100)+"%",44,color);on(val,t);
+        return {fill:f,track,lab,val};
+      }
+      function dotField(h,x,y,cols,rows,d,gap,red=0,visible=true){
+        const a=[],bad=[]; for(let i=0;i<cols*rows;i++){const e=n(h,x+(i%cols)*(d+gap),y+Math.floor(i/cols)*(d+gap),d,d,"","background:"+(i<red?HOT:"#4B5A72")+";border-radius:50%",visible);a.push(e);if(i<red)bad.push(e)}return {all:a,bad};
+      }
+      function svg(h,x,y,w,ht){const e=document.createElementNS("http://www.w3.org/2000/svg","svg");e.setAttribute("viewBox","0 0 "+w+" "+ht);e.classList.add("plot");e.style.cssText="left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px";h.appendChild(e);return e}
+      function path(s,d,color=ACC,sw=9){const e=document.createElementNS("http://www.w3.org/2000/svg","path");e.setAttribute("d",d);e.setAttribute("fill","none");e.setAttribute("stroke",color);e.setAttribute("stroke-width",sw);e.setAttribute("stroke-linecap","round");e.setAttribute("stroke-linejoin","round");s.appendChild(e);return e}
+      function draw(e,t){e.setAttribute("pathLength","1000");e.style.strokeDasharray="1000";tl.fromTo(e,{strokeDashoffset:1000},{strokeDashoffset:0,duration:.65,ease:"power2.out",immediateRender:false},t)}
+      function tile(h,x,y,w,ht,txt,color,t){const e=panel(h,x,y,w,ht,txt,50,color);on(e,t);return e}
+
+      // diagram: A — big teacher and compact student, visible at frame zero.
+      const A=sc.A; heading(A,"SMALL MODEL · BIG BRAIN");
+      panel(A,80,360,440,610,"",48,TEXT,true);panel(A,560,465,380,505,"",48,TEXT,true);
+      dotField(A,132,432,11,10,22,10,0,true);dotField(A,616,540,11,6,22,7,0,true);
+      label(A,112,775,370,85,"BERT",72,ACC,true);label(A,572,780,350,90,"DistilBERT",58,CYAN,true);
+      on(label(A,100,900,400,64,"TEACHER",46,ACC),W("A","teacher"));
+      on(label(A,560,900,370,64,"STUDENT",46,CYAN),W("A","student"));
+      stat(A,70,1040,300,190,"40%","chhota",GOOD,W("A","40"));
+      stat(A,390,1040,300,190,"60%","fast",CYAN,W("A","60"));
+      stat(A,710,1040,300,190,"97%","samajh",ACC,W("A","97"));
+      // diagram: B — one dot means a million parameters.
+      const B=sc.B;heading(B,"KITNE PARAMETERS?");
+      panel(B,70,305,940,370,"",44,TEXT,true);panel(B,70,715,940,370,"",44,TEXT,true);
+      dotField(B,130,362,11,10,22,8,0,true);dotField(B,130,772,11,6,22,8,0,true);
+      M.count(B,110,W("B","110"),{x:560,y:390,w:390,size:138,suffix:"M",color:ACC,dur:.7});
+      M.count(B,66,W("B","66"),{x:560,y:805,w:390,size:138,suffix:"M",color:CYAN,dur:.7});
+      label(B,570,555,370,70,"TEACHER",45,ACC,true);label(B,570,950,370,70,"STUDENT",45,CYAN,true);
+      on(panel(B,100,1125,880,125,"1 dot = 1M model numbers",52,TEXT),P("B",2));
+      // diagram: C — ordinary training gives one answer.
+      const C=sc.C;heading(C,"ONE ANSWER ONLY");
+      const sentence=panel(C,65,335,950,415,"I drink ____",98,TEXT,true);
+      label(sentence,40,275,870,90,"every morning",62,MUTED,true);
+      const ans=panel(C,170,805,740,300,"tea ✓",150,GOOD);on(ans,W("C","tea"));
+      on(label(C,185,1160,710,85,"sirf ek answer",58,MUTED),P("C",4));
+      // diagram: D — teacher's full answer sheet, each row on its spoken item.
+      const D=sc.D;heading(D,"TEACHER KI ANSWER SHEET");
+      panel(D,75,305,930,920,"",44,TEXT,true);
+      bar(D,125,420,820,"tea",.60,GOOD,W("D","tea"));
+      bar(D,125,600,820,"coffee",.30,ACC,W("D","Coffee"));
+      bar(D,125,780,820,"water",.09,CYAN,W("D","Water"));
+      bar(D,125,960,820,"petrol",.002,HOT,W("D","Petrol"));
+      // diagram: E — complete pattern beats a single winner.
+      const E=sc.E;heading(E,"EK ANSWER vs FULL PATTERN");
+      panel(E,65,315,440,565,"",46,TEXT,true);panel(E,525,315,490,565,"",46,TEXT,true);
+      label(E,85,340,400,72,"SIRF TEA",52,MUTED,true);
+      label(E,545,340,450,72,"TEACHER",52,ACC,true);
+      on(label(E,90,445,145,70,"tea",48,GOOD),P("E",0));
+      const onlyTrack=n(E,245,453,205,54,"","background:#26354D;border-radius:12px",true);
+      const onlyFill=n(onlyTrack,0,0,205,54,"","background:"+GOOD+";border-radius:12px;transform-origin:left center",true);
+      tl.fromTo(onlyFill,{scaleX:0},{scaleX:1,duration:.65,ease:"power3.out",immediateRender:false},P("E",0));
+      on(label(E,120,555,330,75,"100%",74,GOOD),P("E",0));
+      on(label(E,90,720,390,75,"baaki? pata nahi",46,MUTED),P("E",2));
+      function teacherRow(y,name,v,color,pct,mark,t){
+        on(label(E,565,y,350,52,name+(mark?"  "+mark:""),44,color),t);
+        const track=n(E,565,y+55,350,42,"","background:#26354D;border-radius:10px",true);
+        const fill=n(track,0,0,350,42,"","background:"+color+";border-radius:10px;transform-origin:left center",true);
+        tl.fromTo(fill,{scaleX:0},{scaleX:v,duration:.65,ease:"power3.out",immediateRender:false},t);
+        on(label(E,925,y+51,80,52,pct,44,color),t);
+      }
+      teacherRow(420,"tea",.60,GOOD,"60%","✓ best",P("E",1));
+      teacherRow(530,"coffee",.30,ACC,"30%","~ okay",W("E","coffee"));
+      teacherRow(640,"water",.09,CYAN,"9%","",P("E",3));
+      teacherRow(750,"petrol",.002,HOT,"~0%","✕ no",W("E","petrol"));
+      on(label(E,360,890,360,58,"student copies ↓",48,CYAN),P("E",6));
+      panel(E,65,960,950,330,"",44,TEXT,true);
+      label(E,100,965,880,58,"STUDENT",50,CYAN,true);
+      function patternRow(host,x,y,w,name,v,color,pct,t){
+        on(label(host,x,y,150,62,name,44,TEXT),t);
+        const track=n(host,x+160,y+9,w-245,44,"","background:#26354D;border-radius:10px",true);
+        const fill=n(track,0,0,w-245,44,"","background:"+color+";border-radius:10px;transform-origin:left center",true);
+        tl.fromTo(fill,{scaleX:0},{scaleX:v,duration:.65,ease:"power3.out",immediateRender:false},t);
+        on(label(host,x+w-82,y,82,62,pct,44,color),t);
+      }
+      function studentRow(y,name,v,color,pct){patternRow(E,105,y,870,name,v,color,pct,P("E",7))}
+      studentRow(1025,"tea",.60,GOOD,"60%");studentRow(1088,"coffee",.30,ACC,"30%");
+      studentRow(1151,"water",.09,CYAN,"9%");studentRow(1214,"petrol",.002,HOT,"~0%");
+      // diagram: F — transfer probability shape, then carry student on phone.
+      const F=sc.F;heading(F,"KNOWLEDGE DISTILLATION");
+      const ft=panel(F,80,355,390,210,"BERT\nTEACHER",67,ACC);on(ft,P("F",0));
+      on(label(F,465,405,95,110,"→",90,ACC),P("F",1));
+      const fp=panel(F,560,300,440,330,"",55,CYAN);on(fp,P("F",1));
+      label(fp,30,12,380,62,"chances",56,CYAN,true);
+      [[.60,GOOD,"60"],[.30,ACC,"30"],[.09,CYAN,"9"],[.002,HOT,"~0"]].forEach((a,i)=>{
+        const y=82+i*60;label(fp,20,y,85,55,a[2],48,a[1],true);
+        const track=n(fp,115,y+8,290,40,"","background:#26354D;border-radius:9px",true);
+        const fill=n(track,0,0,290,40,"","background:"+a[1]+";border-radius:9px;transform-origin:left center",true);
+        tl.fromTo(fill,{scaleX:0},{scaleX:a[0],duration:.6,ease:"power3.out",immediateRender:false},P("F",1));
+      });
+      const fs=panel(F,80,820,390,230,"DistilBERT\nSTUDENT",59,GOOD);on(fs,P("F",3));
+      on(label(F,465,865,120,105,"→",92,ACC),P("F",3));
+      const phone=panel(F,605,635,380,690,"",44,TEXT);phone.style.borderRadius="48px";phone.style.borderWidth="8px";on(phone,W("F","phone"));
+      panel(phone,35,215,310,185,"DistilBERT\n66M",65,GOOD,true);
+      label(phone,40,470,300,95,"phone app",53,ACC,true);
+      on(label(F,85,1130,430,90,"small + fast",62,GOOD),P("F",5));
+      // diagram: G — a teacher mistake propagates.
+      const G=sc.G;heading(G,"TEACHER GALAT HO TOH?");
+      panel(G,70,325,440,680,"",44,TEXT,true);panel(G,570,325,440,680,"",44,TEXT,true);
+      label(G,100,350,380,75,"TEACHER",49,ACC,true);label(G,600,350,380,75,"STUDENT",49,CYAN,true);
+      bar(G,110,505,360,"tea",.22,GOOD,P("G",1));bar(G,110,650,360,"petrol",.78,HOT,P("G",1));
+      bar(G,610,505,360,"tea",.22,GOOD,P("G",2));bar(G,610,650,360,"petrol",.78,HOT,P("G",2));
+      on(label(G,470,730,140,135,"→",120,HOT),P("G",2));
+      on(panel(G,175,1060,730,140,"?  COMMENT MEIN BATAO",55,ACC),P("G",3));
+
+      for(const k of ["B","C","D","E","F","G"]) M.wipe(S[k]);
+      M.finish({kw:{bert:"gold",teacher:"gold",student:"cyan",tea:"good",coffee:"gold",petrol:"hot",distillation:"gold",phone:"cyan"}});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

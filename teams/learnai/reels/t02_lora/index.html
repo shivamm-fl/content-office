@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>LoRA: The Times-Table Trick</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+
+      .v{position:absolute;box-sizing:border-box;font-family:var(--lat);font-weight:700;line-height:1.12;color:#E8EDF6}
+      .panel{background:#111C2F;border:2px solid #34435D;border-radius:28px}
+      .soft{background:#17243A;border:2px solid #34435D;border-radius:22px}
+      .gold{color:#F2B544}.green{color:#4CC38A}.red{color:#E8596B}.cyan{color:#5BC0EB}
+      .mono{font-family:var(--code)}
+      .center{display:flex;align-items:center;justify-content:center;text-align:center}
+      .dot{position:absolute;border-radius:50%;background:#4B5A72}
+      .plot{position:absolute;overflow:visible}
+      #tag,#handle{font-size:44px;letter-spacing:0}
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="109" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="109" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="109" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="109" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const ORDER = ["A","B","C","D","E","F","G"];
+      const M = Mo.init({ order: ORDER, tag: "AI SAMJHO" });
+      Viz.install(M);
+      const {tl,S,P,Ed,W,ACC,GOOD,HOT,CYAN,TEXT,MUTED}=M;
+      const sc={}; for(const k of ORDER) sc[k]=M.$("#s"+k);
+      // All entrances and changes use the recorded phrase or word timing.
+      function n(h,x,y,w,ht,txt,sty="",visible=false){
+        const e=M.mk("v",h,txt); e.style.cssText+=";left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px;"+sty+(visible?";opacity:1":";opacity:0"); return e;
+      }
+      function on(e,t){tl.fromTo(e,{opacity:0,y:22},{opacity:1,y:0,duration:.42,ease:"power3.out",immediateRender:false},t);return e}
+      function off(e,t){tl.to(e,{opacity:0,y:-18,duration:.28,ease:"power2.in",immediateRender:false},t)}
+      function panel(h,x,y,w,ht,txt,sz=55,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"background:#111C2F;border:2px solid #34435D;border-radius:26px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:pre-line;padding:20px;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function label(h,x,y,w,ht,txt,sz=48,color=TEXT,visible=false){
+        return n(h,x,y,w,ht,txt,"display:flex;align-items:center;justify-content:center;text-align:center;font-size:"+sz+"px;color:"+color,visible);
+      }
+      function heading(h,txt){return label(h,70,174,940,100,txt,62,ACC,true)}
+      function line(h,x,y,w,ht,color,visible=false){return n(h,x,y,w,ht,"","background:"+color+";border-radius:99px",visible)}
+      function stat(h,x,y,w,ht,num,sub,color,t){
+        const a=panel(h,x,y,w,ht,"",44,color); on(a,t);
+        label(a,10,10,w-20,ht*.58,num,Math.min(105,ht*.43),color,true);
+        label(a,10,ht*.6,w-20,ht*.28,sub,44,TEXT,true);
+        return a;
+      }
+      function bar(h,x,y,w,name,percent,color,t){
+        const lw=w<600?125:200, tw=w-lw-110;
+        const lab=label(h,x,y,lw,74,name,45,TEXT);on(lab,t);
+        const track=n(h,x+lw,y+8,tw,60,"","background:#26354D;border-radius:15px",true);
+        const f=n(track,0,0,tw,60,"","background:"+color+";border-radius:15px;transform-origin:left center",true);
+        tl.fromTo(f,{scaleX:0},{scaleX:percent,duration:.65,ease:"power3.out",immediateRender:false},t);
+        const val=label(h,x+w-100,y,100,74,Math.round(percent*100)+"%",44,color);on(val,t);
+        return {fill:f,track,lab,val};
+      }
+      function dotField(h,x,y,cols,rows,d,gap,red=0,visible=true){
+        const a=[],bad=[]; for(let i=0;i<cols*rows;i++){const e=n(h,x+(i%cols)*(d+gap),y+Math.floor(i/cols)*(d+gap),d,d,"","background:"+(i<red?HOT:"#4B5A72")+";border-radius:50%",visible);a.push(e);if(i<red)bad.push(e)}return {all:a,bad};
+      }
+      function svg(h,x,y,w,ht){const e=document.createElementNS("http://www.w3.org/2000/svg","svg");e.setAttribute("viewBox","0 0 "+w+" "+ht);e.classList.add("plot");e.style.cssText="left:"+x+"px;top:"+y+"px;width:"+w+"px;height:"+ht+"px";h.appendChild(e);return e}
+      function path(s,d,color=ACC,sw=9){const e=document.createElementNS("http://www.w3.org/2000/svg","path");e.setAttribute("d",d);e.setAttribute("fill","none");e.setAttribute("stroke",color);e.setAttribute("stroke-width",sw);e.setAttribute("stroke-linecap","round");e.setAttribute("stroke-linejoin","round");s.appendChild(e);return e}
+      function draw(e,t){e.setAttribute("pathLength","1000");e.style.strokeDasharray="1000";tl.fromTo(e,{strokeDashoffset:1000},{strokeDashoffset:0,duration:.65,ease:"power2.out",immediateRender:false},t)}
+      function tile(h,x,y,w,ht,txt,color,t){const e=panel(h,x,y,w,ht,txt,50,color);on(e,t);return e}
+
+      // diagram: A — the enormous base and three answers.
+      const A=sc.A;heading(A,"KITNE NUMBERS BADLENGE?");
+      label(A,80,275,920,280,"175B",235,ACC,true);
+      label(A,170,560,740,75,"GPT-3 PARAMETERS",52,MUTED,true);
+      const all=panel(A,75,660,930,160,"SAARE ✗",78,HOT);on(all,W("A","saare"));
+      const half=panel(A,75,835,930,160,"AADHE ✗",78,HOT);on(half,W("A","aadhe"));
+      const tiny=panel(A,75,1010,930,170,"10,000x KAM ✓",76,GOOD);on(tiny,W("A","10"));
+      on(line(all,115,78,700,9,HOT),W("A","nahi"));
+      on(line(half,115,78,700,9,HOT),W("A","nahi",1));
+      on(panel(A,250,1200,580,105,"1–10  ×  1–10",64,ACC),W("A","पहाड़े"));
+      // diagram: B — copies of 175B are costly.
+      const B=sc.B;heading(B,"HAR TASK = NAYI COPY?");
+      const base=panel(B,100,325,880,310,"GPT-3 · 175B",110,ACC,true);
+      on(panel(B,105,690,590,180,"Support bot · 175B",58,CYAN),W("B","Support"));
+      on(panel(B,105,910,590,180,"Legal bot · 175B",58,CYAN),W("B","legal"));
+      label(B,750,745,230,70,"COST",48,HOT,true);
+      const meter=n(B,765,825,165,350,"","background:#26354D;border-radius:20px",true);
+      const rise=n(meter,0,0,165,350,"","background:"+HOT+";border-radius:20px;transform-origin:bottom center",true);
+      tl.fromTo(rise,{scaleY:.08},{scaleY:1,duration:.85,ease:"power3.out",immediateRender:false},W("B","mahnga"));
+      // diagram: C — twenty input numbers generate one hundred products.
+      const C=sc.C;heading(C,"20 INPUTS → 100 PRODUCTS");
+      const cells=[],topNumbers=[],sideNumbers=[],inside=[];
+      for(let r=0;r<11;r++)for(let c=0;c<11;c++){
+        const edge=r===0||c===0;
+        const v=r===0?(c===0?"×":c):c===0?r:r*c;
+        const q=n(C,78+c*84,282+r*84,78,78,"",
+          "background:#17243A;border:2px solid #34435D;border-radius:10px",true);
+        cells.push(q);
+        if(r===0&&c===0)label(q,0,0,78,78,"×",54,ACC,true);
+        else {const number=label(q,0,0,78,78,String(v),44,edge?ACC:TEXT,false);
+          if(r===0)topNumbers.push({q,number});else if(c===0)sideNumbers.push({q,number});else inside.push(number);}
+      }
+      const hundred=on(label(C,300,1213,480,90,"100 numbers",68,ACC),W("C","100"));
+      topNumbers.forEach(({q,number})=>{tl.to(q,{backgroundColor:"#5B461F",borderColor:ACC,duration:.3,immediateRender:false},W("C","lists"));on(number,W("C","lists"))});
+      sideNumbers.forEach(({q,number})=>{tl.to(q,{backgroundColor:"#5B461F",borderColor:ACC,duration:.3,immediateRender:false},W("C","lists"));on(number,W("C","lists"))});
+      tl.fromTo(inside,{opacity:0},{opacity:1,duration:.2,stagger:.023,immediateRender:false},W("C","multiply"));
+      off(hundred,W("C","20"));
+      on(panel(C,235,1208,610,100,"20 → 100",78,GOOD),W("C","20"));
+      // diagram: D — frozen W and a low-rank correction.
+      const D=sc.D;heading(D,"FREEZE W · TRAIN ΔW");
+      const Wbox=panel(D,70,310,520,520,"W\n1000 × 1000\n= 10 LAKH",70,ACC,true);
+      tl.to(Wbox,{backgroundColor:"#273140",borderColor:MUTED,color:MUTED,y:-70,duration:.45,immediateRender:false},W("D","freeze"));
+      on(label(D,240,580,180,110,"🔒",90,TEXT),W("D","freeze"));
+      on(label(D,590,445,100,120,"+",110,GOOD),W("D","correction"));
+      const delta=panel(D,700,365,300,300,"ΔW",100,GOOD);on(delta,W("D","correction"));
+      const tall=panel(D,115,790,70,500,"",57,CYAN);on(tall,W("D","patli"));
+      on(label(D,195,1195,225,85,"1000 × 8",52,CYAN),W("D","1000",2));
+      on(label(D,300,990,100,110,"×",105,ACC),W("D","multiply"));
+      const wide=panel(D,440,1045,520,70,"",57,CYAN);on(wide,W("D","aur"));
+      on(label(D,500,1140,400,85,"8 × 1000",52,CYAN),W("D","aur"));
+      on(label(D,680,845,300,90,"= ΔW",72,GOOD),W("D","multiply"));
+      // diagram: E — 16,000 is a narrow 1.6% of a million.
+      const E=sc.E;heading(E,"TRAINABLE NUMBERS");
+      panel(E,85,305,910,135,"8,000 + 8,000",78,CYAN,true);
+      on(label(E,135,440,810,110,"= 16,000",120,GOOD),W("E","16"));
+      const area=panel(E,190,555,700,700,"",44,TEXT,true);
+      label(area,45,35,610,80,"10 LAKH TOTAL",56,MUTED,true);
+      const sliver=n(area,25,125,12,540,"","background:"+ACC+";border-radius:6px",true);
+      tl.fromTo(sliver,{scaleY:0,transformOrigin:"top center"},{scaleY:1,duration:.55,immediateRender:false},P("E",3));
+      on(label(area,80,305,540,130,"1.6%",124,ACC),P("E",3));
+      on(panel(E,260,1145,560,85,"rank 8 = motai",52,ACC),W("E","rank"));
+      // diagram: F — benefits, and tiny files plugged into one base.
+      const F=sc.F;heading(F,"EK BASE · CHHOTI FILES");
+      on(panel(F,75,305,930,150,"10,000x · kam numbers",65,GOOD),P("F",0));
+      on(panel(F,75,475,930,150,"3x · kam GPU",65,CYAN),P("F",1));
+      on(panel(F,75,645,930,150,"= full quality",65,ACC),P("F",2));
+      panel(F,115,835,850,190,"GPT-3 · ONE BASE",78,ACC,true);
+      const support=panel(F,65,1100,290,125,"Support +Δ",56,GOOD);
+      const legal=panel(F,395,1100,290,125,"Legal +Δ",56,CYAN);
+      const hindi=panel(F,725,1100,290,125,"Hindi +Δ",56,ACC);
+      [support,legal,hindi].forEach(file=>on(file,P("F",3)));
+      [support,legal,hindi].forEach((file,i)=>{
+        const plug=line(F,210+i*330,1010,9,95,i===0?GOOD:i===1?CYAN:ACC);
+        const t=P("F",3)+.55+i*.9;
+        on(plug,t);
+        tl.to(file,{y:-80,duration:.36,ease:"power3.out",immediateRender:false},t);
+        tl.to(file,{y:0,duration:.36,ease:"power3.inOut",immediateRender:false},t+.48);
+        off(plug,t+.65);
+      });
+      on(label(F,290,1240,500,65,"swap tiny files",48,GOOD),P("F",4));
+      // diagram: G — rank-one count quiz.
+      const G=sc.G;heading(G,"RANK 1 QUIZ");
+      const q1=panel(G,145,355,300,580,"1000 × 1",62,CYAN,true);
+      const q2=panel(G,565,570,380,160,"1 × 1000",62,CYAN,true);
+      on(label(G,445,625,120,90,"×",90,ACC),P("G",2));
+      on(panel(G,185,1010,710,160,"? NUMBERS",100,ACC),P("G",3));
+      on(panel(G,285,1200,510,90,"COMMENT",53,GOOD),P("G",4));
+
+      for(const k of ["B","C","D","E","F","G"]) M.wipe(S[k]);
+      M.finish({kw:{lora:"gold",parameters:"cyan",freeze:"hot",rank:"gold",correction:"good",gpu:"cyan",quality:"good",comment:"gold"}});
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

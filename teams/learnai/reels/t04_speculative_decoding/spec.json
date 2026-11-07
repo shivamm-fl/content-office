@@ -1,0 +1,118 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 0.9,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.5,
+  "B": 2.5,
+  "C": 2.5,
+  "D": 2.5,
+  "E": 2.5,
+  "F": 2.5,
+  "G": 2.5
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "A",
+   3,
+   0
+  ],
+  [
+   "rise",
+   "A",
+   4,
+   0
+  ],
+  [
+   "tick",
+   "B",
+   4,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   0,
+   -0.1
+  ],
+  [
+   "rise",
+   "D",
+   4,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   5,
+   0
+  ],
+  [
+   "pop",
+   "F",
+   3,
+   0
+  ],
+  [
+   "pop",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://research.google/blog/looking-back-at-speculative-decoding/"
+ ],
+ "hook_type": "direct_question",
+ "template": "better_best_rehook",
+ "copy": {
+  "hi": {
+   "A": "@hook AI का जवाब तेज़ कैसे करोगे? || Better way: छोटा model use करो। | Fast है, पर उतना समझदार नहीं। || Best way: छोटा और बड़ा, दोनों साथ। | Speed 2{दो} से 3{तीन} गुना, | और output बिल्कुल बड़े model जैसा। | Google Search के AI Overviews में यही trick लगी है।",
+   "B": "पहले समझो AI slow क्यों है। | AI जवाब एक-एक token लिखता है, | token यानी word का टुकड़ा। | हर token के लिए बड़े model को | अपने सारे weights memory से पढ़ने पड़ते हैं। | Weights यानी model के अंदर के अरबों numbers। || सौ tokens, यानी सौ बार पूरा model पढ़ना।",
+   "C": "Best way में एक छोटा model | आगे के कुछ tokens फटाफट guess करता है। | फिर बड़ा model उन सब guesses को | एक साथ check करता है, | एक ही बार में। || इसे speculative decoding कहते हैं, | यानी अंदाज़े से आगे लिखना।",
+   "D": "पर रुको। | Check करना भी तो काम है। | तो time बचा कहाँ से? || यहीं असली राज़ है। | आज की chips, memory से एक byte पढ़ने के time में | सैकड़ों calculations कर लेती हैं। | बड़े model का time ज़्यादातर weights पढ़ने में जाता है। || तो weights एक बार पढ़ लिए, | फिर एक token check करो या पाँच, | खर्चा लगभग वही।",
+   "E": "Example देखो। | सवाल: What is the square root of 7{seven}? | जवाब शुरू होता है: The square root of 7{seven}। | ये हिस्सा आसान है, words सवाल में ही थे। | छोटा model इसे guess करता है, | बड़ा model check करता है: सही, सही, सही। || जहाँ छोटा model गलत निकला, | वहाँ से उसके guesses फेंक दिए जाते हैं, | और बड़ा model अपना token लिख देता है।",
+   "F": "Google के paper में, | 11{eleven} billion parameters वाले T5 model ने, | 60{sixty} million वाले छोटे T5 से guess करवाकर, | लगभग 3{तीन} गुना speed पाई।",
+   "G": "अब सोचो: | अगर छोटा model हर guess गलत करे, | तो speed क्या होगी? | Slow, या normal जितनी? | Comment करो।"
+  }
+ }
+}

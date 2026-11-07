@@ -1,0 +1,118 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 0.9,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.5,
+  "B": 2.5,
+  "C": 2.5,
+  "D": 2.5,
+  "E": 2.5,
+  "F": 2.5,
+  "G": 2.5
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   2,
+   0
+  ],
+  [
+   "click",
+   "B",
+   3,
+   0
+  ],
+  [
+   "tick",
+   "B",
+   5,
+   0
+  ],
+  [
+   "dip",
+   "B",
+   7,
+   -0.1
+  ],
+  [
+   "rise",
+   "C",
+   3,
+   0
+  ],
+  [
+   "click",
+   "D",
+   2,
+   0
+  ],
+  [
+   "click",
+   "D",
+   5,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   3,
+   0
+  ],
+  [
+   "ok",
+   "F",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "G",
+   2,
+   0
+  ]
+ ],
+ "sources": [
+  "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "common_belief_contradict",
+ "copy": {
+  "hi": {
+   "A": "@hook सब मानते हैं: | 99{ninety-nine} percent accuracy, मतलब शानदार model। || चलो एक model बनाते हैं जो कुछ भी नहीं करता, | और फिर भी 99{ninety-nine} percent लाता है।",
+   "B": "एक bank के पास 1000{thousand} UPI payments आए। | इनमें 10{ten} fraud हैं, | बाकी सब सही। || हमारा model हर payment पर बोलता है: safe। | 990{nine-hundred-ninety} safe payments पर वो सही निकला। | Accuracy: 990{nine-hundred-ninety} divided by 1000{thousand}, | यानी 99{ninety-nine} percent। || और fraud कितने पकड़े? | Zero।",
+   "C": "Accuracy बस ये गिनती है कि कितने जवाब सही थे। | जब कोई चीज़ बहुत rare हो, | जैसे यहाँ fraud, सिर्फ़ 1{one} percent, | तो हमेशा no बोलने वाला model भी topper बन जाता है। || इसलिए ऐसे काम में दो और सवाल पूछे जाते हैं।",
+   "D": "पहला: | जितने fraud थे, उनमें से कितने पकड़े? | इसे recall कहते हैं। || दूसरा: | जितनों पर alarm बजाया, | उनमें से कितने सच में fraud थे? | इसे precision कहते हैं।",
+   "E": "अब दूसरा model लो। | ये 20{twenty} payments पर alarm बजाता है, | और उनमें से 8{आठ} fraud निकलते हैं। || Recall: 10{दस} में से 8{आठ}, यानी 80{eighty} percent। | Precision: 20{बीस} में से 8{आठ}, यानी 40{forty} percent। | और accuracy? | 986{nine-hundred-eighty-six} payments सही, | यानी 98.6{ninety-eight-point-six} percent।",
+   "F": "Accuracy में ये पहले model से पीछे है, | पर दस में से आठ fraud यही पकड़ता है। || और ध्यान दो: | alarm ज़्यादा बजाओगे तो recall बढ़ेगा, | पर सही payments भी ज़्यादा रुकेंगी, | यानी precision गिरेगा। | Balance इससे तय होता है कि ज़्यादा महँगा क्या है: | fraud छूटना, या customer का परेशान होना।",
+   "G": "तुम bank हो। | कौनसा model लोगे: | 99{ninety-nine} percent वाला, | या 98.6{ninety-eight-point-six} percent वाला? | Comment में बताओ, और क्यों।"
+  }
+ }
+}
