@@ -1,0 +1,7 @@
+Day 18/150: Server mar gaya, phir bhi request kyun jaati hai?
+
+Load balancer har server ko chhoti test request (health check) bhejta hai. Lagatar kuch failures ke baad wo server ko requests dena band kar deta hai, aur baaki servers kaam sambhal lete hain (failover). Mara server kitni der requests khaata hai, ye lagbhag interval times threshold hai: AWS defaults 30 s aur 2 failures, yaani lagbhag 60 s. Example ke numbers invented hain.
+
+Comment karke batao: check har 10 seconds par ho aur 3 failures chahiye, toh lagbhag kitni der?
+
+#SystemDesign #LoadBalancing #Backend

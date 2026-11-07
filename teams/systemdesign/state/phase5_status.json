@@ -328,5 +328,24 @@
   "youtube": "social/s017_layer4_vs_layer7.youtube.txt",
   "unit": "P2",
   "production_date_ist": "2026-11-06"
+ },
+ "s018": {
+  "status": "built",
+  "track": "series",
+  "folder": "reels/s018_health_checks_failover",
+  "mp4": "reels/s018_health_checks_failover_hi.mp4",
+  "duration_s": 126.5,
+  "cover": "brand/covers/s018_health_checks_failover.png",
+  "caption": "social/s018_health_checks_failover.hi.caption.txt",
+  "published": false,
+  "qa_passed": false,
+  "hook_formula": "surprising_fact: dead server keeps receiving requests for about interval x threshold (30 s x 2 = about 60 s, AWS defaults)",
+  "hook_source": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html",
+  "hook_type": "surprising_fact",
+  "format": "pattern",
+  "title": "Health checks aur failover: mara hua server request kyun leta rehta hai",
+  "youtube": "social/s018_health_checks_failover.youtube.txt",
+  "unit": "P2",
+  "production_date_ist": "2026-11-07"
  }
 }

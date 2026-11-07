@@ -10,39 +10,11 @@
       "one_idea": "A load balancer sends each server a small test request every few seconds (health check); after a set number of consecutive failures it stops routing to that server and the others take over (failover), and the interval times the threshold sets how long a dead server still receives requests.",
       "hook_type": "surprising_fact",
       "spoken_hook": "Server मर गया, फिर भी request वहीं जाती रही।",
-      "hook_formula": "surprising_fact: with default settings a dead server keeps receiving requests for about interval x threshold seconds (30 s x 2 checks = about 60 s, arithmetic from the AWS defaults), the viewer's own request is the one that fails",
       "hook_source": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html",
-      "hook_10s": "Server मर गया, फिर भी request वहीं जाती रही। Load balancer हर server से बार-बार पूछता है: ठीक हो? जवाब न आए, तो उसे बाहर कर देता है। इसे health check कहते हैं। [frame 0: four server boxes behind a balancer, one box greyed with a cross, request dots still flowing into it]",
-      "hook_candidates": [
-        {
-          "formula": "surprising_fact: dead server still gets requests",
-          "hook": "Server मर गया, फिर भी request वहीं जाती रही।"
-        },
-        {
-          "formula": "interviewer_asked: failure detection",
-          "hook": "Interviewer ने पूछा: load balancer को कैसे पता चलता है कि server मर गया?"
-        },
-        {
-          "formula": "relatable_stake: the failed order",
-          "hook": "Order डाला, spinner घूमा, error आया; बाकी servers तो ठीक थे।"
-        }
-      ],
-      "visual_idea": "One fixed frame: a balancer on the left and four server boxes on the right. Small request dots flow in a round and one box greys out with a cross while dots still pile into it; then a ping travels to each box and comes back, the silent box collects red ticks (1, 2) and a gate closes in front of it so the dots go only to the other three; at the end its ping returns, green ticks fill (1 to 5) and the gate opens. A two-ended bar shows detection time = interval x threshold, short bar vs long bar.",
-      "everyday_anchor": "A dhaba manager calls out 'ready?' to each cook before sending orders; a cook who does not answer twice gets no more order slips until he answers again.",
-      "example": "EXAMPLE: 4 servers behind one balancer, round robin, one dead and not yet detected: 1 of every 4 requests (25 percent) fails. EXAMPLE: check every 30 s with 2 failures needed means up to about 60 s of requests to the dead server; every 5 s with 2 failures means about 10 s but 6 times more check requests. All server counts and traffic are invented.",
       "sources": [
         "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html",
         "https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/",
         "https://en.wikipedia.org/wiki/Failover"
-      ],
-      "facts_to_verify": [
-        "AWS ALB (fetched 2026-11-07): the balancer sends a health check request to each target every HealthCheckIntervalSeconds (default 30 for instance/ip targets, range 5-300); UnhealthyThresholdCount default 2 (range 2-10) consecutive failures takes the target out of service; HealthyThresholdCount default 5 consecutive successes puts it back; timeout default 5 s; path default /; success code default 200; it routes only to healthy targets.",
-        "AWS ALB: if a target group has only unhealthy targets the balancer fails open and sends requests to all of them regardless of health. This is the catch beat.",
-        "NGINX: passive checks (max_fails default 1, fail_timeout default 10 s) mark a server unavailable after failures seen on live traffic; active checks are NGINX Plus only (interval default 5 s). Say 'for example NGINX and AWS defaults differ', do not call one right.",
-        "Wikipedia Failover: failover = switching to a redundant or standby system when the active one fails, automatic; heartbeat between two servers is one detection method. Switchover needs a human.",
-        "The 60 s and 10 s figures are our arithmetic from interval x threshold on AWS defaults; say 'about' and 'with default settings'. Actual detection also depends on timeout and where in the interval the failure happens.",
-        "Not sourced, keep out of the script: any claim that a short interval causes false positives at a named company, any cost figure, 'health check must hit the database'. False positive (a slow but alive server marked out) is stated as a typical risk of a tight threshold, not as a measured number.",
-        "No code on screen; if any is added, run it and show its real output."
       ],
       "length_target_s": 150,
       "cover_headline": "Health Checks and Failover",
@@ -55,8 +27,16 @@
       ],
       "status": "planned",
       "qa_passed": false,
+      "script_file": "state/scripts/s018.txt",
       "script_locked": false,
-      "script_file": "state/scripts/s018.txt"
+      "hook_formula": "surprising_fact: with default settings a dead server keeps receiving requests for about interval x threshold seconds (30 s x 2 = about 60 s, arithmetic from AWS defaults)",
+      "visual_idea": "One fixed frame: a balancer and four server boxes; a ping travels to each box, the silent box collects red ticks and a gate closes; later green ticks fill and the gate opens.",
+      "everyday_anchor": "A dhaba manager calls out 'ready?' to each cook before sending orders.",
+      "example": "EXAMPLE: 4 servers, one dead: 25 percent fail. 30 s x 2 = about 60 s; 5 s x 2 = about 10 s but 6x more checks. All numbers invented.",
+      "facts_to_verify": [
+        "AWS ALB defaults: interval 30 s, unhealthy 2, healthy 5; fail open",
+        "Wikipedia Failover definition"
+      ]
     }
   ]
 }

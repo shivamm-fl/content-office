@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Health checks aur failover</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="126.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+        <div class="beat" id="sL"></div>
+        <div class="beat" id="sM"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="126.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="126.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="126.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J","K","L","M"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 018 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J, K, L, MM] = SC.map((k) => M.$("#s" + k));
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${cx - w / 2}px;width:${w}px;top:${y}px;height:${h || 76}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 40}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const sv = (kind, size, col) => `<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${Viz.ICONS[kind](col)}</svg>`;
+      const ico = (host, kind, cx, cy, size, col, t) => show(el(host, `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`, sv(kind, size, col)), t, { opacity: 0, scale: 0.8, y: 0 });
+      const mv = (d, dx, dy, t, dur) => tl.to(d, { x: dx, y: dy, duration: dur || 0.7, ease: "power2.inOut", immediateRender: false }, t);
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M9 17L12 46M35 17l17 29"/></g>`;
+      Viz.ICONS.eyeoff = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4 32C14 16 50 16 60 32 50 48 14 48 4 32z"/><circle cx="32" cy="32" r="7"/><path d="M10 56L54 8" stroke-width="6"/></g>`;
+      Viz.ICONS.unlock = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="12" y="28" width="40" height="28" rx="6"/><path d="M0 28V20a12 12 0 0 1 24 0"/></g><circle cx="32" cy="42" r="4" fill="${c}"/>`;
+      Viz.ICONS.door = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M16 56V8h32v48M8 56h48"/></g><circle cx="40" cy="34" r="3.5" fill="${c}"/>`;
+            const S = M.S;
+      const XS = [55, 307, 559, 811], FX = [157, 409, 661, 913], LBY = 380, SY = 880, SW = 205, SH = 230, DEAD = 2;
+      const frame = (host, t, skip) => {
+        const lb = M.box(host, { x: 290, y: LBY, w: 500, h: 190, label: "BALANCER", icon: "balancer", color: ACC, size: 44 }); lb.show(t);
+        const s = [0, 1, 2, 3].map((i) => { const b = M.box(host, { x: XS[i], y: SY, w: SW, h: SH, label: "S" + (i + 1), icon: "server", color: CYAN, size: 40 }); b.show(t + 0.05 * i); return b; });
+        const arr = [0, 1, 2, 3].map((i) => { if (skip && skip.includes(i)) return null; const a = M.arrow(host, { from: [540, 576], to: [FX[i], 872], color: GREY, w: 5, dash: true }); a.show(t + 0.2, 0.3); return a; });
+        return { lb, s, arr };
+      };
+      const kill = (host, i, t) => { const c = show(el(host, `left:${XS[i]}px;top:${SY}px;width:${SW}px;height:${SH}px;border-radius:18px;background:rgba(14,18,30,.74)`), t, { opacity: 0, y: 0 }); const x = ico(host, "cross", FX[i], SY + SH / 2, 90, HOT, t); return [c, x]; };
+      const dot = (host, x0, y0, x1, y1, t, col, dur, o) => { o = o || {}; const d = el(host, `left:${x0 - 22}px;top:${y0 - 22}px;width:44px;height:44px;border-radius:50%;box-sizing:border-box;${o.hollow ? `border:6px solid ${col}` : `background:${col}`}`);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, t);
+        tl.to(d, { x: x1 - x0, y: y1 - y0, duration: dur, ease: "power1.inOut", immediateRender: false }, t);
+        if (!o.stay) tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      const toSrv = (host, i, t, col, o) => dot(host, 540, 570, FX[i], 850, t, col || ACC, 0.5, o);
+      const round = (host, t, dead) => [0, 1, 2, 3].forEach((i) => { const t0 = t + 0.1 * i; const p = dot(host, 540, 570, FX[i], 850, t0, CYAN, 0.5, { hollow: 1, stay: dead === i });
+        if (dead === i) gone(p, t0 + 1.0); else dot(host, FX[i], 850, 540, 570, t0 + 0.6, GOOD, 0.5, { hollow: 1 }); });
+      const tick = (host, cx, y, col, t, kind) => show(el(host, `left:${cx - 34}px;top:${y}px;width:68px;height:68px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center`, sv(kind, 38, col)), t, { opacity: 0, y: 8 });
+      const gate = (host, i, t) => { const g = el(host, `left:${XS[i]}px;top:834px;width:${SW}px;height:22px;border-radius:8px;background:repeating-linear-gradient(90deg,${HOT} 0 26px,#fff 26px 52px)`); tl.set(g, { opacity: 0, scaleX: 0 }, 0); tl.to(g, { opacity: 1, scaleX: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t); return g; };
+
+      // ===== A: hook. Requests keep landing on the dead server =====
+      // diagram: A
+      M.hook(["Server मर गया,", "फिर भी request वहीं"], { size: 92, top: 230 });
+      const fa = frame(A, 0.05);
+      kill(A, DEAD, 0.35);
+      [0, 1, 3].forEach((i, k) => toSrv(A, i, 0.15 + 0.2 * k));
+      [0.7, 1.15, 1.6].forEach((t, k) => { const d = dot(A, 540, 570, FX[DEAD] + (k - 1) * 70, 836, t, HOT, 0.45, { stay: 1 }); });
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: dhaba manager asks each cook, then the same thing as a balancer =====
+      // diagram: B
+      const bM = M.box(B, { x: 290, y: 300, w: 500, h: 190, label: "MANAGER", icon: "user", color: ACC, size: 44 }); bM.show(M.P("B", 0));
+      const CX3 = [215, 540, 865];
+      const bCook = [0, 1, 2].map((i) => { const b = M.box(B, { x: CX3[i] - 145, y: 820, w: 290, h: 220, label: "COOK", icon: "user", color: GREY, size: 44 }); b.show(M.P("B", 0) + 0.1 * i); return b; });
+      const dh = [];
+      CX3.forEach((cx, i) => { const c = chip(B, "ready?", cx, 560, 220, CYAN, at("B", "ready") + 0.1 * i, 40, 64); mv(c, 0, 190, at("B", "ready") + 0.1 * i, 0.55); gone(c, at("B", "ready") + 0.85); });
+      [0, 2].forEach((i) => dh.push(ico(B, "check", CX3[i], 1110, 80, GOOD, at("B", "ready") + 0.8)));
+      dh.push(chip(B, "...", CX3[1], 1076, 150, GREY, at("B", "ready") + 0.8, 44, 64));
+      [0, 1, 2].forEach((i) => { const s = ico(B, "doc", CX3[i], 700, 90, i === 1 ? HOT : ACC, at("B", "slip")); dh.push(s); });
+      dh.push(ico(B, "cross", CX3[1], 770, 80, HOT, at("B", "band")));
+      dh.push(bM, ...bCook);
+      const bFr = (() => { const f = frame(B, at("B", "Load")); return f; })();
+      dh.forEach((d) => { if (d.hide) d.hide(at("B", "Load") - 0.35); else gone(d, at("B", "Load") - 0.35); });
+      [0, 1, 2, 3].forEach((i) => toSrv(B, i, at("B", "baantta") + 0.2 * i));
+      M.fit(B);
+
+      // ===== C: the health check ping and its answer =====
+      // diagram: C
+      const fc = frame(C, M.P("C", 0));
+      stamp(C, "HEALTH CHECK", 540, 250, CYAN, at("C", "health"), 46, 480);
+      [0, 1, 2, 3].forEach((i) => { const p = toSrv(C, i, at("C", "request") + 0.12 * i, CYAN, { hollow: 1, stay: 1 }); gone(p, at("C", "Server") + 0.4); });
+      [0, 1, 2, 3].forEach((i) => { ico(C, "check", XS[i] + SW - 24, SY + 22, 52, GOOD, at("C", "theek") + 0.08 * i); dot(C, FX[i], 850, 540, 570, at("C", "jawab") + 0.1 * i, GOOD, 0.5, { hollow: 1 }); });
+      M.fit(C);
+
+      // ===== D: EXAMPLE, 4 servers, one dead, balancer does not know yet =====
+      // diagram: D
+      M.pill(D, "EXAMPLE", M.P("D", 0), { x: 380, y: 250, size: 44 });
+      frame(D, M.P("D", 0) + 0.1);
+      [0, 1, 2, 3].forEach((i) => toSrv(D, i, at("D", "baari-baari") + 0.3 * i));
+      kill(D, DEAD, at("D", "mar"));
+      ico(D, "eyeoff", 930, 470, 120, HOT, at("D", "pata"));
+      [0, 1, 2, 3].forEach((i) => { const ti = at("D", "har", 1) + 0.25 * i; if (i === DEAD) { const d = dot(D, 540, 570, FX[i], 836, ti, ACC, 0.5, { stay: 1 }); tl.to(d, { backgroundColor: HOT, duration: 0.2, immediateRender: false }, at("D", "fail")); } else toSrv(D, i, ti); });
+      tick(D, FX[DEAD], 1130, HOT, at("D", "fail"), "cross");
+      stamp(D, "25% FAIL", 540, 1230, HOT, at("D", "25"), 52, 420);
+      M.fit(D);
+
+      // ===== E: step 1, a ping to every server every 30 s =====
+      // diagram: E
+      frame(E, M.P("E", 0));
+      stamp(E, "STEP 1", 540, 250, ACC, M.P("E", 0), 46, 300);
+      round(E, at("E", "health"));
+      ico(E, "clock", 930, 470, 120, CYAN, at("E", "kuch"));
+      round(E, at("E", "30"));
+      chip(E, "AWS DEFAULT", 540, 1150, 440, GREY, at("E", "AWS"), 36, 76);
+      chip(E, "EVERY 30 s", 540, 1245, 440, CYAN, at("E", "30"), 44, 80);
+      M.fit(E);
+
+      // ===== F: step 2, two failures in a row =====
+      // diagram: F
+      frame(F, M.P("F", 0));
+      kill(F, DEAD, M.P("F", 0) + 0.2);
+      const fSt = stamp(F, "STEP 2", 540, 250, ACC, M.P("F", 0), 46, 300);
+      round(F, at("F", "jawab"), DEAD);
+      tick(F, 621, 1130, HOT, at("F", "failure"), "cross");
+      const fCl = ico(F, "cloud", 150, 470, 130, GREY, at("F", "network")); const fCh = chip(F, "GLITCH", 150, 560, 200, GREY, at("F", "network"), 34, 60);
+      gone(fCl, at("F", "sakta") - 0.2); gone(fCh, at("F", "sakta") - 0.2);
+      round(F, at("F", "lagatar"), DEAD);
+      tick(F, 701, 1130, HOT, at("F", "failures"), "cross");
+      stamp(F, "UNHEALTHY", 661, 1235, HOT, at("F", "unhealthy"), 44, 360);
+      M.fit(F);
+
+      // ===== G: step 3, the gate closes and the others take over =====
+      // diagram: G
+      const fg = frame(G, M.P("G", 0), [DEAD]);
+      M.arrow(G, { from: [540, 576], to: [FX[DEAD], 872], color: GREY, w: 5, dash: true }).show(M.P("G", 0) + 0.2, 0.3);
+      kill(G, DEAD, M.P("G", 0) + 0.2);
+      const gSt = stamp(G, "STEP 3", 540, 250, ACC, M.P("G", 0), 46, 300);
+      tick(G, 621, 1130, HOT, M.P("G", 0) + 0.2, "cross"); tick(G, 701, 1130, HOT, M.P("G", 0) + 0.25, "cross");
+      gate(G, DEAD, at("G", "band"));
+      [0, 1, 3].forEach((i) => { toSrv(G, i, at("G", "baaki") + 0.2 * i); toSrv(G, i, at("G", "ise") + 0.2 * i); toSrv(G, i, at("G", "apne") + 0.2 * i); fg.s[i].glow(at("G", "servers"), GOOD); });
+      gone(gSt, at("G", "ise") - 0.1);
+      stamp(G, "FAILOVER", 540, 250, GOOD, at("G", "failover"), 46, 400);
+      M.fit(G);
+
+      // ===== H: step 4, pings keep going, five good answers bring it back =====
+      // diagram: H
+      const fh = frame(H, M.P("H", 0), [DEAD]);
+      const hKill = kill(H, DEAD, M.P("H", 0) + 0.2);
+      const hGate = gate(H, DEAD, M.P("H", 0) + 0.3);
+      stamp(H, "STEP 4", 540, 250, ACC, M.P("H", 0), 46, 300);
+      const hp = dot(H, 540, 570, FX[DEAD], 850, at("H", "mare"), CYAN, 0.5, { hollow: 1, stay: 1 }); gone(hp, at("H", "mare") + 1.3);
+      const KT = at("H", "lagatar"), hTick = [];
+      for (let k = 0; k < 5; k++) { const t0 = KT + 0.1 + 0.42 * k; dot(H, 540, 570, FX[DEAD], 850, t0, CYAN, 0.35, { hollow: 1 }); dot(H, FX[DEAD], 850, 540, 570, t0 + 0.4, GOOD, 0.35, { hollow: 1 }); hTick.push(tick(H, FX[DEAD] + (k - 2) * 78, 1130, GOOD, t0 + 0.4, "check")); }
+      const hArr = M.arrow(H, { from: [540, 576], to: [FX[DEAD], 872], color: GOOD, w: 8 }); hArr.show(at("H", "vaapas"), 0.3);
+      gone(hGate, at("H", "vaapas")); goneAll(hKill, at("H", "vaapas"));
+      fh.s[DEAD].glow(at("H", "vaapas"), GOOD);
+      M.fit(H);
+
+      // ===== I: the answer, interval x threshold = how long requests still go to the dead server =====
+      // diagram: I
+      const eqBox = (txt, cx, w, col, t, size) => chip(I, txt, cx, 300, w, col, t, size || 56, 120);
+      eqBox("30 s", 190, 250, CYAN, at("I", "30"));
+      show(el(I, "left:290px;width:120px;top:322px;text-align:center;font:700 64px var(--code);color:#E8EDF6", "×"), at("I", "times", 1), { opacity: 0, y: 10 });
+      eqBox("2", 470, 150, CYAN, at("I", "2"));
+      show(el(I, "left:530px;width:120px;top:322px;text-align:center;font:700 64px var(--code);color:#E8EDF6", "="), at("I", "yaani"), { opacity: 0, y: 10 });
+      eqBox("≈ 60 s", 810, 330, HOT, at("I", "60"));
+      show(el(I, "left:65px;width:250px;top:440px;text-align:center;font:700 36px var(--code);color:#AEB9D0", "INTERVAL"), at("I", "interval"), { opacity: 0, y: 10 });
+      show(el(I, "left:320px;width:300px;top:440px;text-align:center;font:700 36px var(--code);color:#AEB9D0", "THRESHOLD"), at("I", "threshold"), { opacity: 0, y: 10 });
+      const iAx = (x, y, w, h, col) => el(I, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${col}`);
+      show(iAx(140, 905, 800, 6, GREY), M.P("I", 0) + 0.1, { opacity: 0, y: 0 });
+      ico(I, "server", 140, 760, 110, GREY, M.P("I", 0) + 0.2);
+      ico(I, "cross", 140, 760, 70, HOT, at("I", "marne"));
+      const iBar = iAx(140, 850, 800, 40, M.ca(HOT, 0.85)); tl.set(iBar, { opacity: 0, transformOrigin: "0 50%", scaleX: 0 }, 0);
+      tl.to(iBar, { opacity: 1, scaleX: 1, duration: 2.6, ease: "none", immediateRender: false }, at("I", "marne"));
+      for (let k = 0; k < 6; k++) show(el(I, `left:${190 + k * 140}px;top:790px;width:40px;height:40px;border-radius:50%;background:${ACC}`), at("I", "marne") + 0.3 + 0.4 * k, { opacity: 0, y: -10 });
+      [[540, "30 s", "30"], [940, "60 s", "2"]].forEach(([x, lab, w], i) => { show(iAx(x - 3, 840, 6, 120, CYAN), at("I", i ? "checks" : "30"), { opacity: 0, y: 0 });
+        show(el(I, `left:${x - 80}px;width:160px;top:975px;text-align:center;font:700 40px var(--code);color:#E8EDF6`, lab), at("I", i ? "checks" : "30"), { opacity: 0, y: 8 });
+        ico(I, "cross", x, 1060, 64, HOT, at("I", i ? "checks" : "30") + 0.2); });
+      show(el(I, "left:140px;width:800px;top:1130px;height:60px;border-radius:12px;border:4px solid " + HOT + ";border-top:none;box-sizing:border-box"), at("I", "lagbhag"), { opacity: 0, y: 0 });
+      M.fit(I);
+
+      // ===== J: shorter interval catches faster but costs more checks; low threshold can drop a live server =====
+      // diagram: J
+      const jLane = (title, y, ticks, barW, endLab, col, t) => {
+        show(el(J, `left:160px;width:340px;top:${y}px;text-align:center;font:700 44px var(--code);color:${col}`, title), t, { opacity: 0, y: 10 });
+        show(iAx2(180, y + 120, 800, 4, GREY), t, { opacity: 0, y: 0 });
+        ticks.forEach((tx, k) => show(iAx2(180 + tx - 2, y + 90, 4, 66, M.ca(CYAN, 0.9)), t + 0.08 + 0.05 * k, { opacity: 0, y: 0 }));
+        const bar = iAx2(180, y + 104, barW, 36, M.ca(HOT, 0.85)); tl.set(bar, { opacity: 0, transformOrigin: "0 50%", scaleX: 0 }, 0); tl.to(bar, { opacity: 1, scaleX: 1, duration: 0.7, ease: "power2.out", immediateRender: false }, t + 0.1);
+        show(el(J, `left:${180 + barW - 90}px;width:180px;top:${y + 165}px;text-align:center;font:700 40px var(--code);color:#E8EDF6`, endLab), t + 0.5, { opacity: 0, y: 8 }); };
+      const iAx2 = (x, y, w, h, col) => el(J, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${col}`);
+      jLane("EVERY 30 s", 290, [400, 800], 800, "60 s", GREY, M.P("J", 0));
+      jLane("EVERY 5 s", 640, Array.from({ length: 12 }, (_, k) => (k + 1) * 66.67), 133, "10 s", CYAN, at("J", "5"));
+      chip(J, "6× CHECKS", 800, 650, 340, CYAN, at("J", "6"), 44, 80);
+      const jSv = M.box(J, { x: 120, y: 1010, w: 330, h: 220, label: "SLOW SERVER", icon: "clock", color: CYAN, size: 34 }); jSv.show(at("J", "dheema") - 0.2);
+      ico(J, "cross", 540, 1120, 80, HOT, at("J", "bahar"));
+      stamp(J, "FALSE POSITIVE", 800, 1085, HOT, at("J", "false"), 38, 400);
+      M.fit(J);
+
+      // ===== K: catch, all servers unhealthy -> fail open =====
+      // diagram: K
+      const fk = frame(K, M.P("K", 0));
+      M.pill(K, "AWS", at("K", "AWS"), { x: 110, y: 258, size: 38, kind: "out" });
+      const kGates = [], kKill = [];
+      [0, 1, 2, 3].forEach((i) => { kKill.push(...kill(K, i, at("K", "saare") + 0.12 * i)); kGates.push(gate(K, i, at("K", "unhealthy") + 0.12 * i)); });
+      const kStamp = stamp(K, "FAIL OPEN", 540, 250, GOOD, at("K", "open"), 46, 400);
+      goneAll(kGates, at("K", "open")); goneAll(kKill, at("K", "open") + 0.1);
+      [0, 1, 2, 3].forEach((i) => { M.arrow(K, { from: [540, 576], to: [FX[i], 872], color: HOT, w: 6, dash: true }).show(at("K", "open") + 0.2, 0.3); toSrv(K, i, at("K", "sabko") + 0.2 * i); toSrv(K, i, at("K", "lagta") + 0.2 * i); });
+      M.fit(K);
+
+      // ===== L: the rule as a seesaw: more checks / less dead time, fewer checks / more dead time =====
+      // diagram: L
+      const lBeam = el(L, `left:140px;top:600px;width:800px;height:18px;border-radius:9px;background:${GREY};transform-origin:50% 50%`); show(lBeam, M.P("L", 0), { opacity: 0, y: 0 });
+      show(el(L, `left:480px;top:624px;width:0;height:0;border-left:60px solid transparent;border-right:60px solid transparent;border-bottom:200px solid #34415F`), M.P("L", 0), { opacity: 0, y: 0 });
+      show(el(L, `left:380px;top:824px;width:320px;height:20px;border-radius:10px;background:#34415F`), M.P("L", 0), { opacity: 0, y: 0 });
+      tl.to(lBeam, { rotation: -8, transformOrigin: "50% 50%", duration: 0.6, ease: "power2.inOut", immediateRender: false }, at("L", "jaldi"));
+      tl.to(lBeam, { rotation: 8, transformOrigin: "50% 50%", duration: 0.7, ease: "power2.inOut", immediateRender: false }, at("L", "checks", 1));
+      const gl = el(L, "left:90px;top:360px;width:220px;height:230px"), gr = el(L, "left:770px;top:360px;width:220px;height:230px");
+      show(gl, M.P("L", 0) + 0.1, { opacity: 0, y: 0 }); show(gr, M.P("L", 0) + 0.1, { opacity: 0, y: 0 });
+      el(gl, "left:0;width:220px;top:0;text-align:center;font:700 38px var(--code);color:#E8EDF6", "CHECKS");
+      el(gr, "left:0;width:220px;top:0;text-align:center;font:700 38px var(--code);color:#E8EDF6", "DEAD TIME");
+      const lDots = [0, 1, 2, 3, 4, 5].map((k) => el(gl, `left:${30 + (k % 3) * 64}px;top:${110 + Math.floor(k / 3) * 66}px;width:48px;height:48px;border-radius:50%;box-sizing:border-box;border:7px solid ${CYAN}`));
+      const lBlk = el(gr, `left:30px;top:70px;width:160px;height:160px;border-radius:10px;background:${M.ca(HOT, 0.85)};transform-origin:50% 100%`);
+      tl.set(lBlk, { scaleY: 0.22 }, 0);
+      tl.to(gl, { y: 56, duration: 0.6, ease: "power2.inOut", immediateRender: false }, at("L", "jaldi")); tl.to(gr, { y: -56, duration: 0.6, ease: "power2.inOut", immediateRender: false }, at("L", "jaldi"));
+      tl.to(gl, { y: -56, duration: 0.7, ease: "power2.inOut", immediateRender: false }, at("L", "checks", 1)); tl.to(gr, { y: 56, duration: 0.7, ease: "power2.inOut", immediateRender: false }, at("L", "checks", 1));
+      tl.to(lDots.slice(2), { opacity: 0, duration: 0.3, immediateRender: false }, at("L", "checks", 1)); tl.to(lBlk, { scaleY: 1, duration: 0.7, ease: "power2.inOut", immediateRender: false }, at("L", "checks", 1));
+      const lFast = stamp(L, "FAST CATCH", 540, 960, GOOD, at("L", "jaldi") + 0.2, 46, 460);
+      gone(lFast, at("L", "checks", 1) - 0.1);
+      stamp(L, "SLOW CATCH", 540, 960, HOT, at("L", "checks", 1) + 0.3, 46, 460);
+      M.fit(L);
+
+      // ===== M: comment + follow =====
+      // diagram: M
+      M.pill(MM, "EXAMPLE", M.P("M", 0), { x: 380, y: 200, size: 40 });
+      const mc = panel(MM, 90, 300, 900, 780, CYAN, "COMMENT"); show(mc, M.P("M", 0));
+      chip(MM, "EVERY 10 s", 340, 440, 360, ACC, at("M", "10"), 48, 100);
+      chip(MM, "3 FAILURES", 740, 440, 360, ACC, at("M", "3"), 48, 100);
+      stamp(MM, "DEAD FOR ?", 540, 640, HOT, at("M", "kitni"), 56, 560);
+      ico(MM, "server", 540, 880, 130, GREY, at("M", "mare")); ico(MM, "cross", 540, 880, 70, HOT, at("M", "mare") + 0.2);
+      show(el(MM, "left:130px;width:820px;top:960px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.5);font:500 34px var(--code);color:#AEB9D0;display:flex;align-items:center;padding:0 34px;box-sizing:border-box", "Add a comment..."), at("M", "comment"), { opacity: 0 });
+      const kf = M.pill(MM, "+  FOLLOW", at("M", "follow") - 0.4, { x: 340, y: 1150, size: 60, kind: "acc" });
+      tl.fromTo(kf, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("M", "follow"));
+      M.fit(MM);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { server: "hot", health: "cyan", check: "cyan", checks: "cyan", failure: "hot", failures: "hot", unhealthy: "hot", failover: "gold", interval: "gold", threshold: "gold", false: "hot", positive: "hot", fail: "hot", open: "gold", EXAMPLE: "gold", follow: "gold", comment: "cyan", step: "gold" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+
+    </script>
+  </body>
+</html>
