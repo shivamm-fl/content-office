@@ -1,0 +1,136 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   2,
+   -0.1
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "B",
+   3,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   4,
+   0
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   1,
+   0
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   3,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "F",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://www.anthropic.com/news/contextual-retrieval"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "better_best",
+ "copy": {
+  "hi": {
+   "A": "@hook सही chunk मिला, पर prompt तक पहुँचा ही नहीं। | Retriever ने उसे rank 17{seventeen} पर रखा, और prompt में जाते हैं सिर्फ़ top 5{five}। | गलत जवाब, और गलती model की नहीं थी।",
+   "B": "Better तरीका: top 5{five} की जगह top 20{twenty} भेज दो। | सही chunk अंदर आ जाएगा। | पर tokens 4{चार} गुना, bill 4{चार} गुना, | और 19{nineteen} बेकार chunks में सही वाला दब जाएगा।",
+   "C": "Best तरीका: reranker। | जैसे 50{fifty} resumes: पहले keywords से shortlist, फिर interview लेकर top 5{five}। | Retriever से 50{fifty} chunks लाओ, | reranker हर chunk को सवाल के साथ पढ़कर score दे, | और top 5{five} वही भेजो।",
+   "D": "Anthropic के contextual retrieval test में, | reranking जोड़ते ही सही chunk छूटने की दर 2.9{two-point-nine} percent से 1.9{one-point-nine} percent पर आ गई।",
+   "E": "दूसरा fix: hybrid search, यानी vectors के साथ keyword search भी। | पर उसके लिए नया keyword index बनाना पड़ता है। | Reranker बस एक extra step है, index छुए बिना कल ship। | तो पहले reranker।",
+   "F": "Interview line: | पहले reranker, क्योंकि index नहीं छूना पड़ता। | फिर hybrid search, ताकि सही chunk retriever की list में ही ऊपर आए।",
+   "G": "अब बताओ: | Reranker 50{fifty} की जगह 500{five-hundred} chunks पढ़े, | तो क्या बिगड़ेगा? | Comment करो।"
+  }
+ }
+}

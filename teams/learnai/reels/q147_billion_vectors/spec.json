@@ -1,0 +1,146 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "A",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "B",
+   2,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   1,
+   0
+  ],
+  [
+   "click",
+   "C",
+   3,
+   0
+  ],
+  [
+   "click",
+   "D",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   2,
+   0
+  ],
+  [
+   "ok",
+   "D",
+   3,
+   0
+  ],
+  [
+   "click",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "E",
+   3,
+   0
+  ],
+  [
+   "click",
+   "F",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "F",
+   3,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "H",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://github.com/facebookresearch/faiss/wiki/Faiss-indexes",
+  "https://papers.nips.cc/paper/2019/hash/09853c7fb1d3f8ee67a61b6bf4a7f8e6-Abstract.html"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "wont_work_unless",
+ "copy": {
+  "hi": {
+   "A": "@hook 1{one} billion vectors, 128{one-twenty-eight} GB RAM में कैसे fit करोगे? | और search फिर भी 100{hundred} milliseconds में चाहिए।",
+   "B": "हर vector में 768{seven-sixty-eight} numbers, हर number 4{four} bytes। | यानी 1{one} billion vectors, 3{three} TB। | RAM से 24{चौबीस} गुना ज़्यादा।",
+   "C": "ये fit नहीं होगा, | जब तक हर vector 3{three} KB से 64{sixty-four} bytes का न हो जाए। | इसे product quantization कहते हैं। | Paint की shade card सोचो: exact रंग नहीं, बस सबसे पास वाले shade का number।",
+   "D": "Vector को 64{sixty-four} टुकड़ों में काटो। | हर टुकड़े की जगह, 256{two-fifty-six} shades में से सबसे पास वाले का number, एक byte। | अब पूरा data 64{sixty-four} GB, | आराम से fit।",
+   "E": "अब speed। | Vectors को 65{पैंसठ} हज़ार groups में बाँटो, PIN code की तरह। इसे IVF कहते हैं। | Query सिर्फ़ पास के 32{thirty-two} groups में जाती है, | यानी 1{one} billion नहीं, करीब 5{पाँच} लाख vectors check।",
+   "F": "Shade number थोड़ा अंदाज़ा है, | इसलिए top 100{hundred} को SSD पर रखे पूरे vectors से दोबारा check करो। | Microsoft का DiskANN यही करता है: | 64{sixty-four} GB RAM और एक SSD, 1{one} billion points, 3{three} milliseconds से कम।",
+   "G": "Interview line: | billion scale पर सवाल speed का नहीं, memory का है। | PQ से छोटा करो, IVF से कम ढूँढो, top results exact rerank करो।",
+   "H": "अब बताओ: | 32{thirty-two} bytes per vector किए, | तो RAM कितनी, | और क्या खोओगे? | Comment करो।"
+  }
+ }
+}

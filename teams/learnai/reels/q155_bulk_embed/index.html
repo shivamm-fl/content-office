@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>50 Million Docs This Week</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="57.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <!-- company tag --><style>#sA > *:not(#a_co):not(style) { margin-top: 90px; }</style>
+          <div class="chip" id="a_co" style="left:50%; top:170px; transform:translateX(-50%); background:#E8596B; color:#0B1220; font-size:50px; letter-spacing:.04em;">ASKED AT ZOHO</div>
+          <div class="x c gold" id="a_1" style="top:220px; font-size:120px;">5 CRORE<br/>DOCUMENTS</div>
+          <div class="chip" id="a_2" style="left:190px; top:500px; width:700px; background:#E8EDF6; color:#0B1220; font-size:56px;">deadline: IS HAFTE</div>
+          <div class="x c red" id="a_3" style="top:640px; font-size:150px;">API: 9 DIN</div>
+          <div class="x c" id="a_4" style="top:860px; font-size:96px;">kya karoge?</div>
+          <div class="x c mut" id="a_5" style="top:1010px; font-size:56px;">4,000 documents / minute</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="chip" id="b_t" style="left:190px; top:190px; width:700px; border:3px solid #5BC0EB; color:#5BC0EB; font-size:56px;">BETTER: BATCH API</div>
+          <div class="x c green" id="b_50" style="top:310px; font-size:160px;">50% SASTA</div>
+          <div class="x mut" id="b_l1" style="left:60px; top:560px; font-size:50px;">normal limit</div>
+          <div class="hbar" id="b_r1" style="left:60px; top:630px; width:960px; height:100px; background:#5BC0EB;"></div>
+          <div class="x mut" id="b_l2" style="left:60px; top:770px; font-size:50px;">batch · alag pool</div>
+          <div class="hbar" id="b_r2" style="left:60px; top:840px; width:960px; height:100px; background:#4CC38A;"></div>
+          <div class="x c" id="b_s" style="top:990px; font-size:64px;">dono <span class="gold">saath-saath</span></div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="card" id="c_1" style="left:60px; top:220px; width:960px; height:180px;"><div class="x" style="left:50px; top:52px; font-size:62px;">1 batch = <span class="gold">50,000 inputs</span></div></div>
+          <div class="card" id="c_2" style="left:60px; top:440px; width:960px; height:180px;"><div class="x" style="left:50px; top:52px; font-size:62px;">har batch <span class="green">24 ghante</span> ke andar</div></div>
+          <div class="x c gold" id="c_3" style="top:700px; font-size:120px;">1,000 batches</div>
+          <div class="x c mut" id="c_3t" style="top:860px; font-size:56px;">5 crore ke liye</div>
+          <div class="src" style="top:1000px; font-size:44px;">Source: OpenAI Batch API docs</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="chip" id="d_t" style="left:60px; top:190px; width:960px; background:#4CC38A; color:#0B1220; font-size:50px;">BEST: PEHLE KAM EMBED KARO</div>
+          <div id="d_docs"></div>
+          <div class="x c" id="d_1" style="top:330px; font-size:62px;">ek hi PDF ke <span class="red">10 versions</span></div>
+          <div class="x c green" id="d_h" style="top:860px; font-size:80px;">hash → 1 baar embed</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:190px; font-size:80px;">sab kuch aaj <span class="red">nahi</span> chahiye</div>
+          <div class="card" id="e_1" style="left:60px; top:330px; width:960px; height:300px; border-color:#4CC38A;">
+            <div class="x green" style="left:50px; top:40px; font-size:64px;">AAJ</div>
+            <div class="x" style="left:50px; top:130px; width:860px; font-size:58px; line-height:1.15;">jo documents log sach mein search karte hain</div>
+          </div>
+          <div class="card" id="e_2" style="left:60px; top:680px; width:960px; height:240px;">
+            <div class="x mut" style="left:50px; top:40px; font-size:64px;">BAAD MEIN</div>
+            <div class="x" style="left:50px; top:130px; font-size:58px;">baaki · background · batch</div>
+          </div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="x c gold" id="f_1" style="top:320px; font-size:96px;">pehle KAM embed</div>
+          <div class="chip" id="f_2" style="left:60px; top:500px; width:465px; background:#4CC38A; color:#0B1220; font-size:52px;">dedupe</div>
+          <div class="chip" id="f_3" style="left:555px; top:500px; width:465px; background:#5BC0EB; color:#0B1220; font-size:52px;">priority</div>
+          <div class="x c" id="f_4" style="top:660px; font-size:66px;">baaki: <span class="green">batch API</span></div>
+          <div class="x c mut" id="f_5" style="top:780px; font-size:56px;">aadhe daam · alag limit</div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:280px; font-size:140px;">1,024 → 256</div>
+          <div class="x c" id="g_2" style="top:480px; font-size:80px;">numbers per embedding</div>
+          <div class="x c green" id="g_3" style="top:620px; font-size:84px;">kya bachega?</div>
+          <div class="x c red" id="g_4" style="top:740px; font-size:84px;">kya khooge?</div>
+          <div class="chip" id="g_c" style="left:290px; top:920px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="57.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="57.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="57.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows 5 crore documents; then the deadline against 9 days
+      tl.fromTo("#a_1", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_2", at("A", "isi"), { s: 1 });
+      show("#a_3", at("A", "9"), { s: 1.5, y: 0 });
+      show("#a_4", at("A", "kya"), { s: 1.1 });
+      show("#a_5", at("A", "4,000"), { s: 1 });
+      // B: better: the Batch API, half price, its own limit
+      show("#b_t", at("B", "batch"), { s: 1 });
+      show("#b_50", at("B", "50"), { s: 1.4, y: 0 });
+      show("#b_l1", at("B", "rate"), { s: 1 }); wipe("#b_r1", at("B", "rate"), 0.5);
+      show("#b_l2", at("B", "alag"), { s: 1 }); wipe("#b_r2", at("B", "alag"), 0.5);
+      show("#b_s", at("B", "saath-saath"), { s: 1.1 });
+      // C: batch sizes
+      show("#c_1", at("C", "50"), { s: 1 });
+      show("#c_2", at("C", "24"), { s: 1 });
+      show(["#c_3", "#c_3t"], at("C", "1,000"), { s: 1.3 });
+      // D: best: embed less: ten versions of one PDF collapse to one
+      show("#d_t", S.D + 0.05, { s: 1 });
+      show("#d_1", at("D", "pdf"), { s: 1 });
+      for (let i = 0; i < 10; i++) {
+        const d = document.createElement("div"); d.className = "tok dd" + (i === 0 ? " d0" : "");
+        const x = 60 + (i % 5) * 195, y = 440 + Math.floor(i / 5) * 200;
+        d.style.cssText += ";left:" + x + "px;top:" + y + "px;width:170px;height:170px;border-color:#5BC0EB;";
+        d.dataset.dx = 445 - x; d.dataset.dy = 540 - y;
+        const n = document.createElement("div"); n.className = "x"; n.textContent = "v" + (i + 1); n.style.cssText += ";left:0;width:170px;top:55px;text-align:center;font-size:52px;";
+        d.appendChild(n); q("#d_docs").appendChild(d);
+      }
+      tl.fromTo(".dd", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.2, stagger: 0.05 }, at("D", "das"));
+      qa(".dd").forEach((d) => tl.to(d, { x: +d.dataset.dx, y: +d.dataset.dy, opacity: d.classList.contains("d0") ? 1 : 0, duration: 0.5, ease: "power2.inOut" }, at("D", "hash")));
+      tl.to(".d0", { borderColor: "#4CC38A", scale: 1.3, duration: 0.3 }, at("D", "hash") + 0.5);
+      show("#d_h", at("D", "hash"), { s: 1.1 });
+      // E: today only what people search
+      show("#e_t", S.E + 0.05, { s: 1 });
+      show("#e_1", at("E", "jo"), { s: 1 });
+      show("#e_2", at("E", "baaki"), { s: 1 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "pehle"), { s: 1.1 });
+      show("#f_2", at("F", "dedupe"), { s: 1 });
+      show("#f_3", at("F", "priority"), { s: 1 });
+      show("#f_4", at("F", "batch"), { s: 1 });
+      show("#f_5", at("F", "aadhe"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "1,024"), { s: 1.2 });
+      show("#g_2", at("G", "numbers"), { s: 1 });
+      show("#g_3", at("G", "kya"), { s: 1.1 });
+      show("#g_4", at("G", "kya", 1), { s: 1.1 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { batch: "gold", duplicates: "hot", hash: "green", dedupe: "green", priority: "cyan", karod: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

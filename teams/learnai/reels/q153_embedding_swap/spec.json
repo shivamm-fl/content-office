@@ -1,0 +1,143 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   3,
+   -0.1
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "C",
+   2,
+   -0.1
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   2,
+   0
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "E",
+   2,
+   -0.1
+  ],
+  [
+   "ok",
+   "E",
+   3,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "F",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://www.elastic.co/docs/manage-data/data-store/aliases",
+  "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "common_belief_contradict",
+ "copy": {
+  "hi": {
+   "A": "@hook 20{बीस} करोड़ vectors, search एक second भी बंद नहीं हो सकती, | और embedding model बदलना है। | सब कहते हैं: नए model से re-embed करो, पुराने overwrite कर दो। | गलत, search आधे रास्ते में टूटेगी।",
+   "B": "क्योंकि हर model का अपना नक्शा होता है। | पुराना model 768{seven-sixty-eight} numbers देता था, Qwen3 embedding 1,024{ten-twenty-four}। | और numbers बराबर हों, तब भी एक नक्शे का row 3{three}, column 4{four}, दूसरे में कहीं और है।",
+   "C": "आधे vectors नए, आधे पुराने, | तो query एक नक्शे में बनेगी, और आधे data को दूसरे नक्शे में ढूँढेगी। | Results कचरा।",
+   "D": "सही तरीका: पुराने के बगल में नया index। | नए documents दोनों में लिखो, | पुराने 20{बीस} करोड़ background में नए model से भरो।",
+   "E": "फिर असली queries पर दोनों के results मिलाओ। | नया बेहतर निकला, तो alias एक झटके में नए index पर। | Elasticsearch में ये switch atomic है, कोई downtime नहीं। | पुराना index कुछ दिन rollback के लिए रखो।",
+   "F": "Interview line: | दो models के vectors कभी mix नहीं होते। | Side-by-side index, backfill, compare, फिर atomic switch।",
+   "G": "अब बताओ: | Backfill के दौरान RAM दोगुनी लगेगी, | उसे कम कैसे करोगे? | Comment करो।"
+  }
+ }
+}

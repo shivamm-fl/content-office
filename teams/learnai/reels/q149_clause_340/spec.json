@@ -1,0 +1,142 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "ok",
+   "A",
+   3,
+   0
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "B",
+   1,
+   -0.1
+  ],
+  [
+   "pop",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   2,
+   0
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "D",
+   2,
+   0
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "E",
+   2,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "G",
+   2,
+   -0.1
+  ],
+  [
+   "ok",
+   "G",
+   4,
+   0
+  ]
+ ],
+ "sources": [
+  "https://platform.claude.com/docs/en/about-claude/pricing"
+ ],
+ "hook_type": "direct_question",
+ "template": "not_a_neither_b",
+ "copy": {
+  "hi": {
+   "A": "@hook Contract 9{नौ} लाख tokens का है, | model में जगह सिर्फ़ 128{one-twenty-eight} thousand tokens की। | User पूछता है: clause 340{three-forty} में क्या लिखा है? | कैसे जवाब दोगे?",
+   "B": "पहला idea: पूरा contract चिपका दो। | Fit ही नहीं होगा। | दूसरा idea: Claude Opus 5.5{five-point-five} ले लो, उसमें 10{दस} लाख tokens की जगह है।",
+   "C": "Fit हो जाएगा, पर हर सवाल पर 9{नौ} लाख input tokens। | 4{four} dollars per million के हिसाब से, एक सवाल 3.6{three-point-six} dollars का। | दिन के 1,000{एक-हज़ार} सवाल, यानी 3,600{thirty-six-hundred} dollars रोज़।",
+   "D": "असली तरीका: किताब का index। | Contract को clauses में काटो, हर टुकड़े पर उसका clause number, metadata की तरह। | सवाल में 340{three-forty} आया, तो सीधा clause 340{three-forty} निकालो।",
+   "E": "पर clause 340{three-forty} अक्सर कहता है: as defined in clause 2{two}। | तो वो definition भी साथ भेजो। | कुल करीब 5,000{five-thousand} tokens, यानी 2{two} cents का सवाल।",
+   "F": "Interview line: | पूरा document मत भरो। | Structure से retrieve करो: clause number से clause, और उसके references भी।",
+   "G": "अब बताओ: | User पूछे, termination के सारे rules, | कोई clause number नहीं, | तब कैसे ढूँढोगे? | Comment करो।"
+  }
+ }
+}

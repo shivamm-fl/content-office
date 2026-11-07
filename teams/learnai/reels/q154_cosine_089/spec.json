@@ -1,0 +1,137 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   2,
+   -0.1
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "B",
+   3,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   3,
+   0
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   3,
+   -0.1
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   3,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "F",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B",
+  "https://huggingface.co/intfloat/multilingual-e5-small"
+ ],
+ "hook_type": "direct_question",
+ "template": "common_belief_contradict",
+ "copy": {
+  "hi": {
+   "A": "@hook दो बिल्कुल अलग sentences, और cosine similarity 0.84{zero-point-eight-four}। क्या ये 84{eighty-four} percent same हैं? | छत टपक रही है, और laptop की battery जल्दी खत्म होती है। | नहीं, ये number percent है ही नहीं।",
+   "B": "हमने खुद नापा। | यही दो sentences, multilingual E-five small model पर 0.84{zero-point-eight-four}, | और Qwen3 embedding पर 0.46{zero-point-four-six}। | Sentences वही, number आधा।",
+   "C": "Cosine दो arrows के बीच का angle है। | कुछ models में सारे arrows एक ही तरफ़ झुके होते हैं, | जैसे stadium में सब लोग एक ही screen की तरफ़ देख रहे हों। | तब कोई भी दो arrows पास ही दिखेंगे।",
+   "D": "और सबसे मज़ेदार: | E-five पर ये बेमेल जोड़ी 0.84{zero-point-eight-four}, | जबकि Qwen3 पर सच में एक जैसे सवाल, bank PIN reset वाले, सिर्फ़ 0.78{zero-point-seven-eight}। | तो 0.8{zero-point-eight} का threshold एक model में कचरा अंदर आने देगा, दूसरे में सही जवाब बाहर फेंकेगा।",
+   "E": "Fix: अपने model और अपने data पर बेमेल जोड़ियों का average नापो, | वो तुम्हारा floor है। | Score को absolute मत पढ़ो, ranking पढ़ो, | और threshold labelled examples से तय करो।",
+   "F": "Interview line: | cosine score probability नहीं है। | हर model का अपना floor होता है, threshold उसी पर calibrate करो।",
+   "G": "अब बताओ: | Model बदला, | तो पुराना 0.8{zero-point-eight} threshold रखोगे? | Comment करो।"
+  }
+ }
+}

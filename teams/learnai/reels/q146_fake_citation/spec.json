@@ -1,0 +1,149 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   1,
+   -0.1
+  ],
+  [
+   "click",
+   "A",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "A",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "B",
+   0,
+   -0.1
+  ],
+  [
+   "dip",
+   "B",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "C",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   2,
+   0
+  ],
+  [
+   "ok",
+   "C",
+   5,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "D",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "E",
+   1,
+   0
+  ],
+  [
+   "ok",
+   "E",
+   3,
+   0
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "F",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://ccstartup.com/blog/2025/04/17/company-apologizes-after-ai-support-agent-invents-policy-that-causes-user-uproar",
+  "https://vibegraveyard.ai/story/cursor-ai-support-bot-fake-policy/"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "not_a_neither_b",
+ "copy": {
+  "hi": {
+   "A": "@hook तुम्हारे RAG bot ने customer को refund policy का section 7.3{seven-point-three} quote किया। | ऐसा कोई section है ही नहीं। | Cursor के support bot ने भी ऐसी एक policy बना दी थी, और users ने subscription cancel कर दिए। | पहले कहाँ देखोगे?",
+   "B": "Model बदलना पहला कदम नहीं। | Prompt में 'झूठ मत बोलना' लिखना भी नहीं। | पहले देखो, model के सामने रखा क्या गया था।",
+   "C": "Open book exam सोचो। | बच्चे ने लिखा: page 212{two-twelve} के हिसाब से। | Book में वो page है ही नहीं। | Teacher पहले देखेगी, उसके सामने कौनसे pages खुले थे। | RAG में वो pages हैं retrieved chunks, | यानी पहले retrieval log।",
+   "D": "Section 7.3{seven-point-three} chunks में नहीं था? | तो model ने खुद बनाया। | Fix: bot सिर्फ़ retrieved documents cite करे, बाकी हर citation code reject कर दे।",
+   "E": "Chunks में था? | तो गलती index की है: | कोई पुराना draft अब भी index में पड़ा है। | Fix: draft हटाओ, re-index करो।",
+   "F": "Interview line: | पहले देखूँगा retriever ने क्या भेजा। | Citation उसमें नहीं, तो generation की गलती। | थी, तो index की।",
+   "G": "अब बताओ: | Chunk में section 5{five} था, | bot ने 7{seven} बोल दिया। | गलती किसकी? | Comment करो।"
+  }
+ }
+}

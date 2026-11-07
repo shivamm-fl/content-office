@@ -1,0 +1,136 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   2,
+   -0.1
+  ],
+  [
+   "click",
+   "B",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "B",
+   2,
+   0
+  ],
+  [
+   "click",
+   "C",
+   0,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   5,
+   0
+  ],
+  [
+   "click",
+   "D",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   2,
+   -0.1
+  ],
+  [
+   "click",
+   "E",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "E",
+   1,
+   -0.1
+  ],
+  [
+   "click",
+   "F",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "F",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "F",
+   2,
+   0
+  ],
+  [
+   "click",
+   "G",
+   0,
+   0
+  ],
+  [
+   "ok",
+   "G",
+   3,
+   0
+  ]
+ ],
+ "sources": [
+  "https://platform.claude.com/docs/en/api/rate-limits"
+ ],
+ "hook_type": "surprising_fact",
+ "template": "common_belief_contradict",
+ "copy": {
+  "hi": {
+   "A": "@hook RAG app viral, traffic रातों-रात 50{पचास} गुना: सबसे पहले क्या टूटेगा? | सब कहेंगे: vector database। | गलत।",
+   "B": "हिसाब: हर सवाल के साथ, chunks मिलाकर करीब 4,000{four-thousand} input tokens। | पहले एक minute में 100{सौ} सवाल, यानी 4{चार} लाख tokens। | अब 5,000{पाँच-हज़ार} सवाल: 2{दो} करोड़ tokens हर minute।",
+   "C": "Restaurant viral हो जाए, तो कुर्सियाँ बहुत हैं, पर kitchen की speed fixed है। | Vector database के लिए ये करीब 83{eighty-three} queries per second, छोटा number। | पर LLM API की limit tokens per minute में है। | Claude Opus 5.5{five-point-five} के सबसे बड़े standard tier पर भी 1{एक} करोड़ input tokens। | चाहिए 2{दो} करोड़। | 429{four-twenty-nine} errors, app बैठ गया।",
+   "D": "पहला fix: prompt caching। | System prompt और बार-बार आने वाले documents cache करो। | Claude की limit में cache से पढ़े tokens गिने ही नहीं जाते।",
+   "E": "दूसरा: 5{five} की जगह 3{three} अच्छे chunks। | तीसरा: queue, और 429{four-twenty-nine} पर retry-after जितना रुको, crash नहीं।",
+   "F": "Interview line: | RAG में पहले vector database नहीं, LLM की tokens per minute limit टूटती है। | इसलिए caching, कम chunks, और queue।",
+   "G": "अब बताओ: | 80{eighty} percent tokens cache से आएँ, | तो 2{दो} करोड़ में से limit में कितने गिने जाएँगे? | Comment करो।"
+  }
+ }
+}

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>RAG at 50x Traffic</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="69" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <!-- company tag --><style>#sA > *:not(#a_co):not(style) { margin-top: 90px; }</style>
+          <div class="chip" id="a_co" style="left:50%; top:170px; transform:translateX(-50%); background:#E8596B; color:#0B1220; font-size:50px; letter-spacing:.04em;">ASKED AT VERCEL</div>
+          <div class="x c" id="a_1" style="top:220px; font-size:100px;">RAG APP VIRAL</div>
+          <div class="x c gold" id="a_2" style="top:340px; font-size:230px;">50×</div>
+          <div class="x c" id="a_3" style="top:600px; font-size:76px;">sabse pehle <span class="red">kya tootega?</span></div>
+          <div class="chip" id="a_4" style="left:160px; top:760px; width:760px; border:3px solid #E8EDF6; color:#E8EDF6; font-size:60px;">VECTOR DATABASE?</div>
+          <div class="strike" id="a_s" style="left:190px; top:800px; width:700px;"></div>
+          <div class="x c red" id="a_g" style="top:900px; font-size:150px;">GALAT</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="x c" id="b_1" style="top:200px; font-size:64px;">1 sawal ≈ <span class="gold">4,000 input tokens</span></div>
+          <div class="card" id="b_old" style="left:60px; top:320px; width:960px; height:270px;">
+            <div class="x mut" style="left:50px; top:30px; font-size:48px;">PEHLE</div>
+            <div class="x" style="left:50px; top:96px; font-size:72px;">100 sawal / min</div>
+            <div class="x cyan" style="left:50px; top:180px; font-size:60px;">= 4 lakh tokens / min</div>
+          </div>
+          <div class="card" id="b_new" style="left:60px; top:630px; width:960px; height:320px; border-color:#E8596B;">
+            <div class="x mut" style="left:50px; top:30px; font-size:48px;">AB</div>
+            <div class="x" style="left:50px; top:96px; font-size:80px;">5,000 sawal / min</div>
+            <div class="x red" style="left:50px; top:200px; font-size:84px;">= 2 CRORE tokens / min</div>
+          </div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c mut" id="c_r" style="top:190px; font-size:60px;">kursiyan bahut, kitchen ek</div>
+          <div class="card" id="c_v" style="left:60px; top:290px; width:960px; height:170px; border-color:#4CC38A;">
+            <div class="x" style="left:50px; top:50px; font-size:60px;">VECTOR DB: <span class="green">83 queries/sec · OK</span></div>
+          </div>
+          <div class="x cyan" id="c_ll" style="left:60px; top:500px; font-size:52px;">Opus 5.5 limit: 1 crore/min</div>
+          <div class="hbar" id="c_lb" style="left:60px; top:570px; width:480px; height:100px; background:#5BC0EB;"></div>
+          <div class="x red" id="c_nl" style="left:60px; top:700px; font-size:52px;">CHAHIYE: 2 crore/min</div>
+          <div class="hbar" id="c_nb" style="left:60px; top:770px; width:960px; height:100px; background:#E8596B;"></div>
+          <div class="x c red" id="c_429" style="top:900px; font-size:190px;">429</div>
+          <div class="x c" id="c_bt" style="top:1110px; font-size:60px;">app baith gaya</div>
+          <div class="src" id="c_src" style="top:1210px; font-size:44px;">Source: Claude rate limits docs</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="chip" id="d_t" style="left:140px; top:200px; width:800px; background:#4CC38A; color:#0B1220; font-size:58px;">FIX 1 · PROMPT CACHING</div>
+          <div class="x mut" id="d_l" style="left:60px; top:340px; font-size:50px;">ek request ke input tokens</div>
+          <div class="hbar" id="d_b1" style="left:60px; top:420px; width:740px; height:160px; background:#4CC38A;"></div>
+          <div class="x" id="d_b1t" style="left:90px; top:470px; font-size:50px; color:#0B1220;">system prompt + docs</div>
+          <div class="hbar" id="d_b2" style="left:810px; top:420px; width:210px; height:160px; background:#F2B544;"></div>
+          <div class="x" id="d_b2t" style="left:830px; top:470px; font-size:50px; color:#0B1220;">sawal</div>
+          <div class="x green" id="d_c" style="left:60px; top:610px; font-size:56px;">↑ CACHED</div>
+          <div class="card" id="d_n" style="left:60px; top:740px; width:960px; height:290px; border-color:#F2B544;">
+            <div class="x" style="left:50px; top:44px; width:880px; font-size:58px; line-height:1.3;">limit mein: <span class="gold">sirf naya hissa</span><br/>cache reads = <span class="green">0</span></div>
+          </div>
+          <div class="src" style="top:1080px; font-size:44px;">Source: Claude rate limits docs</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="card" id="e_1" style="left:60px; top:220px; width:960px; height:260px; border-color:#5BC0EB;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">FIX 2</div>
+            <div class="x" style="left:50px; top:110px; font-size:76px;">5 chunks → <span class="cyan">3 achhe</span></div>
+          </div>
+          <div class="card" id="e_2" style="left:60px; top:530px; width:960px; height:340px; border-color:#F2B544;">
+            <div class="x mut" style="left:50px; top:36px; font-size:48px;">FIX 3</div>
+            <div class="x" style="left:50px; top:110px; font-size:72px;">queue + <span class="gold">retry-after</span></div>
+            <div class="x green" style="left:50px; top:220px; font-size:64px;">crash nahi</div>
+          </div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" id="f_c" style="left:290px; top:190px; width:500px; border:3px solid #F2B544; color:#F2B544; font-size:52px;">INTERVIEW LINE</div>
+          <div class="x c" id="f_1" style="top:320px; font-size:70px;">pehle vector DB <span class="red">nahi</span>,</div>
+          <div class="x c gold" id="f_2" style="top:420px; font-size:84px;">LLM ki tokens/min<br/>limit tootegi</div>
+          <div class="chip" id="f_3" style="left:60px; top:700px; width:300px; background:#4CC38A; color:#0B1220; font-size:48px;">caching</div>
+          <div class="chip" id="f_4" style="left:390px; top:700px; width:300px; background:#5BC0EB; color:#0B1220; font-size:48px;">kam chunks</div>
+          <div class="chip" id="f_5" style="left:720px; top:700px; width:300px; background:#F2B544; color:#0B1220; font-size:48px;">queue</div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:260px; font-size:120px;">80% CACHE</div>
+          <div class="x c" id="g_2" style="top:450px; font-size:84px;">2 crore mein se<br/>kitne gine jaayenge?</div>
+          <div class="chip" id="g_c" style="left:290px; top:820px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="69" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="69" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="69" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows the viral app and 50x; then the wrong guess struck out
+      tl.fromTo(["#a_1", "#a_2"], { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_3", at("A", "sabse"), { s: 1 });
+      show("#a_4", at("A", "vector"), { s: 1.1 });
+      wipe("#a_s", at("A", "galat"), 0.3);
+      show("#a_g", at("A", "galat"), { s: 1.8, y: 0 });
+      // B: the token arithmetic
+      show("#b_1", at("B", "har"), { s: 1 });
+      show("#b_old", at("B", "pehle"), { s: 1 });
+      show("#b_new", at("B", "ab"), { s: 1.1 });
+      // C: kitchen speed; the vector DB is fine, the token limit is not
+      show("#c_r", S.C + 0.05, { s: 1 });
+      show("#c_v", at("C", "vector"), { s: 1 });
+      show("#c_src", at("C", "llm"), { s: 1 });
+      show("#c_ll", at("C", "claude"), { s: 1 });
+      wipe("#c_lb", at("C", "1"), 0.5);
+      show("#c_nl", at("C", "chahiye"), { s: 1 });
+      wipe("#c_nb", at("C", "chahiye"), 0.6);
+      show("#c_429", at("C", "429"), { s: 1.8, y: 0 });
+      show("#c_bt", at("C", "baith"), { s: 1 });
+      // D: prompt caching; cache reads do not count
+      show("#d_t", S.D + 0.05, { s: 1 });
+      show("#d_l", at("D", "system"), { s: 1 });
+      wipe("#d_b1", at("D", "system"), 0.5);
+      show("#d_b1t", at("D", "system") + 0.3, { s: 1 });
+      wipe("#d_b2", at("D", "documents"), 0.3);
+      show("#d_b2t", at("D", "documents") + 0.2, { s: 1 });
+      show("#d_c", at("D", "cache"), { s: 1.2 });
+      show("#d_n", at("D", "claude"), { s: 1 });
+      // E: fewer chunks, a queue
+      show("#e_1", at("E", "doosra"), { s: 1 });
+      show("#e_2", at("E", "teesra"), { s: 1 });
+      // F: the interview answer
+      show("#f_c", at("F", "interview"), { s: 0.8 });
+      show("#f_1", at("F", "rag"), { s: 1 });
+      show("#f_2", at("F", "llm"), { s: 1.1 });
+      show("#f_3", at("F", "caching"), { s: 1 });
+      show("#f_4", at("F", "kam"), { s: 1 });
+      show("#f_5", at("F", "queue"), { s: 1 });
+      // G: question
+      show("#g_1", at("G", "80"), { s: 1.2 });
+      show("#g_2", at("G", "2"), { s: 1 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { galat: "hot", tokens: "gold", karod: "gold", cache: "cyan", caching: "cyan", "429": "hot", llm: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
