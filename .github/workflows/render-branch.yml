@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        reel: [q144_input_vs_output, q145_reasoning_bill, a018_temperature]
+        reel: [a020_penalty]
     env: { GH_TOKEN: "${{ github.token }}", TEAM: learnai, AUDIO_TAG: render-t-templates-20261107, REEL: "${{ matrix.reel }}" }
     steps:
       - uses: actions/checkout@v4

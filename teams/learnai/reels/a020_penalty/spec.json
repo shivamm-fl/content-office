@@ -1,0 +1,126 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "hook_type": "direct_question",
+ "template": "wont_work_unless",
+ "sources": [
+  "https://huggingface.co/docs/transformers/internal/generation_utils",
+  "https://github.com/huggingface/transformers/blob/main/src/transformers/generation/logits_process.py",
+  "https://huggingface.co/papers/1909.05858"
+ ],
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "dip",
+   "A",
+   1,
+   -0.1
+  ],
+  [
+   "pop",
+   "A",
+   3,
+   0
+  ],
+  [
+   "click",
+   "B",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "C",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   2,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   3,
+   0
+  ],
+  [
+   "dip",
+   "E",
+   1,
+   -0.1
+  ],
+  [
+   "ok",
+   "E",
+   3,
+   0
+  ],
+  [
+   "click",
+   "F",
+   1,
+   0
+  ],
+  [
+   "pop",
+   "G",
+   2,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "@hook Model एक ही line बार-बार लिखे जा रहा है? | जब तक पिछले words पर सज़ा नहीं लगेगी, | ये loop अक्सर चलता रहता है। | उस सज़ा का नाम है repetition penalty।",
+   "B": "Day 18{eighteen} वाला example याद करो: | Main roz subah blank peeta hoon। | Scores: chai 2{two}, coffee 1{one}, paani zero। | और मान लो model पिछली line में chai पहले ही लिख चुका है।",
+   "C": "अब repetition penalty 1.2{one-point-two} लगाओ। | जो word पहले आ चुका है, उसका score 1.2{one-point-two} से divide होता है। | Chai का score 2{two} से घटकर 1.67{one-point-six-seven}।",
+   "D": "अब chances: | chai 67{sixty-seven} percent से 59{fifty-nine} percent, | coffee 24{twenty-four} से 30{thirty}, | paani 9{nine} से 11{eleven}। | Chai अब भी आगे है, पर loop की पकड़ ढीली।",
+   "E": "पर penalty ज़्यादा मत बढ़ाओ। | Penalty 2{two} पर chai और coffee दोनों 42{forty-two} percent पर बराबर। | फिर model सही word भी छोड़ने लगेगा। | इसीलिए original paper ने लगभग 1.2{one-point-two} suggest किया।",
+   "F": "एक बात और: | ये penalty एक word पर एक ही बार लगती है, | और prompt के words भी गिने जाते हैं।",
+   "G": "अब बताओ: | Penalty 0.8{zero-point-eight} रखी, | तो model क्या करेगा? | Comment करो।"
+  }
+ }
+}

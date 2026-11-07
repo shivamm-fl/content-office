@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Repetition Penalty</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="60.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="card" id="a_bub" style="left:80px; top:200px; width:920px; height:470px;">
+            <div class="x mut" style="left:44px; top:30px; font-size:48px;">model ka jawab</div>
+            <div class="x aln" style="left:44px; top:110px; font:600 62px 'Space Grotesk',sans-serif;">chai peeta hoon.</div>
+            <div class="x aln" style="left:44px; top:190px; font:600 62px 'Space Grotesk',sans-serif;">chai peeta hoon.</div>
+            <div class="x aln" style="left:44px; top:270px; font:600 62px 'Space Grotesk',sans-serif;">chai peeta hoon.</div>
+            <div class="x aln" style="left:44px; top:350px; font:600 62px 'Space Grotesk',sans-serif; color:#8592AD;">chai peeta hoon...</div>
+          </div>
+          <div class="chip" id="a_loop" style="left:380px; top:700px; width:320px; background:#E8596B; color:#0B1220; font-size:60px;">LOOP</div>
+          <div class="x c" id="a_saza" style="top:830px; font-size:90px;">pichhle words pe <span class="red">SAZA</span></div>
+          <div class="x c gold" id="a_name" style="top:980px; font-size:116px;">REPETITION<br/>PENALTY</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="chip" id="b_day" style="left:340px; top:190px; width:400px; border:3px solid #F2B544; color:#F2B544; font-size:48px;">DAY 18 RECAP</div>
+          <div class="card" id="b_s" style="left:60px; top:300px; width:960px; height:240px;">
+            <div class="x" style="left:0; width:960px; top:36px; text-align:center; font-size:74px;">Main roz subah</div>
+            <div class="x" style="left:0; width:960px; top:126px; text-align:center; font-size:74px;"><span class="gold">_____</span> peeta hoon</div>
+          </div>
+          <div class="x" id="b_c1" style="left:100px; top:600px; width:240px; text-align:center;"><div style="font-size:64px;">chai</div><div class="gold" style="font-size:170px;">2</div></div>
+          <div class="x" id="b_c2" style="left:420px; top:600px; width:240px; text-align:center;"><div style="font-size:64px;">coffee</div><div class="gold" style="font-size:170px;">1</div></div>
+          <div class="x" id="b_c3" style="left:740px; top:600px; width:240px; text-align:center;"><div style="font-size:64px;">paani</div><div class="gold" style="font-size:170px;">0</div></div>
+          <div class="chip" id="b_used" style="left:60px; top:900px; width:380px; background:#E8596B; color:#0B1220; font-size:46px;">pehle aa chuka</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c gold" id="c_pen" style="top:200px; font-size:130px;">PENALTY = 1.2</div>
+          <div class="card" id="c_rule" style="left:90px; top:400px; width:900px; height:200px; border-color:#F2B544;">
+            <div class="x" style="left:0; width:900px; top:60px; text-align:center; font-size:64px;">pehle aaya word: <span class="gold">score ÷ 1.2</span></div>
+          </div>
+          <div class="x c mut" id="c_lab" style="top:680px; font-size:64px;">chai ka score</div>
+          <div class="x c" id="c_num" style="top:760px; font-size:230px;">2</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="chip" id="d_loose" style="left:220px; top:350px; width:640px; background:#4CC38A; color:#0B1220; font-size:52px;">loop ki pakad dheeli</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="chip" id="e_warn" style="left:180px; top:350px; width:720px; background:#E8596B; color:#0B1220; font-size:52px;">sahi word bhi chhoot jaayega</div>
+          <div class="chip" id="e_ok" style="left:240px; top:350px; width:600px; background:#4CC38A; color:#0B1220; font-size:52px;">sweet spot ≈ 1.2</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="card" id="f_1" style="left:60px; top:280px; width:960px; height:220px; border-color:#F2B544;"><div class="x" style="left:50px; top:70px; font-size:76px;">ek word = <span class="gold">ek hi baar</span></div></div>
+          <div class="card" id="f_2" style="left:60px; top:540px; width:960px; height:220px; border-color:#5BC0EB;"><div class="x" style="left:50px; top:70px; font-size:76px;"><span class="cyan">prompt</span> ke words bhi gine</div></div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c gold" id="g_1" style="top:280px; font-size:150px;">PENALTY 0.8</div>
+          <div class="x c" id="g_2" style="top:500px; font-size:110px;">model kya karega?</div>
+          <div class="chip" id="g_c" style="left:290px; top:900px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+        <!-- one chart shared by scenes D and E -->
+        <div id="chart" style="position:absolute; left:0; top:0; width:1080px; height:1300px; opacity:0;">
+          <div class="x c gold" id="p12" style="top:190px; font-size:120px;">PENALTY 1.2</div>
+          <div class="x c red" id="p2" style="top:190px; font-size:120px; opacity:0;">PENALTY 2</div>
+          <div class="x" id="v1" style="left:100px; top:450px; width:240px; text-align:center; font-size:84px;">67%</div>
+          <div class="x" id="v2" style="left:420px; top:450px; width:240px; text-align:center; font-size:84px;">24%</div>
+          <div class="x" id="v3" style="left:740px; top:450px; width:240px; text-align:center; font-size:84px;">9%</div>
+          <div class="bar" id="k1" style="left:120px; top:560px; width:200px; height:620px; background:#F2B544;"></div>
+          <div class="bar" id="k2" style="left:440px; top:560px; width:200px; height:620px; background:#F2B544; opacity:.8;"></div>
+          <div class="bar" id="k3" style="left:760px; top:560px; width:200px; height:620px; background:#5BC0EB;"></div>
+          <div style="position:absolute; left:80px; top:1180px; width:920px; height:6px; background:#26324B;"></div>
+          <div class="x" style="left:100px; top:1200px; width:240px; text-align:center; font-size:60px;">chai</div>
+          <div class="x" style="left:420px; top:1200px; width:240px; text-align:center; font-size:60px;">coffee</div>
+          <div class="x" style="left:740px; top:1200px; width:240px; text-align:center; font-size:60px;">paani</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="60.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="60.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="60.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "DAY 20/150" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the loop is on screen at frame 0
+      tl.fromTo(".aln", { opacity: 0.35 }, { opacity: 1, duration: 0.25, stagger: 0.2, repeat: 3, yoyo: true }, 0.1);
+      show("#a_loop", at("A", "baar-baar"), { s: 1.4 });
+      show("#a_saza", at("A", "saza"), { s: 1.2 });
+      show("#a_name", at("A", "repetition"), { s: 1.4 });
+      // B: Day 18 recap
+      show("#b_day", at("B", "day"), { s: 0.9 });
+      show("#b_s", at("B", "main") - 0.3, { s: 0.95 });
+      show("#b_c1", at("B", "chai"), { s: 1.4 });
+      show("#b_c2", at("B", "coffee"), { s: 1.4 });
+      show("#b_c3", at("B", "paani"), { s: 1.4 });
+      show("#b_used", at("B", "chai", 1), { s: 1.3 });
+      // C: the rule and chai's new score
+      show("#c_pen", at("C", "1.2") - 0.1, { s: 1.4 });
+      show("#c_rule", at("C", "jo"), { s: 0.9 });
+      show("#c_lab", at("C", "chai"), { s: 1 });
+      show("#c_num", at("C", "chai") + 0.1, { s: 1.2 });
+      count("#c_num", 2, 1.67, at("C", "1.67") - 0.3, 0.6, (v) => (v > 1.995 ? "2" : v.toFixed(2)));
+      tl.to("#c_num", { color: "#F2B544", duration: 0.3 }, at("C", "1.67"));
+      // D, E: one chart; the bars change with the penalty
+      tl.set("#chart", { opacity: 1 }, S.D);
+      tl.set("#chart", { opacity: 0 }, S.F);
+      tl.set("#k1", { scaleY: 0.665 }, 0); tl.set("#k2", { scaleY: 0.245 }, 0); tl.set("#k3", { scaleY: 0.09 }, 0);
+      tl.fromTo("#chart", { y: 40 }, { y: 0, duration: 0.4, ease: "power3.out" }, S.D);
+      const P = [{ v: 66.5 }, { v: 24.5 }, { v: 9.0 }];
+      const fmt = (v) => Math.round(v) + "%";
+      const step = (i, pct, t) => {
+        tl.to("#k" + (i + 1), { scaleY: pct / 100, duration: 0.6, ease: "power2.out" }, t);
+        tl.to(P[i], { v: pct, duration: 0.6, ease: "power2.out", onUpdate: () => { q("#v" + (i + 1)).textContent = fmt(P[i].v); } }, t);
+      };
+      step(0, 58.7, at("D", "59")); step(1, 30.2, at("D", "30")); step(2, 11.1, at("D", "11"));
+      show("#d_loose", at("D", "loop"), { s: 1.2 });
+      tl.to("#p12", { opacity: 0, duration: 0.15 }, at("E", "penalty", 1) - 0.1);
+      show("#p2", at("E", "penalty", 1), { s: 1.4 });
+      step(0, 42.2, at("E", "chai")); step(1, 42.2, at("E", "coffee")); step(2, 15.5, at("E", "coffee"));
+      tl.set("#v1", { textContent: "42%" }, at("E", "42") + 0.1);
+      tl.set("#v2", { textContent: "42%" }, at("E", "42") + 0.1);
+      show("#e_warn", at("E", "sahi"), { s: 1.2 });
+      hide("#e_warn", at("E", "original") - 0.1);
+      show("#e_ok", at("E", "1.2"), { s: 1.2 });
+      // F: two details
+      show("#f_1", at("F", "ek", 1), { s: 0.9 });
+      show("#f_2", at("F", "prompt"), { s: 0.9 });
+      // G: question
+      show("#g_1", at("G", "0.8") - 0.1, { s: 1.4 });
+      show("#g_2", at("G", "model"), { s: 1.2 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      M.finish({ kw: { penalty: "gold", repetition: "gold", loop: "hot", chai: "gold", saza: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
