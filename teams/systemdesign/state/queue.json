@@ -1,41 +1,47 @@
 {
   "items": [
     {
-      "id": "s018",
+      "id": "s019",
       "track": "series",
-      "day": 18,
+      "day": 19,
       "unit": "P2",
-      "title": "Health checks aur failover: dead server request kyun leta rehta hai",
-      "format": "pattern",
-      "one_idea": "A load balancer sends each server a small test request every few seconds (health check); after a set number of consecutive failures it stops routing to that server and the others take over (failover), and the interval times the threshold sets how long a dead server still receives requests.",
-      "hook_type": "surprising_fact",
-      "spoken_hook": "Server dead हो गया, फिर भी request वहीं जाती रही।",
-      "hook_source": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html",
+      "title": "Reverse proxy: server ka front door, aur load balancer se fark",
+      "format": "component",
+      "one_idea": "A reverse proxy is a server that sits in front of your servers: clients talk only to it, it forwards each request to a backend server and returns the response; that one front door can balance load, terminate TLS, cache and compress, hides the backend servers, and is also a single point of failure. A forward proxy is the opposite side: it sits in front of clients. A load balancer is one job a reverse proxy can do.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: reverse proxy और load balancer में क्या फर्क है?",
+      "hook_source": "https://en.wikipedia.org/wiki/Reverse_proxy",
       "sources": [
-        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html",
-        "https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/",
-        "https://en.wikipedia.org/wiki/Failover"
+        "https://en.wikipedia.org/wiki/Reverse_proxy",
+        "https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Proxy_servers_and_tunneling"
       ],
-      "length_target_s": 150,
-      "cover_headline": "Health Checks and Failover",
-      "thumb_text": "DEAD SERVER?",
+      "length_target_s": 140,
+      "cover_headline": "Reverse Proxy: The Front Door",
+      "thumb_text": "REVERSE PROXY",
       "keywords": [
-        "health check load balancer",
-        "failover kya hota hai",
-        "load balancer health check hindi",
-        "system design health check interval threshold"
+        "reverse proxy kya hai",
+        "reverse proxy vs load balancer",
+        "forward proxy vs reverse proxy hindi",
+        "nginx reverse proxy system design"
       ],
       "status": "planned",
       "qa_passed": false,
-      "script_file": "state/scripts/s018.txt",
+      "script_file": "state/scripts/s019.txt",
       "script_locked": false,
-      "hook_formula": "surprising_fact: with default settings a dead server keeps receiving requests for about interval x threshold seconds (30 s x 2 = about 60 s, arithmetic from AWS defaults)",
-      "visual_idea": "One fixed frame: a balancer and four server boxes; a ping travels to each box, the silent box collects red ticks and a gate closes; later green ticks fill and the gate opens.",
-      "everyday_anchor": "A dhaba manager calls out 'ready?' to each cook before sending orders.",
-      "example": "EXAMPLE: 4 servers, one dead: 25 percent fail. 30 s x 2 = about 60 s; 5 s x 2 = about 10 s but 6x more checks. All numbers invented.",
+      "hook_formula": "interviewer_asked: one complete real interview question; the answer starts on the next line (reverse proxy is the front door, load balancer is one of its jobs). No staged pause.",
+      "visual_idea": "One fixed frame: client icons on the left, one door-shaped box in the middle, three server boxes on the right behind it with no direct lines from clients. A request enters the door and leaves to one server; the response returns through the door. Then job tags (balance, TLS, cache, compress) light up one by one on the door; last, the door itself gets a red cross to show it can go down. A small mirrored sketch shows the forward proxy on the client side.",
+      "everyday_anchor": "A hotel reception desk: guests never walk to the rooms, the desk takes the request and sends it to the right room.",
+      "example": "EXAMPLE: clients ask for /app and /static; the proxy sends /app to server group A and serves /static from its cache. Paths and groups invented.",
       "facts_to_verify": [
-        "AWS ALB defaults: interval 30 s, unhealthy 2, healthy 5; fail open",
-        "Wikipedia Failover definition"
+        "Wikipedia: reverse proxy appears to clients as an ordinary web server and forwards to backends; listed uses load balancing, TLS termination, caching, compression, security, hiding origin servers; it can be a single point of failure",
+        "MDN: forward proxies can hide client identities, reverse proxies can hide server identities; X-Forwarded-For carries the original client IP",
+        "NGINX guide: proxy_pass forwards a request to a proxied server; 'A common use of a reverse proxy is to provide load balancing'; responses are buffered by default; Host header is reset unless proxy_set_header sets it"
+      ],
+      "avoid_claims": [
+        "reverse proxy makes things faster by a number",
+        "nginx handles N requests per second",
+        "any named company's internal setup"
       ]
     }
   ]

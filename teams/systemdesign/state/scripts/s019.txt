@@ -1,0 +1,13 @@
+A: @hook Interviewer ने पूछा: reverse proxy और load balancer में क्या फर्क है?
+B: @emph Reverse proxy पूरा front door है, और load balancer उस door का सिर्फ़ एक काम है।
+C: Hotel की reception desk सोचो। | Guest सीधे rooms में नहीं जाते। | Desk उनकी request लेती है, सही room तक पहुँचाती है, और जवाब वापस लाती है।
+D: Reverse proxy यानी तुम्हारे servers के आगे बैठा एक server, ठीक यही करता है। | Client सिर्फ़ उससे बात करता है, और backend servers उसे दिखते ही नहीं।
+E: EXAMPLE: | मान लो पीछे 3{three} servers हैं। | Client /app माँगता है, तो proxy उसे server group A को भेजता है। | /static माँगे, तो proxy अपने cache से ही दे देता है।
+F: पहला step: | client की request proxy तक आती है। | Client को लगता है, यही असली server है।
+G: दूसरा step: | proxy वो request किसी एक backend server को forward करता है।
+H: तीसरा step: | backend जवाब देता है, और वो जवाब proxy से होकर ही client तक जाता है।
+I: क्योंकि हर request इसी door से गुज़रती है, ये door कई काम कर सकता है। || पहला, load balancing, यानी requests को servers में बाँटना। | दूसरा, TLS termination, यानी HTTPS की encryption यहीं खुलती है, backend को नहीं खोलनी पड़ती। | तीसरा, caching, यानी वही जवाब दोबारा backend से नहीं माँगना।
+J: अब hook का जवाब। || Load balancer इन तीनों में से पहला काम है। | Reverse proxy का सबसे common use यही है।
+K: Forward proxy इसका उल्टा है। | वो clients के आगे बैठता है, और client की identity छुपाता है। | Reverse proxy server की identity छुपाता है।
+L: अब एक catch। | सारी requests एक ही door से जाती हैं, तो वो door dead हो जाए, तो पूरा system बंद। | इसे single point of failure कहते हैं। | इसीलिए आम तौर पर proxy की भी 2{two} copies रखी जाती हैं।
+M: अब तुम बताओ: | अगर हर जवाब proxy के cache में हो, तो backend servers को कितनी requests जाएँगी? | comment में लिखो। || ऐसे और system design concepts के लिए follow करो।
