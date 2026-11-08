@@ -1,0 +1,19 @@
+Interviewer ने पूछा: कितने subarrays का sum exactly k है, negatives के साथ?
+
+Subarray यानी array का continuous हिस्सा। | Given array: three, four, minus three, two, one, one, और k equals three। | Four, minus three, two का sum three है, और three अकेला भी, और two, one भी, तो answer three है।
+
+Brute force हर start और end का sum निकालता है। | Twenty thousand elements पर लगभग two hundred million subarrays बनते हैं, यह एक example है।
+
+Sliding window negatives के साथ गलत है। | वह sum k से ऊपर जाने पर window shrink करती है, इस भरोसे पर कि sum बढ़ता ही रहेगा। | Negative number sum घटा देता है, तो भरोसा टूटता है। | इसी array पर वह सिर्फ one गिनती है, जबकि सही answer three है।
+
+अब prefix sum। | Prefix sum यानी index तक के सारे elements का running sum। | किसी subarray का sum दो prefix sums का difference है: prefix j minus prefix i। | तो current prefix s पर बस यह देखना है कि prefix s minus k पहले कितनी बार आ चुका है।
+
+इसके लिए hash map रखो, जो हर prefix की count रखे। | Count इसलिए, क्योंकि एक prefix कई बार आ सकता है, और हर बार एक नया subarray बनता है। | Map शुरू होता है zero से one पर, उन subarrays के लिए जो index zero से शुरू होते हैं।
+
+अब dry run, k equals three। | Three: prefix three, minus k यानी zero, मिला, answer one। | Four पर prefix seven, और four नहीं मिला। | Minus three पर prefix four, और one नहीं मिला। | Two: prefix six, और three मिला, answer two। | One: prefix seven, और four मिला, answer three। | आखिरी one पर five नहीं मिला, तो answer three।
+
+अब code। | पहले seen में zero की count one रखो, और s और ans zero करो। | हर x पर s में x जोड़ो, ans में seen.get of s minus k, default zero, जोड़ो, फिर seen में s की count बढ़ाओ। | Query हमेशा insert से पहले करो, वरना k equals zero पर prefix अपने आप से match हो जाएगा।
+
+मैंने code चलाया है, इन्हीं पर three, two, two, three आता है। | Time O of n, क्योंकि एक pass है और map lookup average O of one है। | Extra space O of n, क्योंकि worst case में हर prefix अलग होता है।
+
+Comments में बताओ: Given array: one, minus one, zero, और k equals zero का answer कितना आएगा?
