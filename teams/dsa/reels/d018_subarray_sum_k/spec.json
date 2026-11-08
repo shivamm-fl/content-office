@@ -1,0 +1,107 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5,
+    "K": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "err",
+      "D",
+      0,
+      0.3
+    ],
+    [
+      "dip",
+      "E",
+      3,
+      -0.1
+    ],
+    [
+      "click",
+      "F",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "H",
+      1,
+      0.2
+    ],
+    [
+      "ok",
+      "H",
+      2,
+      0.3
+    ],
+    [
+      "save",
+      "K",
+      1,
+      0.4
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: कितने subarrays का sum exactly k है, negatives के साथ? || Subarray यानी array का continuous हिस्सा।",
+      "B": "Given array: three, four, minus three, two, one, one, और k equals three। || Four, minus three, two का sum three है, और three अकेला भी, और two, one भी, तो answer three है।",
+      "C": "Brute force हर start और end का sum निकालता है। || Twenty thousand elements पर लगभग two hundred million subarrays बनते हैं, यह एक example है।",
+      "D": "@emph Sliding window negatives के साथ गलत है। || वह sum k से ऊपर जाने पर window shrink करती है, इस भरोसे पर कि sum बढ़ता ही रहेगा। || Negative number sum घटा देता है, तो भरोसा टूटता है। || इसी array पर वह सिर्फ one गिनती है, जबकि सही answer three है।",
+      "E": "अब prefix sum। || Prefix sum यानी index तक के सारे elements का running sum। || किसी subarray का sum दो prefix sums का difference है: prefix j minus prefix i। || तो current prefix s पर बस यह देखना है कि prefix s minus k पहले कितनी बार आ चुका है।",
+      "F": "इसके लिए hash map रखो, जो हर prefix की count रखे। || Count इसलिए, क्योंकि एक prefix कई बार आ सकता है, और हर बार एक नया subarray बनता है। || Map शुरू होता है zero से one पर, उन subarrays के लिए जो index zero से शुरू होते हैं।",
+      "G": "अब dry run, k equals three। || Three: prefix three, minus k यानी zero, मिला, answer one। || Four पर prefix seven, और four नहीं मिला। || Minus three पर prefix four, और one नहीं मिला।",
+      "H": "Two: prefix six, और three मिला, answer two। || One: prefix seven, और four मिला, answer three। || आखिरी one पर five नहीं मिला, तो answer three।",
+      "I": "अब code। || पहले seen में zero की count one रखो, और s और ans zero करो। || हर x पर s में x जोड़ो, ans में seen.get of s minus k, default zero, जोड़ो, फिर seen में s की count बढ़ाओ। || Query हमेशा insert से पहले करो, वरना k equals zero पर prefix अपने आप से match हो जाएगा।",
+      "J": "मैंने code चलाया है, इन्हीं पर three, two, two, three आता है। || @emph Time O of n, क्योंकि एक pass है और map lookup average O of one है। || Extra space O of n, क्योंकि worst case में हर prefix अलग होता है।",
+      "K": "Comments में बताओ: Given array: one, minus one, zero, और k equals zero का answer कितना आएगा? || Code और dry run के साथ DSA सीखने के लिए follow करो।"
+    }
+  },
+  "sources": [
+    "https://leetcode.doocs.org/en/lc/560/",
+    "https://en.wikipedia.org/wiki/Prefix_sum",
+    "https://docs.python.org/3/library/collections.html"
+  ],
+  "prime": "सुनो, ये बहुत interesting है!"
+}

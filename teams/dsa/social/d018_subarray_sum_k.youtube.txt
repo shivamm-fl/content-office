@@ -1,0 +1,8 @@
+Subarray Sum Equals K in O(n): Prefix Sum and Hash Map
+
+Subarray Sum Equals K asks how many continuous subarrays of an array, which may contain negative numbers, sum to exactly k. Brute force checks every start and end pair (about 200 million subarrays for n = 20,000, an example). A sliding window fails with negatives because the sum no longer only grows (our own derivation): on [3, 4, -3, 2, 1, 1] with k = 3 it counts 1, but the answer is 3. Instead use prefix sums: the sum of a subarray is the difference of two prefix sums, so at each element add the number of earlier prefixes equal to current prefix minus k, kept in a hash map of counts seeded with {0: 1}, querying before inserting. Time O(n), extra space O(n). The code shown was run: 3, 2, 2, 3 on the four examples.
+
+Sources:
+https://leetcode.doocs.org/en/lc/560/
+https://en.wikipedia.org/wiki/Prefix_sum
+https://docs.python.org/3/library/collections.html

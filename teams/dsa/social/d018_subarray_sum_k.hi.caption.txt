@@ -1,0 +1,9 @@
+Day 18/150: Subarray Sum Equals K: negatives ke saath bhi O(n)!
+
+Interviewer poochta hai: kitne subarrays ka sum exactly k hai, negatives ke saath? Brute force har start aur end ka sum nikalta hai: 20,000 elements par lagbhag 200 million subarrays (example). Sliding window yahan galat hai, kyunki negative number sum ghata deta hai aur window ek valid subarray ke paar shrink ho jaati hai. [3, 4, -3, 2, 1, 1] aur k = 3 par woh sirf 1 ginti hai, sahi answer 3 hai.
+
+Fix: prefix sum. Subarray ka sum do prefix sums ka difference hai, to current prefix s par dekho ki s - k pehle kitni baar aaya. Hash map har prefix ki count rakhta hai, seen = {0: 1} se shuru, aur query hamesha insert se pehle. Time O(n), extra space O(n). Actual Python code video mein hai, example par chalaya hai: 3, 2, 2, 3.
+
+Ab tumhara turn: [1, -1, 0] aur k = 0 ka answer kitna aayega? Comment mein likho.
+
+#dsa #subarraysumequalsk #interviewprep

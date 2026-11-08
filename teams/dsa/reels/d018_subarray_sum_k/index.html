@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Subarray Sum Equals K</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="143.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="143.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="143.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="143.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J","K"], tag: "DSA 018/150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const AMB = "#E9B44C", VIO = "#9A8CEB";
+      const $s = (k) => M.$("#s" + k);
+      const [A, B, C, D, E, F, G, H, I, J, K] = "ABCDEFGHIJK".split("").map($s);
+      const cp = (sc, i) => REEL.hi.caps.filter((c) => c.scene === sc)[i].s;
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size, ts) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, String(from)); const o = { v: from };
+        show(d, ts == null ? segs[0][0] - 0.3 : ts, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const tint = (d, t, col, fill) => tl.to(d, { borderColor: M.ca(col, .9), backgroundColor: M.ca(col, fill == null ? .28 : fill), duration: 0.3, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t);
+      const bigtxt = (host, css, txt, col, size, t) => show(lab(host, css, txt, col, size), t, { opacity: 0 });
+      const ghost = (host, x, y, w, h) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px dashed rgba(150,175,215,.35)`);
+      const chip = (host, x, y, w, h, txt, col, t, fs) => show(tile(host, x, y, w, h, txt, col, fs || 56), t, { opacity: 0, y: 18 });
+      const base = (sc, h) => { const p = panel(sc, 60, 230, 960, h || 1010, CYAN, null); show(p, ST[sc.id.slice(1)] + 0.05); return p; };
+      // a lit tile: dim from the start, lit on its word
+      const lt = (host, x, y, w, h, txt, col, fs, t, s0) => { const d = tile(host, x, y, w, h, txt, col, fs); dimIn(d, s0 + 0.1, 0.28); lit(d, t); return d; };
+
+      const CX = (i) => 24 + i * 92;
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      const code = (host, x, y, w, lines, fs, lh, s0) => {
+        const h = lines.length * lh + 36;
+        show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(8,13,26,.9);border:2px solid ${M.ca(CYAN, .35)}`), s0 + 0.1);
+        const Ls = lines.map((s, i) => show(el(host, `left:${x + 10}px;top:${y + 18 + i * lh}px;width:${w - 20}px;height:${lh}px;border-radius:8px;font:500 ${fs}px/${lh}px var(--code);color:#9FB0CC;white-space:pre;padding-left:12px;box-sizing:border-box`, esc(s)), s0 + 0.15, { opacity: 0 }));
+        const on = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: M.ca(ACC, .25), color: "#FFFFFF", duration: 0.3, immediateRender: false }, t); };
+        const off = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: "rgba(233,180,76,0)", color: "#9FB0CC", duration: 0.3, immediateRender: false }, t); };
+        return { on, off, h }; };
+      const seqTile = (host, x, y, w, h, col, fs, seq) => seq.map(([txt, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = seq[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[1]); return d; });
+
+      const GREY = "#B8C4DC", DIMC = "#5C6B88";
+      // swap: one tile slot whose text changes; items [txt, colour, time]
+      const swap = (host, x, y, w, h, fs, items) => items.map(([txt, col, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = items[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[2]); return d; });
+      // ring that moves between cells
+      const mkRing = (host, x, y, w, h, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:5px solid ${ACC};box-sizing:border-box`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); return d; };
+      const hop = (d, x, y, t, dur) => tl.to(d, { left: x, top: y, duration: dur || 0.35, ease: "power2.inOut", immediateRender: false }, t);
+
+      const ARR = [3, 4, -3, 2, 1, 1]; const AX = (i) => 24 + i * 152;
+      const fmt = (v) => (v < 0 ? "-" + Math.abs(v) : String(v));
+      // array row: ghost + tile per cell; visible from the scene start, lit on its word if times are given
+      const arrRow = (host, y, h, fs, s0, times) => ARR.map((v, i) => { ghost(host, AX(i), y, 140, h);
+        if (times) return lt(host, AX(i), y, 140, h, fmt(v), CYAN, fs, times[i], s0);
+        return show(tile(host, AX(i), y, 140, h, fmt(v), CYAN, fs), s0 + 0.05, { opacity: 0 }); });
+      // bracket over cells a..b of an array row at y
+      const brk = (host, a, b, y, h, col, t, t2) => { const d = el(host, `left:${AX(a) - 8}px;top:${y - 8}px;width:${(b - a) * 152 + 156}px;height:${h + 16}px;border-radius:18px;border:5px solid ${col};box-sizing:border-box`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); if (t2 != null) hide(d, t2); return d; };
+
+      // diagram: A
+      // ===== A: hook, the question, a subarray is continuous
+      M.hook(["SUBARRAYS WITH", "SUM = k ?"], { size: 88, top: 250 });
+      const pa = panel(A, 60, 500, 960, 720, CYAN, null); show(pa, 0.02);
+      bigtxt(pa, "left:0;width:960px;top:12px", "SUBARRAY", GREY, 36, 0.1);
+      arrRow(pa, 60, 100, 56, 0);
+      const aB = brk(pa, 1, 3, 60, 100, ACC, cp("A", 13) - 0.2);
+      lt(pa, AX(1), 190, 440, 90, "SUM = k", ACC, 54, cp("A", 6), 0);
+      bigtxt(pa, "left:0;width:960px;top:300px", "NOT A SUBARRAY", GREY, 36, cp("A", 15));
+      ARR.forEach((v, i) => { ghost(pa, AX(i), 345, 140, 100); if (i === 0 || i === 3) lt(pa, AX(i), 345, 140, 100, fmt(v), HOT, 56, cp("A", 17), 0); else lt(pa, AX(i), 345, 140, 100, fmt(v), CYAN, 56, cp("A", 15), 0); });
+      lt(pa, 24, 470, 916, 90, "SKIPS CELLS = NOT CONTINUOUS", HOT, 44, cp("A", 17), 0);
+      lt(pa, 24, 590, 440, 100, "HOW MANY?", HOT, 54, cp("A", 3), 0);
+      lt(pa, 498, 590, 440, 100, "NEGATIVES OK", AMB, 46, cp("A", 10), 0);
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B
+      // ===== B: given array, k = 3, three matching subarrays
+      const b0 = ST.B; const pb = base(B, 880);
+      bigtxt(pb, "left:0;width:960px;top:12px", "GIVEN ARRAY", GREY, 36, cp("B", 0));
+      arrRow(pb, 60, 100, 52, b0, [cp("B", 2), cp("B", 3), cp("B", 4), cp("B", 6), cp("B", 7), cp("B", 8)]);
+      lt(pb, 330, 185, 300, 90, "k = 3", ACC, 54, cp("B", 10), b0);
+      const strip = (y, idx, t, lbl) => { ARR.forEach((v, i) => { if (idx.includes(i)) lt(pb, AX(i), y, 140, 90, fmt(v), ACC, 48, t, b0); else ghost(pb, AX(i), y, 140, 90); }); };
+      strip(345, [1, 2, 3], cp("B", 13)); strip(455, [0], cp("B", 22)); strip(565, [3, 4], cp("B", 26));
+      lt(pb, 24, 700, 916, 120, "ANSWER = 3", GOOD, 68, cp("B", 30), b0);
+      M.pill(pb, "SUM = 3 EACH", cp("B", 17), { x: 650, y: 200, w: 290, kind: "out", size: 30 });
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C
+      // ===== C: brute force, the real sum of every start/end pair
+      const c0 = ST.C; const pc = base(C, 1010);
+      const CXo = 204, CC = (c) => CXo + c * 92;
+      ARR.forEach((v, c) => { ghost(pc, CC(c), 20, 86, 70); lt(pc, CC(c), 20, 86, 70, fmt(v), CYAN, 38, c0, c0); });
+      bigtxt(pc, "left:24px;width:170px;top:130px", "START", GREY, 30, cp("C", 2));
+      const cSum = []; for (let r = 0; r < 6; r++) { let s = 0; for (let c = r; c < 6; c++) { s += ARR[c]; cSum.push([r, c, s]); } }
+      cSum.forEach(([r, c, s], n) => { const y = 120 + r * 76; const d = tile(pc, CC(c), y, 86, 70, fmt(s), HOT, 38); dimIn(d, c0 + 0.1, 0.15); lit(d, cp("C", 2) + 0.15 + n * 0.08); if (s === 3) tint(d, cp("C", 8) + 0.3, GOOD, 0.4); });
+      lt(pc, 24, 600, 916, 90, "n = 20,000", CYAN, 56, cp("C", 10), c0);
+      counter(pc, "left:24px;width:916px;top:720px", 0, [[cp("C", 15), cp("C", 17) + 0.5, 200010000]], HOT, 100, cp("C", 14));
+      bigtxt(pc, "left:24px;width:500px;top:845px", "SUBARRAYS", GREY, 44, cp("C", 18));
+      M.pill(pc, "EXAMPLE", cp("C", 23), { x: 690, y: 840, w: 250, kind: "out", size: 30 });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D
+      // ===== D: sliding window, its running sums, the missed subarray
+      const d0 = ST.D; const pd = base(D, 900);
+      bigtxt(pd, "left:0;width:960px;top:12px", "SLIDING WINDOW", GREY, 36, cp("D", 0));
+      const dA = arrRow(pd, 60, 100, 52, d0);
+      const dW = el(pd, `left:${AX(0) - 8}px;top:52px;width:156px;height:116px;border-radius:18px;border:5px solid ${GOOD};box-sizing:border-box`);
+      tl.set(dW, { opacity: 0 }, 0); tl.to(dW, { opacity: 1, duration: 0.3, immediateRender: false }, cp("D", 7));
+      tl.to(dW, { width: 308, borderColor: HOT, duration: 0.4, immediateRender: false }, cp("D", 11));
+      tl.to(dW, { opacity: 0, duration: 0.3, immediateRender: false }, cp("D", 15) + 0.3);
+      [0, 1].forEach((i) => dim(dA[i], cp("D", 15) + 0.1, 0.25));
+      bigtxt(pd, "left:0;width:960px;top:176px", "WINDOW SUM", GREY, 34, cp("D", 7));
+      ARR.forEach((v, i) => ghost(pd, AX(i), 218, 140, 90));
+      swap(pd, AX(0), 218, 140, 90, 52, [["3", GOOD, cp("D", 7)]]);
+      swap(pd, AX(1), 218, 140, 90, 52, [["7", HOT, cp("D", 11)], ["0", AMB, cp("D", 15)]]);
+      [["-3", 2], ["-1", 3], ["0", 4], ["1", 5]].forEach(([t, i]) => swap(pd, AX(i), 218, 140, 90, 52, [[t, CYAN, cp("D", 26) + (i - 2) * 0.4]]));
+      tint(dA[2], cp("D", 26), HOT);
+      lt(pd, 24, 350, 916, 90, "ASSUMES SUM GROWS", AMB, 50, cp("D", 19), d0);
+      lt(pd, 24, 465, 916, 90, "-3 LOWERS SUM", HOT, 54, cp("D", 29), d0);
+      const dM = brk(pd, 1, 3, 60, 100, GOOD, cp("D", 45) - 0.2);
+      lt(pd, 24, 600, 440, 110, "WINDOW: 1", HOT, 54, cp("D", 41), d0);
+      lt(pd, 498, 600, 440, 110, "TRUE: 3", GOOD, 54, cp("D", 47), d0);
+      lt(pd, 24, 735, 916, 90, "MISSED 4, -3, 2", HOT, 50, cp("D", 47), d0);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E
+      // ===== E: prefix sums, the difference, the lookup of s - k
+      const e0 = ST.E; const pe = base(E, 980);
+      const PX = (j) => 24 + j * 132, AX2 = (i) => 90 + i * 132; const PRE = [0, 3, 7, 4, 6, 7, 8];
+      bigtxt(pe, "left:0;width:960px;top:10px", "ARRAY", GREY, 34, cp("E", 3));
+      const eA = ARR.map((v, i) => { ghost(pe, AX2(i), 55, 120, 90); return lt(pe, AX2(i), 55, 120, 90, fmt(v), CYAN, 46, cp("E", 3), e0); });
+      bigtxt(pe, "left:0;width:960px;top:175px", "PREFIX", GREY, 34, cp("E", 4));
+      const eP = PRE.map((v, j) => { ghost(pe, PX(j), 220, 120, 90); return lt(pe, PX(j), 220, 120, 90, fmt(v), VIO, 46, cp("E", 7) + j * 0.35, e0); });
+      const eB = brk(pe, 0, 0, 55, 90, ACC, cp("E", 17)); tl.set(eB, { left: AX2(1) - 8, width: 3 * 132 + 120 + 12 }, 0);
+      const eR1 = mkRing(pe, PX(1) - 5, 215, 130, 100, cp("E", 28)); const eR2 = mkRing(pe, PX(4) - 5, 215, 130, 100, cp("E", 25));
+      swap(pe, 24, 360, 916, 100, 50, [["PREFIX = RUNNING SUM", VIO, cp("E", 12)], ["SUM = P[j] - P[i]", ACC, cp("E", 22)], ["6 - 3 = 3 = k", GOOD, cp("E", 29)]]);
+      swap(pe, 24, 500, 440, 100, 50, [["s = 6", VIO, cp("E", 30)]]);
+      swap(pe, 498, 500, 440, 100, 50, [["s - k = 3", AMB, cp("E", 39)]]);
+      const eG = el(pe, `left:${PX(1) - 8}px;top:212px;width:136px;height:106px;border-radius:18px;border:6px solid ${GOOD};box-sizing:border-box`);
+      tl.set(eG, { opacity: 0 }, 0); tl.to(eG, { opacity: 1, duration: 0.3, immediateRender: false }, cp("E", 43));
+      lt(pe, 24, 640, 916, 110, "3 ALREADY SEEN: x1", GOOD, 50, cp("E", 44), e0);
+      lt(pe, 24, 780, 916, 100, "COUNT = SUBARRAYS ENDING HERE", AMB, 40, cp("E", 46), e0);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F
+      // ===== F: hash map of prefix counts, seeded with 0 -> 1
+      const f0 = ST.F; const pf = base(F, 960);
+      bigtxt(pf, "left:0;width:960px;top:10px", "PREFIXES", GREY, 34, cp("F", 7));
+      [0, 3, 7, 4, 6, 7, 8].forEach((v, j) => { ghost(pf, PX(j), 55, 120, 90); const d = lt(pf, PX(j), 55, 120, 90, v, VIO, 46, cp("F", 7) + j * 0.08, f0); if (v === 7) tint(d, cp("F", 15) + (j === 2 ? 0 : 0.5), AMB, 0.4); });
+      bigtxt(pf, "left:24px;width:440px;top:180px", "PREFIX", GREY, 40, cp("F", 2)); bigtxt(pf, "left:496px;width:440px;top:180px", "COUNT", GREY, 40, cp("F", 9));
+      ghost(pf, 24, 235, 440, 110); ghost(pf, 496, 235, 440, 110); ghost(pf, 24, 365, 440, 110); ghost(pf, 496, 365, 440, 110);
+      lt(pf, 24, 235, 440, 110, "0", CYAN, 56, cp("F", 33), f0); lt(pf, 496, 235, 440, 110, "1", GOOD, 56, cp("F", 35), f0);
+      lt(pf, 24, 365, 440, 110, "7", VIO, 56, cp("F", 14), f0);
+      swap(pf, 496, 365, 440, 110, 56, [["1", CYAN, cp("F", 14)], ["2", GOOD, cp("F", 17)]]);
+      const fR = mkRing(pf, PX(0) - 5, 50, 130, 100, cp("F", 37));
+      lt(pf, 24, 520, 916, 100, "SEEN TWICE", AMB, 54, cp("F", 16), f0);
+      lt(pf, 24, 650, 916, 100, "+1 SUBARRAY EACH", GOOD, 54, cp("F", 24), f0);
+      lt(pf, 24, 780, 916, 100, "0 : 1 = INDEX 0 START", ACC, 46, cp("F", 37), f0);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // dry run builder: array row, s / s-k / result tiles, seen slots, answer, 2 code lines
+      const SX = (i) => 24 + i * 152;
+      const dry = (sc, k0, o) => { const p = base(sc, 800);
+        const cells = ARR.map((v, i) => { ghost(p, AX(i), 20, 140, 90); const t = tile(p, AX(i), 20, 140, 90, fmt(v), CYAN, 48); show(t, k0 + 0.05, { opacity: 0 }); return t; });
+        (o.done || []).forEach((i) => dim(cells[i], k0 + 0.1, 0.3));
+        bigtxt(p, "left:0;width:960px;top:300px", "SEEN MAP", GREY, 34, k0 + 0.1);
+        for (let i = 0; i < 6; i++) ghost(p, SX(i), 340, 140, 100);
+        const slotItems = {}; (o.init || []).forEach(([i, txt]) => { (slotItems[i] = slotItems[i] || []).push([txt, CYAN, k0 + 0.1]); });
+        const sI = [], qI = [], rI = [], aI = o.ans.slice(); const ring = mkRing(p, AX(o.steps[0].cell), 20, 140, 90, o.steps[0].hop);
+        o.steps.forEach((st, n) => {
+          if (n) tl.to(ring, { left: AX(st.cell), duration: 0.4, ease: "power2.inOut", immediateRender: false }, st.hop);
+          sI.push([st.s[1], VIO, st.s[0]]); qI.push([st.q[1], AMB, st.q[0]]); rI.push([st.r[1], st.r[2] ? GOOD : HOT, st.r[0]]);
+          if (st.hit != null) { const h = el(p, `left:${SX(st.hit) - 6}px;top:334px;width:152px;height:112px;border-radius:18px;border:5px solid ${GOOD};box-sizing:border-box`); tl.set(h, { opacity: 0 }, 0); tl.to(h, { opacity: 1, duration: 0.3, immediateRender: false }, st.r[0]); hide(h, st.end); }
+          if (st.br) brk(p, st.br[0], st.br[1], 20, 90, ACC, st.br[2], st.end);
+          if (st.ins) (slotItems[st.ins[0]] = slotItems[st.ins[0]] || []).push([st.ins[1], st.ins[2] ? GOOD : CYAN, st.ins[3]]);
+        });
+        Object.keys(slotItems).forEach((i) => swap(p, SX(+i), 340, 140, 100, 44, slotItems[i]));
+        swap(p, 24, 150, 290, 100, 46, sI); swap(p, 330, 150, 290, 100, 46, qI); swap(p, 636, 150, 304, 100, 40, rI);
+        swap(p, 24, 480, 560, 110, 58, aI);
+        lt(p, 604, 480, 336, 110, "k = " + o.k, ACC, 58, o.kT, k0);
+        const cd = code(p, 24, 620, 916, ["ans += seen.get(s - k, 0)", "seen[s] = seen.get(s, 0) + 1"], 40, 62, k0);
+        o.steps.forEach((st) => { cd.on(0, 0, st.q[0]); cd.off(0, 0, st.ins ? st.ins[3] - 0.1 : st.end); cd.on(1, 1, st.ins ? st.ins[3] : st.end); cd.off(1, 1, st.end + 0.1); });
+        M.fit(sc, { y: 200, h: 1100 }); return p; };
+
+      // diagram: G
+      // ===== G: dry run, x = 3, 4, -3
+      const g0 = ST.G;
+      dry(G, g0, { k: 3, kT: cp("G", 3), init: [[0, "0:1"]], ans: [["ANS = 0", CYAN, g0 + 0.1], ["ANS = 1", GOOD, cp("G", 15)]],
+        steps: [
+          { cell: 0, hop: cp("G", 6), s: [cp("G", 8), "s = 3"], q: [cp("G", 12), "s - k = 0"], r: [cp("G", 13), "FOUND x1", true], hit: 0, br: [0, 0, cp("G", 14)], ins: [1, "3:1", false, cp("G", 16) - 0.6], end: cp("G", 16) },
+          { cell: 1, hop: cp("G", 16), s: [cp("G", 19), "s = 7"], q: [cp("G", 21), "s - k = 4"], r: [cp("G", 22), "NOT FOUND", false], ins: [2, "7:1", false, cp("G", 24) - 0.6], end: cp("G", 24) },
+          { cell: 2, hop: cp("G", 24), s: [cp("G", 28), "s = 4"], q: [cp("G", 30), "s - k = 1"], r: [cp("G", 31), "NOT FOUND", false], ins: [3, "4:1", false, cp("G", 32) + 0.5], end: cp("G", 32) + 1.1 }] });
+
+      // diagram: H
+      // ===== H: dry run, x = 2, 1, 1 and the answer
+      const h0 = ST.H;
+      dry(H, h0, { k: 3, kT: h0 + 0.1, done: [0, 1, 2], init: [[0, "0:1"], [1, "3:1"], [2, "7:1"], [3, "4:1"]],
+        ans: [["ANS = 1", CYAN, h0 + 0.1], ["ANS = 2", GOOD, cp("H", 7)], ["ANS = 3", GOOD, cp("H", 15)], ["ANSWER = 3", GOOD, cp("H", 23)]],
+        steps: [
+          { cell: 3, hop: cp("H", 0), s: [cp("H", 2), "s = 6"], q: [cp("H", 4), "s - k = 3"], r: [cp("H", 5), "FOUND x1", true], hit: 1, br: [1, 3, cp("H", 6)], ins: [4, "6:1", false, cp("H", 8) - 0.6], end: cp("H", 8) },
+          { cell: 4, hop: cp("H", 8), s: [cp("H", 10), "s = 7"], q: [cp("H", 12), "s - k = 4"], r: [cp("H", 13), "FOUND x1", true], hit: 3, br: [3, 4, cp("H", 14)], ins: [2, "7:2", true, cp("H", 16) - 0.6], end: cp("H", 16) },
+          { cell: 5, hop: cp("H", 16), s: [cp("H", 17), "s = 8"], q: [cp("H", 19), "s - k = 5"], r: [cp("H", 20), "NOT FOUND", false], ins: [5, "8:1", false, cp("H", 22)], end: cp("H", 24) + 0.6 }] });
+
+      // diagram: I
+      // ===== I: the real code, one chunk at a time, large
+      const i0 = ST.I; const pi = base(I, 900);
+      const chunk = (lines, t0, t1, y) => { const lh = 80, hh = lines.length * lh + 30; const box = el(pi, `left:24px;top:${y}px;width:916px;height:${hh}px;border-radius:16px;background:rgba(8,13,26,.92);border:2px solid ${M.ca(CYAN, .4)}`);
+        show(box, t0); lines.forEach((s, k) => show(el(pi, `left:44px;top:${y + 15 + k * lh}px;width:880px;height:${lh}px;font:600 52px/${lh}px var(--code);color:#FFFFFF;white-space:pre`, esc(s)), t0 + 0.05, { opacity: 0 }));
+        if (t1 != null) { const g = []; hide(box, t1); } return box; };
+      const cks = [[["def subarraySum(nums, k):", "    seen = {0: 1}", "    s = ans = 0"], i0 + 0.1, cp("I", 16)], [["for x in nums:", "    s += x"], cp("I", 16), cp("I", 23)], [["ans += seen.get(s - k, 0)"], cp("I", 23), cp("I", 33)], [["seen[s] = seen.get(s, 0) + 1"], cp("I", 33), cp("I", 40)], [["ans += seen.get(s - k, 0)", "seen[s] = seen.get(s, 0) + 1"], cp("I", 40), null]];
+      // chunks cross-fade in the same slot: hide the previous one as the next shows
+      cks.forEach(([ls, a, b]) => { const lhh = ls.length * 80 + 30; const bx = el(pi, `left:24px;top:20px;width:916px;height:${lhh}px;border-radius:16px;background:rgba(8,13,26,.92);border:2px solid ${M.ca(CYAN, .4)}`); show(bx, a);
+        const els = [bx]; ls.forEach((s, k) => els.push(show(el(pi, `left:44px;top:${35 + k * 80}px;width:880px;height:80px;font:600 52px/80px var(--code);color:#FFFFFF;white-space:pre`, esc(s)), a + 0.05, { opacity: 0 })));
+        if (b != null) els.forEach((d) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, b)); });
+      swap(pi, 24, 340, 916, 110, 58, [["SEED MAP", CYAN, cp("I", 2)], ["s, ans = 0", VIO, cp("I", 10)], ["ADD x", VIO, cp("I", 19)], ["LOOKUP FIRST", GOOD, cp("I", 23)], ["THEN INSERT", CYAN, cp("I", 33)], ["QUERY, THEN INSERT", GOOD, cp("I", 40)]]);
+      bigtxt(pi, "left:0;width:916px;top:490px", "IF INSERTED FIRST, k = 0", HOT, 40, cp("I", 46));
+      lt(pi, 24, 550, 440, 100, "s = 3", VIO, 54, cp("I", 47), i0); lt(pi, 498, 550, 440, 100, "s - 0 = 3", AMB, 54, cp("I", 48), i0);
+      ghost(pi, 24, 690, 200, 100); lt(pi, 24, 690, 200, 100, "3:1", CYAN, 48, cp("I", 51), i0);
+      const iH = el(pi, `left:18px;top:684px;width:212px;height:112px;border-radius:18px;border:6px solid ${HOT};box-sizing:border-box`); tl.set(iH, { opacity: 0 }, 0); tl.to(iH, { opacity: 1, duration: 0.3, immediateRender: false }, cp("I", 52));
+      lt(pi, 250, 690, 690, 100, "COUNTS ITSELF", HOT, 54, cp("I", 54), i0);
+      M.fit(I, { y: 200, h: 1100 });
+
+      // diagram: J
+      // ===== J: real run, time, space
+      const j0 = ST.J; const pj = base(J, 1050);
+      bigtxt(pj, "left:0;width:960px;top:12px", "REAL RUN", GREY, 38, cp("J", 1));
+      [["3,4,-3,2,1,1   k=3", 3, 6], ["1,2,3   k=3", 2, 7], ["1,1,1   k=2", 2, 8], ["1,-1,0   k=0", 3, 9]].forEach(([lbl, ans, ci], r) => {
+        lt(pj, 24, 60 + r * 84, 610, 74, lbl, CYAN, 38, cp("J", 1) + r * 0.1, j0); lt(pj, 650, 60 + r * 84, 290, 74, "= " + ans, GOOD, 44, cp("J", ci), j0); });
+      lt(pj, 24, 420, 440, 100, "TIME O(n)", GOOD, 54, cp("J", 12), j0); lt(pj, 498, 420, 440, 100, "SPACE O(n)", AMB, 54, cp("J", 28), j0);
+      ARR.forEach((v, i) => ghost(pj, AX(i), 560, 140, 70));
+      const jBar = el(pj, `left:24px;top:640px;width:912px;height:12px;border-radius:5px;background:${ACC};transform-origin:0 50%`); tl.set(jBar, { opacity: 0, scaleX: 0 }, 0);
+      tl.to(jBar, { opacity: 1, scaleX: 1, duration: 1.0, ease: "power2.inOut", immediateRender: false }, cp("J", 17));
+      ARR.forEach((v, i) => lt(pj, AX(i), 560, 140, 70, fmt(v), CYAN, 40, cp("J", 17) + i * 0.15, j0));
+      bigtxt(pj, "left:24px;width:300px;top:668px", "1 PASS", ACC, 40, cp("J", 18));
+      lt(pj, 24, 730, 916, 90, "LOOKUP O(1) AVERAGE", GOOD, 46, cp("J", 22), j0);
+      [0, 1, 3, 6, 10, 15, 21].forEach((v, i) => lt(pj, 24 + i * 132, 850, 120, 90, v, AMB, 44, cp("J", 37) + i * 0.1, j0));
+      M.pill(pj, "WORST CASE", cp("J", 34), { x: 560, y: 958, w: 380, kind: "out", size: 30 });
+      bigtxt(pj, "left:24px;width:500px;top:955px", "ALL DIFFERENT", AMB, 40, cp("J", 39));
+      M.fit(J, { y: 200, h: 1100 });
+
+      // diagram: K
+      // ===== K: comment question + follow
+      const k0 = ST.K; const pk = base(K, 800);
+      bigtxt(pk, "left:0;width:960px;top:14px", "GIVEN ARRAY", GREY, 36, cp("K", 3));
+      [[1, 5], [-1, 6], [0, 8]].forEach(([v, ci], i) => { ghost(pk, 120 + i * 270, 70, 240, 140); lt(pk, 120 + i * 270, 70, 240, 140, fmt(v), CYAN, 76, cp("K", ci), k0); });
+      lt(pk, 270, 250, 420, 100, "k = 0", ACC, 60, cp("K", 12), k0);
+      lt(pk, 140, 390, 680, 130, "ANSWER = ?", HOT, 68, cp("K", 16), k0);
+      const kCb = el(pk, "left:24px;top:570px;width:916px;height:84px;border-radius:50px;border:1.5px solid rgba(150,175,215,.35);font:500 40px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 30px", "Add a comment..."); show(kCb, cp("K", 0), { opacity: 0 });
+      const kFb = M.pill(pk, "+  FOLLOW", cp("K", 27) - 0.4, { x: 240, y: 690, w: 480, kind: "acc", size: 56 });
+      tl.fromTo(kFb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, cp("K", 27));
+      M.fit(K, { y: 200, h: 1100 });
+
+      ["B","C","D","E","F","G","H","I","J","K"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { negatives: "hot", Sliding: "hot", galat: "hot", Brute: "hot", million: "hot", prefix: "cyan", Prefix: "cyan", hash: "cyan", map: "cyan", subarray: "gold", Subarray: "gold", subarrays: "gold", answer: "good", Time: "good", space: "gold", follow: "gold", mila: "good", nahi: "hot", insert: "gold", Query: "good", sum: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

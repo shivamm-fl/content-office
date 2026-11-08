@@ -1,1 +1,139 @@
-{"items": [{"id": "d001", "track": "series", "day": 1, "title": "DSA kya hai aur interview mein kaise use hota hai", "status": "built"}, {"id": "d002", "track": "series", "day": 2, "title": "Big-O: steps ka growth, seconds nahi", "status": "built"}, {"id": "d003", "track": "series", "day": 3, "title": "Space complexity: memory dekar time bachana", "status": "built"}, {"id": "d004", "track": "series", "day": 4, "title": "Arrays: memory mein kaise rakhe jaate hain", "status": "built"}, {"id": "d005", "track": "series", "day": 5, "title": "Strings: array jaisi, par badal nahi sakte", "status": "built"}, {"id": "d006", "track": "series", "day": 6, "title": "Hash map: lookup O(1) kaise ho jaata hai", "status": "built"}, {"id": "d007", "track": "series", "day": 7, "title": "Hash collision: do key ek hi slot par aa jaayein toh", "status": "built"}, {"id": "d008", "track": "series", "day": 8, "title": "Two Sum: do number jinka jod target ho, ek pass mein", "status": "built"}, {"id": "d009", "track": "series", "day": 9, "title": "Contains Duplicate aur Valid Anagram: ek hash map se dono", "status": "built"}, {"id": "d010", "track": "series", "day": 10, "title": "Recursion aur call stack: har call ka apna frame", "status": "built"}, {"id": "d011", "track": "series", "day": 11, "title": "Prefix sum: range queries O(1) mein", "status": "built"}, {"id": "d012", "track": "series", "day": 12, "title": "Pivot Index: left aur right ka sum barabar kahan", "status": "built"}, {"id": "d013", "day": 13, "title": "Product of Array Except Self", "track": "series", "status": "built", "production_date_ist": "2026-11-02", "owner_approved": false, "published": false}, {"id": "d014", "day": 14, "title": "Maximum Subarray with Kadane", "track": "series", "status": "built", "production_date_ist": "2026-11-03", "owner_approved": false, "published": false}, {"id": "d015", "day": 15, "title": "Group Anagrams with Count Keys", "track": "series", "status": "built", "production_date_ist": "2026-11-04", "owner_approved": false, "published": false}, {"id": "d016", "track": "series", "day": 16, "title": "Top K Frequent Elements: count karo, phir frequency ke buckets", "status": "built"}, {"id": "d017", "track": "series", "day": 17, "title": "Longest Consecutive Sequence: set mein sirf run ka start dhoondho", "status": "built"}, {"id": "d018", "track": "series", "day": 18, "title": "Subarray Sum Equals K: prefix sum aur hash map se count", "status": "planned"}]}
+{
+  "items": [
+    {
+      "id": "d001",
+      "track": "series",
+      "day": 1,
+      "title": "DSA kya hai aur interview mein kaise use hota hai",
+      "status": "built"
+    },
+    {
+      "id": "d002",
+      "track": "series",
+      "day": 2,
+      "title": "Big-O: steps ka growth, seconds nahi",
+      "status": "built"
+    },
+    {
+      "id": "d003",
+      "track": "series",
+      "day": 3,
+      "title": "Space complexity: memory dekar time bachana",
+      "status": "built"
+    },
+    {
+      "id": "d004",
+      "track": "series",
+      "day": 4,
+      "title": "Arrays: memory mein kaise rakhe jaate hain",
+      "status": "built"
+    },
+    {
+      "id": "d005",
+      "track": "series",
+      "day": 5,
+      "title": "Strings: array jaisi, par badal nahi sakte",
+      "status": "built"
+    },
+    {
+      "id": "d006",
+      "track": "series",
+      "day": 6,
+      "title": "Hash map: lookup O(1) kaise ho jaata hai",
+      "status": "built"
+    },
+    {
+      "id": "d007",
+      "track": "series",
+      "day": 7,
+      "title": "Hash collision: do key ek hi slot par aa jaayein toh",
+      "status": "built"
+    },
+    {
+      "id": "d008",
+      "track": "series",
+      "day": 8,
+      "title": "Two Sum: do number jinka jod target ho, ek pass mein",
+      "status": "built"
+    },
+    {
+      "id": "d009",
+      "track": "series",
+      "day": 9,
+      "title": "Contains Duplicate aur Valid Anagram: ek hash map se dono",
+      "status": "built"
+    },
+    {
+      "id": "d010",
+      "track": "series",
+      "day": 10,
+      "title": "Recursion aur call stack: har call ka apna frame",
+      "status": "built"
+    },
+    {
+      "id": "d011",
+      "track": "series",
+      "day": 11,
+      "title": "Prefix sum: range queries O(1) mein",
+      "status": "built"
+    },
+    {
+      "id": "d012",
+      "track": "series",
+      "day": 12,
+      "title": "Pivot Index: left aur right ka sum barabar kahan",
+      "status": "built"
+    },
+    {
+      "id": "d013",
+      "day": 13,
+      "title": "Product of Array Except Self",
+      "track": "series",
+      "status": "built",
+      "production_date_ist": "2026-11-02",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "d014",
+      "day": 14,
+      "title": "Maximum Subarray with Kadane",
+      "track": "series",
+      "status": "built",
+      "production_date_ist": "2026-11-03",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "d015",
+      "day": 15,
+      "title": "Group Anagrams with Count Keys",
+      "track": "series",
+      "status": "built",
+      "production_date_ist": "2026-11-04",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "d016",
+      "track": "series",
+      "day": 16,
+      "title": "Top K Frequent Elements: count karo, phir frequency ke buckets",
+      "status": "built"
+    },
+    {
+      "id": "d017",
+      "track": "series",
+      "day": 17,
+      "title": "Longest Consecutive Sequence: set mein sirf run ka start dhoondho",
+      "status": "built"
+    },
+    {
+      "id": "d018",
+      "track": "series",
+      "day": 18,
+      "title": "Subarray Sum Equals K: prefix sum aur hash map se count",
+      "status": "built"
+    }
+  ]
+}

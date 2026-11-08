@@ -50,35 +50,21 @@
       "hook_type": "interviewer_asked",
       "spoken_hook": "Interviewer ने पूछा: कितने subarrays का sum exactly k है, negatives के साथ?",
       "hook_formula": "interviewer_asked_full_question",
-      "hook_source": "Interviewer asked: the problem as one complete question; interviewer_asked is the unused hook type of the last six built (d012-d017: direct_question x4, surprising_fact x1, relatable_stake x1). No company claim, so no company page needed.",
+      "hook_source": "Interviewer asked: the problem as one complete question; interviewer_asked is the unused hook type of the last six built (d012-d017). No company claim.",
       "hook_10s": "Interviewer ने पूछा: कितने subarrays का sum exactly k है, negatives के साथ? Subarray यानी array का continuous हिस्सा. [Frame 0: array 3, 4, -3, 2, 1, 1 with a bracket on 4, -3, 2 and the label sum = 3]",
-      "hook_candidates": [
-        {
-          "formula": "interviewer_asked_full_question",
-          "text": "Interviewer ने पूछा: कितने subarrays का sum exactly k है, negatives के साथ?"
-        },
-        {
-          "formula": "direct_question",
-          "text": "Subarray Sum Equals K: negatives हों तो sliding window क्यों fail होती है?"
-        },
-        {
-          "formula": "surprising_fact",
-          "text": "Subarray Sum Equals K में sliding window गलत answer देती है, prefix sum सही."
-        }
-      ],
       "one_idea": "Subarray Sum Equals K: a subarray ending at the current index sums to k exactly when an earlier prefix sum equals current_prefix - k, so keep a hash map of prefix-sum counts and add seen[current - k] at each step; sliding window fails because negatives break monotonic growth.",
       "visual_idea": "The array as a row of cells with a running prefix-sum strip underneath; at each cell a pointer reads the current prefix, a lookup arrow jumps to a hash-map table of prefix to count and highlights the entry for current minus k, the matching subarray bracket lights on the array and the answer counter rises. A short side panel shows a sliding window on 3, 4, -3, 2, 1, 1 shrinking past a valid subarray and missing it. Actual Python code visible in readable chunks synced to the voice.",
-      "everyday_anchor": "none: audience is working engineers (owner 2026-10-26); technical explanation with prefix sum and hash map only, no everyday analogy.",
+      "everyday_anchor": "none: audience is working engineers; technical explanation only.",
       "example": "EXAMPLE nums = [3, 4, -3, 2, 1, 1], k = 3: answer 3 (subarrays [3], [4, -3, 2], [2, 1]). [1, 2, 3] k = 3 gives 2; [1, 1, 1] k = 2 gives 2; [1, -1, 0] k = 0 gives 3. Sliding window on the first array returns 1 (wrong). Brute force for n = 20000 checks 200,010,000 subarrays vs 20,000 steps (EXAMPLE).",
-      "code_outline": "seen = {0: 1}; s = ans = 0; for x in nums: s += x; ans += seen.get(s - k, 0); seen[s] = seen.get(s, 0) + 1; return ans. Query before insert; seen starts {0: 1} for subarrays that begin at index 0.",
+      "code_outline": "seen = {0: 1}; s = ans = 0; for x in nums: s += x; ans += seen.get(s - k, 0); seen[s] = seen.get(s, 0) + 1; return ans. Query before insert.",
       "sources": [
         "https://leetcode.doocs.org/en/lc/560/",
         "https://en.wikipedia.org/wiki/Prefix_sum",
         "https://docs.python.org/3/library/collections.html"
       ],
       "facts_to_verify": [
-        "Problem paraphrased from the doocs mirror of LeetCode 560 (fetched; LeetCode itself not used): negatives allowed, elements -1000..1000, up to 2*10^4 elements. Prefix-sum + hash-map approach, seen = {0: 1}, query before insert, O(n) time and O(n) space come from that page. Prefix sum definition from Wikipedia. Counter/defaultdict missing-key behaviour from Python collections docs (code uses dict.get instead).",
-        "Run the code and show its real output: planner run gave 2, 2, 3, 3 for the four examples; matched brute force on 5000 random arrays (0 mismatches); sliding window gave 1 on [3,4,-3,2,1,1] k=3 (true 3) and was wrong on 2519 of 5000 random arrays with negatives (planner arithmetic, EXAMPLE). 200,010,000 vs 20,000 is EXAMPLE arithmetic. The claim that sliding window fails with negatives is our own derivation (the sum does not grow monotonically), shown by the counterexample."
+        "Problem paraphrased from the doocs mirror of LeetCode 560 (fetched): negatives allowed; prefix-sum + hash-map, seen={0:1}, query before insert, O(n) time and space. Prefix sum definition from Wikipedia.",
+        "Code run: 3, 2, 2, 3 for the four examples; 0 mismatches vs brute force on 5000 random arrays; sliding window gave 1 on [3,4,-3,2,1,1] k=3 (true 3). Sliding-window-fails-with-negatives is our own derivation. 200,010,000 vs 20,000 is EXAMPLE arithmetic."
       ],
       "length_target_s": 150,
       "cover_headline": "Subarray Sum Equals K in O(n)",
