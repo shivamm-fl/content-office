@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Reverse proxy: server ka front door, aur load balancer se fark</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="117.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+<div class="beat" id="sB"></div>
+<div class="beat" id="sC"></div>
+<div class="beat" id="sD"></div>
+<div class="beat" id="sE"></div>
+<div class="beat" id="sF"></div>
+<div class="beat" id="sG"></div>
+<div class="beat" id="sH"></div>
+<div class="beat" id="sI"></div>
+<div class="beat" id="sJ"></div>
+<div class="beat" id="sK"></div>
+<div class="beat" id="sL"></div>
+<div class="beat" id="sM"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="117.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="117.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="117.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J","K","L","M"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 019 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J, K, L, MM] = SC.map((k) => M.$("#s" + k));
+      const S = M.S;
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${cx - w / 2}px;width:${w}px;top:${y}px;height:${h || 76}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 40}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const sv = (kind, size, col) => `<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${Viz.ICONS[kind](col)}</svg>`;
+      const ico = (host, kind, cx, cy, size, col, t) => show(el(host, `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`, sv(kind, size, col)), t, { opacity: 0, scale: 0.8, y: 0 });
+      const dot = (host, x0, y0, x1, y1, t, col, dur, o) => { o = o || {}; const d = el(host, `left:${x0 - 22}px;top:${y0 - 22}px;width:44px;height:44px;border-radius:50%;box-sizing:border-box;${o.hollow ? `border:6px solid ${col}` : `background:${col}`}`);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, t);
+        tl.to(d, { x: x1 - x0, y: y1 - y0, duration: dur, ease: "power1.inOut", immediateRender: false }, t);
+        if (!o.stay) tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M9 17L12 46M35 17l17 29"/></g>`;
+      Viz.ICONS.eyeoff = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4 32C14 16 50 16 60 32 50 48 14 48 4 32z"/><circle cx="32" cy="32" r="7"/><path d="M10 56L54 8" stroke-width="6"/></g>`;
+      Viz.ICONS.door = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M16 56V8h32v48M8 56h48"/></g><circle cx="40" cy="34" r="3.5" fill="${c}"/>`;
+      Viz.ICONS.bed = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M6 52V14M6 40h52v12M58 40V30a8 8 0 0 0-8-8H26v18"/><circle cx="16" cy="30" r="5"/></g>`;
+      Viz.ICONS.bell = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M10 48h44M16 48a16 16 0 0 1 32 0M32 24v-8M26 16h12"/></g>`;
+
+      // fixed frame: clients on top, one door in the middle, servers below; no wire from a client to a server
+      const CX = [190, 540, 890], DX = [400, 540, 680], SX = [200, 540, 880], CY = 420, DY = 700, SY = 1010;
+      const frame = (host, t, o) => { o = o || {};
+        const cl = CX.map((cx, i) => { const b = M.box(host, { x: cx - 125, y: CY, w: 250, h: 170, label: o.cl || "CLIENT", icon: o.cicon || "user", color: CYAN, size: 36 }); b.show(t + 0.05 * i); return b; });
+        const door = M.box(host, { x: 240, y: DY, w: 600, h: 200, label: o.dl || "REVERSE PROXY", icon: o.dicon || "door", color: ACC, size: 44 }); door.show(t + 0.1);
+        const sv_ = SX.map((cx, i) => { const b = M.box(host, { x: cx - 135, y: SY, w: 270, h: 200, label: o.sl ? o.sl + " " + (i + 1) : "S" + (i + 1), icon: o.sicon || "server", color: CYAN, size: 40 }); b.show(t + 0.15 + 0.05 * i); return b; });
+        const win = CX.map((cx, i) => { const a = M.arrow(host, { from: [cx, CY + 170], to: [DX[i], DY - 8], color: GREY, w: 5, dash: true }); a.show(t + 0.3, 0.3); return a; });
+        const wout = SX.map((cx, i) => { const a = M.arrow(host, { from: [DX[i], DY + 208], to: [cx, SY - 8], color: GREY, w: 5, dash: true }); a.show(t + 0.35, 0.3); return a; });
+        return { cl, door, sv: sv_, win, wout }; };
+      // a request: client ci -> door -> server si; back = response returns the same way
+      const req = (host, ci, si, t, col, o) => { o = o || {}; col = col || ACC;
+        dot(host, CX[ci], CY + 170, DX[1], DY + 40, t, col, 0.5);
+        if (si != null) dot(host, DX[1], DY + 200, SX[si], SY + 40, t + 0.55, col, 0.5); };
+      const resp = (host, si, ci, t, col) => { col = col || GOOD;
+        dot(host, SX[si], SY + 40, DX[1], DY + 200, t, col, 0.5, { hollow: 1 });
+        dot(host, DX[1], DY + 40, CX[ci], CY + 170, t + 0.55, col, 0.5, { hollow: 1 }); };
+
+      Viz.ICONS.unlock = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="12" y="28" width="40" height="28" rx="6"/><path d="M0 28V20a12 12 0 0 1 24 0"/></g><circle cx="32" cy="42" r="4" fill="${c}"/>`;
+      const hiOut = (host, t, col) => SX.map((cx, i) => M.arrow(host, { from: [DX[i], DY + 208], to: [cx, SY - 8], color: col, w: 9 }).show(t, 0.3));
+      // ===== A: hook =====
+      // diagram: A
+      M.hook(["Reverse proxy", "vs load balancer?"], { size: 92, top: 230 });
+      const fa = frame(A, 0.05);
+      req(A, 0, 0, 0.3); req(A, 2, 2, 1.1);
+      ring(A, 240, DY, 600, 200, ACC, at("A", "reverse"));
+      chip(A, "REVERSE PROXY", 300, 1235, 440, ACC, at("A", "reverse"), 36, 70);
+      hiOut(A, at("A", "load"), CYAN);
+      chip(A, "LOAD BALANCER", 780, 1235, 440, CYAN, at("A", "load"), 36, 70);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: the door is everything, balancing is one job =====
+      // diagram: B
+      frame(B, M.P("B", 0));
+      const bSt = stamp(B, "FRONT DOOR", 540, 250, ACC, at("B", "front"), 50, 520);
+      ring(B, 240, DY, 600, 200, ACC, at("B", "front"));
+      gone(bSt, at("B", "sirf") - 0.2);
+      hiOut(B, at("B", "balancer"), CYAN);
+      chip(B, "LOAD BALANCER", 540, 1235, 440, CYAN, at("B", "balancer"), 38, 70);
+      stamp(B, "ONE JOB", 540, 250, CYAN, at("B", "sirf"), 50, 400);
+      M.fit(B);
+
+      // ===== C: hotel reception, guests never walk to rooms =====
+      // diagram: C
+      frame(C, M.P("C", 0), { cl: "GUEST", dl: "RECEPTION", dicon: "bell", sl: "ROOM", sicon: "bed" });
+      stamp(C, "HOTEL", 540, 250, ACC, M.P("C", 0), 50, 360);
+      const cDir = M.arrow(C, { from: [190, 590], to: [200, 1002], color: HOT, w: 7, dash: true }); cDir.show(at("C", "seedhe"), 0.3);
+      const cX = ico(C, "cross", 195, 800, 90, HOT, at("C", "nahi"));
+      gone(cX, at("C", "Desk") - 0.1); cDir.hide(at("C", "Desk") - 0.1);
+      req(C, 1, null, at("C", "request"));
+      dot(C, DX[1], DY + 200, SX[1], SY + 40, at("C", "room"), ACC, 0.5);
+      resp(C, 1, 1, at("C", "jawab"));
+      M.fit(C);
+
+      // ===== D: the real thing: proxy in front of servers, servers hidden =====
+      // diagram: D
+      frame(D, M.P("D", 0));
+      ring(D, 240, DY, 600, 200, ACC, at("D", "baitha"));
+      req(D, 1, null, at("D", "baat")); resp(D, 1, 1, at("D", "baat") + 0.9);
+      SX.forEach((cx) => show(el(D, `left:${cx - 135}px;top:${SY}px;width:270px;height:200px;border-radius:18px;background:rgba(14,18,30,.78)`), at("D", "dikhte"), { opacity: 0, y: 0 }));
+      SX.forEach((cx) => ico(D, "eyeoff", cx, SY + 100, 100, HOT, at("D", "dikhte")));
+      chip(D, "HIDDEN", 540, 1235, 320, HOT, at("D", "nahi"), 40, 70);
+      M.fit(D);
+
+      // ===== E: EXAMPLE, /app goes to group A, /static comes from the cache =====
+      // diagram: E
+      M.pill(E, "EXAMPLE", M.P("E", 0), { x: 380, y: 200, size: 44 });
+      frame(E, M.P("E", 0) + 0.1);
+      chip(E, "/app", CX[0], 340, 170, ACC, at("E", "/app"), 38, 64);
+      req(E, 0, 1, at("E", "proxy"));
+      chip(E, "GROUP A", 540, 1235, 420, CYAN, at("E", "group"), 40, 70);
+      SX.forEach((cx) => ring(E, cx - 135, SY, 270, 200, CYAN, at("E", "group")));
+      chip(E, "/static", CX[2], 340, 190, ACC, at("E", "/static"), 38, 64);
+      dot(E, CX[2], CY + 170, DX[1], DY + 40, at("E", "/static") + 0.2, ACC, 0.5);
+      chip(E, "CACHE", 950, 770, 190, CYAN, at("E", "cache"), 34, 66);
+      M.arrow(E, { from: [700, DY - 8], to: [CX[2], CY + 178], color: GOOD, w: 9 }).show(at("E", "cache") + 0.1, 0.3);
+      dot(E, DX[2], DY + 40, CX[2], CY + 170, at("E", "cache") + 0.2, GOOD, 0.5, { hollow: 1 });
+      M.fit(E);
+
+      // ===== F: step 1, the request reaches the proxy =====
+      // diagram: F
+      frame(F, M.P("F", 0));
+      stamp(F, "STEP 1", 540, 205, ACC, M.P("F", 0), 50, 300);
+      dot(F, CX[1], CY + 170, DX[1], DY + 40, at("F", "request"), ACC, 0.6);
+      chip(F, "REAL SERVER?", CX[1], 340, 380, CYAN, at("F", "lagta"), 36, 64);
+      ring(F, 240, DY, 600, 200, ACC, at("F", "yahi"));
+      M.fit(F);
+
+      // ===== G: step 2, the proxy forwards to one backend =====
+      // diagram: G
+      const fg = frame(G, M.P("G", 0));
+      stamp(G, "STEP 2", 540, 250, ACC, M.P("G", 0), 50, 300);
+      ring(G, SX[1] - 135, SY, 270, 200, ACC, at("G", "ek"));
+      chip(G, "FORWARD", 540, 925, 300, ACC, at("G", "forward"), 38, 66);
+      dot(G, DX[1], DY + 200, SX[1], SY + 40, at("G", "forward"), ACC, 0.6);
+      M.fit(G);
+
+      // ===== H: step 3, the response returns through the proxy =====
+      // diagram: H
+      frame(H, M.P("H", 0));
+      stamp(H, "STEP 3", 540, 250, ACC, M.P("H", 0), 50, 300);
+      ring(H, SX[1] - 135, SY, 270, 200, GOOD, M.P("H", 0) + 0.2);
+      dot(H, SX[1], SY + 40, DX[1], DY + 200, at("H", "jawab"), GOOD, 0.5, { hollow: 1 });
+      chip(H, "RESPONSE", 540, 925, 300, GOOD, at("H", "jawab"), 38, 66);
+      dot(H, DX[1], DY + 40, CX[1], CY + 170, at("H", "proxy") + 0.1, GOOD, 0.5, { hollow: 1 });
+      M.fit(H);
+
+      // ===== I: three jobs of the door =====
+      // diagram: I
+      M.box(I, { x: 190, y: 330, w: 700, h: 190, label: "REVERSE PROXY", icon: "door", color: ACC, size: 46 }).show(M.P("I", 0));
+      const jobY = [580, 820, 1060];
+      const jobPanel = (k, col, icon, label, t) => { const p = panel(I, 120, jobY[k], 840, 200, col); show(p, M.P("I", 0) + 0.15 * k);
+        const ic = show(el(I, `left:154px;top:${jobY[k] + 55}px;width:90px;height:90px`, sv(icon, 90, col)), t, { opacity: 0, y: 0 });
+        show(el(I, `left:270px;top:${jobY[k] + 62}px;font:700 46px var(--code);white-space:nowrap;color:${INK}`, label), t, { opacity: 0, y: 0 }); return ic; };
+      jobPanel(0, CYAN, "balancer", "BALANCE", at("I", "pahla"));
+      [0, 1, 2].forEach((i) => ico(I, "server", 650 + i * 100, jobY[0] + 100, 70, CYAN, at("I", "servers") + 0.12 * i));
+      const lockIc = jobPanel(1, GOOD, "lock", "TLS", at("I", "doosra"));
+      chip(I, "HTTPS", 640, jobY[1] + 66, 150, GOOD, at("I", "HTTPS"), 30, 68);
+      ico(I, "arrow", 745, jobY[1] + 100, 50, GREY, at("I", "encryption"));
+      chip(I, "PLAIN", 850, jobY[1] + 66, 150, GREY, at("I", "khulti"), 30, 68);
+      gone(lockIc, at("I", "khulti")); ico(I, "unlock", 199, jobY[1] + 100, 90, GOOD, at("I", "khulti") + 0.1);
+      jobPanel(2, ACC, "doc", "CACHE", at("I", "teesra"));
+      ico(I, "doc", 700, jobY[2] + 100, 84, ACC, at("I", "jawab"));
+      ico(I, "server", 850, jobY[2] + 100, 84, GREY, at("I", "backend", 1));
+      ico(I, "cross", 850, jobY[2] + 100, 60, HOT, at("I", "nahi", 1));
+      M.fit(I);
+
+      // ===== J: the hook answer, balancing is the first job =====
+      // diagram: J
+      panel(J, 120, 360, 840, 770, ACC, "REVERSE PROXY");
+      [["LOAD BALANCER", CYAN, "balancer", 470], ["TLS", GREY, "lock", 680], ["CACHE", GREY, "doc", 890]].forEach(([t, c, ic, y]) => M.box(J, { x: 200, y, w: 680, h: 170, label: t, icon: ic, color: c, size: 44 }).show(M.P("J", 0) + 0.1));
+      ring(J, 200, 470, 680, 170, ACC, at("J", "Load"));
+      stamp(J, "1 OF 3 JOBS", 540, 250, ACC, at("J", "pahla"), 50, 440);
+      chip(J, "COMMON USE", 540, 1180, 480, GOOD, at("J", "common"), 44, 80);
+      M.fit(J);
+
+      // ===== K: forward proxy vs reverse proxy =====
+      // diagram: K
+      const RW = [60, 410, 760];
+      const krow = (y, t) => ["CLIENT", "PROXY", "SERVER"].map((lab, i) => { const b = M.box(K, { x: RW[i], y, w: 260, h: 180, label: lab, icon: i === 1 ? "door" : (i === 0 ? "user" : "server"), color: i === 1 ? ACC : CYAN, size: 34 }); b.show(t + 0.05 * i); return b; });
+      const side = (x, y, w, txt, cx, col, t) => { show(el(K, `left:${x}px;top:${y}px;width:${w}px;height:210px;border-radius:24px;border:4px dashed ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); chip(K, txt, cx, y + 225, 270, col, t, 34, 62); };
+      krow(400, M.P("K", 0));
+      [0, 1].forEach((i) => M.arrow(K, { from: [RW[i] + 260, 490], to: [RW[i + 1], 490], color: GREY, w: 6 }).show(M.P("K", 0) + 0.3, 0.3));
+      stamp(K, "FORWARD PROXY", 540, 280, ACC, M.P("K", 0), 44, 540);
+      side(35, 385, 660, "CLIENT SIDE", 440, ACC, at("K", "clients"));
+      ico(K, "eyeoff", RW[0] + 130, 700, 100, HOT, at("K", "identity"));
+      krow(830, M.P("K", 0) + 0.2);
+      [0, 1].forEach((i) => M.arrow(K, { from: [RW[i] + 260, 920], to: [RW[i + 1], 920], color: GREY, w: 6 }).show(M.P("K", 0) + 0.5, 0.3));
+      stamp(K, "REVERSE PROXY", 540, 710, GOOD, at("K", "Reverse"), 44, 540);
+      side(385, 815, 660, "SERVER SIDE", 715, GOOD, at("K", "server"));
+      ico(K, "eyeoff", RW[2] + 130, 1130, 100, HOT, at("K", "identity", 1));
+      M.fit(K);
+
+      // ===== L: single point of failure, and the second copy =====
+      // diagram: L
+      M.box(L, { x: 340, y: 400, w: 400, h: 170, label: "CLIENTS", icon: "user", color: CYAN, size: 40 }).show(M.P("L", 0));
+      M.box(L, { x: 340, y: SY, w: 400, h: 200, label: "SERVERS", icon: "server", color: CYAN, size: 40 }).show(M.P("L", 0) + 0.05);
+      const l1 = M.box(L, { x: 90, y: DY, w: 420, h: 200, label: "PROXY", icon: "door", color: ACC, size: 44 }); l1.show(M.P("L", 0) + 0.1);
+      M.arrow(L, { from: [480, 570], to: [300, DY - 8], color: GREY, w: 5, dash: true }).show(M.P("L", 0) + 0.3, 0.3);
+      M.arrow(L, { from: [300, DY + 208], to: [480, SY - 8], color: GREY, w: 5, dash: true }).show(M.P("L", 0) + 0.3, 0.3);
+      const slot = show(el(L, `left:570px;top:${DY}px;width:420px;height:200px;border-radius:18px;border:3px dashed ${GREY};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 70px var(--code);color:${GREY}`, "+"), M.P("L", 0) + 0.2, { opacity: 0, y: 0 });
+      dot(L, 480, 570, 300, DY + 40, at("L", "saari"), ACC, 0.5); dot(L, 300, DY + 200, 480, SY + 40, at("L", "saari") + 0.55, ACC, 0.5);
+      dot(L, 480, 570, 300, DY + 40, at("L", "door", 0) + 0.9, HOT, 0.5, { stay: 1 });
+      const lDim = show(el(L, `left:90px;top:${DY}px;width:420px;height:200px;border-radius:18px;background:rgba(14,18,30,.9)`), at("L", "dead"), { opacity: 0, y: 0 });
+      const lX = ico(L, "cross", 300, DY + 100, 100, HOT, at("L", "dead"));
+      stamp(L, "SPOF", 540, 250, HOT, at("L", "single"), 54, 300);
+      gone(slot, at("L", "isilie"));
+      const l2 = M.box(L, { x: 570, y: DY, w: 420, h: 200, label: "PROXY 2", icon: "door", color: GOOD, size: 44 }); l2.show(at("L", "copies"));
+      M.arrow(L, { from: [600, 570], to: [780, DY - 8], color: GOOD, w: 6 }).show(at("L", "copies"), 0.3);
+      M.arrow(L, { from: [780, DY + 208], to: [600, SY - 8], color: GOOD, w: 6 }).show(at("L", "copies"), 0.3);
+      M.fit(L);
+
+      // ===== M: comment + follow, with the cache question drawn =====
+      // diagram: M
+      M.box(MM, { x: 340, y: 230, w: 400, h: 130, label: "CLIENT", icon: "user", color: CYAN, size: 38 }).show(M.P("M", 0));
+      M.box(MM, { x: 290, y: 470, w: 500, h: 190, label: "PROXY CACHE", icon: "door", color: ACC, size: 42 }).show(M.P("M", 0) + 0.1);
+      [0, 1, 2].forEach((i) => ico(MM, "doc", 410 + i * 130, 700, 56, ACC, at("M", "cache")));
+      M.arrow(MM, { from: [540, 360], to: [540, 462], color: GREY, w: 6, dash: true }).show(M.P("M", 0) + 0.3, 0.3);
+      M.box(MM, { x: 340, y: 800, w: 400, h: 130, label: "BACKEND", icon: "server", color: GREY, size: 38 }).show(M.P("M", 0) + 0.2);
+      M.arrow(MM, { from: [540, 760], to: [540, 792], color: GREY, w: 6, dash: true }).show(M.P("M", 0) + 0.4, 0.3);
+      dot(MM, 540, 360, 540, 470, at("M", "har"), ACC, 0.4);
+      dot(MM, 540, 470, 540, 360, at("M", "har") + 0.5, GOOD, 0.4, { hollow: 1 });
+      stamp(MM, "BACKEND = ?", 540, 965, HOT, at("M", "kitni"), 52, 540);
+      ico(MM, "cross", 540, 780, 60, HOT, at("M", "backend"));
+      show(el(MM, "left:130px;width:820px;top:1090px;height:84px;border-radius:42px;border:1.5px solid rgba(150,175,215,.5);font:500 34px var(--code);color:#AEB9D0;display:flex;align-items:center;padding:0 34px;box-sizing:border-box", "Add a comment..."), at("M", "comment"), { opacity: 0 });
+      const kf = M.pill(MM, "+  FOLLOW", at("M", "follow") - 0.4, { x: 340, y: 1230, size: 52, kind: "acc" });
+      tl.fromTo(kf, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("M", "follow"));
+      M.fit(MM);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { proxy: "gold", door: "cyan", balancer: "cyan", balancing: "cyan", cache: "cyan", caching: "cyan", TLS: "cyan", dead: "hot", failure: "hot", forward: "gold", EXAMPLE: "gold", follow: "gold", comment: "cyan", step: "gold", identity: "good", hidden: "hot" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+    </script>
+  </body>
+</html>

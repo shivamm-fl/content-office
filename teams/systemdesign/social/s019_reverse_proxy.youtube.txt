@@ -1,0 +1,13 @@
+Reverse proxy vs load balancer: kya fark hai?
+
+Day 19/150: Reverse proxy tumhare servers ke aage baitha ek server hai. Client sirf usse baat karta hai, wo request ek backend server ko forward karta hai aur jawab wapas laata hai. Load balancing, TLS termination aur caching uske kaam ho sakte hain, load balancer inme se ek kaam hai. Forward proxy clients ke aage baithta hai. Reverse proxy ek single point of failure ho sakta hai. Example ke paths aur group invented hain.
+
+Comment karke batao: agar har jawab proxy ke cache mein ho, toh backend servers ko kitni requests jaayengi?
+
+Sources:
+https://en.wikipedia.org/wiki/Reverse_proxy
+https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Proxy_servers_and_tunneling
+
+Tags: reverse proxy,load balancer,forward proxy,system design
+AI-assisted visuals and narration.
