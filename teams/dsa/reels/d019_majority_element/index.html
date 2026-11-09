@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Majority Element</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="133" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="133" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="133" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="133" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J","K"], tag: "DSA 019/150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const AMB = "#E9B44C", VIO = "#9A8CEB";
+      const $s = (k) => M.$("#s" + k);
+      const [A, B, C, D, E, F, G, H, I, J, K] = "ABCDEFGHIJK".split("").map($s);
+      const cp = (sc, i) => REEL.hi.caps.filter((c) => c.scene === sc)[i].s;
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size, ts) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, String(from)); const o = { v: from };
+        show(d, ts == null ? segs[0][0] - 0.3 : ts, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const tint = (d, t, col, fill) => tl.to(d, { borderColor: M.ca(col, .9), backgroundColor: M.ca(col, fill == null ? .28 : fill), duration: 0.3, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t);
+      const bigtxt = (host, css, txt, col, size, t) => show(lab(host, css, txt, col, size), t, { opacity: 0 });
+      const ghost = (host, x, y, w, h) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px dashed rgba(150,175,215,.35)`);
+      const chip = (host, x, y, w, h, txt, col, t, fs) => show(tile(host, x, y, w, h, txt, col, fs || 56), t, { opacity: 0, y: 18 });
+      const base = (sc, h) => { const p = panel(sc, 60, 230, 960, h || 1010, CYAN, null); show(p, ST[sc.id.slice(1)] + 0.05); return p; };
+      // a lit tile: dim from the start, lit on its word
+      const lt = (host, x, y, w, h, txt, col, fs, t, s0) => { const d = tile(host, x, y, w, h, txt, col, fs); dimIn(d, s0 + 0.1, 0.28); lit(d, t); return d; };
+
+      const CX = (i) => 24 + i * 92;
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      const code = (host, x, y, w, lines, fs, lh, s0) => {
+        const h = lines.length * lh + 36;
+        show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(8,13,26,.9);border:2px solid ${M.ca(CYAN, .35)}`), s0 + 0.1);
+        const Ls = lines.map((s, i) => show(el(host, `left:${x + 10}px;top:${y + 18 + i * lh}px;width:${w - 20}px;height:${lh}px;border-radius:8px;font:500 ${fs}px/${lh}px var(--code);color:#9FB0CC;white-space:pre;padding-left:12px;box-sizing:border-box`, esc(s)), s0 + 0.15, { opacity: 0 }));
+        const on = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: M.ca(ACC, .25), color: "#FFFFFF", duration: 0.3, immediateRender: false }, t); };
+        const off = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: "rgba(233,180,76,0)", color: "#9FB0CC", duration: 0.3, immediateRender: false }, t); };
+        return { on, off, h }; };
+      const seqTile = (host, x, y, w, h, col, fs, seq) => seq.map(([txt, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = seq[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[1]); return d; });
+
+      const GREY = "#B8C4DC", DIMC = "#5C6B88";
+      // swap: one tile slot whose text changes; items [txt, colour, time]
+      const swap = (host, x, y, w, h, fs, items) => items.map(([txt, col, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = items[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[2]); return d; });
+      // ring that moves between cells
+      const mkRing = (host, x, y, w, h, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:5px solid ${ACC};box-sizing:border-box`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); return d; };
+      const hop = (d, x, y, t, dur) => tl.to(d, { left: x, top: y, duration: dur || 0.35, ease: "power2.inOut", immediateRender: false }, t);
+      const ARR = [2, 2, 1, 1, 1, 2, 2]; const AX = (i) => 24 + i * 134;
+      const row7 = (host, arr, y, h, fs, s0, times) => arr.map((v, i) => { ghost(host, AX(i), y, 124, h);
+        if (times) return lt(host, AX(i), y, 124, h, String(v), CYAN, fs, times[i], s0);
+        return show(tile(host, AX(i), y, 124, h, String(v), CYAN, fs), s0 + 0.05, { opacity: 0 }); });
+
+      // diagram: A
+      // ===== A: hook, two boxes instead of a hash map
+      M.hook(["MAJORITY ELEMENT", "2 VARIABLES"], { size: 88, top: 250 });
+      const pa = panel(A, 60, 500, 960, 780, CYAN, null); show(pa, 0.02);
+      bigtxt(pa, "left:0;width:960px;top:12px", "GIVEN ARRAY", GREY, 36, 0.1);
+      row7(pa, ARR, 60, 100, 56, 0);
+      lt(pa, 24, 200, 440, 90, "CANDIDATE", CYAN, 42, cp("A", 3), 0);
+      lt(pa, 498, 200, 440, 90, "COUNT", ACC, 42, cp("A", 4), 0);
+      lt(pa, 24, 300, 440, 100, "?", CYAN, 64, cp("A", 4), 0);
+      lt(pa, 498, 300, 440, 100, "0", ACC, 64, cp("A", 4), 0);
+      lt(pa, 24, 450, 300, 70, "2 : 4", CYAN, 40, cp("A", 6), 0);
+      lt(pa, 24, 535, 300, 70, "1 : 3", CYAN, 40, cp("A", 6), 0);
+      const aX = el(pa, "left:-20px;top:515px;width:420px;height:10px;border-radius:5px;background:" + HOT + ";transform:rotate(25deg)");
+      tl.set(aX, { opacity: 0 }, 0); tl.to(aX, { opacity: 1, duration: 0.3, immediateRender: false }, cp("A", 8));
+      lt(pa, 400, 485, 540, 90, "NO HASH MAP", HOT, 48, cp("A", 8), 0);
+      lt(pa, 24, 650, 916, 90, "MORE THAN n/2 TIMES", GOOD, 46, cp("A", 18), 0);
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B
+      // ===== B: given array, 4 of 7
+      const b0 = ST.B; const pb = base(B, 1000);
+      bigtxt(pb, "left:0;width:960px;top:14px", "GIVEN ARRAY", GREY, 44, cp("B", 0));
+      const bA = row7(pb, ARR, 80, 130, 68, b0, [2, 3, 4, 5, 6, 7, 8].map((k) => cp("B", k)));
+      lt(pb, 24, 250, 300, 100, "n = 7", CYAN, 56, cp("B", 9), b0);
+      lt(pb, 350, 250, 590, 100, "4  >  7 / 2", ACC, 56, cp("B", 12), b0);
+      [0, 1, 5, 6].forEach((i) => tint(bA[i], cp("B", 13), GOOD, 0.4));
+      [0, 1, 2, 3].forEach((i) => lt(pb, 24 + i * 110, 400, 100, 110, "2", GOOD, 54, cp("B", 13), b0));
+      [0, 1, 2].forEach((i) => lt(pb, 24 + i * 110, 540, 100, 110, "1", HOT, 54, cp("B", 12), b0));
+      lt(pb, 490, 400, 450, 110, "4 TIMES", GOOD, 52, cp("B", 13), b0);
+      lt(pb, 490, 540, 450, 110, "3 TIMES", HOT, 52, cp("B", 12), b0);
+      lt(pb, 24, 720, 916, 170, "ANSWER = 2", GOOD, 84, cp("B", 19), b0);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C
+      // ===== C: hash map space, brute force count
+      const c0 = ST.C; const pc = base(C, 1000);
+      bigtxt(pc, "left:0;width:300px;top:12px", "HASH MAP", GREY, 36, cp("C", 0));
+      [["2 : 4", 0], ["1 : 3", 0], ["7 : 1", 16], ["9 : 1", 16], ["5 : 1", 17], ["8 : 1", 17]].forEach(([t, k], r) => lt(pc, 24, 70 + r * 80, 280, 70, t, k ? AMB : CYAN, 40, k ? cp("C", k) + 0.3 + (r % 2) * 0.2 : cp("C", 3), c0));
+      lt(pc, 340, 70, 600, 90, "TIME O(n)", GOOD, 50, cp("C", 9), c0);
+      lt(pc, 340, 330, 600, 90, "SPACE O(n)", HOT, 50, cp("C", 22), c0);
+      bigtxt(pc, "left:340px;width:600px;top:430px", "n DISTINCT = n ROWS", GREY, 40, cp("C", 16));
+      lt(pc, 24, 600, 916, 90, "BRUTE FORCE  n = 50,000", CYAN, 44, cp("C", 28), c0);
+      counter(pc, "left:24px;width:916px;top:715px", 0, [[cp("C", 36), cp("C", 39) + 0.6, 2500000000]], HOT, 96, cp("C", 34));
+      bigtxt(pc, "left:24px;width:600px;top:850px", "COMPARISONS", GREY, 44, cp("C", 40));
+      M.pill(pc, "EXAMPLE", cp("C", 45), { x: 690, y: 850, w: 250, kind: "out", size: 30 });
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D
+      // ===== D: unequal pairs cancel, majority outnumbers the rest
+      const d0 = ST.D; const pd = base(D, 960);
+      bigtxt(pd, "left:0;width:960px;top:12px", "CANCEL PAIRS", GREY, 36, cp("D", 0));
+      const dA = row7(pd, ARR, 60, 100, 56, d0);
+      const arc = (a, b, hh, t) => { const d = el(pd, `left:${AX(a) + 62}px;top:168px;width:${AX(b) - AX(a)}px;height:${hh}px;border:8px solid ${HOT};border-top:none;border-radius:0 0 40px 40px;box-sizing:border-box`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); return d; };
+      arc(1, 2, 60, cp("D", 10)); arc(0, 3, 110, cp("D", 10) + 0.4); arc(4, 5, 60, cp("D", 10) + 0.8);
+      lt(pd, 24, 300, 420, 70, "UNEQUAL PAIR", HOT, 38, cp("D", 5), d0);
+      [0, 1, 2, 3, 4, 5].forEach((i) => dim(dA[i], cp("D", 13), 0.3));
+      lt(pd, 520, 300, 420, 70, "1 COPY LEFT", GOOD, 38, cp("D", 19), d0);
+      tint(dA[6], cp("D", 19), GOOD, 0.4);
+      lt(pd, 24, 440, 800, 80, "MAJORITY: 4", GOOD, 46, cp("D", 22), d0);
+      lt(pd, 24, 540, 600, 80, "OTHERS: 3", HOT, 46, cp("D", 26), d0);
+      lt(pd, 24, 650, 916, 90, "MAJORITY  >  ALL OTHERS", ACC, 46, cp("D", 30), d0);
+      lt(pd, 24, 770, 916, 110, "ONE COPY SURVIVES", GOOD, 56, cp("D", 44), d0);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E
+      // ===== E: candidate + count and the three rules
+      const e0 = ST.E; const pe = base(E, 960);
+      lt(pe, 24, 20, 440, 100, "CANDIDATE", CYAN, 42, cp("E", 6), e0);
+      lt(pe, 498, 20, 440, 100, "COUNT", ACC, 42, cp("E", 8), e0);
+      const card = (y, n, col, k, tiles) => { lt(pe, 24, y, 916, 190, "", col, 30, cp("E", k), e0); bigtxt(pe, `left:40px;width:200px;top:${y + 10}px;text-align:left`, "STEP " + n, GREY, 30, cp("E", k));
+        tiles.forEach(([x, w, t, c]) => lt(pe, x, y + 80, w, 90, t, c, 40, cp("E", k + 1), e0)); };
+      card(150, 1, CYAN, 9, [[44, 270, "COUNT = 0", ACC], [330, 60, "->", GREY], [405, 220, "TAKE x", CYAN], [640, 280, "COUNT = 1", ACC]]);
+      card(370, 2, GOOD, 22, [[44, 270, "x = CAND", GOOD], [330, 60, "->", GREY], [405, 300, "COUNT +1", GOOD]]);
+      card(590, 3, HOT, 33, [[44, 270, "x != CAND", HOT], [330, 60, "->", GREY], [405, 300, "COUNT -1", HOT], [730, 190, "PAIR", HOT]]);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // dry run builder: array row, hopping ring, candidate / count swaps, a trace strip
+      const dry = (host, s0, o) => {
+        bigtxt(host, "left:0;width:960px;top:12px", "DRY RUN", GREY, 44, s0 + 0.1);
+        const cells = ARR.map((v, i) => { ghost(host, AX(i), 80, 124, 130); return show(tile(host, AX(i), 80, 124, 130, String(v), CYAN, 68), s0 + 0.05, { opacity: 0 }); });
+        ARR.forEach((v, i) => ghost(host, AX(i), 650, 124, 110));
+        o.pre.forEach(([i, col, op, tr]) => { tint(cells[i], s0 + 0.3, col); chip(host, AX(i), 225, 124, 70, op, col, s0 + 0.2, 40); chip(host, AX(i), 650, 124, 110, tr, col, s0 + 0.2, 40); });
+        const rg = mkRing(host, AX(o.ring0) - 6, 74, 136, 142, o.ringT);
+        o.steps.forEach(([i, hopT, t, col, op, tr], k) => { if (hopT != null) hop(rg, AX(i) - 6, 74, hopT); tint(cells[i], t, col); chip(host, AX(i), 225, 124, 70, op, col, t, 40); chip(host, AX(i), 650, 124, 110, tr, col, t + 0.1, 40); });
+        bigtxt(host, "left:24px;width:440px;top:330px", "CANDIDATE", GREY, 42, s0 + 0.1);
+        bigtxt(host, "left:498px;width:440px;top:330px", "COUNT", GREY, 42, s0 + 0.1);
+        ghost(host, 24, 385, 440, 170); ghost(host, 498, 385, 440, 170);
+        swap(host, 24, 385, 440, 170, 100, o.cand); swap(host, 498, 385, 440, 170, 100, o.cnt);
+        bigtxt(host, "left:0;width:960px;top:590px", "TRACE: CANDIDATE, COUNT", GREY, 36, s0 + 0.1);
+      };
+
+      // diagram: F
+      // ===== F: dry run, first four elements
+      const f0 = ST.F; const pf = base(F, 800);
+      dry(pf, f0, { pre: [], ring0: 0, ringT: cp("F", 3) - 0.3,
+        steps: [[0, null, cp("F", 8), GOOD, "NEW", "2,1"], [1, cp("F", 10) - 0.2, cp("F", 13), GOOD, "+1", "2,2"], [2, cp("F", 14) - 0.2, cp("F", 17), HOT, "-1", "2,1"], [3, cp("F", 19) - 0.2, cp("F", 22), HOT, "-1", "2,0"]],
+        cand: [["?", CYAN, f0 + 0.1], ["2", CYAN, cp("F", 6)]], cnt: [["0", ACC, f0 + 0.1], ["1", ACC, cp("F", 8)], ["2", ACC, cp("F", 13)], ["1", ACC, cp("F", 17)], ["0", ACC, cp("F", 22)]] });
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G
+      // ===== G: dry run, last three elements and the answer
+      const g0 = ST.G; const pg = base(G, 1000);
+      dry(pg, g0, { pre: [[0, GOOD, "NEW", "2,1"], [1, GOOD, "+1", "2,2"], [2, HOT, "-1", "2,1"], [3, HOT, "-1", "2,0"]], ring0: 3, ringT: g0 + 0.3,
+        steps: [[4, cp("G", 1) - 0.2, cp("G", 10), AMB, "NEW", "1,1"], [5, cp("G", 11) - 0.2, cp("G", 14), HOT, "-1", "1,0"], [6, cp("G", 16) - 0.2, cp("G", 22), GOOD, "NEW", "2,1"]],
+        cand: [["2", CYAN, g0 + 0.1], ["1", CYAN, cp("G", 8)], ["2", CYAN, cp("G", 20)]], cnt: [["0", ACC, g0 + 0.1], ["1", ACC, cp("G", 10)], ["0", ACC, cp("G", 14)], ["1", ACC, cp("G", 22)]] });
+      lt(pg, 24, 810, 916, 150, "ANSWER = 2", GOOD, 84, cp("G", 24), g0);
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H
+      // ===== H: the code, run
+      const h0 = ST.H; const ph = base(H, 960);
+      const hc = code(ph, 24, 24, 916, ["def majority(nums):", "    m = cnt = 0", "    for x in nums:", "        if cnt == 0:", "            m, cnt = x, 1", "        else:", "            cnt += 1 if x == m else -1", "    return m"], 38, 68, h0);
+      hc.on(0, 0, cp("H", 0)); hc.off(0, 0, cp("H", 2) - 0.1);
+      hc.on(1, 1, cp("H", 2)); hc.off(1, 1, cp("H", 10) - 0.1);
+      hc.on(2, 2, cp("H", 10)); hc.off(2, 2, cp("H", 13) - 0.1);
+      hc.on(3, 4, cp("H", 13)); hc.off(3, 4, cp("H", 25) - 0.1);
+      hc.on(5, 6, cp("H", 25)); hc.off(5, 6, cp("H", 38) - 0.1);
+      hc.on(7, 7, cp("H", 38)); hc.off(7, 7, cp("H", 43) - 0.1);
+      lt(ph, 24, 650, 916, 100, "majority([2,2,1,1,1,2,2])", CYAN, 40, cp("H", 43), h0);
+      lt(ph, 24, 780, 916, 130, "OUTPUT: 2", GOOD, 72, cp("H", 51), h0);
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I
+      // ===== I: one pass, two variables
+      const i0 = ST.I; const pi = base(I, 1000);
+      row7(pi, ARR, 20, 110, 56, i0, ARR.map((v, i) => cp("I", 0) + 0.7 + i * 0.05));
+      const iBar = el(pi, `left:24px;top:146px;width:912px;height:12px;border-radius:5px;background:${ACC};transform-origin:0 50%`); tl.set(iBar, { opacity: 0, scaleX: 0 }, 0);
+      tl.to(iBar, { opacity: 1, scaleX: 1, duration: 1.0, ease: "power2.inOut", immediateRender: false }, cp("I", 0));
+      lt(pi, 24, 190, 916, 110, "TIME  O(n)", GOOD, 64, cp("I", 4), i0);
+      lt(pi, 24, 340, 440, 130, "m", CYAN, 76, cp("I", 9), i0);
+      lt(pi, 498, 340, 440, 130, "cnt", ACC, 76, cp("I", 9) + 0.5, i0);
+      lt(pi, 24, 510, 916, 110, "EXTRA SPACE  O(1)", GOOD, 58, cp("I", 14), i0);
+      lt(pi, 24, 690, 916, 100, "HASH MAP: n ROWS", HOT, 48, cp("I", 8), i0);
+      lt(pi, 24, 820, 240, 100, "m, cnt", GOOD, 46, cp("I", 13), i0);
+      lt(pi, 290, 820, 650, 100, "ONLY 2 VARIABLES", GOOD, 46, cp("I", 13), i0);
+      M.fit(I, { y: 200, h: 1100 });
+
+      // diagram: J
+      // ===== J: the guarantee is a requirement
+      const j0 = ST.J; const pj = base(J, 1000);
+      lt(pj, 24, 20, 916, 120, "NEEDS  MORE THAN n/2", GOOD, 54, cp("J", 0) + 0.7, j0);
+      bigtxt(pj, "left:0;width:960px;top:175px", "NO MAJORITY", HOT, 50, cp("J", 7));
+      const jA = row7(pj, [1, 2, 3], 250, 130, 72, j0, [cp("J", 20), cp("J", 21), cp("J", 22)]);
+      [["1,1", cp("J", 20) + 0.4], ["1,0", cp("J", 21) + 0.4], ["3,1", cp("J", 24)]].forEach(([t, tm], i) => lt(pj, AX(i), 420, 124, 100, t, i === 2 ? HOT : AMB, 44, tm, j0));
+      bigtxt(pj, "left:24px;width:900px;top:540px", "TRACE: CANDIDATE, COUNT", GREY, 38, cp("J", 19));
+      lt(pj, 24, 630, 916, 120, "ANY ELEMENT", AMB, 62, cp("J", 11), j0);
+      lt(pj, 24, 780, 916, 150, "RETURNS 3", HOT, 84, cp("J", 24), j0);
+      M.fit(J, { y: 200, h: 1100 });
+
+      // diagram: K
+      // ===== K: comment question + follow
+      const k0 = ST.K; const pk = base(K, 1000);
+      bigtxt(pk, "left:0;width:960px;top:14px", "GIVEN ARRAY", GREY, 44, cp("K", 3));
+      row7(pk, [3, 1, 3, 2, 3], 90, 150, 80, k0, [5, 6, 7, 8, 9].map((k) => cp("K", k)));
+      lt(pk, 24, 310, 440, 150, "CANDIDATE ?", HOT, 50, cp("K", 13), k0);
+      lt(pk, 498, 310, 440, 150, "COUNT ?", HOT, 50, cp("K", 15), k0);
+      const kCb = el(pk, "left:24px;top:560px;width:916px;height:120px;border-radius:60px;border:2px solid rgba(150,175,215,.4);font:500 48px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 40px", "Add a comment..."); show(kCb, cp("K", 0), { opacity: 0 });
+      const kFb = M.pill(pk, "+  FOLLOW", cp("K", 28) - 0.4, { x: 190, y: 760, w: 580, kind: "acc", size: 68 });
+      tl.fromTo(kFb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, cp("K", 28));
+      M.fit(K, { y: 200, h: 1100 });
+
+      ["B","C","D","E","F","G","H","I","J","K"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { Majority: "gold", variables: "cyan", hash: "hot", map: "hot", candidate: "cyan", count: "gold", answer: "good", Brute: "hot", billion: "hot", observation: "gold", unequal: "hot", cancel: "hot", return: "good", Time: "good", space: "gold", guaranteed: "good", follow: "gold", zero: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -87,40 +87,26 @@
       "title": "Majority Element: Boyer-Moore voting, O(1) space mein",
       "format": "problem",
       "status": "planned",
+      "script_file": "state/scripts/d019.txt",
       "script_locked": false,
       "hook_type": "surprising_fact",
       "spoken_hook": "Majority Element सिर्फ़ दो variables से, hash map के बिना।",
       "hook_formula": "surprising_fact_plain_payoff",
-      "hook_source": "surprising_fact is the oldest of the last six built (d013-d018: direct_question x3, surprising_fact x1 on d016, relatable_stake x1, interviewer_asked x1); company_specific has no fetched company page. The payoff is verified: the doocs 0169 page and Wikipedia both state O(n) time and O(1) space. No company claim.",
-      "hook_10s": "Majority Element सिर्फ़ दो variables से, hash map के बिना। Majority यानी वो value जो आधे से ज़्यादा बार आए। Brute force हर element गिनता है, voting बस एक candidate और एक counter रखता है। [Frame 0: array 2, 2, 1, 1, 1, 2, 2 with a box CANDIDATE and a box COUNT, and a crossed-out hash map table beside it]",
-      "hook_candidates": [
-        {
-          "formula": "surprising_fact_plain_payoff",
-          "text": "Majority Element सिर्फ़ दो variables से, hash map के बिना।"
-        },
-        {
-          "formula": "direct_question",
-          "text": "Majority Element problem: hash map के बिना O(1) space में कैसे?"
-        },
-        {
-          "formula": "relatable_stake",
-          "text": "Majority Element में hash map लगाया, interviewer बोला O(1) space!"
-        }
-      ],
+      "hook_source": "surprising_fact is the oldest of the last six built (d013-d018). Payoff verified (fetched in this session): doocs 0169 and Wikipedia state O(n) time and O(1) space. No company claim.",
+      "hook_10s": "Majority Element सिर्फ़ दो variables से, hash map के बिना। [Frame 0: array 2, 2, 1, 1, 1, 2, 2 with CANDIDATE and COUNT boxes and a crossed-out hash map table beside it]",
       "one_idea": "Majority Element: when a value appears more than n/2 times, keep one candidate and one counter; a different element cancels one vote, and because the majority outnumbers all other elements put together, the candidate left at the end is the majority (Boyer-Moore voting, O(n) time, O(1) space).",
-      "visual_idea": "A row of cells for 2, 2, 1, 1, 1, 2, 2 with a CANDIDATE box and a COUNT counter below; each step a ring moves over a cell and the counter ticks up or down, equal and different cells cancel in pairs with a connecting line, the candidate box swaps from 2 to 1 and back to 2 when the count hits zero, and a leftover cell stays lit as the answer. A short side panel shows the brute-force count table growing with a quadratic n by n grid. Actual Python code visible in readable chunks synced to the voice.",
+      "visual_idea": "A row of cells for 2, 2, 1, 1, 1, 2, 2 with a CANDIDATE box and a COUNT counter below; each step a ring moves over a cell and the counter ticks up or down, unequal cells cancel in pairs with a connecting line, the candidate box swaps from 2 to 1 and back to 2 when the count hits zero. A short side panel shows the brute-force count table growing. Actual Python code visible in readable chunks synced to the voice.",
       "everyday_anchor": "none: audience is working engineers; technical explanation only.",
-      "example": "EXAMPLE nums = [2, 2, 1, 1, 1, 2, 2], n = 7: majority is 2 (appears 4 times, more than 3). Trace (candidate, count) after each element: (2,1) (2,2) (2,1) (2,0) (1,1) (1,0) (2,1); the candidate flips to 1 at the fifth element and back to 2 at the end. [3, 2, 3] gives 3; [1] gives 1; [-1, -1, 5, -1, 7] gives -1. Brute force for n = 50000 does up to 2,500,000,000 comparisons vs 50,000 steps (EXAMPLE, the problem's upper bound for n).",
-      "code_outline": "m = cnt = 0; for x in nums: if cnt == 0: m, cnt = x, 1 else: cnt += 1 if x == m else -1; return m. Valid only when a majority (> n/2) is guaranteed; without it the result can be any element.",
+      "example": "EXAMPLE nums = [2, 2, 1, 1, 1, 2, 2], n = 7: majority is 2 (4 times). Trace (candidate, count): (2,1) (2,2) (2,1) (2,0) (1,1) (1,0) (2,1). [3, 2, 3] gives 3; [1] gives 1; [-1, -1, 5, -1, 7] gives -1. Brute force for n = 50000 does up to 2,500,000,000 comparisons vs 50,000 steps (EXAMPLE).",
+      "code_outline": "m = cnt = 0; for x in nums: if cnt == 0: m, cnt = x, 1 else: cnt += 1 if x == m else -1; return m. Valid only when a majority (> n/2) is guaranteed.",
       "sources": [
         "https://leetcode.doocs.org/en/lc/169/",
         "https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm"
       ],
       "facts_to_verify": [
-        "Problem paraphrased from the doocs mirror of LeetCode 169 (fetched this session): majority element appears more than floor(n/2) times and is guaranteed to exist; n up to 5 x 10^4; Moore voting is O(n) time and O(1) space; one pass suffices because the majority is guaranteed, otherwise a second pass confirms the candidate. LeetCode itself returns 403.",
-        "Wikipedia (fetched): candidate m and counter c, set m = x when c = 0, equal increments, different decrements; O(n) time, O(1) extra space; without a strict majority it returns some element that is not guaranteed to be the most frequent; correctness argument that unequal pairs cancel and any other value cannot exceed half.",
-        "Code run by the planner: 2, 3, 1, -1 for the four examples; 0 mismatches against brute force and a Counter on 5000 random arrays with a forced strict majority; without a majority, [1,2,3] returns 3 and [1,2] returns 1, and on 5000 random arrays with no guarantee the returned value was not a majority in 3541 of them. Builder: run the exact on-screen code in qa/d019/run.py and show its real output.",
-        "2,500,000,000 vs 50,000 is EXAMPLE arithmetic (n = 50000, the upper bound on the problem page). The 'majority outnumbers all others combined, so the survivor is the majority' wording is a plain restatement of the Wikipedia pairing argument."
+        "doocs LC 169 (fetched): majority appears more than floor(n/2) times, guaranteed; n up to 5 x 10^4; Moore voting O(n) time, O(1) space.",
+        "Wikipedia (fetched): candidate/counter rules; O(n) time, O(1) extra space; without a strict majority the result is arbitrary.",
+        "Code run in qa/d019/run.py: [2,2,1,1,1,2,2] -> 2; trace as in the example; [1,2,3] -> 3; [3,1,3,2,3] ends (3,1). 2,500,000,000 vs 50,000 is EXAMPLE arithmetic."
       ],
       "length_target_s": 150,
       "cover_headline": "Majority Element in O(1) Space",

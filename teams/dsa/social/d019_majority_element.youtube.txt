@@ -1,0 +1,7 @@
+Majority Element in O(1) Space: Boyer-Moore Voting
+
+Majority Element asks for the value that appears more than n/2 times in an array, where such a value is guaranteed to exist. A hash map counts every element in O(n) time but needs O(n) extra space; brute force would be about 2.5 billion comparisons for n = 50,000 (an example). Boyer-Moore voting keeps one candidate and one counter: when the counter is zero the current element becomes the candidate, an equal element adds one, a different element subtracts one. Because the majority outnumbers all other elements together, the candidate left at the end is the majority. Time O(n), extra space O(1). Without a guaranteed majority the result is an arbitrary element (for example 3 on [1, 2, 3]). The code shown was run: it returns 2 on [2, 2, 1, 1, 1, 2, 2].
+
+Sources:
+https://leetcode.doocs.org/en/lc/169/
+https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm

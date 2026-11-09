@@ -1,0 +1,11 @@
+Day 19/150: Majority Element sirf 2 variables se, hash map ke bina!
+
+Majority Element problem: array mein woh element nikalna hai jo n/2 se zyada baar aata hai, aur woh hamesha maujud hai. Hash map se time O(n) hai, par extra space O(n) lagta hai. Brute force mein n = 50,000 par lagbhag 2.5 billion comparisons (example).
+
+Boyer-Moore voting: ek candidate aur ek count rakho. Count zero ho to current element candidate banao, barabar ho to count +1, alag ho to count -1 (ek pair cancel). Majority baaki sab elements se zyada hoti hai, isliye unequal pairs hatne ke baad bhi uski ek copy bachti hai. Time O(n), extra space O(1). Actual Python code video mein hai, example par chalaya: output 2.
+
+Shart: majority guaranteed honi chahiye. Nahi ho, to yeh koi bhi element return kar sakta hai, jaise [1, 2, 3] par 3.
+
+Ab tumhara turn: [3, 1, 3, 2, 3] mein aakhir mein candidate aur count kya aayenge? Comment mein likho.
+
+#dsa #majorityelement #interviewprep
