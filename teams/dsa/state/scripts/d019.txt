@@ -1,0 +1,19 @@
+Majority Element सिर्फ़ दो variables से, hash map के बिना। | Problem: array में वो element निकालना है जो n by two से ज़्यादा बार आता है, और वो हमेशा मौजूद है।
+
+Given array: two, two, one, one, one, two, two। | Seven elements हैं, two चार बार आता है, तो answer two है।
+
+Hash map में हर element की count रखो, तो time O n है। | पर map में सारे distinct elements रहते हैं, तो extra space O n लगता है। | Brute force में n fifty thousand पर लगभग two point five billion comparisons होते हैं, यह एक example है।
+
+अब एक observation देखो। | दो अलग elements को साथ में हटा दो, तो majority की ज़्यादा से ज़्यादा एक copy जाती है। | Majority की count बाकी सब elements की total count से ज़्यादा है। | इसलिए सारे unequal pairs हटने के बाद भी, majority की एक copy बचती है।
+
+यह दो variables में चलता है: candidate और count। | पहला step: count zero है, तो current element को candidate बनाओ, count one। | दूसरा step: element candidate के बराबर है, तो count plus one। | तीसरा step: element अलग है, तो count minus one, यानी एक pair cancel हुआ।
+
+अब dry run। | Two आया, candidate two, count one। | फिर two आया, count two। | One आया, count one। | अगला one आया, count zero। | फिर one आया, count zero था, तो candidate one, count one। | Two आया, count zero। | आख़िरी two में candidate फिर two, count one, और answer two है।
+
+Code में m और cnt zero से शुरू होते हैं। | हर x पर: cnt equals zero है, तो m equals x और cnt equals one। | नहीं तो x equals m पर cnt plus one, वरना cnt minus one। | आख़िर में m return करो। | मैंने code चलाया है: इस array पर output two आता है।
+
+एक pass है, तो time O n है, और दो variables हैं, तो extra space O one है।
+
+शर्त याद रखो: majority guaranteed होनी चाहिए। | नहीं हो, तो यह कोई भी element return कर सकता है, जैसे array one, two, three पर three आता है।
+
+Comments में बताओ: Given array three, one, three, two, three में आख़िर में candidate और count क्या आएँगे? | Code और dry run के साथ DSA सीखने के लिए follow करो।
