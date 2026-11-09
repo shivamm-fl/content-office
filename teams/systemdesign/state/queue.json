@@ -1,34 +1,63 @@
 {
   "items": [
     {
-      "id": "s019",
+      "id": "s020",
       "track": "series",
-      "day": 19,
+      "day": 20,
       "unit": "P2",
-      "title": "Reverse proxy: server ka front door, aur load balancer se fark",
-      "format": "component",
-      "one_idea": "A reverse proxy is a server in front of your servers: clients talk only to it, it forwards each request to a backend and returns the response; it can balance load, terminate TLS and cache, hides the backends, and is a single point of failure. A forward proxy sits in front of clients. A load balancer is one job a reverse proxy can do.",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: reverse proxy और load balancer में क्या फर्क है?",
-      "hook_source": "https://en.wikipedia.org/wiki/Reverse_proxy",
+      "title": "Stateless servers: server ko aapko yaad kyun nahi rakhna chahiye",
+      "format": "pattern",
+      "one_idea": "A stateless server keeps no per-user memory between requests: the user's state lives in a shared session store (or in a signed token the client sends), so any server behind the load balancer can answer any request, and a dead or added server loses nobody's session.",
+      "hook_type": "direct_question",
+      "spoken_hook": "Server को आपको याद क्यों नहीं रखना चाहिए?",
+      "hook_10s": "Server को आपको याद क्यों नहीं रखना चाहिए? सोचो आपने login किया और आपकी cart Server A की memory में है। अगला request Server B पर गया, तो cart गायब। [frame 0: one user, two server boxes behind a load balancer, a cart icon sitting only inside Server A, the request arrow landing on Server B with an empty cart]",
+      "hook_candidates": [
+        {
+          "hook": "Server को आपको याद क्यों नहीं रखना चाहिए?",
+          "formula": "direct_question: the counter-intuitive why"
+        },
+        {
+          "hook": "Login Server A पर किया, अगला request Server B पर गया, cart गायब।",
+          "formula": "relatable_stake: the viewer's own cart vanishes"
+        },
+        {
+          "hook": "Interviewer ने पूछा: horizontal scaling के लिए servers stateless क्यों होने चाहिए?",
+          "formula": "interviewer_asked: the real interview question"
+        }
+      ],
+      "hook_formula": "direct_question: the counter-intuitive why",
+      "hook_source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies",
+      "visual_idea": "A user and a load balancer in front of three server boxes. First design: the cart icon sits inside Server A only, the next request lands on Server B and its cart is empty, then Server A turns grey (dead) and the cart disappears. Second design: the cart icon moves out into one shared store box (key = session id, value = cart) that all three servers read from; requests now hop between servers and the same cart shows every time, and one server can be removed or added with no loss.",
+      "everyday_anchor": "Adding items to a shopping cart on a shopping app, then a new request lands on a different server and the cart is empty; or a bank clerk who must check your file every time instead of remembering your face.",
+      "example": "EXAMPLE: user adds 2 items to a cart, request 1 goes to Server A, request 2 to Server B. With state inside Server A, request 2 sees an empty cart; with the cart in a shared session store keyed by the session id from the cookie, request 2 sees both items. Item counts are EXAMPLE, not measured. Sticky sessions are shown as the workaround, with the catch that if the sticky server dies its sessions are lost and load can skew (our reasoning, said as 'typically').",
       "sources": [
-        "https://en.wikipedia.org/wiki/Reverse_proxy",
-        "https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/",
-        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Proxy_servers_and_tunneling"
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies",
+        "https://en.wikipedia.org/wiki/Stateless_protocol",
+        "https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/",
+        "https://redis.io/solutions/session-management/"
+      ],
+      "facts_to_verify": [
+        "HTTP is stateless by default; cookies carry a session ID so the server can recognise the same browser (MDN Cookies, fetched)",
+        "Stateless protocol: the receiver does not retain session state from previous requests; each request carries the context it needs; advantages include scalability, reliability, visibility (Wikipedia, fetched)",
+        "Session persistence (sticky): NGINX Plus adds a session cookie to the first response and sends later requests with it to the same server; ip_hash sends the same client address to the same server unless it is unavailable (NGINX docs, fetched)",
+        "Session state can be kept in an external key-value store, user identifier as key and session data as value (Redis page, fetched). A vendor page, so say 'for example Redis', no performance numbers",
+        "The AWS sticky-sessions page returned only its title when fetched, so no AWS claim is made; the claim that a sticky server dying loses its sessions is our reasoning, label it so, or drop it",
+        "Do not claim JWT or any token detail unless a page is fetched at build time; if used, show it as one line 'client sends a signed token' with a fetched source",
+        "No code shown; if a header example is shown, use the MDN Set-Cookie / Cookie example as printed"
       ],
       "length_target_s": 140,
-      "cover_headline": "Reverse Proxy: The Front Door",
-      "thumb_text": "REVERSE PROXY",
+      "cover_headline": "Why Servers Should Forget You",
+      "thumb_text": "STATELESS SERVERS",
       "keywords": [
-        "reverse proxy kya hai",
-        "reverse proxy vs load balancer",
-        "forward proxy vs reverse proxy hindi",
-        "nginx reverse proxy system design"
+        "stateless server kya hai",
+        "stateless vs stateful system design",
+        "sticky session vs stateless",
+        "session store redis system design",
+        "stateless architecture hindi",
+        "horizontal scaling stateless"
       ],
       "status": "planned",
-      "qa_passed": false,
-      "script_file": "state/scripts/s019.txt",
-      "script_locked": false
+      "qa_passed": false
     }
   ]
 }

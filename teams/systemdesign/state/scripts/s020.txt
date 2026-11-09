@@ -1,0 +1,11 @@
+A: @hook Server को आपको याद क्यों नहीं रखना चाहिए?
+B: Bank के clerk को सोचो। | वो तुम्हारा चेहरा याद नहीं रखता, हर बार तुम्हारी file खोलकर देखता है। | इसीलिए कोई भी clerk तुम्हारा काम कर देता है।
+C: Server भी ऐसा हो, तो वो stateless server है। | यानी request के बीच वो तुम्हारे बारे में कुछ याद नहीं रखता। | State यानी तुम्हारी पिछली requests से बनी जानकारी, जैसे cart।
+D: याद रखने से क्या बिगड़ता है, देखो। | EXAMPLE: | तुमने 2{two} items cart में डाले। | Load balancer यानी जो requests को servers में बाँटता है, उसने ये request Server A को भेजी, और cart A की memory में बनी।
+E: अब तुम cart खोलते हो, और ये request Server B पर गई। | B को कुछ पता नहीं, तो cart खाली। | और Server A dead हो जाए, तो cart हमेशा के लिए गई।
+F: Fix ये है: cart को servers के अंदर रखो ही मत। | उसे एक shared session store में रखो, जैसे Redis। | ये key-value store है, यानी key दो तो value मिलती है। | यहाँ key है session ID, value है तुम्हारी cart।
+G: Session ID यानी login के बाद तुम्हारी पहचान का नंबर। | ये 3{three} steps में चलता है। || पहला step: login पर server session ID बनाकर browser को cookie में भेजता है, यानी browser में रखी छोटी सी चीज़। | दूसरा step: हर request के साथ browser वो cookie वापस भेजता है। | तीसरा step: जो भी server request ले, वो session ID से store में cart निकालता है, और काम के बाद वापस रख देता है।
+H: वही example दोबारा। | Request B पर गई, B ने session ID पढ़ी, store से दोनों items निकाले। | Server A dead हो जाए, या नया server जुड़े, किसी की session नहीं जाती।
+I: यही hook का जवाब है। | Server याद रखेगा, तो user उसी server से बँध जाता है। | याद नहीं रखेगा, तो कोई भी server कोई भी request ले सकता है।
+J: एक workaround है: sticky session। | इसमें load balancer एक user को हमेशा एक ही server पर भेजता है, NGINX में cookie या ip_hash से। | Catch: आम तौर पर वो server dead हुआ, तो उसकी sessions गईं, और load असमान हो सकता है।
+K: याद रखो: state बाहर रखो, servers हल्के रखो। || अब तुम बताओ: तुम्हारे app में login session server की memory में रहता है या store में? | comment में लिखो। || ऐसे और system design concepts के लिए follow करो।
