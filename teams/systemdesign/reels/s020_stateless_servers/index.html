@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Stateless servers: server ko aapko yaad kyun nahi rakhna chahiye</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="133" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+                <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="133" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="133" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="133" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J","K"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 020 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J, K] = SC.map((k) => M.$("#s" + k));
+      const S = M.S;
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${cx - w / 2}px;width:${w}px;top:${y}px;height:${h || 76}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 40}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const sv = (kind, size, col) => `<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${Viz.ICONS[kind](col)}</svg>`;
+      const ico = (host, kind, cx, cy, size, col, t) => show(el(host, `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`, sv(kind, size, col)), t, { opacity: 0, scale: 0.8, y: 0 });
+      const dot = (host, x0, y0, x1, y1, t, col, dur, o) => { o = o || {}; const d = el(host, `left:${x0 - 22}px;top:${y0 - 22}px;width:44px;height:44px;border-radius:50%;box-sizing:border-box;${o.hollow ? `border:6px solid ${col}` : `background:${col}`}`);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, t);
+        tl.to(d, { x: x1 - x0, y: y1 - y0, duration: dur, ease: "power1.inOut", immediateRender: false }, t);
+        if (!o.stay) tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M9 17L12 46M35 17l17 29"/></g>`;
+      Viz.ICONS.eyeoff = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4 32C14 16 50 16 60 32 50 48 14 48 4 32z"/><circle cx="32" cy="32" r="7"/><path d="M10 56L54 8" stroke-width="6"/></g>`;
+      Viz.ICONS.door = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M16 56V8h32v48M8 56h48"/></g><circle cx="40" cy="34" r="3.5" fill="${c}"/>`;
+      Viz.ICONS.bed = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M6 52V14M6 40h52v12M58 40V30a8 8 0 0 0-8-8H26v18"/><circle cx="16" cy="30" r="5"/></g>`;
+      Viz.ICONS.bell = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M10 48h44M16 48a16 16 0 0 1 32 0M32 24v-8M26 16h12"/></g>`;
+      Viz.ICONS.cart = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M4 8h8l6 30h30l6-22H16"/><circle cx="24" cy="52" r="4"/><circle cx="44" cy="52" r="4"/></g>`;
+      const fly = (d, dx, dy, t, dur) => tl.to(d, { x: dx, y: dy, duration: dur || 0.7, ease: "power1.inOut", immediateRender: false }, t);
+      const mchip = (host, x0, y0, x1, y1, t, dur, txt, col) => { const w = 170, h = 56; const d = el(host, `left:${x0 - w / 2}px;top:${y0 - h / 2}px;width:${w}px;height:${h}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 30px var(--code);color:${INK}`, txt);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, t);
+        tl.to(d, { x: x1 - x0, y: y1 - y0, duration: dur, ease: "power1.inOut", immediateRender: false }, t); tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      const cartChip = (host, cx, y, t, txt, col, w) => { w = w || 234; col = col || ACC;
+        return show(el(host, `left:${cx - w / 2}px;top:${y}px;width:${w}px;height:68px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:12px;font:700 36px var(--code);color:${INK};white-space:nowrap`, sv("cart", 44, col) + "<span>" + txt + "</span>"), t, { opacity: 0, y: 0, scale: 0.85 }); };
+
+      // fixed frame: USER on top, balancer, three servers each with a dashed memory slot, optional session store
+      const SX = [200, 540, 880], LX = [400, 540, 680], UY = 335, LY = 500, SY = 760, SLY = 910, STX = [340, 540, 740], STY = 1060;
+      const slotY = SLY + 8;
+      const frame = (host, t, o) => { o = o || {};
+        M.box(host, { x: 340, y: UY, w: 400, h: 130, label: o.ul || "USER", icon: "user", color: CYAN, size: 40 }).show(t);
+        if (!o.nolb) { M.box(host, { x: 290, y: LY, w: 500, h: 140, label: "LOAD BALANCER", icon: "balancer", color: ACC, size: 36 }).show(t + 0.1); M.arrow(host, { from: [540, UY + 130], to: [540, LY - 8], color: GREY, w: 5, dash: true }).show(t + 0.25, 0.3); }
+        SX.forEach((cx, i) => { M.box(host, { x: cx - 135, y: SY, w: 270, h: 140, label: (o.sl || "SERVER") + " " + "ABC"[i], icon: o.sicon || "server", color: CYAN, size: 34 }).show(t + 0.15 + 0.05 * i);
+          show(el(host, `left:${cx - 125}px;top:${SLY}px;width:250px;height:84px;border-radius:14px;border:3px dashed ${GREY};box-sizing:border-box`), t + 0.3, { opacity: 0, y: 0 });
+          if (o.nolb) M.arrow(host, { from: [540, UY + 130], to: [cx, SY - 8], color: GREY, w: 5, dash: true }).show(t + 0.3, 0.3); else M.arrow(host, { from: [LX[i], LY + 148], to: [cx, SY - 8], color: GREY, w: 5, dash: true }).show(t + 0.3, 0.3); });
+        if (o.store) { show(panel(host, 120, STY, 840, 200, ACC, "SESSION STORE"), t + 0.4);
+          SX.forEach((cx, i) => M.arrow(host, { from: [cx, SLY + 92], to: [STX[i], STY - 8], color: GREY, w: 5, dash: true }).show(t + 0.5, 0.3)); } };
+      const dead = (host, si, t) => { show(el(host, `left:${SX[si] - 135}px;top:${SY}px;width:270px;height:234px;border-radius:18px;background:rgba(14,18,30,.9)`), t, { opacity: 0, y: 0 }); return ico(host, "cross", SX[si], SY + 117, 110, HOT, t); };
+      const reqTo = (host, si, t, col) => { col = col || ACC; dot(host, 540, UY + 130, 540, LY + 60, t, col, 0.45); dot(host, 540, LY + 140, SX[si], SY + 40, t + 0.5, col, 0.5); };
+      const reqDirect = (host, si, t, col) => dot(host, 540, UY + 130, SX[si], SY + 40, t, col || ACC, 0.7);
+      const kv = (host, t) => { chip(host, "ID 7f3a", STX[0] - 20, STY + 118, 250, ACC, t, 34, 66); ico(host, "arrow", 540, STY + 151, 50, GREY, t); return cartChip(host, 760, STY + 118, t, "× 2", GOOD, 230); };
+
+      // ===== A: hook =====
+      // diagram: A
+      M.hook(["Server should", "forget you?"], { size: 92, top: 230 });
+      frame(A, 0.05);
+      reqTo(A, 0, 0.4);
+      cartChip(A, SX[0], slotY, at("A", "yaad"), "× 2", ACC);
+      chip(A, "REMEMBER?", 540, 1060, 440, ACC, at("A", "yaad"), 40, 76);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: bank clerks, the file holds everything =====
+      // diagram: B
+      frame(B, M.P("B", 0), { nolb: 1, ul: "CUSTOMER", sl: "CLERK", sicon: "user" });
+      show(panel(B, 220, 1060, 640, 200, ACC, "YOUR FILE"), M.P("B", 0) + 0.3);
+      ico(B, "doc", 540, 1180, 90, ACC, M.P("B", 0) + 0.4);
+      stamp(B, "BANK", 540, 190, ACC, M.P("B", 0), 50, 300);
+      ico(B, "cross", SX[0], slotY + 34, 60, HOT, at("B", "yaad"));
+      reqDirect(B, 0, at("B", "har"));
+      M.arrow(B, { from: [SX[0], SLY + 92], to: [440, 1052], color: ACC, w: 8 }).show(at("B", "file"), 0.3);
+      dot(B, SX[0], SLY + 100, 440, 1090, at("B", "file") + 0.1, ACC, 0.5);
+      dot(B, 440, 1090, SX[0], SLY + 100, at("B", "kholkar") + 0.3, GOOD, 0.5, { hollow: 1 });
+      reqDirect(B, 2, at("B", "koi"), GOOD);
+      ring(B, SX[2] - 135, SY, 270, 140, GOOD, at("B", "koi"));
+      M.fit(B);
+
+      // ===== C: stateless = no memory kept, state = cart =====
+      // diagram: C
+      M.box(C, { x: 340, y: 290, w: 400, h: 130, label: "USER", icon: "user", color: CYAN, size: 40 }).show(M.P("C", 0));
+      M.box(C, { x: 190, y: 560, w: 700, h: 200, label: "STATELESS SERVER", icon: "server", color: CYAN, size: 44 }).show(M.P("C", 0) + 0.1);
+      show(el(C, `left:290px;top:800px;width:500px;height:100px;border-radius:16px;border:3px dashed ${GREY};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 38px var(--code);color:${GREY}`, "MEMORY: EMPTY"), M.P("C", 0) + 0.3, { opacity: 0, y: 0 });
+      M.arrow(C, { from: [540, 420], to: [540, 552], color: GREY, w: 6, dash: true }).show(M.P("C", 0) + 0.3, 0.3);
+      dot(C, 540, 420, 540, 620, at("C", "request"), ACC, 0.5);
+      dot(C, 540, 620, 540, 420, at("C", "request") + 0.7, GOOD, 0.5, { hollow: 1 });
+      ring(C, 190, 560, 700, 200, CYAN, at("C", "stateless"));
+      chip(C, "STATE", 330, 1000, 280, ACC, at("C", "State"), 40, 76);
+      cartChip(C, 740, 1000, at("C", "cart"), "CART", ACC, 280);
+      M.arrow(C, { from: [480, 1038], to: [598, 1038], color: GREY, w: 6 }).show(at("C", "jaise"), 0.3);
+      M.fit(C);
+
+      // ===== D: EXAMPLE, cart built in Server A's memory =====
+      // diagram: D
+      M.pill(D, "EXAMPLE", at("D", "EXAMPLE"), { x: 380, y: 200, size: 44 });
+      frame(D, M.P("D", 0) + 0.1);
+      cartChip(D, 900, 360, at("D", "2"), "× 2", ACC, 220);
+      reqTo(D, 0, at("D", "request", 1));
+      ring(D, SX[0] - 135, SY, 270, 140, ACC, at("D", "Server"));
+      ring(D, 290, LY, 500, 140, ACC, at("D", "Load"), at("D", "ye"));
+      cartChip(D, SX[0], slotY, at("D", "memory"), "× 2", ACC, 234);
+      M.fit(D);
+
+      // ===== E: next request lands on B, cart empty, A dies =====
+      // diagram: E
+      frame(E, M.P("E", 0));
+      const eC = cartChip(E, SX[0], slotY, M.P("E", 0) + 0.3, "× 2", ACC, 234);
+      chip(E, "OPEN CART", 900, 365, 250, ACC, at("E", "kholte"), 34, 66);
+      reqTo(E, 1, at("E", "request"), HOT);
+      ring(E, SX[1] - 135, SY, 270, 140, HOT, at("E", "B", 0));
+      chip(E, "EMPTY", SX[1], slotY, 234, HOT, at("E", "khaali"), 36, 68);
+      gone(eC, at("E", "dead"));
+      dead(E, 0, at("E", "dead"));
+      stamp(E, "CART LOST", 540, 190, HOT, at("E", "hamesha"), 52, 460);
+      M.fit(E);
+
+      // ===== F: the fix, cart moves into a shared session store =====
+      // diagram: F
+      frame(F, M.P("F", 0), { store: 1 });
+      const fCart = cartChip(F, SX[0], slotY, M.P("F", 0) + 0.3, "× 2", ACC, 234);
+      const fX = ico(F, "cross", SX[0], slotY + 34, 70, HOT, at("F", "mat"));
+      gone(fX, at("F", "shared") + 0.3);
+      fly(fCart, 760 - SX[0], STY + 118 - slotY, at("F", "shared"), 0.9);
+      chip(F, "REDIS", 540, 1262, 260, CYAN, at("F", "Redis"), 36, 56);
+      show(el(F, `left:${STX[0] - 125}px;top:${STY + 74}px;font:700 30px var(--code);color:${GREY}`, "KEY"), at("F", "key", 0), { opacity: 0, y: 0 });
+      show(el(F, `left:645px;top:${STY + 74}px;font:700 30px var(--code);color:${GREY}`, "VALUE"), at("F", "value", 0), { opacity: 0, y: 0 });
+      chip(F, "ID 7f3a", STX[0] - 20, STY + 118, 250, ACC, at("F", "ID"), 34, 66);
+      ico(F, "arrow", 540, STY + 151, 50, GREY, at("F", "value", 1));
+      M.fit(F);
+
+      // ===== G: session ID, cookie, three steps =====
+      // diagram: G
+      frame(G, M.P("G", 0), { store: 1 });
+      const gV = kv(G, M.P("G", 0) + 0.3);
+      chip(G, "ID 7f3a", 900, 365, 220, ACC, at("G", "ID"), 32, 62);
+      const s1 = stamp(G, "STEP 1", 540, 190, ACC, at("G", "pahla"), 50, 300);
+      reqTo(G, 1, at("G", "login", 1));
+      const gIdB = chip(G, "ID 7f3a", SX[1], slotY, 234, ACC, at("G", "banakar"), 34, 68);
+      dot(G, SX[1], SY + 40, 540, UY + 130, at("G", "browser"), GOOD, 0.8, { hollow: 1 });
+      gone(gIdB, at("G", "cookie") - 0.1);
+      chip(G, "COOKIE", 900, 445, 220, GOOD, at("G", "cookie"), 32, 58);
+      gone(s1, at("G", "doosra") - 0.2);
+      const s2 = stamp(G, "STEP 2", 540, 190, ACC, at("G", "doosra"), 50, 300);
+      mchip(G, 540, UY + 130, 540, LY + 70, at("G", "request", 0), 0.45, "ID 7f3a", GOOD);
+      mchip(G, 540, LY + 140, SX[2], SY + 40, at("G", "request", 0) + 0.5, 0.5, "ID 7f3a", GOOD);
+      gone(s2, at("G", "teesra") - 0.2);
+      stamp(G, "STEP 3", 540, 190, ACC, at("G", "teesra"), 50, 300);
+      ring(G, SX[2] - 135, SY, 270, 140, GOOD, at("G", "server", 1));
+      dot(G, SX[2], SLY + 90, 760, STY + 8, at("G", "store", 1), GOOD, 0.5);
+      const gC = cartChip(G, SX[2], slotY, at("G", "nikalta"), "× 2", ACC, 234);
+      tl.to(gV, { opacity: 0, duration: 0.2, immediateRender: false }, at("G", "nikalta"));
+      fly(gC, 760 - SX[2], STY + 118 - slotY, at("G", "rakh"), 0.7);
+      gone(gC, at("G", "rakh") + 0.75);
+      tl.to(gV, { opacity: 1, duration: 0.25, immediateRender: false }, at("G", "rakh") + 0.85);
+      M.fit(G);
+
+      // ===== H: same example again =====
+      // diagram: H
+      frame(H, M.P("H", 0), { store: 1 });
+      kv(H, M.P("H", 0) + 0.3);
+      reqTo(H, 1, at("H", "Request"));
+      ring(H, SX[1] - 135, SY, 270, 140, GOOD, at("H", "B", 0));
+      const hId = chip(H, "ID 7f3a", SX[1], slotY, 234, ACC, at("H", "session", 0), 34, 68);
+      dot(H, SX[1], SLY + 90, 640, STY + 8, at("H", "store"), ACC, 0.5);
+      dot(H, 760, STY + 8, SX[1] + 60, SLY + 90, at("H", "donon"), GOOD, 0.5, { hollow: 1 });
+      gone(hId, at("H", "items") + 0.1);
+      cartChip(H, SX[1], slotY, at("H", "items") + 0.3, "× 2", GOOD, 234);
+      dead(H, 0, at("H", "dead"));
+      const hs1 = stamp(H, "NEW SERVER", 540, 190, GOOD, at("H", "naya"), 50, 440);
+      gone(hs1, at("H", "kisi") - 0.1);
+      stamp(H, "NOTHING LOST", 540, 190, GOOD, at("H", "kisi"), 50, 520);
+      M.fit(H);
+
+      // ===== I: hook answer, remembering ties a user to one server =====
+      // diagram: I
+      const panelSet = (y0, col, title, t) => { show(panel(I, 60, y0, 960, 500, col, title), t);
+        M.box(I, { x: 380, y: y0 + 90, w: 320, h: 110, label: "USER", icon: "user", color: CYAN, size: 36 }).show(t + 0.1);
+        SX.forEach((cx, i) => M.box(I, { x: cx - 135, y: y0 + 330, w: 270, h: 130, label: "SERVER " + "ABC"[i], icon: "server", color: CYAN, size: 32 }).show(t + 0.2 + 0.05 * i)); };
+      panelSet(230, HOT, "REMEMBERS", M.P("I", 0));
+      panelSet(780, GOOD, "FORGETS", M.P("I", 0) + 0.1);
+      const iArr = (y0, i, col, w, t) => M.arrow(I, { from: [540 + (i - 1) * 90, y0 + 200], to: [SX[i], y0 + 322], color: col, w }).show(t, 0.3);
+      iArr(230, 0, HOT, 10, at("I", "usi"));
+      [1, 2].forEach((i) => show(el(I, `left:${SX[i] - 135}px;top:560px;width:270px;height:130px;border-radius:18px;background:rgba(14,18,30,.85)`), at("I", "bandh"), { opacity: 0, y: 0 }));
+      [0, 1, 2].forEach((i) => iArr(780, i, GOOD, 8, at("I", "koi", i)));
+      M.fit(I);
+
+      // ===== J: sticky session workaround =====
+      // diagram: J
+      frame(J, M.P("J", 0));
+      gone(stamp(J, "STICKY", 540, 190, ACC, at("J", "sticky"), 50, 300), at("J", "Catch") - 0.1);
+      const jC = cartChip(J, SX[0], slotY, at("J", "hamesha"), "× 2", ACC, 234);
+      [0, 1, 2].forEach((k) => dot(J, 540, LY + 140, SX[0], SY + 40, at("J", "hamesha") + k * 0.55, ACC, 0.5));
+      M.arrow(J, { from: [LX[0], LY + 148], to: [SX[0], SY - 8], color: ACC, w: 10 }).show(at("J", "hamesha"), 0.3);
+      chip(J, "COOKIE", 150, LY + 70, 230, GOOD, at("J", "cookie"), 34, 62);
+      chip(J, "IP_HASH", 930, LY + 70, 230, GOOD, at("J", "ip_hash"), 34, 62);
+      gone(jC, at("J", "dead"));
+      dead(J, 0, at("J", "dead"));
+      stamp(J, "SESSIONS LOST", 540, 190, HOT, at("J", "sessions"), 48, 560);
+      const bar = (cx, h, col, t) => { const b = el(J, `left:${cx - 60}px;top:${1250 - h}px;width:120px;height:${h}px;border-radius:12px 12px 0 0;background:${M.ca(col, 0.85)};transform-origin:50% 100%`); tl.set(b, { opacity: 0 }, 0); tl.fromTo(b, { opacity: 0, scaleY: 0 }, { opacity: 1, scaleY: 1, duration: 0.5, ease: "power3.out", immediateRender: false }, t); return b; };
+      bar(SX[1], 200, HOT, at("J", "load", 1)); bar(SX[2], 60, CYAN, at("J", "load", 1) + 0.1);
+      chip(J, "UNEVEN", SX[0] + 20, 1150, 250, HOT, at("J", "asman"), 36, 66);
+      M.fit(J);
+
+      // ===== K: close, state outside + comment =====
+      // diagram: K
+      SX.forEach((cx, i) => M.box(K, { x: cx - 135, y: 230, w: 270, h: 130, label: "SERVER " + "ABC"[i], icon: "server", color: CYAN, size: 32 }).show(at("K", "servers")));
+      M.box(K, { x: 240, y: 470, w: 600, h: 150, label: "SESSION STORE", icon: "db", color: ACC, size: 38 }).show(at("K", "state"));
+      cartChip(K, 540, 650, at("K", "bahar"), "× 2", GOOD, 234);
+      SX.forEach((cx, i) => M.arrow(K, { from: [cx, 368], to: [STX[i], 462], color: GREY, w: 5, dash: true }).show(at("K", "halke"), 0.3));
+      const cc = panel(K, 120, 800, 840, 460, CYAN, "COMMENT KARO"); show(cc, at("K", "tum"));
+      M.pill(cc, "SERVER MEMORY", at("K", "memory"), { x: 120, y: 120, kind: "out", size: 34 });
+      M.pill(cc, "STORE", at("K", "store"), { x: 120, y: 200, kind: "out", size: 34 });
+      show(el(cc, "left:40px;right:40px;top:290px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.5);font:500 32px var(--code);color:#AEB9D0;display:flex;align-items:center;padding:0 30px;box-sizing:border-box", "Add a comment..."), at("K", "comment"), { opacity: 0 });
+      const kf = M.pill(K, "+  FOLLOW", at("K", "follow") - 0.4, { x: 340, y: 1300, size: 48, kind: "acc" });
+      tl.fromTo(kf, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("K", "follow"));
+      M.fit(K);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { stateless: "cyan", state: "gold", cart: "gold", session: "cyan", store: "cyan", Redis: "cyan", dead: "hot", EXAMPLE: "gold", cookie: "good", sticky: "gold", follow: "gold", comment: "cyan", step: "gold", ID: "good", khaali: "hot" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+    </script>
+  </body>
+</html>

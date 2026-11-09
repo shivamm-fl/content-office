@@ -1,0 +1,14 @@
+Stateless servers: server ko yaad kyun nahi rakhna chahiye?
+
+Day 20/150: Stateless server request ke beech tumhare baare mein kuch yaad nahi rakhta. Cart jaisi state ek shared session store mein rakhi jaati hai, jaise Redis, key session ID aur value cart. Browser ek cookie mein session ID bhejta hai, aur jo bhi server request le, wo ID se store se cart nikalta hai. Isliye koi bhi server koi bhi request le sakta hai. Sticky session ek workaround hai: NGINX mein cookie ya ip_hash se ek user ek hi server par jaata hai. Aam taur par us server ke dead hone par uski sessions chali jaati hain (hamara reasoning). Example ke 2 items invented hain.
+
+Comment karke batao: tumhare app mein login session server ki memory mein rehta hai ya store mein?
+
+Sources:
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies
+https://en.wikipedia.org/wiki/Stateless_protocol
+https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
+https://redis.io/solutions/session-management/
+
+Tags: stateless server,session store,sticky session,system design
+AI-assisted visuals and narration.

@@ -1,0 +1,7 @@
+Day 20/150: Server ko aapko yaad kyun nahi rakhna chahiye?
+
+Stateless server request ke beech tumhare baare mein kuch yaad nahi rakhta. Cart jaisi state ek shared session store mein rehti hai, jaise Redis, jahan key hai session ID aur value hai cart. Isliye load balancer ke peeche koi bhi server koi bhi request le sakta hai, aur server dead ho jaye ya naya judey, toh session nahi jaati. Sticky session ek workaround hai, par aam taur par wo server dead hua toh uski sessions chali jaati hain. Example ke 2 items invented hain.
+
+Comment karke batao: tumhare app mein login session server ki memory mein rehta hai ya store mein?
+
+#SystemDesign #StatelessServers #Backend
