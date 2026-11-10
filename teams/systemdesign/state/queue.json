@@ -1,37 +1,67 @@
 {
   "items": [
     {
-      "id": "s020",
+      "id": "s021",
       "track": "series",
-      "day": 20,
+      "day": 21,
       "unit": "P2",
-      "title": "Stateless servers: server ko aapko yaad kyun nahi rakhna chahiye",
+      "title": "Autoscaling: traffic badhe to servers khud badh jayein",
       "format": "pattern",
-      "one_idea": "A stateless server keeps no per-user memory between requests: the user's state lives in a shared session store, so any server behind the load balancer can answer any request, and a dead or added server loses nobody's session.",
-      "hook_type": "direct_question",
-      "spoken_hook": "Server को आपको याद क्यों नहीं रखना चाहिए?",
-      "hook_formula": "direct_question: the counter-intuitive why",
-      "hook_source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies",
+      "one_idea": "Autoscaling watches a metric (for example average CPU) and adds servers (scale-out) when it crosses a target and removes them (scale-in) when it falls, within a minimum and maximum; a cooldown or warm-up stops it from reacting twice to the same spike, and the catch is that new servers are not instant, it costs money while they run, and it only works cleanly when servers are stateless.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Sale की रात traffic 10 गुना, servers बढ़े नहीं तो?",
+      "hook_formula": "relatable_stake: the viewer's own sale-night app buckling, a plain statement with no question after it",
+      "hook_source": "https://en.wikipedia.org/wiki/Autoscaling",
+      "hook_10s": "Sale की रात traffic 10 गुना, और servers उतने ही। Ya to app बैठ जाएगा, ya aap 10 गुना servers पूरे साल चलाओगे। Autoscaling ये दोनों बचाता है: traffic देखकर servers खुद घटाता-बढ़ाता है। [frame 0: one server card with a CPU bar filling red as request dots pour in from the left, a second empty server card dimmed beside it]",
+      "hook_candidates": [
+        {
+          "formula": "relatable_stake",
+          "text": "Sale की रात traffic 10 गुना, servers बढ़े नहीं तो?"
+        },
+        {
+          "formula": "direct_question",
+          "text": "Traffic बढ़े तो servers अपने आप कैसे बढ़ते हैं?"
+        },
+        {
+          "formula": "interviewer_asked",
+          "text": "Interviewer ने पूछा: traffic अचानक बढ़ जाए तो system कैसे संभालोगे?"
+        }
+      ],
+      "visual_idea": "A row of server cards behind a load balancer, each with a CPU bar; as request dots thicken the average CPU bar crosses a dashed target line and a new server card slides in (scale-out), then a clock ring shows the warm-up before it takes requests; later the dots thin out and a card slides away (scale-in), with a min and max bracket around the row and a ticking rupee meter beside each running card.",
+      "everyday_anchor": "A busy restaurant on a festival night calling in extra waiters when the queue at the door grows, and sending them home when it empties, instead of paying a full crew all year.",
+      "example": "EXAMPLE (invented numbers): a shop app runs on 4 servers at about 40% average CPU; the target is 50%; sale traffic pushes it to 80%. The formula Kubernetes documents, desiredReplicas = ceil[currentReplicas x (currentMetric / targetMetric)], gives ceil[4 x 80/50] = 7 servers. Min 4 and max 12 are EXAMPLE limits. After the sale CPU falls and it scales back in toward the minimum.",
       "sources": [
-        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies",
-        "https://en.wikipedia.org/wiki/Stateless_protocol",
-        "https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/",
-        "https://redis.io/solutions/session-management/"
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-cooldowns.html",
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html",
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html",
+        "https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/",
+        "https://en.wikipedia.org/wiki/Autoscaling"
+      ],
+      "facts_to_verify": [
+        "AWS what-is: group never goes below minimum or above maximum; scaling policies launch or terminate instances as demand changes; reduces cost by removing capacity when demand is lower.",
+        "AWS target tracking: you pick a metric and a target (example 50 percent average CPU); scales out above it and in below it; 'thermostat' comparison; the target leaves extra capacity for spikes.",
+        "AWS cooldown: lets the group stabilize before further simple-scaling activity, default 300 s; target tracking and step scaling use a per-instance warmup instead (warmup page: instance not counted in metrics until warmed up; scale-in is blocked while scale-out warms up).",
+        "Kubernetes HPA: formula desiredReplicas = ceil[currentReplicas x (currentMetricValue / desiredMetricValue)]; control loop every 15 s by default; scale-down stabilization window 300 s to avoid flapping.",
+        "Wikipedia: reactive scaling can be too slow for a very sudden change, scheduled scaling suits predictable peaks; most clouds bill by usage, not peak capacity. AWS scheduled scaling page: scheduled actions raise or lower desired capacity at set times.",
+        "Stateless requirement: NO fetched page says it. Say it as our own reasoning, labelled so (a server removed on scale-in loses anything kept in its memory, so keep sessions in a shared store).",
+        "No startup-minutes figure, no cost figure, no named-company claim. All traffic and server numbers say EXAMPLE."
       ],
       "length_target_s": 150,
-      "cover_headline": "Why Servers Should Forget You",
-      "thumb_text": "STATELESS SERVERS",
+      "cover_headline": "Servers That Scale Themselves",
+      "thumb_text": "AUTOSCALING",
       "keywords": [
-        "stateless server kya hai",
-        "stateless vs stateful system design",
-        "sticky session vs stateless",
-        "session store redis system design",
-        "stateless architecture hindi",
-        "horizontal scaling stateless"
+        "autoscaling kya hai",
+        "auto scaling system design",
+        "scale out vs scale in",
+        "horizontal pod autoscaler hindi",
+        "aws auto scaling group explained",
+        "autoscaling cooldown warm up"
       ],
       "status": "planned",
       "qa_passed": false,
-      "script_file": "state/scripts/s020.txt",
+      "script_file": "state/scripts/s021.txt",
       "script_locked": false
     }
   ]
