@@ -1,0 +1,21 @@
+Rotate Array: slice लिखा, पर array बदला ही नहीं!
+
+Problem: array को k steps right rotate करना है, यानी आख़िर के k elements आगे आ जाते हैं, और बदलाव उसी array में चाहिए, कुछ return नहीं करना। | Given array: one, two, three, four, five, six, seven, और k equals three, तो result five, six, seven, one, two, three, four है।
+
+Slice वाली line nums equals nums[-k:] plus nums[:-k] एक नया list बनाती है, और function के अंदर नाम nums उस पर चला जाता है। | मैंने code चलाया है: call के बाद भी array one से seven वही आता है।
+
+एक-एक step rotate करो, तो हर step में n elements move होते हैं, यानी k times n moves। | नया list बनाओ, तो extra space O n लगता है।
+
+अब एक observation देखो। | पूरा array reverse करो, तो आख़िर के elements आगे आ जाते हैं, पर उल्टे order में। | फिर दोनों हिस्सों को अलग से reverse करो, तो order सीधा हो जाता है।
+
+पहला step: k equals k mod n, क्योंकि n बार rotate करने पर array वैसा ही रहता है। | दूसरा step: पूरा array reverse करो। | तीसरा step: पहले k elements reverse करो, और फिर बाकी n minus k elements reverse करो।
+
+अब dry run। | पूरा reverse करने पर seven, six, five, four, three, two, one। | पहले three elements reverse करने पर five, six, seven, four, three, two, one। | आख़िर के four elements reverse करने पर five, six, seven, one, two, three, four, और यही answer है।
+
+Rotate में n equals len of nums, k mod equals n, फिर reverse zero से n minus one, फिर zero से k minus one, फिर k से n minus one। | मैंने code चलाया है: इस array पर output five, six, seven, one, two, three, four आता है।
+
+हर element पर सिर्फ़ एक swap होता है, कुल लगभग n swaps, तो time O n है। | Swap उसी array में होता है, तो extra space O one है।
+
+k, n से बड़ा हो सकता है, इसलिए k mod n ज़रूरी है। | Array one, two पर k equals three हो, तो mod के बिना reverse zero से two index बाहर चला जाता है।
+
+Comments में बताओ: Given array negative one, negative one hundred, three, ninety-nine और k equals two पर result क्या आएगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।
