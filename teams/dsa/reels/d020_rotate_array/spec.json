@@ -1,0 +1,119 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5,
+    "K": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      0,
+      0.3
+    ],
+    [
+      "err",
+      "C",
+      1,
+      0.3
+    ],
+    [
+      "dip",
+      "E",
+      1,
+      -0.1
+    ],
+    [
+      "click",
+      "F",
+      1,
+      0
+    ],
+    [
+      "slice",
+      "G",
+      2,
+      0
+    ],
+    [
+      "ok",
+      "G",
+      3,
+      0.3
+    ],
+    [
+      "ok",
+      "H",
+      1,
+      0.3
+    ],
+    [
+      "err",
+      "J",
+      1,
+      0.3
+    ],
+    [
+      "save",
+      "K",
+      1,
+      0.4
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Rotate Array: slice लिखा, पर array बदला ही नहीं! || Problem: array को k steps right rotate करना है, यानी आख़िर के k elements आगे आ जाते हैं, और बदलाव उसी array में चाहिए, कुछ return नहीं करना।",
+      "B": "Given array: one, two, three, four, five, six, seven, और k equals three, तो result five, six, seven, one, two, three, four है।",
+      "C": "Slice वाली line nums equals nums[-k:] plus nums[:-k] एक नया list बनाती है, और function के अंदर नाम nums उस पर चला जाता है। || मैंने code चलाया है: call के बाद भी array one से seven वही आता है।",
+      "D": "एक-एक step rotate करो, तो हर step में n elements move होते हैं, यानी k times n moves। || नया list बनाओ, तो extra space O n लगता है।",
+      "E": "@emph अब एक observation देखो। || पूरा array reverse करो, तो आख़िर के elements आगे आ जाते हैं, पर उल्टे order में। || फिर दोनों हिस्सों को अलग से reverse करो, तो order सीधा हो जाता है।",
+      "F": "पहला step: k equals k mod n, क्योंकि n बार rotate करने पर array वैसा ही रहता है। || दूसरा step: पूरा array reverse करो। || तीसरा step: पहले k elements reverse करो, और फिर बाकी n minus k elements reverse करो।",
+      "G": "अब dry run। || पूरा reverse करने पर seven, six, five, four, three, two, one। || पहले three elements reverse करने पर five, six, seven, four, three, two, one। || आख़िर के four elements reverse करने पर five, six, seven, one, two, three, four, और यही answer है।",
+      "H": "Rotate में n equals len of nums, k mod equals n, फिर reverse zero से n minus one, फिर zero से k minus one, फिर k से n minus one। || मैंने code चलाया है: इस array पर output five, six, seven, one, two, three, four आता है।",
+      "I": "हर element पर सिर्फ़ एक swap होता है, कुल लगभग n swaps, तो time O n है। || Swap उसी array में होता है, तो extra space O one है।",
+      "J": "@emph k, n से बड़ा हो सकता है, इसलिए k mod n ज़रूरी है। || Array one, two पर k equals three हो, तो mod के बिना reverse zero से two index बाहर चला जाता है।",
+      "K": "Comments में बताओ: Given array negative one, negative one hundred, three, ninety-nine और k equals two पर result क्या आएगा? || Code और dry run के साथ DSA सीखने के लिए follow करो।"
+    }
+  },
+  "sources": [
+    "https://leetcode.doocs.org/en/lc/189/",
+    "https://docs.python.org/3/reference/datamodel.html"
+  ],
+  "hook_type": "relatable_stake",
+  "prime": "सुनो, ये बहुत interesting है!"
+}

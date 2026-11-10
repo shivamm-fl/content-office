@@ -1,0 +1,9 @@
+Day 20/150: Rotate Array: slice likha, par array badla hi nahi!
+
+Rotate Array problem: array ko k steps right rotate karna hai, yaani aakhir ke k elements aage aa jaate hain, aur badlav usi array mein chahiye. Slice wali line nums = nums[-k:] + nums[:-k] ek naya list banati hai, aur function ke andar naam nums us par chala jaata hai, isliye caller ka array wahi rehta hai (code chalaya).
+
+Teen reverse: k = k % n, phir poora array reverse, phir pehle k elements, phir baaki n - k elements. [1, 2, 3, 4, 5, 6, 7] aur k = 3 par 7 6 5 4 3 2 1, phir 5 6 7 4 3 2 1, phir 5 6 7 1 2 3 4. Time O(n), extra space O(1). k, n se bada ho sakta hai, isliye k % n zaroori hai. Actual Python code video mein hai.
+
+Ab tumhara turn: [-1, -100, 3, 99] aur k = 2 par result kya aayega? Comment mein likho.
+
+#dsa #rotatearray #interviewprep

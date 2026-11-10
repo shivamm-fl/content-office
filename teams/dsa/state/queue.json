@@ -134,35 +134,19 @@
       "hook_type": "relatable_stake",
       "spoken_hook": "Rotate Array: slice लिखा, पर array बदला ही नहीं!",
       "hook_formula": "wrong_way_first_real_bug",
-      "hook_source": "relatable_stake is the least used of the last six built (d014-d019: direct_question x2, surprising_fact x2, relatable_stake x1 on d017, interviewer_asked x1 on d018; d017 is older than d018; company_specific has no fetched company page). The stake is a real, run result: the slice line leaves nums unchanged at the caller ([1,2,3,4,5,6,7] after wrong(a,3)). Python name/object facts from docs.python.org datamodel (fetched).",
-      "hook_10s": "Rotate Array: slice लिखा, पर array बदला ही नहीं! nums = nums[-k:] + nums[:-k] एक नया list बनाती है, original वैसा का वैसा। [Frame 0: array 1..7 unchanged on the left with the code line above it, a second new array 5,6,7,1,2,3,4 floating beside it, a red NOT CHANGED stamp on the original]",
-      "hook_candidates": [
-        {
-          "formula": "wrong_way_first_real_bug",
-          "text": "Rotate Array: slice लिखा, पर array बदला ही नहीं!"
-        },
-        {
-          "formula": "payoff_fact",
-          "text": "Rotate Array बिना extra array के, सिर्फ़ तीन reverse से।"
-        },
-        {
-          "formula": "interviewer_question",
-          "text": "Interviewer ने पूछा: array को k step rotate करो, extra space O(1) में?"
-        }
-      ],
+      "hook_source": "relatable_stake; payoff verified: doocs 189 and run in qa/d020/run.py. No company claim.",
+      "hook_10s": "Rotate Array: slice लिखा, पर array बदला ही नहीं! [Frame 0: row 1..7 and a second rotated row, original stamped NOT CHANGED]",
       "one_idea": "Rotate Array: rotating right by k means the last k elements move to the front; do it in place by taking k mod n and reversing three times (the whole array, then the first k, then the remaining n - k), which is O(n) time and O(1) extra space, while the slice-and-assign shortcut builds a new list and does not change the caller's array.",
-      "visual_idea": "One row of 7 cells holding 1 to 7. First scene: a code line builds a second, rotated row beside it while the original row stays unchanged under a NOT CHANGED stamp. Then the same row is reversed three times: a mirrored sweep flips all 7 cells, a bracket over the first 3 flips them, a bracket over the last 4 flips them, each flip drawn as swap arcs between the end cells moving inward with a swap counter; colour the last k cells (5,6,7) so the viewer can follow them to the front. A small side bar compares the extra copy (7 cells) with zero extra cells. Actual Accepted Python code is visible in readable chunks synced to the voice.",
-      "everyday_anchor": "none: audience is working engineers; technical explanation only.",
-      "example": "EXAMPLE nums = [1,2,3,4,5,6,7], k = 3 gives [5,6,7,1,2,3,4]. Reverse all: [7,6,5,4,3,2,1]; reverse first 3: [5,6,7,4,3,2,1]; reverse last 4: [5,6,7,1,2,3,4]. [1,2] with k = 3 gives [2,1] because k mod n = 1; [-1,-100,3,99] with k = 2 gives [3,99,-1,-100]; [5] stays [5]. Rotating one step at a time costs k x n element moves: for n = 100000 and k = 99999 about 10,000,000,000 vs about 100,000 swaps for the three reverses (EXAMPLE, arithmetic).",
-      "code_outline": "def rotate(nums, k): n = len(nums); k %= n; reverse(0, n-1); reverse(0, k-1); reverse(k, n-1), with reverse(i, j) swapping nums[i], nums[j] while i < j. Valid in place; LeetCode expects nums modified, nothing returned.",
+      "visual_idea": "One row of 7 cells holding 1 to 7. First scene: a code line builds a second, rotated row beside it while the original row stays unchanged under a NOT CHANGED stamp. Then the same row is reversed three times with swap arcs; last k cells (5,6,7) coloured. A side bar compares the extra copy (7 cells) with zero extra cells.",
+      "example": "EXAMPLE nums = [1,2,3,4,5,6,7], k = 3 gives [5,6,7,1,2,3,4]. [1,2] with k = 3 gives [2,1]; [-1,-100,3,99] k = 2 gives [3,99,-1,-100].",
+      "code_outline": "def rotate(nums, k): n = len(nums); k %= n; reverse(0, n-1); reverse(0, k-1); reverse(k, n-1). Code run in qa/d020/run.py.",
       "sources": [
         "https://leetcode.doocs.org/en/lc/189/",
         "https://docs.python.org/3/reference/datamodel.html"
       ],
       "facts_to_verify": [
-        "doocs LC 189 (fetched; LeetCode page not used): rotate right by k, 1 <= n <= 10^5, k >= 0 and can exceed n, take k mod n; reverse whole array, first k, remaining n - k; O(n) time, O(1) space; example [1..7], k = 3.",
-        "docs.python.org datamodel (fetched, first 100000 characters): names refer to objects, lists are mutable. The word 'rebind' is not on the page, so the script says the line makes a new list and the name nums inside the function now points to it, shown by the real output.",
-        "Code run in qa/d020/run.py: wrong version leaves [1,2,3,4,5,6,7]; three reverses give [7,6,5,4,3,2,1], [5,6,7,4,3,2,1], [5,6,7,1,2,3,4]; [1,2] k=3 gives [2,1]; matched a slice-based expected result on 5000 random arrays (0 mismatches). 10,000,000,000 vs 100,000 is EXAMPLE arithmetic; the reverse swap count is our own derivation (about n/2 + k/2 + (n-k)/2 = n swaps)."
+        "doocs LC 189 (fetched): reverse whole, then first k, then last n-k; k %= n; O(n) time, O(1) space.",
+        "Run in qa/d020/run.py: slice version leaves [1..7] unchanged; steps match; [1,2] k=3 -> [2,1] and without mod IndexError."
       ],
       "length_target_s": 150,
       "cover_headline": "Rotate Array In Place, O(1) Space",
@@ -171,11 +155,11 @@
         "rotate array",
         "leetcode 189",
         "rotate array in place python",
-        "rotate array reverse three times",
         "rotate array O(1) space",
         "DSA hinglish"
       ],
-      "qa_passed": false
+      "qa_passed": false,
+      "everyday_anchor": "none: audience is working engineers; technical explanation only."
     }
   ]
 }

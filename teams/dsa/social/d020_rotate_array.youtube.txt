@@ -1,0 +1,7 @@
+Rotate Array In Place: 3 Reverses, O(1) Space
+
+Rotate Array (LeetCode 189) asks you to rotate an array right by k steps in place. The slice shortcut nums = nums[-k:] + nums[:-k] builds a new list and rebinds the local name nums, so the caller's array is unchanged (the code was run to check this). Rotating one step at a time costs about k x n moves. The in-place method takes k mod n, reverses the whole array, then reverses the first k elements, then the remaining n - k elements. The three reverses make about n swaps in total, so time is O(n) and extra space is O(1). On [1, 2, 3, 4, 5, 6, 7] with k = 3 the result is [5, 6, 7, 1, 2, 3, 4]. k mod n is needed because k can be larger than n: without it, reverse(0, k - 1) on [1, 2] with k = 3 goes out of range (run to check).
+
+Sources:
+https://leetcode.doocs.org/en/lc/189/
+https://docs.python.org/3/reference/datamodel.html
