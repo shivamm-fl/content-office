@@ -1,0 +1,159 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5,
+    "K": 2.5,
+    "L": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "err",
+      null,
+      null,
+      1.5
+    ],
+    [
+      "click",
+      null,
+      null,
+      5.4
+    ],
+    [
+      "err",
+      null,
+      null,
+      7.2
+    ],
+    [
+      "click",
+      null,
+      null,
+      28.2
+    ],
+    [
+      "pop",
+      null,
+      null,
+      28.9
+    ],
+    [
+      "click",
+      null,
+      null,
+      31.3
+    ],
+    [
+      "pop",
+      null,
+      null,
+      55.9
+    ],
+    [
+      "ok",
+      null,
+      null,
+      59.7
+    ],
+    [
+      "click",
+      null,
+      null,
+      72.2
+    ],
+    [
+      "err",
+      null,
+      null,
+      79.9
+    ],
+    [
+      "dip",
+      null,
+      null,
+      82.3
+    ],
+    [
+      "err",
+      null,
+      null,
+      87.6
+    ],
+    [
+      "dip",
+      null,
+      null,
+      98.4
+    ],
+    [
+      "err",
+      null,
+      null,
+      104.9
+    ],
+    [
+      "ok",
+      null,
+      null,
+      109.8
+    ],
+    [
+      "save",
+      null,
+      null,
+      123.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Sale की रात traffic 10{ten} गुना, servers बढ़े नहीं तो?",
+      "B": "Autoscaling यानी traffic देखकर servers अपने आप बढ़ें और घटें। | नहीं तो app बैठ जाएगा, या तुम 10{ten} गुना servers पूरे साल चलाओगे।",
+      "C": "तीन चीज़ें समझो। | Metric यानी वो number जो servers की हालत बताता है, जैसे average CPU। | Target यानी जो level तुम चाहते हो, जैसे 50{fifty} percent CPU। | Min और max यानी servers की सबसे कम और सबसे ज़्यादा गिनती।",
+      "D": "Metric target के ऊपर जाए, तो नए servers जुड़ते हैं, ये scale-out है। | नीचे आए, तो servers हटते हैं, ये scale-in है।",
+      "E": "EXAMPLE, सारे numbers invented हैं। | एक shop app 4{four} servers पर है, average CPU 40{forty} percent, target 50{fifty} percent, min 4{four}, max 12{twelve}। | Sale में CPU 80{eighty} percent पर पहुँचा।",
+      "F": "Kubernetes का documented formula: अभी के servers गुणा current metric भाग target, नतीजा ऊपर round। | 4{four} गुणा 80{eighty} भाग 50{fifty}, यानी 6{six} से थोड़ा ऊपर, round करके 7{seven} servers। | 7{seven}, max 12{twelve} के अंदर है, तो 3{three} नए servers जुड़े।",
+      "G": "Sale खत्म, CPU गिरा, तो servers वापस हटते हैं, minimum 4{four} तक। | ज़्यादातर clouds usage के हिसाब से bill करते हैं, peak के हिसाब से नहीं।",
+      "H": "अब catches। || पहला: नया server instant नहीं मिलता। | AWS में warm-up होता है: जब तक नया server warm नहीं हुआ, उसे metrics में गिना नहीं जाता, और तब तक scale-in भी रुका रहता है।",
+      "I": "दूसरा: cooldown। | Cooldown यानी scaling के बाद group को settle होने का वक़्त, ताकि वो उसी spike पर दोबारा न भागे। | AWS में simple scaling का default तीन सौ seconds है।",
+      "J": "तीसरा: servers चलते हैं, तब तक पैसा लगता है। | इसीलिए max ज़रूरी है।",
+      "K": "चौथा catch हमारी अपनी सोच है, किसी doc की line नहीं। | Scale-in में हटे server की memory की चीज़ें गईं, जैसे login session। | इसलिए servers stateless रखो, session shared store में रखो।",
+      "L": "याद रखो: metric देखो, target रखो, min और max की सीमा रखो, cooldown दो। || अब तुम बताओ: तुम्हारे app में scale का metric कौन सा होगा? | comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

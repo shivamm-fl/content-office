@@ -1,0 +1,7 @@
+Day 21/150: Sale ki raat traffic 10 guna, servers badhe nahi toh?
+
+Autoscaling ek metric dekhta hai, jaise average CPU. Wo target se upar gaya toh naye servers judte hain (scale-out), neeche aaya toh servers hat jaate hain (scale-in), hamesha min aur max ke beech. Example ke numbers invented hain: 4 servers, CPU 80%, target 50% toh Kubernetes ke formula se 4 x 80/50 = 6.4, round up karke 7 servers. Catches: naya server instant nahi milta (warm-up), cooldown ek hi spike par dobara scale hone se rokta hai (AWS simple scaling ka default 300 seconds), chalte servers ka paisa lagta hai, aur servers stateless rakhna padta hai (ye hamari apni soch hai).
+
+Comment karke batao: tumhare app mein scale ka metric kaun sa hoga?
+
+#SystemDesign #Autoscaling #Backend

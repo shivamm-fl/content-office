@@ -1,0 +1,15 @@
+Autoscaling: traffic badhe to servers khud badh jayein
+
+Day 21/150: Autoscaling ek metric dekhta hai, jaise average CPU. Metric target se upar jaye toh naye servers judte hain (scale-out), neeche aaye toh servers hat jaate hain (scale-in), min aur max ke beech. Example ke numbers invented hain: 4 servers, CPU 80%, target 50%, Kubernetes formula se 4 x 80/50 = 6.4, round up 7 servers. Catches: warm-up (naya server warm hone tak metrics mein nahi ginta aur tab tak scale-in rukta hai), cooldown (AWS simple scaling ka default 300 seconds), chalte servers ka paisa lagta hai, aur servers stateless rakhna (hamari apni soch). Zyaadatar clouds usage ke hisab se bill karte hain.
+
+Comment karke batao: tumhare app mein scale ka metric kaun sa hoga?
+
+Sources:
+https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html
+https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-cooldowns.html
+https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html
+https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/
+https://en.wikipedia.org/wiki/Autoscaling
+
+Tags: autoscaling,scale out,scale in,cooldown,system design
+AI-assisted visuals and narration.
