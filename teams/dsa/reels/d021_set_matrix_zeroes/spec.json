@@ -1,0 +1,114 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0.3
+    ],
+    [
+      "err",
+      "C",
+      2,
+      0.3
+    ],
+    [
+      "dip",
+      "D",
+      0,
+      -0.1
+    ],
+    [
+      "click",
+      "E",
+      1,
+      0.3
+    ],
+    [
+      "ok",
+      "E",
+      2,
+      0.2
+    ],
+    [
+      "click",
+      "F",
+      1,
+      0.2
+    ],
+    [
+      "ok",
+      "G",
+      1,
+      0.3
+    ],
+    [
+      "ok",
+      "G",
+      5,
+      0.3
+    ],
+    [
+      "ok",
+      "H",
+      1,
+      0.3
+    ],
+    [
+      "save",
+      "I",
+      1,
+      0.4
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Set Matrix Zeroes: extra array के बिना कैसे करें?",
+      "B": "Problem: matrix में जिस cell की value zero हो, उसकी पूरी row और पूरा column zero होना चाहिए, और बदलाव उसी matrix में चाहिए। | Given matrix: zero, one, two, zero, three, four, five, two, one, three, one, five।",
+      "C": "सबसे सीधा तरीका: scan करो, और zero मिलते ही उसकी row और column वहीं zero कर दो। | पर नए बने zeros भी असली zeros जैसे दिखते हैं। | पहले zero ने नीचे का three zero कर दिया, और scan ने उसे असली zero मानकर उसकी पूरी row भी zero कर दी। | आख़िर में पूरा matrix zero।",
+      "D": "इसलिए पहले note करो, बाद में zero करो। | Rows के लिए एक array और columns के लिए एक array, तो extra space O of m plus n लगता है।",
+      "E": "पर notes matrix के अंदर ही रखे जा सकते हैं। | Zero वाली row का पहला cell और zero वाले column का पहला cell, दोनों बाद में वैसे भी zero होने हैं। | तो पहली row columns का marker बनती है, और पहला column rows का।",
+      "F": "दिक्कत यह है कि पहली row और पहले column में असली zeros भी हो सकते हैं। | इसलिए दो booleans रखो, first_row और first_col, यानी इन दोनों में originally zero था या नहीं।",
+      "G": "@emph अब dry run। | पहली row में zero है, तो first_row equals True, और पहले column में भी zero है, तो first_col equals True। | बाकी cells में कोई zero नहीं, तो नया marker नहीं लगता। | पर आख़िरी column का marker zero है, तो उसके two और five zero हो जाते हैं। | फिर flags से पहली row और पहला column zero होते हैं। | Result: zero, zero, zero, zero, zero, four, five, zero, zero, three, one, zero।",
+      "H": "हर cell कुछ ही बार देखा गया, तो time O of m times n है। | Extra memory में सिर्फ़ दो booleans हैं, तो space O one है।",
+      "I": "Comments में बताओ: Given matrix one, one, one, one, zero, one, one, one, one पर result क्या आएगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

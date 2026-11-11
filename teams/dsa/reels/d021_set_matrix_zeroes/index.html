@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Set Matrix Zeroes</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="105" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="105" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="105" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="105" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "DSA 021/150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const AMB = "#E9B44C", VIO = "#9A8CEB";
+      const $s = (k) => M.$("#s" + k);
+      const [A, B, C, D, E, F, G, H, I] = "ABCDEFGHI".split("").map($s);
+      const cp = (sc, i) => REEL.hi.caps.filter((c) => c.scene === sc)[i].s;
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size, ts) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, String(from)); const o = { v: from };
+        show(d, ts == null ? segs[0][0] - 0.3 : ts, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const tint = (d, t, col, fill) => tl.to(d, { borderColor: M.ca(col, .9), backgroundColor: M.ca(col, fill == null ? .28 : fill), duration: 0.3, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t);
+      const bigtxt = (host, css, txt, col, size, t) => show(lab(host, css, txt, col, size), t, { opacity: 0 });
+      const ghost = (host, x, y, w, h) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px dashed rgba(150,175,215,.35)`);
+      const chip = (host, x, y, w, h, txt, col, t, fs) => show(tile(host, x, y, w, h, txt, col, fs || 56), t, { opacity: 0, y: 18 });
+      const base = (sc, h) => { const p = panel(sc, 60, 230, 960, h || 1010, CYAN, null); show(p, ST[sc.id.slice(1)] + 0.05); return p; };
+      // a lit tile: dim from the start, lit on its word
+      const lt = (host, x, y, w, h, txt, col, fs, t, s0) => { const d = tile(host, x, y, w, h, txt, col, fs); dimIn(d, s0 + 0.1, 0.5); lit(d, t); return d; };
+
+      const CX = (i) => 24 + i * 92;
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      const code = (host, x, y, w, lines, fs, lh, s0) => {
+        const h = lines.length * lh + 36;
+        show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(8,13,26,.9);border:2px solid ${M.ca(CYAN, .35)}`), s0 + 0.1);
+        const Ls = lines.map((s, i) => show(el(host, `left:${x + 10}px;top:${y + 18 + i * lh}px;width:${w - 20}px;height:${lh}px;border-radius:8px;font:500 ${fs}px/${lh}px var(--code);color:#9FB0CC;white-space:pre;padding-left:12px;box-sizing:border-box`, esc(s)), s0 + 0.15, { opacity: 0 }));
+        const on = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: M.ca(ACC, .25), color: "#FFFFFF", duration: 0.3, immediateRender: false }, t); };
+        const off = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: "rgba(233,180,76,0)", color: "#9FB0CC", duration: 0.3, immediateRender: false }, t); };
+        return { on, off, h }; };
+      const seqTile = (host, x, y, w, h, col, fs, seq) => seq.map(([txt, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = seq[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[1]); return d; });
+
+      const GREY = "#B8C4DC", DIMC = "#5C6B88";
+      // swap: one tile slot whose text changes; items [txt, colour, time]
+      const swap = (host, x, y, w, h, fs, items) => items.map(([txt, col, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = items[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[2]); return d; });
+      // ring that moves between cells
+      const mkRing = (host, x, y, w, h, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:5px solid ${ACC};box-sizing:border-box`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); return d; };
+      const hop = (d, x, y, t, dur) => tl.to(d, { left: x, top: y, duration: dur || 0.35, ease: "power2.inOut", immediateRender: false }, t);
+      const bar = (host, x, y, w, hh, col, t, tOut) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${hh}px;border-radius:4px;background:${col}`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); if (tOut != null) tl.to(d, { opacity: 0, duration: 0.25, immediateRender: false }, tOut); return d; };
+      const MAT = [[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]];
+      const EXM = [[1, 1, 1, 1], [1, 1, 0, 1], [1, 1, 1, 1]];
+      const BLK = [[1, 1, 1], [1, 0, 1], [1, 1, 1]];
+      const CW = 214, GP = 8;
+      const gX = (j, x0, cw) => (x0 == null ? 40 : x0) + j * ((cw || CW) + GP);
+      const gY = (i, y0, ch) => y0 + i * (ch + GP);
+      // grid of swap-tiles: cells[i][j] = list of tile elements (first = original); chg["i,j"] = [[txt,col,t],...]
+      const grid = (host, mat, y0, ch, fs, s0, o) => { o = o || {}; const cw = o.cw || CW, x0 = o.x0 == null ? 40 : o.x0; const chg = o.chg || {};
+        return mat.map((r, i) => r.map((v, j) => { const x = x0 + j * (cw + GP), y = y0 + i * (ch + GP); ghost(host, x, y, cw, ch);
+          const items = [[String(v), v === 0 ? AMB : CYAN, s0 + 0.1]].concat(chg[i + "," + j] || []);
+          return swap(host, x, y, cw, ch, fs, items); })); };
+      const lastOf = (c) => c[c.length - 1];
+      const tintAll = (g, cells, t, col, fill) => cells.forEach(([i, j]) => tint(g[i][j][0], t, col, fill));
+      const ROW0 = [[0, 1], [0, 2]], COL0 = [[1, 0], [2, 0]], COL3 = [[1, 3], [2, 3]];
+
+      const codeS = (host, x, y, w, lines, fs, lh, tIn, tOut) => { const h = lines.length * lh + 36; const els = [];
+        els.push(show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(8,13,26,.9);border:2px solid ${M.ca(CYAN, .35)}`), tIn));
+        const Ls = lines.map((t, i) => { const d = show(el(host, `left:${x + 10}px;top:${y + 18 + i * lh}px;width:${w - 20}px;height:${lh}px;border-radius:8px;font:500 ${fs}px/${lh}px var(--code);color:#9FB0CC;white-space:pre;padding-left:12px;box-sizing:border-box`, esc(t)), tIn + 0.05, { opacity: 0 }); els.push(d); return d; });
+        if (tOut != null) els.forEach((d) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, tOut));
+        const on = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: M.ca(ACC, .25), color: "#FFFFFF", duration: 0.3, immediateRender: false }, t); };
+        return { on, h }; };
+
+      // diagram: A
+      // ===== A: hook, 3x4 grid with the zero strips
+      M.hook(["SET MATRIX", "ZEROES"], { size: 96, top: 250 });
+      const pa = panel(A, 60, 500, 960, 760, CYAN, null); show(pa, 0.02);
+      const gA = grid(pa, MAT, 40, 170, 84, 0);
+      tintAll(gA, ROW0.concat(COL0, COL3), cp("A", 2), AMB, 0.3);
+      chip(pa, 40, 610, 880, 110, "EXTRA ARRAY ?", HOT, 0.2, 62);
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B
+      // ===== B: problem + given matrix
+      const sB = ST.B; const pb = base(B, 860);
+      bigtxt(pb, "left:0;width:960px;top:12px", "GIVEN MATRIX", GREY, 40, sB + 0.1);
+      const gB = MAT.map((r, i) => r.map((v, j) => lt(pb, gX(j), gY(i, 70, 150), CW, 150, String(v), v === 0 ? AMB : CYAN, 72, cp("B", 26 + i * 4 + j), sB)));
+      ROW0.concat([[0, 0], [0, 3]]).forEach(([i, j]) => tint(gB[i][j], cp("B", 11), AMB, 0.3));
+      COL0.concat(COL3, [[0, 0], [0, 3]]).forEach(([i, j]) => tint(gB[i][j], cp("B", 14), AMB, 0.3));
+      lt(pb, 40, 575, 430, 90, "ROW TO 0", AMB, 48, cp("B", 11), sB);
+      lt(pb, 490, 575, 430, 90, "COLUMN TO 0", AMB, 48, cp("B", 14), sB);
+      lt(pb, 40, 695, 880, 100, "IN PLACE", GOOD, 58, cp("B", 20), sB);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C
+      // ===== C: scan and zero at once wipes the matrix
+      const sC = ST.C; const pc = base(C, 860);
+      bigtxt(pc, "left:0;width:960px;top:12px", "ZERO WHILE SCANNING", GREY, 40, sC + 0.1);
+      const tA = cp("C", 14), tR1 = cp("C", 45), tR2 = cp("C", 50);
+      const chgC = {};
+      ROW0.concat(COL0, COL3).forEach(([i, j]) => { chgC[i + "," + j] = [["0", AMB, tA]]; });
+      [[1, 1], [1, 2]].forEach(([i, j]) => { chgC[i + "," + j] = [["0", HOT, tR1]]; });
+      [[2, 1], [2, 2]].forEach(([i, j]) => { chgC[i + "," + j] = [["0", HOT, tR2]]; });
+      const gC = grid(pc, MAT, 70, 150, 72, sC, { chg: chgC });
+      const rC = mkRing(pc, gX(0), gY(0, 70, 150), CW, 150, cp("C", 3)); hop(rC, gX(3), gY(0, 70, 150), cp("C", 6), 0.6);
+      tl.to(rC, { opacity: 0, duration: 0.25, immediateRender: false }, tA + 0.4);
+      tint(lastOf(gC[1][0]), cp("C", 41), HOT, 0.3);
+      chip(pc, 40, 575, 380, 90, "WAS 3", HOT, cp("C", 32), 50);
+      chip(pc, 440, 575, 480, 90, "LOOKS REAL", HOT, cp("C", 40), 50);
+      chip(pc, 40, 695, 880, 110, "WIPED", HOT, cp("C", 54), 72);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D
+      // ===== D: two extra arrays aligned with the grid, O(m + n)
+      const sD = ST.D; const pd = base(D, 900);
+      const DW = 170, DH = 130;
+      const gD = grid(pd, MAT, 100, DH, 60, sD, { cw: DW });
+      [[0, 0], [0, 3]].forEach(([i, j]) => ring(gD[i][j][0], cp("D", 1), HOT));
+      lt(pd, 770, 20, 150, 70, "ROWS", CYAN, 36, cp("D", 11), sD);
+      [["T", AMB], ["F", CYAN], ["F", CYAN]].forEach(([t, c], i) => { ghost(pd, 770, gY(i, 100, DH), 150, DH); lt(pd, 770, gY(i, 100, DH), 150, DH, t, c, 60, cp("D", 12) + i * 0.1, sD); });
+      [["T", AMB], ["F", CYAN], ["F", CYAN], ["T", AMB]].forEach(([t, c], j) => { ghost(pd, gX(j, 40, DW), 540, DW, 110); lt(pd, gX(j, 40, DW), 540, DW, 110, t, c, 56, cp("D", 17) + j * 0.1, sD); });
+      lt(pd, 40, 670, 300, 80, "COLS", VIO, 40, cp("D", 16), sD);
+      lt(pd, 360, 670, 560, 80, "3 + 4 = 7 CELLS", AMB, 40, cp("D", 20), sD);
+      chip(pd, 40, 775, 880, 110, "SPACE O(m + n)", HOT, cp("D", 22), 60);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E
+      // ===== E: first row and first column are the markers
+      const sE = ST.E; const pe = base(E, 960);
+      M.pill(pe, "EXAMPLE", sE + 0.1, { x: 20, y: 14, size: 34 });
+      const chgE = { "1,0": [["0", AMB, cp("E", 15)]], "0,2": [["0", AMB, cp("E", 22)]] };
+      const gE = grid(pe, EXM, 70, 150, 72, sE, { chg: chgE });
+      ring(gE[1][2][0], cp("E", 10), HOT);
+      ring(lastOf(gE[1][0]), cp("E", 15), HOT); ring(lastOf(gE[0][2]), cp("E", 22), HOT);
+      [[1, 1], [1, 3], [2, 2]].forEach(([i, j]) => tint(gE[i][j][0], cp("E", 28), AMB, 0.25));
+      lt(pe, 40, 560, 880, 80, "ZERO LATER", AMB, 48, cp("E", 28), sE);
+      [0, 1, 3].forEach((j) => tint(gE[0][j][0], cp("E", 36), VIO, 0.3)); tint(lastOf(gE[0][2]), cp("E", 36), VIO, 0.3);
+      tint(lastOf(gE[1][0]), cp("E", 41), CYAN, 0.3); tint(gE[2][0][0], cp("E", 41), CYAN, 0.3);
+      lt(pe, 40, 655, 430, 80, "COLUMN MARKERS", VIO, 34, cp("E", 36), sE);
+      lt(pe, 490, 655, 430, 80, "ROW MARKERS", CYAN, 36, cp("E", 41), sE);
+      const cdE = code(pe, 20, 770, 920, ["if matrix[i][j] == 0:", "    matrix[i][0] = matrix[0][j] = 0"], 40, 56, sE);
+      cdE.on(0, 0, cp("E", 10)); cdE.on(1, 1, cp("E", 14));
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F
+      // ===== F: real zeros versus markers, the two flags
+      const sF = ST.F; const pf = base(F, 980);
+      const gF = grid(pf, MAT, 40, 130, 64, sF);
+      [0, 1, 2, 3].forEach((j) => tint(gF[0][j][0], sF + 0.6, VIO, 0.2));
+      [1, 2].forEach((i) => tint(gF[i][0][0], sF + 0.6, CYAN, 0.2));
+      [[0, 0], [0, 3]].forEach(([i, j]) => ring(gF[i][j][0], cp("F", 10), HOT));
+      chip(pf, 40, 480, 880, 90, "REAL OR MARKER ?", HOT, cp("F", 11), 50);
+      [0, 1, 2, 3].forEach((j) => ring(gF[0][j][0], cp("F", 20), GOOD));
+      [0, 1, 2].forEach((i) => ring(gF[i][0][0], cp("F", 22), GOOD));
+      lt(pf, 40, 590, 430, 90, "first_row", GOOD, 40, cp("F", 20), sF);
+      lt(pf, 490, 590, 430, 90, "first_col", GOOD, 40, cp("F", 22), sF);
+      const cdF = code(pf, 10, 710, 940, ["first_row = any(v == 0 for v in matrix[0])", "first_col = any(matrix[i][0] == 0", "                for i in range(m))"], 35, 54, sF);
+      cdF.on(0, 0, cp("F", 20)); cdF.on(1, 2, cp("F", 22));
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G
+      // ===== G: dry run
+      const sG = ST.G; const pg = base(G, 1060);
+      swap(pg, 40, 20, 430, 90, 38, [["first_row  ?", CYAN, sG + 0.1], ["first_row  True", GOOD, cp("G", 11)]]);
+      swap(pg, 490, 20, 430, 90, 38, [["first_col  ?", CYAN, sG + 0.1], ["first_col  True", GOOD, cp("G", 22)]]);
+      const chgG = { "1,3": [["0", AMB, cp("G", 46)]], "2,3": [["0", AMB, cp("G", 46)]],
+        "0,1": [["0", AMB, cp("G", 54)]], "0,2": [["0", AMB, cp("G", 54)]], "1,0": [["0", AMB, cp("G", 57)]], "2,0": [["0", AMB, cp("G", 57)]] };
+      const gG = grid(pg, MAT, 140, 100, 64, sG, { chg: chgG });
+      [0, 1, 2, 3].forEach((j) => tint(gG[0][j][0], sG + 0.5, VIO, 0.14));
+      [1, 2].forEach((i) => tint(gG[i][0][0], sG + 0.5, CYAN, 0.14));
+      ring(gG[0][0][0], cp("G", 6), AMB); ring(gG[0][0][0], cp("G", 17), AMB);
+      [1, 2].forEach((i) => [1, 2, 3].forEach((j) => tint(gG[i][j][0], cp("G", 27), GOOD, 0.16)));
+      lt(pg, 40, 480, 880, 80, "NO NEW MARKER", GOOD, 50, cp("G", 31), sG);
+      ring(gG[0][3][0], cp("G", 38), HOT);
+      ring(gG[1][3][0], cp("G", 43), HOT); ring(gG[2][3][0], cp("G", 45), HOT);
+      lt(pg, 40, 575, 880, 80, "RESULT", GOOD, 52, cp("G", 61), sG);
+      const cdG = code(pg, 20, 685, 920, ["if matrix[i][0] == 0 or matrix[0][j] == 0:", "    matrix[i][j] = 0", "if first_row:", "    for j in range(n): matrix[0][j] = 0", "if first_col:", "    for i in range(m): matrix[i][0] = 0"], 34, 50, sG);
+      cdG.on(0, 1, cp("G", 34)); cdG.on(2, 3, cp("G", 50)); cdG.on(4, 5, cp("G", 56));
+      const fin = [[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 1], [1, 2], [1, 3], [2, 0], [2, 1], [2, 2], [2, 3]];
+      fin.forEach(([i, j], k) => tint(lastOf(gG[i][j]), cp("G", 62 + k), GOOD, 0.3));
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H
+      // ===== H: two passes, time and space
+      const sH = ST.H; const ph = base(H, 1080);
+      const gH = grid(ph, MAT, 30, 130, 64, sH);
+      const sweep = (col, t0, t1) => { const r = mkRing(ph, 30, 30, 884, 130, t0); r.style.borderColor = col; [1, 2].forEach((i) => hop(r, 30, 30 + i * 138, t0 + (t1 - t0) * i / 3, (t1 - t0) / 3 - 0.05)); tl.to(r, { opacity: 0, duration: 0.25, immediateRender: false }, t1 + 0.1); return r; };
+      sweep(ACC, cp("H", 1), cp("H", 4));
+      lt(ph, 40, 480, 430, 90, "PASS 1: 12 CELLS", ACC, 36, cp("H", 1), sH);
+      sweep(CYAN, cp("H", 4) + 0.2, cp("H", 7));
+      lt(ph, 490, 480, 430, 90, "PASS 2: 12 CELLS", CYAN, 36, cp("H", 4), sH);
+      lt(ph, 40, 590, 880, 100, "TIME O(m x n)", ACC, 60, cp("H", 8), sH);
+      [0, 1, 2, 3, 4, 5, 6].forEach((i) => { ghost(ph, 40 + i * 126, 740, 118, 80); const d = lt(ph, 40 + i * 126, 740, 118, 80, "m+n", HOT, 30, cp("H", 15), sH); tl.to(d, { opacity: 0.18, duration: 0.4, immediateRender: false }, cp("H", 18)); });
+      lt(ph, 40, 850, 430, 90, "first_row", GOOD, 44, cp("H", 19), sH);
+      lt(ph, 490, 850, 430, 90, "first_col", GOOD, 44, cp("H", 19) + 0.2, sH);
+      lt(ph, 40, 970, 880, 100, "SPACE O(1)", GOOD, 60, cp("H", 24), sH);
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I
+      // ===== I: comment question + follow
+      const sI = ST.I; const pi = base(I, 1020);
+      bigtxt(pi, "left:0;width:960px;top:14px", "GIVEN MATRIX", GREY, 44, cp("I", 3));
+      BLK.forEach((r, i) => r.forEach((v, j) => lt(pi, 52 + j * 288, 80 + i * 92, 280, 84, String(v), v === 0 ? AMB : CYAN, 56, cp("I", 5 + i * 3 + j), sI)));
+      bigtxt(pi, "left:0;width:960px;top:372px", "RESULT ?", HOT, 44, cp("I", 15));
+      BLK.forEach((r, i) => r.forEach((v, j) => lt(pi, 52 + j * 288, 440 + i * 92, 280, 84, "?", HOT, 56, cp("I", 16) + (i * 3 + j) * 0.05, sI)));
+      const kCb = el(pi, "left:24px;top:750px;width:916px;height:110px;border-radius:55px;border:2px solid rgba(150,175,215,.4);font:500 48px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 40px", "Add a comment..."); show(kCb, cp("I", 0), { opacity: 0 });
+      const kFb = M.pill(pi, "+  FOLLOW", cp("I", 28) - 0.4, { x: 190, y: 880, w: 580, kind: "acc", size: 68 });
+      tl.fromTo(kFb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, cp("I", 28));
+      M.fit(I, { y: 200, h: 1100 });
+
+      ["B","C","D","E","F","G","H","I"].forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { Matrix: "gold", Zeroes: "gold", array: "cyan", zero: "hot", zeros: "hot", asli: "hot", note: "gold", marker: "gold", first_row: "good", first_col: "good", booleans: "good", True: "good", Result: "good", time: "good", space: "gold", follow: "gold", Comments: "gold", row: "cyan", column: "cyan" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

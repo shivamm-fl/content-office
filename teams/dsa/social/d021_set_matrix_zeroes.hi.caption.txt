@@ -1,0 +1,9 @@
+Day 21/150: Set Matrix Zeroes: extra array ke bina kaise karein?
+
+Set Matrix Zeroes problem: matrix mein jis cell ki value zero ho, uski poori row aur poora column zero honi chahiye, aur badlav usi matrix mein chahiye. Scan karte hue turant zero karoge to naye bane zeros bhi asli zeros jaise dikhte hain aur poora matrix zero ho jaata hai (code chalaya).
+
+Pehle note karo, baad mein zero karo. Do extra arrays se space O(m + n) lagta hai. Isse bachne ke liye pehli row columns ka marker banti hai aur pehla column rows ka, aur do booleans first_row, first_col yaad rakhte hain ki wo originally zero the ya nahi. Time O(m x n), extra space O(1). Actual Python code video mein hai.
+
+Ab tumhara turn: [[1,1,1],[1,0,1],[1,1,1]] par result kya aayega? Comment mein likho.
+
+#dsa #setmatrixzeroes #interviewprep
