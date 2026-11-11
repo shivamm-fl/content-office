@@ -1,0 +1,10 @@
+A: @hook Gateway पाँच calls को एक call बना देता है।
+B: मान लो तुम्हारा app 20{twenty} छोटी services में बँटा है, तो phone इन सबसे कैसे बात करे? | Home screen के लिए profile, orders, offers, cart और reviews, पाँच services चाहिए।
+C: Phone को पाँचों के address याद रखने पड़ेंगे, और हर service अपना login अलग check करेगी। | पाँचों calls एक के बाद एक जाएँ, और हर call में 100{hundred} ms लगे, तो 500{five-hundred} ms गए।
+D: इसका हल है API gateway। | Office की reception desk सोचो: बाहर से जो भी आता है, पहले वहीं जाता है, और desk उसे सही कमरे तक पहुँचाती है। | Gateway यानी clients के लिए एक ही entry point, सारी services के सामने।
+E: पहला काम: routing। | Phone सिर्फ gateway को request भेजता है, जैसे slash orders। | Gateway जानता है कि ये orders service का काम है, और request वहीं भेज देता है। | किसी service का address बदले, तो सिर्फ gateway की list बदलती है।
+F: दूसरा काम: कई calls को एक बनाना। | Home screen की एक request आई। | Gateway खुद पाँचों services को call करता है, जवाब जोड़ता है, और phone को एक response लौटाता है। | यानी 5{five} calls की जगह 1{एक} call।
+G: तीसरा काम: edge jobs, यानी वो काम जो गेट पर एक बार हो जाएँ। | Authentication यानी कौन call कर रहा है, और throttling यानी वो कितनी calls कर सकता है, इन्हें गेट पर एक बार देखा जाता है। | 20{twenty} services में बीस बार लिखने की जगह, ये एक जगह।
+H: Reverse proxy से फ़र्क क्या है? | Reverse proxy ज़्यादातर requests आगे forward करता है, या एक ही app के कई servers में load बाँटता है। | Gateway API को समझता है: कौन सा route किस service का है, कौन call कर सकता है, कितनी बार, और जवाब कैसे जोड़ने हैं।
+I: अब catch। || पहला: एक और हिस्सा चलाना पड़ता है, और हर request में एक extra network hop जुड़ता है। | दूसरा catch हमारी अपनी सोच है: सारी calls gateway से गुज़रती हैं, तो gateway dead हुआ, तो सारी calls dead। | इसलिए gateway की कई copies चलाओ, load balancer के पीछे।
+J: अब तुम बताओ: तुम्हारे app की कौन सी screen सबसे ज़्यादा calls करती है? | comment में लिखो। || ऐसे और system design concepts के लिए follow करो।
