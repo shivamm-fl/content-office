@@ -1,0 +1,14 @@
+API gateway: bahut saari services ka ek front door
+
+Day 22/150: API gateway clients ke liye ek single entry point hai, bahut saari services ke saamne. Wo request ko sahi service tak route karta hai, kai calls ko ek response mein jod sakta hai, aur authentication aur throttling jaise shared edge kaam ek baar karta hai. Example ke numbers invented hain: 20 services, home screen ke liye 5 calls, har call 100 ms. Catches: ek aur moving part aur ek extra network hop. Akela gateway dead ho toh saari calls dead, isliye uski kai copies load balancer ke peechhe chalao (hamari apni soch).
+
+Comment karke batao: tumhare app ki kaun si screen sabse zyada calls karti hai?
+
+Sources:
+https://microservices.io/patterns/apigateway.html
+https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html
+https://en.wikipedia.org/wiki/API_management
+https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/
+
+Tags: api gateway,api gateway kya hai,microservices,system design,api gateway vs reverse proxy
+AI-assisted visuals and narration.

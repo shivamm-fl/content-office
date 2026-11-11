@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>API gateway: bahut saari services ka ek front door</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="126" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+                <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="126" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="126" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="126" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 022 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J] = SC.map((k) => M.$("#s" + k));
+      const S = M.S;
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${cx - w / 2}px;width:${w}px;top:${y}px;height:${h || 76}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 40}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const sv = (kind, size, col) => `<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${Viz.ICONS[kind](col)}</svg>`;
+      const ico = (host, kind, cx, cy, size, col, t) => show(el(host, `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`, sv(kind, size, col)), t, { opacity: 0, scale: 0.8, y: 0 });
+      const dot = (host, x0, y0, x1, y1, t, col, dur, o) => { o = o || {}; const d = el(host, `left:${x0 - 22}px;top:${y0 - 22}px;width:44px;height:44px;border-radius:50%;box-sizing:border-box;${o.hollow ? `border:6px solid ${col}` : `background:${col}`}`);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, t);
+        tl.to(d, { x: x1 - x0, y: y1 - y0, duration: dur, ease: "power1.inOut", immediateRender: false }, t);
+        if (!o.stay) tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.phone = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="16" y="4" width="32" height="56" rx="7"/><path d="M28 52h8"/></g>`;
+      Viz.ICONS.door = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M16 56V8h32v48M8 56h48"/></g><circle cx="40" cy="34" r="3.5" fill="${c}"/>`;
+      Viz.ICONS.bell = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M10 48h44M16 48a16 16 0 0 1 32 0M32 24v-8M26 16h12"/></g>`;
+      Viz.ICONS.gauge = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M8 46a24 24 0 0 1 48 0"/><path d="M32 46l12-16"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M9 17L12 46M35 17l17 29"/></g>`;
+
+      // tile: bordered card with an icon and a label (row) or a tall gateway card (col)
+      const tile = (host, x, y, w, h, label, icon, col, t, size, o) => { o = o || {};
+        const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;${o.col ? "flex-direction:column;justify-content:center;" : ""}align-items:center;gap:${o.col ? 18 : 14}px;${o.col ? "" : "padding:0 18px;"}font:700 ${size || 34}px var(--code);color:${INK};white-space:nowrap`, sv(icon, o.isz || 56, col) + `<span>${label}</span>`);
+        return show(d, t, { opacity: 0, y: 12 }); };
+
+      // fixed frame: phone left, gateway (optional) in the middle, 5 service tiles right
+      const PH = { x: 40, y: 640, w: 230, h: 260 }, GW = { x: 370, y: 500, w: 190, h: 570 }, SX = 730, SW = 300, SH = 150, SVY = [330, 520, 710, 900, 1090];
+      const NAMES = ["PROFILE", "ORDERS", "OFFERS", "CART", "REVIEWS"];
+      const PHC = [PH.x + PH.w, PH.y + PH.h / 2];   // phone right-edge centre
+      const phone = (host, t, lab) => tile(host, PH.x, PH.y, PH.w, PH.h, lab || "PHONE", "phone", CYAN, t, 34, { col: 1, isz: 90 });
+      const svcs = (host, t, step) => NAMES.map((n, i) => tile(host, SX, SVY[i], SW, SH, n, "server", CYAN, t + (step || 0.1) * i, 32));
+      const gw = (host, t, lab, icon, col) => tile(host, GW.x, GW.y, GW.w, GW.h, lab || "GATEWAY", icon || "door", col || ACC, t, 32, { col: 1, isz: 90 });
+      const direct = (host, t, col, dash) => SVY.map((y, i) => { const a = M.arrow(host, { from: [PHC[0] + 6, PHC[1]], to: [SX - 8, y + SH / 2], color: col || GREY, w: 5, dash: dash !== false }); a.show(t + 0.1 * i, 0.3); return a; });
+      const wIn = (host, t, col, w) => M.arrow(host, { from: [PHC[0] + 6, PHC[1]], to: [GW.x - 8, PHC[1]], color: col || GREY, w: w || 6 }).show(t, 0.3);
+      const wOut = (host, t, col) => SVY.map((y) => M.arrow(host, { from: [GW.x + GW.w + 6, GW.y + GW.h / 2], to: [SX - 8, y + SH / 2], color: col || GREY, w: 5 }).show(t, 0.3));
+      const toSvc = (host, i, t, col, hollow, dur) => dot(host, GW.x + GW.w, GW.y + GW.h / 2, SX, SVY[i] + SH / 2, t, col || ACC, dur || 0.55, { hollow });
+      const fromSvc = (host, i, t, col, dur) => dot(host, SX, SVY[i] + SH / 2, GW.x + GW.w, GW.y + GW.h / 2, t, col || GOOD, dur || 0.55, { hollow: 1 });
+      const toGw = (host, t, col) => dot(host, PHC[0], PHC[1], GW.x, PHC[1], t, col || ACC, 0.5);
+      const fromGw = (host, t, col) => dot(host, GW.x, PHC[1], PHC[0], PHC[1], t, col || GOOD, 0.5, { hollow: 1 });
+      const svcRing = (host, i, col, t, tOff) => ring(host, SX, SVY[i], SW, SH, col, t, tOff);
+
+      // ===== A: hook =====
+      // diagram: A
+      M.hook(["Gateway:", "5 calls = 1 call"], { size: 92, top: 230 });
+      phone(A, 0.05); gw(A, 0.1); svcs(A, 0.15, 0.05); wIn(A, 0.3); wOut(A, 0.35);
+      SVY.forEach((y, i) => toSvc(A, i, at("A", "paanch") + 0.08 * i, ACC));
+      toGw(A, at("A", "ek"));
+      chip(A, "5 CALLS → 1", 540, 1290, 440, ACC, at("A", "bana"), 40, 70);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: 20 services, the home screen needs 5 =====
+      // diagram: B
+      M.pill(B, "EXAMPLE", M.P("B", 0), { x: 380, y: 200, size: 44 });
+      phone(B, M.P("B", 0));
+      const grid = []; for (let r = 0; r < 5; r++) for (let c = 0; c < 4; c++) grid.push(tile(B, 730 + c * 78, 330 + r * 190, 66, 150, "", "server", CYAN, at("B", "20") + 0.03 * (r * 4 + c), 20, { col: 1, isz: 46 }));
+      const c20 = chip(B, "20 SERVICES", 880, 1290, 330, CYAN, at("B", "20"), 34, 70);
+      const q = chip(B, "?", PH.x + PH.w / 2, 560, 100, HOT, at("B", "kaise"), 50, 76);
+      goneAll(grid, at("B", "Home") - 0.2); gone(c20, at("B", "Home") - 0.2); gone(q, at("B", "Home") - 0.2);
+      const bw = M.arrow(B, { from: [PHC[0] + 6, PHC[1]], to: [SX - 8, 785], color: GREY, w: 6, dash: true }); bw.show(at("B", "20"), 0.3); bw.hide(at("B", "Home") - 0.2);
+      NAMES.forEach((n, i) => M.arrow(B, { from: [PHC[0] + 6, PHC[1]], to: [SX - 8, SVY[i] + SH / 2], color: GREY, w: 5, dash: true }).show(at("B", ["profile", "orders", "offers", "cart", "reviews"][i]) + 0.1, 0.3));
+      const bs = NAMES.map((n, i) => tile(B, SX, SVY[i], SW, SH, n, "server", CYAN, at("B", ["profile", "orders", "offers", "cart", "reviews"][i]), 32));
+      M.fit(B);
+
+      // ===== C: five addresses, five logins, 500 ms =====
+      // diagram: C
+      phone(C, M.P("C", 0)); svcs(C, M.P("C", 0));
+      direct(C, at("C", "address"), HOT);
+      chip(C, "5 ADDRESSES", PH.x + PH.w / 2, 560, 300, HOT, at("C", "address"), 32, 62);
+      chip(C, "5 LOGINS", PH.x + PH.w / 2, 940, 240, HOT, at("C", "login"), 34, 62);
+      NAMES.forEach((n, i) => ico(C, "lock", SX + SW - 40, SVY[i] + SH / 2, 44, ACC, at("C", "login") + 0.12 * i));
+      const seg = [0, 1, 2, 3, 4].map((i) => show(el(C, `left:${60 + i * 190}px;top:1280px;width:180px;height:44px;border-radius:10px;border:3px solid ${GREY};box-sizing:border-box`), M.P("C", 0) + 0.3, { opacity: 0, y: 0 }));
+      [0, 1, 2, 3, 4].forEach((i) => { const t0 = at("C", "baad") + 0.45 * i; dot(C, PHC[0], PHC[1], SX, SVY[i] + SH / 2, t0, ACC, 0.45);
+        const f = el(C, `left:${60 + i * 190}px;top:1280px;width:180px;height:44px;border-radius:10px;background:${HOT};opacity:0`); tl.to(f, { opacity: 1, duration: 0.2, immediateRender: false }, t0 + 0.4); });
+      chip(C, "100 MS", 155, 1340, 190, HOT, at("C", "100"), 34, 56);
+      stamp(C, "500 MS", 760, 1335, HOT, at("C", "500"), 52, 360);
+      M.fit(C);
+
+      // ===== D: the gateway steps in, reception desk =====
+      // diagram: D
+      phone(D, M.P("D", 0)); svcs(D, M.P("D", 0));
+      const dDir = direct(D, M.P("D", 0) + 0.2, GREY);
+      const gD = gw(D, at("D", "gateway"), "GATEWAY", "door", ACC);
+      dDir.forEach((a) => a.hide(at("D", "gateway") - 0.1));
+      const dIn = wIn(D, at("D", "gateway") + 0.3); const dOut = wOut(D, at("D", "gateway") + 0.4);
+      ring(D, GW.x, GW.y, GW.w, GW.h, ACC, at("D", "gateway") + 0.2, at("D", "Office") - 0.2);
+      const rec = gw(D, at("D", "reception"), "DESK", "bell", GOOD); gone(gD, at("D", "reception") - 0.35);
+      chip(D, "VISITOR", PH.x + PH.w / 2, 560, 220, CYAN, at("D", "bahar"), 34, 62);
+      toGw(D, at("D", "bahar")); toSvc(D, 2, at("D", "pahunchati") - 0.8, ACC);
+      svcRing(D, 2, GOOD, at("D", "kamre"), at("D", "pahunchati") + 0.3);
+      gone(rec, at("D", "Gateway") - 0.05); const gD2 = gw(D, at("D", "Gateway") + 0.05, "GATEWAY", "door", ACC);
+      ring(D, GW.x, GW.y, GW.w, GW.h, ACC, at("D", "ek"));
+      chip(D, "ENTRY POINT", 540, 1290, 420, ACC, at("D", "entry"), 40, 70);
+      M.fit(D);
+
+      // ===== E: routing =====
+      // diagram: E
+      phone(E, M.P("E", 0)); gw(E, M.P("E", 0)); svcs(E, M.P("E", 0), 0.05); wIn(E, M.P("E", 0) + 0.3); wOut(E, M.P("E", 0) + 0.4);
+      const eC = chip(E, "/orders", PH.x + PH.w / 2, 560, 230, ACC, at("E", "orders", 0), 36, 62);
+      toGw(E, at("E", "request")); 
+      ring(E, GW.x, GW.y, GW.w, GW.h, ACC, at("E", "jaanta"), at("E", "vahin"));
+      svcRing(E, 1, GOOD, at("E", "orders", 1));
+      toSvc(E, 1, at("E", "vahin"), ACC);
+      const route = panel(E, 40, 960, 300, 270, ACC, "");
+      show(route, at("E", "address") - 0.3, { opacity: 0, y: 12 });
+      show(el(E, "left:70px;top:985px;font:700 32px var(--code);color:#E8EDF6;white-space:nowrap", "ROUTES"), at("E", "address") - 0.3, { opacity: 0 });
+      ["/orders", "/cart"].forEach((r, i) => show(el(E, `left:70px;top:${1050 + i * 70}px;font:600 34px var(--code);color:${ACC};white-space:nowrap`, r), at("E", "address") - 0.3, { opacity: 0 }));
+      chip(E, "NEW", 300, 1050, 80, GOOD, at("E", "badle"), 26, 50);
+      ring(E, 40, 960, 300, 270, ACC, at("E", "list"));
+      const nc = chip(E, "NO CHANGE", PH.x + PH.w / 2, 560, 230, GOOD, at("E", "sirf", 1), 32, 62); gone(eC, at("E", "sirf", 1) - 0.1);
+      M.fit(E);
+
+      // ===== F: combine 5 calls into 1 =====
+      // diagram: F
+      phone(F, M.P("F", 0)); gw(F, M.P("F", 0)); svcs(F, M.P("F", 0), 0.05); wIn(F, M.P("F", 0) + 0.3); wOut(F, M.P("F", 0) + 0.4);
+      chip(F, "HOME", PH.x + PH.w / 2, 560, 200, ACC, at("F", "request"), 36, 62);
+      toGw(F, at("F", "request"), ACC);
+      SVY.forEach((y, i) => { toSvc(F, i, at("F", "khud") + 0.1 * i, ACC); fromSvc(F, i, at("F", "jawab") + 0.1 * i, GOOD); });
+      dot(F, GW.x, PHC[1], PHC[0], PHC[1], at("F", "ek", 2), GOOD, 0.5, { hollow: 1 });
+      chip(F, "5 CALLS", 300, 1290, 300, GREY, at("F", "5"), 40, 70);
+      chip(F, "1 CALL", 760, 1290, 300, GOOD, at("F", "1"), 40, 70);
+      ico(F, "arrow", 530, 1327, 56, GREY, at("F", "1"));
+      M.fit(F);
+
+      // ===== G: edge jobs, once at the gate =====
+      // diagram: G
+      tile(G, 415, 330, 250, 170, "PHONE", "phone", CYAN, M.P("G", 0), 34, { col: 1, isz: 70 });
+      const gp = panel(G, 160, 590, 760, 400, ACC, ""); show(gp, M.P("G", 0) + 0.1, { opacity: 0, y: 12 });
+      show(el(G, "left:160px;width:760px;text-align:center;top:610px;font:700 38px var(--code);color:#F5C451", "GATEWAY"), M.P("G", 0) + 0.1, { opacity: 0 });
+      const jobA = tile(G, 210, 690, 660, 120, "AUTH", "lock", GOOD, at("G", "Authentication"), 40);
+      const jobT = tile(G, 210, 830, 660, 120, "THROTTLE", "gauge", CYAN, at("G", "throttling"), 40);
+      M.arrow(G, { from: [540, 505], to: [540, 582], color: GREY, w: 6 }).show(M.P("G", 0) + 0.3, 0.3);
+      dot(G, 540, 505, 540, 700, at("G", "kaun"), ACC, 0.5, { stay: 1 });
+      ico(G, "check", 800, 750, 60, GOOD, at("G", "kaun") + 0.6); ico(G, "check", 800, 890, 60, GOOD, at("G", "kitni") + 0.7);
+      stamp(G, "CHECKED ONCE", 540, 1020, GOOD, at("G", "baar", 1), 44, 520);
+      const gridG = []; for (let k = 0; k < 20; k++) gridG.push(show(el(G, `left:${70 + (k % 10) * 94}px;top:${1110 + Math.floor(k / 10) * 100}px;width:84px;height:90px;border-radius:12px;border:3px solid ${GREY};box-sizing:border-box;display:flex;align-items:center;justify-content:center`, sv("lock", 40, GREY)), at("G", "20") + 0.03 * k, { opacity: 0, y: 8 }));
+      chip(G, "x20 COPIES", 540, 1315, 300, HOT, at("G", "bees"), 40, 62);
+      gridG.forEach((d) => tl.to(d, { opacity: 0.25, duration: 0.3, immediateRender: false }, at("G", "ye") - 0.1));
+      ring(G, 160, 590, 760, 400, ACC, at("G", "jagah", 1));
+      M.fit(G);
+
+      // ===== H: reverse proxy vs gateway =====
+      // diagram: H
+      panel(H, 50, 330, 460, 760, CYAN, "REVERSE PROXY"); panel(H, 570, 330, 460, 760, ACC, "API GATEWAY");
+      tile(H, 150, 430, 260, 150, "DOOR", "door", CYAN, at("H", "Reverse"), 36, { col: 1, isz: 60 });
+      [0, 1, 2].forEach((i) => ico(H, "server", 130 + i * 125, 700, 90, CYAN, at("H", "servers") + 0.1 * i));
+      [0, 1, 2].forEach((i) => M.arrow(H, { from: [280, 585], to: [130 + i * 125, 650], color: GREY, w: 4 }).show(at("H", "forward") - 0.1, 0.3));
+      chip(H, "FORWARD", 280, 830, 380, CYAN, at("H", "forward"), 36, 66);
+      chip(H, "SPLIT LOAD", 280, 930, 380, CYAN, at("H", "load"), 36, 66);
+      tile(H, 670, 430, 260, 150, "GATEWAY", "door", ACC, at("H", "Gateway"), 34, { col: 1, isz: 60 });
+      chip(H, "ROUTE", 800, 620, 340, ACC, at("H", "route"), 36, 62);
+      chip(H, "WHO", 800, 705, 340, ACC, at("H", "call"), 36, 62);
+      chip(H, "HOW OFTEN", 800, 790, 340, ACC, at("H", "kitni"), 36, 62);
+      chip(H, "MERGE", 800, 875, 340, ACC, at("H", "jodne"), 36, 62);
+      ico(H, "check", 800, 990, 80, GOOD, at("H", "samajhta"));
+      M.fit(H);
+
+      // ===== I: the catch: one more hop, a single point of failure, copies =====
+      // diagram: I
+      const IX = 340, IW = 400;
+      tile(I, IX, 330, IW, 150, "PHONE", "phone", CYAN, M.P("I", 0), 36);
+      const svcBox = tile(I, IX, 1050, IW, 170, "SERVICES", "server", CYAN, M.P("I", 0) + 0.1, 36);
+      const g1 = tile(I, 90, 740, 420, 190, "GATEWAY", "door", ACC, M.P("I", 0) + 0.1, 40);
+      const slot = show(el(I, `left:570px;top:740px;width:420px;height:190px;border-radius:18px;border:3px dashed ${GREY};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 70px var(--code);color:${GREY}`, "+"), M.P("I", 0) + 0.2, { opacity: 0, y: 0 });
+      const aIn = M.arrow(I, { from: [480, 484], to: [300, 732], color: GREY, w: 5, dash: true }); aIn.show(M.P("I", 0) + 0.3, 0.3);
+      const aOut = M.arrow(I, { from: [300, 938], to: [480, 1042], color: GREY, w: 5, dash: true }); aOut.show(M.P("I", 0) + 0.3, 0.3);
+      dot(I, 480, 484, 300, 740, at("I", "hissa"), ACC, 0.5); dot(I, 300, 930, 480, 1050, at("I", "hissa") + 0.55, ACC, 0.4);
+      const hop = chip(I, "+1 HOP", 640, 570, 240, ACC, at("I", "hop"), 40, 66); gone(hop, at("I", "dead") - 0.4);
+      dot(I, 480, 484, 300, 740, at("I", "guzarti"), ACC, 0.5);
+      const iCov = show(el(I, "left:90px;top:740px;width:420px;height:190px;border-radius:18px;background:rgba(14,18,30,.9)"), at("I", "dead"), { opacity: 0, y: 0 });
+      ico(I, "cross", 300, 835, 100, HOT, at("I", "dead"));
+      stamp(I, "ALL CALLS DEAD", 540, 205, HOT, at("I", "dead", 1), 44, 600);
+      gone(slot, at("I", "copies")); const g2 = tile(I, 570, 740, 420, 190, "GATEWAY 2", "door", GOOD, at("I", "copies"), 40);
+      aIn.hide(at("I", "load")); aOut.hide(at("I", "load"));
+      const lb = tile(I, IX, 540, IW, 140, "BALANCER", "balancer", CYAN, at("I", "load"), 38);
+      M.arrow(I, { from: [540, 484], to: [540, 532], color: CYAN, w: 6 }).show(at("I", "load"), 0.3);
+      M.arrow(I, { from: [470, 664], to: [300, 732], color: CYAN, w: 6 }).show(at("I", "load") + 0.2, 0.3);
+      M.arrow(I, { from: [610, 664], to: [780, 732], color: CYAN, w: 6 }).show(at("I", "load") + 0.2, 0.3);
+      M.arrow(I, { from: [300, 938], to: [480, 1042], color: GOOD, w: 6 }).show(at("I", "load") + 0.3, 0.3);
+      M.arrow(I, { from: [780, 938], to: [620, 1042], color: GOOD, w: 6 }).show(at("I", "load") + 0.3, 0.3);
+      M.fit(I);
+
+      // ===== J: comment + follow =====
+      // diagram: J
+      tile(J, 380, 300, 320, 260, "PHONE", "phone", CYAN, M.P("J", 0), 36, { col: 1, isz: 80 });
+      ["HOME", "CART", "SEARCH"].forEach((s, i) => chip(J, s, 230 + i * 310, 640, 280, CYAN, at("J", "screen"), 40, 90));
+      [0, 1, 2].forEach((i) => stamp(J, "? CALLS", 230 + i * 310, 780, ACC, at("J", "calls"), 40, 280));
+      show(el(J, "left:130px;width:820px;top:1000px;height:100px;border-radius:50px;border:1.5px solid rgba(150,175,215,.5);font:500 34px var(--code);color:#AEB9D0;display:flex;align-items:center;padding:0 34px;box-sizing:border-box", "Add a comment..."), at("J", "comment"), { opacity: 0 });
+      const kf = M.pill(J, "+  FOLLOW", at("J", "follow") - 0.4, { x: 340, y: 1190, size: 52, kind: "acc" });
+      tl.fromTo(kf, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("J", "follow"));
+      M.fit(J);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { gateway: "gold", Gateway: "gold", calls: "cyan", call: "cyan", routing: "gold", reverse: "cyan", proxy: "cyan", dead: "hot", "500": "hot", hop: "hot", EXAMPLE: "gold", follow: "gold", comment: "cyan", Authentication: "good", throttling: "good" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+
+    </script>
+  </body>
+</html>

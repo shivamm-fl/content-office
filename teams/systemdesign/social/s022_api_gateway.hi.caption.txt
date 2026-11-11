@@ -1,0 +1,7 @@
+Day 22/150: Gateway paanch calls ko ek call bana deta hai.
+
+API gateway clients ke liye ek hi entry point hai, bahut saari services ke saamne. Wo teen kaam karta hai: request ko sahi service tak route karna, kai service calls ko ek response mein jodna, aur authentication aur throttling jaise shared kaam gate par ek baar karna. Example ke numbers invented hain: 20 services, home screen ke liye 5 calls, har call 100 ms. Catches: ek aur hissa chalana padta hai, har request mein ek extra network hop judta hai, aur akela gateway dead hua toh saari calls dead (ye hamari apni soch hai), isliye uski kai copies load balancer ke peechhe chalao.
+
+Comment karke batao: tumhare app ki kaun si screen sabse zyada calls karti hai?
+
+#SystemDesign #APIGateway #Backend

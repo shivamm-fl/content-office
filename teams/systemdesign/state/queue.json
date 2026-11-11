@@ -12,96 +12,15 @@
       "spoken_hook": "Gateway पाँच calls को एक call बना देता है।",
       "hook_formula": "surprising_fact: composition, five client calls become one (the five is an EXAMPLE)",
       "hook_source": "https://microservices.io/patterns/apigateway.html",
-      "hook_10s": "Gateway पाँच calls को एक call बना देता है। Example: app की एक screen को profile, orders, offers, cart, reviews चाहिए, पाँच services में। Gateway के बिना app पाँच बार network जाता है, gateway के साथ एक बार। [frame 0: phone sends one arrow into a box; the box fans it into five arrows to five service boxes and five answers merge back into one]",
-      "hook_candidates": [
-        {
-          "formula": "surprising_fact",
-          "text": "Gateway पाँच calls को एक call बना देता है।"
-        },
-        {
-          "formula": "relatable_stake",
-          "text": "App को हर service का address याद रखना पड़े, तो क्या होगा?"
-        },
-        {
-          "formula": "interviewer_asked",
-          "text": "Interviewer ने पूछा: API gateway reverse proxy से अलग कैसे है?"
-        }
-      ],
-      "visual_idea": "A phone on the left and 5 small service boxes on the right. First the phone draws 5 separate arrows (messy). Then a gateway box slides between: the phone has one arrow in, the gateway fans it out to the right service, and the answers fold back into one reply. A small row of 3 chips on the gateway (auth, throttle, log) lights up once as a request passes.",
-      "everyday_anchor": "The reception desk of a big office building: you tell one desk who you want to meet, it checks your ID once, and sends you to the right floor, instead of every visitor wandering through every office.",
-      "example": "EXAMPLE: a shopping app screen needs profile, orders, offers, cart and reviews, each in its own service. Five calls without a gateway, one call with it. The service names and the count five are invented.",
       "sources": [
         "https://microservices.io/patterns/apigateway.html",
         "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html",
         "https://en.wikipedia.org/wiki/API_management",
         "https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/"
       ],
-      "facts_to_verify": [
-        "microservices.io: the API gateway is the single entry point for all clients; it routes some requests to the right service and fans out others and combines the results; it can handle edge functions such as authentication; clients are shielded from how the app is split into services; fewer round trips, most useful for mobile; drawbacks: another moving part to develop, deploy and manage, and an extra network hop (latency).",
-        "AWS API Gateway docs: it acts as a 'front door' for applications to reach backend services; handles traffic management, authorization and access control, monitoring and API version management.",
-        "Wikipedia API management: a server acting as API front-end that receives API requests, enforces throttling and security policies, passes requests to the back-end service and returns the response.",
-        "NGINX reverse proxy guide: a reverse proxy forwards requests to other servers and is typically used to distribute load among several servers (used only for the one-beat contrast).",
-        "Our own reasoning, say it as reasoning and not as a sourced fact: a single gateway is a single point of failure unless run as several copies behind a load balancer. The sources do not state it.",
-        "Not claimed anywhere: any speed, cost or requests-per-second number, how a named company runs its gateway, that a gateway is built on a reverse proxy, JWT or OAuth details."
-      ],
-      "beats": [
-        {
-          "n": 1,
-          "what": "Hook: five calls become one",
-          "show": "phone with five arrows collapses into one arrow through a gateway box"
-        },
-        {
-          "n": 2,
-          "what": "Problem in a person's words: 20 services behind the app; without a gateway the app must know every address, call each one, and each service must check login itself",
-          "show": "phone with many arrows to many boxes, each box with its own lock icon"
-        },
-        {
-          "n": 3,
-          "what": "Definition: an API gateway is the single entry point for clients; the app talks only to it, and it talks to the services",
-          "show": "gateway box slides in, one arrow in, the many arrows now start from the gateway"
-        },
-        {
-          "n": 4,
-          "what": "Job 1 routing: /orders goes to the orders service, /profile to the profile service",
-          "show": "two paths light up one at a time"
-        },
-        {
-          "n": 5,
-          "what": "Job 2 composition: for one screen the gateway calls several services and merges the answers into one reply, so fewer round trips (EXAMPLE five to one)",
-          "show": "fan out, five answers fold back into one"
-        },
-        {
-          "n": 6,
-          "what": "Job 3 edge jobs done once: authentication, throttling, logging at the door, not in every service",
-          "show": "three chips on the gateway, one lock replaces many"
-        },
-        {
-          "n": 7,
-          "what": "Contrast in one beat: a reverse proxy mostly forwards requests to servers of the same app and spreads load; a gateway knows the API: which route, who may call it, how many calls, and can combine services",
-          "show": "left box 'forward', right box 'route + check + combine'"
-        },
-        {
-          "n": 8,
-          "what": "Catch: one more moving part to run, one more network hop; and if the single gateway dies, every call dies, so run several copies behind a load balancer (our reasoning)",
-          "show": "gateway turns grey, all arrows stop; then three gateway copies behind a balancer"
-        },
-        {
-          "n": 9,
-          "what": "Close: one front door for many services, with auth, throttling and routing at the door; the viewer can explain it in one sentence",
-          "show": "final clean diagram"
-        }
-      ],
-      "length_target_s": 140,
+      "length_target_s": 160,
       "cover_headline": "One Front Door For Many Services",
       "thumb_text": "API GATEWAY",
-      "keywords": [
-        "api gateway kya hai",
-        "api gateway system design",
-        "api gateway vs reverse proxy",
-        "api gateway vs load balancer",
-        "microservices api gateway hindi",
-        "api gateway interview question"
-      ],
       "status": "planned",
       "qa_passed": false,
       "script_file": "state/scripts/s022.txt",
