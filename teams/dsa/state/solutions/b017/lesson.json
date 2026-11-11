@@ -1,0 +1,80 @@
+{
+  "id": "b017",
+  "slug": "coin-change",
+  "number": "322",
+  "folder": "b017_coin_change",
+  "title": "Coin Change",
+  "difficulty": "Medium",
+  "sources": [
+    "https://leetcode.com/problems/coin-change/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Coin change में largest coin हमेशा सही नहीं। | Given array: one, three, four. Amount six। Unlimited coins हैं; minimum count चाहिए। Three plus three से answer two है।",
+    "B": "Brute force हर possible next coin चुनकर remaining amount recursively solve करता है। | Six में one लो तो five बचता है, three लो तो three, four लो तो two। सभी valid paths में सबसे छोटा coin count रखते हैं।",
+    "C": "Different paths वही remaining amounts दोबारा solve करते हैं। ये repeated branching बढ़ती जाती है। | Greedy shortcut भी fail होता है: four, one, one में three coins हैं; three, three में सिर्फ two।",
+    "D": "DP total का मतलब उस total के लिए minimum coins। Last coin c हो तो उससे पहले total minus c बनना चाहिए। | उसका minimum answer पहले ready है। One coin जोड़कर हर possible last coin का candidate लो, फिर minimum चुनो। | Zero total को zero coins; unreachable totals को amount plus one sentinel।",
+    "E": "Dry run: totals zero से six के minimum counts: zero, one, two, one, one, two, two। | Total six पर last coin one देता है three coins; three देता है two; four देता है three। Minimum two, यानी three plus three।",
+    "F": "Accepted code छोटे totals पहले solve करता है। Coin current total से बड़ा हो तो skip। | Otherwise dp total को पुराने answer और dp total minus coin plus one के minimum से update करो। | Impossible predecessor sentinel रहता है, valid answer को खराब नहीं करता।",
+    "G": "Final answer amount से बड़ा हो तो minus one लौटाओ। Amount zero पर zero लौटेगा। | A amount और M denominations हों: O of A times M time, O of A extra space। सारे last coins check करना greedy failure रोकता है।"
+  },
+  "teaching": {
+    "problem": "With unlimited coins [1,3,4] and amount6 return minimum coin count2, obtained by3+3; unreachable amounts return minus one.",
+    "brute_force": "Recursively try each valid next denomination and take the smallest count among all paths reaching exactly zero remaining amount.",
+    "bottleneck": "Different paths repeat the same remaining amount. Greedy4+1+1 needs3 coins while3+3 needs2, so largest-first is incorrect for arbitrary denominations.",
+    "optimization": "Define dp[t] as minimum coins for total t. Any optimal nonempty solution has a last coin c and an optimal predecessor t-c; enumerate all last coins and minimize dp[t-c]+1. Seed dp[0]=0 and sentinel amount+1.",
+    "dry_run": "Totals0 through6 have values0,1,2,1,1,2,2. At6, last denominations1,3,4 propose3,2,3 coins respectively, so retain2.",
+    "complexity": "For amount A and M denominations the nested total/coin loops take O(A M) time and O(A) extra space. Check unreachable sentinel at return; amount zero returns zero."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Coins1,3,4 and amount6 show two3 coins forming the optimal answer",
+    "B": "Recursive remaining6 branches to5,3,2 with repeated smaller amounts",
+    "C": "Greedy4+1+1 marked3 coins;3+3 marked2 coins",
+    "D": "DP predecessor arrows total-minus-coin to total, selecting minimum candidate",
+    "E": "Chronological dp0 throughdp6 then three candidate comparisons at6",
+    "F": "First source chunk shows sentinel, zero base, nested loops and candidate transition",
+    "G": "Remaining exact source returns minus one for sentinel; A by M operations, A-state storage"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

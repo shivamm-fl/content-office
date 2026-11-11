@@ -1,0 +1,8 @@
+Reverse Bits | Blind 75 15/75
+
+Given integer: 10. Reverse all 32 bits -> 1342177280.
+
+Result left shift, input ka low bit OR, phir input right shift. Input zero hone par bhi 32 rounds poore karo. Padded string baseline sahi hai; bit registers temporary string hataate hain. Fixed 32-bit domain: O(1) time aur O(1) extra space.
+
+Problem: https://leetcode.com/problems/reverse-bits/
+Original Accepted Python: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b015/solution.py

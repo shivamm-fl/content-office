@@ -1,0 +1,12 @@
+Blind 75 14/75: Missing Number
+
+Given array: [4, 0, 2, 1]. Missing value: 3.
+
+Full range 0..n aur present values XOR karo. Equal copies cancel hongi, missing value bachegi. One pass, O(n) time aur O(1) extra space; input mutate nahi hota. Distinct values ki guarantee zaroori hai.
+
+Length n ko accumulator mein seed kyun kiya?
+
+Problem: https://leetcode.com/problems/missing-number/
+Accepted Python code: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b014/solution.py
+
+#Blind75 #DSA #Python

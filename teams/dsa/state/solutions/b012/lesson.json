@@ -1,0 +1,80 @@
+{
+  "id": "b012",
+  "slug": "number-of-1-bits",
+  "number": "191",
+  "folder": "b012_number_one_bits",
+  "title": "Number of 1 Bits",
+  "difficulty": "Easy",
+  "sources": [
+    "https://leetcode.com/problems/number-of-1-bits/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook हर bit को check करना ज़रूरी नहीं। | Given integer: twelve. Binary one one zero zero में two set bits हैं। Set bit मतलब जिस position पर one हो। हमें वही count लौटाना है।",
+    "B": "Brute force: हर round में last bit check करो, फिर number को right shift करो। | Twelve से six, फिर three, फिर one। Four positions check हुए, जबकि ones सिर्फ two थे।",
+    "C": "ये answer सही देता है। Problem extra checks हैं: बीच के zero bits भी scan होते हैं। | Binary one zero zero zero zero में सिर्फ one set bit है, फिर भी five positions देखनी पड़ती हैं।",
+    "D": "Observation: n minus one, rightmost one को zero और उसके बाद के zeroes को ones बनाता है। | इसलिए n AND n minus one करने पर सिर्फ वही rightmost set bit मिटता है। बाकी set bits बचते हैं। | हर round exactly one मिटाओ और count बढ़ाओ।",
+    "E": "Dry run उसी twelve पर। One one zero zero AND one zero one one देता है one zero zero zero, यानी eight। Count one। | Eight AND seven देता है zero। Count two। Number zero, loop stop, answer two।",
+    "F": "ये actual Accepted Python है। Count zero से शुरू। While n के अंदर n AND n minus one assign होता है, फिर count one बढ़ता है। | Count बढ़ाना मत भूलना; बदला हुआ n answer नहीं है। Original number को preserve करना ज़रूरी नहीं।",
+    "G": "K set bits हों तो K rounds, O of K time और O of one extra space। | इस problem का integer at most thirty one bits है, इसलिए fixed domain में दोनों constant हैं। Speedup sparse ones पर है; naive algorithm गलत नहीं था।"
+  },
+  "teaching": {
+    "problem": "Count the one bits of a positive integer; original input twelve has binary 1100 and returns two.",
+    "brute_force": "Scan each bit using bitwise AND one and right shifts until the remaining number is zero.",
+    "bottleneck": "The correct baseline still examines every bit position including zeroes; sixteen needs five scans for one set bit.",
+    "optimization": "Subtracting one flips the least significant one and all trailing zeroes. AND with the old number clears exactly that one while preserving the higher bits; count one removal per round.",
+    "dry_run": "For twelve, 1100 AND 1011 gives 1000 with count one; 1000 AND 0111 gives zero with count two, then return two.",
+    "complexity": "With k set bits there are k rounds and constant scalar extra space under fixed-width arithmetic. The actual positive 31-bit domain makes worst-case time and space constant."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Binary cells 1100 with two selected ones and requested count two",
+    "B": "Shift scan visits twelve, six, three and one, including zero low bits",
+    "C": "Binary10000 highlights four zero checks beside a single set bit",
+    "D": "Bit-aligned n and n-minus-one show rightmost-one removal, preserving higher bits",
+    "E": "Two chronological AND transitions:12 to8 to0; separate count0 to1 to2",
+    "F": "Complete Accepted source with loop, clear operation and counter highlights",
+    "G": "Source return highlight plus k removals, constant registers and fixed31-bit qualification"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

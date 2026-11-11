@@ -1,0 +1,80 @@
+{
+  "id": "b018",
+  "slug": "longest-increasing-subsequence",
+  "number": "300",
+  "folder": "b018_increasing_subsequence",
+  "title": "Longest Increasing Subsequence",
+  "difficulty": "Medium",
+  "sources": [
+    "https://leetcode.com/problems/longest-increasing-subsequence/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Longest subsequence के लिए smallest tails रखो। | Given array: minus four, six, two, seven, three, eight. Order बचाना है, adjacent होना ज़रूरी नहीं। | Strictly increasing subsequence minus four, two, three, eight की length four है।",
+    "B": "Brute force हर element को लो या छोड़ो: two to the n candidate subsequences। | फिर check करो कि चुने हुए values strictly increasing हैं या नहीं। Small input पर सही, लेकिन choices exponential हैं।",
+    "C": "DP में हर index के लिए सारे earlier smaller values देख सकते हैं; ये quadratic है। | Optimization के लिए पूछो: same length के subsequence में smaller last value बेहतर क्यों? क्योंकि आगे उसे extend करना आसान होगा।",
+    "D": "Tails at index k, length k plus one वाले subsequences का smallest possible ending है। | New value के लिए binary search से first tail greater than or equal ढूँढो। मिले तो replace; न मिले तो append। | Replacement length नहीं बढ़ाता, लेकिन future extension का मौका बचाता है।",
+    "E": "Dry run: minus four से tails minus four। Six append। Two, six को replace करता है। | Seven append। Three, seven को replace करता है। Eight append। | Final tails minus four, two, three, eight; length four।",
+    "F": "Accepted Python bisect left use करता है: first greater than or equal position। Position length के बराबर हो तो append; otherwise उस tail को replace करो। | Equal values replace होते हैं, append नहीं; तभी strictly increasing condition बचती है।",
+    "G": "Return tails की length। Tails को हमेशा original subsequence समझना गलत है; ये best endings का summary है। | N binary searches: O of n log n time, O of n extra space। Input array modify नहीं होता।"
+  },
+  "teaching": {
+    "problem": "Return longest strictly increasing subsequence length for [-4,6,2,7,3,8], preserving order but allowing gaps; answer4.",
+    "brute_force": "Enumerate take-or-skip choices for every element and verify each candidate subsequence is strictly increasing.",
+    "bottleneck": "Exponential subsets are expensive; quadratic endpoint DP still scans all earlier candidates. For equal lengths a smaller ending leaves at least as many valid future extensions.",
+    "optimization": "tails[k] stores the minimum ending among increasing subsequences of length k+1 in the processed prefix. Replace the first tail greater than or equal to x, or append if x exceeds all tails. Lower bound prevents equals from increasing length.",
+    "dry_run": "The original input creates tails[-4],[-4,6],[-4,2],[-4,2,7],[-4,2,3],[-4,2,3,8], yielding length4.",
+    "complexity": "At most n binary searches over at most n tails give O(n log n) time and O(n) extra space without input mutation. Tails need not itself be a subsequence of the original array."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Original six cells with indices0,2,4,5 selected to form length4",
+    "B": "Take/skip branch diagram showing exponential candidate choice",
+    "C": "Equal-length endings6 versus2 show which can accept a future3",
+    "D": "Sorted tail slots represent minimum possible ending for each length, not fixed chosen indices",
+    "E": "Six exact tail-array states, replacement keeps count and append grows count",
+    "F": "Source import and lower-bound branch; equal value uses replacement",
+    "G": "Remaining source returns length; tails summary warning and O(n log n),O(n)"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

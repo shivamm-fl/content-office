@@ -1,0 +1,8 @@
+Climbing Stairs | Blind 75 16/75
+
+Given integer: 5 stairs. One-step ya two-step moves -> 8 ways.
+
+Last move ke disjoint cases: ways[i - 1] + ways[i - 2]. Zero stairs ka one empty route base hai. Previous two counts simultaneously update hote hain. O(n) time, O(1) extra space.
+
+Problem: https://leetcode.com/problems/climbing-stairs/
+Original Accepted Python: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b016/solution.py

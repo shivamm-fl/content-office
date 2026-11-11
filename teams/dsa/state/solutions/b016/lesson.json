@@ -1,0 +1,80 @@
+{
+  "id": "b016",
+  "slug": "climbing-stairs",
+  "number": "70",
+  "folder": "b016_climbing_stairs",
+  "title": "Climbing Stairs",
+  "difficulty": "Easy",
+  "sources": [
+    "https://leetcode.com/problems/climbing-stairs/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Stairs की recursion में repeated work बचाओ। | Given integer: five. हर move में one या two stairs चढ़ सकते हो। Total eight distinct sequences हैं। हमें count चाहिए, shortest route नहीं।",
+    "B": "Brute force: हर position से one-step और two-step branches बनाओ। Top पर पहुँचो तो one valid way; आगे निकलो तो zero। | Five stairs से branches four और three remaining stairs solve करती हैं।",
+    "C": "Four वाला branch फिर three और two को solve करता है। Three वाला subtree दोबारा बना। | यही overlapping subproblems हैं। Recursion tree बढ़ता रहता है; वही remaining-stairs question बार बार solve होता है।",
+    "D": "Last move देखो। Stair i पर आने का आखिरी move या one है, या two। | First case के सारे routes stair i minus one से आते हैं, second case के stair i minus two से। Cases overlap नहीं करते, इसलिए counts जोड़ते हैं। | Current answer के लिए सिर्फ पिछले two counts चाहिए।",
+    "E": "Base: zero stairs के लिए one empty sequence, one stair के लिए one way। | Two पर one plus one is two। Three पर one plus two is three। | Four पर two plus three is five। Five पर three plus five is eight। यही answer है।",
+    "F": "Accepted code previous और current दोनों one रखता है। Loop two से n तक चलता है। | Simultaneous assignment में old current नया previous बनता है; old previous plus old current नया current। | पहले previous बदलकर फिर sum निकालोगे तो wrong state use हो सकती है।",
+    "G": "Every stair once: O of n time। सिर्फ two running counts: O of one extra space। | N one पर loop skip होता है और one लौटता है। Full recursion tree या पूरा DP array रखने की ज़रूरत नहीं।"
+  },
+  "teaching": {
+    "problem": "Count ordered one-step and two-step routes to five stairs; original example returns eight distinct routes.",
+    "brute_force": "Recursively branch on taking one or two stairs, counting one at the exact top and zero on overshooting.",
+    "bottleneck": "The remaining-three-stairs subtree is reached directly and through remaining-four, so recursive expansion repeats identical smaller questions exponentially.",
+    "optimization": "Partition routes by their last move: one-step arrivals come from i-1 and two-step arrivals from i-2. Disjoint exhaustive cases allow addition, and only the previous two counts are needed.",
+    "dry_run": "Start ways0=1 and ways1=1. Compute ways2=2, ways3=3, ways4=5 and ways5=8, updating the two previous counts simultaneously.",
+    "complexity": "Each stair is computed once for O(n) time and two fixed scalar counts use O(1) extra space within the legal domain. n one skips the loop and returns one."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Five-step staircase with one/two move arcs and required route count8",
+    "B": "Branch tree remaining5 to4/3 and4 to3/2",
+    "C": "Duplicate remaining3 subtree marked in both branches",
+    "D": "Last-edge partition into i-minus-one and i-minus-two routes, disjoint sum",
+    "E": "Two-register timeline1,1 to1,2 to2,3 to3,5 to5,8",
+    "F": "Full Accepted source highlights simultaneous state update using old values",
+    "G": "Single-stair boundary and n iterations versus two scalar storage cells"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

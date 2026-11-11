@@ -1,0 +1,12 @@
+Blind 75 12/75: Number of 1 Bits
+
+12 -> 8 -> 0: har round exactly one set bit clear hota hai.
+
+n & (n - 1) rightmost one ko hataata hai. Naive shift scan sahi hai, par zero positions bhi check karta hai. K set bits ke liye K rounds; actual fixed 31-bit domain mein constant time aur constant extra space.
+
+Sparse bits par kaunsa scan kam work karega?
+
+Problem: https://leetcode.com/problems/number-of-1-bits/
+Accepted Python code: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b012/solution.py
+
+#Blind75 #DSA #Python

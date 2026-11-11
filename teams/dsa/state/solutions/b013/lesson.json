@@ -1,0 +1,80 @@
+{
+  "id": "b013",
+  "slug": "counting-bits",
+  "number": "338",
+  "folder": "b013_counting_bits",
+  "title": "Counting Bits",
+  "difficulty": "Easy",
+  "sources": [
+    "https://leetcode.com/problems/counting-bits/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Bits की counting में पिछले answers reuse करो। | Given integer: six. Zero से six तक हर number के set bits चाहिए। Output: zero, one, one, two, one, two, two।",
+    "B": "Naive approach: हर number को अलग binary में बदलो और उसके ones गिनो। | Three का binary one one है। Six का one one zero। दोनों को अलग scan करते हो।",
+    "C": "यही repeated work है: six को right shift करो तो three मिलता है, जिसकी counting पहले ही निकाली थी। | हर number का पूरा binary दोबारा scan करने से total O of n log n work होता है।",
+    "D": "Right shift last bit हटाता है। इसलिए count of i बराबर count of i shifted right, plus i AND one। | हटाई हुई last bit zero हो तो कुछ नहीं जोड़ो; one हो तो one जोड़ो। | आधे number का index हमेशा छोटा है, इसलिए उसका answer पहले ready होगा।",
+    "E": "Dry run: count zero is zero। One के लिए zero plus one, answer one। | Two के लिए count one plus zero, answer one। Three के लिए count one plus one, answer two। | Four, five, six के answers one, two, two। Output ready।",
+    "F": "Accepted code counts array को n plus one zeroes देता है। Loop one से n तक चलता है। | हर cell में exactly वही recurrence लिखी है: smaller index का stored answer, plus last bit। Return पूरा counts array, सिर्फ आखिरी cell नहीं।",
+    "G": "हर output के लिए constant work: O of n time। Result array O of n space लेता है; उसे छोड़कर O of one auxiliary space। | N zero होने पर loop नहीं चलता और output सिर्फ zero है। पुराना answer reuse करना ही optimization है।"
+  },
+  "teaching": {
+    "problem": "For input six return counts for every integer from zero through six: [0,1,1,2,1,2,2].",
+    "brute_force": "Independently scan the binary representation of each integer and count all its one bits.",
+    "bottleneck": "Scanning six repeats the prefix already counted for three; independently scanning all bit positions costs O(n log n) in the variable-width counting model.",
+    "optimization": "Removing the low bit leaves value shifted right, an already solved smaller index. The answer is counts[value >> 1] plus value AND one, computed in ascending order.",
+    "dry_run": "Initialize count zero as zero; indices one,two,three,four,five,six become one,one,two,one,two,two through the smaller-index dependency.",
+    "complexity": "One constant-width recurrence per result gives O(n) time, O(n) output storage and O(1) auxiliary storage excluding the returned array; n zero returns [0]."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Scalar6 points to output cells0,1,1,2,1,2,2 indexed0 to6",
+    "B": "Separate binary scans for3 and6 reveal shared11 prefix",
+    "C": "Arrow from binary110 back to already counted11",
+    "D": "Dependency graph i to i>>1 with the detached last-bit contribution",
+    "E": "Ascending recurrence fills each of seven cells without jumping ahead",
+    "F": "All Accepted method lines highlighted for allocation, recurrence and array return",
+    "G": "One dependency per cell; output storage explicitly distinguished from auxiliary scalars"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

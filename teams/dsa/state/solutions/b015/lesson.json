@@ -1,0 +1,80 @@
+{
+  "id": "b015",
+  "slug": "reverse-bits",
+  "number": "190",
+  "folder": "b015_reverse_bits",
+  "title": "Reverse Bits",
+  "difficulty": "Easy",
+  "sources": [
+    "https://leetcode.com/problems/reverse-bits/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Bit reversal में leading zeroes भी गिनो। | Given integer: ten. इसका thirty two bit pattern reverse करना है। ये decimal digits उलटना नहीं है। | Low four bits one zero one zero हैं; बाकी twenty eight bits zero हैं।",
+    "B": "Naive approach: number को thirty two character binary string बनाओ, फिर string reverse करके integer में convert करो। | Padding ज़रूरी है। सिर्फ one zero one zero reverse करोगे तो five मिलेगा, जो wrong width है।",
+    "C": "String वाला padded approach सही है, लेकिन temporary string रखता है। | Optimization में वही bits directly move करेंगे। Target faster asymptotic time नहीं; extra representation हटाना है, और exact width बचानी है।",
+    "D": "हर round result को left shift करो, ताकि नया bit डालने की जगह बने। N AND one से input का last bit लो और OR से result में जोड़ो। | फिर n right shift करके consumed bit हटाओ। Exactly thirty two rounds।",
+    "E": "Ten पर dry run: result zero, input ten। Last bits क्रम से zero, one, zero, one। | Result zero, फिर one, फिर two, फिर five। | अब input zero है, लेकिन रुकना नहीं। Twenty eight remaining zeroes append होंगे। Final pattern zero one zero one, फिर twenty eight zeroes।",
+    "F": "ये Accepted Python है। Range thirty two width enforce करता है। Result shift और input का last bit combine होते हैं, फिर input shift होता है। | While n लिखकर जल्दी रुकोगे तो leading zeroes खो जाएँगे। इसीलिए fixed loop ज़रूरी है।",
+    "G": "Result one billion, three hundred forty two million, one hundred seventy seven thousand, two hundred eighty। | W bits के लिए O of W time और constant registers। यहाँ W thirty two fixed है: O of one time, O of one extra space।"
+  },
+  "teaching": {
+    "problem": "Reverse the entire 32-bit pattern of legal even nonnegative input ten, yielding0101 followed by28 zeroes, integer1342177280.",
+    "brute_force": "Pad a binary string to32 characters, reverse the characters and convert that result to an integer.",
+    "bottleneck": "The padded string baseline is correct but stores a width-sized representation; reversing only1010 incorrectly produces5 because the other28 positions were omitted.",
+    "optimization": "Maintain the reverse of the consumed low bits in a scalar result. Shift result left, append the old input low bit using OR, then shift input right. Execute32 rounds so zero padding remains significant.",
+    "dry_run": "For10, low bits0,1,0,1 produce result0,1,2,5. Input reaches0 but28 remaining zero appends shift5 into the high nibble, yielding1342177280.",
+    "complexity": "For generalized width W there are W fixed-width bit rounds and scalar registers; in this actual32-bit domain time and extra space are O(1). No claim of asymptotic speedup over the padded-string baseline."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Ten shown as00000000 00000000 00000000 00001010 with32-position reversal target",
+    "B": "Correct padded string reversal contrasted with invalid four-bit-only1010 to0101",
+    "C": "Temporary32-character buffer contrasted with two scalar registers",
+    "D": "Low-bit extraction arrow and shift-append invariant",
+    "E": "Chronological result0,1,2,5 then28 zero appends ending0x50000000",
+    "F": "Complete Accepted32-round loop; input zero never truncates loop",
+    "G": "Full result1342177280 and fixed32-round time/space qualification"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

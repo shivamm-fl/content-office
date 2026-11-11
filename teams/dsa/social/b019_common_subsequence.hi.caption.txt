@@ -1,0 +1,12 @@
+Blind 75 19/75: Longest Common Subsequence
+
+Given strings: axby and aby. Common subsequence aby -> length 3.
+
+DP prefix pairs store karta hai. Match par diagonal + 1; mismatch par max(up, left). Gaps allowed hain, order badalna allowed nahi. Yeh actual code full table rakhta hai: O(m*n) time aur O(m*n) extra space.
+
+Mismatch par dono characters ek saath chhodna kyun unsafe hai?
+
+Problem: https://leetcode.com/problems/longest-common-subsequence/
+Accepted Python code: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b019/solution.py
+
+#Blind75 #DSA #Python

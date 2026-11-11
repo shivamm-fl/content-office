@@ -1,0 +1,80 @@
+{
+  "id": "b019",
+  "slug": "longest-common-subsequence",
+  "number": "1143",
+  "folder": "b019_common_subsequence",
+  "title": "Longest Common Subsequence",
+  "difficulty": "Medium",
+  "sources": [
+    "https://leetcode.com/problems/longest-common-subsequence/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Common subsequence में mismatches को सही handle करो। | Given strings: a x b y, और a b y। Relative order रखना है; characters skip कर सकते हो। | Common subsequence a b y की length three है।",
+    "B": "Brute force first string की हर subsequence generate करता है, फिर second string में order से check करता है। | हर character लो या छोड़ो। Four characters पर sixteen choices; लंबाई बढ़ने पर choices exponential होती हैं।",
+    "C": "Recursive matching में भी वही prefix pairs दोबारा solve होते हैं। | सिर्फ matching characters गिनना काफी नहीं: order भी बचना चाहिए। इसलिए state में दोनों strings के consumed prefixes चाहिए।",
+    "D": "DP i j मतलब first i और first j characters का best common length। | Last characters equal हों तो shorter prefixes के answer में one जोड़ो: diagonal plus one। | Mismatch पर या first का last छोड़ो, या second का। दोनों options का maximum लो। Empty prefix का answer zero।",
+    "E": "Dry run में columns a, b, y हैं। A वाली row: one, one, one। | X वाली row unchanged: one, one, one। | B वाली row: one, two, two। Y वाली row: one, two, three। Bottom right three हमारा answer।",
+    "F": "Accepted code zero border वाली table बनाता है। Rows और columns one से शुरू होते हैं। | Equal branch diagonal plus one है। Else branch ऊपर और left का maximum है। | Mismatch पर दोनों को साथ छोड़ना longest answer खो सकता है।",
+    "G": "Return bottom-right cell। M और N string lengths पर O of M times N time और O of M times N extra space। | इस code में full table है; one-row memory optimization claim नहीं कर रहे। Subsequence में gaps allowed हैं, substring में नहीं।"
+  },
+  "teaching": {
+    "problem": "Compute longest common subsequence length for original strings axby and aby; preserving character order while allowing skips gives aby of length3.",
+    "brute_force": "Generate every subsequence of the first string and check whether it appears in the second string in order.",
+    "bottleneck": "Take/skip choices grow exponentially; recursive prefix matching also revisits identical prefix-pair states. Counting shared letters without respecting order is invalid.",
+    "optimization": "dp[i][j] stores the LCS length of prefixes text1[:i] and text2[:j]. Equal last characters give diagonal+1; unequal last characters require skipping one side or the other and taking maximum. Empty-prefix borders are zero.",
+    "dry_run": "For columns a,b,y, process rows a:[1,1,1], x:[1,1,1], b:[1,2,2], y:[1,2,3]. Final bottom-right value3 matches aby.",
+    "complexity": "The shown full table processes every pair of prefix lengths: O(m n) time and O(m n) auxiliary space. Do not claim rolling-row memory for this actual implementation."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Strings axby and aby aligned with a,b,y links crossing a skipped x only",
+    "B": "Take/skip tree for4 letters produces16 candidate subsets",
+    "C": "Prefix pair state grid prevents repeated recursive pair work",
+    "D": "Grid diagonal-plus-one for match, upper/left maximum for mismatch",
+    "E": "Four exact DP rows reveal1,1,1 then1,1,1 then1,2,2 then1,2,3",
+    "F": "First exact source chunk shows table and nested prefix loops",
+    "G": "Remaining equal/mismatch/return code with full-table memory accounting"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

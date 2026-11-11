@@ -1,0 +1,13 @@
+@hook Bits की counting में पिछले answers reuse करो। | Given integer: six. Zero से six तक हर number के set bits चाहिए। Output: zero, one, one, two, one, two, two।
+
+Naive approach: हर number को अलग binary में बदलो और उसके ones गिनो। | Three का binary one one है। Six का one one zero। दोनों को अलग scan करते हो।
+
+यही repeated work है: six को right shift करो तो three मिलता है, जिसकी counting पहले ही निकाली थी। | हर number का पूरा binary दोबारा scan करने से total O of n log n work होता है।
+
+Right shift last bit हटाता है। इसलिए count of i बराबर count of i shifted right, plus i AND one। | हटाई हुई last bit zero हो तो कुछ नहीं जोड़ो; one हो तो one जोड़ो। | आधे number का index हमेशा छोटा है, इसलिए उसका answer पहले ready होगा।
+
+Dry run: count zero is zero। One के लिए zero plus one, answer one। | Two के लिए count one plus zero, answer one। Three के लिए count one plus one, answer two। | Four, five, six के answers one, two, two। Output ready।
+
+Accepted code counts array को n plus one zeroes देता है। Loop one से n तक चलता है। | हर cell में exactly वही recurrence लिखी है: smaller index का stored answer, plus last bit। Return पूरा counts array, सिर्फ आखिरी cell नहीं।
+
+हर output के लिए constant work: O of n time। Result array O of n space लेता है; उसे छोड़कर O of one auxiliary space। | N zero होने पर loop नहीं चलता और output सिर्फ zero है। पुराना answer reuse करना ही optimization है।

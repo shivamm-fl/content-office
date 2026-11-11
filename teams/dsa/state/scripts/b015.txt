@@ -1,0 +1,13 @@
+@hook Bit reversal में leading zeroes भी गिनो। | Given integer: ten. इसका thirty two bit pattern reverse करना है। ये decimal digits उलटना नहीं है। | Low four bits one zero one zero हैं; बाकी twenty eight bits zero हैं।
+
+Naive approach: number को thirty two character binary string बनाओ, फिर string reverse करके integer में convert करो। | Padding ज़रूरी है। सिर्फ one zero one zero reverse करोगे तो five मिलेगा, जो wrong width है।
+
+String वाला padded approach सही है, लेकिन temporary string रखता है। | Optimization में वही bits directly move करेंगे। Target faster asymptotic time नहीं; extra representation हटाना है, और exact width बचानी है।
+
+हर round result को left shift करो, ताकि नया bit डालने की जगह बने। N AND one से input का last bit लो और OR से result में जोड़ो। | फिर n right shift करके consumed bit हटाओ। Exactly thirty two rounds।
+
+Ten पर dry run: result zero, input ten। Last bits क्रम से zero, one, zero, one। | Result zero, फिर one, फिर two, फिर five। | अब input zero है, लेकिन रुकना नहीं। Twenty eight remaining zeroes append होंगे। Final pattern zero one zero one, फिर twenty eight zeroes।
+
+ये Accepted Python है। Range thirty two width enforce करता है। Result shift और input का last bit combine होते हैं, फिर input shift होता है। | While n लिखकर जल्दी रुकोगे तो leading zeroes खो जाएँगे। इसीलिए fixed loop ज़रूरी है।
+
+Result one billion, three hundred forty two million, one hundred seventy seven thousand, two hundred eighty। | W bits के लिए O of W time और constant registers। यहाँ W thirty two fixed है: O of one time, O of one extra space।

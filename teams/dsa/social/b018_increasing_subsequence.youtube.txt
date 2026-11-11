@@ -1,0 +1,8 @@
+Longest Increasing Subsequence | Blind 75 18/75
+
+Given array: [-4, 6, 2, 7, 3, 8]. Strictly increasing length: 4.
+
+Tails har length ka smallest possible ending rakhta hai. Lower bound: first tail >= value replace karo, ya end par append. Tails ko hamesha actual subsequence mat samjho. O(n log n) time, O(n) extra space; input unchanged.
+
+Problem: https://leetcode.com/problems/longest-increasing-subsequence/
+Original Accepted Python: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b018/solution.py

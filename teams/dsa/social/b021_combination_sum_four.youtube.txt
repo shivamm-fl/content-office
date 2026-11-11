@@ -1,0 +1,8 @@
+Combination Sum IV | Blind 75 21/75
+
+Given array: [1, 2]. Target 4 -> 5 ordered sequences.
+
+1111, 112, 121, 211, 22 alag ways hain. Last value ke disjoint cases sum karo: ways[t] += ways[t - v]. Total outer loop, values inner loop. Positive values smaller-state dependency dete hain. O(A*M) time, O(A) extra space.
+
+Problem: https://leetcode.com/problems/combination-sum-iv/
+Original Accepted Python: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b021/solution.py

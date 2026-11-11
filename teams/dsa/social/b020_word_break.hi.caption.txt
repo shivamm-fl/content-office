@@ -1,0 +1,12 @@
+Blind 75 20/75: Word Break
+
+Given string: cars. Dictionary: car, ca, rs. Valid split: ca | rs.
+
+Longest prefix car greedy trap hai. reachable[end] true tabhi, jab reachable start se exact dictionary word us end tak match kare. N characters, M words, max word length L: O(N*M*L) time, O(N) extra space.
+
+Sirf ek middle prefix ka true hona enough kyun nahi?
+
+Problem: https://leetcode.com/problems/word-break/
+Accepted Python code: https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b020/solution.py
+
+#Blind75 #DSA #Python

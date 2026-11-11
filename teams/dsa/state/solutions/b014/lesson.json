@@ -1,0 +1,80 @@
+{
+  "id": "b014",
+  "slug": "missing-number",
+  "number": "268",
+  "folder": "b014_missing_number",
+  "title": "Missing Number",
+  "difficulty": "Easy",
+  "sources": [
+    "https://leetcode.com/problems/missing-number/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Missing number को XOR से निकालो। | Given array: four, zero, two, one. Four elements हैं, इसलिए allowed numbers zero से four तक हैं। Missing value three है। Array में duplicates नहीं हैं।",
+    "B": "Brute force: zero से four तक हर candidate लो, और पूरे array में ढूँढो। | Zero मिलता है, one मिलता है, two मिलता है, three नहीं मिलता। Answer सही है।",
+    "C": "लेकिन हर candidate के लिए फिर से array scan होता है। N candidates और हर scan में up to N values: quadratic work। | Sorting करने पर भी extra ordering work चाहिए; हमें सिर्फ absent value चाहिए।",
+    "D": "XOR की properties: x XOR x is zero, और x XOR zero is x। Order बदलने से result नहीं बदलता। | इसलिए full range और array को XOR कर दो। मौजूद numbers two copies में cancel होंगे। सिर्फ missing number की one copy बचेगी।",
+    "E": "Code missing को length four से initialize करता है। | Index zero, value four से accumulator zero। Index one, value zero से one। | Index two, value two cancel: accumulator one। Index three, value one से three। सभी pairs process हुए, return three।",
+    "F": "ये पूरा Accepted code है। Length वाला initialization range का last number शामिल करता है। Loop के indices zero से n minus one तक बाकी range देते हैं। | हर round index और actual value दोनों XOR होते हैं। Input array बदला नहीं जाता।",
+    "G": "One pass: O of n time, O of one extra space। | Missing zero या missing n भी इसी तरह बचेगा। Duplicates allowed हों तो cancellation proof टूटेगा; यहाँ distinct values problem की guarantee है।"
+  },
+  "teaching": {
+    "problem": "Find the unique absent value from zero through n for distinct nums of length n. Original [4,0,2,1] returns three.",
+    "brute_force": "For each range candidate scan the entire array until it is found or identified as missing.",
+    "bottleneck": "Repeated candidate searches can inspect a quadratic number of array values; sorting also performs unnecessary ordering work for this task.",
+    "optimization": "XOR cancels two equal values and has zero identity, independent of order. XOR of complete range zero through n with all present values leaves exactly the absent value.",
+    "dry_run": "Initialize accumulator4; process (index,value) pairs (0,4),(1,0),(2,2),(3,1), giving accumulators0,1,1,3 and return3.",
+    "complexity": "One pass with scalar state costs O(n) time and O(1) auxiliary space, without input mutation. Distinctness and the zero-through-n domain are required for cancellation proof."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "Input4,0,2,1 below complete range0 through4 with3 visibly absent",
+    "B": "Candidate3 scans each cell and fails membership",
+    "C": "Repeated candidate-to-array edges expose quadratic scans",
+    "D": "Matched range and input values pair off; unpaired3 remains",
+    "E": "Accumulator4 to0 to1 to1 to3 synchronized with index,value pairs",
+    "F": "Complete Accepted source with length seed, enumerate and XOR highlights",
+    "G": "Unmatched zero and n boundary diagrams; O(n) pass and scalar state"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}

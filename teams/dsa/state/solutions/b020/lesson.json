@@ -1,0 +1,80 @@
+{
+  "id": "b020",
+  "slug": "word-break",
+  "number": "139",
+  "folder": "b020_word_break",
+  "title": "Word Break",
+  "difficulty": "Medium",
+  "sources": [
+    "https://leetcode.com/problems/word-break/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types"
+  ],
+  "copy": {
+    "A": "@hook Word Break में longest prefix greedily मत चुनो। | Given string: cars. Dictionary: car, ca, rs। Ca plus rs से पूरा string बनता है, इसलिए answer true है। Words reuse भी कर सकते हो।",
+    "B": "Brute force हर matching first word चुनता है, फिर remaining suffix recursively solve करता है। | Cars पर car चुनो तो s बचता है और fail। Ca चुनो तो rs मिलता है और success। सभी choices try करनी पड़ती हैं।",
+    "C": "Longest word वाला greedy choice car पर अटक गया, जबकि valid split था। | Backtracking सही है, लेकिन कई paths वही suffix दोबारा solve करते हैं। Repeated questions को stored prefix answers से बदलेंगे।",
+    "D": "Reachable end का मतलब: end से पहले का पूरा prefix dictionary से बन सकता है। Empty prefix true है। | हर word के लिए start बराबर end minus word length। | Start reachable हो और यही word start से end तक match करे, तभी end true करो। इससे कोई gap या invalid piece बीच में नहीं आता।",
+    "E": "Dry run: zero reachable। End one पर c नहीं बनता, false। | End two पर ca मिलता है और start zero true है: true। End three पर car से true। | End four पर rs का start two है, जो true है। इसलिए cars true।",
+    "F": "Accepted code हर end पर dictionary words check करता है। Negative start skip होता है। | Reachable start और exact word match मिलने पर true set करके break। | Final reachable last return होता है। सिर्फ किसी बीच वाले prefix का true होना पूरे string का answer नहीं।",
+    "G": "N string length, M words, L maximum word length: O of N times M times L time, क्योंकि match भी characters check करता है। | Reachable array O of N extra space। String slices नहीं बनाते; starts with से bounded match करते हैं।"
+  },
+  "teaching": {
+    "problem": "Determine if cars can be fully segmented with dictionary car,ca,rs; ca followed by rs succeeds and words may be reused.",
+    "brute_force": "Recursively try every matching first word and continue on the remaining suffix until empty or no dictionary word matches.",
+    "bottleneck": "Greedy longest-prefix car leaves invalid s, while ca then rs works. Exhaustive backtracking revisits identical suffix questions through different prefix choices.",
+    "optimization": "reachable[end] is true iff the entire prefix ending at end is segmentable. Seed the empty prefix true; a dictionary word of length l can end there only from reachable[end-l] with an exact bounded character match.",
+    "dry_run": "For cars, reachable indices0..4 are true,false,true,true,true. ca reaches2 from0; car reaches3 from0; rs reaches4 from2, so final result true.",
+    "complexity": "For n characters, m dictionary words and maximum length L, bounded startswith checks give O(n m L) worst-case time; reachable uses O(n) auxiliary space and no new substring slices."
+  },
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "descriptions": {
+    "A": "cars split ca|rs, dictionary car,ca,rs and whole-string true",
+    "B": "Branch car|s fails while ca|rs reaches the end",
+    "C": "Longest-prefix path dead end and repeated suffix-state pattern",
+    "D": "Edges from reachable start to end exist only for exact dictionary-word spans",
+    "E": "Prefix cells0,1,2,3,4 fill true,false,true,true,true in order",
+    "F": "First source chunk initializes empty prefix and computes start for each word",
+    "G": "Remaining condition/early-break/final-return code with character-comparison complexity"
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "narration_numbers": "All inputs, signs, indices and computed counts in English; technical Hinglish; owner tempo 0.9. Complete Accepted method body on screen."
+}
