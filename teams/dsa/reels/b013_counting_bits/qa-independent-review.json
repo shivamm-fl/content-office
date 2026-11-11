@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "item": "b013",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "notes": [
+    "Reviewed exact original source and lesson.json, storyboard, all 34 sampled HTML frames and seven-scene phone sheet.",
+    "The shift recurrence, ascending smaller-index dependency, [0,1,1,2,1,2,2] output and n=0 boundary are correct. O(n) time, O(n) returned output and O(1) auxiliary scalars are distinguished in narration.",
+    "Complete source-bound method body is readable, with continuation arrow on its wrapped expression. No P0/P1 found.",
+    "This is an HTML/still teaching review; final MP4 decoding, audio and continuous playback are outside this report."
+  ],
+  "reviewed_at_utc": "2026-11-11T15:48:57.9257977Z",
+  "hashes": {
+    "code_sha256": "f763bc930071e2e911b8693ad8c47882d24b0bc817893d99b93e3ea935e714ce",
+    "source_sha256": "f763bc930071e2e911b8693ad8c47882d24b0bc817893d99b93e3ea935e714ce",
+    "lesson_sha256": "fc01ab77d9d9cd1167690997a0d41105eac7b31bba911ed99f6a6b6ef4344926",
+    "script_sha256": "9c6d7ef419cbbad466a2cf6805e13afe6af21090a787d62713d5671ccda0aa90",
+    "html_sha256": "f2d3c97767d82f9678a436edd6b30ccb46be99e2ce1b23e82edf86c916e5eaa4",
+    "storyboard_sha256": "c0c87e5492e44546e8760f753765e8663afda0464347484b9b8858f879dd2b30"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "30515830c317e735fc056fe429ec17e38a59f41caade0ef5c2f6ccdd95422e32",
+    "snapshots/contact-sheet-1.jpg": "faea4d762fa2ec878c4dc1d4d151005a6991bcbb7ff8021b1a6fd581ca515595",
+    "snapshots/contact-sheet-2.jpg": "aee5b25360a5156efffedea2e090dad6e4d6b16006ad08555f37317988edc46f",
+    "snapshots/contact-sheet-3.jpg": "a29f0d705c77b8757f8dcb912815a3b1b33978b35ca85ee9d6804abbc211a9c5",
+    "snapshots/contact-sheet-4.jpg": "671927c67336467be8d2be3aaf20d8023d725c0954875db356ef5a04cdb035a1"
+  },
+  "independent_local_checks": {
+    "passed": 65,
+    "description": "Exact original source evaluated for n=0..64 against independent binary one-count lists."
+  }
+}

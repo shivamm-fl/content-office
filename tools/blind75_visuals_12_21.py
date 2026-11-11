@@ -90,6 +90,7 @@ def diagrams(n):
         d['D']=[(vals('D',[5,3,2],530,'predecessor totals for total 6')+vals('Dcost',[3,2,3],850,'dp[6 − coin] + 1',selected=(1,))+note('minimum candidate = 2',1170),None)]
         costs=[0,1,2,1,1,2,2]
         d['E']=[(vals('Ecost',costs,560,'dp · totals 0 through 6')+note('last coin → candidate count',835,DIM)+vals(f'Ecand{k}',[3,2,3],920,'coins 1, 3, 4',selected=sel),p) for k,sel,p in [(0,(),None),(1,(0,),(1,'one',0)),(2,(1,),(1,'three',1)),(3,(2,),(1,'four',0))]]
+        d['E'].append((vals('Ebest',costs,560,'dp · totals 0 through 6',selected=(6,))+note('minimum 2 coins · 3 + 3',835,GOOD)+vals('Ewinner',[3,2,3],920,'last coin 1, 3, 4 · compare counts',selected=(1,)),(1,'minimum',0)))
     elif n==18:
         d['A']=[(vals('A',[-4,6,2,7,3,8],510,selected=(0,2,4,5))+vals('As',[-4,2,3,8],865,'strictly increasing · length 4',selected=(0,1,2,3)),None)]
         d['B']=[(branch('value','TAKE','SKIP')+note('2 choices per element → 2ⁿ subsets',1160,BAD,38),None)]
@@ -112,7 +113,7 @@ def diagrams(n):
         flags=['T','F','T','T','T']
         d['E']=[(words(['c','a','r','s'],500)+vals(f'Ew{k}',[v if i<=k else '·' for i,v in enumerate(flags)],840,'reachable prefix lengths',selected=(k,))+note(label,1170,GOOD,38),p) for k,label,p in [(0,'empty prefix → true',None),(1,'"c" → false',(0,'one',0)),(2,'"ca" from 0 → true',(1,'two',0)),(3,'"car" from 0 → true',(1,'three',0)),(4,'"rs" from 2 → true',(2,'four',0))]]
     elif n==21:
-        d['A']=[(vals('A',[1,2],480,'Given array · target 4')+words(['1111','112','121'],790)+words(['211','22'],1010),None)]
+        d['A']=[(vals('A',[1,2],480,'Given array · target 4')+words(['1+1+1+1','1+1+2','1+2+1'],790)+words(['2+1+1','2+2'],1010),None)]
         d['B']=[(branch(4,3,2)+note('append 1 or 2 · explore every path',1160,DIM,38),None)]
         d['C']=[(words(['1,1,2','2,1,1'],540)+note('different order → different sequence',830,BAD,35)+boxlabel(340,950,330,'REPEATED TOTAL',2,BAD),None)]
         d['D']=[(boxlabel(100,520,370,'LAST VALUE 1','ways[3]')+boxlabel(550,520,370,'LAST VALUE 2','ways[2]',GOOD)+arrow(285,720,505,880)+arrow(735,720,505,880)+boxlabel(340,910,330,'ways[4]','3 + 2',GOOD),None)]

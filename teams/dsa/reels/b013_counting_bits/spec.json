@@ -1,0 +1,89 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "surprising_fact",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "copy": {
+    "hi": {
+      "A": "@hook Bits की counting में पिछले answers reuse करो। | Given integer: six. Zero से six तक हर number के set bits चाहिए। Output: zero, one, one, two, one, two, two।",
+      "B": "Naive approach: हर number को अलग binary में बदलो और उसके ones गिनो। | Three का binary one one है। Six का one one zero। दोनों को अलग scan करते हो।",
+      "C": "यही repeated work है: six को right shift करो तो three मिलता है, जिसकी counting पहले ही निकाली थी। | हर number का पूरा binary दोबारा scan करने से total O of n log n work होता है।",
+      "D": "Right shift last bit हटाता है। इसलिए count of i बराबर count of i shifted right, plus i AND one। | हटाई हुई last bit zero हो तो कुछ नहीं जोड़ो; one हो तो one जोड़ो। | आधे number का index हमेशा छोटा है, इसलिए उसका answer पहले ready होगा।",
+      "E": "Dry run: count zero is zero। One के लिए zero plus one, answer one। | Two के लिए count one plus zero, answer one। Three के लिए count one plus one, answer two। | Four, five, six के answers one, two, two। Output ready।",
+      "F": "Accepted code counts array को n plus one zeroes देता है। Loop one से n तक चलता है। | हर cell में exactly वही recurrence लिखी है: smaller index का stored answer, plus last bit। Return पूरा counts array, सिर्फ आखिरी cell नहीं।",
+      "G": "हर output के लिए constant work: O of n time। Result array O of n space लेता है; उसे छोड़कर O of one auxiliary space। | N zero होने पर loop नहीं चलता और output सिर्फ zero है। पुराना answer reuse करना ही optimization है।"
+    }
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "solution_sha256": "f763bc930071e2e911b8693ad8c47882d24b0bc817893d99b93e3ea935e714ce",
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "sources": [
+    "https://leetcode.com/problems/counting-bits/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    "https://leetcode.com/problems/counting-bits/submissions/2193972892/"
+  ],
+  "on_screen_code_contract": "complete_method_body"
+}

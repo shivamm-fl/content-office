@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "item": "b012",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "resolved_findings": [
+    {
+      "priority": "P1",
+      "where": "Scene B final baseline state",
+      "verified_at_s": [
+        22.16,
+        22.36
+      ],
+      "resolution": "Regenerated full-size frames now show remaining=0/checks=4. Original source and narration are unchanged."
+    }
+  ],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg",
+    "snapshots/frame-08-at-22.16s.png",
+    "snapshots/frame-09-at-22.36s.png"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "changed_frame_reinspection": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "independent_local_checks": {
+    "passed": 2048,
+    "description": "Exact original source tested for n=0..2047 against binary one-count oracle."
+  },
+  "notes": [
+    "Original source correctly clears one least-significant set bit per round. Optimized 12 -> 8 -> 0/counts 0 -> 1 -> 2, positive 31-bit qualification, O(k) fixed-width rounds and constant scalar space are correct.",
+    "Full original snapshot set and phone sheet reviewed previously; regenerated changed terminal baseline frames inspected at full size before closing the finding.",
+    "This report validates HTML/still teaching evidence; no final MP4/audio/continuous playback claim."
+  ],
+  "reviewed_at_utc": "2026-11-11T15:51:47.8014375Z",
+  "hashes": {
+    "code_sha256": "92d7de2c4b1878abec1112b3a32151559b2a514936dc6a058ded14cbc7f744f9",
+    "source_sha256": "92d7de2c4b1878abec1112b3a32151559b2a514936dc6a058ded14cbc7f744f9",
+    "lesson_sha256": "df6d5e848f3ad31ad3af446fcdbeb14e4d09bfc000346c00701399586d5ca73b",
+    "script_sha256": "4e495e8b54679897b6c149c5bdfbef4eff617579928e902bc1c8edad564f30bc",
+    "html_sha256": "693624ff59b66196e00205662e66fb11eb1617b03bde1654b62143289a547bce",
+    "storyboard_sha256": "f657f4258755cee77aaef8e776cec0e5c5f8435c81ee9643dc9692d8e6fedce2"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "63ed3a07854d681cdff795d3c6219c734b2732ead90ac66a8bb66f26201faedf",
+    "snapshots/contact-sheet-1.jpg": "94a1e87031feaf6aa270fa0b4b5d409c289526470bb1994d48e17c5922add661",
+    "snapshots/contact-sheet-2.jpg": "9c93b4091e2cf2bf6999880f598f561da48d58aabd90530de450afe4604b2775",
+    "snapshots/contact-sheet-3.jpg": "c534706a4ffa309a00ec52c9ef4184ae9cef8eebc7e74cea986b4e00c6ff3e42",
+    "snapshots/contact-sheet-4.jpg": "48e90eb87dffbc4c2877f72abd2107b6090e21273b223ca64b86f5c0d6854e3e",
+    "snapshots/frame-08-at-22.16s.png": "28c02fd3786cbc98ac697abb4e80816b74cfbd14decf97b5ca8da0e920d05531",
+    "snapshots/frame-09-at-22.36s.png": "9124a018b76a955cb5c03c41c3ae8bd58c8517c5a020ccb076758787f79455ec"
+  }
+}

@@ -1,0 +1,531 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=1080,height=1920"><title>Coin Change</title>
+<script src="assets/gsap.min.js"></script><script src="data.js"></script><style>
+@font-face{font-family:Head;src:url('fonts/SpaceGrotesk.ttf');font-weight:300 700}
+@font-face{font-family:Code;src:url('fonts/JetBrainsMono.ttf');font-weight:100 800}
+@font-face{font-family:Hindi;src:url('fonts/NotoSansDevanagari.ttf')}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0B1220}
+#root{position:relative;width:1080px;height:1920px;background:#0B1220;color:#F3EFE6;font-family:Head,Hindi,sans-serif}
+.clip,.visual{position:absolute;inset:0}.visual,.state{opacity:0}svg{font-family:Head,Hindi,sans-serif;font-weight:600}
+#series{position:absolute;left:90px;top:178px;font:600 30px Head;letter-spacing:2px;color:#A78BFA;z-index:20}
+#handle{position:absolute;right:140px;top:180px;font:500 28px Head;color:#9DAEC5;z-index:20}
+#source{position:absolute;left:90px;top:1403px;font:500 29px Head;color:#9DAEC5;z-index:20}
+#caption-lane{position:absolute;left:75px;top:1248px;width:870px;height:145px;z-index:30}
+.caption{position:absolute;left:0;top:0;width:870px;text-align:center;font-size:65px;font-weight:700;line-height:1.12;color:#F3EFE6;opacity:0}
+#progress-track{position:absolute;left:90px;top:1460px;width:850px;height:5px;background:#25334D}
+#progress{height:5px;width:850px;background:#A78BFA;transform-origin:left}
+</style></head><body><main id="root" data-composition-id="main" data-start="0" data-duration="101.0" data-width="1080" data-height="1920">
+<div id="series">BLIND 75 · 17 / 75</div><div id="handle">@dsa.learnvora</div>
+<section id="scene-A" class="clip" data-start="0.0" data-duration="10.712" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vA"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="A teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Coin Change</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Input → required output</text><g class="state" id="A-step0"><text x="90" y="465" fill="#9DAEC5" font-size="30" text-anchor="start" >Given array · coins</text><rect id="A-c0" x="100.0" y="500" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="583" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="228.33333333333334" y="671" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="A-c1" x="376.6666666666667" y="500" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="583" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="505.0" y="671" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="A-c2" x="653.3333333333334" y="500" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="583" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="781.6666666666667" y="671" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="" x="100.0" y="850" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="296.0" y="938" fill="#F3EFE6" font-size="58" text-anchor="middle" >3</text><rect id="" x="510.0" y="850" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="706.0" y="938" fill="#F3EFE6" font-size="58" text-anchor="middle" >3</text><text x="505" y="1160" fill="#6FD3A6" font-size="44" text-anchor="middle" >amount 6 · minimum 2 coins</text></g></svg></div></section><section id="scene-B" class="clip" data-start="10.712" data-duration="13.453" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vB"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="B teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Brute force</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Correct baseline · explicit choices</text><g class="state" id="B-step0"><rect id="" x="340" y="485" width="330" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="505.0" y="537" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="505.0" y="607" fill="#A78BFA" font-size="65" text-anchor="middle" >6</text><text x="90" y="825" fill="#9DAEC5" font-size="30" text-anchor="start" >after choosing coin 1, 3, 4</text><rect id="B-c0" x="100.0" y="860" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="943" fill="#F3EFE6" font-size="65" text-anchor="middle" >5</text><text x="228.33333333333334" y="1031" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="B-c1" x="376.6666666666667" y="860" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="943" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="505.0" y="1031" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="B-c2" x="653.3333333333334" y="860" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="943" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="781.6666666666667" y="1031" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><line x1="505" y1="650" x2="250" y2="820" stroke="#9DAEC5" stroke-width="4"/><line x1="505" y1="650" x2="505" y2="820" stroke="#9DAEC5" stroke-width="4"/><line x1="505" y1="650" x2="760" y2="820" stroke="#9DAEC5" stroke-width="4"/></g></svg></div></section><section id="scene-C" class="clip" data-start="24.165" data-duration="11.475" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vC"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="C teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Where it costs</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Repeated work or a concrete trap</text><g class="state" id="C-step0"><rect id="" x="100.0" y="515" width="255.33333333333331" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="227.66666666666666" y="603" fill="#F3EFE6" font-size="58" text-anchor="middle" >4</text><rect id="" x="373.3333333333333" y="515" width="255.33333333333331" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="501.0" y="603" fill="#F3EFE6" font-size="58" text-anchor="middle" >1</text><rect id="" x="646.6666666666666" y="515" width="255.33333333333331" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="774.3333333333333" y="603" fill="#F3EFE6" font-size="58" text-anchor="middle" >1</text><text x="505" y="740" fill="#E5735F" font-size="44" text-anchor="middle" >3 coins · greedy</text><rect id="" x="100.0" y="860" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="296.0" y="948" fill="#F3EFE6" font-size="58" text-anchor="middle" >3</text><rect id="" x="510.0" y="860" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="706.0" y="948" fill="#F3EFE6" font-size="58" text-anchor="middle" >3</text><text x="505" y="1080" fill="#6FD3A6" font-size="44" text-anchor="middle" >2 coins · optimum</text></g></svg></div></section><section id="scene-D" class="clip" data-start="35.64" data-duration="19.100" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vD"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="D teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="58" text-anchor="start" >Why the optimization works</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Preserve the invariant</text><g class="state" id="D-step0"><text x="90" y="495" fill="#9DAEC5" font-size="30" text-anchor="start" >predecessor totals for total 6</text><rect id="D-c0" x="100.0" y="530" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="613" fill="#F3EFE6" font-size="65" text-anchor="middle" >5</text><text x="228.33333333333334" y="701" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="D-c1" x="376.6666666666667" y="530" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="613" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="505.0" y="701" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="D-c2" x="653.3333333333334" y="530" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="613" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="781.6666666666667" y="701" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><text x="90" y="815" fill="#9DAEC5" font-size="30" text-anchor="start" >dp[6 − coin] + 1</text><rect id="Dcost-c0" x="100.0" y="850" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="228.33333333333334" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Dcost-c1" x="376.6666666666667" y="850" width="256.6666666666667" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="933" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Dcost-c2" x="653.3333333333334" y="850" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="781.6666666666667" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><text x="505" y="1170" fill="#6FD3A6" font-size="44" text-anchor="middle" >minimum candidate = 2</text></g></svg></div></section><section id="scene-E" class="clip" data-start="54.74" data-duration="14.893" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vE"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="E teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Follow the same input</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Chronological state changes</text><g class="state" id="E-step0"><text x="90" y="525" fill="#9DAEC5" font-size="30" text-anchor="start" >dp · totals 0 through 6</text><rect id="Ecost-c0" x="100.0" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="149.28571428571428" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="149.28571428571428" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecost-c1" x="218.57142857142856" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="267.85714285714283" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="267.85714285714283" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecost-c2" x="337.1428571428571" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="386.4285714285714" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="386.4285714285714" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="Ecost-c3" x="455.7142857142857" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="505.0" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="Ecost-c4" x="574.2857142857142" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="623.5714285714286" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="623.5714285714286" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><rect id="Ecost-c5" x="692.8571428571429" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="742.1428571428572" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="742.1428571428572" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >5</text><rect id="Ecost-c6" x="811.4285714285714" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="860.7142857142858" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="860.7142857142858" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >6</text><text x="505" y="835" fill="#9DAEC5" font-size="44" text-anchor="middle" >last coin → candidate count</text><text x="90" y="885" fill="#9DAEC5" font-size="30" text-anchor="start" >coins 1, 3, 4</text><rect id="Ecand0-c0" x="100.0" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="228.33333333333334" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecand0-c1" x="376.6666666666667" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecand0-c2" x="653.3333333333334" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="781.6666666666667" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text></g><g class="state" id="E-step1"><text x="90" y="525" fill="#9DAEC5" font-size="30" text-anchor="start" >dp · totals 0 through 6</text><rect id="Ecost-c0" x="100.0" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="149.28571428571428" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="149.28571428571428" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecost-c1" x="218.57142857142856" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="267.85714285714283" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="267.85714285714283" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecost-c2" x="337.1428571428571" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="386.4285714285714" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="386.4285714285714" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="Ecost-c3" x="455.7142857142857" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="505.0" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="Ecost-c4" x="574.2857142857142" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="623.5714285714286" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="623.5714285714286" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><rect id="Ecost-c5" x="692.8571428571429" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="742.1428571428572" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="742.1428571428572" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >5</text><rect id="Ecost-c6" x="811.4285714285714" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="860.7142857142858" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="860.7142857142858" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >6</text><text x="505" y="835" fill="#9DAEC5" font-size="44" text-anchor="middle" >last coin → candidate count</text><text x="90" y="885" fill="#9DAEC5" font-size="30" text-anchor="start" >coins 1, 3, 4</text><rect id="Ecand1-c0" x="100.0" y="920" width="256.6666666666667" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="228.33333333333334" y="1003" fill="#6FD3A6" font-size="65" text-anchor="middle" >3</text><text x="228.33333333333334" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecand1-c1" x="376.6666666666667" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecand1-c2" x="653.3333333333334" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="781.6666666666667" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text></g><g class="state" id="E-step2"><text x="90" y="525" fill="#9DAEC5" font-size="30" text-anchor="start" >dp · totals 0 through 6</text><rect id="Ecost-c0" x="100.0" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="149.28571428571428" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="149.28571428571428" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecost-c1" x="218.57142857142856" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="267.85714285714283" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="267.85714285714283" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecost-c2" x="337.1428571428571" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="386.4285714285714" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="386.4285714285714" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="Ecost-c3" x="455.7142857142857" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="505.0" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="Ecost-c4" x="574.2857142857142" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="623.5714285714286" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="623.5714285714286" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><rect id="Ecost-c5" x="692.8571428571429" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="742.1428571428572" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="742.1428571428572" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >5</text><rect id="Ecost-c6" x="811.4285714285714" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="860.7142857142858" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="860.7142857142858" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >6</text><text x="505" y="835" fill="#9DAEC5" font-size="44" text-anchor="middle" >last coin → candidate count</text><text x="90" y="885" fill="#9DAEC5" font-size="30" text-anchor="start" >coins 1, 3, 4</text><rect id="Ecand2-c0" x="100.0" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="228.33333333333334" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecand2-c1" x="376.6666666666667" y="920" width="256.6666666666667" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="1003" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecand2-c2" x="653.3333333333334" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="781.6666666666667" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text></g><g class="state" id="E-step3"><text x="90" y="525" fill="#9DAEC5" font-size="30" text-anchor="start" >dp · totals 0 through 6</text><rect id="Ecost-c0" x="100.0" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="149.28571428571428" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="149.28571428571428" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecost-c1" x="218.57142857142856" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="267.85714285714283" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="267.85714285714283" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecost-c2" x="337.1428571428571" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="386.4285714285714" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="386.4285714285714" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="Ecost-c3" x="455.7142857142857" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="505.0" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="Ecost-c4" x="574.2857142857142" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="623.5714285714286" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="623.5714285714286" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><rect id="Ecost-c5" x="692.8571428571429" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="742.1428571428572" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="742.1428571428572" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >5</text><rect id="Ecost-c6" x="811.4285714285714" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="860.7142857142858" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="860.7142857142858" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >6</text><text x="505" y="835" fill="#9DAEC5" font-size="44" text-anchor="middle" >last coin → candidate count</text><text x="90" y="885" fill="#9DAEC5" font-size="30" text-anchor="start" >coins 1, 3, 4</text><rect id="Ecand3-c0" x="100.0" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="228.33333333333334" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ecand3-c1" x="376.6666666666667" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ecand3-c2" x="653.3333333333334" y="920" width="256.6666666666667" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="781.6666666666667" y="1003" fill="#6FD3A6" font-size="65" text-anchor="middle" >3</text><text x="781.6666666666667" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text></g><g class="state" id="E-step4"><text x="90" y="525" fill="#9DAEC5" font-size="30" text-anchor="start" >dp · totals 0 through 6</text><rect id="Ebest-c0" x="100.0" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="149.28571428571428" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="149.28571428571428" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ebest-c1" x="218.57142857142856" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="267.85714285714283" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="267.85714285714283" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ebest-c2" x="337.1428571428571" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="386.4285714285714" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="386.4285714285714" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="Ebest-c3" x="455.7142857142857" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="505.0" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="Ebest-c4" x="574.2857142857142" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="623.5714285714286" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="623.5714285714286" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><rect id="Ebest-c5" x="692.8571428571429" y="560" width="98.57142857142857" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="742.1428571428572" y="643" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="742.1428571428572" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >5</text><rect id="Ebest-c6" x="811.4285714285714" y="560" width="98.57142857142857" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="860.7142857142858" y="643" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="860.7142857142858" y="731" fill="#9DAEC5" font-size="31" text-anchor="middle" >6</text><text x="505" y="835" fill="#6FD3A6" font-size="44" text-anchor="middle" >minimum 2 coins · 3 + 3</text><text x="90" y="885" fill="#9DAEC5" font-size="30" text-anchor="start" >last coin 1, 3, 4 · compare counts</text><rect id="Ewinner-c0" x="100.0" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="228.33333333333334" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="228.33333333333334" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ewinner-c1" x="376.6666666666667" y="920" width="256.6666666666667" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="1003" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ewinner-c2" x="653.3333333333334" y="920" width="256.6666666666667" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="781.6666666666667" y="1003" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="781.6666666666667" y="1091" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text></g></svg></div></section><section id="scene-F" class="clip" data-start="69.633" data-duration="16.150" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vF"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="F teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Accepted Python</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Exact submitted source · phrase-synced chunks</text><g class="state" id="F-code-init"><rect id="" x="80" y="495" width="885" height="275" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeF0-L6" data-source-line="6" data-code-panel="codeF0"><rect class="code-highlight" x="88" y="508" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">dp = [amount + 1] * (amount + 1)</text></g><g id="codeF0-L7" data-source-line="7" data-code-panel="codeF0"><rect class="code-highlight" x="88" y="556" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="585" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">dp[0] = 0</text></g><g id="codeF0-L8" data-source-line="8" data-code-panel="codeF0"><rect class="code-highlight" x="88" y="604" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="633" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">for total in range(1, amount + 1):</text></g><g id="codeF0-L9" data-source-line="9" data-code-panel="codeF0"><rect class="code-highlight" x="88" y="652" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="681" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">    for coin in coins:</text></g><g id="codeF0-L10" data-source-line="10" data-code-panel="codeF0"><rect class="code-highlight" x="88" y="700" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="729" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">        if coin &lt;= total:</text></g></g><g class="state" id="F-code-core"><rect id="" x="80" y="495" width="885" height="270" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeF1-L10" data-source-line="10" data-code-panel="codeF1"><rect class="code-highlight" x="88" y="508" width="870" height="47" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">        if coin &lt;= total:</text></g><g id="codeF1-L11" data-source-line="11" data-code-panel="codeF1"><rect class="code-highlight" x="88" y="555" width="870" height="94" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="584" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">            dp[total] = min(dp[total],</text><path d="M89 613 V623 H100 M96 619 L100 623 L96 627" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="631" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">              dp[total - coin] + 1)</text></g><g id="codeF1-L12" data-source-line="12" data-code-panel="codeF1"><rect class="code-highlight" x="88" y="649" width="870" height="94" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="678" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">return dp[amount] if dp[amount] &lt;= amount</text><path d="M89 707 V717 H100 M96 713 L100 717 L96 721" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="725" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">  else -1</text></g></g></svg></div></section><section id="scene-G" class="clip" data-start="85.783" data-duration="15.217" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vG"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="G teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Accepted Python · result</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Exact submitted code · continuation</text><rect id="" x="80" y="495" width="885" height="223" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeG-L11" data-source-line="11" data-code-panel="codeG"><rect class="code-highlight" x="88" y="508" width="870" height="94" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">            dp[total] = min(dp[total],</text><path d="M89 566 V576 H100 M96 572 L100 576 L96 580" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="584" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">              dp[total - coin] + 1)</text></g><g id="codeG-L12" data-source-line="12" data-code-panel="codeG"><rect class="code-highlight" x="88" y="602" width="870" height="94" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="631" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">return dp[amount] if dp[amount] &lt;= amount</text><path d="M89 660 V670 H100 M96 666 L100 670 L96 674" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="678" fill="#F3EFE6" font-size="31" text-anchor="start" font-family="Code" xml:space="preserve">  else -1</text></g><text x="505" y="1200" fill="#6FD3A6" font-size="39" text-anchor="middle" >O(A × M) time · O(A) extra</text></svg></div></section><div id="caption-lane" data-track-kind="captions"><div class="clip caption" id="cap0" data-track-index="2" data-track-kind="captions" data-start="0.08" data-duration="0.748"><span id="w0-0">Coin</span> <span id="w0-1">change</span> <span id="w0-2">mein</span></div>
+<div class="clip caption" id="cap1" data-track-index="2" data-track-kind="captions" data-start="0.88" data-duration="1.044"><span id="w1-0">largest</span> <span id="w1-1">coin</span> <span id="w1-2">hamesha</span></div>
+<div class="clip caption" id="cap2" data-track-index="2" data-track-kind="captions" data-start="1.989" data-duration="1.3029999999999997"><span id="w2-0">sahi</span> <span id="w2-1">nahi.</span> <span id="w2-2">Given</span></div>
+<div class="clip caption" id="cap3" data-track-index="2" data-track-kind="captions" data-start="3.384" data-duration="1.0699999999999998"><span id="w3-0">array:</span> <span id="w3-1">one,</span> <span id="w3-2">three,</span></div>
+<div class="clip caption" id="cap4" data-track-index="2" data-track-kind="captions" data-start="4.492" data-duration="1.2140000000000004"><span id="w4-0">four.</span> <span id="w4-1">Amount</span> <span id="w4-2">six.</span></div>
+<div class="clip caption" id="cap5" data-track-index="2" data-track-kind="captions" data-start="5.796" data-duration="1.1609999999999996"><span id="w5-0">Unlimited</span> <span id="w5-1">coins</span> <span id="w5-2">hain;</span></div>
+<div class="clip caption" id="cap6" data-track-index="2" data-track-kind="captions" data-start="7.047" data-duration="1.0949999999999998"><span id="w6-0">minimum</span> <span id="w6-1">count</span> <span id="w6-2">chahiye.</span></div>
+<div class="clip caption" id="cap7" data-track-index="2" data-track-kind="captions" data-start="8.271" data-duration="0.8259999999999987"><span id="w7-0">Three</span> <span id="w7-1">plus</span> <span id="w7-2">three</span></div>
+<div class="clip caption" id="cap8" data-track-index="2" data-track-kind="captions" data-start="9.136" data-duration="0.8250000000000011"><span id="w8-0">se</span> <span id="w8-1">answer</span> <span id="w8-2">two</span></div>
+<div class="clip caption" id="cap9" data-track-index="2" data-track-kind="captions" data-start="10.039" data-duration="0.17300000000000004"><span id="w9-0">hai.</span></div>
+<div class="clip caption" id="cap10" data-track-index="2" data-track-kind="captions" data-start="10.792" data-duration="1.0190000000000001"><span id="w10-0">Brute</span> <span id="w10-1">force</span> <span id="w10-2">har</span></div>
+<div class="clip caption" id="cap11" data-track-index="2" data-track-kind="captions" data-start="11.914" data-duration="1.0190000000000001"><span id="w11-0">possible</span> <span id="w11-1">next</span> <span id="w11-2">coin</span></div>
+<div class="clip caption" id="cap12" data-track-index="2" data-track-kind="captions" data-start="12.998" data-duration="0.8130000000000006"><span id="w12-0">chunkar</span> <span id="w12-1">remaining</span></div>
+<div class="clip caption" id="cap13" data-track-index="2" data-track-kind="captions" data-start="13.862" data-duration="0.968"><span id="w13-0">amount</span> <span id="w13-1">recursively</span></div>
+<div class="clip caption" id="cap14" data-track-index="2" data-track-kind="captions" data-start="14.881" data-duration="1.158999999999999"><span id="w14-0">solve</span> <span id="w14-1">karta</span> <span id="w14-2">hai.</span></div>
+<div class="clip caption" id="cap15" data-track-index="2" data-track-kind="captions" data-start="16.34" data-duration="0.6829999999999998"><span id="w15-0">Six</span> <span id="w15-1">mein</span> <span id="w15-2">one</span></div>
+<div class="clip caption" id="cap16" data-track-index="2" data-track-kind="captions" data-start="17.05" data-duration="0.5150000000000006"><span id="w16-0">lo</span> <span id="w16-1">to</span> <span id="w16-2">five</span></div>
+<div class="clip caption" id="cap17" data-track-index="2" data-track-kind="captions" data-start="17.604" data-duration="1.019000000000002"><span id="w17-0">bachta</span> <span id="w17-1">hai,</span> <span id="w17-2">three</span></div>
+<div class="clip caption" id="cap18" data-track-index="2" data-track-kind="captions" data-start="18.648" data-duration="0.6969999999999992"><span id="w18-0">lo</span> <span id="w18-1">to</span> <span id="w18-2">three,</span></div>
+<div class="clip caption" id="cap19" data-track-index="2" data-track-kind="captions" data-start="19.474" data-duration="0.46399999999999864"><span id="w19-0">four</span> <span id="w19-1">lo</span> <span id="w19-2">to</span></div>
+<div class="clip caption" id="cap20" data-track-index="2" data-track-kind="captions" data-start="20.003" data-duration="1.1099999999999994"><span id="w20-0">two.</span> <span id="w20-1">sabhi</span> <span id="w20-2">valid</span></div>
+<div class="clip caption" id="cap21" data-track-index="2" data-track-kind="captions" data-start="21.164" data-duration="0.8509999999999991"><span id="w21-0">paths</span> <span id="w21-1">mein</span> <span id="w21-2">sabse</span></div>
+<div class="clip caption" id="cap22" data-track-index="2" data-track-kind="captions" data-start="22.067" data-duration="0.8000000000000007"><span id="w22-0">chhota</span> <span id="w22-1">coin</span> <span id="w22-2">count</span></div>
+<div class="clip caption" id="cap23" data-track-index="2" data-track-kind="captions" data-start="22.918" data-duration="0.7469999999999999"><span id="w23-0">rakhte</span> <span id="w23-1">hain.</span></div>
+<div class="clip caption" id="cap24" data-track-index="2" data-track-kind="captions" data-start="24.245" data-duration="1.4319999999999986"><span id="w24-0">Different</span> <span id="w24-1">paths</span> <span id="w24-2">wahi</span></div>
+<div class="clip caption" id="cap25" data-track-index="2" data-track-kind="captions" data-start="25.742" data-duration="0.8119999999999976"><span id="w25-0">remaining</span> <span id="w25-1">amounts</span></div>
+<div class="clip caption" id="cap26" data-track-index="2" data-track-kind="captions" data-start="26.657" data-duration="1.0710000000000015"><span id="w26-0">dobara</span> <span id="w26-1">solve</span> <span id="w26-2">karte</span></div>
+<div class="clip caption" id="cap27" data-track-index="2" data-track-kind="captions" data-start="27.767" data-duration="0.9160000000000004"><span id="w27-0">hain.</span> <span id="w27-1">ye</span> <span id="w27-2">repeated</span></div>
+<div class="clip caption" id="cap28" data-track-index="2" data-track-kind="captions" data-start="28.722" data-duration="1.0829999999999984"><span id="w28-0">branching</span> <span id="w28-1">badhti</span> <span id="w28-2">jati</span></div>
+<div class="clip caption" id="cap29" data-track-index="2" data-track-kind="captions" data-start="29.857" data-duration="1.3100000000000023"><span id="w29-0">hai.</span> <span id="w29-1">Greedy</span> <span id="w29-2">shortcut</span></div>
+<div class="clip caption" id="cap30" data-track-index="2" data-track-kind="captions" data-start="31.245" data-duration="0.5289999999999999"><span id="w30-0">bhi</span> <span id="w30-1">fail</span> <span id="w30-2">hota</span></div>
+<div class="clip caption" id="cap31" data-track-index="2" data-track-kind="captions" data-start="31.812" data-duration="0.5549999999999962"><span id="w31-0">hai:</span> <span id="w31-1">four,</span> <span id="w31-2">one,</span></div>
+<div class="clip caption" id="cap32" data-track-index="2" data-track-kind="captions" data-start="32.392" data-duration="0.47799999999999443"><span id="w32-0">one</span> <span id="w32-1">mein</span> <span id="w32-2">three</span></div>
+<div class="clip caption" id="cap33" data-track-index="2" data-track-kind="captions" data-start="32.921" data-duration="1.0330000000000013"><span id="w33-0">coins</span> <span id="w33-1">hain;</span> <span id="w33-2">three,</span></div>
+<div class="clip caption" id="cap34" data-track-index="2" data-track-kind="captions" data-start="33.979" data-duration="0.5949999999999989"><span id="w34-0">three</span> <span id="w34-1">mein</span> <span id="w34-2">sirf</span></div>
+<div class="clip caption" id="cap35" data-track-index="2" data-track-kind="captions" data-start="34.625" data-duration="0.5150000000000006"><span id="w35-0">two.</span></div>
+<div class="clip caption" id="cap36" data-track-index="2" data-track-kind="captions" data-start="35.72" data-duration="0.8119999999999976"><span id="w36-0">DP</span> <span id="w36-1">total</span> <span id="w36-2">ka</span></div>
+<div class="clip caption" id="cap37" data-track-index="2" data-track-kind="captions" data-start="36.585" data-duration="1.0319999999999965"><span id="w37-0">matlab</span> <span id="w37-1">us</span> <span id="w37-2">total</span></div>
+<div class="clip caption" id="cap38" data-track-index="2" data-track-kind="captions" data-start="37.668" data-duration="0.5930000000000035"><span id="w38-0">ke</span> <span id="w38-1">liye</span> <span id="w38-2">minimum</span></div>
+<div class="clip caption" id="cap39" data-track-index="2" data-track-kind="captions" data-start="38.339" data-duration="1.1219999999999999"><span id="w39-0">coins.</span> <span id="w39-1">Last</span> <span id="w39-2">coin</span></div>
+<div class="clip caption" id="cap40" data-track-index="2" data-track-kind="captions" data-start="39.512" data-duration="0.671999999999997"><span id="w40-0">c</span> <span id="w40-1">ho</span> <span id="w40-2">to</span></div>
+<div class="clip caption" id="cap41" data-track-index="2" data-track-kind="captions" data-start="40.248" data-duration="0.786999999999999"><span id="w41-0">usse</span> <span id="w41-1">pehle</span> <span id="w41-2">total</span></div>
+<div class="clip caption" id="cap42" data-track-index="2" data-track-kind="captions" data-start="41.086" data-duration="0.7610000000000028"><span id="w42-0">minus</span> <span id="w42-1">c</span> <span id="w42-2">banna</span></div>
+<div class="clip caption" id="cap43" data-track-index="2" data-track-kind="captions" data-start="41.925" data-duration="1.5020000000000024"><span id="w43-0">chahiye.</span> <span id="w43-1">uska</span> <span id="w43-2">minimum</span></div>
+<div class="clip caption" id="cap44" data-track-index="2" data-track-kind="captions" data-start="43.505" data-duration="0.7609999999999957"><span id="w44-0">answer</span> <span id="w44-1">pehle</span> <span id="w44-2">ready</span></div>
+<div class="clip caption" id="cap45" data-track-index="2" data-track-kind="captions" data-start="44.317" data-duration="0.9039999999999964"><span id="w45-0">hai.</span> <span id="w45-1">One</span> <span id="w45-2">coin</span></div>
+<div class="clip caption" id="cap46" data-track-index="2" data-track-kind="captions" data-start="45.272" data-duration="1.213000000000001"><span id="w46-0">jodkar</span> <span id="w46-1">har</span> <span id="w46-2">possible</span></div>
+<div class="clip caption" id="cap47" data-track-index="2" data-track-kind="captions" data-start="46.536" data-duration="0.580999999999996"><span id="w47-0">last</span> <span id="w47-1">coin</span> <span id="w47-2">ka</span></div>
+<div class="clip caption" id="cap48" data-track-index="2" data-track-kind="captions" data-start="47.169" data-duration="1.0450000000000017"><span id="w48-0">candidate</span> <span id="w48-1">lo,</span> <span id="w48-2">phir</span></div>
+<div class="clip caption" id="cap49" data-track-index="2" data-track-kind="captions" data-start="48.279" data-duration="1.5349999999999966"><span id="w49-0">minimum</span> <span id="w49-1">chuno.</span> <span id="w49-2">Zero</span></div>
+<div class="clip caption" id="cap50" data-track-index="2" data-track-kind="captions" data-start="49.879" data-duration="0.8629999999999995"><span id="w50-0">total</span> <span id="w50-1">ko</span> <span id="w50-2">zero</span></div>
+<div class="clip caption" id="cap51" data-track-index="2" data-track-kind="captions" data-start="50.807" data-duration="1.213000000000001"><span id="w51-0">coins;</span> <span id="w51-1">unreachable</span></div>
+<div class="clip caption" id="cap52" data-track-index="2" data-track-kind="captions" data-start="52.059" data-duration="0.8900000000000006"><span id="w52-0">totals</span> <span id="w52-1">ko</span> <span id="w52-2">amount</span></div>
+<div class="clip caption" id="cap53" data-track-index="2" data-track-kind="captions" data-start="53.013" data-duration="1.2270000000000039"><span id="w53-0">plus</span> <span id="w53-1">one</span> <span id="w53-2">sentinel.</span></div>
+<div class="clip caption" id="cap54" data-track-index="2" data-track-kind="captions" data-start="54.82" data-duration="1.4969999999999999"><span id="w54-0">Dry</span> <span id="w54-1">run:</span> <span id="w54-2">totals</span></div>
+<div class="clip caption" id="cap55" data-track-index="2" data-track-kind="captions" data-start="56.588" data-duration="0.8639999999999972"><span id="w55-0">zero</span> <span id="w55-1">se</span> <span id="w55-2">six</span></div>
+<div class="clip caption" id="cap56" data-track-index="2" data-track-kind="captions" data-start="57.516" data-duration="0.9930000000000021"><span id="w56-0">ke</span> <span id="w56-1">minimum</span> <span id="w56-2">counts:</span></div>
+<div class="clip caption" id="cap57" data-track-index="2" data-track-kind="captions" data-start="58.742" data-duration="1.2520000000000024"><span id="w57-0">zero,</span> <span id="w57-1">one,</span> <span id="w57-2">two,</span></div>
+<div class="clip caption" id="cap58" data-track-index="2" data-track-kind="captions" data-start="60.019" data-duration="0.9040000000000035"><span id="w58-0">one,</span> <span id="w58-1">one,</span> <span id="w58-2">two,</span></div>
+<div class="clip caption" id="cap59" data-track-index="2" data-track-kind="captions" data-start="60.96" data-duration="1.2310000000000016"><span id="w59-0">two.</span> <span id="w59-1">Total</span> <span id="w59-2">six</span></div>
+<div class="clip caption" id="cap60" data-track-index="2" data-track-kind="captions" data-start="62.268" data-duration="0.644999999999996"><span id="w60-0">par</span> <span id="w60-1">last</span> <span id="w60-2">coin</span></div>
+<div class="clip caption" id="cap61" data-track-index="2" data-track-kind="captions" data-start="63.003" data-duration="0.5679999999999978"><span id="w61-0">one</span> <span id="w61-1">deta</span> <span id="w61-2">hai</span></div>
+<div class="clip caption" id="cap62" data-track-index="2" data-track-kind="captions" data-start="63.635" data-duration="1.0320000000000036"><span id="w62-0">three</span> <span id="w62-1">coins;</span> <span id="w62-2">three</span></div>
+<div class="clip caption" id="cap63" data-track-index="2" data-track-kind="captions" data-start="64.706" data-duration="0.7479999999999905"><span id="w63-0">deta</span> <span id="w63-1">hai</span> <span id="w63-2">two;</span></div>
+<div class="clip caption" id="cap64" data-track-index="2" data-track-kind="captions" data-start="65.647" data-duration="0.6969999999999885"><span id="w64-0">four</span> <span id="w64-1">deta</span> <span id="w64-2">hai</span></div>
+<div class="clip caption" id="cap65" data-track-index="2" data-track-kind="captions" data-start="66.396" data-duration="1.3940000000000055"><span id="w65-0">three.</span> <span id="w65-1">Minimum</span> <span id="w65-2">two,</span></div>
+<div class="clip caption" id="cap66" data-track-index="2" data-track-kind="captions" data-start="67.918" data-duration="0.7620000000000005"><span id="w66-0">yaani</span> <span id="w66-1">three</span> <span id="w66-2">plus</span></div>
+<div class="clip caption" id="cap67" data-track-index="2" data-track-kind="captions" data-start="68.757" data-duration="0.37599999999999056"><span id="w67-0">three.</span></div>
+<div class="clip caption" id="cap68" data-track-index="2" data-track-kind="captions" data-start="69.713" data-duration="1.3930000000000007"><span id="w68-0">Accepted</span> <span id="w68-1">code</span> <span id="w68-2">chhote</span></div>
+<div class="clip caption" id="cap69" data-track-index="2" data-track-kind="captions" data-start="71.171" data-duration="0.914999999999992"><span id="w69-0">totals</span> <span id="w69-1">pehle</span> <span id="w69-2">solve</span></div>
+<div class="clip caption" id="cap70" data-track-index="2" data-track-kind="captions" data-start="72.112" data-duration="0.8250000000000028"><span id="w70-0">karta</span> <span id="w70-1">hai.</span> <span id="w70-2">Coin</span></div>
+<div class="clip caption" id="cap71" data-track-index="2" data-track-kind="captions" data-start="73.015" data-duration="0.7360000000000042"><span id="w71-0">current</span> <span id="w71-1">total</span> <span id="w71-2">se</span></div>
+<div class="clip caption" id="cap72" data-track-index="2" data-track-kind="captions" data-start="73.802" data-duration="0.5289999999999964"><span id="w72-0">bada</span> <span id="w72-1">ho</span> <span id="w72-2">to</span></div>
+<div class="clip caption" id="cap73" data-track-index="2" data-track-kind="captions" data-start="74.383" data-duration="1.625"><span id="w73-0">skip.</span> <span id="w73-1">Otherwise</span> <span id="w73-2">dp</span></div>
+<div class="clip caption" id="cap74" data-track-index="2" data-track-kind="captions" data-start="76.085" data-duration="0.8130000000000024"><span id="w74-0">total</span> <span id="w74-1">ko</span> <span id="w74-2">purane</span></div>
+<div class="clip caption" id="cap75" data-track-index="2" data-track-kind="captions" data-start="76.949" data-duration="0.8530000000000086"><span id="w75-0">answer</span> <span id="w75-1">aur</span> <span id="w75-2">dp</span></div>
+<div class="clip caption" id="cap76" data-track-index="2" data-track-kind="captions" data-start="77.878" data-duration="1.007000000000005"><span id="w76-0">total</span> <span id="w76-1">minus</span> <span id="w76-2">coin</span></div>
+<div class="clip caption" id="cap77" data-track-index="2" data-track-kind="captions" data-start="78.949" data-duration="0.6189999999999998"><span id="w77-0">plus</span> <span id="w77-1">one</span> <span id="w77-2">ke</span></div>
+<div class="clip caption" id="cap78" data-track-index="2" data-track-kind="captions" data-start="79.633" data-duration="0.8770000000000095"><span id="w78-0">minimum</span> <span id="w78-1">se</span> <span id="w78-2">update</span></div>
+<div class="clip caption" id="cap79" data-track-index="2" data-track-kind="captions" data-start="80.562" data-duration="1.4339999999999975"><span id="w79-0">karo.</span> <span id="w79-1">Impossible</span></div>
+<div class="clip caption" id="cap80" data-track-index="2" data-track-kind="captions" data-start="82.035" data-duration="1.043999999999997"><span id="w80-0">predecessor</span> <span id="w80-1">sentinel</span></div>
+<div class="clip caption" id="cap81" data-track-index="2" data-track-kind="captions" data-start="83.144" data-duration="0.695999999999998"><span id="w81-0">rahta</span> <span id="w81-1">hai,</span> <span id="w81-2">valid</span></div>
+<div class="clip caption" id="cap82" data-track-index="2" data-track-kind="captions" data-start="83.891" data-duration="0.6969999999999885"><span id="w82-0">answer</span> <span id="w82-1">ko</span> <span id="w82-2">kharab</span></div>
+<div class="clip caption" id="cap83" data-track-index="2" data-track-kind="captions" data-start="84.64" data-duration="0.6430000000000007"><span id="w83-0">nahi</span> <span id="w83-1">karta.</span></div>
+<div class="clip caption" id="cap84" data-track-index="2" data-track-kind="captions" data-start="85.863" data-duration="1.0570000000000022"><span id="w84-0">Final</span> <span id="w84-1">answer</span> <span id="w84-2">amount</span></div>
+<div class="clip caption" id="cap85" data-track-index="2" data-track-kind="captions" data-start="86.959" data-duration="0.47700000000000387"><span id="w85-0">se</span> <span id="w85-1">bada</span> <span id="w85-2">ho</span></div>
+<div class="clip caption" id="cap86" data-track-index="2" data-track-kind="captions" data-start="87.5" data-duration="0.6200000000000045"><span id="w86-0">to</span> <span id="w86-1">minus</span> <span id="w86-2">one</span></div>
+<div class="clip caption" id="cap87" data-track-index="2" data-track-kind="captions" data-start="88.146" data-duration="1.0319999999999965"><span id="w87-0">lautao.</span> <span id="w87-1">Amount</span> <span id="w87-2">zero</span></div>
+<div class="clip caption" id="cap88" data-track-index="2" data-track-kind="captions" data-start="89.229" data-duration="1.3160000000000025"><span id="w88-0">par</span> <span id="w88-1">zero</span> <span id="w88-2">lautega.</span></div>
+<div class="clip caption" id="cap89" data-track-index="2" data-track-kind="captions" data-start="90.845" data-duration="0.7870000000000061"><span id="w89-0">A</span> <span id="w89-1">amount</span> <span id="w89-2">aur</span></div>
+<div class="clip caption" id="cap90" data-track-index="2" data-track-kind="captions" data-start="91.735" data-duration="1.1610000000000014"><span id="w90-0">M</span> <span id="w90-1">denominations</span> <span id="w90-2">hon:</span></div>
+<div class="clip caption" id="cap91" data-track-index="2" data-track-kind="captions" data-start="93.064" data-duration="0.4510000000000076"><span id="w91-0">O</span> <span id="w91-1">of</span> <span id="w91-2">A</span></div>
+<div class="clip caption" id="cap92" data-track-index="2" data-track-kind="captions" data-start="93.593" data-duration="0.9799999999999898"><span id="w92-0">times</span> <span id="w92-1">M</span> <span id="w92-2">time,</span></div>
+<div class="clip caption" id="cap93" data-track-index="2" data-track-kind="captions" data-start="94.766" data-duration="0.5289999999999964"><span id="w93-0">O</span> <span id="w93-1">of</span> <span id="w93-2">A</span></div>
+<div class="clip caption" id="cap94" data-track-index="2" data-track-kind="captions" data-start="95.425" data-duration="1.4309999999999974"><span id="w94-0">extra</span> <span id="w94-1">space.</span> <span id="w94-2">saare</span></div>
+<div class="clip caption" id="cap95" data-track-index="2" data-track-kind="captions" data-start="96.934" data-duration="0.7740000000000009"><span id="w95-0">last</span> <span id="w95-1">coins</span> <span id="w95-2">check</span></div>
+<div class="clip caption" id="cap96" data-track-index="2" data-track-kind="captions" data-start="97.759" data-duration="1.0579999999999927"><span id="w96-0">karna</span> <span id="w96-1">greedy</span> <span id="w96-2">failure</span></div>
+<div class="clip caption" id="cap97" data-track-index="2" data-track-kind="captions" data-start="98.843" data-duration="0.7680000000000007"><span id="w97-0">rokta</span> <span id="w97-1">hai.</span></div>
+</div><div id="source">Problem: LeetCode #322</div><div id="progress-track"><div id="progress"></div></div><audio class="clip" id="voice" data-track-index="3" data-track-kind="audio" src="audio/hi/voice.wav" data-start="0" data-duration="101.0"></audio><audio class="clip" id="bed" data-track-index="4" data-track-kind="audio" src="audio/hi/bed.wav" data-start="0" data-duration="101.0"></audio><audio class="clip" id="sfx" data-track-index="5" data-track-kind="audio" src="audio/hi/sfx.wav" data-start="0" data-duration="101.0"></audio></main><script>const R=window.REEL.hi,S=R.starts,P=R.ph;
+const tl=gsap.timeline({paused:true}),order=Object.keys(P);
+order.forEach((s,i)=>{tl.set('#v'+s,{opacity:1},S[s]);if(i<order.length-1)tl.set('#v'+s,{opacity:0},S[order[i+1]]);});
+tl.fromTo('#progress',{scaleX:0},{scaleX:1,duration:R.total,ease:'none'},0);
+function step(id,t,end){tl.set(id,{opacity:1},t);tl.set(id,{opacity:0},end);}
+function cell(prefix,i,t,color='#A78BFA'){tl.to('#'+prefix+'-c'+i,{attr:{stroke:color,fill:color==='#6FD3A6'?'#173B35':'#30264C'},duration:.2},t);}
+function reset(prefix,t){tl.set('[id^="'+prefix+'-c"]',{attr:{stroke:'#34425D',fill:'#172239'}},t);}
+function reveal(id,t){tl.fromTo(id,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out'},t);}
+
+function cue(scene,phrase,word=null,occurrence=0){
+ const p=P[scene][phrase];if(!p)throw Error('missing phrase '+scene+phrase);
+ if(word===null)return p.s;
+ const hits=R.caps.filter(c=>c.scene===scene&&c.s>=p.s&&c.s<p.e&&c.t.toLowerCase().replace(/[^a-z0-9]/g,'')===word.toLowerCase());
+ if(!hits[occurrence])throw Error('missing word '+scene+phrase+' '+word+' #'+occurrence);
+ return hits[occurrence].s;
+}
+// diagram: A
+step("#A-step0",S.A,S.B);
+// diagram: B
+step("#B-step0",S.B,S.C);
+// diagram: C
+step("#C-step0",S.C,S.D);
+// diagram: D
+step("#D-step0",S.D,S.E);
+// diagram: E
+step("#E-step0",S.E,cue("E",1,"one",0));
+step("#E-step1",cue("E",1,"one",0),cue("E",1,"three",1));
+step("#E-step2",cue("E",1,"three",1),cue("E",1,"four",0));
+step("#E-step3",cue("E",1,"four",0),cue("E",1,"minimum",0));
+step("#E-step4",cue("E",1,"minimum",0),S.F);
+// diagram: F
+// diagram: G
+function codeFocus(prefix,lines,t){tl.set("[id^="+prefix+"-L] .code-highlight",{opacity:0},t);lines.forEach(n=>tl.set("#"+prefix+"-L"+n+" .code-highlight",{opacity:.2},t));}
+step("#F-code-init",S.F,P.F[1].s);step("#F-code-core",P.F[1].s,S.G);
+codeFocus("codeF0",[8,9,10],S.F);codeFocus("codeF1",[10,11],P.F[1].s);codeFocus("codeF1",[11],P.F[2].s);
+codeFocus("codeG",[12],S.G);codeFocus("codeG",[],P.G[1].s);
+
+window.__timelines=window.__timelines||{};window.__timelines.main=tl;
+tl.set('#cap0',{opacity:1},0.08);tl.set('#cap0',{opacity:0},0.858);
+tl.set('#w0-0',{color:'#A78BFA'},0.08);
+tl.set('#w0-1',{color:'#A78BFA'},0.493);
+tl.set('#w0-2',{color:'#A78BFA'},0.738);
+tl.set('#cap1',{opacity:1},0.88);tl.set('#cap1',{opacity:0},1.954);
+tl.set('#w1-0',{color:'#A78BFA'},0.88);
+tl.set('#w1-1',{color:'#A78BFA'},1.292);
+tl.set('#w1-2',{color:'#A78BFA'},1.551);
+tl.set('#cap2',{opacity:1},1.989);tl.set('#cap2',{opacity:0},3.3219999999999996);
+tl.set('#w2-0',{color:'#A78BFA'},1.989);
+tl.set('#w2-1',{color:'#A78BFA'},2.221);
+tl.set('#w2-2',{color:'#A78BFA'},2.945);
+tl.set('#cap3',{opacity:1},3.384);tl.set('#cap3',{opacity:0},4.484);
+tl.set('#w3-0',{color:'#A78BFA'},3.384);
+tl.set('#w3-1',{color:'#A78BFA'},3.899);
+tl.set('#w3-2',{color:'#A78BFA'},4.184);
+tl.set('#cap4',{opacity:1},4.492);tl.set('#cap4',{opacity:0},5.736000000000001);
+tl.set('#w4-0',{color:'#A78BFA'},4.492);
+tl.set('#w4-1',{color:'#A78BFA'},4.879);
+tl.set('#w4-2',{color:'#A78BFA'},5.241);
+tl.set('#cap5',{opacity:1},5.796);tl.set('#cap5',{opacity:0},6.987);
+tl.set('#w5-0',{color:'#A78BFA'},5.796);
+tl.set('#w5-1',{color:'#A78BFA'},6.389);
+tl.set('#w5-2',{color:'#A78BFA'},6.737);
+tl.set('#cap6',{opacity:1},7.047);tl.set('#cap6',{opacity:0},8.171999999999999);
+tl.set('#w6-0',{color:'#A78BFA'},7.047);
+tl.set('#w6-1',{color:'#A78BFA'},7.486);
+tl.set('#w6-2',{color:'#A78BFA'},7.742);
+tl.set('#cap7',{opacity:1},8.271);tl.set('#cap7',{opacity:0},9.126999999999999);
+tl.set('#w7-0',{color:'#A78BFA'},8.271);
+tl.set('#w7-1',{color:'#A78BFA'},8.568);
+tl.set('#w7-2',{color:'#A78BFA'},8.866);
+tl.set('#cap8',{opacity:1},9.136);tl.set('#cap8',{opacity:0},9.991);
+tl.set('#w8-0',{color:'#A78BFA'},9.136);
+tl.set('#w8-1',{color:'#A78BFA'},9.329);
+tl.set('#w8-2',{color:'#A78BFA'},9.794);
+tl.set('#cap9',{opacity:1},10.039);tl.set('#cap9',{opacity:0},10.241999999999999);
+tl.set('#w9-0',{color:'#A78BFA'},10.039);
+tl.set('#cap10',{opacity:1},10.792);tl.set('#cap10',{opacity:0},11.841);
+tl.set('#w10-0',{color:'#A78BFA'},10.792);
+tl.set('#w10-1',{color:'#A78BFA'},11.14);
+tl.set('#w10-2',{color:'#A78BFA'},11.553);
+tl.set('#cap11',{opacity:1},11.914);tl.set('#cap11',{opacity:0},12.963);
+tl.set('#w11-0',{color:'#A78BFA'},11.914);
+tl.set('#w11-1',{color:'#A78BFA'},12.404);
+tl.set('#w11-2',{color:'#A78BFA'},12.727);
+tl.set('#cap12',{opacity:1},12.998);tl.set('#cap12',{opacity:0},13.841);
+tl.set('#w12-0',{color:'#A78BFA'},12.998);
+tl.set('#w12-1',{color:'#A78BFA'},13.437);
+tl.set('#cap13',{opacity:1},13.862);tl.set('#cap13',{opacity:0},14.86);
+tl.set('#w13-0',{color:'#A78BFA'},13.862);
+tl.set('#w13-1',{color:'#A78BFA'},14.211);
+tl.set('#cap14',{opacity:1},14.881);tl.set('#cap14',{opacity:0},16.07);
+tl.set('#w14-0',{color:'#A78BFA'},14.881);
+tl.set('#w14-1',{color:'#A78BFA'},15.204);
+tl.set('#w14-2',{color:'#A78BFA'},15.566);
+tl.set('#cap15',{opacity:1},16.34);tl.set('#cap15',{opacity:0},17.053);
+tl.set('#w15-0',{color:'#A78BFA'},16.34);
+tl.set('#w15-1',{color:'#A78BFA'},16.687);
+tl.set('#w15-2',{color:'#A78BFA'},16.868);
+tl.set('#cap16',{opacity:1},17.05);tl.set('#cap16',{opacity:0},17.595000000000002);
+tl.set('#w16-0',{color:'#A78BFA'},17.05);
+tl.set('#w16-1',{color:'#A78BFA'},17.216);
+tl.set('#w16-2',{color:'#A78BFA'},17.346);
+tl.set('#cap17',{opacity:1},17.604);tl.set('#cap17',{opacity:0},18.653000000000002);
+tl.set('#w17-0',{color:'#A78BFA'},17.604);
+tl.set('#w17-1',{color:'#A78BFA'},17.977);
+tl.set('#w17-2',{color:'#A78BFA'},18.391);
+tl.set('#cap18',{opacity:1},18.648);tl.set('#cap18',{opacity:0},19.375);
+tl.set('#w18-0',{color:'#A78BFA'},18.648);
+tl.set('#w18-1',{color:'#A78BFA'},18.816);
+tl.set('#w18-2',{color:'#A78BFA'},18.958);
+tl.set('#cap19',{opacity:1},19.474);tl.set('#cap19',{opacity:0},19.968);
+tl.set('#w19-0',{color:'#A78BFA'},19.474);
+tl.set('#w19-1',{color:'#A78BFA'},19.732);
+tl.set('#w19-2',{color:'#A78BFA'},19.862);
+tl.set('#cap20',{opacity:1},20.003);tl.set('#cap20',{opacity:0},21.143);
+tl.set('#w20-0',{color:'#A78BFA'},20.003);
+tl.set('#w20-1',{color:'#A78BFA'},20.455);
+tl.set('#w20-2',{color:'#A78BFA'},20.828);
+tl.set('#cap21',{opacity:1},21.164);tl.set('#cap21',{opacity:0},22.045);
+tl.set('#w21-0',{color:'#A78BFA'},21.164);
+tl.set('#w21-1',{color:'#A78BFA'},21.551);
+tl.set('#w21-2',{color:'#A78BFA'},21.771);
+tl.set('#cap22',{opacity:1},22.067);tl.set('#cap22',{opacity:0},22.897000000000002);
+tl.set('#w22-0',{color:'#A78BFA'},22.067);
+tl.set('#w22-1',{color:'#A78BFA'},22.364);
+tl.set('#w22-2',{color:'#A78BFA'},22.647);
+tl.set('#cap23',{opacity:1},22.918);tl.set('#cap23',{opacity:0},23.695);
+tl.set('#w23-0',{color:'#A78BFA'},22.918);
+tl.set('#w23-1',{color:'#A78BFA'},23.203);
+tl.set('#cap24',{opacity:1},24.245);tl.set('#cap24',{opacity:0},25.707);
+tl.set('#w24-0',{color:'#A78BFA'},24.245);
+tl.set('#w24-1',{color:'#A78BFA'},24.761);
+tl.set('#w24-2',{color:'#A78BFA'},25.393);
+tl.set('#cap25',{opacity:1},25.742);tl.set('#cap25',{opacity:0},26.584);
+tl.set('#w25-0',{color:'#A78BFA'},25.742);
+tl.set('#w25-1',{color:'#A78BFA'},26.218);
+tl.set('#cap26',{opacity:1},26.657);tl.set('#cap26',{opacity:0},27.758000000000003);
+tl.set('#w26-0',{color:'#A78BFA'},26.657);
+tl.set('#w26-1',{color:'#A78BFA'},27.122);
+tl.set('#w26-2',{color:'#A78BFA'},27.432);
+tl.set('#cap27',{opacity:1},27.767);tl.set('#cap27',{opacity:0},28.713);
+tl.set('#w27-0',{color:'#A78BFA'},27.767);
+tl.set('#w27-1',{color:'#A78BFA'},28.076);
+tl.set('#w27-2',{color:'#A78BFA'},28.257);
+tl.set('#cap28',{opacity:1},28.722);tl.set('#cap28',{opacity:0},29.835);
+tl.set('#w28-0',{color:'#A78BFA'},28.722);
+tl.set('#w28-1',{color:'#A78BFA'},29.186);
+tl.set('#w28-2',{color:'#A78BFA'},29.522);
+tl.set('#cap29',{opacity:1},29.857);tl.set('#cap29',{opacity:0},31.197000000000003);
+tl.set('#w29-0',{color:'#A78BFA'},29.857);
+tl.set('#w29-1',{color:'#A78BFA'},30.355);
+tl.set('#w29-2',{color:'#A78BFA'},30.768);
+tl.set('#cap30',{opacity:1},31.245);tl.set('#cap30',{opacity:0},31.804000000000002);
+tl.set('#w30-0',{color:'#A78BFA'},31.245);
+tl.set('#w30-1',{color:'#A78BFA'},31.361);
+tl.set('#w30-2',{color:'#A78BFA'},31.567);
+tl.set('#cap31',{opacity:1},31.812);tl.set('#cap31',{opacity:0},32.397);
+tl.set('#w31-0',{color:'#A78BFA'},31.812);
+tl.set('#w31-1',{color:'#A78BFA'},31.955);
+tl.set('#w31-2',{color:'#A78BFA'},32.199);
+tl.set('#cap32',{opacity:1},32.392);tl.set('#cap32',{opacity:0},32.9);
+tl.set('#w32-0',{color:'#A78BFA'},32.392);
+tl.set('#w32-1',{color:'#A78BFA'},32.548);
+tl.set('#w32-2',{color:'#A78BFA'},32.677);
+tl.set('#cap33',{opacity:1},32.921);tl.set('#cap33',{opacity:0},33.984);
+tl.set('#w33-0',{color:'#A78BFA'},32.921);
+tl.set('#w33-1',{color:'#A78BFA'},33.321);
+tl.set('#w33-2',{color:'#A78BFA'},33.696);
+tl.set('#cap34',{opacity:1},33.979);tl.set('#cap34',{opacity:0},34.604);
+tl.set('#w34-0',{color:'#A78BFA'},33.979);
+tl.set('#w34-1',{color:'#A78BFA'},34.212);
+tl.set('#w34-2',{color:'#A78BFA'},34.355);
+tl.set('#cap35',{opacity:1},34.625);tl.set('#cap35',{opacity:0},35.17);
+tl.set('#w35-0',{color:'#A78BFA'},34.625);
+tl.set('#cap36',{opacity:1},35.72);tl.set('#cap36',{opacity:0},36.562);
+tl.set('#w36-0',{color:'#A78BFA'},35.72);
+tl.set('#w36-1',{color:'#A78BFA'},36.107);
+tl.set('#w36-2',{color:'#A78BFA'},36.456);
+tl.set('#cap37',{opacity:1},36.585);tl.set('#cap37',{opacity:0},37.647);
+tl.set('#w37-0',{color:'#A78BFA'},36.585);
+tl.set('#w37-1',{color:'#A78BFA'},37.114);
+tl.set('#w37-2',{color:'#A78BFA'},37.358);
+tl.set('#cap38',{opacity:1},37.668);tl.set('#cap38',{opacity:0},38.291000000000004);
+tl.set('#w38-0',{color:'#A78BFA'},37.668);
+tl.set('#w38-1',{color:'#A78BFA'},37.785);
+tl.set('#w38-2',{color:'#A78BFA'},37.914);
+tl.set('#cap39',{opacity:1},38.339);tl.set('#cap39',{opacity:0},39.491);
+tl.set('#w39-0',{color:'#A78BFA'},38.339);
+tl.set('#w39-1',{color:'#A78BFA'},38.894);
+tl.set('#w39-2',{color:'#A78BFA'},39.242);
+tl.set('#cap40',{opacity:1},39.512);tl.set('#cap40',{opacity:0},40.214);
+tl.set('#w40-0',{color:'#A78BFA'},39.512);
+tl.set('#w40-1',{color:'#A78BFA'},39.719);
+tl.set('#w40-2',{color:'#A78BFA'},40.055);
+tl.set('#cap41',{opacity:1},40.248);tl.set('#cap41',{opacity:0},41.065);
+tl.set('#w41-0',{color:'#A78BFA'},40.248);
+tl.set('#w41-1',{color:'#A78BFA'},40.494);
+tl.set('#w41-2',{color:'#A78BFA'},40.751);
+tl.set('#cap42',{opacity:1},41.086);tl.set('#cap42',{opacity:0},41.877);
+tl.set('#w42-0',{color:'#A78BFA'},41.086);
+tl.set('#w42-1',{color:'#A78BFA'},41.435);
+tl.set('#w42-2',{color:'#A78BFA'},41.602);
+tl.set('#cap43',{opacity:1},41.925);tl.set('#cap43',{opacity:0},43.457);
+tl.set('#w43-0',{color:'#A78BFA'},41.925);
+tl.set('#w43-1',{color:'#A78BFA'},42.77);
+tl.set('#w43-2',{color:'#A78BFA'},43.105);
+tl.set('#cap44',{opacity:1},43.505);tl.set('#cap44',{opacity:0},44.296);
+tl.set('#w44-0',{color:'#A78BFA'},43.505);
+tl.set('#w44-1',{color:'#A78BFA'},43.789);
+tl.set('#w44-2',{color:'#A78BFA'},44.034);
+tl.set('#cap45',{opacity:1},44.317);tl.set('#cap45',{opacity:0},45.251);
+tl.set('#w45-0',{color:'#A78BFA'},44.317);
+tl.set('#w45-1',{color:'#A78BFA'},44.756);
+tl.set('#w45-2',{color:'#A78BFA'},45.002);
+tl.set('#cap46',{opacity:1},45.272);tl.set('#cap46',{opacity:0},46.515);
+tl.set('#w46-0',{color:'#A78BFA'},45.272);
+tl.set('#w46-1',{color:'#A78BFA'},45.853);
+tl.set('#w46-2',{color:'#A78BFA'},46.085);
+tl.set('#cap47',{opacity:1},46.536);tl.set('#cap47',{opacity:0},47.147);
+tl.set('#w47-0',{color:'#A78BFA'},46.536);
+tl.set('#w47-1',{color:'#A78BFA'},46.807);
+tl.set('#w47-2',{color:'#A78BFA'},47.053);
+tl.set('#cap48',{opacity:1},47.169);tl.set('#cap48',{opacity:0},48.244);
+tl.set('#w48-0',{color:'#A78BFA'},47.169);
+tl.set('#w48-1',{color:'#A78BFA'},47.607);
+tl.set('#w48-2',{color:'#A78BFA'},48.046);
+tl.set('#cap49',{opacity:1},48.279);tl.set('#cap49',{opacity:0},49.844);
+tl.set('#w49-0',{color:'#A78BFA'},48.279);
+tl.set('#w49-1',{color:'#A78BFA'},48.665);
+tl.set('#w49-2',{color:'#A78BFA'},49.401);
+tl.set('#cap50',{opacity:1},49.879);tl.set('#cap50',{opacity:0},50.772);
+tl.set('#w50-0',{color:'#A78BFA'},49.879);
+tl.set('#w50-1',{color:'#A78BFA'},50.24);
+tl.set('#w50-2',{color:'#A78BFA'},50.459);
+tl.set('#cap51',{opacity:1},50.807);tl.set('#cap51',{opacity:0},52.050000000000004);
+tl.set('#w51-0',{color:'#A78BFA'},50.807);
+tl.set('#w51-1',{color:'#A78BFA'},51.362);
+tl.set('#cap52',{opacity:1},52.059);tl.set('#cap52',{opacity:0},52.979);
+tl.set('#w52-0',{color:'#A78BFA'},52.059);
+tl.set('#w52-1',{color:'#A78BFA'},52.459);
+tl.set('#w52-2',{color:'#A78BFA'},52.625);
+tl.set('#cap53',{opacity:1},53.013);tl.set('#cap53',{opacity:0},54.27);
+tl.set('#w53-0',{color:'#A78BFA'},53.013);
+tl.set('#w53-1',{color:'#A78BFA'},53.361);
+tl.set('#w53-2',{color:'#A78BFA'},53.554);
+tl.set('#cap54',{opacity:1},54.82);tl.set('#cap54',{opacity:0},56.347);
+tl.set('#w54-0',{color:'#A78BFA'},54.82);
+tl.set('#w54-1',{color:'#A78BFA'},55.324);
+tl.set('#w54-2',{color:'#A78BFA'},55.749);
+tl.set('#cap55',{opacity:1},56.588);tl.set('#cap55',{opacity:0},57.482);
+tl.set('#w55-0',{color:'#A78BFA'},56.588);
+tl.set('#w55-1',{color:'#A78BFA'},57.065);
+tl.set('#w55-2',{color:'#A78BFA'},57.246);
+tl.set('#cap56',{opacity:1},57.516);tl.set('#cap56',{opacity:0},58.539);
+tl.set('#w56-0',{color:'#A78BFA'},57.516);
+tl.set('#w56-1',{color:'#A78BFA'},57.658);
+tl.set('#w56-2',{color:'#A78BFA'},58.084);
+tl.set('#cap57',{opacity:1},58.742);tl.set('#cap57',{opacity:0},60.024);
+tl.set('#w57-0',{color:'#A78BFA'},58.742);
+tl.set('#w57-1',{color:'#A78BFA'},59.362);
+tl.set('#w57-2',{color:'#A78BFA'},59.684);
+tl.set('#cap58',{opacity:1},60.019);tl.set('#cap58',{opacity:0},60.953);
+tl.set('#w58-0',{color:'#A78BFA'},60.019);
+tl.set('#w58-1',{color:'#A78BFA'},60.367);
+tl.set('#w58-2',{color:'#A78BFA'},60.652);
+tl.set('#cap59',{opacity:1},60.96);tl.set('#cap59',{opacity:0},62.221000000000004);
+tl.set('#w59-0',{color:'#A78BFA'},60.96);
+tl.set('#w59-1',{color:'#A78BFA'},61.558);
+tl.set('#w59-2',{color:'#A78BFA'},62.023);
+tl.set('#cap60',{opacity:1},62.268);tl.set('#cap60',{opacity:0},62.943);
+tl.set('#w60-0',{color:'#A78BFA'},62.268);
+tl.set('#w60-1',{color:'#A78BFA'},62.435);
+tl.set('#w60-2',{color:'#A78BFA'},62.706);
+tl.set('#cap61',{opacity:1},63.003);tl.set('#cap61',{opacity:0},63.601);
+tl.set('#w61-0',{color:'#A78BFA'},63.003);
+tl.set('#w61-1',{color:'#A78BFA'},63.184);
+tl.set('#w61-2',{color:'#A78BFA'},63.455);
+tl.set('#cap62',{opacity:1},63.635);tl.set('#cap62',{opacity:0},64.697);
+tl.set('#w62-0',{color:'#A78BFA'},63.635);
+tl.set('#w62-1',{color:'#A78BFA'},63.92);
+tl.set('#w62-2',{color:'#A78BFA'},64.461);
+tl.set('#cap63',{opacity:1},64.706);tl.set('#cap63',{opacity:0},65.484);
+tl.set('#w63-0',{color:'#A78BFA'},64.706);
+tl.set('#w63-1',{color:'#A78BFA'},64.99);
+tl.set('#w63-2',{color:'#A78BFA'},65.145);
+tl.set('#cap64',{opacity:1},65.647);tl.set('#cap64',{opacity:0},66.374);
+tl.set('#w64-0',{color:'#A78BFA'},65.647);
+tl.set('#w64-1',{color:'#A78BFA'},65.971);
+tl.set('#w64-2',{color:'#A78BFA'},66.254);
+tl.set('#cap65',{opacity:1},66.396);tl.set('#cap65',{opacity:0},67.82000000000001);
+tl.set('#w65-0',{color:'#A78BFA'},66.396);
+tl.set('#w65-1',{color:'#A78BFA'},66.912);
+tl.set('#w65-2',{color:'#A78BFA'},67.454);
+tl.set('#cap66',{opacity:1},67.918);tl.set('#cap66',{opacity:0},68.71000000000001);
+tl.set('#w66-0',{color:'#A78BFA'},67.918);
+tl.set('#w66-1',{color:'#A78BFA'},68.215);
+tl.set('#w66-2',{color:'#A78BFA'},68.434);
+tl.set('#cap67',{opacity:1},68.757);tl.set('#cap67',{opacity:0},69.163);
+tl.set('#w67-0',{color:'#A78BFA'},68.757);
+tl.set('#cap68',{opacity:1},69.713);tl.set('#cap68',{opacity:0},71.136);
+tl.set('#w68-0',{color:'#A78BFA'},69.713);
+tl.set('#w68-1',{color:'#A78BFA'},70.306);
+tl.set('#w68-2',{color:'#A78BFA'},70.706);
+tl.set('#cap69',{opacity:1},71.171);tl.set('#cap69',{opacity:0},72.116);
+tl.set('#w69-0',{color:'#A78BFA'},71.171);
+tl.set('#w69-1',{color:'#A78BFA'},71.557);
+tl.set('#w69-2',{color:'#A78BFA'},71.828);
+tl.set('#cap70',{opacity:1},72.112);tl.set('#cap70',{opacity:0},72.967);
+tl.set('#w70-0',{color:'#A78BFA'},72.112);
+tl.set('#w70-1',{color:'#A78BFA'},72.422);
+tl.set('#w70-2',{color:'#A78BFA'},72.603);
+tl.set('#cap71',{opacity:1},73.015);tl.set('#cap71',{opacity:0},73.781);
+tl.set('#w71-0',{color:'#A78BFA'},73.015);
+tl.set('#w71-1',{color:'#A78BFA'},73.312);
+tl.set('#w71-2',{color:'#A78BFA'},73.673);
+tl.set('#cap72',{opacity:1},73.802);tl.set('#cap72',{opacity:0},74.361);
+tl.set('#w72-0',{color:'#A78BFA'},73.802);
+tl.set('#w72-1',{color:'#A78BFA'},74.061);
+tl.set('#w72-2',{color:'#A78BFA'},74.241);
+tl.set('#cap73',{opacity:1},74.383);tl.set('#cap73',{opacity:0},76.038);
+tl.set('#w73-0',{color:'#A78BFA'},74.383);
+tl.set('#w73-1',{color:'#A78BFA'},75.208);
+tl.set('#w73-2',{color:'#A78BFA'},75.802);
+tl.set('#cap74',{opacity:1},76.085);tl.set('#cap74',{opacity:0},76.928);
+tl.set('#w74-0',{color:'#A78BFA'},76.085);
+tl.set('#w74-1',{color:'#A78BFA'},76.42);
+tl.set('#w74-2',{color:'#A78BFA'},76.576);
+tl.set('#cap75',{opacity:1},76.949);tl.set('#cap75',{opacity:0},77.83200000000001);
+tl.set('#w75-0',{color:'#A78BFA'},76.949);
+tl.set('#w75-1',{color:'#A78BFA'},77.349);
+tl.set('#w75-2',{color:'#A78BFA'},77.595);
+tl.set('#cap76',{opacity:1},77.878);tl.set('#cap76',{opacity:0},78.915);
+tl.set('#w76-0',{color:'#A78BFA'},77.878);
+tl.set('#w76-1',{color:'#A78BFA'},78.266);
+tl.set('#w76-2',{color:'#A78BFA'},78.627);
+tl.set('#cap77',{opacity:1},78.949);tl.set('#cap77',{opacity:0},79.598);
+tl.set('#w77-0',{color:'#A78BFA'},78.949);
+tl.set('#w77-1',{color:'#A78BFA'},79.259);
+tl.set('#w77-2',{color:'#A78BFA'},79.478);
+tl.set('#cap78',{opacity:1},79.633);tl.set('#cap78',{opacity:0},80.54);
+tl.set('#w78-0',{color:'#A78BFA'},79.633);
+tl.set('#w78-1',{color:'#A78BFA'},80.02);
+tl.set('#w78-2',{color:'#A78BFA'},80.2);
+tl.set('#cap79',{opacity:1},80.562);tl.set('#cap79',{opacity:0},82.026);
+tl.set('#w79-0',{color:'#A78BFA'},80.562);
+tl.set('#w79-1',{color:'#A78BFA'},81.325);
+tl.set('#cap80',{opacity:1},82.035);tl.set('#cap80',{opacity:0},83.109);
+tl.set('#w80-0',{color:'#A78BFA'},82.035);
+tl.set('#w80-1',{color:'#A78BFA'},82.64);
+tl.set('#cap81',{opacity:1},83.144);tl.set('#cap81',{opacity:0},83.87);
+tl.set('#w81-0',{color:'#A78BFA'},83.144);
+tl.set('#w81-1',{color:'#A78BFA'},83.415);
+tl.set('#w81-2',{color:'#A78BFA'},83.544);
+tl.set('#cap82',{opacity:1},83.891);tl.set('#cap82',{opacity:0},84.618);
+tl.set('#w82-0',{color:'#A78BFA'},83.891);
+tl.set('#w82-1',{color:'#A78BFA'},84.176);
+tl.set('#w82-2',{color:'#A78BFA'},84.318);
+tl.set('#cap83',{opacity:1},84.64);tl.set('#cap83',{opacity:0},85.313);
+tl.set('#w83-0',{color:'#A78BFA'},84.64);
+tl.set('#w83-1',{color:'#A78BFA'},84.781);
+tl.set('#cap84',{opacity:1},85.863);tl.set('#cap84',{opacity:0},86.95);
+tl.set('#w84-0',{color:'#A78BFA'},85.863);
+tl.set('#w84-1',{color:'#A78BFA'},86.327);
+tl.set('#w84-2',{color:'#A78BFA'},86.675);
+tl.set('#cap85',{opacity:1},86.959);tl.set('#cap85',{opacity:0},87.46600000000001);
+tl.set('#w85-0',{color:'#A78BFA'},86.959);
+tl.set('#w85-1',{color:'#A78BFA'},87.088);
+tl.set('#w85-2',{color:'#A78BFA'},87.32);
+tl.set('#cap86',{opacity:1},87.5);tl.set('#cap86',{opacity:0},88.15);
+tl.set('#w86-0',{color:'#A78BFA'},87.5);
+tl.set('#w86-1',{color:'#A78BFA'},87.643);
+tl.set('#w86-2',{color:'#A78BFA'},87.991);
+tl.set('#cap87',{opacity:1},88.146);tl.set('#cap87',{opacity:0},89.208);
+tl.set('#w87-0',{color:'#A78BFA'},88.146);
+tl.set('#w87-1',{color:'#A78BFA'},88.558);
+tl.set('#w87-2',{color:'#A78BFA'},88.933);
+tl.set('#cap88',{opacity:1},89.229);tl.set('#cap88',{opacity:0},90.575);
+tl.set('#w88-0',{color:'#A78BFA'},89.229);
+tl.set('#w88-1',{color:'#A78BFA'},89.371);
+tl.set('#w88-2',{color:'#A78BFA'},89.643);
+tl.set('#cap89',{opacity:1},90.845);tl.set('#cap89',{opacity:0},91.662);
+tl.set('#w89-0',{color:'#A78BFA'},90.845);
+tl.set('#w89-1',{color:'#A78BFA'},91.142);
+tl.set('#w89-2',{color:'#A78BFA'},91.542);
+tl.set('#cap90',{opacity:1},91.735);tl.set('#cap90',{opacity:0},92.926);
+tl.set('#w90-0',{color:'#A78BFA'},91.735);
+tl.set('#w90-1',{color:'#A78BFA'},91.993);
+tl.set('#w90-2',{color:'#A78BFA'},92.651);
+tl.set('#cap91',{opacity:1},93.064);tl.set('#cap91',{opacity:0},93.545);
+tl.set('#w91-0',{color:'#A78BFA'},93.064);
+tl.set('#w91-1',{color:'#A78BFA'},93.257);
+tl.set('#w91-2',{color:'#A78BFA'},93.489);
+tl.set('#cap92',{opacity:1},93.593);tl.set('#cap92',{opacity:0},94.603);
+tl.set('#w92-0',{color:'#A78BFA'},93.593);
+tl.set('#w92-1',{color:'#A78BFA'},93.993);
+tl.set('#w92-2',{color:'#A78BFA'},94.289);
+tl.set('#cap93',{opacity:1},94.766);tl.set('#cap93',{opacity:0},95.325);
+tl.set('#w93-0',{color:'#A78BFA'},94.766);
+tl.set('#w93-1',{color:'#A78BFA'},94.986);
+tl.set('#w93-2',{color:'#A78BFA'},95.205);
+tl.set('#cap94',{opacity:1},95.425);tl.set('#cap94',{opacity:0},96.886);
+tl.set('#w94-0',{color:'#A78BFA'},95.425);
+tl.set('#w94-1',{color:'#A78BFA'},95.837);
+tl.set('#w94-2',{color:'#A78BFA'},96.547);
+tl.set('#cap95',{opacity:1},96.934);tl.set('#cap95',{opacity:0},97.738);
+tl.set('#w95-0',{color:'#A78BFA'},96.934);
+tl.set('#w95-1',{color:'#A78BFA'},97.231);
+tl.set('#w95-2',{color:'#A78BFA'},97.527);
+tl.set('#cap96',{opacity:1},97.759);tl.set('#cap96',{opacity:0},98.847);
+tl.set('#w96-0',{color:'#A78BFA'},97.759);
+tl.set('#w96-1',{color:'#A78BFA'},98.134);
+tl.set('#w96-2',{color:'#A78BFA'},98.521);
+tl.set('#cap97',{opacity:1},98.843);tl.set('#cap97',{opacity:0},99.641);
+tl.set('#w97-0',{color:'#A78BFA'},98.843);
+tl.set('#w97-1',{color:'#A78BFA'},99.256);
+</script></body></html>

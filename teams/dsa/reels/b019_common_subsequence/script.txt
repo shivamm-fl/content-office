@@ -1,0 +1,13 @@
+@hook Common subsequence में mismatches को सही handle करो। | Given strings: a x b y, और a b y। Relative order रखना है; characters skip कर सकते हो। | Common subsequence a b y की length three है।
+
+Brute force first string की हर subsequence generate करता है, फिर second string में order से check करता है। | हर character लो या छोड़ो। Four characters पर sixteen choices; लंबाई बढ़ने पर choices exponential होती हैं।
+
+Recursive matching में भी वही prefix pairs दोबारा solve होते हैं। | सिर्फ matching characters गिनना काफी नहीं: order भी बचना चाहिए। इसलिए state में दोनों strings के consumed prefixes चाहिए।
+
+DP i j मतलब first i और first j characters का best common length। | Last characters equal हों तो shorter prefixes के answer में one जोड़ो: diagonal plus one। | Mismatch पर या first का last छोड़ो, या second का। दोनों options का maximum लो। Empty prefix का answer zero।
+
+Dry run में columns a, b, y हैं। A वाली row: one, one, one। | X वाली row unchanged: one, one, one। | B वाली row: one, two, two। Y वाली row: one, two, three। Bottom right three हमारा answer।
+
+Accepted code zero border वाली table बनाता है। Rows और columns one से शुरू होते हैं। | Equal branch diagonal plus one है। Else branch ऊपर और left का maximum है। | Mismatch पर दोनों को साथ छोड़ना longest answer खो सकता है।
+
+Return bottom-right cell। M और N string lengths पर O of M times N time और O of M times N extra space। | इस code में full table है; one-row memory optimization claim नहीं कर रहे। Subsequence में gaps allowed हैं, substring में नहीं।

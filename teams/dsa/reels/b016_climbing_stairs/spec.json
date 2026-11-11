@@ -1,0 +1,89 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "surprising_fact",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "copy": {
+    "hi": {
+      "A": "@hook Stairs की recursion में repeated work बचाओ। | Given integer: five. हर move में one या two stairs चढ़ सकते हो। Total eight distinct sequences हैं। हमें count चाहिए, shortest route नहीं।",
+      "B": "Brute force: हर position से one-step और two-step branches बनाओ। Top पर पहुँचो तो one valid way; आगे निकलो तो zero। | Five stairs से branches four और three remaining stairs solve करती हैं।",
+      "C": "Four वाला branch फिर three और two को solve करता है। Three वाला subtree दोबारा बना। | यही overlapping subproblems हैं। Recursion tree बढ़ता रहता है; वही remaining-stairs question बार बार solve होता है।",
+      "D": "Last move देखो। Stair i पर आने का आखिरी move या one है, या two। | First case के सारे routes stair i minus one से आते हैं, second case के stair i minus two से। Cases overlap नहीं करते, इसलिए counts जोड़ते हैं। | Current answer के लिए सिर्फ पिछले two counts चाहिए।",
+      "E": "Base: zero stairs के लिए one empty sequence, one stair के लिए one way। | Two पर one plus one is two। Three पर one plus two is three। | Four पर two plus three is five। Five पर three plus five is eight। यही answer है।",
+      "F": "Accepted code previous और current दोनों one रखता है। Loop two से n तक चलता है। | Simultaneous assignment में old current नया previous बनता है; old previous plus old current नया current। | पहले previous बदलकर फिर sum निकालोगे तो wrong state use हो सकती है।",
+      "G": "Every stair once: O of n time। सिर्फ two running counts: O of one extra space। | N one पर loop skip होता है और one लौटता है। Full recursion tree या पूरा DP array रखने की ज़रूरत नहीं।"
+    }
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "solution_sha256": "0f9d23174627eb4a2075f70c0c901fc183bfd3633b9ed5d78e015a5d566dbb91",
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "sources": [
+    "https://leetcode.com/problems/climbing-stairs/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    "https://leetcode.com/problems/climbing-stairs/submissions/2193976227/"
+  ],
+  "on_screen_code_contract": "complete_method_body"
+}

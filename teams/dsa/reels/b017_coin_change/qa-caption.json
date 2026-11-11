@@ -1,0 +1,72 @@
+{
+  "characters": 540,
+  "limit": 2200,
+  "truncate_at": 125,
+  "visible": "Blind 75 17/75: Coin Change\n\nGiven array: [1, 3, 4]. Amount 6 -> 2 coins: 3 + 3.\n\nGreedy 4 + 1 + 1 mein 3 coins hain. DP har ",
+  "truncated": true,
+  "first_line_chars": 27,
+  "hashtags": [
+    "#Blind75",
+    "#DSA",
+    "#Python"
+  ],
+  "mentions": [],
+  "links": [
+    "https://leetcode.com/problems/coin-change/",
+    "https://github.com/shivamm-fl/content-office/blob/main/teams/dsa/state/solutions/b017/solution.py"
+  ],
+  "emoji": 0,
+  "asks": [],
+  "checks": [
+    {
+      "check": "LENGTH",
+      "status": "PASS",
+      "detail": "540 / 2200 characters"
+    },
+    {
+      "check": "FIRST LINE",
+      "status": "PASS",
+      "detail": "27 characters, lands whole"
+    },
+    {
+      "check": "HOOK IS CONCRETE",
+      "status": "PASS",
+      "detail": "17 number(s) or name(s) in the visible window"
+    },
+    {
+      "check": "HASHTAGS",
+      "status": "PASS",
+      "detail": "3 tag(s): #Blind75 #DSA #Python"
+    },
+    {
+      "check": "TAG PLACEMENT",
+      "status": "PASS",
+      "detail": "tags are below the fold"
+    },
+    {
+      "check": "LINKS",
+      "status": "WARN",
+      "detail": "2 link(s) in the caption, and captions are not clickable. Move it to the bio or the DM"
+    },
+    {
+      "check": "ONE ASK",
+      "status": "WARN",
+      "detail": "no call to action. Decide what this post is for"
+    },
+    {
+      "check": "EMOJI",
+      "status": "PASS",
+      "detail": "0 emoji, 0.0 per 100 characters"
+    },
+    {
+      "check": "SEARCH TERMS",
+      "status": "PASS",
+      "detail": "2/2 present, 1 in the visible window"
+    }
+  ],
+  "verdict": "REVIEW",
+  "intentional_notes": [
+    "Owner coding-track rule requires problem and full-code URLs despite nonclickable-caption warning.",
+    "Caption supports the worked example; no repeated spoken CTA padding."
+  ]
+}

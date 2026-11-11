@@ -1,0 +1,13 @@
+@hook Missing number को XOR से निकालो। | Given array: four, zero, two, one. Four elements हैं, इसलिए allowed numbers zero से four तक हैं। Missing value three है। Array में duplicates नहीं हैं।
+
+Brute force: zero से four तक हर candidate लो, और पूरे array में ढूँढो। | Zero मिलता है, one मिलता है, two मिलता है, three नहीं मिलता। Answer सही है।
+
+लेकिन हर candidate के लिए फिर से array scan होता है। N candidates और हर scan में up to N values: quadratic work। | Sorting करने पर भी extra ordering work चाहिए; हमें सिर्फ absent value चाहिए।
+
+XOR की properties: x XOR x is zero, और x XOR zero is x। Order बदलने से result नहीं बदलता। | इसलिए full range और array को XOR कर दो। मौजूद numbers two copies में cancel होंगे। सिर्फ missing number की one copy बचेगी।
+
+Code missing को length four से initialize करता है। | Index zero, value four से accumulator zero। Index one, value zero से one। | Index two, value two cancel: accumulator one। Index three, value one से three। सभी pairs process हुए, return three।
+
+ये पूरा Accepted code है। Length वाला initialization range का last number शामिल करता है। Loop के indices zero से n minus one तक बाकी range देते हैं। | हर round index और actual value दोनों XOR होते हैं। Input array बदला नहीं जाता।
+
+One pass: O of n time, O of one extra space। | Missing zero या missing n भी इसी तरह बचेगा। Duplicates allowed हों तो cancellation proof टूटेगा; यहाँ distinct values problem की guarantee है।

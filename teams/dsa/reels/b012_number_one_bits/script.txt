@@ -1,0 +1,13 @@
+@hook हर bit को check करना ज़रूरी नहीं। | Given integer: twelve. Binary one one zero zero में two set bits हैं। Set bit मतलब जिस position पर one हो। हमें वही count लौटाना है।
+
+Brute force: हर round में last bit check करो, फिर number को right shift करो। | Twelve से six, फिर three, फिर one। Four positions check हुए, जबकि ones सिर्फ two थे।
+
+ये answer सही देता है। Problem extra checks हैं: बीच के zero bits भी scan होते हैं। | Binary one zero zero zero zero में सिर्फ one set bit है, फिर भी five positions देखनी पड़ती हैं।
+
+Observation: n minus one, rightmost one को zero और उसके बाद के zeroes को ones बनाता है। | इसलिए n AND n minus one करने पर सिर्फ वही rightmost set bit मिटता है। बाकी set bits बचते हैं। | हर round exactly one मिटाओ और count बढ़ाओ।
+
+Dry run उसी twelve पर। One one zero zero AND one zero one one देता है one zero zero zero, यानी eight। Count one। | Eight AND seven देता है zero। Count two। Number zero, loop stop, answer two।
+
+ये actual Accepted Python है। Count zero से शुरू। While n के अंदर n AND n minus one assign होता है, फिर count one बढ़ता है। | Count बढ़ाना मत भूलना; बदला हुआ n answer नहीं है। Original number को preserve करना ज़रूरी नहीं।
+
+K set bits हों तो K rounds, O of K time और O of one extra space। | इस problem का integer at most thirty one bits है, इसलिए fixed domain में दोनों constant हैं। Speedup sparse ones पर है; naive algorithm गलत नहीं था।

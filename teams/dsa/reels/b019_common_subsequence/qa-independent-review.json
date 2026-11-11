@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "item": "b019",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "independent_local_checks": {
+    "passed": 961,
+    "description": "Exact source compared on every pair of binary strings up to length four against independent subsequence enumeration."
+  },
+  "notes": [
+    "axby/aby LCS3, take/skip subsets, prefix-pair state, equal diagonal+1, mismatch max(up,left), empty-prefix border and all four DP rows are correct.",
+    "Regenerated F changes to condition/transition chunk during branch explanation. Match and mismatch highlights correspond to the visible branch, and G highlights return before full-table complexity.",
+    "Complete method body with readable continuation marks. O(m*n) time and actual full-table O(m*n) auxiliary space are correct. No P0/P1 found; no final MP4/audio/continuous-playback claim."
+  ],
+  "reviewed_at_utc": "2026-11-11T16:03:13.7593260Z",
+  "hashes": {
+    "code_sha256": "08507b125769eb41850dc5cb065d6074847089789de46b27469fa2a4a1e519eb",
+    "source_sha256": "08507b125769eb41850dc5cb065d6074847089789de46b27469fa2a4a1e519eb",
+    "lesson_sha256": "8fd3479f36410ad3d074c12cdfe396f2aea04f72c89d66b6d9f5a2f8a3f99f3d",
+    "script_sha256": "c27daa59eb90c14b43aafac3b15081ad15aca40f971610f48f5dd3316f06aa58",
+    "html_sha256": "12ae9f58c66e49005e6cf10b1c297c3a0d3609717c0356afc78fbe134c2c2bf0",
+    "storyboard_sha256": "15d4dd1e2c4860ba533e713827bdf288abd0e898859f61e378049226f4a8d414"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "7ad7a2afdc59a8a515890dc8ba00e39b3c2a055e1ddb56748c22b4ab2d3b38ec",
+    "snapshots/contact-sheet-1.jpg": "0a91c0fdff637939268e6d31b574a0cb1b5a80506280341324c4db1335b7894a",
+    "snapshots/contact-sheet-2.jpg": "41428bcf0351a043b101abf534d9ed2b644d30d65e8fb64a9022637644af92f9",
+    "snapshots/contact-sheet-3.jpg": "ad7b2b275aec16584a9be75decba4a0cde4999c89ace5deaafe8fc0afafe057e",
+    "snapshots/contact-sheet-4.jpg": "d4228b3d81ca8bf60609a8fdf84c300a73a0f3e1cc1580f0fd40895b81c3a769"
+  }
+}

@@ -1,0 +1,526 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=1080,height=1920"><title>Climbing Stairs</title>
+<script src="assets/gsap.min.js"></script><script src="data.js"></script><style>
+@font-face{font-family:Head;src:url('fonts/SpaceGrotesk.ttf');font-weight:300 700}
+@font-face{font-family:Code;src:url('fonts/JetBrainsMono.ttf');font-weight:100 800}
+@font-face{font-family:Hindi;src:url('fonts/NotoSansDevanagari.ttf')}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0B1220}
+#root{position:relative;width:1080px;height:1920px;background:#0B1220;color:#F3EFE6;font-family:Head,Hindi,sans-serif}
+.clip,.visual{position:absolute;inset:0}.visual,.state{opacity:0}svg{font-family:Head,Hindi,sans-serif;font-weight:600}
+#series{position:absolute;left:90px;top:178px;font:600 30px Head;letter-spacing:2px;color:#A78BFA;z-index:20}
+#handle{position:absolute;right:140px;top:180px;font:500 28px Head;color:#9DAEC5;z-index:20}
+#source{position:absolute;left:90px;top:1403px;font:500 29px Head;color:#9DAEC5;z-index:20}
+#caption-lane{position:absolute;left:75px;top:1248px;width:870px;height:145px;z-index:30}
+.caption{position:absolute;left:0;top:0;width:870px;text-align:center;font-size:65px;font-weight:700;line-height:1.12;color:#F3EFE6;opacity:0}
+#progress-track{position:absolute;left:90px;top:1460px;width:850px;height:5px;background:#25334D}
+#progress{height:5px;width:850px;background:#A78BFA;transform-origin:left}
+</style></head><body><main id="root" data-composition-id="main" data-start="0" data-duration="94.0" data-width="1080" data-height="1920">
+<div id="series">BLIND 75 · 16 / 75</div><div id="handle">@dsa.learnvora</div>
+<section id="scene-A" class="clip" data-start="0.0" data-duration="10.447" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vA"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="A teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Climbing Stairs</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Input → required output</text><g class="state" id="A-step0"><rect id="" x="145" y="1040" width="140" height="115" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="215" y="1116" fill="#F3EFE6" font-size="50" text-anchor="middle" >1</text><line x1="215" y1="1025" x2="360" y2="930" stroke="#6FD3A6" stroke-width="4"/><rect id="" x="290" y="945" width="140" height="115" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="360" y="1021" fill="#F3EFE6" font-size="50" text-anchor="middle" >2</text><line x1="360" y1="930" x2="505" y2="835" stroke="#6FD3A6" stroke-width="4"/><rect id="" x="435" y="850" width="140" height="115" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="505" y="926" fill="#F3EFE6" font-size="50" text-anchor="middle" >3</text><line x1="505" y1="835" x2="650" y2="740" stroke="#6FD3A6" stroke-width="4"/><rect id="" x="580" y="755" width="140" height="115" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="650" y="831" fill="#F3EFE6" font-size="50" text-anchor="middle" >4</text><line x1="650" y1="740" x2="795" y2="645" stroke="#6FD3A6" stroke-width="4"/><rect id="" x="725" y="660" width="140" height="115" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="795" y="736" fill="#F3EFE6" font-size="50" text-anchor="middle" >5</text><text x="505" y="1190" fill="#6FD3A6" font-size="38" text-anchor="middle" >1-step or 2-step moves · 8 routes</text></g></svg></div></section><section id="scene-B" class="clip" data-start="10.447" data-duration="11.843" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vB"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="B teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Brute force</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Correct baseline · explicit choices</text><g class="state" id="B-step0"><rect id="" x="350" y="520" width="310" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="505.0" y="572" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="505.0" y="642" fill="#A78BFA" font-size="65" text-anchor="middle" >5</text><line x1="505" y1="675" x2="280" y2="760" stroke="#9DAEC5" stroke-width="4"/><line x1="505" y1="675" x2="730" y2="760" stroke="#9DAEC5" stroke-width="4"/><rect id="" x="130" y="770" width="300" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="280.0" y="822" fill="#A78BFA" font-size="32" text-anchor="middle" >CHOICE 1</text><text x="280.0" y="892" fill="#A78BFA" font-size="65" text-anchor="middle" >4</text><rect id="" x="580" y="770" width="300" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="730.0" y="822" fill="#A78BFA" font-size="32" text-anchor="middle" >CHOICE 2</text><text x="730.0" y="892" fill="#A78BFA" font-size="65" text-anchor="middle" >3</text><text x="280" y="1060" fill="#A78BFA" font-size="47" text-anchor="middle" >→ 3, 2</text><text x="730" y="1060" fill="#A78BFA" font-size="47" text-anchor="middle" >→ 2, 1</text></g></svg></div></section><section id="scene-C" class="clip" data-start="22.29" data-duration="12.099" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vC"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="C teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Where it costs</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Repeated work or a concrete trap</text><g class="state" id="C-step0"><rect id="" x="350" y="520" width="310" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="505.0" y="572" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="505.0" y="642" fill="#A78BFA" font-size="65" text-anchor="middle" >5</text><line x1="505" y1="675" x2="280" y2="760" stroke="#9DAEC5" stroke-width="4"/><line x1="505" y1="675" x2="730" y2="760" stroke="#9DAEC5" stroke-width="4"/><rect id="" x="130" y="770" width="300" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="280.0" y="822" fill="#A78BFA" font-size="32" text-anchor="middle" >CHOICE 1</text><text x="280.0" y="892" fill="#A78BFA" font-size="65" text-anchor="middle" >4</text><rect id="" x="580" y="770" width="300" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="730.0" y="822" fill="#A78BFA" font-size="32" text-anchor="middle" >CHOICE 2</text><text x="730.0" y="892" fill="#A78BFA" font-size="65" text-anchor="middle" >3</text><rect id="" x="140" y="1010" width="290" height="155" rx="14" fill="#172239" stroke="#E5735F" stroke-width="3"/><text x="285.0" y="1062" fill="#E5735F" font-size="32" text-anchor="middle" >RECOMPUTED</text><text x="285.0" y="1132" fill="#E5735F" font-size="65" text-anchor="middle" >3</text><line x1="280" y1="950" x2="285" y2="1005" stroke="#E5735F" stroke-width="4"/><text x="505" y="1190" fill="#E5735F" font-size="36" text-anchor="middle" >same remaining-stairs question</text></g></svg></div></section><section id="scene-D" class="clip" data-start="34.389" data-duration="17.174" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vD"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="D teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="58" text-anchor="start" >Why the optimization works</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Preserve the invariant</text><g class="state" id="D-step0"><rect id="" x="100" y="550" width="370" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="285.0" y="602" fill="#A78BFA" font-size="32" text-anchor="middle" >WAYS i − 1</text><text x="285.0" y="672" fill="#A78BFA" font-size="65" text-anchor="middle" >a</text><rect id="" x="550" y="550" width="370" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="735.0" y="602" fill="#6FD3A6" font-size="32" text-anchor="middle" >WAYS i − 2</text><text x="735.0" y="672" fill="#6FD3A6" font-size="65" text-anchor="middle" >b</text><line x1="285" y1="745" x2="505" y2="900" stroke="#A78BFA" stroke-width="4"/><path d="M496,888 L505,900 L514,888" fill="none" stroke="#A78BFA" stroke-width="4"/><line x1="735" y1="745" x2="505" y2="900" stroke="#A78BFA" stroke-width="4"/><path d="M496,888 L505,900 L514,888" fill="none" stroke="#A78BFA" stroke-width="4"/><rect id="" x="340" y="930" width="330" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="982" fill="#6FD3A6" font-size="32" text-anchor="middle" >WAYS i</text><text x="505.0" y="1052" fill="#6FD3A6" font-size="65" text-anchor="middle" >a + b</text></g></svg></div></section><section id="scene-E" class="clip" data-start="51.563" data-duration="13.316" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vE"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="E teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Follow the same input</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Chronological state changes</text><g class="state" id="E-step0"><rect id="" x="110" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="772" fill="#A78BFA" font-size="32" text-anchor="middle" >PREVIOUS</text><text x="290.0" y="842" fill="#A78BFA" font-size="65" text-anchor="middle" >1</text><rect id="" x="550" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="772" fill="#6FD3A6" font-size="32" text-anchor="middle" >CURRENT</text><text x="730.0" y="842" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text><text x="505" y="1100" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[0] = 1 · ways[1] = 1</text></g><g class="state" id="E-step1"><rect id="" x="110" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="772" fill="#A78BFA" font-size="32" text-anchor="middle" >PREVIOUS</text><text x="290.0" y="842" fill="#A78BFA" font-size="65" text-anchor="middle" >1</text><rect id="" x="550" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="772" fill="#6FD3A6" font-size="32" text-anchor="middle" >CURRENT</text><text x="730.0" y="842" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="505" y="1100" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[2] = 1 + 1 = 2</text></g><g class="state" id="E-step2"><rect id="" x="110" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="772" fill="#A78BFA" font-size="32" text-anchor="middle" >PREVIOUS</text><text x="290.0" y="842" fill="#A78BFA" font-size="65" text-anchor="middle" >2</text><rect id="" x="550" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="772" fill="#6FD3A6" font-size="32" text-anchor="middle" >CURRENT</text><text x="730.0" y="842" fill="#6FD3A6" font-size="65" text-anchor="middle" >3</text><text x="505" y="1100" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[3] = 1 + 2 = 3</text></g><g class="state" id="E-step3"><rect id="" x="110" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="772" fill="#A78BFA" font-size="32" text-anchor="middle" >PREVIOUS</text><text x="290.0" y="842" fill="#A78BFA" font-size="65" text-anchor="middle" >3</text><rect id="" x="550" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="772" fill="#6FD3A6" font-size="32" text-anchor="middle" >CURRENT</text><text x="730.0" y="842" fill="#6FD3A6" font-size="65" text-anchor="middle" >5</text><text x="505" y="1100" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[4] = 2 + 3 = 5</text></g><g class="state" id="E-step4"><rect id="" x="110" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="772" fill="#A78BFA" font-size="32" text-anchor="middle" >PREVIOUS</text><text x="290.0" y="842" fill="#A78BFA" font-size="65" text-anchor="middle" >5</text><rect id="" x="550" y="720" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="772" fill="#6FD3A6" font-size="32" text-anchor="middle" >CURRENT</text><text x="730.0" y="842" fill="#6FD3A6" font-size="65" text-anchor="middle" >8</text><text x="505" y="1100" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[5] = 3 + 5 = 8</text></g></svg></div></section><section id="scene-F" class="clip" data-start="64.879" data-duration="15.848" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vF"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="F teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Accepted Python</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >climbing-stairs</text><rect id="" x="80" y="495" width="885" height="275" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeF-L3" data-source-line="3" data-code-panel="codeF"><rect class="code-highlight" x="88" y="508" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">previous, current = 1, 1</text></g><g id="codeF-L4" data-source-line="4" data-code-panel="codeF"><rect class="code-highlight" x="88" y="556" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="585" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">for _ in range(2, n + 1):</text></g><g id="codeF-L5" data-source-line="5" data-code-panel="codeF"><rect class="code-highlight" x="88" y="604" width="870" height="96" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="633" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">    previous, current = current, previous +</text><path d="M89 663 V673 H100 M96 669 L100 673 L96 677" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="681" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">      current</text></g><g id="codeF-L6" data-source-line="6" data-code-panel="codeF"><rect class="code-highlight" x="88" y="700" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="729" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">return current</text></g></svg></div></section><section id="scene-G" class="clip" data-start="80.727" data-duration="13.273" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vG"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="G teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Cost and boundary</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Same algorithm · honest complexity</text><rect id="" x="80" y="495" width="885" height="275" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeG-L3" data-source-line="3" data-code-panel="codeG"><rect class="code-highlight" x="88" y="508" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">previous, current = 1, 1</text></g><g id="codeG-L4" data-source-line="4" data-code-panel="codeG"><rect class="code-highlight" x="88" y="556" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="585" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">for _ in range(2, n + 1):</text></g><g id="codeG-L5" data-source-line="5" data-code-panel="codeG"><rect class="code-highlight" x="88" y="604" width="870" height="96" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="633" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">    previous, current = current, previous +</text><path d="M89 663 V673 H100 M96 669 L100 673 L96 677" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="681" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">      current</text></g><g id="codeG-L6" data-source-line="6" data-code-panel="codeG"><rect class="code-highlight" x="88" y="700" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="729" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">return current</text></g><text x="505" y="1200" fill="#6FD3A6" font-size="39" text-anchor="middle" >O(n) time · O(1) extra</text></svg></div></section><div id="caption-lane" data-track-kind="captions"><div class="clip caption" id="cap0" data-track-index="2" data-track-kind="captions" data-start="0.08" data-duration="0.993"><span id="w0-0">Stairs</span> <span id="w0-1">ki</span> <span id="w0-2">recursion</span></div>
+<div class="clip caption" id="cap1" data-track-index="2" data-track-kind="captions" data-start="1.124" data-duration="0.7489999999999999"><span id="w1-0">mein</span> <span id="w1-1">repeated</span> <span id="w1-2">work</span></div>
+<div class="clip caption" id="cap2" data-track-index="2" data-track-kind="captions" data-start="1.912" data-duration="1.532"><span id="w2-0">bachao.</span> <span id="w2-1">Given</span> <span id="w2-2">integer:</span></div>
+<div class="clip caption" id="cap3" data-track-index="2" data-track-kind="captions" data-start="3.508" data-duration="1.0190000000000001"><span id="w3-0">five.</span> <span id="w3-1">har</span> <span id="w3-2">move</span></div>
+<div class="clip caption" id="cap4" data-track-index="2" data-track-kind="captions" data-start="4.566" data-duration="0.4640000000000004"><span id="w4-0">mein</span> <span id="w4-1">one</span> <span id="w4-2">ya</span></div>
+<div class="clip caption" id="cap5" data-track-index="2" data-track-kind="captions" data-start="5.082" data-duration="0.7229999999999999"><span id="w5-0">two</span> <span id="w5-1">stairs</span> <span id="w5-2">chadh</span></div>
+<div class="clip caption" id="cap6" data-track-index="2" data-track-kind="captions" data-start="5.856" data-duration="0.7869999999999999"><span id="w6-0">sakte</span> <span id="w6-1">ho.</span> <span id="w6-2">Total</span></div>
+<div class="clip caption" id="cap7" data-track-index="2" data-track-kind="captions" data-start="6.734" data-duration="0.6440000000000001"><span id="w7-0">eight</span> <span id="w7-1">distinct</span></div>
+<div class="clip caption" id="cap8" data-track-index="2" data-track-kind="captions" data-start="7.417" data-duration="1.045"><span id="w8-0">sequences</span> <span id="w8-1">hain.</span> <span id="w8-2">hamen</span></div>
+<div class="clip caption" id="cap9" data-track-index="2" data-track-kind="captions" data-start="8.514" data-duration="0.5410000000000004"><span id="w9-0">count</span> <span id="w9-1">chahiye,</span></div>
+<div class="clip caption" id="cap10" data-track-index="2" data-track-kind="captions" data-start="9.094" data-duration="0.8529999999999998"><span id="w10-0">shortest</span> <span id="w10-1">route</span> <span id="w10-2">nahi.</span></div>
+<div class="clip caption" id="cap11" data-track-index="2" data-track-kind="captions" data-start="10.527" data-duration="1.0580000000000016"><span id="w11-0">Brute</span> <span id="w11-1">force:</span> <span id="w11-2">har</span></div>
+<div class="clip caption" id="cap12" data-track-index="2" data-track-kind="captions" data-start="11.662" data-duration="1.379999999999999"><span id="w12-0">position</span> <span id="w12-1">se</span> <span id="w12-2">one-step</span></div>
+<div class="clip caption" id="cap13" data-track-index="2" data-track-kind="captions" data-start="13.132" data-duration="0.9039999999999999"><span id="w13-0">aur</span> <span id="w13-1">two-step</span> <span id="w13-2">branches</span></div>
+<div class="clip caption" id="cap14" data-track-index="2" data-track-kind="captions" data-start="14.075" data-duration="0.9800000000000004"><span id="w14-0">banao.</span> <span id="w14-1">Top</span> <span id="w14-2">par</span></div>
+<div class="clip caption" id="cap15" data-track-index="2" data-track-kind="captions" data-start="15.119" data-duration="0.7480000000000011"><span id="w15-0">pahuncho</span> <span id="w15-1">to</span> <span id="w15-2">one</span></div>
+<div class="clip caption" id="cap16" data-track-index="2" data-track-kind="captions" data-start="15.894" data-duration="0.9539999999999988"><span id="w16-0">valid</span> <span id="w16-1">way;</span> <span id="w16-2">aage</span></div>
+<div class="clip caption" id="cap17" data-track-index="2" data-track-kind="captions" data-start="16.899" data-duration="0.8909999999999982"><span id="w17-0">niklo</span> <span id="w17-1">to</span> <span id="w17-2">zero.</span></div>
+<div class="clip caption" id="cap18" data-track-index="2" data-track-kind="captions" data-start="18.09" data-duration="0.7100000000000009"><span id="w18-0">Five</span> <span id="w18-1">stairs</span> <span id="w18-2">se</span></div>
+<div class="clip caption" id="cap19" data-track-index="2" data-track-kind="captions" data-start="18.851" data-duration="0.9420000000000002"><span id="w19-0">branches</span> <span id="w19-1">four</span> <span id="w19-2">aur</span></div>
+<div class="clip caption" id="cap20" data-track-index="2" data-track-kind="captions" data-start="19.87" data-duration="0.9540000000000006"><span id="w20-0">three</span> <span id="w20-1">remaining</span> <span id="w20-2">stairs</span></div>
+<div class="clip caption" id="cap21" data-track-index="2" data-track-kind="captions" data-start="20.851" data-duration="0.9390000000000001"><span id="w21-0">solve</span> <span id="w21-1">karti</span> <span id="w21-2">hain.</span></div>
+<div class="clip caption" id="cap22" data-track-index="2" data-track-kind="captions" data-start="22.37" data-duration="0.9029999999999987"><span id="w22-0">Four</span> <span id="w22-1">wala</span> <span id="w22-2">branch</span></div>
+<div class="clip caption" id="cap23" data-track-index="2" data-track-kind="captions" data-start="23.338" data-duration="0.657"><span id="w23-0">phir</span> <span id="w23-1">three</span> <span id="w23-2">aur</span></div>
+<div class="clip caption" id="cap24" data-track-index="2" data-track-kind="captions" data-start="24.047" data-duration="0.5809999999999995"><span id="w24-0">two</span> <span id="w24-1">ko</span> <span id="w24-2">solve</span></div>
+<div class="clip caption" id="cap25" data-track-index="2" data-track-kind="captions" data-start="24.653" data-duration="1.0450000000000017"><span id="w25-0">karta</span> <span id="w25-1">hai.</span> <span id="w25-2">Three</span></div>
+<div class="clip caption" id="cap26" data-track-index="2" data-track-kind="captions" data-start="25.724" data-duration="0.9939999999999998"><span id="w26-0">wala</span> <span id="w26-1">subtree</span> <span id="w26-2">dobara</span></div>
+<div class="clip caption" id="cap27" data-track-index="2" data-track-kind="captions" data-start="26.755" data-duration="1.5820000000000007"><span id="w27-0">bana.</span> <span id="w27-1">yahi</span> <span id="w27-2">overlapping</span></div>
+<div class="clip caption" id="cap28" data-track-index="2" data-track-kind="captions" data-start="28.388" data-duration="0.786999999999999"><span id="w28-0">subproblems</span> <span id="w28-1">hain.</span></div>
+<div class="clip caption" id="cap29" data-track-index="2" data-track-kind="captions" data-start="29.407" data-duration="0.9549999999999983"><span id="w29-0">Recursion</span> <span id="w29-1">tree</span> <span id="w29-2">badhta</span></div>
+<div class="clip caption" id="cap30" data-track-index="2" data-track-kind="captions" data-start="30.426" data-duration="0.6710000000000029"><span id="w30-0">rahta</span> <span id="w30-1">hai;</span> <span id="w30-2">wahi</span></div>
+<div class="clip caption" id="cap31" data-track-index="2" data-track-kind="captions" data-start="31.162" data-duration="0.7100000000000009"><span id="w31-0">remaining-stairs</span></div>
+<div class="clip caption" id="cap32" data-track-index="2" data-track-kind="captions" data-start="31.923" data-duration="0.9420000000000037"><span id="w32-0">question</span> <span id="w32-1">baar</span> <span id="w32-2">baar</span></div>
+<div class="clip caption" id="cap33" data-track-index="2" data-track-kind="captions" data-start="32.93" data-duration="0.9590000000000032"><span id="w33-0">solve</span> <span id="w33-1">hota</span> <span id="w33-2">hai.</span></div>
+<div class="clip caption" id="cap34" data-track-index="2" data-track-kind="captions" data-start="34.469" data-duration="1.043999999999997"><span id="w34-0">Last</span> <span id="w34-1">move</span> <span id="w34-2">dekho.</span></div>
+<div class="clip caption" id="cap35" data-track-index="2" data-track-kind="captions" data-start="35.708" data-duration="0.7220000000000013"><span id="w35-0">Stair</span> <span id="w35-1">i</span> <span id="w35-2">par</span></div>
+<div class="clip caption" id="cap36" data-track-index="2" data-track-kind="captions" data-start="36.481" data-duration="0.9810000000000016"><span id="w36-0">aane</span> <span id="w36-1">ka</span> <span id="w36-2">aakhiri</span></div>
+<div class="clip caption" id="cap37" data-track-index="2" data-track-kind="captions" data-start="37.526" data-duration="0.7089999999999961"><span id="w37-0">move</span> <span id="w37-1">ya</span> <span id="w37-2">one</span></div>
+<div class="clip caption" id="cap38" data-track-index="2" data-track-kind="captions" data-start="38.3" data-duration="0.9050000000000011"><span id="w38-0">hai,</span> <span id="w38-1">ya</span> <span id="w38-2">two.</span></div>
+<div class="clip caption" id="cap39" data-track-index="2" data-track-kind="captions" data-start="39.505" data-duration="0.7359999999999971"><span id="w39-0">First</span> <span id="w39-1">case</span> <span id="w39-2">ke</span></div>
+<div class="clip caption" id="cap40" data-track-index="2" data-track-kind="captions" data-start="40.331" data-duration="1.1739999999999995"><span id="w40-0">saare</span> <span id="w40-1">routes</span> <span id="w40-2">stair</span></div>
+<div class="clip caption" id="cap41" data-track-index="2" data-track-kind="captions" data-start="41.608" data-duration="0.8390000000000057"><span id="w41-0">i</span> <span id="w41-1">minus</span> <span id="w41-2">one</span></div>
+<div class="clip caption" id="cap42" data-track-index="2" data-track-kind="captions" data-start="42.472" data-duration="0.490000000000002"><span id="w42-0">se</span> <span id="w42-1">aate</span> <span id="w42-2">hain,</span></div>
+<div class="clip caption" id="cap43" data-track-index="2" data-track-kind="captions" data-start="43.001" data-duration="0.6840000000000046"><span id="w43-0">second</span> <span id="w43-1">case</span> <span id="w43-2">ke</span></div>
+<div class="clip caption" id="cap44" data-track-index="2" data-track-kind="captions" data-start="43.737" data-duration="0.7860000000000014"><span id="w44-0">stair</span> <span id="w44-1">i</span> <span id="w44-2">minus</span></div>
+<div class="clip caption" id="cap45" data-track-index="2" data-track-kind="captions" data-start="44.588" data-duration="1.0570000000000022"><span id="w45-0">two</span> <span id="w45-1">se.</span> <span id="w45-2">Cases</span></div>
+<div class="clip caption" id="cap46" data-track-index="2" data-track-kind="captions" data-start="45.71" data-duration="0.8780000000000001"><span id="w46-0">overlap</span> <span id="w46-1">nahi</span> <span id="w46-2">karte,</span></div>
+<div class="clip caption" id="cap47" data-track-index="2" data-track-kind="captions" data-start="46.639" data-duration="1.0060000000000002"><span id="w47-0">isliye</span> <span id="w47-1">counts</span> <span id="w47-2">jodte</span></div>
+<div class="clip caption" id="cap48" data-track-index="2" data-track-kind="captions" data-start="47.671" data-duration="1.328000000000003"><span id="w48-0">hain.</span> <span id="w48-1">Current</span> <span id="w48-2">answer</span></div>
+<div class="clip caption" id="cap49" data-track-index="2" data-track-kind="captions" data-start="49.076" data-duration="0.5409999999999968"><span id="w49-0">ke</span> <span id="w49-1">liye</span> <span id="w49-2">sirf</span></div>
+<div class="clip caption" id="cap50" data-track-index="2" data-track-kind="captions" data-start="49.682" data-duration="0.7609999999999957"><span id="w50-0">pichhle</span> <span id="w50-1">two</span> <span id="w50-2">counts</span></div>
+<div class="clip caption" id="cap51" data-track-index="2" data-track-kind="captions" data-start="50.507" data-duration="0.5560000000000045"><span id="w51-0">chahiye.</span></div>
+<div class="clip caption" id="cap52" data-track-index="2" data-track-kind="captions" data-start="51.643" data-duration="1.0970000000000013"><span id="w52-0">Base:</span> <span id="w52-1">zero</span> <span id="w52-2">stairs</span></div>
+<div class="clip caption" id="cap53" data-track-index="2" data-track-kind="captions" data-start="52.804" data-duration="0.5419999999999945"><span id="w53-0">ke</span> <span id="w53-1">liye</span> <span id="w53-2">one</span></div>
+<div class="clip caption" id="cap54" data-track-index="2" data-track-kind="captions" data-start="53.384" data-duration="1.006999999999998"><span id="w54-0">empty</span> <span id="w54-1">sequence,</span> <span id="w54-2">one</span></div>
+<div class="clip caption" id="cap55" data-track-index="2" data-track-kind="captions" data-start="54.416" data-duration="0.568000000000005"><span id="w55-0">stair</span> <span id="w55-1">ke</span> <span id="w55-2">liye</span></div>
+<div class="clip caption" id="cap56" data-track-index="2" data-track-kind="captions" data-start="55.062" data-duration="0.9710000000000036"><span id="w56-0">one</span> <span id="w56-1">way.</span> <span id="w56-2">Two</span></div>
+<div class="clip caption" id="cap57" data-track-index="2" data-track-kind="captions" data-start="56.098" data-duration="0.5930000000000035"><span id="w57-0">par</span> <span id="w57-1">one</span> <span id="w57-2">plus</span></div>
+<div class="clip caption" id="cap58" data-track-index="2" data-track-kind="captions" data-start="56.769" data-duration="0.5030000000000001"><span id="w58-0">one</span> <span id="w58-1">is</span> <span id="w58-2">two.</span></div>
+<div class="clip caption" id="cap59" data-track-index="2" data-track-kind="captions" data-start="57.323" data-duration="0.6069999999999993"><span id="w59-0">Three</span> <span id="w59-1">par</span> <span id="w59-2">one</span></div>
+<div class="clip caption" id="cap60" data-track-index="2" data-track-kind="captions" data-start="57.955" data-duration="0.5040000000000049"><span id="w60-0">plus</span> <span id="w60-1">two</span> <span id="w60-2">is</span></div>
+<div class="clip caption" id="cap61" data-track-index="2" data-track-kind="captions" data-start="58.523" data-duration="1.340999999999994"><span id="w61-0">three.</span> <span id="w61-1">Four</span> <span id="w61-2">par</span></div>
+<div class="clip caption" id="cap62" data-track-index="2" data-track-kind="captions" data-start="59.928" data-duration="0.6189999999999998"><span id="w62-0">two</span> <span id="w62-1">plus</span> <span id="w62-2">three</span></div>
+<div class="clip caption" id="cap63" data-track-index="2" data-track-kind="captions" data-start="60.574" data-duration="1.044000000000004"><span id="w63-0">is</span> <span id="w63-1">five.</span> <span id="w63-2">Five</span></div>
+<div class="clip caption" id="cap64" data-track-index="2" data-track-kind="captions" data-start="61.644" data-duration="0.5930000000000035"><span id="w64-0">par</span> <span id="w64-1">three</span> <span id="w64-2">plus</span></div>
+<div class="clip caption" id="cap65" data-track-index="2" data-track-kind="captions" data-start="62.315" data-duration="0.8640000000000043"><span id="w65-0">five</span> <span id="w65-1">is</span> <span id="w65-2">eight.</span></div>
+<div class="clip caption" id="cap66" data-track-index="2" data-track-kind="captions" data-start="63.308" data-duration="1.071000000000005"><span id="w66-0">yahi</span> <span id="w66-1">answer</span> <span id="w66-2">hai.</span></div>
+<div class="clip caption" id="cap67" data-track-index="2" data-track-kind="captions" data-start="64.959" data-duration="1.2000000000000028"><span id="w67-0">Accepted</span> <span id="w67-1">code</span> <span id="w67-2">previous</span></div>
+<div class="clip caption" id="cap68" data-track-index="2" data-track-kind="captions" data-start="66.224" data-duration="0.6829999999999927"><span id="w68-0">aur</span> <span id="w68-1">current</span> <span id="w68-2">donon</span></div>
+<div class="clip caption" id="cap69" data-track-index="2" data-track-kind="captions" data-start="66.946" data-duration="0.6710000000000065"><span id="w69-0">one</span> <span id="w69-1">rakhta</span> <span id="w69-2">hai.</span></div>
+<div class="clip caption" id="cap70" data-track-index="2" data-track-kind="captions" data-start="67.81" data-duration="0.7090000000000032"><span id="w70-0">Loop</span> <span id="w70-1">two</span> <span id="w70-2">se</span></div>
+<div class="clip caption" id="cap71" data-track-index="2" data-track-kind="captions" data-start="68.597" data-duration="0.6069999999999993"><span id="w71-0">n</span> <span id="w71-1">tak</span> <span id="w71-2">chalta</span></div>
+<div class="clip caption" id="cap72" data-track-index="2" data-track-kind="captions" data-start="69.229" data-duration="1.328000000000003"><span id="w72-0">hai.</span> <span id="w72-1">Simultaneous</span></div>
+<div class="clip caption" id="cap73" data-track-index="2" data-track-kind="captions" data-start="70.609" data-duration="1.0829999999999984"><span id="w73-0">assignment</span> <span id="w73-1">mein</span> <span id="w73-2">old</span></div>
+<div class="clip caption" id="cap74" data-track-index="2" data-track-kind="captions" data-start="71.757" data-duration="0.9029999999999916"><span id="w74-0">current</span> <span id="w74-1">naya</span> <span id="w74-2">previous</span></div>
+<div class="clip caption" id="cap75" data-track-index="2" data-track-kind="captions" data-start="72.711" data-duration="0.9549999999999983"><span id="w75-0">banta</span> <span id="w75-1">hai;</span> <span id="w75-2">old</span></div>
+<div class="clip caption" id="cap76" data-track-index="2" data-track-kind="captions" data-start="73.718" data-duration="1.1479999999999961"><span id="w76-0">previous</span> <span id="w76-1">plus</span> <span id="w76-2">old</span></div>
+<div class="clip caption" id="cap77" data-track-index="2" data-track-kind="captions" data-start="74.917" data-duration="1.2009999999999934"><span id="w77-0">current</span> <span id="w77-1">naya</span> <span id="w77-2">current.</span></div>
+<div class="clip caption" id="cap78" data-track-index="2" data-track-kind="captions" data-start="76.418" data-duration="0.6969999999999885"><span id="w78-0">pehle</span> <span id="w78-1">previous</span></div>
+<div class="clip caption" id="cap79" data-track-index="2" data-track-kind="captions" data-start="77.153" data-duration="0.7999999999999972"><span id="w79-0">badalkar</span> <span id="w79-1">phir</span> <span id="w79-2">sum</span></div>
+<div class="clip caption" id="cap80" data-track-index="2" data-track-kind="captions" data-start="78.018" data-duration="0.8509999999999991"><span id="w80-0">nikaloge</span> <span id="w80-1">to</span> <span id="w80-2">wrong</span></div>
+<div class="clip caption" id="cap81" data-track-index="2" data-track-kind="captions" data-start="78.92" data-duration="0.6069999999999993"><span id="w81-0">state</span> <span id="w81-1">use</span> <span id="w81-2">ho</span></div>
+<div class="clip caption" id="cap82" data-track-index="2" data-track-kind="captions" data-start="79.605" data-duration="0.6219999999999999"><span id="w82-0">sakti</span> <span id="w82-1">hai.</span></div>
+<div class="clip caption" id="cap83" data-track-index="2" data-track-kind="captions" data-start="80.807" data-duration="1.070999999999998"><span id="w83-0">Every</span> <span id="w83-1">stair</span> <span id="w83-2">once:</span></div>
+<div class="clip caption" id="cap84" data-track-index="2" data-track-kind="captions" data-start="82.007" data-duration="0.5159999999999911"><span id="w84-0">O</span> <span id="w84-1">of</span> <span id="w84-2">n</span></div>
+<div class="clip caption" id="cap85" data-track-index="2" data-track-kind="captions" data-start="82.6" data-duration="0.8130000000000024"><span id="w85-0">time.</span> <span id="w85-1">sirf</span> <span id="w85-2">two</span></div>
+<div class="clip caption" id="cap86" data-track-index="2" data-track-kind="captions" data-start="83.477" data-duration="0.9170000000000016"><span id="w86-0">running</span> <span id="w86-1">counts:</span> <span id="w86-2">O</span></div>
+<div class="clip caption" id="cap87" data-track-index="2" data-track-kind="captions" data-start="84.47" data-duration="0.6710000000000065"><span id="w87-0">of</span> <span id="w87-1">one</span> <span id="w87-2">extra</span></div>
+<div class="clip caption" id="cap88" data-track-index="2" data-track-kind="captions" data-start="85.18" data-duration="1.3839999999999861"><span id="w88-0">space.</span> <span id="w88-1">N</span> <span id="w88-2">one</span></div>
+<div class="clip caption" id="cap89" data-track-index="2" data-track-kind="captions" data-start="86.616" data-duration="0.5679999999999978"><span id="w89-0">par</span> <span id="w89-1">loop</span> <span id="w89-2">skip</span></div>
+<div class="clip caption" id="cap90" data-track-index="2" data-track-kind="captions" data-start="87.235" data-duration="0.5679999999999978"><span id="w90-0">hota</span> <span id="w90-1">hai</span> <span id="w90-2">aur</span></div>
+<div class="clip caption" id="cap91" data-track-index="2" data-track-kind="captions" data-start="87.879" data-duration="0.7620000000000005"><span id="w91-0">one</span> <span id="w91-1">lautta</span> <span id="w91-2">hai.</span></div>
+<div class="clip caption" id="cap92" data-track-index="2" data-track-kind="captions" data-start="88.771" data-duration="1.1219999999999999"><span id="w92-0">Full</span> <span id="w92-1">recursion</span> <span id="w92-2">tree</span></div>
+<div class="clip caption" id="cap93" data-track-index="2" data-track-kind="captions" data-start="90.125" data-duration="0.7339999999999947"><span id="w93-0">ya</span> <span id="w93-1">poora</span> <span id="w93-2">DP</span></div>
+<div class="clip caption" id="cap94" data-track-index="2" data-track-kind="captions" data-start="90.989" data-duration="0.6189999999999998"><span id="w94-0">array</span> <span id="w94-1">rakhne</span> <span id="w94-2">ki</span></div>
+<div class="clip caption" id="cap95" data-track-index="2" data-track-kind="captions" data-start="91.659" data-duration="0.8319999999999936"><span id="w95-0">zarurat</span> <span id="w95-1">nahi.</span></div>
+</div><div id="source">Problem: LeetCode #70</div><div id="progress-track"><div id="progress"></div></div><audio class="clip" id="voice" data-track-index="3" data-track-kind="audio" src="audio/hi/voice.wav" data-start="0" data-duration="94.0"></audio><audio class="clip" id="bed" data-track-index="4" data-track-kind="audio" src="audio/hi/bed.wav" data-start="0" data-duration="94.0"></audio><audio class="clip" id="sfx" data-track-index="5" data-track-kind="audio" src="audio/hi/sfx.wav" data-start="0" data-duration="94.0"></audio></main><script>const R=window.REEL.hi,S=R.starts,P=R.ph;
+const tl=gsap.timeline({paused:true}),order=Object.keys(P);
+order.forEach((s,i)=>{tl.set('#v'+s,{opacity:1},S[s]);if(i<order.length-1)tl.set('#v'+s,{opacity:0},S[order[i+1]]);});
+tl.fromTo('#progress',{scaleX:0},{scaleX:1,duration:R.total,ease:'none'},0);
+function step(id,t,end){tl.set(id,{opacity:1},t);tl.set(id,{opacity:0},end);}
+function cell(prefix,i,t,color='#A78BFA'){tl.to('#'+prefix+'-c'+i,{attr:{stroke:color,fill:color==='#6FD3A6'?'#173B35':'#30264C'},duration:.2},t);}
+function reset(prefix,t){tl.set('[id^="'+prefix+'-c"]',{attr:{stroke:'#34425D',fill:'#172239'}},t);}
+function reveal(id,t){tl.fromTo(id,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out'},t);}
+
+function cue(scene,phrase,word=null,occurrence=0){
+ const p=P[scene][phrase];if(!p)throw Error('missing phrase '+scene+phrase);
+ if(word===null)return p.s;
+ const hits=R.caps.filter(c=>c.scene===scene&&c.s>=p.s&&c.s<p.e&&c.t.toLowerCase().replace(/[^a-z0-9]/g,'')===word.toLowerCase());
+ if(!hits[occurrence])throw Error('missing word '+scene+phrase+' '+word+' #'+occurrence);
+ return hits[occurrence].s;
+}
+// diagram: A
+step("#A-step0",S.A,S.B);
+// diagram: B
+step("#B-step0",S.B,S.C);
+// diagram: C
+step("#C-step0",S.C,S.D);
+// diagram: D
+step("#D-step0",S.D,S.E);
+// diagram: E
+step("#E-step0",S.E,cue("E",1,"two",0));
+step("#E-step1",cue("E",1,"two",0),cue("E",1,"three",0));
+step("#E-step2",cue("E",1,"three",0),cue("E",2,"four",0));
+step("#E-step3",cue("E",2,"four",0),cue("E",2,"five",1));
+step("#E-step4",cue("E",2,"five",1),S.F);
+// diagram: F
+// diagram: G
+tl.set("[id^=codeF-L] .code-highlight",{opacity:0},cue("F",0));tl.set("#codeF-L3 .code-highlight",{opacity:.2},cue("F",0));
+tl.set("[id^=codeF-L] .code-highlight",{opacity:0},cue("F",1));tl.set("#codeF-L4 .code-highlight",{opacity:.2},cue("F",1));
+tl.set("[id^=codeF-L] .code-highlight",{opacity:0},cue("F",2));tl.set("#codeF-L5 .code-highlight",{opacity:.2},cue("F",2));
+tl.set("[id^=codeG-L] .code-highlight",{opacity:0},cue("G",0));tl.set("#codeG-L3 .code-highlight",{opacity:.2},cue("G",0));
+tl.set("[id^=codeG-L] .code-highlight",{opacity:0},cue("G",1));tl.set("#codeG-L5 .code-highlight",{opacity:.2},cue("G",1));
+
+window.__timelines=window.__timelines||{};window.__timelines.main=tl;
+tl.set('#cap0',{opacity:1},0.08);tl.set('#cap0',{opacity:0},1.103);
+tl.set('#w0-0',{color:'#A78BFA'},0.08);
+tl.set('#w0-1',{color:'#A78BFA'},0.544);
+tl.set('#w0-2',{color:'#A78BFA'},0.673);
+tl.set('#cap1',{opacity:1},1.124);tl.set('#cap1',{opacity:0},1.903);
+tl.set('#w1-0',{color:'#A78BFA'},1.124);
+tl.set('#w1-1',{color:'#A78BFA'},1.267);
+tl.set('#w1-2',{color:'#A78BFA'},1.692);
+tl.set('#cap2',{opacity:1},1.912);tl.set('#cap2',{opacity:0},3.4739999999999998);
+tl.set('#w2-0',{color:'#A78BFA'},1.912);
+tl.set('#w2-1',{color:'#A78BFA'},2.683);
+tl.set('#w2-2',{color:'#A78BFA'},3.044);
+tl.set('#cap3',{opacity:1},3.508);tl.set('#cap3',{opacity:0},4.557);
+tl.set('#w3-0',{color:'#A78BFA'},3.508);
+tl.set('#w3-1',{color:'#A78BFA'},4.063);
+tl.set('#w3-2',{color:'#A78BFA'},4.295);
+tl.set('#cap4',{opacity:1},4.566);tl.set('#cap4',{opacity:0},5.0600000000000005);
+tl.set('#w4-0',{color:'#A78BFA'},4.566);
+tl.set('#w4-1',{color:'#A78BFA'},4.734);
+tl.set('#w4-2',{color:'#A78BFA'},4.94);
+tl.set('#cap5',{opacity:1},5.082);tl.set('#cap5',{opacity:0},5.835);
+tl.set('#w5-0',{color:'#A78BFA'},5.082);
+tl.set('#w5-1',{color:'#A78BFA'},5.302);
+tl.set('#w5-2',{color:'#A78BFA'},5.649);
+tl.set('#cap6',{opacity:1},5.856);tl.set('#cap6',{opacity:0},6.673);
+tl.set('#w6-0',{color:'#A78BFA'},5.856);
+tl.set('#w6-1',{color:'#A78BFA'},6.127);
+tl.set('#w6-2',{color:'#A78BFA'},6.32);
+tl.set('#cap7',{opacity:1},6.734);tl.set('#cap7',{opacity:0},7.408);
+tl.set('#w7-0',{color:'#A78BFA'},6.734);
+tl.set('#w7-1',{color:'#A78BFA'},7.017);
+tl.set('#cap8',{opacity:1},7.417);tl.set('#cap8',{opacity:0},8.491999999999999);
+tl.set('#w8-0',{color:'#A78BFA'},7.417);
+tl.set('#w8-1',{color:'#A78BFA'},7.933);
+tl.set('#w8-2',{color:'#A78BFA'},8.229);
+tl.set('#cap9',{opacity:1},8.514);tl.set('#cap9',{opacity:0},9.084999999999999);
+tl.set('#w9-0',{color:'#A78BFA'},8.514);
+tl.set('#w9-1',{color:'#A78BFA'},8.784);
+tl.set('#cap10',{opacity:1},9.094);tl.set('#cap10',{opacity:0},9.976999999999999);
+tl.set('#w10-0',{color:'#A78BFA'},9.094);
+tl.set('#w10-1',{color:'#A78BFA'},9.48);
+tl.set('#w10-2',{color:'#A78BFA'},9.726);
+tl.set('#cap11',{opacity:1},10.527);tl.set('#cap11',{opacity:0},11.615);
+tl.set('#w11-0',{color:'#A78BFA'},10.527);
+tl.set('#w11-1',{color:'#A78BFA'},10.901);
+tl.set('#w11-2',{color:'#A78BFA'},11.366);
+tl.set('#cap12',{opacity:1},11.662);tl.set('#cap12',{opacity:0},13.072);
+tl.set('#w12-0',{color:'#A78BFA'},11.662);
+tl.set('#w12-1',{color:'#A78BFA'},12.191);
+tl.set('#w12-2',{color:'#A78BFA'},12.527);
+tl.set('#cap13',{opacity:1},13.132);tl.set('#cap13',{opacity:0},14.065999999999999);
+tl.set('#w13-0',{color:'#A78BFA'},13.132);
+tl.set('#w13-1',{color:'#A78BFA'},13.288);
+tl.set('#w13-2',{color:'#A78BFA'},13.661);
+tl.set('#cap14',{opacity:1},14.075);tl.set('#cap14',{opacity:0},15.084999999999999);
+tl.set('#w14-0',{color:'#A78BFA'},14.075);
+tl.set('#w14-1',{color:'#A78BFA'},14.578);
+tl.set('#w14-2',{color:'#A78BFA'},14.926);
+tl.set('#cap15',{opacity:1},15.119);tl.set('#cap15',{opacity:0},15.897);
+tl.set('#w15-0',{color:'#A78BFA'},15.119);
+tl.set('#w15-1',{color:'#A78BFA'},15.494);
+tl.set('#w15-2',{color:'#A78BFA'},15.674);
+tl.set('#cap16',{opacity:1},15.894);tl.set('#cap16',{opacity:0},16.878);
+tl.set('#w16-0',{color:'#A78BFA'},15.894);
+tl.set('#w16-1',{color:'#A78BFA'},16.255);
+tl.set('#w16-2',{color:'#A78BFA'},16.602);
+tl.set('#cap17',{opacity:1},16.899);tl.set('#cap17',{opacity:0},17.82);
+tl.set('#w17-0',{color:'#A78BFA'},16.899);
+tl.set('#w17-1',{color:'#A78BFA'},17.221);
+tl.set('#w17-2',{color:'#A78BFA'},17.377);
+tl.set('#cap18',{opacity:1},18.09);tl.set('#cap18',{opacity:0},18.830000000000002);
+tl.set('#w18-0',{color:'#A78BFA'},18.09);
+tl.set('#w18-1',{color:'#A78BFA'},18.412);
+tl.set('#w18-2',{color:'#A78BFA'},18.709);
+tl.set('#cap19',{opacity:1},18.851);tl.set('#cap19',{opacity:0},19.823);
+tl.set('#w19-0',{color:'#A78BFA'},18.851);
+tl.set('#w19-1',{color:'#A78BFA'},19.341);
+tl.set('#w19-2',{color:'#A78BFA'},19.651);
+tl.set('#cap20',{opacity:1},19.87);tl.set('#cap20',{opacity:0},20.854000000000003);
+tl.set('#w20-0',{color:'#A78BFA'},19.87);
+tl.set('#w20-1',{color:'#A78BFA'},20.167);
+tl.set('#w20-2',{color:'#A78BFA'},20.58);
+tl.set('#cap21',{opacity:1},20.851);tl.set('#cap21',{opacity:0},21.82);
+tl.set('#w21-0',{color:'#A78BFA'},20.851);
+tl.set('#w21-1',{color:'#A78BFA'},21.199);
+tl.set('#w21-2',{color:'#A78BFA'},21.547);
+tl.set('#cap22',{opacity:1},22.37);tl.set('#cap22',{opacity:0},23.303);
+tl.set('#w22-0',{color:'#A78BFA'},22.37);
+tl.set('#w22-1',{color:'#A78BFA'},22.718);
+tl.set('#w22-2',{color:'#A78BFA'},22.977);
+tl.set('#cap23',{opacity:1},23.338);tl.set('#cap23',{opacity:0},24.025000000000002);
+tl.set('#w23-0',{color:'#A78BFA'},23.338);
+tl.set('#w23-1',{color:'#A78BFA'},23.557);
+tl.set('#w23-2',{color:'#A78BFA'},23.879);
+tl.set('#cap24',{opacity:1},24.047);tl.set('#cap24',{opacity:0},24.658);
+tl.set('#w24-0',{color:'#A78BFA'},24.047);
+tl.set('#w24-1',{color:'#A78BFA'},24.228);
+tl.set('#w24-2',{color:'#A78BFA'},24.37);
+tl.set('#cap25',{opacity:1},24.653);tl.set('#cap25',{opacity:0},25.728);
+tl.set('#w25-0',{color:'#A78BFA'},24.653);
+tl.set('#w25-1',{color:'#A78BFA'},24.963);
+tl.set('#w25-2',{color:'#A78BFA'},25.428);
+tl.set('#cap26',{opacity:1},25.724);tl.set('#cap26',{opacity:0},26.748);
+tl.set('#w26-0',{color:'#A78BFA'},25.724);
+tl.set('#w26-1',{color:'#A78BFA'},25.994);
+tl.set('#w26-2',{color:'#A78BFA'},26.394);
+tl.set('#cap27',{opacity:1},26.755);tl.set('#cap27',{opacity:0},28.367);
+tl.set('#w27-0',{color:'#A78BFA'},26.755);
+tl.set('#w27-1',{color:'#A78BFA'},27.498);
+tl.set('#w27-2',{color:'#A78BFA'},27.77);
+tl.set('#cap28',{opacity:1},28.388);tl.set('#cap28',{opacity:0},29.205000000000002);
+tl.set('#w28-0',{color:'#A78BFA'},28.388);
+tl.set('#w28-1',{color:'#A78BFA'},29.021);
+tl.set('#cap29',{opacity:1},29.407);tl.set('#cap29',{opacity:0},30.392);
+tl.set('#w29-0',{color:'#A78BFA'},29.407);
+tl.set('#w29-1',{color:'#A78BFA'},29.897);
+tl.set('#w29-2',{color:'#A78BFA'},30.092);
+tl.set('#cap30',{opacity:1},30.426);tl.set('#cap30',{opacity:0},31.127000000000002);
+tl.set('#w30-0',{color:'#A78BFA'},30.426);
+tl.set('#w30-1',{color:'#A78BFA'},30.685);
+tl.set('#w30-2',{color:'#A78BFA'},30.878);
+tl.set('#cap31',{opacity:1},31.162);tl.set('#cap31',{opacity:0},31.902);
+tl.set('#w31-0',{color:'#A78BFA'},31.162);
+tl.set('#cap32',{opacity:1},31.923);tl.set('#cap32',{opacity:0},32.895);
+tl.set('#w32-0',{color:'#A78BFA'},31.923);
+tl.set('#w32-1',{color:'#A78BFA'},32.452);
+tl.set('#w32-2',{color:'#A78BFA'},32.736);
+tl.set('#cap33',{opacity:1},32.93);tl.set('#cap33',{opacity:0},33.919000000000004);
+tl.set('#w33-0',{color:'#A78BFA'},32.93);
+tl.set('#w33-1',{color:'#A78BFA'},33.252);
+tl.set('#w33-2',{color:'#A78BFA'},33.548);
+tl.set('#cap34',{opacity:1},34.469);tl.set('#cap34',{opacity:0},35.543);
+tl.set('#w34-0',{color:'#A78BFA'},34.469);
+tl.set('#w34-1',{color:'#A78BFA'},34.83);
+tl.set('#w34-2',{color:'#A78BFA'},35.049);
+tl.set('#cap35',{opacity:1},35.708);tl.set('#cap35',{opacity:0},36.46);
+tl.set('#w35-0',{color:'#A78BFA'},35.708);
+tl.set('#w35-1',{color:'#A78BFA'},36.133);
+tl.set('#w35-2',{color:'#A78BFA'},36.274);
+tl.set('#cap36',{opacity:1},36.481);tl.set('#cap36',{opacity:0},37.492000000000004);
+tl.set('#w36-0',{color:'#A78BFA'},36.481);
+tl.set('#w36-1',{color:'#A78BFA'},36.713);
+tl.set('#w36-2',{color:'#A78BFA'},37.01);
+tl.set('#cap37',{opacity:1},37.526);tl.set('#cap37',{opacity:0},38.265);
+tl.set('#w37-0',{color:'#A78BFA'},37.526);
+tl.set('#w37-1',{color:'#A78BFA'},37.823);
+tl.set('#w37-2',{color:'#A78BFA'},37.991);
+tl.set('#cap38',{opacity:1},38.3);tl.set('#cap38',{opacity:0},39.235);
+tl.set('#w38-0',{color:'#A78BFA'},38.3);
+tl.set('#w38-1',{color:'#A78BFA'},38.493);
+tl.set('#w38-2',{color:'#A78BFA'},38.649);
+tl.set('#cap39',{opacity:1},39.505);tl.set('#cap39',{opacity:0},40.271);
+tl.set('#w39-0',{color:'#A78BFA'},39.505);
+tl.set('#w39-1',{color:'#A78BFA'},39.944);
+tl.set('#w39-2',{color:'#A78BFA'},40.15);
+tl.set('#cap40',{opacity:1},40.331);tl.set('#cap40',{opacity:0},41.535000000000004);
+tl.set('#w40-0',{color:'#A78BFA'},40.331);
+tl.set('#w40-1',{color:'#A78BFA'},40.744);
+tl.set('#w40-2',{color:'#A78BFA'},41.195);
+tl.set('#cap41',{opacity:1},41.608);tl.set('#cap41',{opacity:0},42.477000000000004);
+tl.set('#w41-0',{color:'#A78BFA'},41.608);
+tl.set('#w41-1',{color:'#A78BFA'},41.853);
+tl.set('#w41-2',{color:'#A78BFA'},42.267);
+tl.set('#cap42',{opacity:1},42.472);tl.set('#cap42',{opacity:0},42.992000000000004);
+tl.set('#w42-0',{color:'#A78BFA'},42.472);
+tl.set('#w42-1',{color:'#A78BFA'},42.628);
+tl.set('#w42-2',{color:'#A78BFA'},42.86);
+tl.set('#cap43',{opacity:1},43.001);tl.set('#cap43',{opacity:0},43.715);
+tl.set('#w43-0',{color:'#A78BFA'},43.001);
+tl.set('#w43-1',{color:'#A78BFA'},43.414);
+tl.set('#w43-2',{color:'#A78BFA'},43.608);
+tl.set('#cap44',{opacity:1},43.737);tl.set('#cap44',{opacity:0},44.553000000000004);
+tl.set('#w44-0',{color:'#A78BFA'},43.737);
+tl.set('#w44-1',{color:'#A78BFA'},44.072);
+tl.set('#w44-2',{color:'#A78BFA'},44.227);
+tl.set('#cap45',{opacity:1},44.588);tl.set('#cap45',{opacity:0},45.675000000000004);
+tl.set('#w45-0',{color:'#A78BFA'},44.588);
+tl.set('#w45-1',{color:'#A78BFA'},44.833);
+tl.set('#w45-2',{color:'#A78BFA'},45.298);
+tl.set('#cap46',{opacity:1},45.71);tl.set('#cap46',{opacity:0},46.618);
+tl.set('#w46-0',{color:'#A78BFA'},45.71);
+tl.set('#w46-1',{color:'#A78BFA'},46.149);
+tl.set('#w46-2',{color:'#A78BFA'},46.291);
+tl.set('#cap47',{opacity:1},46.639);tl.set('#cap47',{opacity:0},47.675000000000004);
+tl.set('#w47-0',{color:'#A78BFA'},46.639);
+tl.set('#w47-1',{color:'#A78BFA'},46.988);
+tl.set('#w47-2',{color:'#A78BFA'},47.31);
+tl.set('#cap48',{opacity:1},47.671);tl.set('#cap48',{opacity:0},49.029);
+tl.set('#w48-0',{color:'#A78BFA'},47.671);
+tl.set('#w48-1',{color:'#A78BFA'},48.302);
+tl.set('#w48-2',{color:'#A78BFA'},48.715);
+tl.set('#cap49',{opacity:1},49.076);tl.set('#cap49',{opacity:0},49.647);
+tl.set('#w49-0',{color:'#A78BFA'},49.076);
+tl.set('#w49-1',{color:'#A78BFA'},49.231);
+tl.set('#w49-2',{color:'#A78BFA'},49.437);
+tl.set('#cap50',{opacity:1},49.682);tl.set('#cap50',{opacity:0},50.473);
+tl.set('#w50-0',{color:'#A78BFA'},49.682);
+tl.set('#w50-1',{color:'#A78BFA'},50.043);
+tl.set('#w50-2',{color:'#A78BFA'},50.211);
+tl.set('#cap51',{opacity:1},50.507);tl.set('#cap51',{opacity:0},51.093);
+tl.set('#w51-0',{color:'#A78BFA'},50.507);
+tl.set('#cap52',{opacity:1},51.643);tl.set('#cap52',{opacity:0},52.77);
+tl.set('#w52-0',{color:'#A78BFA'},51.643);
+tl.set('#w52-1',{color:'#A78BFA'},52.197);
+tl.set('#w52-2',{color:'#A78BFA'},52.482);
+tl.set('#cap53',{opacity:1},52.804);tl.set('#cap53',{opacity:0},53.376);
+tl.set('#w53-0',{color:'#A78BFA'},52.804);
+tl.set('#w53-1',{color:'#A78BFA'},52.907);
+tl.set('#w53-2',{color:'#A78BFA'},53.152);
+tl.set('#cap54',{opacity:1},53.384);tl.set('#cap54',{opacity:0},54.421);
+tl.set('#w54-0',{color:'#A78BFA'},53.384);
+tl.set('#w54-1',{color:'#A78BFA'},53.681);
+tl.set('#w54-2',{color:'#A78BFA'},54.184);
+tl.set('#cap55',{opacity:1},54.416);tl.set('#cap55',{opacity:0},55.014);
+tl.set('#w55-0',{color:'#A78BFA'},54.416);
+tl.set('#w55-1',{color:'#A78BFA'},54.752);
+tl.set('#w55-2',{color:'#A78BFA'},54.855);
+tl.set('#cap56',{opacity:1},55.062);tl.set('#cap56',{opacity:0},56.063);
+tl.set('#w56-0',{color:'#A78BFA'},55.062);
+tl.set('#w56-1',{color:'#A78BFA'},55.281);
+tl.set('#w56-2',{color:'#A78BFA'},55.801);
+tl.set('#cap57',{opacity:1},56.098);tl.set('#cap57',{opacity:0},56.721000000000004);
+tl.set('#w57-0',{color:'#A78BFA'},56.098);
+tl.set('#w57-1',{color:'#A78BFA'},56.316);
+tl.set('#w57-2',{color:'#A78BFA'},56.498);
+tl.set('#cap58',{opacity:1},56.769);tl.set('#cap58',{opacity:0},57.302);
+tl.set('#w58-0',{color:'#A78BFA'},56.769);
+tl.set('#w58-1',{color:'#A78BFA'},56.975);
+tl.set('#w58-2',{color:'#A78BFA'},57.116);
+tl.set('#cap59',{opacity:1},57.323);tl.set('#cap59',{opacity:0},57.96);
+tl.set('#w59-0',{color:'#A78BFA'},57.323);
+tl.set('#w59-1',{color:'#A78BFA'},57.569);
+tl.set('#w59-2',{color:'#A78BFA'},57.788);
+tl.set('#cap60',{opacity:1},57.955);tl.set('#cap60',{opacity:0},58.489000000000004);
+tl.set('#w60-0',{color:'#A78BFA'},57.955);
+tl.set('#w60-1',{color:'#A78BFA'},58.213);
+tl.set('#w60-2',{color:'#A78BFA'},58.381);
+tl.set('#cap61',{opacity:1},58.523);tl.set('#cap61',{opacity:0},59.894);
+tl.set('#w61-0',{color:'#A78BFA'},58.523);
+tl.set('#w61-1',{color:'#A78BFA'},59.335);
+tl.set('#w61-2',{color:'#A78BFA'},59.721);
+tl.set('#cap62',{opacity:1},59.928);tl.set('#cap62',{opacity:0},60.577);
+tl.set('#w62-0',{color:'#A78BFA'},59.928);
+tl.set('#w62-1',{color:'#A78BFA'},60.121);
+tl.set('#w62-2',{color:'#A78BFA'},60.367);
+tl.set('#cap63',{opacity:1},60.574);tl.set('#cap63',{opacity:0},61.648);
+tl.set('#w63-0',{color:'#A78BFA'},60.574);
+tl.set('#w63-1',{color:'#A78BFA'},60.754);
+tl.set('#w63-2',{color:'#A78BFA'},61.335);
+tl.set('#cap64',{opacity:1},61.644);tl.set('#cap64',{opacity:0},62.267);
+tl.set('#w64-0',{color:'#A78BFA'},61.644);
+tl.set('#w64-1',{color:'#A78BFA'},61.825);
+tl.set('#w64-2',{color:'#A78BFA'},62.069);
+tl.set('#cap65',{opacity:1},62.315);tl.set('#cap65',{opacity:0},63.209);
+tl.set('#w65-0',{color:'#A78BFA'},62.315);
+tl.set('#w65-1',{color:'#A78BFA'},62.611);
+tl.set('#w65-2',{color:'#A78BFA'},62.883);
+tl.set('#cap66',{opacity:1},63.308);tl.set('#cap66',{opacity:0},64.409);
+tl.set('#w66-0',{color:'#A78BFA'},63.308);
+tl.set('#w66-1',{color:'#A78BFA'},63.579);
+tl.set('#w66-2',{color:'#A78BFA'},63.927);
+tl.set('#cap67',{opacity:1},64.959);tl.set('#cap67',{opacity:0},66.18900000000001);
+tl.set('#w67-0',{color:'#A78BFA'},64.959);
+tl.set('#w67-1',{color:'#A78BFA'},65.527);
+tl.set('#w67-2',{color:'#A78BFA'},65.759);
+tl.set('#cap68',{opacity:1},66.224);tl.set('#cap68',{opacity:0},66.937);
+tl.set('#w68-0',{color:'#A78BFA'},66.224);
+tl.set('#w68-1',{color:'#A78BFA'},66.353);
+tl.set('#w68-2',{color:'#A78BFA'},66.649);
+tl.set('#cap69',{opacity:1},66.946);tl.set('#cap69',{opacity:0},67.647);
+tl.set('#w69-0',{color:'#A78BFA'},66.946);
+tl.set('#w69-1',{color:'#A78BFA'},67.1);
+tl.set('#w69-2',{color:'#A78BFA'},67.424);
+tl.set('#cap70',{opacity:1},67.81);tl.set('#cap70',{opacity:0},68.549);
+tl.set('#w70-0',{color:'#A78BFA'},67.81);
+tl.set('#w70-1',{color:'#A78BFA'},68.158);
+tl.set('#w70-2',{color:'#A78BFA'},68.404);
+tl.set('#cap71',{opacity:1},68.597);tl.set('#cap71',{opacity:0},69.234);
+tl.set('#w71-0',{color:'#A78BFA'},68.597);
+tl.set('#w71-1',{color:'#A78BFA'},68.726);
+tl.set('#w71-2',{color:'#A78BFA'},68.907);
+tl.set('#cap72',{opacity:1},69.229);tl.set('#cap72',{opacity:0},70.587);
+tl.set('#w72-0',{color:'#A78BFA'},69.229);
+tl.set('#w72-1',{color:'#A78BFA'},69.834);
+tl.set('#cap73',{opacity:1},70.609);tl.set('#cap73',{opacity:0},71.722);
+tl.set('#w73-0',{color:'#A78BFA'},70.609);
+tl.set('#w73-1',{color:'#A78BFA'},71.163);
+tl.set('#w73-2',{color:'#A78BFA'},71.447);
+tl.set('#cap74',{opacity:1},71.757);tl.set('#cap74',{opacity:0},72.69);
+tl.set('#w74-0',{color:'#A78BFA'},71.757);
+tl.set('#w74-1',{color:'#A78BFA'},72.131);
+tl.set('#w74-2',{color:'#A78BFA'},72.337);
+tl.set('#cap75',{opacity:1},72.711);tl.set('#cap75',{opacity:0},73.696);
+tl.set('#w75-0',{color:'#A78BFA'},72.711);
+tl.set('#w75-1',{color:'#A78BFA'},73.047);
+tl.set('#w75-2',{color:'#A78BFA'},73.459);
+tl.set('#cap76',{opacity:1},73.718);tl.set('#cap76',{opacity:0},74.896);
+tl.set('#w76-0',{color:'#A78BFA'},73.718);
+tl.set('#w76-1',{color:'#A78BFA'},74.284);
+tl.set('#w76-2',{color:'#A78BFA'},74.659);
+tl.set('#cap77',{opacity:1},74.917);tl.set('#cap77',{opacity:0},76.148);
+tl.set('#w77-0',{color:'#A78BFA'},74.917);
+tl.set('#w77-1',{color:'#A78BFA'},75.278);
+tl.set('#w77-2',{color:'#A78BFA'},75.498);
+tl.set('#cap78',{opacity:1},76.418);tl.set('#cap78',{opacity:0},77.145);
+tl.set('#w78-0',{color:'#A78BFA'},76.418);
+tl.set('#w78-1',{color:'#A78BFA'},76.766);
+tl.set('#cap79',{opacity:1},77.153);tl.set('#cap79',{opacity:0},77.983);
+tl.set('#w79-0',{color:'#A78BFA'},77.153);
+tl.set('#w79-1',{color:'#A78BFA'},77.605);
+tl.set('#w79-2',{color:'#A78BFA'},77.823);
+tl.set('#cap80',{opacity:1},78.018);tl.set('#cap80',{opacity:0},78.899);
+tl.set('#w80-0',{color:'#A78BFA'},78.018);
+tl.set('#w80-1',{color:'#A78BFA'},78.533);
+tl.set('#w80-2',{color:'#A78BFA'},78.662);
+tl.set('#cap81',{opacity:1},78.92);tl.set('#cap81',{opacity:0},79.557);
+tl.set('#w81-0',{color:'#A78BFA'},78.92);
+tl.set('#w81-1',{color:'#A78BFA'},79.205);
+tl.set('#w81-2',{color:'#A78BFA'},79.449);
+tl.set('#cap82',{opacity:1},79.605);tl.set('#cap82',{opacity:0},80.257);
+tl.set('#w82-0',{color:'#A78BFA'},79.605);
+tl.set('#w82-1',{color:'#A78BFA'},79.952);
+tl.set('#cap83',{opacity:1},80.807);tl.set('#cap83',{opacity:0},81.908);
+tl.set('#w83-0',{color:'#A78BFA'},80.807);
+tl.set('#w83-1',{color:'#A78BFA'},81.207);
+tl.set('#w83-2',{color:'#A78BFA'},81.581);
+tl.set('#cap84',{opacity:1},82.007);tl.set('#cap84',{opacity:0},82.553);
+tl.set('#w84-0',{color:'#A78BFA'},82.007);
+tl.set('#w84-1',{color:'#A78BFA'},82.2);
+tl.set('#w84-2',{color:'#A78BFA'},82.433);
+tl.set('#cap85',{opacity:1},82.6);tl.set('#cap85',{opacity:0},83.443);
+tl.set('#w85-0',{color:'#A78BFA'},82.6);
+tl.set('#w85-1',{color:'#A78BFA'},82.961);
+tl.set('#w85-2',{color:'#A78BFA'},83.297);
+tl.set('#cap86',{opacity:1},83.477);tl.set('#cap86',{opacity:0},84.424);
+tl.set('#w86-0',{color:'#A78BFA'},83.477);
+tl.set('#w86-1',{color:'#A78BFA'},83.8);
+tl.set('#w86-2',{color:'#A78BFA'},84.251);
+tl.set('#cap87',{opacity:1},84.47);tl.set('#cap87',{opacity:0},85.171);
+tl.set('#w87-0',{color:'#A78BFA'},84.47);
+tl.set('#w87-1',{color:'#A78BFA'},84.69);
+tl.set('#w87-2',{color:'#A78BFA'},84.884);
+tl.set('#cap88',{opacity:1},85.18);tl.set('#cap88',{opacity:0},86.594);
+tl.set('#w88-0',{color:'#A78BFA'},85.18);
+tl.set('#w88-1',{color:'#A78BFA'},85.945);
+tl.set('#w88-2',{color:'#A78BFA'},86.319);
+tl.set('#cap89',{opacity:1},86.616);tl.set('#cap89',{opacity:0},87.214);
+tl.set('#w89-0',{color:'#A78BFA'},86.616);
+tl.set('#w89-1',{color:'#A78BFA'},86.745);
+tl.set('#w89-2',{color:'#A78BFA'},86.938);
+tl.set('#cap90',{opacity:1},87.235);tl.set('#cap90',{opacity:0},87.833);
+tl.set('#w90-0',{color:'#A78BFA'},87.235);
+tl.set('#w90-1',{color:'#A78BFA'},87.506);
+tl.set('#w90-2',{color:'#A78BFA'},87.674);
+tl.set('#cap91',{opacity:1},87.879);tl.set('#cap91',{opacity:0},88.671);
+tl.set('#w91-0',{color:'#A78BFA'},87.879);
+tl.set('#w91-1',{color:'#A78BFA'},88.074);
+tl.set('#w91-2',{color:'#A78BFA'},88.474);
+tl.set('#cap92',{opacity:1},88.771);tl.set('#cap92',{opacity:0},89.923);
+tl.set('#w92-0',{color:'#A78BFA'},88.771);
+tl.set('#w92-1',{color:'#A78BFA'},89.093);
+tl.set('#w92-2',{color:'#A78BFA'},89.622);
+tl.set('#cap93',{opacity:1},90.125);tl.set('#cap93',{opacity:0},90.889);
+tl.set('#w93-0',{color:'#A78BFA'},90.125);
+tl.set('#w93-1',{color:'#A78BFA'},90.305);
+tl.set('#w93-2',{color:'#A78BFA'},90.615);
+tl.set('#cap94',{opacity:1},90.989);tl.set('#cap94',{opacity:0},91.638);
+tl.set('#w94-0',{color:'#A78BFA'},90.989);
+tl.set('#w94-1',{color:'#A78BFA'},91.234);
+tl.set('#w94-2',{color:'#A78BFA'},91.531);
+tl.set('#cap95',{opacity:1},91.659);tl.set('#cap95',{opacity:0},92.521);
+tl.set('#w95-0',{color:'#A78BFA'},91.659);
+tl.set('#w95-1',{color:'#A78BFA'},92.047);
+</script></body></html>

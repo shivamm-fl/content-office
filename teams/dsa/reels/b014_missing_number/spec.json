@@ -1,0 +1,89 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "surprising_fact",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "copy": {
+    "hi": {
+      "A": "@hook Missing number को XOR से निकालो। | Given array: four, zero, two, one. Four elements हैं, इसलिए allowed numbers zero से four तक हैं। Missing value three है। Array में duplicates नहीं हैं।",
+      "B": "Brute force: zero से four तक हर candidate लो, और पूरे array में ढूँढो। | Zero मिलता है, one मिलता है, two मिलता है, three नहीं मिलता। Answer सही है।",
+      "C": "लेकिन हर candidate के लिए फिर से array scan होता है। N candidates और हर scan में up to N values: quadratic work। | Sorting करने पर भी extra ordering work चाहिए; हमें सिर्फ absent value चाहिए।",
+      "D": "XOR की properties: x XOR x is zero, और x XOR zero is x। Order बदलने से result नहीं बदलता। | इसलिए full range और array को XOR कर दो। मौजूद numbers two copies में cancel होंगे। सिर्फ missing number की one copy बचेगी।",
+      "E": "Code missing को length four से initialize करता है। | Index zero, value four से accumulator zero। Index one, value zero से one। | Index two, value two cancel: accumulator one। Index three, value one से three। सभी pairs process हुए, return three।",
+      "F": "ये पूरा Accepted code है। Length वाला initialization range का last number शामिल करता है। Loop के indices zero से n minus one तक बाकी range देते हैं। | हर round index और actual value दोनों XOR होते हैं। Input array बदला नहीं जाता।",
+      "G": "One pass: O of n time, O of one extra space। | Missing zero या missing n भी इसी तरह बचेगा। Duplicates allowed हों तो cancellation proof टूटेगा; यहाँ distinct values problem की guarantee है।"
+    }
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "solution_sha256": "dcaf0527257bbd90fb01f1551eb0f61ce85fcf9a173fae55a959d7e2138118cb",
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "sources": [
+    "https://leetcode.com/problems/missing-number/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    "https://leetcode.com/problems/missing-number/submissions/2193973365/"
+  ],
+  "on_screen_code_contract": "complete_method_body"
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "item": "b018",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "independent_local_checks": {
+    "passed": 1092,
+    "description": "Exact source checked on ternary arrays lengths1..6 against exhaustive strictly-increasing subsequence enumeration; input mutation also checked."
+  },
+  "notes": [
+    "Original [-4,6,2,7,3,8] yields length4; all six tails states, smallest-ending invariant, first tail >=x replacement, append condition and equal-value handling are correct.",
+    "Full method body plus bisect_left import are visible. Current regenerated highlights show binary search for lower-bound explanation, replacement for otherwise/equal explanation and return in G.",
+    "Tails need not itself be a subsequence is qualified; O(n log n) time, O(n) auxiliary space and unchanged input match actual source. No P0/P1 found; no final MP4/audio/continuous-playback claim."
+  ],
+  "reviewed_at_utc": "2026-11-11T16:05:14.0687768Z",
+  "hashes": {
+    "code_sha256": "efac1c0b4a78c0712b9b9e3c133acb23cbe740ee3c65cd11208611567c922c77",
+    "source_sha256": "efac1c0b4a78c0712b9b9e3c133acb23cbe740ee3c65cd11208611567c922c77",
+    "lesson_sha256": "0270e2d27bc93ec1b1d753c53b2916762eeb3f97805a330893be01969c352efa",
+    "script_sha256": "27e77e51679af9529329d09ac688c8a96c91967e642021c1300947cefe0c0ba9",
+    "html_sha256": "f60b24cc877cbe63a8f32c1c9156b5c374b7896f326059fc8c4b166c21ad5651",
+    "storyboard_sha256": "3cfa0dccb0b2efec21a22de34b888368aed56e00d1d43e3a413b745af806390b"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "38a966289e905b1c4b6dd6d098341dd97be6784fe8b547d3afac9ef8353cc72c",
+    "snapshots/contact-sheet-1.jpg": "a9edfebddb6d73fdb3702b7de6ce85fc930cedf6d1b4b9528b6c1bf49dfe5eb6",
+    "snapshots/contact-sheet-2.jpg": "54384f80f6e94ae92079d5c71fe99b4e9323f5ed07805030d800f0ade10c4483",
+    "snapshots/contact-sheet-3.jpg": "dd958690140eb160688de90fa8ec8180177a78d1674da068d741f90d96565a43",
+    "snapshots/contact-sheet-4.jpg": "bfb07ae98635a62bdadb98f44250c19baa078f6c1ed68a8416e1042f9d26c31f"
+  }
+}

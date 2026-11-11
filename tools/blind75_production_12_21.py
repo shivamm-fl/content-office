@@ -90,8 +90,25 @@ def verify(n):
     qa=dict(local_pilot_checks_passed=True,production_worker_gate_run=False,owner_approved=False,published=False,duration_s=dur,owner_tempo=.9,owner_model='eleven_flash_v2_5',loudness_lufs=lufs,true_peak_dbtp_rounded=peak,video=v,accepted_gate=detail,on_screen_code=code,independent_review_passed=True,human_listening=False,mp4_sha256=digest)
     (r/'qa-export-verification.json').write_text(json.dumps(qa,indent=2),encoding='utf-8');progress();print(rid,'final export measured; decoded frames await actual inspection',flush=True)
 
+def final_frames(n):
+    """Decode important terminal and transition frames; inspection remains explicit."""
+    rid,lesson,r=load(n);mp4=TEAM/'reels'/f'{lesson["folder"]}_hi.mp4';data=json.loads((r/'data.json').read_text(encoding='utf-8'))['hi'];p=r/'qa-code-frame-evidence.json';e=json.loads(p.read_text(encoding='utf-8'))
+    assert e['mp4_sha256']==hashlib.sha256(mp4.read_bytes()).hexdigest()
+    targets=[('trace-end',data['starts']['F']-.6)]
+    if n in (17,19,20):targets.append(('code-transition',(data['ph']['F'][1]['s']+data['ph']['F'][1]['e'])/2))
+    if n==21:targets.append(('code-transition',76.5))
+    for name,t in targets:
+        frame=r/f'qa-export-{name}.png';subprocess.run(['ffmpeg','-v','error','-y','-ss',str(t),'-i',str(mp4),'-frames:v','1',str(frame)],check=True)
+        e['frames']=[f for f in e['frames'] if f['frame']!=frame.name]+[dict(time_s=round(t,3),frame=frame.name,frame_sha256=hashlib.sha256(frame.read_bytes()).hexdigest())]
+    e['final_mp4_code_frame_inspected']=False;write=e.pop('inspector',None);e.pop('inspection_scope',None)
+    p.write_text(json.dumps(e,indent=2),encoding='utf-8')
+    ordered=[f for f in e['frames'] if f['frame']!='qa-export-trace.png']
+    sheet=Image.new('RGB',(1080*len(ordered),1920),(11,18,32))
+    for i,f in enumerate(ordered):sheet.paste(Image.open(r/f['frame']).convert('RGB'),(i*1080,0))
+    sheet.save(r/'qa-final-mp4-sheet.jpg',quality=94);print(rid,'final terminal/transition evidence decoded',flush=True)
+
 if __name__=='__main__':
-    a=argparse.ArgumentParser();a.add_argument('action',choices=['progress','quality','render','verify']);a.add_argument('numbers',type=int,nargs='*');args=a.parse_args()
+    a=argparse.ArgumentParser();a.add_argument('action',choices=['progress','quality','render','verify','final_frames']);a.add_argument('numbers',type=int,nargs='*');args=a.parse_args()
     if args.action=='progress':print(json.dumps(progress(),indent=2))
     else:
         for n in args.numbers:globals()[args.action](n)

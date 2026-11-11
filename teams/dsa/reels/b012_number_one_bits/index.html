@@ -1,0 +1,512 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=1080,height=1920"><title>Number of 1 Bits</title>
+<script src="assets/gsap.min.js"></script><script src="data.js"></script><style>
+@font-face{font-family:Head;src:url('fonts/SpaceGrotesk.ttf');font-weight:300 700}
+@font-face{font-family:Code;src:url('fonts/JetBrainsMono.ttf');font-weight:100 800}
+@font-face{font-family:Hindi;src:url('fonts/NotoSansDevanagari.ttf')}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0B1220}
+#root{position:relative;width:1080px;height:1920px;background:#0B1220;color:#F3EFE6;font-family:Head,Hindi,sans-serif}
+.clip,.visual{position:absolute;inset:0}.visual,.state{opacity:0}svg{font-family:Head,Hindi,sans-serif;font-weight:600}
+#series{position:absolute;left:90px;top:178px;font:600 30px Head;letter-spacing:2px;color:#A78BFA;z-index:20}
+#handle{position:absolute;right:140px;top:180px;font:500 28px Head;color:#9DAEC5;z-index:20}
+#source{position:absolute;left:90px;top:1403px;font:500 29px Head;color:#9DAEC5;z-index:20}
+#caption-lane{position:absolute;left:75px;top:1248px;width:870px;height:145px;z-index:30}
+.caption{position:absolute;left:0;top:0;width:870px;text-align:center;font-size:65px;font-weight:700;line-height:1.12;color:#F3EFE6;opacity:0}
+#progress-track{position:absolute;left:90px;top:1460px;width:850px;height:5px;background:#25334D}
+#progress{height:5px;width:850px;background:#A78BFA;transform-origin:left}
+</style></head><body><main id="root" data-composition-id="main" data-start="0" data-duration="92.5" data-width="1080" data-height="1920">
+<div id="series">BLIND 75 · 12 / 75</div><div id="handle">@dsa.learnvora</div>
+<section id="scene-A" class="clip" data-start="0.0" data-duration="11.482" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vA"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="A teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Number of 1 Bits</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Input → required output</text><g class="state" id="A-step0"><text x="100" y="510" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 12</text><rect id="" x="160.0" y="540" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="240.0" y="605" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="335.0" y="540" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="415.0" y="605" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="510.0" y="540" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="605" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="540" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="605" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><text x="505" y="990" fill="#6FD3A6" font-size="44" text-anchor="middle" >set bits = 2</text></g></svg></div></section><section id="scene-B" class="clip" data-start="11.482" data-duration="11.082" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vB"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="B teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Brute force</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Correct baseline · explicit choices</text><g class="state" id="B-step0"><text x="100" y="520" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 12</text><rect id="" x="160.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="240.0" y="615" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="335.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="415.0" y="615" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="510.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >12</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >CHECKS</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >0</text></g><g class="state" id="B-step1"><text x="100" y="520" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 6</text><rect id="" x="160.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="240.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="335.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="415.0" y="615" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="510.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="590.0" y="615" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="685.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >6</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >CHECKS</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text></g><g class="state" id="B-step2"><text x="100" y="520" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 3</text><rect id="" x="160.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="240.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="335.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="415.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="510.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="590.0" y="615" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="685.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="765.0" y="615" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >3</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >CHECKS</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text></g><g class="state" id="B-step3"><text x="100" y="520" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 1</text><rect id="" x="160.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="240.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="335.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="415.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="510.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="765.0" y="615" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >1</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >CHECKS</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >3</text></g><g class="state" id="B-step4"><text x="100" y="520" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 0</text><rect id="" x="160.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="240.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="335.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="415.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="510.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="550" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="615" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >0</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >CHECKS</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >4</text></g></svg></div></section><section id="scene-C" class="clip" data-start="22.564" data-duration="10.387" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vC"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="C teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Where it costs</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Repeated work or a concrete trap</text><g class="state" id="C-step0"><text x="100" y="540" fill="#9DAEC5" font-size="33" text-anchor="start" >16 · scan 5 positions</text><rect id="" x="160.0" y="570" width="125.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="222.5" y="635" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="300.0" y="570" width="125.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="362.5" y="635" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="440.0" y="570" width="125.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="502.5" y="635" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="580.0" y="570" width="125.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="642.5" y="635" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="720.0" y="570" width="125.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="782.5" y="635" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><text x="505" y="1010" fill="#E5735F" font-size="44" text-anchor="middle" >only 1 set bit</text></g></svg></div></section><section id="scene-D" class="clip" data-start="32.951" data-duration="17.232" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vD"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="D teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="58" text-anchor="start" >Why the optimization works</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Preserve the invariant</text><g class="state" id="D-step0"><text x="100" y="480" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 12</text><rect id="" x="160.0" y="510" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="240.0" y="575" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="335.0" y="510" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="415.0" y="575" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="510.0" y="510" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="575" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="510" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="575" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><text x="100" y="670" fill="#9DAEC5" font-size="33" text-anchor="start" >n − 1 = 11</text><rect id="" x="160.0" y="700" width="160.0" height="90" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="240.0" y="765" fill="#6FD3A6" font-size="54" text-anchor="middle" >1</text><rect id="" x="335.0" y="700" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="415.0" y="765" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="510.0" y="700" width="160.0" height="90" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="590.0" y="765" fill="#6FD3A6" font-size="54" text-anchor="middle" >1</text><rect id="" x="685.0" y="700" width="160.0" height="90" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="765.0" y="765" fill="#6FD3A6" font-size="54" text-anchor="middle" >1</text><text x="505" y="1060" fill="#6FD3A6" font-size="44" text-anchor="middle" >1100 AND 1011 = 1000</text><text x="505" y="1170" fill="#9DAEC5" font-size="35" text-anchor="middle" >exactly one 1 removed</text></g></svg></div></section><section id="scene-E" class="clip" data-start="50.183" data-duration="12.767" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vE"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="E teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Follow the same input</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Chronological state changes</text><g class="state" id="E-step0"><text x="100" y="515" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 12</text><rect id="" x="160.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="240.0" y="610" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="335.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="415.0" y="610" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="510.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >VALUE</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >12</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >COUNT</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >0</text><text x="505" y="1185" fill="#6FD3A6" font-size="44" text-anchor="middle" >start</text></g><g class="state" id="E-step1"><text x="100" y="515" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 8</text><rect id="" x="160.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="240.0" y="610" fill="#A78BFA" font-size="54" text-anchor="middle" >1</text><rect id="" x="335.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="415.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="510.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >VALUE</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >8</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >COUNT</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text><text x="505" y="1185" fill="#6FD3A6" font-size="44" text-anchor="middle" >12 AND 11 = 8</text></g><g class="state" id="E-step2"><text x="100" y="515" fill="#9DAEC5" font-size="33" text-anchor="start" >n = 0</text><rect id="" x="160.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="240.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="335.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="415.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="510.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="590.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="685.0" y="545" width="160.0" height="90" rx="14" fill="#172239" stroke="#9DAEC5" stroke-width="3"/><text x="765.0" y="610" fill="#9DAEC5" font-size="54" text-anchor="middle" >0</text><rect id="" x="110" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="290.0" y="1002" fill="#A78BFA" font-size="32" text-anchor="middle" >VALUE</text><text x="290.0" y="1072" fill="#A78BFA" font-size="65" text-anchor="middle" >0</text><rect id="" x="550" y="950" width="360" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="730.0" y="1002" fill="#6FD3A6" font-size="32" text-anchor="middle" >COUNT</text><text x="730.0" y="1072" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="505" y="1185" fill="#6FD3A6" font-size="44" text-anchor="middle" >8 AND 7 = 0 · stop</text></g></svg></div></section><section id="scene-F" class="clip" data-start="62.95" data-duration="14.321" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vF"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="F teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Accepted Python</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >number-of-1-bits</text><rect id="" x="80" y="495" width="885" height="360" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeF-L3" data-source-line="3" data-code-panel="codeF"><rect class="code-highlight" x="88" y="508" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">count = 0</text></g><g id="codeF-L4" data-source-line="4" data-code-panel="codeF"><rect class="code-highlight" x="88" y="573" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="602" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">while n:</text></g><g id="codeF-L5" data-source-line="5" data-code-panel="codeF"><rect class="code-highlight" x="88" y="638" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="667" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">    n &amp;= n - 1</text></g><g id="codeF-L6" data-source-line="6" data-code-panel="codeF"><rect class="code-highlight" x="88" y="703" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="732" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">    count += 1</text></g><g id="codeF-L7" data-source-line="7" data-code-panel="codeF"><rect class="code-highlight" x="88" y="768" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="797" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">return count</text></g></svg></div></section><section id="scene-G" class="clip" data-start="77.271" data-duration="15.229" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vG"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="G teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Cost and boundary</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Same algorithm · honest complexity</text><rect id="" x="80" y="495" width="885" height="360" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeG-L3" data-source-line="3" data-code-panel="codeG"><rect class="code-highlight" x="88" y="508" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">count = 0</text></g><g id="codeG-L4" data-source-line="4" data-code-panel="codeG"><rect class="code-highlight" x="88" y="573" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="602" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">while n:</text></g><g id="codeG-L5" data-source-line="5" data-code-panel="codeG"><rect class="code-highlight" x="88" y="638" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="667" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">    n &amp;= n - 1</text></g><g id="codeG-L6" data-source-line="6" data-code-panel="codeG"><rect class="code-highlight" x="88" y="703" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="732" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">    count += 1</text></g><g id="codeG-L7" data-source-line="7" data-code-panel="codeG"><rect class="code-highlight" x="88" y="768" width="870" height="65" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="797" fill="#F3EFE6" font-size="42" text-anchor="start" font-family="Code" xml:space="preserve">return count</text></g><text x="505" y="1200" fill="#6FD3A6" font-size="39" text-anchor="middle" >k removals · O(1) scalars</text></svg></div></section><div id="caption-lane" data-track-kind="captions"><div class="clip caption" id="cap0" data-track-index="2" data-track-kind="captions" data-start="0.08" data-duration="0.5800000000000001"><span id="w0-0">har</span> <span id="w0-1">bit</span> <span id="w0-2">ko</span></div>
+<div class="clip caption" id="cap1" data-track-index="2" data-track-kind="captions" data-start="0.724" data-duration="0.8780000000000001"><span id="w1-0">check</span> <span id="w1-1">karna</span> <span id="w1-2">zaruri</span></div>
+<div class="clip caption" id="cap2" data-track-index="2" data-track-kind="captions" data-start="1.653" data-duration="1.681"><span id="w2-0">nahi.</span> <span id="w2-1">Given</span> <span id="w2-2">integer:</span></div>
+<div class="clip caption" id="cap3" data-track-index="2" data-track-kind="captions" data-start="3.373" data-duration="1.354"><span id="w3-0">twelve.</span> <span id="w3-1">Binary</span> <span id="w3-2">one</span></div>
+<div class="clip caption" id="cap4" data-track-index="2" data-track-kind="captions" data-start="4.83" data-duration="0.7489999999999997"><span id="w4-0">one</span> <span id="w4-1">zero</span> <span id="w4-2">zero</span></div>
+<div class="clip caption" id="cap5" data-track-index="2" data-track-kind="captions" data-start="5.643" data-duration="0.6580000000000004"><span id="w5-0">mein</span> <span id="w5-1">two</span> <span id="w5-2">set</span></div>
+<div class="clip caption" id="cap6" data-track-index="2" data-track-kind="captions" data-start="6.379" data-duration="0.798"><span id="w6-0">bits</span> <span id="w6-1">hain.</span> <span id="w6-2">Set</span></div>
+<div class="clip caption" id="cap7" data-track-index="2" data-track-kind="captions" data-start="7.243" data-duration="0.6699999999999999"><span id="w7-0">bit</span> <span id="w7-1">matlab</span> <span id="w7-2">jis</span></div>
+<div class="clip caption" id="cap8" data-track-index="2" data-track-kind="captions" data-start="7.977" data-duration="0.8780000000000001"><span id="w8-0">position</span> <span id="w8-1">par</span> <span id="w8-2">one</span></div>
+<div class="clip caption" id="cap9" data-track-index="2" data-track-kind="captions" data-start="8.894" data-duration="0.9550000000000001"><span id="w9-0">ho.</span> <span id="w9-1">hamen</span> <span id="w9-2">wahi</span></div>
+<div class="clip caption" id="cap10" data-track-index="2" data-track-kind="captions" data-start="9.9" data-duration="1.081999999999999"><span id="w10-0">count</span> <span id="w10-1">lautana</span> <span id="w10-2">hai.</span></div>
+<div class="clip caption" id="cap11" data-track-index="2" data-track-kind="captions" data-start="11.562" data-duration="1.0190000000000001"><span id="w11-0">Brute</span> <span id="w11-1">force:</span> <span id="w11-2">har</span></div>
+<div class="clip caption" id="cap12" data-track-index="2" data-track-kind="captions" data-start="12.646" data-duration="0.5809999999999995"><span id="w12-0">round</span> <span id="w12-1">mein</span> <span id="w12-2">last</span></div>
+<div class="clip caption" id="cap13" data-track-index="2" data-track-kind="captions" data-start="13.291" data-duration="0.6579999999999995"><span id="w13-0">bit</span> <span id="w13-1">check</span> <span id="w13-2">karo,</span></div>
+<div class="clip caption" id="cap14" data-track-index="2" data-track-kind="captions" data-start="13.975" data-duration="0.5809999999999995"><span id="w14-0">phir</span> <span id="w14-1">number</span> <span id="w14-2">ko</span></div>
+<div class="clip caption" id="cap15" data-track-index="2" data-track-kind="captions" data-start="14.62" data-duration="1.0070000000000014"><span id="w15-0">right</span> <span id="w15-1">shift</span> <span id="w15-2">karo.</span></div>
+<div class="clip caption" id="cap16" data-track-index="2" data-track-kind="captions" data-start="15.927" data-duration="0.9800000000000004"><span id="w16-0">Twelve</span> <span id="w16-1">se</span> <span id="w16-2">six,</span></div>
+<div class="clip caption" id="cap17" data-track-index="2" data-track-kind="captions" data-start="16.998" data-duration="1.1089999999999982"><span id="w17-0">phir</span> <span id="w17-1">three,</span> <span id="w17-2">phir</span></div>
+<div class="clip caption" id="cap18" data-track-index="2" data-track-kind="captions" data-start="18.21" data-duration="1.3930000000000007"><span id="w18-0">one.</span> <span id="w18-1">Four</span> <span id="w18-2">positions</span></div>
+<div class="clip caption" id="cap19" data-track-index="2" data-track-kind="captions" data-start="19.655" data-duration="0.8900000000000006"><span id="w19-0">check</span> <span id="w19-1">hue,</span> <span id="w19-2">jabki</span></div>
+<div class="clip caption" id="cap20" data-track-index="2" data-track-kind="captions" data-start="20.636" data-duration="0.8120000000000012"><span id="w20-0">ones</span> <span id="w20-1">sirf</span> <span id="w20-2">two</span></div>
+<div class="clip caption" id="cap21" data-track-index="2" data-track-kind="captions" data-start="21.526" data-duration="0.5380000000000003"><span id="w21-0">the.</span></div>
+<div class="clip caption" id="cap22" data-track-index="2" data-track-kind="captions" data-start="22.644" data-duration="0.6060000000000016"><span id="w22-0">ye</span> <span id="w22-1">answer</span> <span id="w22-2">sahi</span></div>
+<div class="clip caption" id="cap23" data-track-index="2" data-track-kind="captions" data-start="23.301" data-duration="0.8140000000000001"><span id="w23-0">deta</span> <span id="w23-1">hai.</span> <span id="w23-2">Problem</span></div>
+<div class="clip caption" id="cap24" data-track-index="2" data-track-kind="captions" data-start="24.166" data-duration="0.7480000000000011"><span id="w24-0">extra</span> <span id="w24-1">checks</span> <span id="w24-2">hain:</span></div>
+<div class="clip caption" id="cap25" data-track-index="2" data-track-kind="captions" data-start="25.056" data-duration="0.593"><span id="w25-0">beech</span> <span id="w25-1">ke</span> <span id="w25-2">zero</span></div>
+<div class="clip caption" id="cap26" data-track-index="2" data-track-kind="captions" data-start="25.688" data-duration="0.5680000000000014"><span id="w26-0">bits</span> <span id="w26-1">bhi</span> <span id="w26-2">scan</span></div>
+<div class="clip caption" id="cap27" data-track-index="2" data-track-kind="captions" data-start="26.307" data-duration="1.2880000000000003"><span id="w27-0">hote</span> <span id="w27-1">hain.</span> <span id="w27-2">Binary</span></div>
+<div class="clip caption" id="cap28" data-track-index="2" data-track-kind="captions" data-start="27.647" data-duration="0.6580000000000013"><span id="w28-0">one</span> <span id="w28-1">zero</span> <span id="w28-2">zero</span></div>
+<div class="clip caption" id="cap29" data-track-index="2" data-track-kind="captions" data-start="28.369" data-duration="0.6189999999999998"><span id="w29-0">zero</span> <span id="w29-1">zero</span> <span id="w29-2">mein</span></div>
+<div class="clip caption" id="cap30" data-track-index="2" data-track-kind="captions" data-start="29.039" data-duration="0.6839999999999975"><span id="w30-0">sirf</span> <span id="w30-1">one</span> <span id="w30-2">set</span></div>
+<div class="clip caption" id="cap31" data-track-index="2" data-track-kind="captions" data-start="29.788" data-duration="0.48999999999999844"><span id="w31-0">bit</span> <span id="w31-1">hai,</span> <span id="w31-2">phir</span></div>
+<div class="clip caption" id="cap32" data-track-index="2" data-track-kind="captions" data-start="30.342" data-duration="0.9550000000000018"><span id="w32-0">bhi</span> <span id="w32-1">five</span> <span id="w32-2">positions</span></div>
+<div class="clip caption" id="cap33" data-track-index="2" data-track-kind="captions" data-start="31.361" data-duration="1.0899999999999999"><span id="w33-0">dekhni</span> <span id="w33-1">padti</span> <span id="w33-2">hain.</span></div>
+<div class="clip caption" id="cap34" data-track-index="2" data-track-kind="captions" data-start="33.031" data-duration="1.6899999999999977"><span id="w34-0">Observation:</span> <span id="w34-1">n</span> <span id="w34-2">minus</span></div>
+<div class="clip caption" id="cap35" data-track-index="2" data-track-kind="captions" data-start="34.824" data-duration="1.3670000000000044"><span id="w35-0">one,</span> <span id="w35-1">rightmost</span> <span id="w35-2">one</span></div>
+<div class="clip caption" id="cap36" data-track-index="2" data-track-kind="captions" data-start="36.218" data-duration="0.7219999999999942"><span id="w36-0">ko</span> <span id="w36-1">zero</span> <span id="w36-2">aur</span></div>
+<div class="clip caption" id="cap37" data-track-index="2" data-track-kind="captions" data-start="36.991" data-duration="0.5810000000000031"><span id="w37-0">uske</span> <span id="w37-1">baad</span> <span id="w37-2">ke</span></div>
+<div class="clip caption" id="cap38" data-track-index="2" data-track-kind="captions" data-start="37.623" data-duration="0.6840000000000046"><span id="w38-0">zeroes</span> <span id="w38-1">ko</span> <span id="w38-2">ones</span></div>
+<div class="clip caption" id="cap39" data-track-index="2" data-track-kind="captions" data-start="38.359" data-duration="1.4209999999999994"><span id="w39-0">banata</span> <span id="w39-1">hai.</span> <span id="w39-2">isliye</span></div>
+<div class="clip caption" id="cap40" data-track-index="2" data-track-kind="captions" data-start="39.947" data-duration="0.8780000000000001"><span id="w40-0">n</span> <span id="w40-1">AND</span> <span id="w40-2">n</span></div>
+<div class="clip caption" id="cap41" data-track-index="2" data-track-kind="captions" data-start="40.954" data-duration="1.0959999999999965"><span id="w41-0">minus</span> <span id="w41-1">one</span> <span id="w41-2">karne</span></div>
+<div class="clip caption" id="cap42" data-track-index="2" data-track-kind="captions" data-start="42.115" data-duration="0.9149999999999991"><span id="w42-0">par</span> <span id="w42-1">sirf</span> <span id="w42-2">wahi</span></div>
+<div class="clip caption" id="cap43" data-track-index="2" data-track-kind="captions" data-start="43.121" data-duration="1.0449999999999946"><span id="w43-0">rightmost</span> <span id="w43-1">set</span> <span id="w43-2">bit</span></div>
+<div class="clip caption" id="cap44" data-track-index="2" data-track-kind="captions" data-start="44.23" data-duration="0.9680000000000035"><span id="w44-0">mitta</span> <span id="w44-1">hai.</span> <span id="w44-2">baaki</span></div>
+<div class="clip caption" id="cap45" data-track-index="2" data-track-kind="captions" data-start="45.263" data-duration="0.8770000000000024"><span id="w45-0">set</span> <span id="w45-1">bits</span> <span id="w45-2">bachte</span></div>
+<div class="clip caption" id="cap46" data-track-index="2" data-track-kind="captions" data-start="46.191" data-duration="1.1599999999999966"><span id="w46-0">hain.</span> <span id="w46-1">har</span> <span id="w46-2">round</span></div>
+<div class="clip caption" id="cap47" data-track-index="2" data-track-kind="captions" data-start="47.415" data-duration="1.0189999999999984"><span id="w47-0">exactly</span> <span id="w47-1">one</span> <span id="w47-2">mitao</span></div>
+<div class="clip caption" id="cap48" data-track-index="2" data-track-kind="captions" data-start="48.602" data-duration="1.081000000000003"><span id="w48-0">aur</span> <span id="w48-1">count</span> <span id="w48-2">badhao.</span></div>
+<div class="clip caption" id="cap49" data-track-index="2" data-track-kind="captions" data-start="50.263" data-duration="0.8509999999999991"><span id="w49-0">Dry</span> <span id="w49-1">run</span> <span id="w49-2">usi</span></div>
+<div class="clip caption" id="cap50" data-track-index="2" data-track-kind="captions" data-start="51.166" data-duration="1.1480000000000032"><span id="w50-0">twelve</span> <span id="w50-1">par.</span> <span id="w50-2">One</span></div>
+<div class="clip caption" id="cap51" data-track-index="2" data-track-kind="captions" data-start="52.365" data-duration="0.8649999999999949"><span id="w51-0">one</span> <span id="w51-1">zero</span> <span id="w51-2">zero</span></div>
+<div class="clip caption" id="cap52" data-track-index="2" data-track-kind="captions" data-start="53.321" data-duration="0.7220000000000013"><span id="w52-0">AND</span> <span id="w52-1">one</span> <span id="w52-2">zero</span></div>
+<div class="clip caption" id="cap53" data-track-index="2" data-track-kind="captions" data-start="54.094" data-duration="0.6580000000000013"><span id="w53-0">one</span> <span id="w53-1">one</span> <span id="w53-2">deta</span></div>
+<div class="clip caption" id="cap54" data-track-index="2" data-track-kind="captions" data-start="54.791" data-duration="0.6580000000000013"><span id="w54-0">hai</span> <span id="w54-1">one</span> <span id="w54-2">zero</span></div>
+<div class="clip caption" id="cap55" data-track-index="2" data-track-kind="captions" data-start="55.526" data-duration="0.9939999999999998"><span id="w55-0">zero</span> <span id="w55-1">zero,</span> <span id="w55-2">yaani</span></div>
+<div class="clip caption" id="cap56" data-track-index="2" data-track-kind="captions" data-start="56.687" data-duration="1.3520000000000039"><span id="w56-0">eight.</span> <span id="w56-1">Count</span> <span id="w56-2">one.</span></div>
+<div class="clip caption" id="cap57" data-track-index="2" data-track-kind="captions" data-start="58.339" data-duration="0.6840000000000046"><span id="w57-0">Eight</span> <span id="w57-1">AND</span> <span id="w57-2">seven</span></div>
+<div class="clip caption" id="cap58" data-track-index="2" data-track-kind="captions" data-start="59.062" data-duration="0.6060000000000016"><span id="w58-0">deta</span> <span id="w58-1">hai</span> <span id="w58-2">zero.</span></div>
+<div class="clip caption" id="cap59" data-track-index="2" data-track-kind="captions" data-start="59.797" data-duration="1.0970000000000013"><span id="w59-0">Count</span> <span id="w59-1">two.</span> <span id="w59-2">Number</span></div>
+<div class="clip caption" id="cap60" data-track-index="2" data-track-kind="captions" data-start="60.945" data-duration="0.8639999999999972"><span id="w60-0">zero,</span> <span id="w60-1">loop</span> <span id="w60-2">stop,</span></div>
+<div class="clip caption" id="cap61" data-track-index="2" data-track-kind="captions" data-start="61.835" data-duration="0.615000000000002"><span id="w61-0">answer</span> <span id="w61-1">two.</span></div>
+<div class="clip caption" id="cap62" data-track-index="2" data-track-kind="captions" data-start="63.03" data-duration="1.2390000000000043"><span id="w62-0">ye</span> <span id="w62-1">actual</span> <span id="w62-2">Accepted</span></div>
+<div class="clip caption" id="cap63" data-track-index="2" data-track-kind="captions" data-start="64.32" data-duration="1.0450000000000017"><span id="w63-0">Python</span> <span id="w63-1">hai.</span> <span id="w63-2">Count</span></div>
+<div class="clip caption" id="cap64" data-track-index="2" data-track-kind="captions" data-start="65.495" data-duration="0.7860000000000014"><span id="w64-0">zero</span> <span id="w64-1">se</span> <span id="w64-2">shuru.</span></div>
+<div class="clip caption" id="cap65" data-track-index="2" data-track-kind="captions" data-start="66.514" data-duration="0.632000000000005"><span id="w65-0">While</span> <span id="w65-1">n</span> <span id="w65-2">ke</span></div>
+<div class="clip caption" id="cap66" data-track-index="2" data-track-kind="captions" data-start="67.184" data-duration="0.7999999999999972"><span id="w66-0">andar</span> <span id="w66-1">n</span> <span id="w66-2">AND</span></div>
+<div class="clip caption" id="cap67" data-track-index="2" data-track-kind="captions" data-start="68.036" data-duration="0.6700000000000017"><span id="w67-0">n</span> <span id="w67-1">minus</span> <span id="w67-2">one</span></div>
+<div class="clip caption" id="cap68" data-track-index="2" data-track-kind="captions" data-start="68.731" data-duration="0.7620000000000005"><span id="w68-0">assign</span> <span id="w68-1">hota</span> <span id="w68-2">hai,</span></div>
+<div class="clip caption" id="cap69" data-track-index="2" data-track-kind="captions" data-start="69.519" data-duration="0.644999999999996"><span id="w69-0">phir</span> <span id="w69-1">count</span> <span id="w69-2">one</span></div>
+<div class="clip caption" id="cap70" data-track-index="2" data-track-kind="captions" data-start="70.189" data-duration="1.206000000000003"><span id="w70-0">badhta</span> <span id="w70-1">hai.</span> <span id="w70-2">Count</span></div>
+<div class="clip caption" id="cap71" data-track-index="2" data-track-kind="captions" data-start="71.459" data-duration="0.9799999999999898"><span id="w71-0">badhana</span> <span id="w71-1">mat</span> <span id="w71-2">bhoolna;</span></div>
+<div class="clip caption" id="cap72" data-track-index="2" data-track-kind="captions" data-start="72.671" data-duration="0.7869999999999919"><span id="w72-0">badla</span> <span id="w72-1">hua</span> <span id="w72-2">n</span></div>
+<div class="clip caption" id="cap73" data-track-index="2" data-track-kind="captions" data-start="73.51" data-duration="0.7740000000000009"><span id="w73-0">answer</span> <span id="w73-1">nahi</span> <span id="w73-2">hai.</span></div>
+<div class="clip caption" id="cap74" data-track-index="2" data-track-kind="captions" data-start="74.478" data-duration="0.8260000000000076"><span id="w74-0">Original</span> <span id="w74-1">number</span> <span id="w74-2">ko</span></div>
+<div class="clip caption" id="cap75" data-track-index="2" data-track-kind="captions" data-start="75.355" data-duration="0.9419999999999931"><span id="w75-0">preserve</span> <span id="w75-1">karna</span> <span id="w75-2">zaruri</span></div>
+<div class="clip caption" id="cap76" data-track-index="2" data-track-kind="captions" data-start="76.348" data-duration="0.4230000000000018"><span id="w76-0">nahi.</span></div>
+<div class="clip caption" id="cap77" data-track-index="2" data-track-kind="captions" data-start="77.351" data-duration="0.6830000000000069"><span id="w77-0">K</span> <span id="w77-1">set</span> <span id="w77-2">bits</span></div>
+<div class="clip caption" id="cap78" data-track-index="2" data-track-kind="captions" data-start="78.086" data-duration="0.284000000000006"><span id="w78-0">hon</span> <span id="w78-1">to</span> <span id="w78-2">K</span></div>
+<div class="clip caption" id="cap79" data-track-index="2" data-track-kind="captions" data-start="78.499" data-duration="0.6200000000000045"><span id="w79-0">rounds,</span> <span id="w79-1">O</span> <span id="w79-2">of</span></div>
+<div class="clip caption" id="cap80" data-track-index="2" data-track-kind="captions" data-start="79.183" data-duration="0.5159999999999911"><span id="w80-0">K</span> <span id="w80-1">time</span> <span id="w80-2">aur</span></div>
+<div class="clip caption" id="cap81" data-track-index="2" data-track-kind="captions" data-start="79.776" data-duration="0.5160000000000053"><span id="w81-0">O</span> <span id="w81-1">of</span> <span id="w81-2">one</span></div>
+<div class="clip caption" id="cap82" data-track-index="2" data-track-kind="captions" data-start="80.344" data-duration="1.347999999999999"><span id="w82-0">extra</span> <span id="w82-1">space.</span> <span id="w82-2">is</span></div>
+<div class="clip caption" id="cap83" data-track-index="2" data-track-kind="captions" data-start="81.757" data-duration="1.1469999999999914"><span id="w83-0">problem</span> <span id="w83-1">ka</span> <span id="w83-2">integer</span></div>
+<div class="clip caption" id="cap84" data-track-index="2" data-track-kind="captions" data-start="83.033" data-duration="1.019999999999996"><span id="w84-0">at</span> <span id="w84-1">most</span> <span id="w84-2">thirty</span></div>
+<div class="clip caption" id="cap85" data-track-index="2" data-track-kind="captions" data-start="84.118" data-duration="0.541000000000011"><span id="w85-0">one</span> <span id="w85-1">bits</span> <span id="w85-2">hai,</span></div>
+<div class="clip caption" id="cap86" data-track-index="2" data-track-kind="captions" data-start="84.684" data-duration="0.9810000000000088"><span id="w86-0">isliye</span> <span id="w86-1">fixed</span> <span id="w86-2">domain</span></div>
+<div class="clip caption" id="cap87" data-track-index="2" data-track-kind="captions" data-start="85.73" data-duration="1.043999999999997"><span id="w87-0">mein</span> <span id="w87-1">donon</span> <span id="w87-2">constant</span></div>
+<div class="clip caption" id="cap88" data-track-index="2" data-track-kind="captions" data-start="86.839" data-duration="1.213000000000008"><span id="w88-0">hain.</span> <span id="w88-1">Speedup</span> <span id="w88-2">sparse</span></div>
+<div class="clip caption" id="cap89" data-track-index="2" data-track-kind="captions" data-start="88.091" data-duration="0.6440000000000055"><span id="w89-0">ones</span> <span id="w89-1">par</span> <span id="w89-2">hai;</span></div>
+<div class="clip caption" id="cap90" data-track-index="2" data-track-kind="captions" data-start="88.968" data-duration="1.1219999999999999"><span id="w90-0">naive</span> <span id="w90-1">algorithm</span> <span id="w90-2">galat</span></div>
+<div class="clip caption" id="cap91" data-track-index="2" data-track-kind="captions" data-start="90.142" data-duration="0.6450000000000102"><span id="w91-0">nahi</span> <span id="w91-1">tha.</span></div>
+</div><div id="source">Problem: LeetCode #191</div><div id="progress-track"><div id="progress"></div></div><audio class="clip" id="voice" data-track-index="3" data-track-kind="audio" src="audio/hi/voice.wav" data-start="0" data-duration="92.5"></audio><audio class="clip" id="bed" data-track-index="4" data-track-kind="audio" src="audio/hi/bed.wav" data-start="0" data-duration="92.5"></audio><audio class="clip" id="sfx" data-track-index="5" data-track-kind="audio" src="audio/hi/sfx.wav" data-start="0" data-duration="92.5"></audio></main><script>const R=window.REEL.hi,S=R.starts,P=R.ph;
+const tl=gsap.timeline({paused:true}),order=Object.keys(P);
+order.forEach((s,i)=>{tl.set('#v'+s,{opacity:1},S[s]);if(i<order.length-1)tl.set('#v'+s,{opacity:0},S[order[i+1]]);});
+tl.fromTo('#progress',{scaleX:0},{scaleX:1,duration:R.total,ease:'none'},0);
+function step(id,t,end){tl.set(id,{opacity:1},t);tl.set(id,{opacity:0},end);}
+function cell(prefix,i,t,color='#A78BFA'){tl.to('#'+prefix+'-c'+i,{attr:{stroke:color,fill:color==='#6FD3A6'?'#173B35':'#30264C'},duration:.2},t);}
+function reset(prefix,t){tl.set('[id^="'+prefix+'-c"]',{attr:{stroke:'#34425D',fill:'#172239'}},t);}
+function reveal(id,t){tl.fromTo(id,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out'},t);}
+
+function cue(scene,phrase,word=null,occurrence=0){
+ const p=P[scene][phrase];if(!p)throw Error('missing phrase '+scene+phrase);
+ if(word===null)return p.s;
+ const hits=R.caps.filter(c=>c.scene===scene&&c.s>=p.s&&c.s<p.e&&c.t.toLowerCase().replace(/[^a-z0-9]/g,'')===word.toLowerCase());
+ if(!hits[occurrence])throw Error('missing word '+scene+phrase+' '+word+' #'+occurrence);
+ return hits[occurrence].s;
+}
+// diagram: A
+step("#A-step0",S.A,S.B);
+// diagram: B
+step("#B-step0",S.B,cue("B",1,"six",0));
+step("#B-step1",cue("B",1,"six",0),cue("B",1,"three",0));
+step("#B-step2",cue("B",1,"three",0),cue("B",1,"one",0));
+step("#B-step3",cue("B",1,"one",0),cue("B",1,"four",0));
+step("#B-step4",cue("B",1,"four",0),S.C);
+// diagram: C
+step("#C-step0",S.C,S.D);
+// diagram: D
+step("#D-step0",S.D,S.E);
+// diagram: E
+step("#E-step0",S.E,cue("E",0,"one",5));
+step("#E-step1",cue("E",0,"one",5),cue("E",1,"zero",0));
+step("#E-step2",cue("E",1,"zero",0),S.F);
+// diagram: F
+// diagram: G
+tl.set("[id^=codeF-L] .code-highlight",{opacity:0},cue("F",0));tl.set("#codeF-L3 .code-highlight",{opacity:.2},cue("F",0));
+tl.set("[id^=codeF-L] .code-highlight",{opacity:0},cue("F",1));tl.set("#codeF-L5 .code-highlight",{opacity:.2},cue("F",1));
+tl.set("[id^=codeG-L] .code-highlight",{opacity:0},cue("G",0));tl.set("#codeG-L3 .code-highlight",{opacity:.2},cue("G",0));
+tl.set("[id^=codeG-L] .code-highlight",{opacity:0},cue("G",1));tl.set("#codeG-L5 .code-highlight",{opacity:.2},cue("G",1));
+
+window.__timelines=window.__timelines||{};window.__timelines.main=tl;
+tl.set('#cap0',{opacity:1},0.08);tl.set('#cap0',{opacity:0},0.6900000000000001);
+tl.set('#w0-0',{color:'#A78BFA'},0.08);
+tl.set('#w0-1',{color:'#A78BFA'},0.39);
+tl.set('#w0-2',{color:'#A78BFA'},0.57);
+tl.set('#cap1',{opacity:1},0.724);tl.set('#cap1',{opacity:0},1.6320000000000001);
+tl.set('#w1-0',{color:'#A78BFA'},0.724);
+tl.set('#w1-1',{color:'#A78BFA'},0.957);
+tl.set('#w1-2',{color:'#A78BFA'},1.241);
+tl.set('#cap2',{opacity:1},1.653);tl.set('#cap2',{opacity:0},3.364);
+tl.set('#w2-0',{color:'#A78BFA'},1.653);
+tl.set('#w2-1',{color:'#A78BFA'},2.431);
+tl.set('#w2-2',{color:'#A78BFA'},2.831);
+tl.set('#cap3',{opacity:1},3.373);tl.set('#cap3',{opacity:0},4.757000000000001);
+tl.set('#w3-0',{color:'#A78BFA'},3.373);
+tl.set('#w3-1',{color:'#A78BFA'},3.966);
+tl.set('#w3-2',{color:'#A78BFA'},4.456);
+tl.set('#cap4',{opacity:1},4.83);tl.set('#cap4',{opacity:0},5.609);
+tl.set('#w4-0',{color:'#A78BFA'},4.83);
+tl.set('#w4-1',{color:'#A78BFA'},5.062);
+tl.set('#w4-2',{color:'#A78BFA'},5.346);
+tl.set('#cap5',{opacity:1},5.643);tl.set('#cap5',{opacity:0},6.331);
+tl.set('#w5-0',{color:'#A78BFA'},5.643);
+tl.set('#w5-1',{color:'#A78BFA'},5.862);
+tl.set('#w5-2',{color:'#A78BFA'},6.094);
+tl.set('#cap6',{opacity:1},6.379);tl.set('#cap6',{opacity:0},7.207);
+tl.set('#w6-0',{color:'#A78BFA'},6.379);
+tl.set('#w6-1',{color:'#A78BFA'},6.649);
+tl.set('#w6-2',{color:'#A78BFA'},6.972);
+tl.set('#cap7',{opacity:1},7.243);tl.set('#cap7',{opacity:0},7.9430000000000005);
+tl.set('#w7-0',{color:'#A78BFA'},7.243);
+tl.set('#w7-1',{color:'#A78BFA'},7.449);
+tl.set('#w7-2',{color:'#A78BFA'},7.759);
+tl.set('#cap8',{opacity:1},7.977);tl.set('#cap8',{opacity:0},8.885);
+tl.set('#w8-0',{color:'#A78BFA'},7.977);
+tl.set('#w8-1',{color:'#A78BFA'},8.43);
+tl.set('#w8-2',{color:'#A78BFA'},8.623);
+tl.set('#cap9',{opacity:1},8.894);tl.set('#cap9',{opacity:0},9.879);
+tl.set('#w9-0',{color:'#A78BFA'},8.894);
+tl.set('#w9-1',{color:'#A78BFA'},9.396);
+tl.set('#w9-2',{color:'#A78BFA'},9.667);
+tl.set('#cap10',{opacity:1},9.9);tl.set('#cap10',{opacity:0},11.011999999999999);
+tl.set('#w10-0',{color:'#A78BFA'},9.9);
+tl.set('#w10-1',{color:'#A78BFA'},10.145);
+tl.set('#w10-2',{color:'#A78BFA'},10.557);
+tl.set('#cap11',{opacity:1},11.562);tl.set('#cap11',{opacity:0},12.610999999999999);
+tl.set('#w11-0',{color:'#A78BFA'},11.562);
+tl.set('#w11-1',{color:'#A78BFA'},11.885);
+tl.set('#w11-2',{color:'#A78BFA'},12.439);
+tl.set('#cap12',{opacity:1},12.646);tl.set('#cap12',{opacity:0},13.257);
+tl.set('#w12-0',{color:'#A78BFA'},12.646);
+tl.set('#w12-1',{color:'#A78BFA'},12.878);
+tl.set('#w12-2',{color:'#A78BFA'},13.02);
+tl.set('#cap13',{opacity:1},13.291);tl.set('#cap13',{opacity:0},13.979);
+tl.set('#w13-0',{color:'#A78BFA'},13.291);
+tl.set('#w13-1',{color:'#A78BFA'},13.446);
+tl.set('#w13-2',{color:'#A78BFA'},13.678);
+tl.set('#cap14',{opacity:1},13.975);tl.set('#cap14',{opacity:0},14.585999999999999);
+tl.set('#w14-0',{color:'#A78BFA'},13.975);
+tl.set('#w14-1',{color:'#A78BFA'},14.207);
+tl.set('#w14-2',{color:'#A78BFA'},14.49);
+tl.set('#cap15',{opacity:1},14.62);tl.set('#cap15',{opacity:0},15.657);
+tl.set('#w15-0',{color:'#A78BFA'},14.62);
+tl.set('#w15-1',{color:'#A78BFA'},14.852);
+tl.set('#w15-2',{color:'#A78BFA'},15.123);
+tl.set('#cap16',{opacity:1},15.927);tl.set('#cap16',{opacity:0},16.937);
+tl.set('#w16-0',{color:'#A78BFA'},15.927);
+tl.set('#w16-1',{color:'#A78BFA'},16.366);
+tl.set('#w16-2',{color:'#A78BFA'},16.52);
+tl.set('#cap17',{opacity:1},16.998);tl.set('#cap17',{opacity:0},18.137);
+tl.set('#w17-0',{color:'#A78BFA'},16.998);
+tl.set('#w17-1',{color:'#A78BFA'},17.307);
+tl.set('#w17-2',{color:'#A78BFA'},17.875);
+tl.set('#cap18',{opacity:1},18.21);tl.set('#cap18',{opacity:0},19.633000000000003);
+tl.set('#w18-0',{color:'#A78BFA'},18.21);
+tl.set('#w18-1',{color:'#A78BFA'},18.752);
+tl.set('#w18-2',{color:'#A78BFA'},19.1);
+tl.set('#cap19',{opacity:1},19.655);tl.set('#cap19',{opacity:0},20.575000000000003);
+tl.set('#w19-0',{color:'#A78BFA'},19.655);
+tl.set('#w19-1',{color:'#A78BFA'},19.9);
+tl.set('#w19-2',{color:'#A78BFA'},20.248);
+tl.set('#cap20',{opacity:1},20.636);tl.set('#cap20',{opacity:0},21.478);
+tl.set('#w20-0',{color:'#A78BFA'},20.636);
+tl.set('#w20-1',{color:'#A78BFA'},20.919);
+tl.set('#w20-2',{color:'#A78BFA'},21.241);
+tl.set('#cap21',{opacity:1},21.526);tl.set('#cap21',{opacity:0},22.094);
+tl.set('#w21-0',{color:'#A78BFA'},21.526);
+tl.set('#cap22',{opacity:1},22.644);tl.set('#cap22',{opacity:0},23.28);
+tl.set('#w22-0',{color:'#A78BFA'},22.644);
+tl.set('#w22-1',{color:'#A78BFA'},22.798);
+tl.set('#w22-2',{color:'#A78BFA'},23.108);
+tl.set('#cap23',{opacity:1},23.301);tl.set('#cap23',{opacity:0},24.145);
+tl.set('#w23-0',{color:'#A78BFA'},23.301);
+tl.set('#w23-1',{color:'#A78BFA'},23.547);
+tl.set('#w23-2',{color:'#A78BFA'},23.727);
+tl.set('#cap24',{opacity:1},24.166);tl.set('#cap24',{opacity:0},24.944000000000003);
+tl.set('#w24-0',{color:'#A78BFA'},24.166);
+tl.set('#w24-1',{color:'#A78BFA'},24.462);
+tl.set('#w24-2',{color:'#A78BFA'},24.734);
+tl.set('#cap25',{opacity:1},25.056);tl.set('#cap25',{opacity:0},25.679000000000002);
+tl.set('#w25-0',{color:'#A78BFA'},25.056);
+tl.set('#w25-1',{color:'#A78BFA'},25.314);
+tl.set('#w25-2',{color:'#A78BFA'},25.456);
+tl.set('#cap26',{opacity:1},25.688);tl.set('#cap26',{opacity:0},26.286);
+tl.set('#w26-0',{color:'#A78BFA'},25.688);
+tl.set('#w26-1',{color:'#A78BFA'},25.92);
+tl.set('#w26-2',{color:'#A78BFA'},26.036);
+tl.set('#cap27',{opacity:1},26.307);tl.set('#cap27',{opacity:0},27.625);
+tl.set('#w27-0',{color:'#A78BFA'},26.307);
+tl.set('#w27-1',{color:'#A78BFA'},26.514);
+tl.set('#w27-2',{color:'#A78BFA'},27.105);
+tl.set('#cap28',{opacity:1},27.647);tl.set('#cap28',{opacity:0},28.335);
+tl.set('#w28-0',{color:'#A78BFA'},27.647);
+tl.set('#w28-1',{color:'#A78BFA'},27.827);
+tl.set('#w28-2',{color:'#A78BFA'},28.111);
+tl.set('#cap29',{opacity:1},28.369);tl.set('#cap29',{opacity:0},29.018);
+tl.set('#w29-0',{color:'#A78BFA'},28.369);
+tl.set('#w29-1',{color:'#A78BFA'},28.627);
+tl.set('#w29-2',{color:'#A78BFA'},28.898);
+tl.set('#cap30',{opacity:1},29.039);tl.set('#cap30',{opacity:0},29.753);
+tl.set('#w30-0',{color:'#A78BFA'},29.039);
+tl.set('#w30-1',{color:'#A78BFA'},29.349);
+tl.set('#w30-2',{color:'#A78BFA'},29.556);
+tl.set('#cap31',{opacity:1},29.788);tl.set('#cap31',{opacity:0},30.308);
+tl.set('#w31-0',{color:'#A78BFA'},29.788);
+tl.set('#w31-1',{color:'#A78BFA'},29.981);
+tl.set('#w31-2',{color:'#A78BFA'},30.136);
+tl.set('#cap32',{opacity:1},30.342);tl.set('#cap32',{opacity:0},31.327);
+tl.set('#w32-0',{color:'#A78BFA'},30.342);
+tl.set('#w32-1',{color:'#A78BFA'},30.497);
+tl.set('#w32-2',{color:'#A78BFA'},30.781);
+tl.set('#cap33',{opacity:1},31.361);tl.set('#cap33',{opacity:0},32.481);
+tl.set('#w33-0',{color:'#A78BFA'},31.361);
+tl.set('#w33-1',{color:'#A78BFA'},31.709);
+tl.set('#w33-2',{color:'#A78BFA'},32.07);
+tl.set('#cap34',{opacity:1},33.031);tl.set('#cap34',{opacity:0},34.751);
+tl.set('#w34-0',{color:'#A78BFA'},33.031);
+tl.set('#w34-1',{color:'#A78BFA'},34.102);
+tl.set('#w34-2',{color:'#A78BFA'},34.385);
+tl.set('#cap35',{opacity:1},34.824);tl.set('#cap35',{opacity:0},36.221000000000004);
+tl.set('#w35-0',{color:'#A78BFA'},34.824);
+tl.set('#w35-1',{color:'#A78BFA'},35.43);
+tl.set('#w35-2',{color:'#A78BFA'},36.037);
+tl.set('#cap36',{opacity:1},36.218);tl.set('#cap36',{opacity:0},36.97);
+tl.set('#w36-0',{color:'#A78BFA'},36.218);
+tl.set('#w36-1',{color:'#A78BFA'},36.45);
+tl.set('#w36-2',{color:'#A78BFA'},36.85);
+tl.set('#cap37',{opacity:1},36.991);tl.set('#cap37',{opacity:0},37.602000000000004);
+tl.set('#w37-0',{color:'#A78BFA'},36.991);
+tl.set('#w37-1',{color:'#A78BFA'},37.262);
+tl.set('#w37-2',{color:'#A78BFA'},37.508);
+tl.set('#cap38',{opacity:1},37.623);tl.set('#cap38',{opacity:0},38.337);
+tl.set('#w38-0',{color:'#A78BFA'},37.623);
+tl.set('#w38-1',{color:'#A78BFA'},37.972);
+tl.set('#w38-2',{color:'#A78BFA'},38.113);
+tl.set('#cap39',{opacity:1},38.359);tl.set('#cap39',{opacity:0},39.81);
+tl.set('#w39-0',{color:'#A78BFA'},38.359);
+tl.set('#w39-1',{color:'#A78BFA'},38.72);
+tl.set('#w39-2',{color:'#A78BFA'},39.303);
+tl.set('#cap40',{opacity:1},39.947);tl.set('#cap40',{opacity:0},40.855000000000004);
+tl.set('#w40-0',{color:'#A78BFA'},39.947);
+tl.set('#w40-1',{color:'#A78BFA'},40.167);
+tl.set('#w40-2',{color:'#A78BFA'},40.631);
+tl.set('#cap41',{opacity:1},40.954);tl.set('#cap41',{opacity:0},42.08);
+tl.set('#w41-0',{color:'#A78BFA'},40.954);
+tl.set('#w41-1',{color:'#A78BFA'},41.444);
+tl.set('#w41-2',{color:'#A78BFA'},41.74);
+tl.set('#cap42',{opacity:1},42.115);tl.set('#cap42',{opacity:0},43.06);
+tl.set('#w42-0',{color:'#A78BFA'},42.115);
+tl.set('#w42-1',{color:'#A78BFA'},42.296);
+tl.set('#w42-2',{color:'#A78BFA'},42.721);
+tl.set('#cap43',{opacity:1},43.121);tl.set('#cap43',{opacity:0},44.196);
+tl.set('#w43-0',{color:'#A78BFA'},43.121);
+tl.set('#w43-1',{color:'#A78BFA'},43.727);
+tl.set('#w43-2',{color:'#A78BFA'},43.998);
+tl.set('#cap44',{opacity:1},44.23);tl.set('#cap44',{opacity:0},45.228);
+tl.set('#w44-0',{color:'#A78BFA'},44.23);
+tl.set('#w44-1',{color:'#A78BFA'},44.591);
+tl.set('#w44-2',{color:'#A78BFA'},44.914);
+tl.set('#cap45',{opacity:1},45.263);tl.set('#cap45',{opacity:0},46.17);
+tl.set('#w45-0',{color:'#A78BFA'},45.263);
+tl.set('#w45-1',{color:'#A78BFA'},45.52);
+tl.set('#w45-2',{color:'#A78BFA'},45.766);
+tl.set('#cap46',{opacity:1},46.191);tl.set('#cap46',{opacity:0},47.381);
+tl.set('#w46-0',{color:'#A78BFA'},46.191);
+tl.set('#w46-1',{color:'#A78BFA'},46.861);
+tl.set('#w46-2',{color:'#A78BFA'},47.132);
+tl.set('#cap47',{opacity:1},47.415);tl.set('#cap47',{opacity:0},48.464);
+tl.set('#w47-0',{color:'#A78BFA'},47.415);
+tl.set('#w47-1',{color:'#A78BFA'},47.88);
+tl.set('#w47-2',{color:'#A78BFA'},48.073);
+tl.set('#cap48',{opacity:1},48.602);tl.set('#cap48',{opacity:0},49.713);
+tl.set('#w48-0',{color:'#A78BFA'},48.602);
+tl.set('#w48-1',{color:'#A78BFA'},48.809);
+tl.set('#w48-2',{color:'#A78BFA'},49.105);
+tl.set('#cap49',{opacity:1},50.263);tl.set('#cap49',{opacity:0},51.144);
+tl.set('#w49-0',{color:'#A78BFA'},50.263);
+tl.set('#w49-1',{color:'#A78BFA'},50.624);
+tl.set('#w49-2',{color:'#A78BFA'},50.87);
+tl.set('#cap50',{opacity:1},51.166);tl.set('#cap50',{opacity:0},52.344);
+tl.set('#w50-0',{color:'#A78BFA'},51.166);
+tl.set('#w50-1',{color:'#A78BFA'},51.566);
+tl.set('#w50-2',{color:'#A78BFA'},52.069);
+tl.set('#cap51',{opacity:1},52.365);tl.set('#cap51',{opacity:0},53.26);
+tl.set('#w51-0',{color:'#A78BFA'},52.365);
+tl.set('#w51-1',{color:'#A78BFA'},52.572);
+tl.set('#w51-2',{color:'#A78BFA'},52.933);
+tl.set('#cap52',{opacity:1},53.321);tl.set('#cap52',{opacity:0},54.073);
+tl.set('#w52-0',{color:'#A78BFA'},53.321);
+tl.set('#w52-1',{color:'#A78BFA'},53.579);
+tl.set('#w52-2',{color:'#A78BFA'},53.772);
+tl.set('#cap53',{opacity:1},54.094);tl.set('#cap53',{opacity:0},54.782000000000004);
+tl.set('#w53-0',{color:'#A78BFA'},54.094);
+tl.set('#w53-1',{color:'#A78BFA'},54.326);
+tl.set('#w53-2',{color:'#A78BFA'},54.507);
+tl.set('#cap54',{opacity:1},54.791);tl.set('#cap54',{opacity:0},55.479);
+tl.set('#w54-0',{color:'#A78BFA'},54.791);
+tl.set('#w54-1',{color:'#A78BFA'},54.933);
+tl.set('#w54-2',{color:'#A78BFA'},55.191);
+tl.set('#cap55',{opacity:1},55.526);tl.set('#cap55',{opacity:0},56.550000000000004);
+tl.set('#w55-0',{color:'#A78BFA'},55.526);
+tl.set('#w55-1',{color:'#A78BFA'},55.849);
+tl.set('#w55-2',{color:'#A78BFA'},56.197);
+tl.set('#cap56',{opacity:1},56.687);tl.set('#cap56',{opacity:0},58.069);
+tl.set('#w56-0',{color:'#A78BFA'},56.687);
+tl.set('#w56-1',{color:'#A78BFA'},57.332);
+tl.set('#w56-2',{color:'#A78BFA'},57.655);
+tl.set('#cap57',{opacity:1},58.339);tl.set('#cap57',{opacity:0},59.053000000000004);
+tl.set('#w57-0',{color:'#A78BFA'},58.339);
+tl.set('#w57-1',{color:'#A78BFA'},58.623);
+tl.set('#w57-2',{color:'#A78BFA'},58.778);
+tl.set('#cap58',{opacity:1},59.062);tl.set('#cap58',{opacity:0},59.698);
+tl.set('#w58-0',{color:'#A78BFA'},59.062);
+tl.set('#w58-1',{color:'#A78BFA'},59.255);
+tl.set('#w58-2',{color:'#A78BFA'},59.358);
+tl.set('#cap59',{opacity:1},59.797);tl.set('#cap59',{opacity:0},60.924);
+tl.set('#w59-0',{color:'#A78BFA'},59.797);
+tl.set('#w59-1',{color:'#A78BFA'},60.107);
+tl.set('#w59-2',{color:'#A78BFA'},60.609);
+tl.set('#cap60',{opacity:1},60.945);tl.set('#cap60',{opacity:0},61.839);
+tl.set('#w60-0',{color:'#A78BFA'},60.945);
+tl.set('#w60-1',{color:'#A78BFA'},61.281);
+tl.set('#w60-2',{color:'#A78BFA'},61.513);
+tl.set('#cap61',{opacity:1},61.835);tl.set('#cap61',{opacity:0},62.480000000000004);
+tl.set('#w61-0',{color:'#A78BFA'},61.835);
+tl.set('#w61-1',{color:'#A78BFA'},62.171);
+tl.set('#cap62',{opacity:1},63.03);tl.set('#cap62',{opacity:0},64.299);
+tl.set('#w62-0',{color:'#A78BFA'},63.03);
+tl.set('#w62-1',{color:'#A78BFA'},63.263);
+tl.set('#w62-2',{color:'#A78BFA'},63.753);
+tl.set('#cap63',{opacity:1},64.32);tl.set('#cap63',{opacity:0},65.395);
+tl.set('#w63-0',{color:'#A78BFA'},64.32);
+tl.set('#w63-1',{color:'#A78BFA'},64.759);
+tl.set('#w63-2',{color:'#A78BFA'},65.004);
+tl.set('#cap64',{opacity:1},65.495);tl.set('#cap64',{opacity:0},66.311);
+tl.set('#w64-0',{color:'#A78BFA'},65.495);
+tl.set('#w64-1',{color:'#A78BFA'},65.791);
+tl.set('#w64-2',{color:'#A78BFA'},65.92);
+tl.set('#cap65',{opacity:1},66.514);tl.set('#cap65',{opacity:0},67.176);
+tl.set('#w65-0',{color:'#A78BFA'},66.514);
+tl.set('#w65-1',{color:'#A78BFA'},66.875);
+tl.set('#w65-2',{color:'#A78BFA'},67.068);
+tl.set('#cap66',{opacity:1},67.184);tl.set('#cap66',{opacity:0},68.014);
+tl.set('#w66-0',{color:'#A78BFA'},67.184);
+tl.set('#w66-1',{color:'#A78BFA'},67.558);
+tl.set('#w66-2',{color:'#A78BFA'},67.79);
+tl.set('#cap67',{opacity:1},68.036);tl.set('#cap67',{opacity:0},68.736);
+tl.set('#w67-0',{color:'#A78BFA'},68.036);
+tl.set('#w67-1',{color:'#A78BFA'},68.19);
+tl.set('#w67-2',{color:'#A78BFA'},68.538);
+tl.set('#cap68',{opacity:1},68.731);tl.set('#cap68',{opacity:0},69.523);
+tl.set('#w68-0',{color:'#A78BFA'},68.731);
+tl.set('#w68-1',{color:'#A78BFA'},69.08);
+tl.set('#w68-2',{color:'#A78BFA'},69.377);
+tl.set('#cap69',{opacity:1},69.519);tl.set('#cap69',{opacity:0},70.194);
+tl.set('#w69-0',{color:'#A78BFA'},69.519);
+tl.set('#w69-1',{color:'#A78BFA'},69.713);
+tl.set('#w69-2',{color:'#A78BFA'},70.021);
+tl.set('#cap70',{opacity:1},70.189);tl.set('#cap70',{opacity:0},71.425);
+tl.set('#w70-0',{color:'#A78BFA'},70.189);
+tl.set('#w70-1',{color:'#A78BFA'},70.538);
+tl.set('#w70-2',{color:'#A78BFA'},71.059);
+tl.set('#cap71',{opacity:1},71.459);tl.set('#cap71',{opacity:0},72.469);
+tl.set('#w71-0',{color:'#A78BFA'},71.459);
+tl.set('#w71-1',{color:'#A78BFA'},71.82);
+tl.set('#w71-2',{color:'#A78BFA'},71.975);
+tl.set('#cap72',{opacity:1},72.671);tl.set('#cap72',{opacity:0},73.488);
+tl.set('#w72-0',{color:'#A78BFA'},72.671);
+tl.set('#w72-1',{color:'#A78BFA'},72.994);
+tl.set('#w72-2',{color:'#A78BFA'},73.317);
+tl.set('#cap73',{opacity:1},73.51);tl.set('#cap73',{opacity:0},74.31400000000001);
+tl.set('#w73-0',{color:'#A78BFA'},73.51);
+tl.set('#w73-1',{color:'#A78BFA'},73.91);
+tl.set('#w73-2',{color:'#A78BFA'},74.129);
+tl.set('#cap74',{opacity:1},74.478);tl.set('#cap74',{opacity:0},75.334);
+tl.set('#w74-0',{color:'#A78BFA'},74.478);
+tl.set('#w74-1',{color:'#A78BFA'},74.942);
+tl.set('#w74-2',{color:'#A78BFA'},75.226);
+tl.set('#cap75',{opacity:1},75.355);tl.set('#cap75',{opacity:0},76.327);
+tl.set('#w75-0',{color:'#A78BFA'},75.355);
+tl.set('#w75-1',{color:'#A78BFA'},75.716);
+tl.set('#w75-2',{color:'#A78BFA'},76.0);
+tl.set('#cap76',{opacity:1},76.348);tl.set('#cap76',{opacity:0},76.801);
+tl.set('#w76-0',{color:'#A78BFA'},76.348);
+tl.set('#cap77',{opacity:1},77.351);tl.set('#cap77',{opacity:0},78.06400000000001);
+tl.set('#w77-0',{color:'#A78BFA'},77.351);
+tl.set('#w77-1',{color:'#A78BFA'},77.622);
+tl.set('#w77-2',{color:'#A78BFA'},77.854);
+tl.set('#cap78',{opacity:1},78.086);tl.set('#cap78',{opacity:0},78.4);
+tl.set('#w78-0',{color:'#A78BFA'},78.086);
+tl.set('#w78-1',{color:'#A78BFA'},78.202);
+tl.set('#w78-2',{color:'#A78BFA'},78.344);
+tl.set('#cap79',{opacity:1},78.499);tl.set('#cap79',{opacity:0},79.149);
+tl.set('#w79-0',{color:'#A78BFA'},78.499);
+tl.set('#w79-1',{color:'#A78BFA'},78.873);
+tl.set('#w79-2',{color:'#A78BFA'},79.015);
+tl.set('#cap80',{opacity:1},79.183);tl.set('#cap80',{opacity:0},79.729);
+tl.set('#w80-0',{color:'#A78BFA'},79.183);
+tl.set('#w80-1',{color:'#A78BFA'},79.351);
+tl.set('#w80-2',{color:'#A78BFA'},79.583);
+tl.set('#cap81',{opacity:1},79.776);tl.set('#cap81',{opacity:0},80.322);
+tl.set('#w81-0',{color:'#A78BFA'},79.776);
+tl.set('#w81-1',{color:'#A78BFA'},79.956);
+tl.set('#w81-2',{color:'#A78BFA'},80.15);
+tl.set('#cap82',{opacity:1},80.344);tl.set('#cap82',{opacity:0},81.722);
+tl.set('#w82-0',{color:'#A78BFA'},80.344);
+tl.set('#w82-1',{color:'#A78BFA'},80.705);
+tl.set('#w82-2',{color:'#A78BFA'},81.46);
+tl.set('#cap83',{opacity:1},81.757);tl.set('#cap83',{opacity:0},82.934);
+tl.set('#w83-0',{color:'#A78BFA'},81.757);
+tl.set('#w83-1',{color:'#A78BFA'},82.26);
+tl.set('#w83-2',{color:'#A78BFA'},82.428);
+tl.set('#cap84',{opacity:1},83.033);tl.set('#cap84',{opacity:0},84.083);
+tl.set('#w84-0',{color:'#A78BFA'},83.033);
+tl.set('#w84-1',{color:'#A78BFA'},83.382);
+tl.set('#w84-2',{color:'#A78BFA'},83.743);
+tl.set('#cap85',{opacity:1},84.118);tl.set('#cap85',{opacity:0},84.68900000000001);
+tl.set('#w85-0',{color:'#A78BFA'},84.118);
+tl.set('#w85-1',{color:'#A78BFA'},84.298);
+tl.set('#w85-2',{color:'#A78BFA'},84.569);
+tl.set('#cap86',{opacity:1},84.684);tl.set('#cap86',{opacity:0},85.69500000000001);
+tl.set('#w86-0',{color:'#A78BFA'},84.684);
+tl.set('#w86-1',{color:'#A78BFA'},85.02);
+tl.set('#w86-2',{color:'#A78BFA'},85.343);
+tl.set('#cap87',{opacity:1},85.73);tl.set('#cap87',{opacity:0},86.804);
+tl.set('#w87-0',{color:'#A78BFA'},85.73);
+tl.set('#w87-1',{color:'#A78BFA'},85.949);
+tl.set('#w87-2',{color:'#A78BFA'},86.298);
+tl.set('#cap88',{opacity:1},86.839);tl.set('#cap88',{opacity:0},88.08200000000001);
+tl.set('#w88-0',{color:'#A78BFA'},86.839);
+tl.set('#w88-1',{color:'#A78BFA'},87.188);
+tl.set('#w88-2',{color:'#A78BFA'},87.678);
+tl.set('#cap89',{opacity:1},88.091);tl.set('#cap89',{opacity:0},88.765);
+tl.set('#w89-0',{color:'#A78BFA'},88.091);
+tl.set('#w89-1',{color:'#A78BFA'},88.388);
+tl.set('#w89-2',{color:'#A78BFA'},88.581);
+tl.set('#cap90',{opacity:1},88.968);tl.set('#cap90',{opacity:0},90.12);
+tl.set('#w90-0',{color:'#A78BFA'},88.968);
+tl.set('#w90-1',{color:'#A78BFA'},89.342);
+tl.set('#w90-2',{color:'#A78BFA'},89.845);
+tl.set('#cap91',{opacity:1},90.142);tl.set('#cap91',{opacity:0},90.81700000000001);
+tl.set('#w91-0',{color:'#A78BFA'},90.142);
+tl.set('#w91-1',{color:'#A78BFA'},90.322);
+</script></body></html>

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "item": "b015",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "independent_local_checks": {
+    "passed": 1026,
+    "description": "Exact source tested against a separately padded 32-character binary reversal, including high-bit legal boundary values."
+  },
+  "notes": [
+    "10's low bits 1010 are reversed only as an intermediate 0101=5; the remaining 28 zero appends correctly produce 0x50000000 / 1342177280. Padded-string baseline is qualified as correct, not asymptotically slower.",
+    "Shift/OR invariant, exact 32-round loop after input reaches zero, complete method body and fixed-domain O(1) time/space are correct.",
+    "No P0/P1 found. Source hash matches existing Accepted proof; script text matches reviewed lesson copy. Final MP4/audio/continuous playback are outside this report."
+  ],
+  "reviewed_at_utc": "2026-11-11T15:58:59.8376939Z",
+  "hashes": {
+    "code_sha256": "f73c830c64eaced4293aa5e58275ce09891aa383bcdacdcd061210b41b05ae8b",
+    "source_sha256": "f73c830c64eaced4293aa5e58275ce09891aa383bcdacdcd061210b41b05ae8b",
+    "lesson_sha256": "6601ccba6e3e94417ccdb0ee169f79c41e5fc97f7acd34194871464db463bac1",
+    "script_sha256": "2ff66e49f9004b110771372da9968cc5bebbbbb616be3bf1894a2f1494beda87",
+    "html_sha256": "f8984914933085666153168c8069d71f68bf895b6e3b2306809f55603681a4db",
+    "storyboard_sha256": "4cbb65b15e54e7773f7fa8f94d712b0c6e853570654ee261a77ec7ef34f756e2"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "06693d9688ba1de9c8c7e67acdcae21617b2aeef69fa47ef4952a62d98b8ae6b",
+    "snapshots/contact-sheet-1.jpg": "130fe748b0db6c6ba17d8cf4125088bedb3846a05e99fa1eda912e7e91b17f61",
+    "snapshots/contact-sheet-2.jpg": "7b771bcb88b64a9a1e71f825e7fbe9ca3734d806d67115126c40b3b510acdb8f",
+    "snapshots/contact-sheet-3.jpg": "924c9e8745194bb8499ba31fc4c48f7917ab59fd941f680961e9b2578cdfd7b5",
+    "snapshots/contact-sheet-4.jpg": "6df636fc6756b7e1a9507bf95e3b00c9042a3872aeffd7339e53e0afec23f764"
+  }
+}

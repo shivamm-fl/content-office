@@ -1,0 +1,13 @@
+@hook Coin change में largest coin हमेशा सही नहीं। | Given array: one, three, four. Amount six। Unlimited coins हैं; minimum count चाहिए। Three plus three से answer two है।
+
+Brute force हर possible next coin चुनकर remaining amount recursively solve करता है। | Six में one लो तो five बचता है, three लो तो three, four लो तो two। सभी valid paths में सबसे छोटा coin count रखते हैं।
+
+Different paths वही remaining amounts दोबारा solve करते हैं। ये repeated branching बढ़ती जाती है। | Greedy shortcut भी fail होता है: four, one, one में three coins हैं; three, three में सिर्फ two।
+
+DP total का मतलब उस total के लिए minimum coins। Last coin c हो तो उससे पहले total minus c बनना चाहिए। | उसका minimum answer पहले ready है। One coin जोड़कर हर possible last coin का candidate लो, फिर minimum चुनो। | Zero total को zero coins; unreachable totals को amount plus one sentinel।
+
+Dry run: totals zero से six के minimum counts: zero, one, two, one, one, two, two। | Total six पर last coin one देता है three coins; three देता है two; four देता है three। Minimum two, यानी three plus three।
+
+Accepted code छोटे totals पहले solve करता है। Coin current total से बड़ा हो तो skip। | Otherwise dp total को पुराने answer और dp total minus coin plus one के minimum से update करो। | Impossible predecessor sentinel रहता है, valid answer को खराब नहीं करता।
+
+Final answer amount से बड़ा हो तो minus one लौटाओ। Amount zero पर zero लौटेगा। | A amount और M denominations हों: O of A times M time, O of A extra space। सारे last coins check करना greedy failure रोकता है।

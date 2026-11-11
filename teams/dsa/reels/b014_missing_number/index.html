@@ -1,0 +1,496 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=1080,height=1920"><title>Missing Number</title>
+<script src="assets/gsap.min.js"></script><script src="data.js"></script><style>
+@font-face{font-family:Head;src:url('fonts/SpaceGrotesk.ttf');font-weight:300 700}
+@font-face{font-family:Code;src:url('fonts/JetBrainsMono.ttf');font-weight:100 800}
+@font-face{font-family:Hindi;src:url('fonts/NotoSansDevanagari.ttf')}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0B1220}
+#root{position:relative;width:1080px;height:1920px;background:#0B1220;color:#F3EFE6;font-family:Head,Hindi,sans-serif}
+.clip,.visual{position:absolute;inset:0}.visual,.state{opacity:0}svg{font-family:Head,Hindi,sans-serif;font-weight:600}
+#series{position:absolute;left:90px;top:178px;font:600 30px Head;letter-spacing:2px;color:#A78BFA;z-index:20}
+#handle{position:absolute;right:140px;top:180px;font:500 28px Head;color:#9DAEC5;z-index:20}
+#source{position:absolute;left:90px;top:1403px;font:500 29px Head;color:#9DAEC5;z-index:20}
+#caption-lane{position:absolute;left:75px;top:1248px;width:870px;height:145px;z-index:30}
+.caption{position:absolute;left:0;top:0;width:870px;text-align:center;font-size:65px;font-weight:700;line-height:1.12;color:#F3EFE6;opacity:0}
+#progress-track{position:absolute;left:90px;top:1460px;width:850px;height:5px;background:#25334D}
+#progress{height:5px;width:850px;background:#A78BFA;transform-origin:left}
+</style></head><body><main id="root" data-composition-id="main" data-start="0" data-duration="94.5" data-width="1080" data-height="1920">
+<div id="series">BLIND 75 · 14 / 75</div><div id="handle">@dsa.learnvora</div>
+<section id="scene-A" class="clip" data-start="0.0" data-duration="11.117" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vA"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="A teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Missing Number</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Input → required output</text><g class="state" id="A-step0"><text x="90" y="495" fill="#9DAEC5" font-size="30" text-anchor="start" >Given array</text><rect id="A-c0" x="100.0" y="530" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="613" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="701" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="A-c1" x="307.5" y="530" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="613" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="701" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="A-c2" x="515.0" y="530" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="613" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="701" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="A-c3" x="722.5" y="530" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="613" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="701" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><text x="90" y="805" fill="#9DAEC5" font-size="30" text-anchor="start" >full range</text><rect id="Ar-c0" x="100.0" y="840" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="173.0" y="923" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="173.0" y="1011" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="Ar-c1" x="266.0" y="840" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="339.0" y="923" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="339.0" y="1011" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="Ar-c2" x="432.0" y="840" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="923" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="1011" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="Ar-c3" x="598.0" y="840" width="146.0" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="671.0" y="923" fill="#6FD3A6" font-size="65" text-anchor="middle" >3</text><text x="671.0" y="1011" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="Ar-c4" x="764.0" y="840" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="837.0" y="923" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="837.0" y="1011" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><text x="505" y="1160" fill="#6FD3A6" font-size="44" text-anchor="middle" >missing = 3</text></g></svg></div></section><section id="scene-B" class="clip" data-start="11.117" data-duration="9.153" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vB"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="B teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Brute force</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Correct baseline · explicit choices</text><g class="state" id="B-step0"><rect id="" x="340" y="480" width="330" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="505.0" y="532" fill="#A78BFA" font-size="32" text-anchor="middle" >CANDIDATE</text><text x="505.0" y="602" fill="#A78BFA" font-size="65" text-anchor="middle" >3</text><text x="90" y="765" fill="#9DAEC5" font-size="30" text-anchor="start" >search each value</text><rect id="B-c0" x="100.0" y="800" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="883" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="971" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="B-c1" x="307.5" y="800" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="883" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="971" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="B-c2" x="515.0" y="800" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="883" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="971" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="B-c3" x="722.5" y="800" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="883" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="971" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><text x="505" y="1160" fill="#E5735F" font-size="44" text-anchor="middle" >3 is absent</text></g></svg></div></section><section id="scene-C" class="clip" data-start="20.27" data-duration="12.665" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vC"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="C teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Where it costs</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Repeated work or a concrete trap</text><g class="state" id="C-step0"><text x="90" y="815" fill="#9DAEC5" font-size="30" text-anchor="start" >same array scanned again</text><rect id="C-c0" x="100.0" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="C-c1" x="307.5" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="C-c2" x="515.0" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="C-c3" x="722.5" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><text x="150" y="560" fill="#A78BFA" font-size="60" text-anchor="middle" >0</text><line x1="150" y1="600" x2="505" y2="800" stroke="#E5735F" stroke-width="2"/><text x="320" y="560" fill="#A78BFA" font-size="60" text-anchor="middle" >1</text><line x1="320" y1="600" x2="505" y2="800" stroke="#E5735F" stroke-width="2"/><text x="490" y="560" fill="#A78BFA" font-size="60" text-anchor="middle" >2</text><line x1="490" y1="600" x2="505" y2="800" stroke="#E5735F" stroke-width="2"/><text x="660" y="560" fill="#A78BFA" font-size="60" text-anchor="middle" >3</text><line x1="660" y1="600" x2="505" y2="800" stroke="#E5735F" stroke-width="2"/><text x="830" y="560" fill="#A78BFA" font-size="60" text-anchor="middle" >4</text><line x1="830" y1="600" x2="505" y2="800" stroke="#E5735F" stroke-width="2"/><text x="505" y="1160" fill="#E5735F" font-size="44" text-anchor="middle" >candidate × array scan</text></g></svg></div></section><section id="scene-D" class="clip" data-start="32.935" data-duration="15.351" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vD"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="D teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="58" text-anchor="start" >Why the optimization works</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Preserve the invariant</text><g class="state" id="D-step0"><text x="90" y="485" fill="#9DAEC5" font-size="30" text-anchor="start" >full range</text><rect id="D1-c0" x="100.0" y="520" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="173.0" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="173.0" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="D1-c1" x="266.0" y="520" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="339.0" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="339.0" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="D1-c2" x="432.0" y="520" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="D1-c3" x="598.0" y="520" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="671.0" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="671.0" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="D1-c4" x="764.0" y="520" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="837.0" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="837.0" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><text x="90" y="815" fill="#9DAEC5" font-size="30" text-anchor="start" >present values</text><rect id="D2-c0" x="100.0" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="D2-c1" x="307.5" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="D2-c2" x="515.0" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="D2-c3" x="722.5" y="850" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="933" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="1021" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><text x="505" y="1160" fill="#6FD3A6" font-size="36" text-anchor="middle" >x XOR x = 0 · unpaired 3 remains</text></g></svg></div></section><section id="scene-E" class="clip" data-start="48.286" data-duration="16.977" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vE"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="E teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Follow the same input</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Chronological state changes</text><g class="state" id="E-step0"><text x="90" y="485" fill="#9DAEC5" font-size="30" text-anchor="start" >nums</text><rect id="E0-c0" x="100.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E0-c1" x="307.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E0-c2" x="515.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E0-c3" x="722.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="" x="340" y="900" width="330" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="952" fill="#6FD3A6" font-size="32" text-anchor="middle" >ACCUMULATOR</text><text x="505.0" y="1022" fill="#6FD3A6" font-size="65" text-anchor="middle" >4</text><text x="505" y="1180" fill="#9DAEC5" font-size="37" text-anchor="middle" >seed n = 4</text></g><g class="state" id="E-step1"><text x="90" y="485" fill="#9DAEC5" font-size="30" text-anchor="start" >nums</text><rect id="E1-c0" x="100.0" y="520" width="187.5" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="193.75" y="603" fill="#6FD3A6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E1-c1" x="307.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E1-c2" x="515.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E1-c3" x="722.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="" x="340" y="900" width="330" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="952" fill="#6FD3A6" font-size="32" text-anchor="middle" >ACCUMULATOR</text><text x="505.0" y="1022" fill="#6FD3A6" font-size="65" text-anchor="middle" >0</text><text x="505" y="1180" fill="#9DAEC5" font-size="37" text-anchor="middle" >4 XOR 0 XOR 4 = 0</text></g><g class="state" id="E-step2"><text x="90" y="485" fill="#9DAEC5" font-size="30" text-anchor="start" >nums</text><rect id="E2-c0" x="100.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E2-c1" x="307.5" y="520" width="187.5" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="401.25" y="603" fill="#6FD3A6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E2-c2" x="515.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E2-c3" x="722.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="" x="340" y="900" width="330" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="952" fill="#6FD3A6" font-size="32" text-anchor="middle" >ACCUMULATOR</text><text x="505.0" y="1022" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text><text x="505" y="1180" fill="#9DAEC5" font-size="37" text-anchor="middle" >0 XOR 1 XOR 0 = 1</text></g><g class="state" id="E-step3"><text x="90" y="485" fill="#9DAEC5" font-size="30" text-anchor="start" >nums</text><rect id="E3-c0" x="100.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E3-c1" x="307.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E3-c2" x="515.0" y="520" width="187.5" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="608.75" y="603" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E3-c3" x="722.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="816.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="" x="340" y="900" width="330" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="952" fill="#6FD3A6" font-size="32" text-anchor="middle" >ACCUMULATOR</text><text x="505.0" y="1022" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text><text x="505" y="1180" fill="#9DAEC5" font-size="37" text-anchor="middle" >1 XOR 2 XOR 2 = 1</text></g><g class="state" id="E-step4"><text x="90" y="485" fill="#9DAEC5" font-size="30" text-anchor="start" >nums</text><rect id="E4-c0" x="100.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="193.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >4</text><text x="193.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E4-c1" x="307.5" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="401.25" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >0</text><text x="401.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E4-c2" x="515.0" y="520" width="187.5" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="608.75" y="603" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="608.75" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E4-c3" x="722.5" y="520" width="187.5" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="816.25" y="603" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text><text x="816.25" y="691" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="" x="340" y="900" width="330" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="952" fill="#6FD3A6" font-size="32" text-anchor="middle" >ACCUMULATOR</text><text x="505.0" y="1022" fill="#6FD3A6" font-size="65" text-anchor="middle" >3</text><text x="505" y="1180" fill="#9DAEC5" font-size="37" text-anchor="middle" >1 XOR 3 XOR 1 = 3</text></g></svg></div></section><section id="scene-F" class="clip" data-start="65.263" data-duration="16.171" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vF"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="F teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Accepted Python</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >missing-number</text><rect id="" x="80" y="495" width="885" height="263" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeF-L6" data-source-line="6" data-code-panel="codeF"><rect class="code-highlight" x="88" y="508" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">missing = len(nums)</text></g><g id="codeF-L7" data-source-line="7" data-code-panel="codeF"><rect class="code-highlight" x="88" y="565" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="594" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">for index, value in enumerate(nums):</text></g><g id="codeF-L8" data-source-line="8" data-code-panel="codeF"><rect class="code-highlight" x="88" y="622" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="651" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">    missing ^= index ^ value</text></g><g id="codeF-L9" data-source-line="9" data-code-panel="codeF"><rect class="code-highlight" x="88" y="679" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="708" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">return missing</text></g></svg></div></section><section id="scene-G" class="clip" data-start="81.434" data-duration="13.066" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vG"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="G teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Cost and boundary</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Same algorithm · honest complexity</text><rect id="" x="80" y="495" width="885" height="263" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeG-L6" data-source-line="6" data-code-panel="codeG"><rect class="code-highlight" x="88" y="508" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">missing = len(nums)</text></g><g id="codeG-L7" data-source-line="7" data-code-panel="codeG"><rect class="code-highlight" x="88" y="565" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="594" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">for index, value in enumerate(nums):</text></g><g id="codeG-L8" data-source-line="8" data-code-panel="codeG"><rect class="code-highlight" x="88" y="622" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="651" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">    missing ^= index ^ value</text></g><g id="codeG-L9" data-source-line="9" data-code-panel="codeG"><rect class="code-highlight" x="88" y="679" width="870" height="57" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="708" fill="#F3EFE6" font-size="37" text-anchor="start" font-family="Code" xml:space="preserve">return missing</text></g><text x="505" y="1200" fill="#6FD3A6" font-size="39" text-anchor="middle" >O(n) time · O(1) extra</text></svg></div></section><div id="caption-lane" data-track-kind="captions"><div class="clip caption" id="cap0" data-track-index="2" data-track-kind="captions" data-start="0.08" data-duration="0.736"><span id="w0-0">Missing</span> <span id="w0-1">number</span> <span id="w0-2">ko</span></div>
+<div class="clip caption" id="cap1" data-track-index="2" data-track-kind="captions" data-start="0.919" data-duration="1.003"><span id="w1-0">XOR</span> <span id="w1-1">se</span> <span id="w1-2">nikalo.</span></div>
+<div class="clip caption" id="cap2" data-track-index="2" data-track-kind="captions" data-start="2.222" data-duration="1.355"><span id="w2-0">Given</span> <span id="w2-1">array:</span> <span id="w2-2">four,</span></div>
+<div class="clip caption" id="cap3" data-track-index="2" data-track-kind="captions" data-start="3.641" data-duration="0.9029999999999996"><span id="w3-0">zero,</span> <span id="w3-1">two,</span> <span id="w3-2">one.</span></div>
+<div class="clip caption" id="cap4" data-track-index="2" data-track-kind="captions" data-start="4.738" data-duration="0.9539999999999997"><span id="w4-0">Four</span> <span id="w4-1">elements</span> <span id="w4-2">hain,</span></div>
+<div class="clip caption" id="cap5" data-track-index="2" data-track-kind="captions" data-start="5.731" data-duration="1.1870000000000003"><span id="w5-0">isliye</span> <span id="w5-1">allowed</span> <span id="w5-2">numbers</span></div>
+<div class="clip caption" id="cap6" data-track-index="2" data-track-kind="captions" data-start="7.008" data-duration="0.6189999999999998"><span id="w6-0">zero</span> <span id="w6-1">se</span> <span id="w6-2">four</span></div>
+<div class="clip caption" id="cap7" data-track-index="2" data-track-kind="captions" data-start="7.679" data-duration="0.786999999999999"><span id="w7-0">tak</span> <span id="w7-1">hain.</span> <span id="w7-2">Missing</span></div>
+<div class="clip caption" id="cap8" data-track-index="2" data-track-kind="captions" data-start="8.518" data-duration="0.6829999999999998"><span id="w8-0">value</span> <span id="w8-1">three</span> <span id="w8-2">hai.</span></div>
+<div class="clip caption" id="cap9" data-track-index="2" data-track-kind="captions" data-start="9.24" data-duration="0.863999999999999"><span id="w9-0">Array</span> <span id="w9-1">mein</span> <span id="w9-2">duplicates</span></div>
+<div class="clip caption" id="cap10" data-track-index="2" data-track-kind="captions" data-start="10.169" data-duration="0.4480000000000004"><span id="w10-0">nahi</span> <span id="w10-1">hain.</span></div>
+<div class="clip caption" id="cap11" data-track-index="2" data-track-kind="captions" data-start="11.197" data-duration="1.0450000000000017"><span id="w11-0">Brute</span> <span id="w11-1">force:</span> <span id="w11-2">zero</span></div>
+<div class="clip caption" id="cap12" data-track-index="2" data-track-kind="captions" data-start="12.294" data-duration="0.5289999999999999"><span id="w12-0">se</span> <span id="w12-1">four</span> <span id="w12-2">tak</span></div>
+<div class="clip caption" id="cap13" data-track-index="2" data-track-kind="captions" data-start="12.952" data-duration="1.0060000000000002"><span id="w13-0">har</span> <span id="w13-1">candidate</span> <span id="w13-2">lo,</span></div>
+<div class="clip caption" id="cap14" data-track-index="2" data-track-kind="captions" data-start="14.023" data-duration="0.761000000000001"><span id="w14-0">aur</span> <span id="w14-1">poore</span> <span id="w14-2">array</span></div>
+<div class="clip caption" id="cap15" data-track-index="2" data-track-kind="captions" data-start="14.835" data-duration="1.2489999999999988"><span id="w15-0">mein</span> <span id="w15-1">dhoondho.</span> <span id="w15-2">Zero</span></div>
+<div class="clip caption" id="cap16" data-track-index="2" data-track-kind="captions" data-start="16.136" data-duration="0.6449999999999996"><span id="w16-0">milta</span> <span id="w16-1">hai,</span> <span id="w16-2">one</span></div>
+<div class="clip caption" id="cap17" data-track-index="2" data-track-kind="captions" data-start="16.806" data-duration="0.5559999999999974"><span id="w17-0">milta</span> <span id="w17-1">hai,</span> <span id="w17-2">two</span></div>
+<div class="clip caption" id="cap18" data-track-index="2" data-track-kind="captions" data-start="17.413" data-duration="0.6709999999999994"><span id="w18-0">milta</span> <span id="w18-1">hai,</span> <span id="w18-2">three</span></div>
+<div class="clip caption" id="cap19" data-track-index="2" data-track-kind="captions" data-start="18.11" data-duration="0.8000000000000007"><span id="w19-0">nahi</span> <span id="w19-1">milta.</span> <span id="w19-2">Answer</span></div>
+<div class="clip caption" id="cap20" data-track-index="2" data-track-kind="captions" data-start="18.974" data-duration="0.7959999999999994"><span id="w20-0">sahi</span> <span id="w20-1">hai.</span></div>
+<div class="clip caption" id="cap21" data-track-index="2" data-track-kind="captions" data-start="20.35" data-duration="1.043999999999997"><span id="w21-0">lekin</span> <span id="w21-1">har</span> <span id="w21-2">candidate</span></div>
+<div class="clip caption" id="cap22" data-track-index="2" data-track-kind="captions" data-start="21.421" data-duration="0.41199999999999903"><span id="w22-0">ke</span> <span id="w22-1">liye</span> <span id="w22-2">phir</span></div>
+<div class="clip caption" id="cap23" data-track-index="2" data-track-kind="captions" data-start="21.898" data-duration="0.6449999999999996"><span id="w23-0">se</span> <span id="w23-1">array</span> <span id="w23-2">scan</span></div>
+<div class="clip caption" id="cap24" data-track-index="2" data-track-kind="captions" data-start="22.594" data-duration="0.7749999999999986"><span id="w24-0">hota</span> <span id="w24-1">hai.</span> <span id="w24-2">N</span></div>
+<div class="clip caption" id="cap25" data-track-index="2" data-track-kind="captions" data-start="23.433" data-duration="0.8649999999999984"><span id="w25-0">candidates</span> <span id="w25-1">aur</span> <span id="w25-2">har</span></div>
+<div class="clip caption" id="cap26" data-track-index="2" data-track-kind="captions" data-start="24.349" data-duration="0.7089999999999996"><span id="w26-0">scan</span> <span id="w26-1">mein</span> <span id="w26-2">up</span></div>
+<div class="clip caption" id="cap27" data-track-index="2" data-track-kind="captions" data-start="25.122" data-duration="0.8640000000000008"><span id="w27-0">to</span> <span id="w27-1">N</span> <span id="w27-2">values:</span></div>
+<div class="clip caption" id="cap28" data-track-index="2" data-track-kind="captions" data-start="26.025" data-duration="1.0180000000000007"><span id="w28-0">quadratic</span> <span id="w28-1">work.</span></div>
+<div class="clip caption" id="cap29" data-track-index="2" data-track-kind="captions" data-start="27.343" data-duration="0.9549999999999983"><span id="w29-0">Sorting</span> <span id="w29-1">karne</span> <span id="w29-2">par</span></div>
+<div class="clip caption" id="cap30" data-track-index="2" data-track-kind="captions" data-start="28.375" data-duration="0.9549999999999983"><span id="w30-0">bhi</span> <span id="w30-1">extra</span> <span id="w30-2">ordering</span></div>
+<div class="clip caption" id="cap31" data-track-index="2" data-track-kind="captions" data-start="29.381" data-duration="1.2390000000000008"><span id="w31-0">work</span> <span id="w31-1">chahiye;</span> <span id="w31-2">hamen</span></div>
+<div class="clip caption" id="cap32" data-track-index="2" data-track-kind="captions" data-start="30.659" data-duration="1.1219999999999999"><span id="w32-0">sirf</span> <span id="w32-1">absent</span> <span id="w32-2">value</span></div>
+<div class="clip caption" id="cap33" data-track-index="2" data-track-kind="captions" data-start="31.82" data-duration="0.615000000000002"><span id="w33-0">chahiye.</span></div>
+<div class="clip caption" id="cap34" data-track-index="2" data-track-kind="captions" data-start="33.015" data-duration="1.2000000000000028"><span id="w34-0">XOR</span> <span id="w34-1">ki</span> <span id="w34-2">properties:</span></div>
+<div class="clip caption" id="cap35" data-track-index="2" data-track-kind="captions" data-start="34.383" data-duration="0.8119999999999976"><span id="w35-0">x</span> <span id="w35-1">XOR</span> <span id="w35-2">x</span></div>
+<div class="clip caption" id="cap36" data-track-index="2" data-track-kind="captions" data-start="35.248" data-duration="0.7730000000000032"><span id="w36-0">is</span> <span id="w36-1">zero,</span> <span id="w36-2">aur</span></div>
+<div class="clip caption" id="cap37" data-track-index="2" data-track-kind="captions" data-start="36.124" data-duration="0.8509999999999991"><span id="w37-0">x</span> <span id="w37-1">XOR</span> <span id="w37-2">zero</span></div>
+<div class="clip caption" id="cap38" data-track-index="2" data-track-kind="captions" data-start="37.04" data-duration="1.1219999999999999"><span id="w38-0">is</span> <span id="w38-1">x.</span> <span id="w38-2">Order</span></div>
+<div class="clip caption" id="cap39" data-track-index="2" data-track-kind="captions" data-start="38.201" data-duration="0.786999999999999"><span id="w39-0">badalne</span> <span id="w39-1">se</span> <span id="w39-2">result</span></div>
+<div class="clip caption" id="cap40" data-track-index="2" data-track-kind="captions" data-start="39.065" data-duration="1.6200000000000045"><span id="w40-0">nahi</span> <span id="w40-1">badalta.</span> <span id="w40-2">isliye</span></div>
+<div class="clip caption" id="cap41" data-track-index="2" data-track-kind="captions" data-start="40.763" data-duration="0.7340000000000018"><span id="w41-0">full</span> <span id="w41-1">range</span> <span id="w41-2">aur</span></div>
+<div class="clip caption" id="cap42" data-track-index="2" data-track-kind="captions" data-start="41.549" data-duration="0.8130000000000024"><span id="w42-0">array</span> <span id="w42-1">ko</span> <span id="w42-2">XOR</span></div>
+<div class="clip caption" id="cap43" data-track-index="2" data-track-kind="captions" data-start="42.401" data-duration="0.992999999999995"><span id="w43-0">kar</span> <span id="w43-1">do.</span> <span id="w43-2">maujud</span></div>
+<div class="clip caption" id="cap44" data-track-index="2" data-track-kind="captions" data-start="43.433" data-duration="0.9149999999999991"><span id="w44-0">numbers</span> <span id="w44-1">two</span> <span id="w44-2">copies</span></div>
+<div class="clip caption" id="cap45" data-track-index="2" data-track-kind="captions" data-start="44.401" data-duration="0.8769999999999953"><span id="w45-0">mein</span> <span id="w45-1">cancel</span> <span id="w45-2">honge.</span></div>
+<div class="clip caption" id="cap46" data-track-index="2" data-track-kind="captions" data-start="45.419" data-duration="0.8900000000000006"><span id="w46-0">sirf</span> <span id="w46-1">missing</span> <span id="w46-2">number</span></div>
+<div class="clip caption" id="cap47" data-track-index="2" data-track-kind="captions" data-start="46.374" data-duration="0.6709999999999994"><span id="w47-0">ki</span> <span id="w47-1">one</span> <span id="w47-2">copy</span></div>
+<div class="clip caption" id="cap48" data-track-index="2" data-track-kind="captions" data-start="47.084" data-duration="0.7019999999999982"><span id="w48-0">bachegi.</span></div>
+<div class="clip caption" id="cap49" data-track-index="2" data-track-kind="captions" data-start="48.366" data-duration="0.7479999999999976"><span id="w49-0">Code</span> <span id="w49-1">missing</span> <span id="w49-2">ko</span></div>
+<div class="clip caption" id="cap50" data-track-index="2" data-track-kind="captions" data-start="49.179" data-duration="0.6580000000000013"><span id="w50-0">length</span> <span id="w50-1">four</span> <span id="w50-2">se</span></div>
+<div class="clip caption" id="cap51" data-track-index="2" data-track-kind="captions" data-start="49.863" data-duration="1.168999999999997"><span id="w51-0">initialize</span> <span id="w51-1">karta</span> <span id="w51-2">hai.</span></div>
+<div class="clip caption" id="cap52" data-track-index="2" data-track-kind="captions" data-start="51.332" data-duration="0.9930000000000021"><span id="w52-0">Index</span> <span id="w52-1">zero,</span> <span id="w52-2">value</span></div>
+<div class="clip caption" id="cap53" data-track-index="2" data-track-kind="captions" data-start="52.364" data-duration="0.8130000000000024"><span id="w53-0">four</span> <span id="w53-1">se</span> <span id="w53-2">accumulator</span></div>
+<div class="clip caption" id="cap54" data-track-index="2" data-track-kind="captions" data-start="53.215" data-duration="0.8780000000000001"><span id="w54-0">zero.</span> <span id="w54-1">Index</span> <span id="w54-2">one,</span></div>
+<div class="clip caption" id="cap55" data-track-index="2" data-track-kind="captions" data-start="54.131" data-duration="0.6839999999999975"><span id="w55-0">value</span> <span id="w55-1">zero</span> <span id="w55-2">se</span></div>
+<div class="clip caption" id="cap56" data-track-index="2" data-track-kind="captions" data-start="54.892" data-duration="1.7049999999999983"><span id="w56-0">one.</span> <span id="w56-1">Index</span> <span id="w56-2">two,</span></div>
+<div class="clip caption" id="cap57" data-track-index="2" data-track-kind="captions" data-start="56.791" data-duration="1.1880000000000024"><span id="w57-0">value</span> <span id="w57-1">two</span> <span id="w57-2">cancel:</span></div>
+<div class="clip caption" id="cap58" data-track-index="2" data-track-kind="captions" data-start="58.069" data-duration="1.972999999999999"><span id="w58-0">accumulator</span> <span id="w58-1">one.</span> <span id="w58-2">Index</span></div>
+<div class="clip caption" id="cap59" data-track-index="2" data-track-kind="captions" data-start="60.12" data-duration="1.264000000000003"><span id="w59-0">three,</span> <span id="w59-1">value</span> <span id="w59-2">one</span></div>
+<div class="clip caption" id="cap60" data-track-index="2" data-track-kind="captions" data-start="61.422" data-duration="1.0830000000000055"><span id="w60-0">se</span> <span id="w60-1">three.</span> <span id="w60-2">sabhi</span></div>
+<div class="clip caption" id="cap61" data-track-index="2" data-track-kind="captions" data-start="62.57" data-duration="1.0450000000000017"><span id="w61-0">pairs</span> <span id="w61-1">process</span> <span id="w61-2">hue,</span></div>
+<div class="clip caption" id="cap62" data-track-index="2" data-track-kind="captions" data-start="63.757" data-duration="1.0060000000000073"><span id="w62-0">return</span> <span id="w62-1">three.</span></div>
+<div class="clip caption" id="cap63" data-track-index="2" data-track-kind="captions" data-start="65.343" data-duration="0.9419999999999931"><span id="w63-0">ye</span> <span id="w63-1">poora</span> <span id="w63-2">Accepted</span></div>
+<div class="clip caption" id="cap64" data-track-index="2" data-track-kind="captions" data-start="66.336" data-duration="1.1219999999999999"><span id="w64-0">code</span> <span id="w64-1">hai.</span> <span id="w64-2">Length</span></div>
+<div class="clip caption" id="cap65" data-track-index="2" data-track-kind="captions" data-start="67.497" data-duration="1.0319999999999965"><span id="w65-0">wala</span> <span id="w65-1">initialization</span></div>
+<div class="clip caption" id="cap66" data-track-index="2" data-track-kind="captions" data-start="68.606" data-duration="0.929000000000002"><span id="w66-0">range</span> <span id="w66-1">ka</span> <span id="w66-2">last</span></div>
+<div class="clip caption" id="cap67" data-track-index="2" data-track-kind="captions" data-start="69.587" data-duration="0.902000000000001"><span id="w67-0">number</span> <span id="w67-1">shaamil</span> <span id="w67-2">karta</span></div>
+<div class="clip caption" id="cap68" data-track-index="2" data-track-kind="captions" data-start="70.542" data-duration="1.0190000000000055"><span id="w68-0">hai.</span> <span id="w68-1">Loop</span> <span id="w68-2">ke</span></div>
+<div class="clip caption" id="cap69" data-track-index="2" data-track-kind="captions" data-start="71.625" data-duration="1.3930000000000007"><span id="w69-0">indices</span> <span id="w69-1">zero</span> <span id="w69-2">se</span></div>
+<div class="clip caption" id="cap70" data-track-index="2" data-track-kind="captions" data-start="73.251" data-duration="0.6569999999999965"><span id="w70-0">n</span> <span id="w70-1">minus</span> <span id="w70-2">one</span></div>
+<div class="clip caption" id="cap71" data-track-index="2" data-track-kind="captions" data-start="73.934" data-duration="0.6970000000000027"><span id="w71-0">tak</span> <span id="w71-1">baaki</span> <span id="w71-2">range</span></div>
+<div class="clip caption" id="cap72" data-track-index="2" data-track-kind="captions" data-start="74.669" data-duration="1.1270000000000095"><span id="w72-0">dete</span> <span id="w72-1">hain.</span> <span id="w72-2">har</span></div>
+<div class="clip caption" id="cap73" data-track-index="2" data-track-kind="captions" data-start="75.925" data-duration="0.9030000000000058"><span id="w73-0">round</span> <span id="w73-1">index</span> <span id="w73-2">aur</span></div>
+<div class="clip caption" id="cap74" data-track-index="2" data-track-kind="captions" data-start="76.893" data-duration="1.1610000000000014"><span id="w74-0">actual</span> <span id="w74-1">value</span> <span id="w74-2">donon</span></div>
+<div class="clip caption" id="cap75" data-track-index="2" data-track-kind="captions" data-start="78.105" data-duration="0.9029999999999916"><span id="w75-0">XOR</span> <span id="w75-1">hote</span> <span id="w75-2">hain.</span></div>
+<div class="clip caption" id="cap76" data-track-index="2" data-track-kind="captions" data-start="79.202" data-duration="1.0060000000000002"><span id="w76-0">Input</span> <span id="w76-1">array</span> <span id="w76-2">badla</span></div>
+<div class="clip caption" id="cap77" data-track-index="2" data-track-kind="captions" data-start="80.26" data-duration="0.6739999999999924"><span id="w77-0">nahi</span> <span id="w77-1">jata.</span></div>
+<div class="clip caption" id="cap78" data-track-index="2" data-track-kind="captions" data-start="81.514" data-duration="0.8389999999999986"><span id="w78-0">One</span> <span id="w78-1">pass:</span> <span id="w78-2">O</span></div>
+<div class="clip caption" id="cap79" data-track-index="2" data-track-kind="captions" data-start="82.418" data-duration="0.5929999999999893"><span id="w79-0">of</span> <span id="w79-1">n</span> <span id="w79-2">time,</span></div>
+<div class="clip caption" id="cap80" data-track-index="2" data-track-kind="captions" data-start="83.101" data-duration="0.554000000000002"><span id="w80-0">O</span> <span id="w80-1">of</span> <span id="w80-2">one</span></div>
+<div class="clip caption" id="cap81" data-track-index="2" data-track-kind="captions" data-start="83.681" data-duration="1.5900000000000034"><span id="w81-0">extra</span> <span id="w81-1">space.</span> <span id="w81-2">Missing</span></div>
+<div class="clip caption" id="cap82" data-track-index="2" data-track-kind="captions" data-start="85.335" data-duration="0.7220000000000084"><span id="w82-0">zero</span> <span id="w82-1">ya</span> <span id="w82-2">missing</span></div>
+<div class="clip caption" id="cap83" data-track-index="2" data-track-kind="captions" data-start="86.122" data-duration="0.5289999999999964"><span id="w83-0">n</span> <span id="w83-1">bhi</span> <span id="w83-2">isi</span></div>
+<div class="clip caption" id="cap84" data-track-index="2" data-track-kind="captions" data-start="86.702" data-duration="0.7489999999999952"><span id="w84-0">tarah</span> <span id="w84-1">bachega.</span></div>
+<div class="clip caption" id="cap85" data-track-index="2" data-track-kind="captions" data-start="87.683" data-duration="1.0049999999999955"><span id="w85-0">Duplicates</span> <span id="w85-1">allowed</span> <span id="w85-2">hon</span></div>
+<div class="clip caption" id="cap86" data-track-index="2" data-track-kind="captions" data-start="88.727" data-duration="0.9679999999999893"><span id="w86-0">to</span> <span id="w86-1">cancellation</span> <span id="w86-2">proof</span></div>
+<div class="clip caption" id="cap87" data-track-index="2" data-track-kind="captions" data-start="89.759" data-duration="0.9419999999999931"><span id="w87-0">tootega;</span> <span id="w87-1">yahan</span></div>
+<div class="clip caption" id="cap88" data-track-index="2" data-track-kind="captions" data-start="90.753" data-duration="0.8119999999999976"><span id="w88-0">distinct</span> <span id="w88-1">values</span></div>
+<div class="clip caption" id="cap89" data-track-index="2" data-track-kind="captions" data-start="91.643" data-duration="1.0190000000000055"><span id="w89-0">problem</span> <span id="w89-1">ki</span> <span id="w89-2">guarantee</span></div>
+<div class="clip caption" id="cap90" data-track-index="2" data-track-kind="captions" data-start="92.701" data-duration="0.38400000000000034"><span id="w90-0">hai.</span></div>
+</div><div id="source">Problem: LeetCode #268</div><div id="progress-track"><div id="progress"></div></div><audio class="clip" id="voice" data-track-index="3" data-track-kind="audio" src="audio/hi/voice.wav" data-start="0" data-duration="94.5"></audio><audio class="clip" id="bed" data-track-index="4" data-track-kind="audio" src="audio/hi/bed.wav" data-start="0" data-duration="94.5"></audio><audio class="clip" id="sfx" data-track-index="5" data-track-kind="audio" src="audio/hi/sfx.wav" data-start="0" data-duration="94.5"></audio></main><script>const R=window.REEL.hi,S=R.starts,P=R.ph;
+const tl=gsap.timeline({paused:true}),order=Object.keys(P);
+order.forEach((s,i)=>{tl.set('#v'+s,{opacity:1},S[s]);if(i<order.length-1)tl.set('#v'+s,{opacity:0},S[order[i+1]]);});
+tl.fromTo('#progress',{scaleX:0},{scaleX:1,duration:R.total,ease:'none'},0);
+function step(id,t,end){tl.set(id,{opacity:1},t);tl.set(id,{opacity:0},end);}
+function cell(prefix,i,t,color='#A78BFA'){tl.to('#'+prefix+'-c'+i,{attr:{stroke:color,fill:color==='#6FD3A6'?'#173B35':'#30264C'},duration:.2},t);}
+function reset(prefix,t){tl.set('[id^="'+prefix+'-c"]',{attr:{stroke:'#34425D',fill:'#172239'}},t);}
+function reveal(id,t){tl.fromTo(id,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out'},t);}
+
+function cue(scene,phrase,word=null,occurrence=0){
+ const p=P[scene][phrase];if(!p)throw Error('missing phrase '+scene+phrase);
+ if(word===null)return p.s;
+ const hits=R.caps.filter(c=>c.scene===scene&&c.s>=p.s&&c.s<p.e&&c.t.toLowerCase().replace(/[^a-z0-9]/g,'')===word.toLowerCase());
+ if(!hits[occurrence])throw Error('missing word '+scene+phrase+' '+word+' #'+occurrence);
+ return hits[occurrence].s;
+}
+// diagram: A
+step("#A-step0",S.A,S.B);
+// diagram: B
+step("#B-step0",S.B,S.C);
+// diagram: C
+step("#C-step0",S.C,S.D);
+// diagram: D
+step("#D-step0",S.D,S.E);
+// diagram: E
+step("#E-step0",S.E,cue("E",1,"zero",1));
+step("#E-step1",cue("E",1,"zero",1),cue("E",1,"one",1));
+step("#E-step2",cue("E",1,"one",1),cue("E",2,"two",0));
+step("#E-step3",cue("E",2,"two",0),cue("E",2,"three",0));
+step("#E-step4",cue("E",2,"three",0),S.F);
+// diagram: F
+// diagram: G
+tl.set("[id^=codeF-L] .code-highlight",{opacity:0},cue("F",0));tl.set("#codeF-L6 .code-highlight",{opacity:.2},cue("F",0));
+tl.set("[id^=codeF-L] .code-highlight",{opacity:0},cue("F",1));tl.set("#codeF-L8 .code-highlight",{opacity:.2},cue("F",1));
+tl.set("[id^=codeG-L] .code-highlight",{opacity:0},cue("G",0));tl.set("#codeG-L6 .code-highlight",{opacity:.2},cue("G",0));
+tl.set("[id^=codeG-L] .code-highlight",{opacity:0},cue("G",1));tl.set("#codeG-L8 .code-highlight",{opacity:.2},cue("G",1));
+
+window.__timelines=window.__timelines||{};window.__timelines.main=tl;
+tl.set('#cap0',{opacity:1},0.08);tl.set('#cap0',{opacity:0},0.846);
+tl.set('#w0-0',{color:'#A78BFA'},0.08);
+tl.set('#w0-1',{color:'#A78BFA'},0.441);
+tl.set('#w0-2',{color:'#A78BFA'},0.712);
+tl.set('#cap1',{opacity:1},0.919);tl.set('#cap1',{opacity:0},1.952);
+tl.set('#w1-0',{color:'#A78BFA'},0.919);
+tl.set('#w1-1',{color:'#A78BFA'},1.331);
+tl.set('#w1-2',{color:'#A78BFA'},1.448);
+tl.set('#cap2',{opacity:1},2.222);tl.set('#cap2',{opacity:0},3.6069999999999998);
+tl.set('#w2-0',{color:'#A78BFA'},2.222);
+tl.set('#w2-1',{color:'#A78BFA'},2.7);
+tl.set('#w2-2',{color:'#A78BFA'},3.19);
+tl.set('#cap3',{opacity:1},3.641);tl.set('#cap3',{opacity:0},4.574);
+tl.set('#w3-0',{color:'#A78BFA'},3.641);
+tl.set('#w3-1',{color:'#A78BFA'},4.016);
+tl.set('#w3-2',{color:'#A78BFA'},4.273);
+tl.set('#cap4',{opacity:1},4.738);tl.set('#cap4',{opacity:0},5.722);
+tl.set('#w4-0',{color:'#A78BFA'},4.738);
+tl.set('#w4-1',{color:'#A78BFA'},5.06);
+tl.set('#w4-2',{color:'#A78BFA'},5.55);
+tl.set('#cap5',{opacity:1},5.731);tl.set('#cap5',{opacity:0},6.948);
+tl.set('#w5-0',{color:'#A78BFA'},5.731);
+tl.set('#w5-1',{color:'#A78BFA'},6.131);
+tl.set('#w5-2',{color:'#A78BFA'},6.557);
+tl.set('#cap6',{opacity:1},7.008);tl.set('#cap6',{opacity:0},7.657);
+tl.set('#w6-0',{color:'#A78BFA'},7.008);
+tl.set('#w6-1',{color:'#A78BFA'},7.33);
+tl.set('#w6-2',{color:'#A78BFA'},7.472);
+tl.set('#cap7',{opacity:1},7.679);tl.set('#cap7',{opacity:0},8.495999999999999);
+tl.set('#w7-0',{color:'#A78BFA'},7.679);
+tl.set('#w7-1',{color:'#A78BFA'},7.911);
+tl.set('#w7-2',{color:'#A78BFA'},8.118);
+tl.set('#cap8',{opacity:1},8.518);tl.set('#cap8',{opacity:0},9.231);
+tl.set('#w8-0',{color:'#A78BFA'},8.518);
+tl.set('#w8-1',{color:'#A78BFA'},8.788);
+tl.set('#w8-2',{color:'#A78BFA'},9.033);
+tl.set('#cap9',{opacity:1},9.24);tl.set('#cap9',{opacity:0},10.133999999999999);
+tl.set('#w9-0',{color:'#A78BFA'},9.24);
+tl.set('#w9-1',{color:'#A78BFA'},9.523);
+tl.set('#w9-2',{color:'#A78BFA'},9.652);
+tl.set('#cap10',{opacity:1},10.169);tl.set('#cap10',{opacity:0},10.647);
+tl.set('#w10-0',{color:'#A78BFA'},10.169);
+tl.set('#w10-1',{color:'#A78BFA'},10.362);
+tl.set('#cap11',{opacity:1},11.197);tl.set('#cap11',{opacity:0},12.272);
+tl.set('#w11-0',{color:'#A78BFA'},11.197);
+tl.set('#w11-1',{color:'#A78BFA'},11.533);
+tl.set('#w11-2',{color:'#A78BFA'},11.958);
+tl.set('#cap12',{opacity:1},12.294);tl.set('#cap12',{opacity:0},12.853);
+tl.set('#w12-0',{color:'#A78BFA'},12.294);
+tl.set('#w12-1',{color:'#A78BFA'},12.436);
+tl.set('#w12-2',{color:'#A78BFA'},12.668);
+tl.set('#cap13',{opacity:1},12.952);tl.set('#cap13',{opacity:0},13.988);
+tl.set('#w13-0',{color:'#A78BFA'},12.952);
+tl.set('#w13-1',{color:'#A78BFA'},13.248);
+tl.set('#w13-2',{color:'#A78BFA'},13.713);
+tl.set('#cap14',{opacity:1},14.023);tl.set('#cap14',{opacity:0},14.814);
+tl.set('#w14-0',{color:'#A78BFA'},14.023);
+tl.set('#w14-1',{color:'#A78BFA'},14.228);
+tl.set('#w14-2',{color:'#A78BFA'},14.577);
+tl.set('#cap15',{opacity:1},14.835);tl.set('#cap15',{opacity:0},16.114);
+tl.set('#w15-0',{color:'#A78BFA'},14.835);
+tl.set('#w15-1',{color:'#A78BFA'},14.977);
+tl.set('#w15-2',{color:'#A78BFA'},15.762);
+tl.set('#cap16',{opacity:1},16.136);tl.set('#cap16',{opacity:0},16.811);
+tl.set('#w16-0',{color:'#A78BFA'},16.136);
+tl.set('#w16-1',{color:'#A78BFA'},16.445);
+tl.set('#w16-2',{color:'#A78BFA'},16.639);
+tl.set('#cap17',{opacity:1},16.806);tl.set('#cap17',{opacity:0},17.392);
+tl.set('#w17-0',{color:'#A78BFA'},16.806);
+tl.set('#w17-1',{color:'#A78BFA'},17.116);
+tl.set('#w17-2',{color:'#A78BFA'},17.245);
+tl.set('#cap18',{opacity:1},17.413);tl.set('#cap18',{opacity:0},18.114);
+tl.set('#w18-0',{color:'#A78BFA'},17.413);
+tl.set('#w18-1',{color:'#A78BFA'},17.71);
+tl.set('#w18-2',{color:'#A78BFA'},17.852);
+tl.set('#cap19',{opacity:1},18.11);tl.set('#cap19',{opacity:0},18.94);
+tl.set('#w19-0',{color:'#A78BFA'},18.11);
+tl.set('#w19-1',{color:'#A78BFA'},18.264);
+tl.set('#w19-2',{color:'#A78BFA'},18.613);
+tl.set('#cap20',{opacity:1},18.974);tl.set('#cap20',{opacity:0},19.8);
+tl.set('#w20-0',{color:'#A78BFA'},18.974);
+tl.set('#w20-1',{color:'#A78BFA'},19.271);
+tl.set('#cap21',{opacity:1},20.35);tl.set('#cap21',{opacity:0},21.424);
+tl.set('#w21-0',{color:'#A78BFA'},20.35);
+tl.set('#w21-1',{color:'#A78BFA'},20.75);
+tl.set('#w21-2',{color:'#A78BFA'},20.956);
+tl.set('#cap22',{opacity:1},21.421);tl.set('#cap22',{opacity:0},21.863);
+tl.set('#w22-0',{color:'#A78BFA'},21.421);
+tl.set('#w22-1',{color:'#A78BFA'},21.536);
+tl.set('#w22-2',{color:'#A78BFA'},21.679);
+tl.set('#cap23',{opacity:1},21.898);tl.set('#cap23',{opacity:0},22.573);
+tl.set('#w23-0',{color:'#A78BFA'},21.898);
+tl.set('#w23-1',{color:'#A78BFA'},22.04);
+tl.set('#w23-2',{color:'#A78BFA'},22.298);
+tl.set('#cap24',{opacity:1},22.594);tl.set('#cap24',{opacity:0},23.399);
+tl.set('#w24-0',{color:'#A78BFA'},22.594);
+tl.set('#w24-1',{color:'#A78BFA'},22.852);
+tl.set('#w24-2',{color:'#A78BFA'},23.226);
+tl.set('#cap25',{opacity:1},23.433);tl.set('#cap25',{opacity:0},24.328);
+tl.set('#w25-0',{color:'#A78BFA'},23.433);
+tl.set('#w25-1',{color:'#A78BFA'},24.013);
+tl.set('#w25-2',{color:'#A78BFA'},24.155);
+tl.set('#cap26',{opacity:1},24.349);tl.set('#cap26',{opacity:0},25.088);
+tl.set('#w26-0',{color:'#A78BFA'},24.349);
+tl.set('#w26-1',{color:'#A78BFA'},24.684);
+tl.set('#w26-2',{color:'#A78BFA'},24.878);
+tl.set('#cap27',{opacity:1},25.122);tl.set('#cap27',{opacity:0},26.016000000000002);
+tl.set('#w27-0',{color:'#A78BFA'},25.122);
+tl.set('#w27-1',{color:'#A78BFA'},25.342);
+tl.set('#w27-2',{color:'#A78BFA'},25.549);
+tl.set('#cap28',{opacity:1},26.025);tl.set('#cap28',{opacity:0},27.073);
+tl.set('#w28-0',{color:'#A78BFA'},26.025);
+tl.set('#w28-1',{color:'#A78BFA'},26.619);
+tl.set('#cap29',{opacity:1},27.343);tl.set('#cap29',{opacity:0},28.328);
+tl.set('#w29-0',{color:'#A78BFA'},27.343);
+tl.set('#w29-1',{color:'#A78BFA'},27.885);
+tl.set('#w29-2',{color:'#A78BFA'},28.182);
+tl.set('#cap30',{opacity:1},28.375);tl.set('#cap30',{opacity:0},29.36);
+tl.set('#w30-0',{color:'#A78BFA'},28.375);
+tl.set('#w30-1',{color:'#A78BFA'},28.543);
+tl.set('#w30-2',{color:'#A78BFA'},28.969);
+tl.set('#cap31',{opacity:1},29.381);tl.set('#cap31',{opacity:0},30.650000000000002);
+tl.set('#w31-0',{color:'#A78BFA'},29.381);
+tl.set('#w31-1',{color:'#A78BFA'},29.652);
+tl.set('#w31-2',{color:'#A78BFA'},30.401);
+tl.set('#cap32',{opacity:1},30.659);tl.set('#cap32',{opacity:0},31.811);
+tl.set('#w32-0',{color:'#A78BFA'},30.659);
+tl.set('#w32-1',{color:'#A78BFA'},30.968);
+tl.set('#w32-2',{color:'#A78BFA'},31.497);
+tl.set('#cap33',{opacity:1},31.82);tl.set('#cap33',{opacity:0},32.465);
+tl.set('#w33-0',{color:'#A78BFA'},31.82);
+tl.set('#cap34',{opacity:1},33.015);tl.set('#cap34',{opacity:0},34.245000000000005);
+tl.set('#w34-0',{color:'#A78BFA'},33.015);
+tl.set('#w34-1',{color:'#A78BFA'},33.429);
+tl.set('#w34-2',{color:'#A78BFA'},33.558);
+tl.set('#cap35',{opacity:1},34.383);tl.set('#cap35',{opacity:0},35.225);
+tl.set('#w35-0',{color:'#A78BFA'},34.383);
+tl.set('#w35-1',{color:'#A78BFA'},34.68);
+tl.set('#w35-2',{color:'#A78BFA'},35.105);
+tl.set('#cap36',{opacity:1},35.248);tl.set('#cap36',{opacity:0},36.051);
+tl.set('#w36-0',{color:'#A78BFA'},35.248);
+tl.set('#w36-1',{color:'#A78BFA'},35.35);
+tl.set('#w36-2',{color:'#A78BFA'},35.853);
+tl.set('#cap37',{opacity:1},36.124);tl.set('#cap37',{opacity:0},37.005);
+tl.set('#w37-0',{color:'#A78BFA'},36.124);
+tl.set('#w37-1',{color:'#A78BFA'},36.382);
+tl.set('#w37-2',{color:'#A78BFA'},36.77);
+tl.set('#cap38',{opacity:1},37.04);tl.set('#cap38',{opacity:0},38.192);
+tl.set('#w38-0',{color:'#A78BFA'},37.04);
+tl.set('#w38-1',{color:'#A78BFA'},37.272);
+tl.set('#w38-2',{color:'#A78BFA'},37.84);
+tl.set('#cap39',{opacity:1},38.201);tl.set('#cap39',{opacity:0},39.018);
+tl.set('#w39-0',{color:'#A78BFA'},38.201);
+tl.set('#w39-1',{color:'#A78BFA'},38.589);
+tl.set('#w39-2',{color:'#A78BFA'},38.691);
+tl.set('#cap40',{opacity:1},39.065);tl.set('#cap40',{opacity:0},40.715);
+tl.set('#w40-0',{color:'#A78BFA'},39.065);
+tl.set('#w40-1',{color:'#A78BFA'},39.233);
+tl.set('#w40-2',{color:'#A78BFA'},40.221);
+tl.set('#cap41',{opacity:1},40.763);tl.set('#cap41',{opacity:0},41.527);
+tl.set('#w41-0',{color:'#A78BFA'},40.763);
+tl.set('#w41-1',{color:'#A78BFA'},41.072);
+tl.set('#w41-2',{color:'#A78BFA'},41.368);
+tl.set('#cap42',{opacity:1},41.549);tl.set('#cap42',{opacity:0},42.392);
+tl.set('#w42-0',{color:'#A78BFA'},41.549);
+tl.set('#w42-1',{color:'#A78BFA'},41.794);
+tl.set('#w42-2',{color:'#A78BFA'},41.975);
+tl.set('#cap43',{opacity:1},42.401);tl.set('#cap43',{opacity:0},43.424);
+tl.set('#w43-0',{color:'#A78BFA'},42.401);
+tl.set('#w43-1',{color:'#A78BFA'},42.568);
+tl.set('#w43-2',{color:'#A78BFA'},43.007);
+tl.set('#cap44',{opacity:1},43.433);tl.set('#cap44',{opacity:0},44.378);
+tl.set('#w44-0',{color:'#A78BFA'},43.433);
+tl.set('#w44-1',{color:'#A78BFA'},43.819);
+tl.set('#w44-2',{color:'#A78BFA'},44.013);
+tl.set('#cap45',{opacity:1},44.401);tl.set('#cap45',{opacity:0},45.308);
+tl.set('#w45-0',{color:'#A78BFA'},44.401);
+tl.set('#w45-1',{color:'#A78BFA'},44.542);
+tl.set('#w45-2',{color:'#A78BFA'},44.929);
+tl.set('#cap46',{opacity:1},45.419);tl.set('#cap46',{opacity:0},46.339);
+tl.set('#w46-0',{color:'#A78BFA'},45.419);
+tl.set('#w46-1',{color:'#A78BFA'},45.729);
+tl.set('#w46-2',{color:'#A78BFA'},46.052);
+tl.set('#cap47',{opacity:1},46.374);tl.set('#cap47',{opacity:0},47.075);
+tl.set('#w47-0',{color:'#A78BFA'},46.374);
+tl.set('#w47-1',{color:'#A78BFA'},46.606);
+tl.set('#w47-2',{color:'#A78BFA'},46.799);
+tl.set('#cap48',{opacity:1},47.084);tl.set('#cap48',{opacity:0},47.816);
+tl.set('#w48-0',{color:'#A78BFA'},47.084);
+tl.set('#cap49',{opacity:1},48.366);tl.set('#cap49',{opacity:0},49.144);
+tl.set('#w49-0',{color:'#A78BFA'},48.366);
+tl.set('#w49-1',{color:'#A78BFA'},48.702);
+tl.set('#w49-2',{color:'#A78BFA'},49.011);
+tl.set('#cap50',{opacity:1},49.179);tl.set('#cap50',{opacity:0},49.867000000000004);
+tl.set('#w50-0',{color:'#A78BFA'},49.179);
+tl.set('#w50-1',{color:'#A78BFA'},49.489);
+tl.set('#w50-2',{color:'#A78BFA'},49.746);
+tl.set('#cap51',{opacity:1},49.863);tl.set('#cap51',{opacity:0},51.062);
+tl.set('#w51-0',{color:'#A78BFA'},49.863);
+tl.set('#w51-1',{color:'#A78BFA'},50.417);
+tl.set('#w51-2',{color:'#A78BFA'},50.779);
+tl.set('#cap52',{opacity:1},51.332);tl.set('#cap52',{opacity:0},52.355000000000004);
+tl.set('#w52-0',{color:'#A78BFA'},51.332);
+tl.set('#w52-1',{color:'#A78BFA'},51.745);
+tl.set('#w52-2',{color:'#A78BFA'},52.054);
+tl.set('#cap53',{opacity:1},52.364);tl.set('#cap53',{opacity:0},53.207);
+tl.set('#w53-0',{color:'#A78BFA'},52.364);
+tl.set('#w53-1',{color:'#A78BFA'},52.597);
+tl.set('#w53-2',{color:'#A78BFA'},52.7);
+tl.set('#cap54',{opacity:1},53.215);tl.set('#cap54',{opacity:0},54.123000000000005);
+tl.set('#w54-0',{color:'#A78BFA'},53.215);
+tl.set('#w54-1',{color:'#A78BFA'},53.512);
+tl.set('#w54-2',{color:'#A78BFA'},53.925);
+tl.set('#cap55',{opacity:1},54.131);tl.set('#cap55',{opacity:0},54.845);
+tl.set('#w55-0',{color:'#A78BFA'},54.131);
+tl.set('#w55-1',{color:'#A78BFA'},54.454);
+tl.set('#w55-2',{color:'#A78BFA'},54.724);
+tl.set('#cap56',{opacity:1},54.892);tl.set('#cap56',{opacity:0},56.627);
+tl.set('#w56-0',{color:'#A78BFA'},54.892);
+tl.set('#w56-1',{color:'#A78BFA'},55.746);
+tl.set('#w56-2',{color:'#A78BFA'},56.275);
+tl.set('#cap57',{opacity:1},56.791);tl.set('#cap57',{opacity:0},58.009);
+tl.set('#w57-0',{color:'#A78BFA'},56.791);
+tl.set('#w57-1',{color:'#A78BFA'},57.217);
+tl.set('#w57-2',{color:'#A78BFA'},57.436);
+tl.set('#cap58',{opacity:1},58.069);tl.set('#cap58',{opacity:0},60.072);
+tl.set('#w58-0',{color:'#A78BFA'},58.069);
+tl.set('#w58-1',{color:'#A78BFA'},59.062);
+tl.set('#w58-2',{color:'#A78BFA'},59.63);
+tl.set('#cap59',{opacity:1},60.12);tl.set('#cap59',{opacity:0},61.414);
+tl.set('#w59-0',{color:'#A78BFA'},60.12);
+tl.set('#w59-1',{color:'#A78BFA'},60.725);
+tl.set('#w59-2',{color:'#A78BFA'},61.164);
+tl.set('#cap60',{opacity:1},61.422);tl.set('#cap60',{opacity:0},62.535000000000004);
+tl.set('#w60-0',{color:'#A78BFA'},61.422);
+tl.set('#w60-1',{color:'#A78BFA'},61.629);
+tl.set('#w60-2',{color:'#A78BFA'},62.183);
+tl.set('#cap61',{opacity:1},62.57);tl.set('#cap61',{opacity:0},63.645);
+tl.set('#w61-0',{color:'#A78BFA'},62.57);
+tl.set('#w61-1',{color:'#A78BFA'},62.866);
+tl.set('#w61-2',{color:'#A78BFA'},63.319);
+tl.set('#cap62',{opacity:1},63.757);tl.set('#cap62',{opacity:0},64.793);
+tl.set('#w62-0',{color:'#A78BFA'},63.757);
+tl.set('#w62-1',{color:'#A78BFA'},64.273);
+tl.set('#cap63',{opacity:1},65.343);tl.set('#cap63',{opacity:0},66.315);
+tl.set('#w63-0',{color:'#A78BFA'},65.343);
+tl.set('#w63-1',{color:'#A78BFA'},65.511);
+tl.set('#w63-2',{color:'#A78BFA'},65.807);
+tl.set('#cap64',{opacity:1},66.336);tl.set('#cap64',{opacity:0},67.488);
+tl.set('#w64-0',{color:'#A78BFA'},66.336);
+tl.set('#w64-1',{color:'#A78BFA'},66.646);
+tl.set('#w64-2',{color:'#A78BFA'},67.123);
+tl.set('#cap65',{opacity:1},67.497);tl.set('#cap65',{opacity:0},68.559);
+tl.set('#w65-0',{color:'#A78BFA'},67.497);
+tl.set('#w65-1',{color:'#A78BFA'},67.781);
+tl.set('#cap66',{opacity:1},68.606);tl.set('#cap66',{opacity:0},69.565);
+tl.set('#w66-0',{color:'#A78BFA'},68.606);
+tl.set('#w66-1',{color:'#A78BFA'},68.891);
+tl.set('#w66-2',{color:'#A78BFA'},69.213);
+tl.set('#cap67',{opacity:1},69.587);tl.set('#cap67',{opacity:0},70.519);
+tl.set('#w67-0',{color:'#A78BFA'},69.587);
+tl.set('#w67-1',{color:'#A78BFA'},69.883);
+tl.set('#w67-2',{color:'#A78BFA'},70.218);
+tl.set('#cap68',{opacity:1},70.542);tl.set('#cap68',{opacity:0},71.59100000000001);
+tl.set('#w68-0',{color:'#A78BFA'},70.542);
+tl.set('#w68-1',{color:'#A78BFA'},71.108);
+tl.set('#w68-2',{color:'#A78BFA'},71.469);
+tl.set('#cap69',{opacity:1},71.625);tl.set('#cap69',{opacity:0},73.048);
+tl.set('#w69-0',{color:'#A78BFA'},71.625);
+tl.set('#w69-1',{color:'#A78BFA'},72.412);
+tl.set('#w69-2',{color:'#A78BFA'},72.837);
+tl.set('#cap70',{opacity:1},73.251);tl.set('#cap70',{opacity:0},73.938);
+tl.set('#w70-0',{color:'#A78BFA'},73.251);
+tl.set('#w70-1',{color:'#A78BFA'},73.418);
+tl.set('#w70-2',{color:'#A78BFA'},73.792);
+tl.set('#cap71',{opacity:1},73.934);tl.set('#cap71',{opacity:0},74.661);
+tl.set('#w71-0',{color:'#A78BFA'},73.934);
+tl.set('#w71-1',{color:'#A78BFA'},74.102);
+tl.set('#w71-2',{color:'#A78BFA'},74.412);
+tl.set('#cap72',{opacity:1},74.669);tl.set('#cap72',{opacity:0},75.82600000000001);
+tl.set('#w72-0',{color:'#A78BFA'},74.669);
+tl.set('#w72-1',{color:'#A78BFA'},74.978);
+tl.set('#w72-2',{color:'#A78BFA'},75.538);
+tl.set('#cap73',{opacity:1},75.925);tl.set('#cap73',{opacity:0},76.858);
+tl.set('#w73-0',{color:'#A78BFA'},75.925);
+tl.set('#w73-1',{color:'#A78BFA'},76.377);
+tl.set('#w73-2',{color:'#A78BFA'},76.764);
+tl.set('#cap74',{opacity:1},76.893);tl.set('#cap74',{opacity:0},78.084);
+tl.set('#w74-0',{color:'#A78BFA'},76.893);
+tl.set('#w74-1',{color:'#A78BFA'},77.28);
+tl.set('#w74-2',{color:'#A78BFA'},77.693);
+tl.set('#cap75',{opacity:1},78.105);tl.set('#cap75',{opacity:0},79.038);
+tl.set('#w75-0',{color:'#A78BFA'},78.105);
+tl.set('#w75-1',{color:'#A78BFA'},78.532);
+tl.set('#w75-2',{color:'#A78BFA'},78.802);
+tl.set('#cap76',{opacity:1},79.202);tl.set('#cap76',{opacity:0},80.238);
+tl.set('#w76-0',{color:'#A78BFA'},79.202);
+tl.set('#w76-1',{color:'#A78BFA'},79.692);
+tl.set('#w76-2',{color:'#A78BFA'},79.951);
+tl.set('#cap77',{opacity:1},80.26);tl.set('#cap77',{opacity:0},80.964);
+tl.set('#w77-0',{color:'#A78BFA'},80.26);
+tl.set('#w77-1',{color:'#A78BFA'},80.402);
+tl.set('#cap78',{opacity:1},81.514);tl.set('#cap78',{opacity:0},82.383);
+tl.set('#w78-0',{color:'#A78BFA'},81.514);
+tl.set('#w78-1',{color:'#A78BFA'},81.785);
+tl.set('#w78-2',{color:'#A78BFA'},82.224);
+tl.set('#cap79',{opacity:1},82.418);tl.set('#cap79',{opacity:0},83.041);
+tl.set('#w79-0',{color:'#A78BFA'},82.418);
+tl.set('#w79-1',{color:'#A78BFA'},82.637);
+tl.set('#w79-2',{color:'#A78BFA'},82.74);
+tl.set('#cap80',{opacity:1},83.101);tl.set('#cap80',{opacity:0},83.685);
+tl.set('#w80-0',{color:'#A78BFA'},83.101);
+tl.set('#w80-1',{color:'#A78BFA'},83.282);
+tl.set('#w80-2',{color:'#A78BFA'},83.475);
+tl.set('#cap81',{opacity:1},83.681);tl.set('#cap81',{opacity:0},85.301);
+tl.set('#w81-0',{color:'#A78BFA'},83.681);
+tl.set('#w81-1',{color:'#A78BFA'},83.965);
+tl.set('#w81-2',{color:'#A78BFA'},84.896);
+tl.set('#cap82',{opacity:1},85.335);tl.set('#cap82',{opacity:0},86.087);
+tl.set('#w82-0',{color:'#A78BFA'},85.335);
+tl.set('#w82-1',{color:'#A78BFA'},85.632);
+tl.set('#w82-2',{color:'#A78BFA'},85.761);
+tl.set('#cap83',{opacity:1},86.122);tl.set('#cap83',{opacity:0},86.681);
+tl.set('#w83-0',{color:'#A78BFA'},86.122);
+tl.set('#w83-1',{color:'#A78BFA'},86.367);
+tl.set('#w83-2',{color:'#A78BFA'},86.496);
+tl.set('#cap84',{opacity:1},86.702);tl.set('#cap84',{opacity:0},87.481);
+tl.set('#w84-0',{color:'#A78BFA'},86.702);
+tl.set('#w84-1',{color:'#A78BFA'},86.922);
+tl.set('#cap85',{opacity:1},87.683);tl.set('#cap85',{opacity:0},88.718);
+tl.set('#w85-0',{color:'#A78BFA'},87.683);
+tl.set('#w85-1',{color:'#A78BFA'},88.276);
+tl.set('#w85-2',{color:'#A78BFA'},88.573);
+tl.set('#cap86',{opacity:1},88.727);tl.set('#cap86',{opacity:0},89.725);
+tl.set('#w86-0',{color:'#A78BFA'},88.727);
+tl.set('#w86-1',{color:'#A78BFA'},88.869);
+tl.set('#w86-2',{color:'#A78BFA'},89.488);
+tl.set('#cap87',{opacity:1},89.759);tl.set('#cap87',{opacity:0},90.731);
+tl.set('#w87-0',{color:'#A78BFA'},89.759);
+tl.set('#w87-1',{color:'#A78BFA'},90.456);
+tl.set('#cap88',{opacity:1},90.753);tl.set('#cap88',{opacity:0},91.595);
+tl.set('#w88-0',{color:'#A78BFA'},90.753);
+tl.set('#w88-1',{color:'#A78BFA'},91.231);
+tl.set('#cap89',{opacity:1},91.643);tl.set('#cap89',{opacity:0},92.69200000000001);
+tl.set('#w89-0',{color:'#A78BFA'},91.643);
+tl.set('#w89-1',{color:'#A78BFA'},92.029);
+tl.set('#w89-2',{color:'#A78BFA'},92.185);
+tl.set('#cap90',{opacity:1},92.701);tl.set('#cap90',{opacity:0},93.115);
+tl.set('#w90-0',{color:'#A78BFA'},92.701);
+</script></body></html>

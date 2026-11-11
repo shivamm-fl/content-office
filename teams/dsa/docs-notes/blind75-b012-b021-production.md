@@ -11,8 +11,10 @@ not claims that the production adapter ran.
 
 Read `state/solutions/blind75-b012-b021-progress.json` for export progress.
 Do not duplicate an item because a legacy roadmap entry still says todo.
-The batch is still in production until all final MP4s, decoded code-frame
-inspection and private Office handoff are verified.
+All ten final MP4s and decoded complete-code/terminal-trace frames are verified.
+All20 Office assets and10 private publisher packages were read back/hash-verified.
+The14 pre-existing DSA library items and owner decisions were preserved.
+Reels await owner review; next Blind75 is b022.
 
 - Number of 1 Bits; Counting Bits; Missing Number; Reverse Bits; Climbing Stairs.
 - Coin Change; Longest Increasing Subsequence; Longest Common Subsequence;
@@ -34,3 +36,7 @@ check; DP source chunks switch during the explanation rather than after it.
 Combination Sum IV shows the entire short body while explaining loop order
 and ordered-sequence accumulation. No original source was changed after its
 Accepted verdict.
+
+Final delivery: 90.5–103 seconds per reel, owner tempo0.9, complete method bodies.
+All ten current independent reviews have no open P0/P1. Source/oracle checks:27,364
+local and13,010 independent checks. Delivery receipt: state/solutions/blind75-b012-b021-delivery.json.

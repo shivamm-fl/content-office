@@ -1,0 +1,89 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "surprising_fact",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "copy": {
+    "hi": {
+      "A": "@hook Coin change में largest coin हमेशा सही नहीं। | Given array: one, three, four. Amount six। Unlimited coins हैं; minimum count चाहिए। Three plus three से answer two है।",
+      "B": "Brute force हर possible next coin चुनकर remaining amount recursively solve करता है। | Six में one लो तो five बचता है, three लो तो three, four लो तो two। सभी valid paths में सबसे छोटा coin count रखते हैं।",
+      "C": "Different paths वही remaining amounts दोबारा solve करते हैं। ये repeated branching बढ़ती जाती है। | Greedy shortcut भी fail होता है: four, one, one में three coins हैं; three, three में सिर्फ two।",
+      "D": "DP total का मतलब उस total के लिए minimum coins। Last coin c हो तो उससे पहले total minus c बनना चाहिए। | उसका minimum answer पहले ready है। One coin जोड़कर हर possible last coin का candidate लो, फिर minimum चुनो। | Zero total को zero coins; unreachable totals को amount plus one sentinel।",
+      "E": "Dry run: totals zero से six के minimum counts: zero, one, two, one, one, two, two। | Total six पर last coin one देता है three coins; three देता है two; four देता है three। Minimum two, यानी three plus three।",
+      "F": "Accepted code छोटे totals पहले solve करता है। Coin current total से बड़ा हो तो skip। | Otherwise dp total को पुराने answer और dp total minus coin plus one के minimum से update करो। | Impossible predecessor sentinel रहता है, valid answer को खराब नहीं करता।",
+      "G": "Final answer amount से बड़ा हो तो minus one लौटाओ। Amount zero पर zero लौटेगा। | A amount और M denominations हों: O of A times M time, O of A extra space। सारे last coins check करना greedy failure रोकता है।"
+    }
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "solution_sha256": "2cbef137d88541264f47cfb7f1144fca0232ef442277bb9404506ba732eb79a5",
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "sources": [
+    "https://leetcode.com/problems/coin-change/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    "https://leetcode.com/problems/coin-change/submissions/2193978621/"
+  ],
+  "on_screen_code_contract": "complete_method_body"
+}

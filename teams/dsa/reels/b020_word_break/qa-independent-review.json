@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "item": "b020",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "resolved_findings": [
+    {
+      "priority": "P1",
+      "where": "Scene F source chunk/highlight",
+      "verified_at_s": 79.85,
+      "resolution": "Regenerated F now displays the transition chunk and highlights reachable[end] = True at the matching caption. The end-of-F return explanation also highlights the actual return."
+    }
+  ],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "changed_frame_reinspection": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "independent_local_checks": {
+    "passed": 961,
+    "description": "Exact original source evaluated over binary strings up to length four and 31 dictionaries against a separate memoized prefix oracle."
+  },
+  "notes": [
+    "cars/ca|rs success, car|s dead end, reachable=[T,F,T,T,T], exact bounded startswith match, full-string return, O(n*M*L) time and O(n) auxiliary space are correct.",
+    "Complete method body is readable with marked soft wraps. Previously reviewed all34 stills; regenerated F/G sheets and phone sheet re-inspected before closing P1.",
+    "No P0/P1 remains. No final MP4/audio/continuous playback claim."
+  ],
+  "reviewed_at_utc": "2026-11-11T16:03:40.3654092Z",
+  "hashes": {
+    "code_sha256": "eebc6705a70ee0890a0bdd3c247c6d2fdc6204eded46138e8b0a4ade8386e6ec",
+    "source_sha256": "eebc6705a70ee0890a0bdd3c247c6d2fdc6204eded46138e8b0a4ade8386e6ec",
+    "lesson_sha256": "26b25be643885f487dc159d28380631f05a235a84e9806c7ba04b0a445fc7a9f",
+    "script_sha256": "372e954ceacedf5e0b52992c50339805933673f787d615de920388683fc756d7",
+    "html_sha256": "4f4613f240473d3ed2aa0c9daef3ce84c9bcc830d3b60fb844d437779e66c14f",
+    "storyboard_sha256": "a952aebdd1b5e4d4c842bfe5f9ab6c949b15643c97354953c2804b342287de55"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "810d79e750b3388dcdf67dc7e86a7f3eae31d0fd0dc9fbb4f9a21c54ace69564",
+    "snapshots/contact-sheet-1.jpg": "1d78c25e33897fc712242fbfcac9436d0e03477cc5c7f49527b6b1616c571766",
+    "snapshots/contact-sheet-2.jpg": "668f53e9a5fc22b2cfd85919d59cde39c57c56cd42e52fd7f275e4d49a81d910",
+    "snapshots/contact-sheet-3.jpg": "5cd877d182b414df157ab038e3c665c25ce4c9dc42b42151278d8cb14f995b5d",
+    "snapshots/contact-sheet-4.jpg": "c38715b7f7a8e6dfe43bad7613579be485901bb52fff563ba5537013f48c629d"
+  }
+}

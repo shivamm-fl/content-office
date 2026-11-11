@@ -1,0 +1,89 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "surprising_fact",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "copy": {
+    "hi": {
+      "A": "@hook यहाँ order बदलने से नया answer बनता है। | Given array: one, two. Target four। Values unlimited बार use कर सकते हो। | One, one, two और two, one, one अलग sequences हैं। Total five sequences हैं।",
+      "B": "Brute force हर position पर one या two choose करता है। Target से आगे गए तो discard; exactly target मिला तो one sequence count करो। | One वाले branch से remaining three, two वाले से remaining two solve होते हैं।",
+      "C": "Remaining two, दूसरे रास्तों से भी आता है। वही sequence counts बार बार निकालते हैं। | Coin Change का minimum यहाँ काम नहीं करेगा: हमें सभी ordered sequences का count चाहिए। सिर्फ unordered combinations गिनना भी गलत है।",
+      "D": "Ways total का मतलब total बनाने वाली ordered sequences का count। Last value v fix करो। | उससे पहले total minus v की कोई भी valid sequence हो सकती है। हर ऐसी sequence में v append करने से unique नई sequence बनती है। | Last value के cases अलग हैं, इसलिए उनके counts add करते हैं। Ways zero is one: empty sequence।",
+      "E": "Dry run: ways one, ways zero से one। | Ways two बराबर ways one plus ways zero: two। Ways three बराबर ways two plus ways one: three। | Ways four बराबर ways three plus ways two: five।",
+      "F": "Accepted code में total outer loop है, values inner loop। Value total से बड़ी हो तो skip; otherwise predecessor count add करो। | छोटे totals पहले ready हैं। Coins outer loop करके unordered combinations गिनने वाला pattern यहाँ मत लगाना।",
+      "G": "Return ways target। A target और M values पर O of A times M time, O of A extra space। | कोई sequence न हो तो zero। All values positive हैं, इसलिए dependencies छोटे totals पर जाती हैं; zero या negatives allowed हों तो ये proof टूटेगा।"
+    }
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "solution_sha256": "951b7ec5c1a6cc074c8dabbd8372796a324fb545771ecc16374d25d79a534108",
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "sources": [
+    "https://leetcode.com/problems/combination-sum-iv/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    "https://leetcode.com/problems/combination-sum-iv/submissions/2193987807/"
+  ],
+  "on_screen_code_contract": "complete_method_body"
+}

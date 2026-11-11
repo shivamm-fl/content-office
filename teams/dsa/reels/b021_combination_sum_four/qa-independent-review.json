@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "item": "b021",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "withdrawn_findings": [
+    {
+      "where": "Original scene-F guard/update timing concern",
+      "reason": "Sparse original samples omitted an existing74.143-78.16s transition window; no all-F absence was established. That original finding was withdrawn rather than counted as a verified defect."
+    }
+  ],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg",
+    "qa-targeted-code/frame-00-at-74.6s.png",
+    "qa-targeted-code/frame-01-at-76.5s.png",
+    "qa-targeted-code/frame-02-at-79.5s.png",
+    "snapshots/frame-02-at-6.37s.png",
+    "../../brand/covers/b021_combination_sum_four.png"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "targeted_code_stills": 3,
+    "phone_sheet": true,
+    "changed_frame_reinspection": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false,
+    "sequence_label_delta_reinspection": true,
+    "cover_still_reviewed": true,
+    "final_revision_mp4_verified": false
+  },
+  "independent_local_checks": {
+    "passed": 420,
+    "description": "Exact original source checked against independent memoized ordered-path counts over positive subsets and small targets."
+  },
+  "notes": [
+    "The five ordered sequences 1+1+1+1, 1+1+2, 1+2+1, 2+1+1, 2+2 are exhaustive for [1,2], target4. Disjoint last-value partition, ways[0]=1, ascending [1,1,2,3,5] trace and positivity requirement are correct.",
+    "Final revision displays the complete method body in F/G with a readable continuation arrow. Targeted74.6s shows guard highlight at value/total text;76.5s highlights predecessor accumulation;79.5s highlights outer/inner loops for the loop-order explanation.",
+    "O(A*M) time and O(A) auxiliary space match the actual implementation under ordinary bounded arithmetic accounting. No P0/P1 remains.",
+    "Reviewed all original story/trace stills, regenerated F/G sheets and targeted final code frames. No final MP4/audio/continuous-playback claim.",
+    "Final sequence-label delta reinspection: regenerated scene A at 0s, 0.5s, 6.37s, 12.35s and 12.55s plus current phone sheet show all five correctly delimited sums legibly. Updated cover repeats the same five sums and count. Source and script hashes unchanged; audio and final MP4 not reviewed."
+  ],
+  "reviewed_at_utc": "2026-11-11T16:32:26.6497774Z",
+  "hashes": {
+    "code_sha256": "951b7ec5c1a6cc074c8dabbd8372796a324fb545771ecc16374d25d79a534108",
+    "source_sha256": "951b7ec5c1a6cc074c8dabbd8372796a324fb545771ecc16374d25d79a534108",
+    "lesson_sha256": "1c398f8dc843acad4dcd707bcc60b1b9f50831b63e19fedb10c6a1ef509fd93b",
+    "script_sha256": "3cb073e46787abd34a1e922d29f86b14e3a0b35f84280d74ed70600778e20af4",
+    "html_sha256": "95f4c02362a519bd6887442565ed2bb56594b25e1d195f36cd6bdd08af48838d",
+    "storyboard_sha256": "a46bb45c6b4471e70c6fd0805ef4c4a7c98999144f9a975f784289e45cd298cb"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "088a2883567d6f77810575bda6741df80897a1fbae2ee1b5a93a218ddbf01d3f",
+    "snapshots/contact-sheet-1.jpg": "3a2bb2cad46b73daeeffe819dca85f16a4af5f33ec27ebe6d2e8ff5591b54487",
+    "snapshots/contact-sheet-2.jpg": "8e3037a461d8e10f0f849e305e1b18c279220b1d60a2be18636073cdbfab9308",
+    "snapshots/contact-sheet-3.jpg": "1e613e26553639a71959eb2fe97ee633df499157bb2cf6435dff43feea443257",
+    "snapshots/contact-sheet-4.jpg": "adfea2d1e2f1cfb8b0b6c6615ab292be10f87ed180f867634edcda867d00210b",
+    "qa-targeted-code/frame-00-at-74.6s.png": "f6077d1aa21943e2cdf0d9fb28c2a4e38094fdf2a6f1b31086aa504a17815ce3",
+    "qa-targeted-code/frame-01-at-76.5s.png": "c71b9450f0885854252608d9c66d7b9725217cc0f6cdc1112d6a8e93e20bb4a8",
+    "qa-targeted-code/frame-02-at-79.5s.png": "5c114f3d3bc6ecf17c4aecbd326976723849c1815e087a95652f090680695f3c",
+    "snapshots/frame-02-at-6.37s.png": "e5c20e0010cedcd2b1bf1b0123b53cc8074bf6a347c0be0d9120aaaa35e7e8c5",
+    "../../brand/covers/b021_combination_sum_four.png": "d875316bda9c2c856296c296c36d7d49ffcfde4da110827f65862a1b75e9465b"
+  }
+}

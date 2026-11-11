@@ -1,0 +1,13 @@
+@hook यहाँ order बदलने से नया answer बनता है। | Given array: one, two. Target four। Values unlimited बार use कर सकते हो। | One, one, two और two, one, one अलग sequences हैं। Total five sequences हैं।
+
+Brute force हर position पर one या two choose करता है। Target से आगे गए तो discard; exactly target मिला तो one sequence count करो। | One वाले branch से remaining three, two वाले से remaining two solve होते हैं।
+
+Remaining two, दूसरे रास्तों से भी आता है। वही sequence counts बार बार निकालते हैं। | Coin Change का minimum यहाँ काम नहीं करेगा: हमें सभी ordered sequences का count चाहिए। सिर्फ unordered combinations गिनना भी गलत है।
+
+Ways total का मतलब total बनाने वाली ordered sequences का count। Last value v fix करो। | उससे पहले total minus v की कोई भी valid sequence हो सकती है। हर ऐसी sequence में v append करने से unique नई sequence बनती है। | Last value के cases अलग हैं, इसलिए उनके counts add करते हैं। Ways zero is one: empty sequence।
+
+Dry run: ways one, ways zero से one। | Ways two बराबर ways one plus ways zero: two। Ways three बराबर ways two plus ways one: three। | Ways four बराबर ways three plus ways two: five।
+
+Accepted code में total outer loop है, values inner loop। Value total से बड़ी हो तो skip; otherwise predecessor count add करो। | छोटे totals पहले ready हैं। Coins outer loop करके unordered combinations गिनने वाला pattern यहाँ मत लगाना।
+
+Return ways target। A target और M values पर O of A times M time, O of A extra space। | कोई sequence न हो तो zero। All values positive हैं, इसलिए dependencies छोटे totals पर जाती हैं; zero या negatives allowed हों तो ये proof टूटेगा।

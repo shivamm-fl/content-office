@@ -1,0 +1,89 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "surprising_fact",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "copy": {
+    "hi": {
+      "A": "@hook हर bit को check करना ज़रूरी नहीं। | Given integer: twelve. Binary one one zero zero में two set bits हैं। Set bit मतलब जिस position पर one हो। हमें वही count लौटाना है।",
+      "B": "Brute force: हर round में last bit check करो, फिर number को right shift करो। | Twelve से six, फिर three, फिर one। Four positions check हुए, जबकि ones सिर्फ two थे।",
+      "C": "ये answer सही देता है। Problem extra checks हैं: बीच के zero bits भी scan होते हैं। | Binary one zero zero zero zero में सिर्फ one set bit है, फिर भी five positions देखनी पड़ती हैं।",
+      "D": "Observation: n minus one, rightmost one को zero और उसके बाद के zeroes को ones बनाता है। | इसलिए n AND n minus one करने पर सिर्फ वही rightmost set bit मिटता है। बाकी set bits बचते हैं। | हर round exactly one मिटाओ और count बढ़ाओ।",
+      "E": "Dry run उसी twelve पर। One one zero zero AND one zero one one देता है one zero zero zero, यानी eight। Count one। | Eight AND seven देता है zero। Count two। Number zero, loop stop, answer two।",
+      "F": "ये actual Accepted Python है। Count zero से शुरू। While n के अंदर n AND n minus one assign होता है, फिर count one बढ़ता है। | Count बढ़ाना मत भूलना; बदला हुआ n answer नहीं है। Original number को preserve करना ज़रूरी नहीं।",
+      "G": "K set bits हों तो K rounds, O of K time और O of one extra space। | इस problem का integer at most thirty one bits है, इसलिए fixed domain में दोनों constant हैं। Speedup sparse ones पर है; naive algorithm गलत नहीं था।"
+    }
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "solution_sha256": "92d7de2c4b1878abec1112b3a32151559b2a514936dc6a058ded14cbc7f744f9",
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "sources": [
+    "https://leetcode.com/problems/number-of-1-bits/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    "https://leetcode.com/problems/number-of-1-bits/submissions/2193972089/"
+  ],
+  "on_screen_code_contract": "complete_method_body"
+}

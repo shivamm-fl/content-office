@@ -1,0 +1,547 @@
+<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=1080,height=1920"><title>Combination Sum IV</title>
+<script src="assets/gsap.min.js"></script><script src="data.js"></script><style>
+@font-face{font-family:Head;src:url('fonts/SpaceGrotesk.ttf');font-weight:300 700}
+@font-face{font-family:Code;src:url('fonts/JetBrainsMono.ttf');font-weight:100 800}
+@font-face{font-family:Hindi;src:url('fonts/NotoSansDevanagari.ttf')}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0B1220}
+#root{position:relative;width:1080px;height:1920px;background:#0B1220;color:#F3EFE6;font-family:Head,Hindi,sans-serif}
+.clip,.visual{position:absolute;inset:0}.visual,.state{opacity:0}svg{font-family:Head,Hindi,sans-serif;font-weight:600}
+#series{position:absolute;left:90px;top:178px;font:600 30px Head;letter-spacing:2px;color:#A78BFA;z-index:20}
+#handle{position:absolute;right:140px;top:180px;font:500 28px Head;color:#9DAEC5;z-index:20}
+#source{position:absolute;left:90px;top:1403px;font:500 29px Head;color:#9DAEC5;z-index:20}
+#caption-lane{position:absolute;left:75px;top:1248px;width:870px;height:145px;z-index:30}
+.caption{position:absolute;left:0;top:0;width:870px;text-align:center;font-size:65px;font-weight:700;line-height:1.12;color:#F3EFE6;opacity:0}
+#progress-track{position:absolute;left:90px;top:1460px;width:850px;height:5px;background:#25334D}
+#progress{height:5px;width:850px;background:#A78BFA;transform-origin:left}
+</style></head><body><main id="root" data-composition-id="main" data-start="0" data-duration="102.0" data-width="1080" data-height="1920">
+<div id="series">BLIND 75 · 21 / 75</div><div id="handle">@dsa.learnvora</div>
+<section id="scene-A" class="clip" data-start="0.0" data-duration="12.747" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vA"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="A teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Combination Sum IV</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Input → required output</text><g class="state" id="A-step0"><text x="90" y="445" fill="#9DAEC5" font-size="30" text-anchor="start" >Given array · target 4</text><rect id="A-c0" x="100.0" y="480" width="395.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="297.5" y="563" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="297.5" y="651" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="A-c1" x="515.0" y="480" width="395.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="712.5" y="563" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="712.5" y="651" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="" x="100.0" y="790" width="255.33333333333331" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="227.66666666666666" y="878" fill="#F3EFE6" font-size="58" text-anchor="middle" >1+1+1+1</text><rect id="" x="373.3333333333333" y="790" width="255.33333333333331" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="501.0" y="878" fill="#F3EFE6" font-size="58" text-anchor="middle" >1+1+2</text><rect id="" x="646.6666666666666" y="790" width="255.33333333333331" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="774.3333333333333" y="878" fill="#F3EFE6" font-size="58" text-anchor="middle" >1+2+1</text><rect id="" x="100.0" y="1010" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="296.0" y="1098" fill="#F3EFE6" font-size="58" text-anchor="middle" >2+1+1</text><rect id="" x="510.0" y="1010" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="706.0" y="1098" fill="#F3EFE6" font-size="58" text-anchor="middle" >2+2</text></g></svg></div></section><section id="scene-B" class="clip" data-start="12.747" data-duration="12.721" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vB"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="B teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Brute force</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Correct baseline · explicit choices</text><g class="state" id="B-step0"><rect id="" x="350" y="520" width="310" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="505.0" y="572" fill="#A78BFA" font-size="32" text-anchor="middle" >REMAINING</text><text x="505.0" y="642" fill="#A78BFA" font-size="65" text-anchor="middle" >4</text><line x1="505" y1="675" x2="280" y2="760" stroke="#9DAEC5" stroke-width="4"/><line x1="505" y1="675" x2="730" y2="760" stroke="#9DAEC5" stroke-width="4"/><rect id="" x="130" y="770" width="300" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="280.0" y="822" fill="#A78BFA" font-size="32" text-anchor="middle" >CHOICE 1</text><text x="280.0" y="892" fill="#A78BFA" font-size="65" text-anchor="middle" >3</text><rect id="" x="580" y="770" width="300" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="730.0" y="822" fill="#A78BFA" font-size="32" text-anchor="middle" >CHOICE 2</text><text x="730.0" y="892" fill="#A78BFA" font-size="65" text-anchor="middle" >2</text><text x="505" y="1160" fill="#9DAEC5" font-size="38" text-anchor="middle" >append 1 or 2 · explore every path</text></g></svg></div></section><section id="scene-C" class="clip" data-start="25.468" data-duration="12.876" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vC"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="C teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Where it costs</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Repeated work or a concrete trap</text><g class="state" id="C-step0"><rect id="" x="100.0" y="540" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="296.0" y="628" fill="#F3EFE6" font-size="58" text-anchor="middle" >1,1,2</text><rect id="" x="510.0" y="540" width="392.0" height="135" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="706.0" y="628" fill="#F3EFE6" font-size="58" text-anchor="middle" >2,1,1</text><text x="505" y="830" fill="#E5735F" font-size="35" text-anchor="middle" >different order → different sequence</text><rect id="" x="340" y="950" width="330" height="155" rx="14" fill="#172239" stroke="#E5735F" stroke-width="3"/><text x="505.0" y="1002" fill="#E5735F" font-size="32" text-anchor="middle" >REPEATED TOTAL</text><text x="505.0" y="1072" fill="#E5735F" font-size="65" text-anchor="middle" >2</text></g></svg></div></section><section id="scene-D" class="clip" data-start="38.344" data-duration="19.408" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vD"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="D teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="58" text-anchor="start" >Why the optimization works</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Preserve the invariant</text><g class="state" id="D-step0"><rect id="" x="100" y="520" width="370" height="155" rx="14" fill="#172239" stroke="#A78BFA" stroke-width="3"/><text x="285.0" y="572" fill="#A78BFA" font-size="32" text-anchor="middle" >LAST VALUE 1</text><text x="285.0" y="642" fill="#A78BFA" font-size="65" text-anchor="middle" >ways[3]</text><rect id="" x="550" y="520" width="370" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="735.0" y="572" fill="#6FD3A6" font-size="32" text-anchor="middle" >LAST VALUE 2</text><text x="735.0" y="642" fill="#6FD3A6" font-size="65" text-anchor="middle" >ways[2]</text><line x1="285" y1="720" x2="505" y2="880" stroke="#A78BFA" stroke-width="4"/><path d="M496,868 L505,880 L514,868" fill="none" stroke="#A78BFA" stroke-width="4"/><line x1="735" y1="720" x2="505" y2="880" stroke="#A78BFA" stroke-width="4"/><path d="M496,868 L505,880 L514,868" fill="none" stroke="#A78BFA" stroke-width="4"/><rect id="" x="340" y="910" width="330" height="155" rx="14" fill="#172239" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="962" fill="#6FD3A6" font-size="32" text-anchor="middle" >ways[4]</text><text x="505.0" y="1032" fill="#6FD3A6" font-size="65" text-anchor="middle" >3 + 2</text></g></svg></div></section><section id="scene-E" class="clip" data-start="57.752" data-duration="13.280" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vE"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="E teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="66" text-anchor="start" >Follow the same input</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Chronological state changes</text><g class="state" id="E-step0"><text x="90" y="615" fill="#9DAEC5" font-size="30" text-anchor="start" >ways · target index</text><rect id="E0-c0" x="100.0" y="650" width="146.0" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="173.0" y="733" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text><text x="173.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E0-c1" x="266.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="339.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="339.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E0-c2" x="432.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="505.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E0-c3" x="598.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="671.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="671.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="E0-c4" x="764.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="837.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="837.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><text x="505" y="1050" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[0] = 1 · empty sequence</text><text x="505" y="1170" fill="#9DAEC5" font-size="36" text-anchor="middle" >total outer · values inner</text></g><g class="state" id="E-step1"><text x="90" y="615" fill="#9DAEC5" font-size="30" text-anchor="start" >ways · target index</text><rect id="E1-c0" x="100.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="173.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="173.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E1-c1" x="266.0" y="650" width="146.0" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="339.0" y="733" fill="#6FD3A6" font-size="65" text-anchor="middle" >1</text><text x="339.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E1-c2" x="432.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="505.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E1-c3" x="598.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="671.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="671.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="E1-c4" x="764.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="837.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="837.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><text x="505" y="1050" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[1] = ways[0] = 1</text><text x="505" y="1170" fill="#9DAEC5" font-size="36" text-anchor="middle" >total outer · values inner</text></g><g class="state" id="E-step2"><text x="90" y="615" fill="#9DAEC5" font-size="30" text-anchor="start" >ways · target index</text><rect id="E2-c0" x="100.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="173.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="173.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E2-c1" x="266.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="339.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="339.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E2-c2" x="432.0" y="650" width="146.0" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="505.0" y="733" fill="#6FD3A6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E2-c3" x="598.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="671.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="671.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="E2-c4" x="764.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="837.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="837.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><text x="505" y="1050" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[2] = 1 + 1 = 2</text><text x="505" y="1170" fill="#9DAEC5" font-size="36" text-anchor="middle" >total outer · values inner</text></g><g class="state" id="E-step3"><text x="90" y="615" fill="#9DAEC5" font-size="30" text-anchor="start" >ways · target index</text><rect id="E3-c0" x="100.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="173.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="173.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E3-c1" x="266.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="339.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="339.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E3-c2" x="432.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E3-c3" x="598.0" y="650" width="146.0" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="671.0" y="733" fill="#6FD3A6" font-size="65" text-anchor="middle" >3</text><text x="671.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="E3-c4" x="764.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="837.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >·</text><text x="837.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><text x="505" y="1050" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[3] = 2 + 1 = 3</text><text x="505" y="1170" fill="#9DAEC5" font-size="36" text-anchor="middle" >total outer · values inner</text></g><g class="state" id="E-step4"><text x="90" y="615" fill="#9DAEC5" font-size="30" text-anchor="start" >ways · target index</text><rect id="E4-c0" x="100.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="173.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="173.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >0</text><rect id="E4-c1" x="266.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="339.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >1</text><text x="339.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >1</text><rect id="E4-c2" x="432.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="505.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >2</text><text x="505.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >2</text><rect id="E4-c3" x="598.0" y="650" width="146.0" height="120" rx="14" fill="#172239" stroke="#34425D" stroke-width="3"/><text x="671.0" y="733" fill="#F3EFE6" font-size="65" text-anchor="middle" >3</text><text x="671.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >3</text><rect id="E4-c4" x="764.0" y="650" width="146.0" height="120" rx="14" fill="#173B35" stroke="#6FD3A6" stroke-width="3"/><text x="837.0" y="733" fill="#6FD3A6" font-size="65" text-anchor="middle" >5</text><text x="837.0" y="821" fill="#9DAEC5" font-size="31" text-anchor="middle" >4</text><text x="505" y="1050" fill="#6FD3A6" font-size="44" text-anchor="middle" >ways[4] = 3 + 2 = 5</text><text x="505" y="1170" fill="#9DAEC5" font-size="36" text-anchor="middle" >total outer · values inner</text></g></svg></div></section><section id="scene-F" class="clip" data-start="71.032" data-duration="14.484" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vF"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="F teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Accepted Python</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >combination-sum-iv</text><rect id="" x="80" y="495" width="885" height="419" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeF-L6" data-source-line="6" data-code-panel="codeF"><rect class="code-highlight" x="88" y="508" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">ways = [0] * (target + 1)</text></g><g id="codeF-L7" data-source-line="7" data-code-panel="codeF"><rect class="code-highlight" x="88" y="556" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="585" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">ways[0] = 1</text></g><g id="codeF-L8" data-source-line="8" data-code-panel="codeF"><rect class="code-highlight" x="88" y="604" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="633" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">for total in range(1, target + 1):</text></g><g id="codeF-L9" data-source-line="9" data-code-panel="codeF"><rect class="code-highlight" x="88" y="652" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="681" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">    for value in nums:</text></g><g id="codeF-L10" data-source-line="10" data-code-panel="codeF"><rect class="code-highlight" x="88" y="700" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="729" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">        if value &lt;= total:</text></g><g id="codeF-L11" data-source-line="11" data-code-panel="codeF"><rect class="code-highlight" x="88" y="748" width="870" height="96" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="777" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">            ways[total] += ways[total -</text><path d="M89 807 V817 H100 M96 813 L100 817 L96 821" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="825" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">              value]</text></g><g id="codeF-L12" data-source-line="12" data-code-panel="codeF"><rect class="code-highlight" x="88" y="844" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="873" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">return ways[target]</text></g></svg></div></section><section id="scene-G" class="clip" data-start="85.516" data-duration="16.484" data-track-index="1" data-track-kind="graphics"><div class="visual" id="vG"><svg viewBox="0 0 1080 1920" width="1080" height="1920" role="img" aria-label="G teaching diagram"><text x="90" y="330" fill="#F3EFE6" font-size="70" text-anchor="start" >Cost and boundary</text><text x="90" y="395" fill="#9DAEC5" font-size="34" text-anchor="start" >Same algorithm · honest complexity</text><rect id="" x="80" y="495" width="885" height="419" rx="14" fill="#101B2D" stroke="#34425D" stroke-width="3"/><g id="codeG-L6" data-source-line="6" data-code-panel="codeG"><rect class="code-highlight" x="88" y="508" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="537" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">ways = [0] * (target + 1)</text></g><g id="codeG-L7" data-source-line="7" data-code-panel="codeG"><rect class="code-highlight" x="88" y="556" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="585" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">ways[0] = 1</text></g><g id="codeG-L8" data-source-line="8" data-code-panel="codeG"><rect class="code-highlight" x="88" y="604" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="633" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">for total in range(1, target + 1):</text></g><g id="codeG-L9" data-source-line="9" data-code-panel="codeG"><rect class="code-highlight" x="88" y="652" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="681" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">    for value in nums:</text></g><g id="codeG-L10" data-source-line="10" data-code-panel="codeG"><rect class="code-highlight" x="88" y="700" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="729" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">        if value &lt;= total:</text></g><g id="codeG-L11" data-source-line="11" data-code-panel="codeG"><rect class="code-highlight" x="88" y="748" width="870" height="96" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="777" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">            ways[total] += ways[total -</text><path d="M89 807 V817 H100 M96 813 L100 817 L96 821" fill="none" stroke="#9DAEC5" stroke-width="2"/><text x="105" y="825" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">              value]</text></g><g id="codeG-L12" data-source-line="12" data-code-panel="codeG"><rect class="code-highlight" x="88" y="844" width="870" height="48" rx="5" fill="#A78BFA" opacity="0"/><text x="105" y="873" fill="#F3EFE6" font-size="32" text-anchor="start" font-family="Code" xml:space="preserve">return ways[target]</text></g><text x="505" y="1200" fill="#6FD3A6" font-size="39" text-anchor="middle" >O(A × M) time · O(A) extra</text></svg></div></section><div id="caption-lane" data-track-kind="captions"><div class="clip caption" id="cap0" data-track-index="2" data-track-kind="captions" data-start="0.08" data-duration="1.097"><span id="w0-0">yahan</span> <span id="w0-1">order</span> <span id="w0-2">badalne</span></div>
+<div class="clip caption" id="cap1" data-track-index="2" data-track-kind="captions" data-start="1.241" data-duration="0.903"><span id="w1-0">se</span> <span id="w1-1">naya</span> <span id="w1-2">answer</span></div>
+<div class="clip caption" id="cap2" data-track-index="2" data-track-kind="captions" data-start="2.209" data-duration="1.145"><span id="w2-0">banta</span> <span id="w2-1">hai.</span> <span id="w2-2">Given</span></div>
+<div class="clip caption" id="cap3" data-track-index="2" data-track-kind="captions" data-start="3.444" data-duration="1.3280000000000003"><span id="w3-0">array:</span> <span id="w3-1">one,</span> <span id="w3-2">two.</span></div>
+<div class="clip caption" id="cap4" data-track-index="2" data-track-kind="captions" data-start="4.876" data-duration="1.3279999999999994"><span id="w4-0">Target</span> <span id="w4-1">four.</span> <span id="w4-2">Values</span></div>
+<div class="clip caption" id="cap5" data-track-index="2" data-track-kind="captions" data-start="6.268" data-duration="0.8780000000000001"><span id="w5-0">unlimited</span> <span id="w5-1">baar</span> <span id="w5-2">use</span></div>
+<div class="clip caption" id="cap6" data-track-index="2" data-track-kind="captions" data-start="7.171" data-duration="0.6659999999999995"><span id="w6-0">kar</span> <span id="w6-1">sakte</span> <span id="w6-2">ho.</span></div>
+<div class="clip caption" id="cap7" data-track-index="2" data-track-kind="captions" data-start="8.137" data-duration="0.7219999999999995"><span id="w7-0">One,</span> <span id="w7-1">one,</span> <span id="w7-2">two</span></div>
+<div class="clip caption" id="cap8" data-track-index="2" data-track-kind="captions" data-start="8.924" data-duration="0.5670000000000002"><span id="w8-0">aur</span> <span id="w8-1">two,</span> <span id="w8-2">one,</span></div>
+<div class="clip caption" id="cap9" data-track-index="2" data-track-kind="captions" data-start="9.517" data-duration="0.9420000000000002"><span id="w9-0">one</span> <span id="w9-1">alag</span> <span id="w9-2">sequences</span></div>
+<div class="clip caption" id="cap10" data-track-index="2" data-track-kind="captions" data-start="10.51" data-duration="0.8000000000000007"><span id="w10-0">hain.</span> <span id="w10-1">Total</span> <span id="w10-2">five</span></div>
+<div class="clip caption" id="cap11" data-track-index="2" data-track-kind="captions" data-start="11.336" data-duration="0.9109999999999996"><span id="w11-0">sequences</span> <span id="w11-1">hain.</span></div>
+<div class="clip caption" id="cap12" data-track-index="2" data-track-kind="captions" data-start="12.827" data-duration="0.8510000000000009"><span id="w12-0">Brute</span> <span id="w12-1">force</span> <span id="w12-2">har</span></div>
+<div class="clip caption" id="cap13" data-track-index="2" data-track-kind="captions" data-start="13.742" data-duration="0.8259999999999987"><span id="w13-0">position</span> <span id="w13-1">par</span> <span id="w13-2">one</span></div>
+<div class="clip caption" id="cap14" data-track-index="2" data-track-kind="captions" data-start="14.594" data-duration="0.5549999999999997"><span id="w14-0">ya</span> <span id="w14-1">two</span> <span id="w14-2">choose</span></div>
+<div class="clip caption" id="cap15" data-track-index="2" data-track-kind="captions" data-start="15.174" data-duration="0.9160000000000004"><span id="w15-0">karta</span> <span id="w15-1">hai.</span> <span id="w15-2">Target</span></div>
+<div class="clip caption" id="cap16" data-track-index="2" data-track-kind="captions" data-start="16.142" data-duration="0.6189999999999998"><span id="w16-0">se</span> <span id="w16-1">aage</span> <span id="w16-2">gaye</span></div>
+<div class="clip caption" id="cap17" data-track-index="2" data-track-kind="captions" data-start="16.812" data-duration="1.2119999999999997"><span id="w17-0">to</span> <span id="w17-1">discard;</span> <span id="w17-2">exactly</span></div>
+<div class="clip caption" id="cap18" data-track-index="2" data-track-kind="captions" data-start="18.077" data-duration="0.6829999999999998"><span id="w18-0">target</span> <span id="w18-1">mila</span> <span id="w18-2">to</span></div>
+<div class="clip caption" id="cap19" data-track-index="2" data-track-kind="captions" data-start="18.838" data-duration="0.8640000000000008"><span id="w19-0">one</span> <span id="w19-1">sequence</span> <span id="w19-2">count</span></div>
+<div class="clip caption" id="cap20" data-track-index="2" data-track-kind="captions" data-start="19.753" data-duration="1.4269999999999996"><span id="w20-0">karo.</span> <span id="w20-1">One</span> <span id="w20-2">wale</span></div>
+<div class="clip caption" id="cap21" data-track-index="2" data-track-kind="captions" data-start="21.232" data-duration="0.7740000000000009"><span id="w21-0">branch</span> <span id="w21-1">se</span> <span id="w21-2">remaining</span></div>
+<div class="clip caption" id="cap22" data-track-index="2" data-track-kind="captions" data-start="22.07" data-duration="1.0459999999999994"><span id="w22-0">three,</span> <span id="w22-1">two</span> <span id="w22-2">wale</span></div>
+<div class="clip caption" id="cap23" data-track-index="2" data-track-kind="captions" data-start="23.167" data-duration="0.6829999999999998"><span id="w23-0">se</span> <span id="w23-1">remaining</span> <span id="w23-2">two</span></div>
+<div class="clip caption" id="cap24" data-track-index="2" data-track-kind="captions" data-start="23.928" data-duration="1.0399999999999991"><span id="w24-0">solve</span> <span id="w24-1">hote</span> <span id="w24-2">hain.</span></div>
+<div class="clip caption" id="cap25" data-track-index="2" data-track-kind="captions" data-start="25.548" data-duration="1.2390000000000008"><span id="w25-0">Remaining</span> <span id="w25-1">two,</span> <span id="w25-2">doosre</span></div>
+<div class="clip caption" id="cap26" data-track-index="2" data-track-kind="captions" data-start="26.838" data-duration="0.5679999999999978"><span id="w26-0">raaston</span> <span id="w26-1">se</span> <span id="w26-2">bhi</span></div>
+<div class="clip caption" id="cap27" data-track-index="2" data-track-kind="captions" data-start="27.471" data-duration="0.9280000000000008"><span id="w27-0">aata</span> <span id="w27-1">hai.</span> <span id="w27-2">wahi</span></div>
+<div class="clip caption" id="cap28" data-track-index="2" data-track-kind="captions" data-start="28.476" data-duration="0.9810000000000016"><span id="w28-0">sequence</span> <span id="w28-1">counts</span> <span id="w28-2">baar</span></div>
+<div class="clip caption" id="cap29" data-track-index="2" data-track-kind="captions" data-start="29.534" data-duration="1.0070000000000014"><span id="w29-0">baar</span> <span id="w29-1">nikalte</span> <span id="w29-2">hain.</span></div>
+<div class="clip caption" id="cap30" data-track-index="2" data-track-kind="captions" data-start="30.841" data-duration="0.6709999999999994"><span id="w30-0">Coin</span> <span id="w30-1">Change</span> <span id="w30-2">ka</span></div>
+<div class="clip caption" id="cap31" data-track-index="2" data-track-kind="captions" data-start="31.563" data-duration="0.7750000000000021"><span id="w31-0">minimum</span> <span id="w31-1">yahan</span> <span id="w31-2">kaam</span></div>
+<div class="clip caption" id="cap32" data-track-index="2" data-track-kind="captions" data-start="32.402" data-duration="0.9939999999999998"><span id="w32-0">nahi</span> <span id="w32-1">karega:</span> <span id="w32-2">hamen</span></div>
+<div class="clip caption" id="cap33" data-track-index="2" data-track-kind="captions" data-start="33.447" data-duration="0.695999999999998"><span id="w33-0">sabhi</span> <span id="w33-1">ordered</span></div>
+<div class="clip caption" id="cap34" data-track-index="2" data-track-kind="captions" data-start="34.208" data-duration="0.8900000000000006"><span id="w34-0">sequences</span> <span id="w34-1">ka</span> <span id="w34-2">count</span></div>
+<div class="clip caption" id="cap35" data-track-index="2" data-track-kind="captions" data-start="35.162" data-duration="0.490000000000002"><span id="w35-0">chahiye.</span> <span id="w35-1">sirf</span></div>
+<div class="clip caption" id="cap36" data-track-index="2" data-track-kind="captions" data-start="35.782" data-duration="1.0700000000000003"><span id="w36-0">unordered</span> <span id="w36-1">combinations</span></div>
+<div class="clip caption" id="cap37" data-track-index="2" data-track-kind="captions" data-start="36.904" data-duration="0.6579999999999941"><span id="w37-0">ginna</span> <span id="w37-1">bhi</span> <span id="w37-2">galat</span></div>
+<div class="clip caption" id="cap38" data-track-index="2" data-track-kind="captions" data-start="37.627" data-duration="0.21699999999999875"><span id="w38-0">hai.</span></div>
+<div class="clip caption" id="cap39" data-track-index="2" data-track-kind="captions" data-start="38.424" data-duration="0.7100000000000009"><span id="w39-0">Ways</span> <span id="w39-1">total</span> <span id="w39-2">ka</span></div>
+<div class="clip caption" id="cap40" data-track-index="2" data-track-kind="captions" data-start="39.185" data-duration="0.8509999999999991"><span id="w40-0">matlab</span> <span id="w40-1">total</span> <span id="w40-2">banane</span></div>
+<div class="clip caption" id="cap41" data-track-index="2" data-track-kind="captions" data-start="40.075" data-duration="1.0959999999999965"><span id="w41-0">wali</span> <span id="w41-1">ordered</span> <span id="w41-2">sequences</span></div>
+<div class="clip caption" id="cap42" data-track-index="2" data-track-kind="captions" data-start="41.236" data-duration="1.0190000000000055"><span id="w42-0">ka</span> <span id="w42-1">count.</span> <span id="w42-2">Last</span></div>
+<div class="clip caption" id="cap43" data-track-index="2" data-track-kind="captions" data-start="42.307" data-duration="0.6059999999999945"><span id="w43-0">value</span> <span id="w43-1">v</span> <span id="w43-2">fix</span></div>
+<div class="clip caption" id="cap44" data-track-index="2" data-track-kind="captions" data-start="42.965" data-duration="1.1779999999999973"><span id="w44-0">karo.</span> <span id="w44-1">usse</span> <span id="w44-2">pehle</span></div>
+<div class="clip caption" id="cap45" data-track-index="2" data-track-kind="captions" data-start="44.208" data-duration="0.8000000000000043"><span id="w45-0">total</span> <span id="w45-1">minus</span> <span id="w45-2">v</span></div>
+<div class="clip caption" id="cap46" data-track-index="2" data-track-kind="captions" data-start="45.098" data-duration="0.490000000000002"><span id="w46-0">ki</span> <span id="w46-1">koi</span> <span id="w46-2">bhi</span></div>
+<div class="clip caption" id="cap47" data-track-index="2" data-track-kind="captions" data-start="45.64" data-duration="0.8119999999999976"><span id="w47-0">valid</span> <span id="w47-1">sequence</span> <span id="w47-2">ho</span></div>
+<div class="clip caption" id="cap48" data-track-index="2" data-track-kind="captions" data-start="46.517" data-duration="0.8639999999999972"><span id="w48-0">sakti</span> <span id="w48-1">hai.</span> <span id="w48-2">har</span></div>
+<div class="clip caption" id="cap49" data-track-index="2" data-track-kind="captions" data-start="47.459" data-duration="0.8379999999999939"><span id="w49-0">aisi</span> <span id="w49-1">sequence</span> <span id="w49-2">mein</span></div>
+<div class="clip caption" id="cap50" data-track-index="2" data-track-kind="captions" data-start="48.348" data-duration="0.7100000000000009"><span id="w50-0">v</span> <span id="w50-1">append</span> <span id="w50-2">karne</span></div>
+<div class="clip caption" id="cap51" data-track-index="2" data-track-kind="captions" data-start="49.109" data-duration="0.6839999999999975"><span id="w51-0">se</span> <span id="w51-1">unique</span> <span id="w51-2">nayi</span></div>
+<div class="clip caption" id="cap52" data-track-index="2" data-track-kind="captions" data-start="49.858" data-duration="0.9610000000000056"><span id="w52-0">sequence</span> <span id="w52-1">banti</span> <span id="w52-2">hai.</span></div>
+<div class="clip caption" id="cap53" data-track-index="2" data-track-kind="captions" data-start="51.119" data-duration="0.8519999999999968"><span id="w53-0">Last</span> <span id="w53-1">value</span> <span id="w53-2">ke</span></div>
+<div class="clip caption" id="cap54" data-track-index="2" data-track-kind="captions" data-start="52.023" data-duration="0.8899999999999935"><span id="w54-0">cases</span> <span id="w54-1">alag</span> <span id="w54-2">hain,</span></div>
+<div class="clip caption" id="cap55" data-track-index="2" data-track-kind="captions" data-start="52.977" data-duration="1.0060000000000002"><span id="w55-0">isliye</span> <span id="w55-1">unke</span> <span id="w55-2">counts</span></div>
+<div class="clip caption" id="cap56" data-track-index="2" data-track-kind="captions" data-start="54.061" data-duration="0.695999999999998"><span id="w56-0">add</span> <span id="w56-1">karte</span> <span id="w56-2">hain.</span></div>
+<div class="clip caption" id="cap57" data-track-index="2" data-track-kind="captions" data-start="54.989" data-duration="0.8900000000000006"><span id="w57-0">Ways</span> <span id="w57-1">zero</span> <span id="w57-2">is</span></div>
+<div class="clip caption" id="cap58" data-track-index="2" data-track-kind="captions" data-start="55.969" data-duration="1.2830000000000013"><span id="w58-0">one:</span> <span id="w58-1">empty</span> <span id="w58-2">sequence.</span></div>
+<div class="clip caption" id="cap59" data-track-index="2" data-track-kind="captions" data-start="57.832" data-duration="0.7740000000000009"><span id="w59-0">Dry</span> <span id="w59-1">run:</span> <span id="w59-2">ways</span></div>
+<div class="clip caption" id="cap60" data-track-index="2" data-track-kind="captions" data-start="58.696" data-duration="0.632000000000005"><span id="w60-0">one,</span> <span id="w60-1">ways</span> <span id="w60-2">zero</span></div>
+<div class="clip caption" id="cap61" data-track-index="2" data-track-kind="captions" data-start="59.379" data-duration="1.1120000000000019"><span id="w61-0">se</span> <span id="w61-1">one.</span> <span id="w61-2">Ways</span></div>
+<div class="clip caption" id="cap62" data-track-index="2" data-track-kind="captions" data-start="60.569" data-duration="1.0449999999999946"><span id="w62-0">two</span> <span id="w62-1">barabar</span> <span id="w62-2">ways</span></div>
+<div class="clip caption" id="cap63" data-track-index="2" data-track-kind="captions" data-start="61.704" data-duration="1.134999999999998"><span id="w63-0">one</span> <span id="w63-1">plus</span> <span id="w63-2">ways</span></div>
+<div class="clip caption" id="cap64" data-track-index="2" data-track-kind="captions" data-start="62.865" data-duration="1.4570000000000007"><span id="w64-0">zero:</span> <span id="w64-1">two.</span> <span id="w64-2">Ways</span></div>
+<div class="clip caption" id="cap65" data-track-index="2" data-track-kind="captions" data-start="64.426" data-duration="1.2249999999999943"><span id="w65-0">three</span> <span id="w65-1">barabar</span> <span id="w65-2">ways</span></div>
+<div class="clip caption" id="cap66" data-track-index="2" data-track-kind="captions" data-start="65.741" data-duration="0.7999999999999972"><span id="w66-0">two</span> <span id="w66-1">plus</span> <span id="w66-2">ways</span></div>
+<div class="clip caption" id="cap67" data-track-index="2" data-track-kind="captions" data-start="66.631" data-duration="1.3769999999999953"><span id="w67-0">one:</span> <span id="w67-1">three.</span> <span id="w67-2">Ways</span></div>
+<div class="clip caption" id="cap68" data-track-index="2" data-track-kind="captions" data-start="68.072" data-duration="0.8259999999999934"><span id="w68-0">four</span> <span id="w68-1">barabar</span> <span id="w68-2">ways</span></div>
+<div class="clip caption" id="cap69" data-track-index="2" data-track-kind="captions" data-start="68.95" data-duration="0.7609999999999957"><span id="w69-0">three</span> <span id="w69-1">plus</span> <span id="w69-2">ways</span></div>
+<div class="clip caption" id="cap70" data-track-index="2" data-track-kind="captions" data-start="69.776" data-duration="0.7560000000000002"><span id="w70-0">two:</span> <span id="w70-1">five.</span></div>
+<div class="clip caption" id="cap71" data-track-index="2" data-track-kind="captions" data-start="71.112" data-duration="0.9549999999999983"><span id="w71-0">Accepted</span> <span id="w71-1">code</span> <span id="w71-2">mein</span></div>
+<div class="clip caption" id="cap72" data-track-index="2" data-track-kind="captions" data-start="72.106" data-duration="0.8250000000000028"><span id="w72-0">total</span> <span id="w72-1">outer</span> <span id="w72-2">loop</span></div>
+<div class="clip caption" id="cap73" data-track-index="2" data-track-kind="captions" data-start="72.996" data-duration="0.8389999999999986"><span id="w73-0">hai,</span> <span id="w73-1">values</span> <span id="w73-2">inner</span></div>
+<div class="clip caption" id="cap74" data-track-index="2" data-track-kind="captions" data-start="73.86" data-duration="0.8900000000000006"><span id="w74-0">loop.</span> <span id="w74-1">Value</span> <span id="w74-2">total</span></div>
+<div class="clip caption" id="cap75" data-track-index="2" data-track-kind="captions" data-start="74.789" data-duration="0.4509999999999934"><span id="w75-0">se</span> <span id="w75-1">badi</span> <span id="w75-2">ho</span></div>
+<div class="clip caption" id="cap76" data-track-index="2" data-track-kind="captions" data-start="75.305" data-duration="1.0179999999999865"><span id="w76-0">to</span> <span id="w76-1">skip;</span> <span id="w76-2">otherwise</span></div>
+<div class="clip caption" id="cap77" data-track-index="2" data-track-kind="captions" data-start="76.362" data-duration="1.0330000000000013"><span id="w77-0">predecessor</span> <span id="w77-1">count</span> <span id="w77-2">add</span></div>
+<div class="clip caption" id="cap78" data-track-index="2" data-track-kind="captions" data-start="77.42" data-duration="1.6550000000000011"><span id="w78-0">karo.</span> <span id="w78-1">chhote</span> <span id="w78-2">totals</span></div>
+<div class="clip caption" id="cap79" data-track-index="2" data-track-kind="captions" data-start="79.243" data-duration="0.8509999999999991"><span id="w79-0">pehle</span> <span id="w79-1">ready</span> <span id="w79-2">hain.</span></div>
+<div class="clip caption" id="cap80" data-track-index="2" data-track-kind="captions" data-start="80.224" data-duration="1.0699999999999932"><span id="w80-0">Coins</span> <span id="w80-1">outer</span> <span id="w80-2">loop</span></div>
+<div class="clip caption" id="cap81" data-track-index="2" data-track-kind="captions" data-start="81.359" data-duration="1.0190000000000055"><span id="w81-0">karke</span> <span id="w81-1">unordered</span></div>
+<div class="clip caption" id="cap82" data-track-index="2" data-track-kind="captions" data-start="82.443" data-duration="0.9410000000000025"><span id="w82-0">combinations</span> <span id="w82-1">ginne</span></div>
+<div class="clip caption" id="cap83" data-track-index="2" data-track-kind="captions" data-start="83.423" data-duration="0.7869999999999919"><span id="w83-0">wala</span> <span id="w83-1">pattern</span> <span id="w83-2">yahan</span></div>
+<div class="clip caption" id="cap84" data-track-index="2" data-track-kind="captions" data-start="84.235" data-duration="0.7810000000000059"><span id="w84-0">mat</span> <span id="w84-1">lagana.</span></div>
+<div class="clip caption" id="cap85" data-track-index="2" data-track-kind="captions" data-start="85.596" data-duration="1.23899999999999"><span id="w85-0">Return</span> <span id="w85-1">ways</span> <span id="w85-2">target.</span></div>
+<div class="clip caption" id="cap86" data-track-index="2" data-track-kind="captions" data-start="86.964" data-duration="0.7729999999999961"><span id="w86-0">A</span> <span id="w86-1">target</span> <span id="w86-2">aur</span></div>
+<div class="clip caption" id="cap87" data-track-index="2" data-track-kind="captions" data-start="87.866" data-duration="0.6839999999999975"><span id="w87-0">M</span> <span id="w87-1">values</span> <span id="w87-2">par</span></div>
+<div class="clip caption" id="cap88" data-track-index="2" data-track-kind="captions" data-start="88.679" data-duration="0.43899999999999295"><span id="w88-0">O</span> <span id="w88-1">of</span> <span id="w88-2">A</span></div>
+<div class="clip caption" id="cap89" data-track-index="2" data-track-kind="captions" data-start="89.195" data-duration="0.7860000000000014"><span id="w89-0">times</span> <span id="w89-1">M</span> <span id="w89-2">time,</span></div>
+<div class="clip caption" id="cap90" data-track-index="2" data-track-kind="captions" data-start="90.046" data-duration="0.43899999999999295"><span id="w90-0">O</span> <span id="w90-1">of</span> <span id="w90-2">A</span></div>
+<div class="clip caption" id="cap91" data-track-index="2" data-track-kind="captions" data-start="90.588" data-duration="1.565000000000012"><span id="w91-0">extra</span> <span id="w91-1">space.</span> <span id="w91-2">koi</span></div>
+<div class="clip caption" id="cap92" data-track-index="2" data-track-kind="captions" data-start="92.217" data-duration="0.6460000000000008"><span id="w92-0">sequence</span> <span id="w92-1">n</span> <span id="w92-2">ho</span></div>
+<div class="clip caption" id="cap93" data-track-index="2" data-track-kind="captions" data-start="92.914" data-duration="0.914999999999992"><span id="w93-0">to</span> <span id="w93-1">zero.</span> <span id="w93-2">All</span></div>
+<div class="clip caption" id="cap94" data-track-index="2" data-track-kind="captions" data-start="93.894" data-duration="1.0579999999999927"><span id="w94-0">values</span> <span id="w94-1">positive</span> <span id="w94-2">hain,</span></div>
+<div class="clip caption" id="cap95" data-track-index="2" data-track-kind="captions" data-start="95.08" data-duration="0.9819999999999993"><span id="w95-0">isliye</span> <span id="w95-1">dependencies</span></div>
+<div class="clip caption" id="cap96" data-track-index="2" data-track-kind="captions" data-start="96.126" data-duration="0.7609999999999957"><span id="w96-0">chhote</span> <span id="w96-1">totals</span> <span id="w96-2">par</span></div>
+<div class="clip caption" id="cap97" data-track-index="2" data-track-kind="captions" data-start="96.925" data-duration="1.0450000000000017"><span id="w97-0">jati</span> <span id="w97-1">hain;</span> <span id="w97-2">zero</span></div>
+<div class="clip caption" id="cap98" data-track-index="2" data-track-kind="captions" data-start="98.035" data-duration="0.9030000000000058"><span id="w98-0">ya</span> <span id="w98-1">negatives</span> <span id="w98-2">allowed</span></div>
+<div class="clip caption" id="cap99" data-track-index="2" data-track-kind="captions" data-start="98.989" data-duration="0.3359999999999985"><span id="w99-0">hon</span> <span id="w99-1">to</span> <span id="w99-2">ye</span></div>
+<div class="clip caption" id="cap100" data-track-index="2" data-track-kind="captions" data-start="99.364" data-duration="0.9029999999999916"><span id="w100-0">proof</span> <span id="w100-1">tootega.</span></div>
+</div><div id="source">Problem: LeetCode #377</div><div id="progress-track"><div id="progress"></div></div><audio class="clip" id="voice" data-track-index="3" data-track-kind="audio" src="audio/hi/voice.wav" data-start="0" data-duration="102.0"></audio><audio class="clip" id="bed" data-track-index="4" data-track-kind="audio" src="audio/hi/bed.wav" data-start="0" data-duration="102.0"></audio><audio class="clip" id="sfx" data-track-index="5" data-track-kind="audio" src="audio/hi/sfx.wav" data-start="0" data-duration="102.0"></audio></main><script>const R=window.REEL.hi,S=R.starts,P=R.ph;
+const tl=gsap.timeline({paused:true}),order=Object.keys(P);
+order.forEach((s,i)=>{tl.set('#v'+s,{opacity:1},S[s]);if(i<order.length-1)tl.set('#v'+s,{opacity:0},S[order[i+1]]);});
+tl.fromTo('#progress',{scaleX:0},{scaleX:1,duration:R.total,ease:'none'},0);
+function step(id,t,end){tl.set(id,{opacity:1},t);tl.set(id,{opacity:0},end);}
+function cell(prefix,i,t,color='#A78BFA'){tl.to('#'+prefix+'-c'+i,{attr:{stroke:color,fill:color==='#6FD3A6'?'#173B35':'#30264C'},duration:.2},t);}
+function reset(prefix,t){tl.set('[id^="'+prefix+'-c"]',{attr:{stroke:'#34425D',fill:'#172239'}},t);}
+function reveal(id,t){tl.fromTo(id,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out'},t);}
+
+function cue(scene,phrase,word=null,occurrence=0){
+ const p=P[scene][phrase];if(!p)throw Error('missing phrase '+scene+phrase);
+ if(word===null)return p.s;
+ const hits=R.caps.filter(c=>c.scene===scene&&c.s>=p.s&&c.s<p.e&&c.t.toLowerCase().replace(/[^a-z0-9]/g,'')===word.toLowerCase());
+ if(!hits[occurrence])throw Error('missing word '+scene+phrase+' '+word+' #'+occurrence);
+ return hits[occurrence].s;
+}
+// diagram: A
+step("#A-step0",S.A,S.B);
+// diagram: B
+step("#B-step0",S.B,S.C);
+// diagram: C
+step("#C-step0",S.C,S.D);
+// diagram: D
+step("#D-step0",S.D,S.E);
+// diagram: E
+step("#E-step0",S.E,cue("E",0,"one",0));
+step("#E-step1",cue("E",0,"one",0),cue("E",1,"two",0));
+step("#E-step2",cue("E",1,"two",0),cue("E",1,"three",0));
+step("#E-step3",cue("E",1,"three",0),cue("E",2,"four",0));
+step("#E-step4",cue("E",2,"four",0),S.F);
+// diagram: F
+// diagram: G
+function codeFocus(prefix,lines,t){tl.set("[id^="+prefix+"-L] .code-highlight",{opacity:0},t);lines.forEach(n=>tl.set("#"+prefix+"-L"+n+" .code-highlight",{opacity:.2},t));}
+codeFocus("codeF",[8,9],S.F);codeFocus("codeF",[10],cue("F",0,"value"));codeFocus("codeF",[11],cue("F",0,"otherwise"));codeFocus("codeF",[8,9],P.F[1].s);codeFocus("codeG",[12],S.G);codeFocus("codeG",[],P.G[1].s);
+
+window.__timelines=window.__timelines||{};window.__timelines.main=tl;
+tl.set('#cap0',{opacity:1},0.08);tl.set('#cap0',{opacity:0},1.207);
+tl.set('#w0-0',{color:'#A78BFA'},0.08);
+tl.set('#w0-1',{color:'#A78BFA'},0.416);
+tl.set('#w0-2',{color:'#A78BFA'},0.79);
+tl.set('#cap1',{opacity:1},1.241);tl.set('#cap1',{opacity:0},2.174);
+tl.set('#w1-0',{color:'#A78BFA'},1.241);
+tl.set('#w1-1',{color:'#A78BFA'},1.499);
+tl.set('#w1-2',{color:'#A78BFA'},1.821);
+tl.set('#cap2',{opacity:1},2.209);tl.set('#cap2',{opacity:0},3.384);
+tl.set('#w2-0',{color:'#A78BFA'},2.209);
+tl.set('#w2-1',{color:'#A78BFA'},2.518);
+tl.set('#w2-2',{color:'#A78BFA'},3.044);
+tl.set('#cap3',{opacity:1},3.444);tl.set('#cap3',{opacity:0},4.8020000000000005);
+tl.set('#w3-0',{color:'#A78BFA'},3.444);
+tl.set('#w3-1',{color:'#A78BFA'},4.127);
+tl.set('#w3-2',{color:'#A78BFA'},4.449);
+tl.set('#cap4',{opacity:1},4.876);tl.set('#cap4',{opacity:0},6.234);
+tl.set('#w4-0',{color:'#A78BFA'},4.876);
+tl.set('#w4-1',{color:'#A78BFA'},5.366);
+tl.set('#w4-2',{color:'#A78BFA'},5.83);
+tl.set('#cap5',{opacity:1},6.268);tl.set('#cap5',{opacity:0},7.176);
+tl.set('#w5-0',{color:'#A78BFA'},6.268);
+tl.set('#w5-1',{color:'#A78BFA'},6.759);
+tl.set('#w5-2',{color:'#A78BFA'},6.965);
+tl.set('#cap6',{opacity:1},7.171);tl.set('#cap6',{opacity:0},7.867);
+tl.set('#w6-0',{color:'#A78BFA'},7.171);
+tl.set('#w6-1',{color:'#A78BFA'},7.339);
+tl.set('#w6-2',{color:'#A78BFA'},7.624);
+tl.set('#cap7',{opacity:1},8.137);tl.set('#cap7',{opacity:0},8.889);
+tl.set('#w7-0',{color:'#A78BFA'},8.137);
+tl.set('#w7-1',{color:'#A78BFA'},8.498);
+tl.set('#w7-2',{color:'#A78BFA'},8.73);
+tl.set('#cap8',{opacity:1},8.924);tl.set('#cap8',{opacity:0},9.520999999999999);
+tl.set('#w8-0',{color:'#A78BFA'},8.924);
+tl.set('#w8-1',{color:'#A78BFA'},9.066);
+tl.set('#w8-2',{color:'#A78BFA'},9.272);
+tl.set('#cap9',{opacity:1},9.517);tl.set('#cap9',{opacity:0},10.488999999999999);
+tl.set('#w9-0',{color:'#A78BFA'},9.517);
+tl.set('#w9-1',{color:'#A78BFA'},9.737);
+tl.set('#w9-2',{color:'#A78BFA'},10.007);
+tl.set('#cap10',{opacity:1},10.51);tl.set('#cap10',{opacity:0},11.34);
+tl.set('#w10-0',{color:'#A78BFA'},10.51);
+tl.set('#w10-1',{color:'#A78BFA'},10.704);
+tl.set('#w10-2',{color:'#A78BFA'},11.117);
+tl.set('#cap11',{opacity:1},11.336);tl.set('#cap11',{opacity:0},12.277);
+tl.set('#w11-0',{color:'#A78BFA'},11.336);
+tl.set('#w11-1',{color:'#A78BFA'},11.826);
+tl.set('#cap12',{opacity:1},12.827);tl.set('#cap12',{opacity:0},13.708);
+tl.set('#w12-0',{color:'#A78BFA'},12.827);
+tl.set('#w12-1',{color:'#A78BFA'},13.174);
+tl.set('#w12-2',{color:'#A78BFA'},13.498);
+tl.set('#cap13',{opacity:1},13.742);tl.set('#cap13',{opacity:0},14.597999999999999);
+tl.set('#w13-0',{color:'#A78BFA'},13.742);
+tl.set('#w13-1',{color:'#A78BFA'},14.22);
+tl.set('#w13-2',{color:'#A78BFA'},14.388);
+tl.set('#cap14',{opacity:1},14.594);tl.set('#cap14',{opacity:0},15.178999999999998);
+tl.set('#w14-0',{color:'#A78BFA'},14.594);
+tl.set('#w14-1',{color:'#A78BFA'},14.723);
+tl.set('#w14-2',{color:'#A78BFA'},14.903);
+tl.set('#cap15',{opacity:1},15.174);tl.set('#cap15',{opacity:0},16.12);
+tl.set('#w15-0',{color:'#A78BFA'},15.174);
+tl.set('#w15-1',{color:'#A78BFA'},15.484);
+tl.set('#w15-2',{color:'#A78BFA'},15.652);
+tl.set('#cap16',{opacity:1},16.142);tl.set('#cap16',{opacity:0},16.791);
+tl.set('#w16-0',{color:'#A78BFA'},16.142);
+tl.set('#w16-1',{color:'#A78BFA'},16.322);
+tl.set('#w16-2',{color:'#A78BFA'},16.645);
+tl.set('#cap17',{opacity:1},16.812);tl.set('#cap17',{opacity:0},18.054000000000002);
+tl.set('#w17-0',{color:'#A78BFA'},16.812);
+tl.set('#w17-1',{color:'#A78BFA'},16.98);
+tl.set('#w17-2',{color:'#A78BFA'},17.522);
+tl.set('#cap18',{opacity:1},18.077);tl.set('#cap18',{opacity:0},18.790000000000003);
+tl.set('#w18-0',{color:'#A78BFA'},18.077);
+tl.set('#w18-1',{color:'#A78BFA'},18.412);
+tl.set('#w18-2',{color:'#A78BFA'},18.683);
+tl.set('#cap19',{opacity:1},18.838);tl.set('#cap19',{opacity:0},19.732000000000003);
+tl.set('#w19-0',{color:'#A78BFA'},18.838);
+tl.set('#w19-1',{color:'#A78BFA'},19.044);
+tl.set('#w19-2',{color:'#A78BFA'},19.47);
+tl.set('#cap20',{opacity:1},19.753);tl.set('#cap20',{opacity:0},21.21);
+tl.set('#w20-0',{color:'#A78BFA'},19.753);
+tl.set('#w20-1',{color:'#A78BFA'},20.755);
+tl.set('#w20-2',{color:'#A78BFA'},20.987);
+tl.set('#cap21',{opacity:1},21.232);tl.set('#cap21',{opacity:0},22.036);
+tl.set('#w21-0',{color:'#A78BFA'},21.232);
+tl.set('#w21-1',{color:'#A78BFA'},21.529);
+tl.set('#w21-2',{color:'#A78BFA'},21.658);
+tl.set('#cap22',{opacity:1},22.07);tl.set('#cap22',{opacity:0},23.146);
+tl.set('#w22-0',{color:'#A78BFA'},22.07);
+tl.set('#w22-1',{color:'#A78BFA'},22.702);
+tl.set('#w22-2',{color:'#A78BFA'},22.921);
+tl.set('#cap23',{opacity:1},23.167);tl.set('#cap23',{opacity:0},23.880000000000003);
+tl.set('#w23-0',{color:'#A78BFA'},23.167);
+tl.set('#w23-1',{color:'#A78BFA'},23.257);
+tl.set('#w23-2',{color:'#A78BFA'},23.657);
+tl.set('#cap24',{opacity:1},23.928);tl.set('#cap24',{opacity:0},24.998);
+tl.set('#w24-0',{color:'#A78BFA'},23.928);
+tl.set('#w24-1',{color:'#A78BFA'},24.277);
+tl.set('#w24-2',{color:'#A78BFA'},24.611);
+tl.set('#cap25',{opacity:1},25.548);tl.set('#cap25',{opacity:0},26.817);
+tl.set('#w25-0',{color:'#A78BFA'},25.548);
+tl.set('#w25-1',{color:'#A78BFA'},26.064);
+tl.set('#w25-2',{color:'#A78BFA'},26.361);
+tl.set('#cap26',{opacity:1},26.838);tl.set('#cap26',{opacity:0},27.436);
+tl.set('#w26-0',{color:'#A78BFA'},26.838);
+tl.set('#w26-1',{color:'#A78BFA'},27.199);
+tl.set('#w26-2',{color:'#A78BFA'},27.328);
+tl.set('#cap27',{opacity:1},27.471);tl.set('#cap27',{opacity:0},28.429000000000002);
+tl.set('#w27-0',{color:'#A78BFA'},27.471);
+tl.set('#w27-1',{color:'#A78BFA'},27.715);
+tl.set('#w27-2',{color:'#A78BFA'},28.179);
+tl.set('#cap28',{opacity:1},28.476);tl.set('#cap28',{opacity:0},29.487000000000002);
+tl.set('#w28-0',{color:'#A78BFA'},28.476);
+tl.set('#w28-1',{color:'#A78BFA'},28.915);
+tl.set('#w28-2',{color:'#A78BFA'},29.264);
+tl.set('#cap29',{opacity:1},29.534);tl.set('#cap29',{opacity:0},30.571);
+tl.set('#w29-0',{color:'#A78BFA'},29.534);
+tl.set('#w29-1',{color:'#A78BFA'},29.728);
+tl.set('#w29-2',{color:'#A78BFA'},30.218);
+tl.set('#cap30',{opacity:1},30.841);tl.set('#cap30',{opacity:0},31.542);
+tl.set('#w30-0',{color:'#A78BFA'},30.841);
+tl.set('#w30-1',{color:'#A78BFA'},31.177);
+tl.set('#w30-2',{color:'#A78BFA'},31.434);
+tl.set('#cap31',{opacity:1},31.563);tl.set('#cap31',{opacity:0},32.368);
+tl.set('#w31-0',{color:'#A78BFA'},31.563);
+tl.set('#w31-1',{color:'#A78BFA'},31.95);
+tl.set('#w31-2',{color:'#A78BFA'},32.144);
+tl.set('#cap32',{opacity:1},32.402);tl.set('#cap32',{opacity:0},33.426);
+tl.set('#w32-0',{color:'#A78BFA'},32.402);
+tl.set('#w32-1',{color:'#A78BFA'},32.57);
+tl.set('#w32-2',{color:'#A78BFA'},33.163);
+tl.set('#cap33',{opacity:1},33.447);tl.set('#cap33',{opacity:0},34.173);
+tl.set('#w33-0',{color:'#A78BFA'},33.447);
+tl.set('#w33-1',{color:'#A78BFA'},33.796);
+tl.set('#cap34',{opacity:1},34.208);tl.set('#cap34',{opacity:0},35.128);
+tl.set('#w34-0',{color:'#A78BFA'},34.208);
+tl.set('#w34-1',{color:'#A78BFA'},34.75);
+tl.set('#w34-2',{color:'#A78BFA'},34.904);
+tl.set('#cap35',{opacity:1},35.162);tl.set('#cap35',{opacity:0},35.682);
+tl.set('#w35-0',{color:'#A78BFA'},35.162);
+tl.set('#w35-1',{color:'#A78BFA'},35.459);
+tl.set('#cap36',{opacity:1},35.782);tl.set('#cap36',{opacity:0},36.882);
+tl.set('#w36-0',{color:'#A78BFA'},35.782);
+tl.set('#w36-1',{color:'#A78BFA'},36.311);
+tl.set('#cap37',{opacity:1},36.904);tl.set('#cap37',{opacity:0},37.592);
+tl.set('#w37-0',{color:'#A78BFA'},36.904);
+tl.set('#w37-1',{color:'#A78BFA'},37.174);
+tl.set('#w37-2',{color:'#A78BFA'},37.304);
+tl.set('#cap38',{opacity:1},37.627);tl.set('#cap38',{opacity:0},37.874);
+tl.set('#w38-0',{color:'#A78BFA'},37.627);
+tl.set('#cap39',{opacity:1},38.424);tl.set('#cap39',{opacity:0},39.164);
+tl.set('#w39-0',{color:'#A78BFA'},38.424);
+tl.set('#w39-1',{color:'#A78BFA'},38.771);
+tl.set('#w39-2',{color:'#A78BFA'},39.068);
+tl.set('#cap40',{opacity:1},39.185);tl.set('#cap40',{opacity:0},40.066);
+tl.set('#w40-0',{color:'#A78BFA'},39.185);
+tl.set('#w40-1',{color:'#A78BFA'},39.443);
+tl.set('#w40-2',{color:'#A78BFA'},39.753);
+tl.set('#cap41',{opacity:1},40.075);tl.set('#cap41',{opacity:0},41.201);
+tl.set('#w41-0',{color:'#A78BFA'},40.075);
+tl.set('#w41-1',{color:'#A78BFA'},40.346);
+tl.set('#w41-2',{color:'#A78BFA'},40.681);
+tl.set('#cap42',{opacity:1},41.236);tl.set('#cap42',{opacity:0},42.285000000000004);
+tl.set('#w42-0',{color:'#A78BFA'},41.236);
+tl.set('#w42-1',{color:'#A78BFA'},41.378);
+tl.set('#w42-2',{color:'#A78BFA'},41.984);
+tl.set('#cap43',{opacity:1},42.307);tl.set('#cap43',{opacity:0},42.943);
+tl.set('#w43-0',{color:'#A78BFA'},42.307);
+tl.set('#w43-1',{color:'#A78BFA'},42.604);
+tl.set('#w43-2',{color:'#A78BFA'},42.733);
+tl.set('#cap44',{opacity:1},42.965);tl.set('#cap44',{opacity:0},44.173);
+tl.set('#w44-0',{color:'#A78BFA'},42.965);
+tl.set('#w44-1',{color:'#A78BFA'},43.615);
+tl.set('#w44-2',{color:'#A78BFA'},43.925);
+tl.set('#cap45',{opacity:1},44.208);tl.set('#cap45',{opacity:0},45.038000000000004);
+tl.set('#w45-0',{color:'#A78BFA'},44.208);
+tl.set('#w45-1',{color:'#A78BFA'},44.608);
+tl.set('#w45-2',{color:'#A78BFA'},44.956);
+tl.set('#cap46',{opacity:1},45.098);tl.set('#cap46',{opacity:0},45.618);
+tl.set('#w46-0',{color:'#A78BFA'},45.098);
+tl.set('#w46-1',{color:'#A78BFA'},45.279);
+tl.set('#w46-2',{color:'#A78BFA'},45.537);
+tl.set('#cap47',{opacity:1},45.64);tl.set('#cap47',{opacity:0},46.482);
+tl.set('#w47-0',{color:'#A78BFA'},45.64);
+tl.set('#w47-1',{color:'#A78BFA'},45.949);
+tl.set('#w47-2',{color:'#A78BFA'},46.349);
+tl.set('#cap48',{opacity:1},46.517);tl.set('#cap48',{opacity:0},47.411);
+tl.set('#w48-0',{color:'#A78BFA'},46.517);
+tl.set('#w48-1',{color:'#A78BFA'},46.878);
+tl.set('#w48-2',{color:'#A78BFA'},47.201);
+tl.set('#cap49',{opacity:1},47.459);tl.set('#cap49',{opacity:0},48.327);
+tl.set('#w49-0',{color:'#A78BFA'},47.459);
+tl.set('#w49-1',{color:'#A78BFA'},47.703);
+tl.set('#w49-2',{color:'#A78BFA'},48.195);
+tl.set('#cap50',{opacity:1},48.348);tl.set('#cap50',{opacity:0},49.088);
+tl.set('#w50-0',{color:'#A78BFA'},48.348);
+tl.set('#w50-1',{color:'#A78BFA'},48.49);
+tl.set('#w50-2',{color:'#A78BFA'},48.851);
+tl.set('#cap51',{opacity:1},49.109);tl.set('#cap51',{opacity:0},49.823);
+tl.set('#w51-0',{color:'#A78BFA'},49.109);
+tl.set('#w51-1',{color:'#A78BFA'},49.316);
+tl.set('#w51-2',{color:'#A78BFA'},49.677);
+tl.set('#cap52',{opacity:1},49.858);tl.set('#cap52',{opacity:0},50.849000000000004);
+tl.set('#w52-0',{color:'#A78BFA'},49.858);
+tl.set('#w52-1',{color:'#A78BFA'},50.245);
+tl.set('#w52-2',{color:'#A78BFA'},50.593);
+tl.set('#cap53',{opacity:1},51.119);tl.set('#cap53',{opacity:0},52.001);
+tl.set('#w53-0',{color:'#A78BFA'},51.119);
+tl.set('#w53-1',{color:'#A78BFA'},51.571);
+tl.set('#w53-2',{color:'#A78BFA'},51.894);
+tl.set('#cap54',{opacity:1},52.023);tl.set('#cap54',{opacity:0},52.943);
+tl.set('#w54-0',{color:'#A78BFA'},52.023);
+tl.set('#w54-1',{color:'#A78BFA'},52.409);
+tl.set('#w54-2',{color:'#A78BFA'},52.719);
+tl.set('#cap55',{opacity:1},52.977);tl.set('#cap55',{opacity:0},54.013);
+tl.set('#w55-0',{color:'#A78BFA'},52.977);
+tl.set('#w55-1',{color:'#A78BFA'},53.442);
+tl.set('#w55-2',{color:'#A78BFA'},53.725);
+tl.set('#cap56',{opacity:1},54.061);tl.set('#cap56',{opacity:0},54.787);
+tl.set('#w56-0',{color:'#A78BFA'},54.061);
+tl.set('#w56-1',{color:'#A78BFA'},54.306);
+tl.set('#w56-2',{color:'#A78BFA'},54.642);
+tl.set('#cap57',{opacity:1},54.989);tl.set('#cap57',{opacity:0},55.909);
+tl.set('#w57-0',{color:'#A78BFA'},54.989);
+tl.set('#w57-1',{color:'#A78BFA'},55.325);
+tl.set('#w57-2',{color:'#A78BFA'},55.737);
+tl.set('#cap58',{opacity:1},55.969);tl.set('#cap58',{opacity:0},57.282000000000004);
+tl.set('#w58-0',{color:'#A78BFA'},55.969);
+tl.set('#w58-1',{color:'#A78BFA'},56.408);
+tl.set('#w58-2',{color:'#A78BFA'},56.769);
+tl.set('#cap59',{opacity:1},57.832);tl.set('#cap59',{opacity:0},58.636);
+tl.set('#w59-0',{color:'#A78BFA'},57.832);
+tl.set('#w59-1',{color:'#A78BFA'},58.179);
+tl.set('#w59-2',{color:'#A78BFA'},58.425);
+tl.set('#cap60',{opacity:1},58.696);tl.set('#cap60',{opacity:0},59.358000000000004);
+tl.set('#w60-0',{color:'#A78BFA'},58.696);
+tl.set('#w60-1',{color:'#A78BFA'},58.903);
+tl.set('#w60-2',{color:'#A78BFA'},59.096);
+tl.set('#cap61',{opacity:1},59.379);tl.set('#cap61',{opacity:0},60.521);
+tl.set('#w61-0',{color:'#A78BFA'},59.379);
+tl.set('#w61-1',{color:'#A78BFA'},59.535);
+tl.set('#w61-2',{color:'#A78BFA'},60.195);
+tl.set('#cap62',{opacity:1},60.569);tl.set('#cap62',{opacity:0},61.644);
+tl.set('#w62-0',{color:'#A78BFA'},60.569);
+tl.set('#w62-1',{color:'#A78BFA'},60.969);
+tl.set('#w62-2',{color:'#A78BFA'},61.434);
+tl.set('#cap63',{opacity:1},61.704);tl.set('#cap63',{opacity:0},62.869);
+tl.set('#w63-0',{color:'#A78BFA'},61.704);
+tl.set('#w63-1',{color:'#A78BFA'},62.039);
+tl.set('#w63-2',{color:'#A78BFA'},62.556);
+tl.set('#cap64',{opacity:1},62.865);tl.set('#cap64',{opacity:0},64.352);
+tl.set('#w64-0',{color:'#A78BFA'},62.865);
+tl.set('#w64-1',{color:'#A78BFA'},63.419);
+tl.set('#w64-2',{color:'#A78BFA'},64.026);
+tl.set('#cap65',{opacity:1},64.426);tl.set('#cap65',{opacity:0},65.681);
+tl.set('#w65-0',{color:'#A78BFA'},64.426);
+tl.set('#w65-1',{color:'#A78BFA'},65.019);
+tl.set('#w65-2',{color:'#A78BFA'},65.47);
+tl.set('#cap66',{opacity:1},65.741);tl.set('#cap66',{opacity:0},66.571);
+tl.set('#w66-0',{color:'#A78BFA'},65.741);
+tl.set('#w66-1',{color:'#A78BFA'},66.012);
+tl.set('#w66-2',{color:'#A78BFA'},66.335);
+tl.set('#cap67',{opacity:1},66.631);tl.set('#cap67',{opacity:0},68.038);
+tl.set('#w67-0',{color:'#A78BFA'},66.631);
+tl.set('#w67-1',{color:'#A78BFA'},66.864);
+tl.set('#w67-2',{color:'#A78BFA'},67.75);
+tl.set('#cap68',{opacity:1},68.072);tl.set('#cap68',{opacity:0},68.928);
+tl.set('#w68-0',{color:'#A78BFA'},68.072);
+tl.set('#w68-1',{color:'#A78BFA'},68.318);
+tl.set('#w68-2',{color:'#A78BFA'},68.73);
+tl.set('#cap69',{opacity:1},68.95);tl.set('#cap69',{opacity:0},69.741);
+tl.set('#w69-0',{color:'#A78BFA'},68.95);
+tl.set('#w69-1',{color:'#A78BFA'},69.259);
+tl.set('#w69-2',{color:'#A78BFA'},69.556);
+tl.set('#cap70',{opacity:1},69.776);tl.set('#cap70',{opacity:0},70.562);
+tl.set('#w70-0',{color:'#A78BFA'},69.776);
+tl.set('#w70-1',{color:'#A78BFA'},70.034);
+tl.set('#cap71',{opacity:1},71.112);tl.set('#cap71',{opacity:0},72.097);
+tl.set('#w71-0',{color:'#A78BFA'},71.112);
+tl.set('#w71-1',{color:'#A78BFA'},71.692);
+tl.set('#w71-2',{color:'#A78BFA'},71.951);
+tl.set('#cap72',{opacity:1},72.106);tl.set('#cap72',{opacity:0},72.961);
+tl.set('#w72-0',{color:'#A78BFA'},72.106);
+tl.set('#w72-1',{color:'#A78BFA'},72.48);
+tl.set('#w72-2',{color:'#A78BFA'},72.75);
+tl.set('#cap73',{opacity:1},72.996);tl.set('#cap73',{opacity:0},73.865);
+tl.set('#w73-0',{color:'#A78BFA'},72.996);
+tl.set('#w73-1',{color:'#A78BFA'},73.228);
+tl.set('#w73-2',{color:'#A78BFA'},73.667);
+tl.set('#cap74',{opacity:1},73.86);tl.set('#cap74',{opacity:0},74.78);
+tl.set('#w74-0',{color:'#A78BFA'},73.86);
+tl.set('#w74-1',{color:'#A78BFA'},74.143);
+tl.set('#w74-2',{color:'#A78BFA'},74.492);
+tl.set('#cap75',{opacity:1},74.789);tl.set('#cap75',{opacity:0},75.27);
+tl.set('#w75-0',{color:'#A78BFA'},74.789);
+tl.set('#w75-1',{color:'#A78BFA'},74.918);
+tl.set('#w75-2',{color:'#A78BFA'},75.15);
+tl.set('#cap76',{opacity:1},75.305);tl.set('#cap76',{opacity:0},76.353);
+tl.set('#w76-0',{color:'#A78BFA'},75.305);
+tl.set('#w76-1',{color:'#A78BFA'},75.408);
+tl.set('#w76-2',{color:'#A78BFA'},75.911);
+tl.set('#cap77',{opacity:1},76.362);tl.set('#cap77',{opacity:0},77.425);
+tl.set('#w77-0',{color:'#A78BFA'},76.362);
+tl.set('#w77-1',{color:'#A78BFA'},76.981);
+tl.set('#w77-2',{color:'#A78BFA'},77.252);
+tl.set('#cap78',{opacity:1},77.42);tl.set('#cap78',{opacity:0},79.105);
+tl.set('#w78-0',{color:'#A78BFA'},77.42);
+tl.set('#w78-1',{color:'#A78BFA'},78.16);
+tl.set('#w78-2',{color:'#A78BFA'},78.611);
+tl.set('#cap79',{opacity:1},79.243);tl.set('#cap79',{opacity:0},80.124);
+tl.set('#w79-0',{color:'#A78BFA'},79.243);
+tl.set('#w79-1',{color:'#A78BFA'},79.631);
+tl.set('#w79-2',{color:'#A78BFA'},79.94);
+tl.set('#cap80',{opacity:1},80.224);tl.set('#cap80',{opacity:0},81.324);
+tl.set('#w80-0',{color:'#A78BFA'},80.224);
+tl.set('#w80-1',{color:'#A78BFA'},80.689);
+tl.set('#w80-2',{color:'#A78BFA'},81.088);
+tl.set('#cap81',{opacity:1},81.359);tl.set('#cap81',{opacity:0},82.408);
+tl.set('#w81-0',{color:'#A78BFA'},81.359);
+tl.set('#w81-1',{color:'#A78BFA'},81.849);
+tl.set('#cap82',{opacity:1},82.443);tl.set('#cap82',{opacity:0},83.414);
+tl.set('#w82-0',{color:'#A78BFA'},82.443);
+tl.set('#w82-1',{color:'#A78BFA'},83.126);
+tl.set('#cap83',{opacity:1},83.423);tl.set('#cap83',{opacity:0},84.24);
+tl.set('#w83-0',{color:'#A78BFA'},83.423);
+tl.set('#w83-1',{color:'#A78BFA'},83.694);
+tl.set('#w83-2',{color:'#A78BFA'},84.042);
+tl.set('#cap84',{opacity:1},84.235);tl.set('#cap84',{opacity:0},85.046);
+tl.set('#w84-0',{color:'#A78BFA'},84.235);
+tl.set('#w84-1',{color:'#A78BFA'},84.43);
+tl.set('#cap85',{opacity:1},85.596);tl.set('#cap85',{opacity:0},86.865);
+tl.set('#w85-0',{color:'#A78BFA'},85.596);
+tl.set('#w85-1',{color:'#A78BFA'},86.06);
+tl.set('#w85-2',{color:'#A78BFA'},86.344);
+tl.set('#cap86',{opacity:1},86.964);tl.set('#cap86',{opacity:0},87.767);
+tl.set('#w86-0',{color:'#A78BFA'},86.964);
+tl.set('#w86-1',{color:'#A78BFA'},87.118);
+tl.set('#w86-2',{color:'#A78BFA'},87.596);
+tl.set('#cap87',{opacity:1},87.866);tl.set('#cap87',{opacity:0},88.58);
+tl.set('#w87-0',{color:'#A78BFA'},87.866);
+tl.set('#w87-1',{color:'#A78BFA'},88.034);
+tl.set('#w87-2',{color:'#A78BFA'},88.395);
+tl.set('#cap88',{opacity:1},88.679);tl.set('#cap88',{opacity:0},89.148);
+tl.set('#w88-0',{color:'#A78BFA'},88.679);
+tl.set('#w88-1',{color:'#A78BFA'},88.886);
+tl.set('#w88-2',{color:'#A78BFA'},89.091);
+tl.set('#cap89',{opacity:1},89.195);tl.set('#cap89',{opacity:0},90.011);
+tl.set('#w89-0',{color:'#A78BFA'},89.195);
+tl.set('#w89-1',{color:'#A78BFA'},89.569);
+tl.set('#w89-2',{color:'#A78BFA'},89.749);
+tl.set('#cap90',{opacity:1},90.046);tl.set('#cap90',{opacity:0},90.515);
+tl.set('#w90-0',{color:'#A78BFA'},90.046);
+tl.set('#w90-1',{color:'#A78BFA'},90.227);
+tl.set('#w90-2',{color:'#A78BFA'},90.434);
+tl.set('#cap91',{opacity:1},90.588);tl.set('#cap91',{opacity:0},92.183);
+tl.set('#w91-0',{color:'#A78BFA'},90.588);
+tl.set('#w91-1',{color:'#A78BFA'},90.988);
+tl.set('#w91-2',{color:'#A78BFA'},91.92);
+tl.set('#cap92',{opacity:1},92.217);tl.set('#cap92',{opacity:0},92.893);
+tl.set('#w92-0',{color:'#A78BFA'},92.217);
+tl.set('#w92-1',{color:'#A78BFA'},92.656);
+tl.set('#w92-2',{color:'#A78BFA'},92.772);
+tl.set('#cap93',{opacity:1},92.914);tl.set('#cap93',{opacity:0},93.859);
+tl.set('#w93-0',{color:'#A78BFA'},92.914);
+tl.set('#w93-1',{color:'#A78BFA'},93.082);
+tl.set('#w93-2',{color:'#A78BFA'},93.649);
+tl.set('#cap94',{opacity:1},93.894);tl.set('#cap94',{opacity:0},94.982);
+tl.set('#w94-0',{color:'#A78BFA'},93.894);
+tl.set('#w94-1',{color:'#A78BFA'},94.229);
+tl.set('#w94-2',{color:'#A78BFA'},94.719);
+tl.set('#cap95',{opacity:1},95.08);tl.set('#cap95',{opacity:0},96.092);
+tl.set('#w95-0',{color:'#A78BFA'},95.08);
+tl.set('#w95-1',{color:'#A78BFA'},95.429);
+tl.set('#cap96',{opacity:1},96.126);tl.set('#cap96',{opacity:0},96.917);
+tl.set('#w96-0',{color:'#A78BFA'},96.126);
+tl.set('#w96-1',{color:'#A78BFA'},96.435);
+tl.set('#w96-2',{color:'#A78BFA'},96.809);
+tl.set('#cap97',{opacity:1},96.925);tl.set('#cap97',{opacity:0},98.0);
+tl.set('#w97-0',{color:'#A78BFA'},96.925);
+tl.set('#w97-1',{color:'#A78BFA'},97.287);
+tl.set('#w97-2',{color:'#A78BFA'},97.66);
+tl.set('#cap98',{opacity:1},98.035);tl.set('#cap98',{opacity:0},98.968);
+tl.set('#w98-0',{color:'#A78BFA'},98.035);
+tl.set('#w98-1',{color:'#A78BFA'},98.164);
+tl.set('#w98-2',{color:'#A78BFA'},98.642);
+tl.set('#cap99',{opacity:1},98.989);tl.set('#cap99',{opacity:0},99.355);
+tl.set('#w99-0',{color:'#A78BFA'},98.989);
+tl.set('#w99-1',{color:'#A78BFA'},99.106);
+tl.set('#w99-2',{color:'#A78BFA'},99.247);
+tl.set('#cap100',{opacity:1},99.364);tl.set('#cap100',{opacity:0},100.297);
+tl.set('#w100-0',{color:'#A78BFA'},99.364);
+tl.set('#w100-1',{color:'#A78BFA'},99.622);
+</script></body></html>

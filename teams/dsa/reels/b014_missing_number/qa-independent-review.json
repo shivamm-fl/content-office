@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "item": "b014",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "independent_local_checks": {
+    "passed": 5912,
+    "description": "Exact source tested over each missing value and every permutation for lengths one through six."
+  },
+  "notes": [
+    "[4,0,2,1] -> 3, full-range XOR cancellation, len(nums) seed, accumulators 4 -> 0 -> 1 -> 1 -> 3, distinctness precondition and O(n)/O(1) are correct.",
+    "Complete method body is readable and invariant is explained before the chronological trace. No P0/P1 found.",
+    "Review covers source/lesson/script/storyboard and HTML snapshots only; final MP4, sound and continuous playback are outside this report."
+  ],
+  "reviewed_at_utc": "2026-11-11T15:56:52.8113378Z",
+  "hashes": {
+    "code_sha256": "dcaf0527257bbd90fb01f1551eb0f61ce85fcf9a173fae55a959d7e2138118cb",
+    "source_sha256": "dcaf0527257bbd90fb01f1551eb0f61ce85fcf9a173fae55a959d7e2138118cb",
+    "lesson_sha256": "a00d3e435b3baf14e95004db74be6882026179f2bedffeda6dc7e4594407b7c7",
+    "script_sha256": "e7dbaf67757449fe187d6fd09b08a77c8543c2d3010cc5725f769596b1a026b5",
+    "html_sha256": "5f36d59c7cf9152c543424499764aa9c820d38498a343b93aec06957d82a710c",
+    "storyboard_sha256": "1ef4eb311fdccc50b543c39e60b52a6f3ae4b073f0d8dd21a2d76cce63e308aa"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "6f5d86475d9de035a128ec86cdc9d94b8fa67be517ac1f5c9ce05e40bf426cf0",
+    "snapshots/contact-sheet-1.jpg": "a67d96e1138ce8dfed6393e37c4ade1b46b7eff35f43f6d3e454e1af61fdd535",
+    "snapshots/contact-sheet-2.jpg": "61f7a07b56e773f6ff28331573c4816ceb87f51832bee7d2b3c14c0d7b547ac6",
+    "snapshots/contact-sheet-3.jpg": "193517eda11bdf50c1f0159ba6dccc2cfcbf6c96464405af7e4a66212826e6a5",
+    "snapshots/contact-sheet-4.jpg": "77f1c2d2cbe417e8739b99b6c4b137c78044d8103b88b1b23f26f98a2c106c2f"
+  }
+}

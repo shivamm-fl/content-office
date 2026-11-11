@@ -1,0 +1,35 @@
+{
+  "final_mp4_code_frame_inspected": true,
+  "mp4_sha256": "451d1b6e407798b801203bf7b2a665cde2350223197befb5904a239da12bd27d",
+  "frames": [
+    {
+      "time_s": 58.039,
+      "frame": "qa-export-trace.png",
+      "frame_sha256": "b631b88089d510fe039762b2ab3a0edf03250cbd8e099bb5233d65d9ac389267"
+    },
+    {
+      "time_s": 72.31,
+      "frame": "qa-export-code-F.png",
+      "frame_sha256": "aeb63fcecd04a1f981810e7328ad9cea4f05a4773d76559171168062a89d6991"
+    },
+    {
+      "time_s": 88.204,
+      "frame": "qa-export-code-G.png",
+      "frame_sha256": "03df4aa2bc5840f5c7fec0bb0c79be19b1b3936cc95bf78cccf4972cf04c39d9"
+    },
+    {
+      "time_s": 69.033,
+      "frame": "qa-export-trace-end.png",
+      "frame_sha256": "8417dae3043a389df7ef2ccec5c69ca76c6a35efed65511a0c44567f37bfb048"
+    },
+    {
+      "time_s": 78.117,
+      "frame": "qa-export-code-transition.png",
+      "frame_sha256": "dd040ea205a8e6bd28025d29472fb17716917f58c436cfa3fe4148b77e3fd6da"
+    }
+  ],
+  "human_listening": false,
+  "continuous_playback_review": false,
+  "inspector": "root assistant; corrected actual decoded final MP4 full code, transition and terminal minimum inspected",
+  "inspection_scope": "Terminal dp6=2 and winning middle candidate2 verified; static final MP4 frames, no continuous playback or human listening"
+}

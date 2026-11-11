@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "item": "b016",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false
+  },
+  "independent_local_checks": {
+    "passed": 45,
+    "description": "Exact source evaluated for all legal n=1..45 against an independent Fibonacci recurrence sequence."
+  },
+  "notes": [
+    "Disjoint last-step cases, repeated remaining-three question, bases ways[0]=ways[1]=1, two-register progression to (5,8), simultaneous old-state update and n=1 are correct.",
+    "Complete method body and soft-wrap continuation are readable. O(n) time and O(1) legal-domain auxiliary storage are correctly stated.",
+    "No P0/P1 found. Source hash matches existing Accepted proof and script matches reviewed lesson copy. Final MP4/audio/continuous playback are outside this report."
+  ],
+  "reviewed_at_utc": "2026-11-11T15:59:39.8656283Z",
+  "hashes": {
+    "code_sha256": "0f9d23174627eb4a2075f70c0c901fc183bfd3633b9ed5d78e015a5d566dbb91",
+    "source_sha256": "0f9d23174627eb4a2075f70c0c901fc183bfd3633b9ed5d78e015a5d566dbb91",
+    "lesson_sha256": "bcdc2f2dc22bcb2d1d1de59366327c5362cb1a6ddd958728c034ca9c2b8c2eb9",
+    "script_sha256": "a03e2185ab95016173faccf88eca71de65f4ddc9d71da93cb4d38dba89751c67",
+    "html_sha256": "e32f85abceeca54b003463ad96ae17289cd43b9dd139e2f2f21d63c7b05bb0aa",
+    "storyboard_sha256": "78369bcc406e8e0b41b6f64686d42949956d18177f49d3575d5cb6cb7e2550f7"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "b86af58e9530bd07c32e1e76bd847bad018701fa968f70f57809a3d4f01200fe",
+    "snapshots/contact-sheet-1.jpg": "90c131e9706ef44f0d55388f3c515e217f5a5ddf06ff0971bd3dfdf01dcbadd0",
+    "snapshots/contact-sheet-2.jpg": "1893ee68b1df0ce74039731e660b7705396956fa018512b58a0c46fbe9427050",
+    "snapshots/contact-sheet-3.jpg": "ae05f9b3b80214426928926949c81eb2f09f91b3821839c0636faf85d329a6b1",
+    "snapshots/contact-sheet-4.jpg": "03dffb2e8bd9ab6f6f82eb061ce07a7027d950acd1f04470d43f1aa9c52eb1bc"
+  }
+}

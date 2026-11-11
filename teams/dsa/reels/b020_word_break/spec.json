@@ -1,0 +1,89 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "prime": "सुनो, ये बहुत interesting है!",
+  "tone": "calm",
+  "hook_type": "surprising_fact",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 3,
+    "B": 3,
+    "C": 3,
+    "D": 3,
+    "E": 3,
+    "F": 3,
+    "G": 3
+  },
+  "tail": {},
+  "copy": {
+    "hi": {
+      "A": "@hook Word Break में longest prefix greedily मत चुनो। | Given string: cars. Dictionary: car, ca, rs। Ca plus rs से पूरा string बनता है, इसलिए answer true है। Words reuse भी कर सकते हो।",
+      "B": "Brute force हर matching first word चुनता है, फिर remaining suffix recursively solve करता है। | Cars पर car चुनो तो s बचता है और fail। Ca चुनो तो rs मिलता है और success। सभी choices try करनी पड़ती हैं।",
+      "C": "Longest word वाला greedy choice car पर अटक गया, जबकि valid split था। | Backtracking सही है, लेकिन कई paths वही suffix दोबारा solve करते हैं। Repeated questions को stored prefix answers से बदलेंगे।",
+      "D": "Reachable end का मतलब: end से पहले का पूरा prefix dictionary से बन सकता है। Empty prefix true है। | हर word के लिए start बराबर end minus word length। | Start reachable हो और यही word start से end तक match करे, तभी end true करो। इससे कोई gap या invalid piece बीच में नहीं आता।",
+      "E": "Dry run: zero reachable। End one पर c नहीं बनता, false। | End two पर ca मिलता है और start zero true है: true। End three पर car से true। | End four पर rs का start two है, जो true है। इसलिए cars true।",
+      "F": "Accepted code हर end पर dictionary words check करता है। Negative start skip होता है। | Reachable start और exact word match मिलने पर true set करके break। | Final reachable last return होता है। सिर्फ किसी बीच वाले prefix का true होना पूरे string का answer नहीं।",
+      "G": "N string length, M words, L maximum word length: O of N times M times L time, क्योंकि match भी characters check करता है। | Reachable array O of N extra space। String slices नहीं बनाते; starts with से bounded match करते हैं।"
+    }
+  },
+  "cues": [
+    [
+      "click",
+      "B",
+      0,
+      0
+    ],
+    [
+      "err",
+      "C",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "E",
+      0,
+      0
+    ]
+  ],
+  "solution_sha256": "eebc6705a70ee0890a0bdd3c247c6d2fdc6204eded46138e8b0a4ade8386e6ec",
+  "teaching_scenes": {
+    "problem": [
+      "A"
+    ],
+    "brute_force": [
+      "B"
+    ],
+    "bottleneck": [
+      "C"
+    ],
+    "optimization": [
+      "D"
+    ],
+    "dry_run": [
+      "E",
+      "F"
+    ],
+    "complexity": [
+      "G"
+    ]
+  },
+  "sources": [
+    "https://leetcode.com/problems/word-break/",
+    "https://docs.python.org/3/library/stdtypes.html#bitwise-operations-on-integer-types",
+    "https://leetcode.com/problems/word-break/submissions/2193986190/"
+  ],
+  "on_screen_code_contract": "complete_method_body"
+}

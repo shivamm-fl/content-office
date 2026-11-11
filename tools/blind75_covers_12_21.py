@@ -27,7 +27,7 @@ def diagram(n):
     if n==19:return C.tx(540,880,'AXBY  ·  ABY',42,C.MUTED)+C.cells(['a','b','y'],945,selected=(0,1,2))+C.result('common length = 3',1230,65)
     if n==20:return C.tx(540,880,'DICTIONARY: CAR, CA, RS',28,C.MUTED)+C.cells(['ca','rs'],945,selected=(0,1))+C.result('cars = ca | rs',1230,76)
     if n==21:
-        return C.tx(540,880,'VALUES 1, 2 · TARGET 4',29,C.MUTED)+C.cells(['112','121','211'],945,selected=(0,1,2))+C.tx(540,1150,'also 1111 and 22',40,C.MUTED)+C.result('5 ordered sequences',1290,65)
+        return C.tx(540,880,'VALUES 1, 2 · TARGET 4',29,C.MUTED)+C.cells(['1+1+2','1+2+1','2+1+1'],945,selected=(0,1,2))+C.tx(540,1150,'also 1+1+1+1 and 2+2',40,C.MUTED)+C.result('5 ordered sequences',1290,65)
     raise ValueError(n)
 C.diagram=diagram
 if __name__=='__main__':

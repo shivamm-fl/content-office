@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "item": "b017",
+  "reviewer": "independent agent /root/reel_review",
+  "ok": true,
+  "open_p0_p1": [],
+  "resolved_findings": [
+    {
+      "priority": "P1",
+      "where": "lesson/script scene G return threshold",
+      "resolution": "Current lesson and script now say return minus one when final answer exceeds amount, matching actual source. Regenerated caption at85.98/86.28s begins Final answer amount and actual return is highlighted."
+    },
+    {
+      "where": "Scene E terminal visual focus",
+      "verified_at_s": [
+        69.23,
+        69.43
+      ],
+      "resolution": "Final regenerated states highlight dp[6]=2 and the middle candidate count2, with explicit minimum2coins /3+3 label. The last tested coin4 candidate3 is no longer the terminal green selection."
+    }
+  ],
+  "evidence_files": [
+    "qa-phone-sheet.jpg",
+    "snapshots/contact-sheet-1.jpg",
+    "snapshots/contact-sheet-2.jpg",
+    "snapshots/contact-sheet-3.jpg",
+    "snapshots/contact-sheet-4.jpg",
+    "snapshots/frame-23-at-69.23s.png",
+    "snapshots/frame-24-at-69.43s.png"
+  ],
+  "reviewer_scope": {
+    "source_and_lesson": true,
+    "invariant_and_trace": true,
+    "time_and_auxiliary_space": true,
+    "english_number_text": true,
+    "html_snapshot_stills": 34,
+    "phone_sheet": true,
+    "mp4_frames_reviewed": false,
+    "audio_listened": false,
+    "continuous_playback": false,
+    "owner_approval_set": false,
+    "changed_frame_reinspection": true,
+    "final_revision_mp4_verified": false
+  },
+  "independent_local_checks": {
+    "passed": 480,
+    "description": "Exact source evaluated for small denomination subsets and totals0..15 against an independent breadth-first minimum-coin oracle."
+  },
+  "notes": [
+    "[1,3,4], amount6 ->2, greedy4+1+1 failure, all-last-coin proof, dp=[0,1,2,1,1,2,2] and candidates[3,2,3] are correct.",
+    "F switches from initialization/nested loops to guard/transition/return within its explanation. Full method body is preserved and readable with soft-wrap marks.",
+    "Corrected impossible-result condition and amount0 boundary, O(A*M) time/O(A) auxiliary space checked. No P0/P1 remains. No listening or final-MP4 claim.",
+    "Follow-up inspection: compared the prior decoded export terminal image with regenerated HTML terminal frames69.23/69.43 and their contact sheet. Final selection now returns to minimum candidate2 and dp[6]=2 with minimum2coins/3+3 label. Source and script hashes remain unchanged; no final revised-MP4 or audio listening claim."
+  ],
+  "reviewed_at_utc": "2026-11-11T16:26:28.8011365Z",
+  "hashes": {
+    "code_sha256": "2cbef137d88541264f47cfb7f1144fca0232ef442277bb9404506ba732eb79a5",
+    "source_sha256": "2cbef137d88541264f47cfb7f1144fca0232ef442277bb9404506ba732eb79a5",
+    "lesson_sha256": "c6db13a3b350f614e1b93295484ae83d64e3cdb2fa60d423621cf85c4351628b",
+    "script_sha256": "a99cb42bed508a67723471171041589934f71535707f8dd1d315c120e1d0d542",
+    "html_sha256": "1d6f35c9944e3aca94c10f5637cae4ad13fbcb03971371abfa3f93de92042477",
+    "storyboard_sha256": "36e79d85b7bea9a145dc67c32a8c4d8e61b89ca856439e6413b7c4ea069f6079"
+  },
+  "evidence_sha256": {
+    "qa-phone-sheet.jpg": "2e67cf343151f34ed961c2e812f3c0c473f9ef7e042b326d130674421c0a0160",
+    "snapshots/contact-sheet-1.jpg": "be95684f2d5329f19bc4142f400375dc1f89aa2a075638c6b927a66d3dea25f2",
+    "snapshots/contact-sheet-2.jpg": "e40ad8abe0b700702f09ef2fb0f2f6a274a2fbc5a2f28e10fea4d31bc19cf609",
+    "snapshots/contact-sheet-3.jpg": "3bb2142ad4d1062eab8834248d7ff9b8fb6e7bbd47135c74ae348064aa6384d9",
+    "snapshots/contact-sheet-4.jpg": "919f2bb24aa1f0cbc65dfc6f66e7b319402cae6d496dba77e9a4a6de53a32cbc",
+    "snapshots/frame-23-at-69.23s.png": "1c2542afe4ee89e8f7724fc7aa8e2d5aa1f0a8134459f78b889e9d3182dee803",
+    "snapshots/frame-24-at-69.43s.png": "157216266a7b4b6e23fe7af8b3884fd1aca23b9f0998c6db14ae6e21dede6ba2"
+  }
+}
