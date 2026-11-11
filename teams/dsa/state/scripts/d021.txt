@@ -1,0 +1,17 @@
+Set Matrix Zeroes: extra array के बिना कैसे करें?
+
+Problem: matrix में जिस cell की value zero हो, उसकी पूरी row और पूरा column zero होना चाहिए, और बदलाव उसी matrix में चाहिए। | Given matrix: zero, one, two, zero | three, four, five, two | one, three, one, five।
+
+सबसे सीधा तरीका: scan करो, और zero मिलते ही उसकी row और column वहीं zero कर दो। | पर नए बने zeros भी असली zeros जैसे दिखते हैं। | पहले zero ने नीचे का three zero कर दिया, और scan ने उसे असली zero मानकर उसकी पूरी row भी zero कर दी। | आख़िर में पूरा matrix zero।
+
+इसलिए पहले note करो, बाद में zero करो। | Rows के लिए एक array और columns के लिए एक array, तो extra space O of m plus n लगता है।
+
+पर notes matrix के अंदर ही रखे जा सकते हैं। | Zero वाली row का पहला cell और zero वाले column का पहला cell, दोनों बाद में वैसे भी zero होने हैं। | तो पहली row columns का marker बनती है, और पहला column rows का।
+
+दिक्कत यह है कि पहली row और पहले column में असली zeros भी हो सकते हैं। | इसलिए दो booleans रखो, first_row और first_col, यानी इन दोनों में originally zero था या नहीं।
+
+अब dry run। | पहली row में zero है, तो first_row equals True, और पहले column में भी zero है, तो first_col equals True। | बाकी cells में कोई zero नहीं, तो नया marker नहीं लगता। | पर आख़िरी column का marker zero है, तो उसके two और five zero हो जाते हैं। | फिर flags से पहली row और पहला column zero होते हैं। | Result: zero, zero, zero, zero | zero, four, five, zero | zero, three, one, zero।
+
+हर cell कुछ ही बार देखा गया, तो time O of m times n है। | Extra memory में सिर्फ़ दो booleans हैं, तो space O one है।
+
+Comments में बताओ: Given matrix one, one, one | one, zero, one | one, one, one पर result क्या आएगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।
