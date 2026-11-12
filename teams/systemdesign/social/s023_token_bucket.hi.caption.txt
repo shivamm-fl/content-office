@@ -1,0 +1,7 @@
+Day 23/150: Interviewer ne poocha: har user ki requests ki limit kaise lagaoge?
+
+Token bucket: har user ka ek bucket, jisme tokens hote hain. Har request ek token leti hai, bucket khaali ho toh request reject hoti hai aur 429 Too Many Requests milta hai. Bucket ka size burst tay karta hai, refill rate speed limit. Example ke numbers invented hain: capacity 10, refill 1 token per second, yaani ek minute mein zyada se zyada 70 requests. Catch (hamari apni soch): 5 servers par alag buckets ho toh limit 5 guna ho jaati hai, isliye bucket ek shared jagah rakho.
+
+Comment karke batao: tumhare app mein burst kitna allow karoge, 10, 50 ya 100?
+
+#SystemDesign #RateLimiting #Backend

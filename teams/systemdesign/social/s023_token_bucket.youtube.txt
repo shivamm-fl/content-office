@@ -1,0 +1,14 @@
+Rate limiting: token bucket se burst bhi, speed limit bhi
+
+Day 23/150: Token bucket rate limiter mein har user ka ek bucket hota hai jo ek fixed limit tak tokens rakhta hai aur ek fixed rate se refill hota hai. Har request ek token leti hai; bucket khaali ho toh request reject hoti hai, aksar 429 Too Many Requests ke saath. Isse user burst bhi kar sakta hai aur lambe samay mein refill rate se upar nahi jaa sakta. Example ke numbers invented hain: capacity 10, refill 1 token per second. Catch: har server ka apna bucket ho toh limit bekar ho jaati hai, isliye bucket shared jagah rakhte hain (hamari apni soch).
+
+Comment karke batao: tumhare app mein burst kitna allow karoge, 10, 50 ya 100?
+
+Sources:
+https://en.wikipedia.org/wiki/Token_bucket
+https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html
+https://stripe.com/blog/rate-limiters
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429
+
+Tags: token bucket algorithm,rate limiting kya hai,rate limiter system design interview,429 too many requests,system design
+AI-assisted visuals and narration.

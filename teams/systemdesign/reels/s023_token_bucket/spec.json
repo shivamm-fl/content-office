@@ -1,0 +1,129 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      null,
+      null,
+      8.2
+    ],
+    [
+      "err",
+      null,
+      null,
+      11.5
+    ],
+    [
+      "pop",
+      null,
+      null,
+      30.1
+    ],
+    [
+      "click",
+      null,
+      null,
+      33.8
+    ],
+    [
+      "err",
+      null,
+      null,
+      65.1
+    ],
+    [
+      "ok",
+      null,
+      null,
+      68.9
+    ],
+    [
+      "dip",
+      null,
+      null,
+      85.3
+    ],
+    [
+      "pop",
+      null,
+      null,
+      91.8
+    ],
+    [
+      "err",
+      null,
+      null,
+      104.1
+    ],
+    [
+      "err",
+      null,
+      null,
+      115.6
+    ],
+    [
+      "ok",
+      null,
+      null,
+      119.6
+    ],
+    [
+      "save",
+      null,
+      null,
+      128.3
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Interviewer ने पूछा: हर user की requests की limit कैसे लगाओगे?",
+      "B": "हर user के लिए एक bucket, जिसमें tokens रखे हैं। | हर request एक token लेती है। | Bucket खाली हो, तो request reject, और 429{four-twenty-nine} status code लौटता है।",
+      "C": "ये limit क्यों चाहिए? एक user या एक buggy script हज़ारों requests भेजकर पूरे server को दबा सकती है। | पर सीधी limit, कि एक second में एक ही request, तो असली user भी फँसता है, क्योंकि page खुलते ही कई calls एक साथ जाती हैं।",
+      "D": "Tea stall का coupon booklet सोचो: 10{ten} coupons, और हर minute एक नया coupon जुड़ता है। | चाय लो, तो एक coupon कटता है। | Booklet भरी है, तो दस चाय एक साथ मिल जाती हैं, पर उसके बाद हर minute सिर्फ़ एक।",
+      "E": "यही token bucket है। | इसके दो numbers हैं। | Capacity यानी bucket में ज़्यादा से ज़्यादा कितने tokens, और refill rate यानी हर second कितने नए tokens आते हैं। | Bucket भरा हो, तो extra tokens गिर जाते हैं।",
+      "F": "EXAMPLE, ये numbers मैंने मान लिए हैं: capacity 10{ten}, refill 1{one} token per second। | User ने एक पल में 10{ten} requests भेजीं, तो सब pass, और bucket खाली। | ग्यारहवीं request को 429{four-twenty-nine} मिलता है। | एक second बाद एक token आया, तो अगली request pass।",
+      "G": "तो एक ही bucket से दो limits बनती हैं। | Burst capacity तक चल सकता है, और लंबे समय का average refill rate से ऊपर जा ही नहीं सकता। | इस example में एक मिनट में ज़्यादा से ज़्यादा 70{seventy} requests: 10{ten} bucket के, और 60{sixty} refill के। | Bucket का size burst तय करता है, refill rate speed limit।",
+      "H": "अब देखो ये हर request पर कैसे चलता है। | पहला step: user की key से उसका bucket उठाओ। | दूसरा step: पिछली request के बाद जितना time बीता, उतने tokens जोड़ दो, पर capacity से ऊपर नहीं। | तीसरा step: token है तो एक घटाओ और request जाने दो, नहीं तो 429{four-twenty-nine} भेजो।",
+      "I": "अब catch, और ये हमारी अपनी सोच है। | मान लो 5{five} servers हैं, और हर server अपना bucket रखता है। | तो user को हर server पर अलग 10{ten} tokens मिलेंगे, यानी 50{fifty} requests, limit बेकार। | इसलिए bucket एक shared जगह पर रखो, और सब servers वहीं से token लें।",
+      "J": "तुम्हारे app में burst कितना allow करोगे? | 10{दस}, 50{पचास} या 100{सौ}? comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
