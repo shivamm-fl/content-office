@@ -1,0 +1,19 @@
+Base URL badla, Anthropic par code chala, settings ignore hui.
+
+Interviewer ne poocha: tumhara app OpenAI ke SDK par chalta hai, doosre provider par kaise switch karoge? SDK yaani wo library, jisse tumhara code model ko call karta hai.
+
+Tumhara jawab: API key, base URL aur model name badlo, phir apne prompts par test chalao. Par compatible ka matlab same nahi hota. Isme 3 steps hain.
+
+Maan lo tumhare support bot mein strict laga hai, yaani tool ka jawab bandhe format mein hi aaye. Tumne base URL badalkar Anthropic par bheja, code chal gaya, error nahi aaya. Par Anthropic par aaj strict chupchaap ignore hota hai. Yaani format toot sakta hai, aur tumhe pata bhi nahi chalega.
+
+Pehla step: teeno cheezein badlo. API key yaani provider ki secret chaabi, base URL yaani request ka pata, model name yaani kaun sa model chalana hai. Kyunki SDK wahi hai, bas pata aur naam badalta hai.
+
+Doosra step: dekho kya ignore hota hai. Anthropic ke page par aaj 14 request fields chupchaap ignore hote hain, jaise seed. Aur 4 tarah ki requests par 400 error aata hai, jaise audio bhejna, yaani server request mana kar deta hai. Ignore zyada khatarnak hai, kyunki error nahi aata.
+
+Teesra step: apne 20 asli prompts dono providers par chalao. Kyunki list batati hai kya ignore hota hai, asar tumhare prompts par test se hi dikhta hai.
+
+Ek boundary: Anthropic khud kehta hai ki ye layer test aur compare karne ke liye hai, zyadatar production ke liye nahi. Poore features chahiye, to native API lo.
+
+Interview mein kaho: compatible ka matlab same nahi hai. Main teeno cheezein badloonga, apne prompts par dono providers ki tulna karoonga, aur jo feature nahi milega uske liye native API rakhoonga.
+
+Tumhare app mein abhi kaun sa provider hai, OpenAI, Anthropic ya Gemini? Comment karo. Roz ek naya interview sawal, poore jawab ke saath, follow karo.

@@ -2475,6 +2475,125 @@
       ],
       "approval_status": "pending",
       "production_date_ist": "2026-11-06"
+    },
+    {
+      "id": "a021",
+      "track": "series",
+      "day": 21,
+      "unit": "C7",
+      "title": "Hallucination: Why a Fluent Answer Can Be False",
+      "format": "concept",
+      "status": "planned",
+      "one_idea": "A language model writes the most plausible next words, and nothing in that step checks the facts. So when it does not know, a smooth, specific, confident answer (name, year, page count) can still be invented. It is a guess dressed as an answer, not a lie and not a bug in one place. Fixes: give it a way out (permission to say I don't know), ground it in your own documents with quotes, ask for a supporting quote per claim and drop the claims without one, and ask the same question several times: different answers are a warning sign.",
+      "hook_type": "direct_question",
+      "spoken_hook": "AI ने नकली किताब के 312 pages बताए। क्यों?",
+      "hook_formula": "direct_question (full-sentence 'you' scene, one false specific detail and a number, direct question by second 8)",
+      "hook_source": "strategist 2026-11-12; growth note 2026-11-12 (fluent answer with one specific false detail and a number; a019 pattern); learning 2026-10-27 (start from a frustration the viewer knows)",
+      "visual_idea": "A chat from frame 0: the question 'Who wrote The Tin Lantern?' and a confident reply (author, 2014, 312 pages) with a small stamp 'this book does not exist'. Then one word-card list for the next word after 'written by': five names with bars and an 'I don't know' bar almost empty; the top bar is highlighted because it is likeliest, not because it is true. Then the same question asked five times as five small chat tiles with different names. Last: a three-step fix strip (way out, your documents, quote check).",
+      "example": "EXAMPLE, a toy (not a real model): 'The Tin Lantern' is a book we invented. Toy scores give Ramesh 31.6 %, Anita 21.2 %, Vikram 19.1 %, Meera 14.2 %, Sanjay 11.6 % and 'I don't know' 2.3 %; five asks gave Anita, Ramesh, Vikram, Ramesh, Vikram (3 different names). Computed in state/runs/a021_hallucination_run.py, output in state/runs/a021_hallucination_run_output.txt. The year 2014 and 312 pages on the chat screen are invented for the picture and carry the EXAMPLE pill.",
+      "everyday_anchor": "A student who has not studied still writes a neat, confident answer in the exam, because a blank page scores zero.",
+      "sources": [
+        "https://arxiv.org/abs/2509.04664",
+        "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-12: arXiv 2509.04664 (Kalai, Nachum, Vempala, Zhang, submitted 4 Sep 2025) 'Why Language Models Hallucinate': hallucinations arise as ordinary errors from statistical pressures when the model cannot tell incorrect statements from true ones; they persist because most benchmarks reward guessing when unsure ('language models are optimized to be good test-takers, and guessing when uncertain improves test performance'). The student-in-the-exam anchor is our analogy, not the paper's wording.",
+        "Fetched 2026-11-12: Anthropic 'Reduce hallucinations': allow the model to say 'I don't know' (can drastically reduce false information), use direct quotes for grounding on long documents, verify with citations (retract a claim with no supporting quote), best-of-N (inconsistent outputs may indicate hallucinations), restrict to provided documents; 'these techniques significantly reduce hallucinations, they don't eliminate them entirely'. Say 'reduce', never 'fix'.",
+        "The openai.com 'Why language models hallucinate' page returned 403 and was not used; no OpenAI birthday example or numbers.",
+        "All probabilities are toy numbers from a run, labelled illustrative; the book, author names, 2014 and 312 are invented. Do not claim any real model gives these numbers."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Why a Fluent Answer Can Be False",
+      "thumb_text": "FLUENT BUT FALSE",
+      "keywords": [
+        "ai hallucination",
+        "why chatgpt makes things up",
+        "llm hallucination explained",
+        "how to reduce hallucination"
+      ],
+      "production_date_ist": "2026-11-12",
+      "approval_status": "pending"
+    },
+    {
+      "id": "q156",
+      "track": "interview",
+      "day": null,
+      "unit": "H5",
+      "title": "Switching Provider: OpenAI-Compatible API",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "OpenAI-compatible means you can keep the OpenAI SDK and change three things (API key, base URL, model name) to reach another provider, but it does not mean identical behaviour. Anthropic's own compatibility page says the layer is mainly for testing and comparing models, silently ignores some fields (14 simple request fields, among them seed and presence_penalty; the strict flag in function calling), and returns a 400 error for others (n other than 1, response_format json_object, audio and file inputs). Google's page calls its OpenAI-library support beta. So you switch with a test run on your own prompts, plus a fallback to the native API for features the layer lacks.",
+      "trap": "Assuming compatible means identical: base URL and model name change, but features, limits and error details can still differ, so you test before switching.",
+      "hook_type": "company_specific",
+      "company": "Anthropic",
+      "company_source": "https://platform.claude.com/docs/en/cli-sdks-libraries/libraries/openai-sdk",
+      "spoken_hook": "Base URL बदला, Anthropic पर code चला, पर strict ignore हुआ।",
+      "hook_formula": "company_specific (a concrete scene: it ran, yet one setting was silently dropped)",
+      "hook_source": "strategist 2026-11-12 (company_specific: oldest of the last six q, last used q141; growth note: full sentence scene, not a bare 'X ya Y?' or 'Company A ... Kyun?' puzzle)",
+      "visual_idea": "One code snippet from frame 0 with three highlighted lines (key, base URL, model) and a green 'it ran' tick; a request card with four fields where two grey out as 'ignored' and one turns red '400'; a checklist of the three changes; then a small test table of 3 own prompts run on old and new provider with a diff, and a 'native API' door for features the layer lacks.",
+      "example": "EXAMPLE project: a support bot calling the OpenAI SDK with a strict function schema and a seed for repeatable tests. After the switch the code runs, but strict and seed are ignored, so the tool JSON may break the schema and the test reruns differ. No invented scores; only counts from the page (state/runs/q156_compat_run.py): 3 things to change, 14 simple request fields silently ignored, 4 request kinds that return a 400.",
+      "everyday_anchor": "A phone charger that fits the socket: it plugs in everywhere, yet the charging speed is not the same.",
+      "sources": [
+        "https://platform.claude.com/docs/en/cli-sdks-libraries/libraries/openai-sdk",
+        "https://aistudio.google.com/docs/openai"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-12 (Anthropic OpenAI SDK compatibility): you change the base URL (https://api.anthropic.com/v1/), the API key and the model name; the layer 'is primarily intended to test and compare model capabilities, and is not considered a long-term or production-ready solution for most use cases'; for the full feature set use the native Claude API. The strict parameter in function calling is ignored; response_format accepts only json_schema with strict true (json_object or text return 400); audio and file inputs return 400; prompt caching not supported; n must be 1; most unsupported fields are silently ignored; error messages are not equivalent.",
+        "Fetched 2026-11-12 (Google Gemini OpenAI compatibility): 'updating three lines of code' (API key, base URL https://generativelanguage.googleapis.com/v1beta/openai/, model); 'Support for the OpenAI libraries is still in beta'; unlisted parameters 'will be silently ignored'; batch file upload and download not supported through it.",
+        "Counts (3, 14, 4) are from state/runs/q156_compat_run_output.txt, counted from the Anthropic table. Table contents may change: say 'on Anthropic's page today' and do not name model versions.",
+        "Do not say OpenAI endorses or certifies other providers; the OpenAI side was not fetched (libraries page redirect gave nothing used)."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Switching Provider: What Breaks",
+      "thumb_text": "COMPATIBLE, NOT SAME",
+      "keywords": [
+        "openai compatible api",
+        "switch llm provider",
+        "base url model name",
+        "ai engineer interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-12"
+    },
+    {
+      "id": "q157",
+      "track": "interview",
+      "day": null,
+      "unit": "I5",
+      "title": "Voice Assistant: How Text Becomes Speech",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "Text to speech turns text into audio in stages: the text is split into tokens, a model makes a spectrogram (a picture of sound over time), and a vocoder turns it into a waveform; some models skip the vocoder and write the waveform directly. A voice assistant needs more than a natural-sounding sentence: stream the audio so it starts before the whole reply is ready, test the voice on your own names, numbers and Hindi-English mix, set the style with instructions where the model allows it, tell users the voice is AI-generated, and clone a voice only with the speaker's consent.",
+      "trap": "Judging only by how natural one sentence sounds, and ignoring latency, pronunciation of names and consent for cloned voices.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "तुम्हारा voice bot बोलने से पहले 6 सेकंड चुप रहा।",
+      "hook_formula": "relatable_stake (a concrete scene: a silent bot, one number, EXAMPLE)",
+      "hook_source": "strategist 2026-11-12 (relatable_stake: second oldest of the last six q, last used q142; growth note: full-sentence scene with one number)",
+      "visual_idea": "A phone call screen with a silent waveform and a counter running 0 to 6 s from frame 0; a text line turning into tokens, then a spectrogram strip, then a waveform (three stages with 1-2 word labels); two timelines of the same 48 s reply, whole file (6.0 s wait) against chunks (0.8 s wait); a four-item checklist card (stream, own names, tell users, consent) with a cloned-voice consent seal.",
+      "example": "EXAMPLE, assumed numbers, not measured (state/runs/q157_tts_run.py): a reply of 120 words at 2.5 words per second is 48 s of speech; if the whole file is made first the user waits 6.0 s in silence, if audio streams in chunks the first sound comes after 0.8 s, so 5.2 s of silence is saved.",
+      "everyday_anchor": "A person reading a letter aloud: they can start the first line while still looking at the rest.",
+      "sources": [
+        "https://developers.openai.com/api/docs/guides/text-to-speech",
+        "https://huggingface.co/learn/audio-course/en/chapter6/pre-trained_models",
+        "https://huggingface.co/learn/audio-course/en/chapter6/introduction"
+      ],
+      "facts_to_verify": [
+        "Fetched 2026-11-12 (Hugging Face audio course, pre-trained TTS models): text is tokenized; the output of the speech model is 'a log mel spectrogram and not a final waveform'; a separate vocoder (HiFi-GAN in the example) converts it to audio; Bark and MMS generate waveforms directly with no vocoder; speaker embeddings capture a voice. Intro page: TTS can be misused for convincing fake audio, so voice data should be collected with explicit consent. The pages do not cover pronunciation of numbers or names: that advice is an engineering check ('test on your own names'), not a sourced fact.",
+        "Fetched 2026-11-12 (OpenAI text-to-speech guide): endpoint /v1/audio/speech with model, input, voice, optional instructions (gpt-4o-mini-tts: accent, emotion, intonation, speed, tone); realtime streaming through chunk transfer encoding so audio can play before the whole file exists; voices optimized for English although other languages are supported; usage policies require 'a clear disclosure to end users that the TTS voice they are hearing is AI-generated'; a custom voice needs the speaker's consent recording. The page gives two different voice counts (11 and 13): do not state a count. Model names and deprecations change: do not name models in the script.",
+        "All timings in the example are assumed and labelled EXAMPLE; the 6 s in the hook is the same assumed number.",
+        "Hindi-English quality of a voice is not sourced: say 'test it' only."
+      ],
+      "length_target_s": 110,
+      "cover_headline": "Voice Assistant: Text to Speech",
+      "thumb_text": "TEST THE VOICE",
+      "keywords": [
+        "text to speech",
+        "voice assistant ai",
+        "tts streaming",
+        "ai engineer interview"
+      ],
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-12"
     }
   ]
 }

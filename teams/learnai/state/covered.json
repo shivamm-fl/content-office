@@ -1432,6 +1432,45 @@
       "production_date_ist": "2026-11-06",
       "owner_approved": false,
       "published": false
+    },
+    {
+      "id": "a021",
+      "day": 21,
+      "title": "Hallucination: Why a Fluent Answer Can Be False",
+      "track": "series",
+      "status": "planned",
+      "topic": "A language model writes plausible next words with no fact check, so a fluent, specific answer can be invented; reduce it with an I-don't-know way out, grounding quotes, claim checks and asking several times.",
+      "hook_formula": "direct_question",
+      "planned": "2026-11-12",
+      "production_date_ist": "2026-11-12",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "q156",
+      "day": null,
+      "title": "Switching Provider: OpenAI-Compatible API",
+      "track": "interview",
+      "status": "planned",
+      "topic": "OpenAI-compatible APIs: change key, base URL, model name, but some fields are ignored or rejected, so test on your own prompts before switching.",
+      "hook_formula": "company_specific",
+      "planned": "2026-11-12",
+      "production_date_ist": "2026-11-12",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "q157",
+      "day": null,
+      "title": "Voice Assistant: How Text Becomes Speech",
+      "track": "interview",
+      "status": "planned",
+      "topic": "Text to speech: tokens, spectrogram, vocoder; for a voice assistant stream the audio, test names and numbers, disclose AI voice, clone only with consent.",
+      "hook_formula": "relatable_stake",
+      "planned": "2026-11-12",
+      "production_date_ist": "2026-11-12",
+      "owner_approved": false,
+      "published": false
     }
   ]
 }

@@ -111,3 +111,9 @@ Experiments closed on n=1 each: a013 69.2 %/10.0 s and a014 74.1 %/8.7 s missed;
 Do: stop bare "X ya Y?" openers; line 1 a full sentence with a "you" scene and one number; keep q142 and q143 at 105 to 115 s; a020 about 100 s.
 Experiment: full-sentence scene hook on a020, q142 (stake), q143 (asked contrast). Bar: q142 and q143 skip at or under 62 % and watch 12 s or more; a020 skip at or under 62 %, watch 10 s or more. n=1 is a hint.
 Owner decision: none needed.
+
+## 2026-11-12 (growth analyst, standup for a021, q144, q145)
+Numbers: a019 (number + "kyun?") 53.0 % skip, 10.8 s, 1,315 views: best series skip since a007 (n=1); a020 61.8 %, 6.5 s, 401 views: skip bar met, watch bar (10 s) missed. a015 to a018 median was 72.3 %. q140 to q143 (n=4) skip 67.8, 58.5, 72.5, 61.4 %; q142 (bare question, 178 views) was the worst, scene or full-sentence hooks 58.5 to 61.4 %. q146 to q154 (n=9) median skip 67.3 %; best skip q149 61.4 % (two numbers, scene), worst q150 75.3 % and q151 71.4 %; q148 22.8 s watch, 33 % retention, 12 shares (best depth). Saves 1.2 to 3.6 per 100 reach hold. q155 and the 11-11 posts are not synced. Note: ids q144/q145 already exist in insights (tokens topics, 11-07).
+Do: line 1 a full sentence with one concrete number or scene, first teaching line by second 8; no "Company A ... Kyun?" puzzle openers.
+Experiment: a021 opens on a fluent answer with one specific false detail and a number, direct_question by second 8. Bar: skip at or under 58 %, watch 11 s or more (a019 pattern). n=1 is a hint.
+Owner decision: none needed.

@@ -1,0 +1,19 @@
+Tumhara voice bot bolne se pehle 6 second chup raha.
+
+Interview mein yahi poocha jaata hai: Voice assistant mein text ko awaaz kaise banaoge?
+
+Tumhara jawab: text teen stages se awaaz banta hai, aur achha bot jaldi bolna shuru karta hai aur naam sahi bolta hai.
+
+Maan lo bot ka jawab 120 words ka hai. Ye karib 48 second ki awaaz hai. Aasaan tareeka: poori audio file banao, phir play karo. Tab user ko pehli awaaz ke liye 6 second chup baithna padta hai. File jitni badi, intezaar utna lamba. Ye EXAMPLE ke maane hue numbers hain.
+
+Pehla step: samjho awaaz banti kaise hai. Text pehle chhote tukdon mein katta hai, jinhe tokens kehte hain. Phir model ek spectrogram banata hai, yaani samay ke saath awaaz ki tasveer. Phir vocoder us tasveer se asli waveform banata hai.
+
+Doosra step: audio ko stream karo, yaani chhote chunks mein bhejo. Jaise chitthi padhne wala pehli line bolte hue aage ki lines dekhta rehta hai. Kyunki user ko poore jawab ka nahi, pehli awaaz ka intezaar lagta hai. Hamare example mein pehli awaaz 0.8 second mein aa gayi, yaani 5.2 second ki chuppi bach gayi.
+
+Teesra step: voice ko apne naamon, numbers aur Hindi-English wali lines par test karo. Kyunki ek saaf English line achhi lagna kaafi nahi, awaaz naam aur numbers par atakti hai.
+
+Ek boundary: kisi ki awaaz clone karni ho, toh pehle uski consent lo, aur user ko batao ki ye awaaz AI ki hai.
+
+Interview mein kaho: main text ko tokens, spectrogram aur vocoder se awaaz banata hoon. Bot jaldi bole, isliye audio stream karunga, aur apne naamon par test karunga.
+
+Tumhare voice bot mein sabse badi dikkat kya hai, deri, galat naam ya robotic awaaz? Comment karo. Roz ek naya interview sawaal, poore jawab ke saath, follow karo.

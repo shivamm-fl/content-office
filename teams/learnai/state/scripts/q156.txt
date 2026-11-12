@@ -1,0 +1,19 @@
+@hook Base URL बदला, Anthropic पर code चला, settings ignore हुईं।
+
+Interviewer ने पूछा: तुम्हारा app OpenAI के SDK पर चलता है, दूसरे provider पर कैसे switch करोगे? | SDK यानी वो library, जिससे तुम्हारा code model को call करता है।
+
+तुम्हारा जवाब: API key, base URL और model name बदलो, फिर अपने prompts पर test चलाओ। | पर compatible का मतलब same नहीं होता। | इसमें 3{three} steps हैं।
+
+मान लो तुम्हारे support bot में strict लगा है, यानी tool का जवाब बँधे format में ही आए। | तुमने base URL बदलकर Anthropic पर भेजा, code चल गया, error नहीं आया। | पर Anthropic पर आज strict चुपचाप ignore होता है। | यानी format टूट सकता है, और तुम्हें पता भी नहीं चलेगा।
+
+पहला step: तीनों चीज़ें बदलो। | API key यानी provider की secret चाबी, base URL यानी request का पता, model name यानी कौन सा model चलाना है। | क्योंकि SDK वही है, बस पता और नाम बदलता है।
+
+दूसरा step: देखो क्या ignore होता है। | Anthropic के page पर आज 14{fourteen} request fields चुपचाप ignore होते हैं, जैसे seed। | और 4{चार} तरह की requests पर 400{four-hundred} error आता है, जैसे audio भेजना, यानी server request मना कर देता है। | ignore ज़्यादा ख़तरनाक है, क्योंकि error नहीं आता।
+
+तीसरा step: अपने 20{twenty} असली prompts दोनों providers पर चलाओ। | क्योंकि list बताती है क्या ignore होता है, असर तुम्हारे prompts पर test से ही दिखता है।
+
+एक boundary: Anthropic खुद कहता है कि ये layer test और compare करने के लिए है, ज़्यादातर production के लिए नहीं। | पूरे features चाहिए, तो native API लो।
+
+@emph Interview में कहो: compatible का मतलब same नहीं है। | मैं तीनों चीज़ें बदलूँगा, अपने prompts पर दोनों providers की तुलना करूँगा, और जो feature नहीं मिलेगा उसके लिए native API रखूँगा।
+
+तुम्हारे app में अभी कौन सा provider है, OpenAI, Anthropic या Gemini? Comment करो। | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।
