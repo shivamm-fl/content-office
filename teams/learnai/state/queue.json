@@ -2517,42 +2517,24 @@
     {
       "id": "q156",
       "track": "interview",
-      "day": null,
       "unit": "H5",
       "title": "Switching Provider: OpenAI-Compatible API",
       "format": "question",
       "status": "planned",
-      "one_idea": "OpenAI-compatible means you can keep the OpenAI SDK and change three things (API key, base URL, model name) to reach another provider, but it does not mean identical behaviour. Anthropic's own compatibility page says the layer is mainly for testing and comparing models, silently ignores some fields (14 simple request fields, among them seed and presence_penalty; the strict flag in function calling), and returns a 400 error for others (n other than 1, response_format json_object, audio and file inputs). Google's page calls its OpenAI-library support beta. So you switch with a test run on your own prompts, plus a fallback to the native API for features the layer lacks.",
-      "trap": "Assuming compatible means identical: base URL and model name change, but features, limits and error details can still differ, so you test before switching.",
+      "one_idea": "OpenAI-compatible means you keep the OpenAI SDK and change three things (API key, base URL, model name), but it does not mean identical behaviour. Anthropic's compatibility page says the layer is mainly for testing and comparing, silently ignores 14 simple request fields and the strict flag, and returns a 400 for some kinds of request. Google calls its OpenAI-library support beta. Switch with a test on your own prompts and keep the native API for missing features.",
+      "trap": "Assuming compatible means identical.",
       "hook_type": "company_specific",
       "company": "Anthropic",
       "company_source": "https://platform.claude.com/docs/en/cli-sdks-libraries/libraries/openai-sdk",
-      "spoken_hook": "Base URL बदला, Anthropic पर code चला, पर strict ignore हुआ।",
-      "hook_formula": "company_specific (a concrete scene: it ran, yet one setting was silently dropped)",
-      "hook_source": "strategist 2026-11-12 (company_specific: oldest of the last six q, last used q141; growth note: full sentence scene, not a bare 'X ya Y?' or 'Company A ... Kyun?' puzzle)",
-      "visual_idea": "One code snippet from frame 0 with three highlighted lines (key, base URL, model) and a green 'it ran' tick; a request card with four fields where two grey out as 'ignored' and one turns red '400'; a checklist of the three changes; then a small test table of 3 own prompts run on old and new provider with a diff, and a 'native API' door for features the layer lacks.",
-      "example": "EXAMPLE project: a support bot calling the OpenAI SDK with a strict function schema and a seed for repeatable tests. After the switch the code runs, but strict and seed are ignored, so the tool JSON may break the schema and the test reruns differ. No invented scores; only counts from the page (state/runs/q156_compat_run.py): 3 things to change, 14 simple request fields silently ignored, 4 request kinds that return a 400.",
-      "everyday_anchor": "A phone charger that fits the socket: it plugs in everywhere, yet the charging speed is not the same.",
+      "spoken_hook": "Base URL बदला, Anthropic पर code चला, settings ignore हुईं।",
+      "visual_idea": "code snippet with three highlighted lines, request card with greyed fields, checklist, test table, native API door",
       "sources": [
         "https://platform.claude.com/docs/en/cli-sdks-libraries/libraries/openai-sdk",
         "https://aistudio.google.com/docs/openai"
       ],
-      "facts_to_verify": [
-        "Fetched 2026-11-12 (Anthropic OpenAI SDK compatibility): you change the base URL (https://api.anthropic.com/v1/), the API key and the model name; the layer 'is primarily intended to test and compare model capabilities, and is not considered a long-term or production-ready solution for most use cases'; for the full feature set use the native Claude API. The strict parameter in function calling is ignored; response_format accepts only json_schema with strict true (json_object or text return 400); audio and file inputs return 400; prompt caching not supported; n must be 1; most unsupported fields are silently ignored; error messages are not equivalent.",
-        "Fetched 2026-11-12 (Google Gemini OpenAI compatibility): 'updating three lines of code' (API key, base URL https://generativelanguage.googleapis.com/v1beta/openai/, model); 'Support for the OpenAI libraries is still in beta'; unlisted parameters 'will be silently ignored'; batch file upload and download not supported through it.",
-        "Counts (3, 14, 4) are from state/runs/q156_compat_run_output.txt, counted from the Anthropic table. Table contents may change: say 'on Anthropic's page today' and do not name model versions.",
-        "Do not say OpenAI endorses or certifies other providers; the OpenAI side was not fetched (libraries page redirect gave nothing used)."
-      ],
       "length_target_s": 110,
       "cover_headline": "Switching Provider: What Breaks",
       "thumb_text": "COMPATIBLE, NOT SAME",
-      "keywords": [
-        "openai compatible api",
-        "switch llm provider",
-        "base url model name",
-        "ai engineer interview"
-      ],
-      "approval_status": "pending",
       "production_date_ist": "2026-11-12"
     },
     {

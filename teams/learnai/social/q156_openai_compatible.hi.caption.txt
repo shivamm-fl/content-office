@@ -1,0 +1,9 @@
+Base URL badla, Anthropic par code chala, par settings ignore ho gayi.
+
+OpenAI-compatible ka matlab hai wahi OpenAI SDK, bas API key, base URL aur model name badalna. Par compatible ka matlab same nahi hota. Anthropic ke page par aaj 14 simple request fields chupchap ignore hote hain (jaise seed), strict flag bhi ignore hota hai, aur kuch requests par 400 error aata hai (jaise audio). Anthropic khud kehta hai ki ye layer mainly test aur compare ke liye hai.
+
+Interview mein bolo: teenon cheezen badlunga, apne prompts par dono providers ki tulna karunga, aur jo feature nahi milega uske liye native API rakhunga.
+
+Tumhare app mein abhi kaun sa provider hai, OpenAI, Anthropic ya Gemini? Comment karo.
+
+Source: Anthropic docs, OpenAI SDK compatibility
