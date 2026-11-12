@@ -1,0 +1,9 @@
+Day 22/150: Merge Sorted Array: extra space ke bina kaise karein?
+
+Merge Sorted Array problem: do sorted arrays hain, nums1 ke end mein nums2 jitne khaali slots hain, aur merge usi nums1 mein hona chahiye. Aage se likhoge to abhi na padhi hui value overwrite ho jaati hai, aur har insert par shift karoge to time O(m x n) lagta hai (code chalaya).
+
+Peeche se bharo: teen pointers i, j, k, har step mein bada element k par likho. k hamesha i se aage rehta hai, to koi unread value overwrite nahi hoti. Time O(m + n), extra space O(1). Actual Python code video mein hai.
+
+Ab tumhara turn: nums1 [4,5,6,0,0,0] aur nums2 [1,2,3] par result kya aayega? Comment mein likho.
+
+#dsa #mergesortedarray #interviewprep

@@ -1,0 +1,6 @@
+Merge Sorted Array In Place: Merge From The Back, O(1) Space
+
+Merge Sorted Array (LeetCode 88) asks you to merge sorted nums2 into nums1, which has empty slots at its end, in place. Merging from the front overwrites nums1 values that were not read yet: on nums1 = [1,2,3,0,0,0], nums2 = [2,5,6] it gives [1,2,2,2,5,6] (the code was run to check this). Shifting elements right on every insert costs O(m x n) time. Filling from the back with three pointers, writing the larger of nums1[i] and nums2[j] at position k, never overwrites an unread value. It runs in O(m + n) time and O(1) extra space and gives [1,2,2,3,5,6] on the example.
+
+Sources:
+https://leetcode.doocs.org/en/lc/88/
