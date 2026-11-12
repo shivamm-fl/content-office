@@ -1,0 +1,52 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ]
+ ],
+ "sources": [
+  "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "wont_work_unless",
+ "copy": {
+  "hi": {
+   "A": "@hook Prompt ऐसे कभी मत लिखो: | Email लिखो। | इसमें 5{पाँच} गलतियाँ हैं, | और हर एक का fix।",
+   "B": "पहली: vague. | साफ़ लिखो: किसको, किस बारे में, कितना लंबा।",
+   "C": "दूसरी: वजह नहीं बताई। | बोलो: ये phone पर पढ़ा जाएगा, इसलिए छोटा।",
+   "D": "तीसरी: एक भी example नहीं। | 3{तीन} से 5{पाँच} अच्छे examples दो,",
+   "E": "चौथी: सब कुछ एक paragraph में। | अलग-अलग XML tags में रखो, | यानी हर हिस्से पर एक label।",
+   "F": "पाँचवीं: role नहीं दिया। | System prompt में, यानी सबसे ऊपर की setting में, | तुम एक HR manager हो।",
+   "G": "5{five} techniques और 10{ten} ready templates वाला prompt pack चाहिए? | PROMPT comment करो, | सीधे DM में।"
+  }
+ }
+}

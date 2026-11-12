@@ -1,0 +1,53 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ]
+ ],
+ "sources": [],
+ "hook_type": "relatable_stake",
+ "template": "not_a_neither_b",
+ "copy": {
+  "hi": {
+   "A": "@hook AI engineer बनना है? | हर हफ्ते नया tool सीखना ज़रूरी नहीं। | 50{fifty} courses भी नहीं। | बस ये 6{six} skills।",
+   "B": "पहली, prompting: | model से सही काम निकलवाना। | जैसे नए intern को काम समझाते हो, | साफ़-साफ़, example के साथ।",
+   "C": "दूसरी, embeddings: | text को numbers में बदलना, | ताकि सस्ता phone search करो, | तो budget mobile भी मिल जाए।",
+   "D": "तीसरी, RAG: | model को तुम्हारी अपनी files से जवाब दिलवाना, | जैसे open-book exam।",
+   "E": "चौथी, agents: | model ख़ुद tools चलाए, | search करे, code चलाए, | और काम पूरा करके लौटे।",
+   "F": "पाँचवीं, evals: | हर बदलाव के बाद test, | ताकि पता चले जवाब सुधरा या बिगड़ा।",
+   "G": "और छठी, production: | cost, speed और monitoring। | क्योंकि demo पर 10{दस} लोग होते हैं, | असली app पर हज़ारों।",
+   "H": "इन 6{six} skills का पूरा roadmap, | 160{one-sixty} concepts के साथ, चाहिए? | ROADMAP comment करो, | PDF सीधे DM में।"
+  }
+ }
+}
