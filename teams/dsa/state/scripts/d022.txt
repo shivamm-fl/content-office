@@ -1,0 +1,17 @@
+Interviewer ने पूछा: Merge Sorted Array, extra space के बिना कैसे?
+
+Problem: दो sorted arrays हैं, nums1 और nums2। | nums1 के आख़िर में nums2 जितने खाली slots हैं, और merge उसी nums1 में होना चाहिए। | Given nums1: one, two, three, zero, zero, zero, m equals three | nums2: two, five, six, n equals three।
+
+सबसे सीधा तरीका: आगे से merge करो, यानी हर बार छोटा element nums1 के front में लिखो। | पर front में लिखना उन values को overwrite करता है जो अभी पढ़ी ही नहीं गईं। | तीसरे step पर nums2 का two nums1 के index two पर लिखा जाता है, और वहाँ की three मिट जाती है। | Result में three कभी आता ही नहीं, आख़िर में one, two, two, two, five, six मिलता है।
+
+दूसरा तरीका: nums2 का हर element सही जगह insert करो, बाकी सबको right shift करके। | यह सही है, पर worst case में हर insert m elements खिसकाता है, तो time O of m times n। | m और n दोनों सौ हों, तो दस हज़ार shifts लगते हैं।
+
+असली बात यह है कि nums1 के खाली slots पीछे हैं। | तो पीछे से भरो: तीन pointers, i आख़िरी real element पर, j nums2 के आख़िर पर, और k nums1 के आख़िरी slot पर। | हर step में दोनों में जो बड़ा है, वो k पर लिखो। | k हमेशा i से आगे रहता है, तो अनपढ़ी value कभी overwrite नहीं होती।
+
+अब dry run। | three और six: six बड़ा है, तो k पर six, j पीछे। | three और five: five बड़ा है, तो five। | three और two: three बड़ा है, तो three, i पीछे। | two और two: बराबर है, तो nums2 वाला two लिखो। | अब nums2 खत्म है, और nums1 का बचा हुआ one, two अपनी सही जगह पर ही है। | Result: one, two, two, three, five, six।
+
+Loop तब रुकता है जब nums2 खत्म हो जाए, क्योंकि nums1 का बचा हिस्सा पहले से sorted और सही जगह पर है।
+
+हर step एक element रखता है, तो time O of m plus n है। | सिर्फ़ तीन pointers हैं, तो extra space O one है।
+
+Comments में बताओ: Given nums1 four, five, six, zero, zero, zero और nums2 one, two, three पर result क्या आएगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।

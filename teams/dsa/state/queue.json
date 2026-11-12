@@ -198,6 +198,59 @@
       ],
       "qa_passed": false,
       "everyday_anchor": "none: audience is working engineers, technical register, no everyday analogy (owner 2026-10-26)"
+    },
+    {
+      "id": "d022",
+      "track": "series",
+      "day": 22,
+      "unit": "P2",
+      "title": "Merge Sorted Array: पीछे से merge करो, extra space के बिना O(m+n)",
+      "format": "problem",
+      "status": "planned",
+      "script_file": "state/scripts/d022.txt",
+      "script_locked": false,
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: Merge Sorted Array, extra space के बिना कैसे?",
+      "hook_formula": "interviewer_plain_problem_question",
+      "hook_source": "interviewer_asked; least used among d016-d021 (surprising_fact x2, relatable_stake x2, interviewer_asked x1, direct_question x1) and the oldest of the least used, since d021 was direct_question. Payoff verified: doocs 0088 and run in qa/d022/run.py. No company claim.",
+      "hook_candidates": [
+        {
+          "formula": "interviewer_plain_problem_question",
+          "text": "Interviewer ने पूछा: Merge Sorted Array, extra space के बिना कैसे?"
+        },
+        {
+          "formula": "payoff_first",
+          "text": "Merge Sorted Array सिर्फ़ तीन pointers से, पीछे से merge करके।"
+        },
+        {
+          "formula": "wrong_way_first",
+          "text": "Merge Sorted Array आगे से merge किया, तो values मिट गईं!"
+        }
+      ],
+      "hook_10s": "Interviewer ने पूछा: Merge Sorted Array, extra space के बिना कैसे? [Frame 0: two sorted rows, nums1 with three empty slots at the right end, nums2 above it, a pointer at each last element]",
+      "one_idea": "Merge Sorted Array: merge sorted nums2 into nums1, which has empty slots at its end, in place; merging from the front overwrites nums1 values not yet read, and shifting on every insert costs O(m*n), so fill from the back with three pointers, writing the larger of nums1[i] and nums2[j] at k, which never overwrites an unread value (O(m+n) time, O(1) extra space).",
+      "visual_idea": "Two rows of cells: nums1 with three empty slots at the right end, nums2 above. Scene 2: a forward write pointer lands on nums1's index-two cell and the unread 3 cell crumbles to a copy of 2 under a LOST tag. Scene 3: the empty tail is tinted as free space and three pointer tags i, j, k sit at the right ends. Scene 4: each step compares two lit cells, the larger drops into the cell under k and the pointers hop left, filling the tail until the row reads sorted. A side bar compares 10,000 shift steps with 200 back-merge steps.",
+      "example": "EXAMPLE nums1 [1,2,3,0,0,0] m=3, nums2 [2,5,6] n=3 gives [1,2,2,3,5,6]; nums1 [4,5,6,0,0,0], nums2 [1,2,3] gives [1,2,3,4,5,6].",
+      "code_outline": "def merge(nums1, m, nums2, n): k, i, j = m+n-1, m-1, n-1; while j >= 0: write the larger of nums1[i] (if i >= 0) and nums2[j] at nums1[k], move that pointer and k left. Code run in qa/d022/run.py.",
+      "sources": [
+        "https://leetcode.doocs.org/en/lc/88/"
+      ],
+      "facts_to_verify": [
+        "doocs LC 88 (fetched): three pointers from the back, O(m+n) time, O(1) space; the page lists only this approach, so the forward-overwrite failure and the shift brute force O(m*n) are our own derivation.",
+        "Run the code and show its real output (qa/d022/run.py: back merge matched sorted() on 5000 random cases; forward in-place merge wrong on 3203 of 5000; the example forward gives [1,2,2,2,5,6])."
+      ],
+      "length_target_s": 150,
+      "cover_headline": "Merge Sorted Array With O(1) Space",
+      "thumb_text": "MERGE FROM BACK",
+      "keywords": [
+        "merge sorted array",
+        "leetcode 88",
+        "merge sorted array in place",
+        "merge sorted array python",
+        "DSA hinglish"
+      ],
+      "qa_passed": false,
+      "everyday_anchor": "none: audience is working engineers, technical register, no everyday analogy (owner 2026-10-26)"
     }
   ]
 }
