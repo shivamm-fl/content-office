@@ -1,0 +1,15 @@
+@hook AI ने नकली किताब के 312{three-twelve} pages बताए। क्यों?
+
+मैंने एक किताब खुद बनाई, The Tin Lantern। ये किताब कहीं है ही नहीं। || फिर भी AI से पूछा: The Tin Lantern कितने pages की है? | जवाब आया: 312{three-twelve} pages, Ramesh ने लिखी। || ये EXAMPLE है। इसे कहते हैं hallucination, यानी AI का बिना जाने, सही जैसा लगने वाला झूठ बोल देना।
+
+क्यों? | क्योंकि model बस अगला likely word चुनता है। | उस step में कोई facts check नहीं करता।
+
+मान लो model लिख रहा है: The Tin Lantern was written by... || अब अगला word। | Model हर नाम को एक score देता है, यानी उसके आने का chance। || Ramesh, 32{thirty-two} percent। | Anita, 21{twenty-one} percent। | Vikram, 19{nineteen} percent। | Meera, 14{fourteen} percent। | Sanjay, 12{twelve} percent। | और "I don't know", सिर्फ़ 2{two} percent। || ये numbers EXAMPLE के हैं, real model के नहीं।
+
+सबसे ऊपर Ramesh है, क्योंकि वो सबसे likely है, सच है इसलिए नहीं। || और "I don't know" नीचे है, क्योंकि कई evaluations में अंदाज़ा लगाने पर ज़्यादा अंक मिलते हैं, चुप रहने पर नहीं। | इसीलिए models guess करना सीखते हैं।
+
+अब इसे कम कैसे करें? | Anthropic की guide के तीन तरीके हैं। || पहला: model को रास्ता दो। | कहो, "अगर पक्का नहीं पता, तो बोलो I don't know"। | क्योंकि जब ये option खुला होता है, तो वो guess की जगह मना कर सकता है। || दूसरा: अपने documents दो, और हर बात के साथ उन्हीं में से एक quote माँगो। | जिस claim का quote नहीं मिले, उसे हटा दो। | क्योंकि quote हो तो तुम खुद जाँच सकते हो। || तीसरा: वही सवाल कई बार पूछो। | मान लो पाँच बार पूछा, तो नाम आए Anita, Ramesh, Vikram, Ramesh, Vikram। | तीन अलग नाम, यानी जवाब पक्का नहीं है।
+
+एक boundary: ये तीनों तरीके hallucination को कम करते हैं, ख़त्म नहीं करते। | इसलिए ज़रूरी बात, जैसे तारीख़, पैसा या नाम, अपनी आँख से एक बार जाँच लो।
+
+तुम्हें कभी AI ने कोई नकली चीज़ confidently बताई है? Comment करो। | रोज़ एक AI concept आसानी से समझने के लिए follow करो।
