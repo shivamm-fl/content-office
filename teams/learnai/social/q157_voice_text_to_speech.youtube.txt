@@ -1,0 +1,13 @@
+Text to Speech: Voice Bot Interview Answer
+
+Voice assistant mein text ko awaaz kaise banate hain: text tokens mein katta hai, model spectrogram banata hai, vocoder waveform banata hai (kuch models waveform seedha likhte hain). Bot jaldi bole isliye audio stream karo, apne naamon aur numbers par voice test karo, user ko batao ki awaaz AI-generated hai, aur voice clone sirf speaker ki consent se karo. Example (assumed, measured nahi): 120 words ka jawab 48 second ki awaaz, poori file pehle to 6.0 second wait, chunks mein 0.8 second.
+
+Comment karke batao: tumhare voice bot mein sabse badi dikkat kya hai, deri, galat naam ya robotic awaaz?
+
+Sources:
+https://developers.openai.com/api/docs/guides/text-to-speech
+https://huggingface.co/learn/audio-course/en/chapter6/pre-trained_models
+https://huggingface.co/learn/audio-course/en/chapter6/introduction
+
+Tags: text to speech,voice assistant ai,tts streaming,ai engineer interview
+AI-assisted visuals and narration.

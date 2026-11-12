@@ -1,0 +1,7 @@
+Tumhara voice bot bolne se pehle 6 second chup raha, kyun?
+
+Voice assistant mein (spectrogram aur vocoder wale models mein) text teen stages se awaaz banta hai: text tokens mein katta hai, model spectrogram (samay ke saath awaaz ki tasveer) banata hai, phir vocoder us se waveform banata hai. Par sirf achhi awaaz kaafi nahi: audio stream karo taaki pehli awaaz poora jawab ready hone se pehle aa jaye, apne naamon, numbers aur Hindi-English lines par voice test karo, user ko batao ki awaaz AI ki hai, aur kisi ki awaaz clone karni ho to pehle uski consent lo. Example (assumed numbers, measured nahi): 120 words ka jawab 48 second ki awaaz hai, poori file ke baad play karo to 6.0 second chup, stream karo to 0.8 second mein pehli awaaz.
+
+Comment karke batao: tumhare voice bot mein sabse badi dikkat kya hai, deri, galat naam ya robotic awaaz?
+
+#AIEngineering #VoiceAI #Learnvora

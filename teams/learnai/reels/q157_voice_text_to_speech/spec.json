@@ -1,0 +1,144 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 1,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G"
+  ],
+  "min": {
+    "A": 2,
+    "B": 2,
+    "C": 2,
+    "D": 2,
+    "E": 2,
+    "F": 2,
+    "G": 2
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "tick",
+      "A",
+      0,
+      0.5
+    ],
+    [
+      "pop",
+      "A",
+      1,
+      0
+    ],
+    [
+      "dip",
+      "A",
+      3,
+      -0.1
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "B",
+      4,
+      0
+    ],
+    [
+      "err",
+      "B",
+      4,
+      0.3
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "C",
+      2,
+      0
+    ],
+    [
+      "pop",
+      "C",
+      4,
+      0
+    ],
+    [
+      "rise",
+      "D",
+      0,
+      0
+    ],
+    [
+      "ok",
+      "D",
+      4,
+      0
+    ],
+    [
+      "dip",
+      "E",
+      1,
+      -0.1
+    ],
+    [
+      "err",
+      "E",
+      2,
+      0.2
+    ],
+    [
+      "lock",
+      "F",
+      0,
+      0.3
+    ],
+    [
+      "pop",
+      "G",
+      1,
+      0
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook तुम्हारा voice bot बोलने से पहले 6{छह} सेकंड चुप रहा। || Interview में यही पूछा जाता है: | Voice assistant में text को आवाज़ कैसे बनाओगे? || तुम्हारा जवाब: | text तीन stages से आवाज़ बनता है, | और अच्छा bot जल्दी बोलना शुरू करता है और नाम सही बोलता है।",
+      "B": "मान लो bot का जवाब 120{one-twenty} words का है। | ये करीब 48{अड़तालीस} सेकंड की आवाज़ है। | आसान तरीका: | पूरी audio file बनाओ, फिर play करो। | तब user को पहली आवाज़ के लिए 6{छह} सेकंड चुप बैठना पड़ता है। | File जितनी बड़ी, इंतज़ार उतना लंबा। | ये EXAMPLE के मान लिए numbers हैं।",
+      "C": "पहला step: समझो आवाज़ बनती कैसे है। | Text पहले छोटे टुकड़ों में कटता है, जिन्हें tokens कहते हैं। | फिर model एक spectrogram बनाता है, | यानी समय के साथ आवाज़ की तस्वीर। | फिर vocoder उस तस्वीर से असली waveform बनाता है।",
+      "D": "दूसरा step: audio को stream करो, | यानी छोटे chunks में भेजो। | जैसे चिट्ठी पढ़ने वाला पहली line बोलते हुए आगे की lines देखता रहता है। | क्योंकि user को पूरे जवाब का नहीं, पहली आवाज़ का इंतज़ार लगता है। | हमारे example में पहली आवाज़ 0.8{ज़ीरो-पॉइंट-आठ} सेकंड में आ गई, | यानी 5.2{पाँच-पॉइंट-दो} सेकंड की चुप्पी बच गई।",
+      "E": "तीसरा step: voice को अपने नामों, numbers और Hindi-English वाली lines पर test करो। | क्योंकि एक साफ़ English line अच्छी लगना काफ़ी नहीं, | आवाज़ नाम और numbers पर अटकती है।",
+      "F": "एक boundary: किसी की आवाज़ clone करनी हो, तो पहले उसकी consent लो, | और user को बताओ कि ये आवाज़ AI की है। || @emph Interview में कहो: मैं text को tokens, spectrogram और vocoder से आवाज़ बनाता हूँ। | Bot जल्दी बोले, इसलिए audio stream करूँगा, और अपने नामों पर test करूँगा।",
+      "G": "तुम्हारे voice bot में सबसे बड़ी दिक्कत क्या है, | देरी, गलत नाम या robotic आवाज़? | Comment करो। | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!",
+  "hook_type": "relatable_stake",
+  "sources": [
+    "https://developers.openai.com/api/docs/guides/text-to-speech",
+    "https://huggingface.co/learn/audio-course/en/chapter6/pre-trained_models",
+    "https://huggingface.co/learn/audio-course/en/chapter6/introduction"
+  ]
+}

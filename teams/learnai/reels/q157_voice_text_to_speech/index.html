@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Voice Assistant: How Text Becomes Speech</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/fx.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="96" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+                <div class="beat" id="sA">
+          <div class="x c red" id="a_t" style="top:190px; font-size:130px;">6 s SILENCE</div>
+          <div class="card" id="a_ph" style="left:100px; top:350px; width:880px; height:640px;">
+            <div class="x mut" style="left:50px; top:34px; font-size:46px;">VOICE BOT · CALL</div>
+            <div class="x red" id="a_n" style="left:0; width:880px; top:150px; text-align:center; font-size:250px;">0.0 s</div>
+            <div style="position:absolute; left:60px; top:500px; width:760px; height:8px; border-radius:4px; background:#26324B;"></div>
+            <div class="x mut" style="left:0; width:880px; top:540px; text-align:center; font-size:50px;">NO SOUND</div>
+          </div>
+          <div class="chip" id="a_iq" style="left:190px; top:1040px; width:700px; background:#F2B544; color:#0B1220; font-size:46px;">INTERVIEW QUESTION</div>
+          <div class="card" id="a_q" style="left:60px; top:1130px; width:960px; height:160px;"><div class="x c" style="left:0; width:960px; top:36px; font-size:84px;">TEXT to <span class="gold">VOICE</span>?</div></div>
+          <div class="chip" id="a_yc" style="left:190px; top:190px; width:700px; background:#F2B544; color:#0B1220; font-size:60px;">YOUR ANSWER</div>
+          <div class="card" id="a_r1" style="left:60px; top:340px; width:960px; height:250px; border-color:#5BC0EB;"><div class="x gold" style="left:50px; top:56px; font-size:130px;">3</div><div class="x" style="left:190px; top:76px; font-size:100px;">STAGES</div></div>
+          <div class="card" id="a_r2" style="left:60px; top:650px; width:960px; height:250px; border-color:#5BC0EB;"><div class="x gold" style="left:50px; top:56px; font-size:130px;">+</div><div class="x" style="left:190px; top:76px; font-size:100px;">FAST START</div></div>
+          <div class="card" id="a_r3" style="left:60px; top:960px; width:960px; height:250px; border-color:#5BC0EB;"><div class="x gold" style="left:50px; top:56px; font-size:130px;">+</div><div class="x" style="left:190px; top:76px; font-size:100px;">RIGHT NAMES</div></div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="chip" id="b_ex" style="left:340px; top:190px; width:400px; border:4px solid #F2B544; color:#F2B544; font-size:48px;">EXAMPLE</div>
+          <div class="card" id="b_rep" style="left:60px; top:290px; width:960px; height:270px;">
+            <div class="x mut" style="left:50px; top:28px; font-size:46px;">BOT REPLY</div>
+            <div class="x gold" style="left:560px; top:20px; width:350px; text-align:right; font-size:66px;">120 words</div>
+            <div class="tok" style="left:50px; top:120px; width:860px; height:22px;"></div>
+            <div class="tok" style="left:50px; top:164px; width:760px; height:22px;"></div>
+            <div class="tok" style="left:50px; top:208px; width:820px; height:22px;"></div>
+          </div>
+          <div class="x mut" id="b_l1" style="left:90px; top:610px; font-size:44px;">SPEECH · 48 s</div>
+          <div class="hbar" id="b_sp" style="left:90px; top:670px; width:800px; height:90px; background:#5BC0EB;"></div>
+          <div class="x mut" id="b_l2" style="left:90px; top:820px; font-size:44px;">WHOLE FILE FIRST</div>
+          <div class="hbar" id="b_red" style="left:90px; top:880px; width:100px; height:90px; background:#E8596B;"></div>
+          <div class="hbar" id="b_grn" style="left:190px; top:880px; width:800px; height:90px; background:#4CC38A;"></div>
+          <div class="x red" id="b_w" style="left:0; width:1080px; text-align:center; top:1040px; font-size:190px;">0.0 s</div>
+          <div class="x mut" id="b_wl" style="left:0; width:1080px; text-align:center; top:1250px; font-size:44px;">SILENT WAIT</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" id="c_in" style="top:190px; font-size:80px;">Hello Asha, order ready</div>
+          <div class="card" id="c_s1" style="left:60px; top:320px; width:960px; height:220px; border-color:#5BC0EB;">
+            <div class="x cyan" style="left:40px; top:24px; font-size:44px;">1 · TOKENS</div>
+            <div id="c_tk"></div>
+          </div>
+          <div class="chip" id="c_m1" style="left:340px; top:556px; width:400px; background:#26324B; color:#E8EDF6; font-size:40px;">MODEL</div>
+          <div class="card" id="c_s2" style="left:60px; top:640px; width:960px; height:250px; border-color:#F2B544;">
+            <div class="x gold" style="left:40px; top:20px; font-size:44px;">2 · SPECTROGRAM</div>
+            <div class="x mut" style="left:560px; top:26px; width:360px; text-align:right; font-size:40px;">time →</div>
+            <div id="c_sp"></div>
+          </div>
+          <div class="chip" id="c_m2" style="left:340px; top:904px; width:400px; background:#F2B544; color:#0B1220; font-size:40px;">VOCODER</div>
+          <div class="card" id="c_s3" style="left:60px; top:990px; width:960px; height:250px; border-color:#4CC38A;">
+            <div class="x green" style="left:40px; top:20px; font-size:44px;">3 · WAVEFORM</div>
+            <svg id="c_wv" style="position:absolute; left:40px; top:80px; transform-origin:0 50%;" width="880" height="150" viewBox="0 0 880 150"></svg>
+          </div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="chip" id="d_h" style="left:190px; top:190px; width:700px; background:#F2B544; color:#0B1220; font-size:56px;">STREAM = CHUNKS</div>
+          <div class="x mut" id="d_l1" style="left:70px; top:310px; font-size:44px;">WHOLE FILE</div>
+          <div class="x red" id="d_t1" style="left:520px; width:490px; text-align:right; top:296px; font-size:64px;">6.0 s</div>
+          <div class="hbar" id="d_w1r" style="left:70px; top:390px; width:100px; height:90px; background:#E8596B;"></div>
+          <div class="hbar" id="d_w1g" style="left:170px; top:390px; width:800px; height:90px; background:#4CC38A;"></div>
+          <div class="x mut" id="d_l2" style="left:70px; top:540px; font-size:44px;">STREAMED</div>
+          <div class="x green" id="d_t2" style="left:520px; width:490px; text-align:right; top:526px; font-size:64px;">0.8 s</div>
+          <div class="hbar" id="d_w2r" style="left:70px; top:620px; width:13px; height:90px; background:#E8596B;"></div>
+          <div id="d_ch"></div>
+          <div class="card" id="d_sheet" style="left:160px; top:790px; width:760px; height:310px;">
+            <div class="x mut" style="left:40px; top:22px; font-size:40px;">READER</div>
+            <div class="hbar" id="d_ln1" style="left:40px; top:100px; width:680px; height:30px; background:#F2B544;"></div>
+            <div class="hbar" id="d_ln2" style="left:40px; top:170px; width:560px; height:30px; background:#26324B;"></div>
+            <div class="hbar" id="d_ln3" style="left:40px; top:240px; width:620px; height:30px; background:#26324B;"></div>
+          </div>
+          <div class="chip" id="d_sv" style="left:190px; top:1170px; width:700px; background:#4CC38A; color:#0B1220; font-size:64px;">5.2 s SAVED</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="chip" id="e_h" style="left:60px; top:190px; width:560px; background:#F2B544; color:#0B1220; font-size:48px;">TEST LINES</div>
+          <div class="chip" id="e_ex" style="left:680px; top:190px; width:340px; border:4px solid #F2B544; color:#F2B544; font-size:44px;">EXAMPLE</div>
+          <div class="card" id="e_1" style="left:60px; top:300px; width:960px; height:210px;"><div class="x mut" style="left:40px; top:24px; font-size:40px;">NAME</div><div class="x" style="left:40px; top:90px; font-size:58px;">Aarav Venkataraghavan</div></div>
+          <div class="card" id="e_2" style="left:60px; top:550px; width:960px; height:210px;"><div class="x mut" style="left:40px; top:24px; font-size:40px;">NUMBER</div><div class="x" style="left:40px; top:90px; font-size:70px;">Rs 1,24,500</div></div>
+          <div class="card" id="e_3" style="left:60px; top:800px; width:960px; height:210px;"><div class="x mut" style="left:40px; top:24px; font-size:40px;">HINDI + ENGLISH</div><div class="x" style="left:40px; top:90px; font-size:62px;">Order ready hai, confirm karo</div></div>
+          <div class="card" id="e_4" style="left:60px; top:1050px; width:960px; height:210px;"><div class="x mut" style="left:40px; top:24px; font-size:40px;">CLEAN ENGLISH</div><div class="x" style="left:40px; top:90px; font-size:70px;">Hello, how are you?</div></div>
+          <div class="chip" id="e_ok" style="left:740px; top:1064px; width:250px; background:#4CC38A; color:#0B1220; font-size:38px;">SOUNDS OK</div>
+          <div class="chip" id="e_x1" style="left:740px; top:314px; width:250px; background:#E8596B; color:#0B1220; font-size:38px;">STUMBLES</div>
+          <div class="chip" id="e_x2" style="left:740px; top:564px; width:250px; background:#E8596B; color:#0B1220; font-size:38px;">STUMBLES</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="card" id="f_c1" style="left:60px; top:230px; width:960px; height:560px;">
+            <div class="x mut" style="left:40px; top:24px; font-size:44px;">VOICE CLONE</div>
+            <div style="position:absolute; left:140px; top:140px; width:110px; height:110px; border-radius:55px; background:#26324B; border:4px solid #5BC0EB;"></div>
+            <div style="position:absolute; left:100px; top:270px; width:190px; height:100px; border-radius:60px 60px 0 0; background:#26324B; border:4px solid #5BC0EB;"></div>
+            <div class="x mut" style="left:100px; top:390px; width:190px; text-align:center; font-size:40px;">SPEAKER</div>
+            <div style="position:absolute; left:340px; top:250px; width:200px; height:12px; background:#5BC0EB; border-radius:6px;"></div>
+            <div style="position:absolute; left:530px; top:230px; width:0; height:0; border-left:36px solid #5BC0EB; border-top:26px solid transparent; border-bottom:26px solid transparent;"></div>
+            <div class="box" style="left:640px; top:140px; width:260px; height:230px; border:4px solid #F2B544; font-size:50px; color:#F2B544;">CLONE</div>
+            <div class="chip" id="f_cs" style="left:300px; top:440px; width:480px; border:5px solid #4CC38A; color:#4CC38A; font-size:56px;">CONSENT</div>
+          </div>
+          <div class="card" id="f_c2" style="left:60px; top:830px; width:960px; height:460px; border-color:#F2B544;">
+            <div class="x mut" style="left:40px; top:24px; font-size:44px;">USER NOTICE</div>
+            <div style="position:absolute; left:110px; top:100px; width:220px; height:330px; border-radius:40px; border:5px solid #5BC0EB; background:#0B1220;"></div>
+            <div style="position:absolute; left:150px; top:200px; width:14px; height:70px; border-radius:7px; background:#5BC0EB;"></div>
+            <div style="position:absolute; left:190px; top:170px; width:14px; height:130px; border-radius:7px; background:#5BC0EB;"></div>
+            <div style="position:absolute; left:230px; top:215px; width:14px; height:40px; border-radius:7px; background:#5BC0EB;"></div>
+            <div style="position:absolute; left:270px; top:185px; width:14px; height:100px; border-radius:7px; background:#5BC0EB;"></div>
+            <div class="chip" style="left:400px; top:150px; width:480px; border:5px solid #F2B544; color:#F2B544; font-size:92px; padding:30px 20px;">AI VOICE</div>
+            <div class="x mut" style="left:400px; top:340px; width:480px; text-align:center; font-size:48px;">TELL THE USER</div>
+          </div>
+          <div class="chip" id="f_h" style="left:190px; top:190px; width:700px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="card" id="f_r1" style="left:60px; top:300px; width:960px; height:150px; border-color:#5BC0EB;"><div class="x gold" style="left:40px; top:30px; font-size:86px;">1</div><div class="x" style="left:150px; top:36px; font-size:76px;">TOKENS</div></div>
+          <div class="card" id="f_r2" style="left:60px; top:490px; width:960px; height:150px; border-color:#5BC0EB;"><div class="x gold" style="left:40px; top:30px; font-size:86px;">2</div><div class="x" style="left:150px; top:36px; font-size:76px;">SPECTROGRAM</div></div>
+          <div class="card" id="f_r3" style="left:60px; top:680px; width:960px; height:150px; border-color:#5BC0EB;"><div class="x gold" style="left:40px; top:30px; font-size:86px;">3</div><div class="x" style="left:150px; top:36px; font-size:76px;">VOCODER</div></div>
+          <div class="card" id="f_r4" style="left:60px; top:900px; width:960px; height:150px; border-color:#F2B544;"><div class="x" style="left:40px; top:36px; font-size:76px;"><span class="gold">STREAM</span> the audio</div></div>
+          <div class="card" id="f_r5" style="left:60px; top:1090px; width:960px; height:150px; border-color:#F2B544;"><div class="x" style="left:40px; top:36px; font-size:76px;"><span class="gold">TEST</span> your names</div></div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="x c" id="g_h" style="top:200px; font-size:100px;">BIGGEST<br/><span class="gold">PROBLEM?</span></div>
+          <div class="card" id="g_1" style="left:140px; top:470px; width:800px; height:150px; border-color:#5BC0EB;"><div class="x" style="left:40px; top:34px; font-size:76px;">DELAY</div><div style="position:absolute; left:500px; top:55px; width:60px; height:40px; border-radius:8px; background:#E8596B;"></div><div style="position:absolute; left:560px; top:55px; width:200px; height:40px; border-radius:8px; background:#4CC38A;"></div></div>
+          <div class="card" id="g_2" style="left:140px; top:660px; width:800px; height:150px; border-color:#5BC0EB;"><div class="x" style="left:40px; top:34px; font-size:76px;">WRONG NAME</div><div class="x red" style="left:555px; top:50px; font-size:54px;">Aarab?</div></div>
+          <div class="card" id="g_3" style="left:140px; top:850px; width:800px; height:150px; border-color:#5BC0EB;"><div class="x" style="left:40px; top:34px; font-size:76px;">ROBOTIC VOICE</div><svg style="position:absolute; left:640px; top:45px;" width="140" height="60" viewBox="0 0 140 60"><path d="M0 30H140" stroke="#E8596B" stroke-width="6"/></svg></div>
+          <div class="chip" id="g_c" style="left:240px; top:1070px; width:600px; background:#F2B544; color:#0B1220; font-size:56px;">COMMENT KARO</div>
+          <div class="chip" id="g_f" style="left:240px; top:1190px; width:600px; border:4px solid #F2B544; color:#F2B544; font-size:56px;">+ FOLLOW</div>
+        </div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="96" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="96" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="96" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      const sec = (v) => v.toFixed(1) + " s";
+      // diagram: A  silence counter from frame 0, then the answer in three parts
+      count("#a_n", 0, 6, 0.05, 2.4, sec);
+      show("#a_iq", at("A", "interview"), { s: 0.9 });
+      show("#a_q", at("A", "assistant"), { s: 0.95 });
+      hide(["#a_t", "#a_ph", "#a_iq", "#a_q"], at("A", "jawab") - 0.1, 0.2);
+      show("#a_yc", at("A", "jawab"), { s: 0.9 });
+      show("#a_r1", at("A", "teen"), { s: 0.9 });
+      show("#a_r2", at("A", "jaldi"), { s: 0.9 });
+      show("#a_r3", at("A", "naam"), { s: 0.9 });
+      // diagram: B  48 s of speech, whole file first, the silent wait
+      show("#b_ex", 15.0, { s: 0.9 });
+      show("#b_rep", at("B", "bot"), { s: 0.95 });
+      show("#b_l1", at("B", "48") - 0.1, { s: 1, y: 10 });
+      wipe("#b_sp", at("B", "48"), 0.9);
+      show("#b_l2", at("B", "poori") - 0.1, { s: 1, y: 10 });
+      tl.fromTo("#b_red", { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: "power1.out" }, at("B", "file"));
+      tl.fromTo("#b_grn", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power2.out" }, at("B", "file") + 1.5);
+      show("#b_w", at("B", "6") - 0.1, { s: 1.15 });
+      count("#b_w", 0, 6, at("B", "6") - 0.1, 0.9, sec);
+      show("#b_wl", at("B", "chup"), { s: 1, y: 10 });
+      // diagram: C  text -> tokens -> spectrogram -> waveform
+      const tk = ["Hel", "lo", " Asha", ",", " order", " ready"]; let tx = 40;
+      tk.forEach((t, i) => { const w = 30 + t.length * 24; const d = document.createElement("div"); d.className = "tok c_tk"; d.style.cssText = `left:${tx}px; top:100px; width:${w}px; height:90px; border-color:#5BC0EB; display:flex; align-items:center; justify-content:center; font:700 38px 'JetBrains Mono',monospace; color:#E8EDF6; white-space:pre;`; d.textContent = t; q("#c_tk").appendChild(d); tx += w + 10; });
+      const cols = 24, rows = 5; for (let c = 0; c < cols; c++) for (let r = 0; r < rows; r++) { const v = 0.15 + 0.8 * Math.abs(Math.sin(c * 0.55 + r * 1.3) * Math.cos(c * 0.21 + r)); const d = document.createElement("div"); d.className = "tok c_sc c_col" + c; d.style.cssText = `left:${40 + c * 37}px; top:${84 + r * 31}px; width:33px; height:27px; border:0; border-radius:4px; background:rgba(242,181,68,${v.toFixed(2)});`; q("#c_sp").appendChild(d); }
+      let pth = ""; for (let x = 0; x <= 880; x += 4) { const env = Math.sin(Math.PI * x / 880) ** 0.6 * (0.55 + 0.45 * Math.sin(x / 70)); const y = 75 + 62 * env * Math.sin(x / 7.5); pth += (x ? "L" : "M") + x + " " + y.toFixed(1); }
+      q("#c_wv").innerHTML = `<path d="${pth}" fill="none" stroke="#4CC38A" stroke-width="5" stroke-linejoin="round"/>`;
+      show("#c_in", at("C", "pahla"), { s: 1, y: 14 });
+      show("#c_s1", at("C", "text"), { s: 0.95 });
+      qa(".c_tk").forEach((el, i) => show(el, at("C", "tokens") - 0.5 + i * 0.12, { s: 0.9, y: 8 }));
+      show("#c_m1", at("C", "model"), { s: 1, y: 8 });
+      show("#c_s2", at("C", "spectrogram") - 0.1, { s: 0.95 });
+      for (let c = 0; c < cols; c++) qa(".c_col" + c).forEach((el) => show(el, at("C", "spectrogram") + 0.1 + c * 0.03, { s: 1, y: 0, d: 0.2, ease: "power2.out" }));
+      show("#c_m2", at("C", "vocoder"), { s: 1, y: 8 });
+      show("#c_s3", at("C", "asli") - 0.1, { s: 0.95 });
+      wipe("#c_wv", at("C", "waveform"), 0.9);
+      // diagram: D  whole file against streamed chunks, same 48 s reply
+      show("#d_h", at("D", "doosra"), { s: 0.9 });
+      show("#d_l1", at("D", "stream") + 0.2, { s: 1, y: 10 });
+      tl.fromTo("#d_w1r", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.out" }, at("D", "stream") + 0.3);
+      tl.fromTo("#d_w1g", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, at("D", "stream") + 0.7);
+      show("#d_l2", at("D", "chunks") - 0.1, { s: 1, y: 10 });
+      tl.fromTo("#d_w2r", { scaleX: 0 }, { scaleX: 1, duration: 0.2 }, at("D", "chunks"));
+      for (let i = 0; i < 12; i++) { const d = document.createElement("div"); d.className = "hbar d_chunk"; d.style.cssText = `left:${83 + i * 66.6}px; top:620px; width:62px; height:90px; background:#4CC38A;`; q("#d_ch").appendChild(d); }
+      qa(".d_chunk").forEach((el, i) => show(el, at("D", "chunks") + 0.2 + i * 0.1, { s: 1, y: 0, d: 0.2, ease: "power2.out" }));
+      show("#d_sheet", at("D", "chitthi"), { s: 0.95 });
+      tl.fromTo("#d_ln1", { scaleX: 0 }, { scaleX: 1, duration: 0.5 }, at("D", "pahli"));
+      tl.fromTo("#d_ln2", { scaleX: 0 }, { scaleX: 1, duration: 0.5 }, at("D", "aage"));
+      tl.fromTo("#d_ln3", { scaleX: 0 }, { scaleX: 1, duration: 0.5 }, at("D", "aage") + 0.3);
+      show("#d_t1", at("D", "pahli", 1), { s: 1.2 });
+      show("#d_t2", at("D", "0.8"), { s: 1.2 });
+      show("#d_sv", at("D", "5.2"), { s: 0.9 });
+      // diagram: E  test lines, clean one passes, names and numbers stumble
+      show("#e_h", at("E", "teesra"), { s: 0.9 }); show("#e_ex", at("E", "teesra") + 0.1, { s: 0.9 });
+      show("#e_1", at("E", "naamon"), { s: 0.95 });
+      show("#e_2", at("E", "numbers"), { s: 0.95 });
+      show("#e_3", at("E", "hindi-english"), { s: 0.95 });
+      show("#e_4", at("E", "saaf"), { s: 0.95 });
+      show("#e_ok", at("E", "achhi"), { s: 1.1 });
+      show("#e_x1", at("E", "naam"), { s: 1.1 });
+      show("#e_x2", at("E", "numbers", 1), { s: 1.1 });
+      // diagram: F  clone needs consent, user is told, then the answer recap
+      show("#f_c1", at("F", "boundary"), { s: 0.95 });
+      show("#f_cs", at("F", "consent"), { s: 1.3 });
+      show("#f_c2", at("F", "consent") + 0.6, { s: 0.95 });
+      hide(["#f_c1", "#f_c2"], at("F", "interview") - 0.15, 0.2);
+      show("#f_h", at("F", "interview"), { s: 0.9 });
+      show("#f_r1", at("F", "tokens"), { s: 0.9 });
+      show("#f_r2", at("F", "spectrogram"), { s: 0.9 });
+      show("#f_r3", at("F", "vocoder"), { s: 0.9 });
+      show("#f_r4", at("F", "stream"), { s: 0.9 });
+      show("#f_r5", at("F", "test"), { s: 0.9 });
+      // G: comment question and follow
+      show("#g_h", at("G", "tumhare"), { s: 1.1 });
+      show("#g_1", at("G", "deri"), { s: 0.9 });
+      show("#g_2", at("G", "galat"), { s: 0.9 });
+      show("#g_3", at("G", "robotic"), { s: 0.9 });
+      show("#g_c", at("G", "comment"), { s: 0.8 });
+      show("#g_f", at("G", "follow"), { s: 0.8 });
+      [["B"],["C"],["D"],["E"],["G"]].forEach(([s]) => M.fit(M.$("#s" + s), { y: 180, h: 1120 }));
+      M.finish({ kw: { chup: "hot", stages: "gold", stream: "cyan", tokens: "gold", spectrogram: "gold", vocoder: "gold", test: "good", consent: "good", naam: "hot", galat: "hot", clone: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
