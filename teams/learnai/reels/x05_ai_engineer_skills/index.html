@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI Engineer: 6 Skills</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="52" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="x c" id="a1" style="top:230px; font-size:130px;"><span class="gold">AI ENGINEER</span></div>
+          <div class="x c" id="a2" style="top:390px; font-size:100px;">banna hai?</div>
+          <div class="chip at" style="left:90px; top:560px; width:420px; border:4px solid #8592AD; color:#E8EDF6; font-size:46px;">NEW TOOL</div>
+          <div class="chip at" style="left:570px; top:560px; width:420px; border:4px solid #8592AD; color:#E8EDF6; font-size:46px;">NEW FRAMEWORK</div>
+          <div class="chip at" style="left:90px; top:680px; width:420px; border:4px solid #8592AD; color:#E8EDF6; font-size:46px;">NEW LIBRARY</div>
+          <div class="chip at" style="left:570px; top:680px; width:420px; border:4px solid #8592AD; color:#E8EDF6; font-size:46px;">NEW MODEL</div>
+          <div class="strike" id="a_s1" style="left:90px; top:665px; width:900px;"></div>
+          <div class="x c" id="a_50" style="top:840px; font-size:120px;">50 COURSES</div>
+          <div class="strike" id="a_s2" style="left:220px; top:905px; width:640px;"></div>
+          <div class="x c gold" id="a_6" style="top:1010px; font-size:170px;">6 SKILLS</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="chip" style="left:60px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:#F2B544;color:#0B1220;border-color:#F2B544;">1</div><div class="chip" style="left:223px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">2</div><div class="chip" style="left:386px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">3</div><div class="chip" style="left:549px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">4</div><div class="chip" style="left:712px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">5</div><div class="chip" style="left:875px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">6</div><div class="x gold" id="b_n" style="left:60px; top:330px; font-size:84px; font-family:'JetBrains Mono',monospace;">01</div><div class="x" id="b_name" style="left:200px; top:300px; font-size:128px;">PROMPTING</div><div class="x c" id="b_mean" style="top:470px; font-size:66px;">model se <span class='gold'>sahi kaam</span></div>
+          <div class="chip" id="b_int" style="left:300px; top:600px; width:480px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:54px;">NAYA INTERN</div>
+          <div class="card" id="b_bad" style="left:60px; top:730px; width:960px; height:150px; border-color:#E8596B;"><div class="x red" style="left:40px; top:44px; font-size:60px;">&times; &ldquo;Kuch bana do.&rdquo;</div></div>
+          <div class="strike" id="b_bs" style="left:110px; top:800px; width:600px;"></div>
+          <div class="card" id="b_good" style="left:60px; top:910px; width:960px; height:250px; border-color:#4CC38A;"><div class="x" style="left:40px; top:40px; width:880px; font-size:56px;"><span class="green">&#10003;</span> &ldquo;Rahul ke liye leave approval email likho, 80 words.&rdquo;</div></div>
+          <div class="chip" id="b_ex" style="left:560px; top:1180px; width:460px; background:#F2B544; color:#0B1220; font-size:50px;">+ 1 EXAMPLE</div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="chip" style="left:60px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">1</div><div class="chip" style="left:223px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:#F2B544;color:#0B1220;border-color:#F2B544;">2</div><div class="chip" style="left:386px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">3</div><div class="chip" style="left:549px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">4</div><div class="chip" style="left:712px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">5</div><div class="chip" style="left:875px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">6</div><div class="x gold" id="c_n" style="left:60px; top:330px; font-size:84px; font-family:'JetBrains Mono',monospace;">02</div><div class="x" id="c_name" style="left:200px; top:300px; font-size:128px;">EMBEDDINGS</div><div class="x c" id="c_mean" style="top:470px; font-size:66px;">text &rarr; <span class='gold'>numbers</span></div>
+          <div class="chip" id="c_txt" style="left:60px; top:600px; width:420px; border:4px solid #E8EDF6; color:#E8EDF6; font-size:52px;">sasta phone</div>
+          <div class="x gold" id="c_arr" style="left:500px; top:600px; font-size:72px;">&rarr;</div>
+          <div class="x cyan" id="c_vec" style="left:590px; top:612px; font-size:48px; font-family:'JetBrains Mono',monospace;">[0.82, -0.14 &hellip;]</div>
+          <div class="card" id="c_box" style="left:60px; top:780px; width:960px; height:150px;"><div class="x" style="left:40px; top:44px; font-size:60px;"><span class="mut">search:</span> sasta phone</div></div>
+          <div class="card" id="c_res" style="left:60px; top:960px; width:960px; height:150px; border-color:#4CC38A;"><div class="x" style="left:40px; top:44px; font-size:60px;"><span class="green">&#10003;</span> budget mobile</div></div>
+          <div class="chip" id="c_same" style="left:500px; top:1140px; width:520px; background:#4CC38A; color:#0B1220; font-size:48px;">SAME MEANING</div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="chip" style="left:60px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">1</div><div class="chip" style="left:223px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">2</div><div class="chip" style="left:386px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:#F2B544;color:#0B1220;border-color:#F2B544;">3</div><div class="chip" style="left:549px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">4</div><div class="chip" style="left:712px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">5</div><div class="chip" style="left:875px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">6</div><div class="x gold" id="d_n" style="left:60px; top:330px; font-size:84px; font-family:'JetBrains Mono',monospace;">03</div><div class="x" id="d_name" style="left:200px; top:300px; font-size:128px;">RAG</div><div class="x c" id="d_mean" style="top:470px; font-size:66px;"><span class='gold'>apni files</span> se jawab</div>
+          <div class="card" id="d_f1" style="left:60px; top:620px; width:300px; height:110px;"><div class="x" style="left:30px; top:28px; font-size:48px;">policy.pdf</div></div>
+          <div class="card" id="d_f2" style="left:60px; top:750px; width:300px; height:110px;"><div class="x" style="left:30px; top:28px; font-size:48px;">notes.docx</div></div>
+          <div class="card" id="d_f3" style="left:60px; top:880px; width:300px; height:110px;"><div class="x" style="left:30px; top:28px; font-size:48px;">sales.csv</div></div>
+          <div class="x gold" id="d_a1" style="left:385px; top:740px; font-size:90px;">&rarr;</div>
+          <div class="box" id="d_m" style="left:490px; top:700px; width:220px; height:200px; border:5px solid #5BC0EB; color:#5BC0EB; background:rgba(91,192,235,.08);">MODEL</div>
+          <div class="x gold" id="d_a2" style="left:725px; top:740px; font-size:90px;">&rarr;</div>
+          <div class="box" id="d_j" style="left:820px; top:700px; width:200px; height:200px; border:5px solid #4CC38A; color:#4CC38A; background:rgba(76,195,138,.08); font-size:50px;">JAWAB</div>
+          <div class="chip" id="d_ob" style="left:220px; top:1080px; width:640px; background:#F2B544; color:#0B1220; font-size:60px;">OPEN-BOOK EXAM</div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="chip" style="left:60px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">1</div><div class="chip" style="left:223px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">2</div><div class="chip" style="left:386px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">3</div><div class="chip" style="left:549px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:#F2B544;color:#0B1220;border-color:#F2B544;">4</div><div class="chip" style="left:712px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">5</div><div class="chip" style="left:875px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">6</div><div class="x gold" id="e_n" style="left:60px; top:330px; font-size:84px; font-family:'JetBrains Mono',monospace;">04</div><div class="x" id="e_name" style="left:200px; top:300px; font-size:128px;">AGENTS</div><div class="x c" id="e_mean" style="top:470px; font-size:66px;">model khud <span class='gold'>tools</span> chalaye</div>
+          <div class="box" id="e_m" style="left:60px; top:640px; width:260px; height:180px; border:5px solid #5BC0EB; color:#5BC0EB; background:rgba(91,192,235,.08);">MODEL</div>
+          <div class="chip" id="e_s" style="left:400px; top:660px; width:280px; border:4px solid #F2B544; color:#F2B544; font-size:52px;">SEARCH</div>
+          <div class="chip" id="e_c" style="left:740px; top:660px; width:280px; border:4px solid #F2B544; color:#F2B544; font-size:52px;">CODE</div>
+          <div class="x gold" id="e_a1" style="left:330px; top:665px; font-size:70px;">&rarr;</div>
+          <div class="x gold" id="e_a2" style="left:683px; top:665px; font-size:60px;">&rarr;</div>
+          <div class="x c gold" id="e_loop" style="top:860px; font-size:66px;">&#8635; jab tak kaam poora na ho</div>
+          <div class="chip" id="e_done" style="left:290px; top:1020px; width:500px; background:#4CC38A; color:#0B1220; font-size:62px;">&#10003; KAAM POORA</div>
+        </div>
+        <div class="beat" id="sF">
+          <div class="chip" style="left:60px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">1</div><div class="chip" style="left:223px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">2</div><div class="chip" style="left:386px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">3</div><div class="chip" style="left:549px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">4</div><div class="chip" style="left:712px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:#F2B544;color:#0B1220;border-color:#F2B544;">5</div><div class="chip" style="left:875px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; color:#5E6B85;">6</div><div class="x gold" id="f_n" style="left:60px; top:330px; font-size:84px; font-family:'JetBrains Mono',monospace;">05</div><div class="x" id="f_name" style="left:200px; top:300px; font-size:128px;">EVALS</div><div class="x c" id="f_mean" style="top:470px; font-size:66px;">har badlav ke baad <span class='gold'>test</span></div>
+          <div class="x mut" id="f_lbl" style="left:60px; top:600px; font-size:46px; font-family:'JetBrains Mono',monospace;">EXAMPLE SCORES</div>
+          <div class="x" id="f_v1" style="left:60px; top:680px; font-size:58px;">v1</div><div class="hbar" id="f_b1" style="left:180px; top:676px; width:590px; height:80px; background:#5E6B85;"></div><div class="x" id="f_p1" style="left:800px; top:680px; font-size:60px;">72%</div>
+          <div class="x" id="f_v2" style="left:60px; top:820px; font-size:58px;">v2</div><div class="hbar" id="f_b2" style="left:180px; top:816px; width:664px; height:80px; background:#4CC38A;"></div><div class="x green" id="f_p2" style="left:870px; top:820px; font-size:60px;">81% &#9650;</div>
+          <div class="x" id="f_v3" style="left:60px; top:960px; font-size:58px;">v3</div><div class="hbar" id="f_b3" style="left:180px; top:956px; width:525px; height:80px; background:#E8596B;"></div><div class="x red" id="f_p3" style="left:735px; top:960px; font-size:60px;">64% &#9660;</div>
+          <div class="x c" id="f_q" style="top:1110px; font-size:64px;"><span class="green">sudhra</span> ya <span class="red">bigda?</span></div>
+        </div>
+        <div class="beat" id="sG">
+          <div class="chip" style="left:60px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">1</div><div class="chip" style="left:223px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">2</div><div class="chip" style="left:386px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">3</div><div class="chip" style="left:549px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">4</div><div class="chip" style="left:712px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:rgba(242,181,68,.25);color:#F2B544;border-color:rgba(242,181,68,.5);">5</div><div class="chip" style="left:875px; top:190px; width:140px; padding:10px 0; font-size:46px; border:3px solid #26324B; background:#F2B544;color:#0B1220;border-color:#F2B544;">6</div><div class="x gold" id="g_n" style="left:60px; top:330px; font-size:84px; font-family:'JetBrains Mono',monospace;">06</div><div class="x" id="g_name" style="left:200px; top:300px; font-size:128px;">PRODUCTION</div><div class="x c" id="g_mean" style="top:470px; font-size:66px;"><span class='gold'>asli users</span> ke liye</div>
+          <div class="chip" id="g_c" style="left:60px; top:600px; width:250px; border:4px solid #F2B544; color:#F2B544; font-size:52px;">COST</div>
+          <div class="chip" id="g_s" style="left:340px; top:600px; width:250px; border:4px solid #F2B544; color:#F2B544; font-size:52px;">SPEED</div>
+          <div class="chip" id="g_m" style="left:620px; top:600px; width:400px; border:4px solid #F2B544; color:#F2B544; font-size:50px;">MONITORING</div>
+          <div class="x" id="g_dt" style="left:60px; top:760px; font-size:58px;">DEMO: <span class="mut">10 log</span></div>
+          <div id="g_demo"></div>
+          <div class="x" id="g_at" style="left:60px; top:920px; font-size:58px;">ASLI APP: <span class="gold">hazaron</span></div>
+          <div id="g_app"></div>
+        </div>
+        <div class="beat" id="sH">
+          <div class="x c" id="h_t" style="top:230px; font-size:72px;"><span class="gold">6</span> SKILLS &rarr; <span class="gold">160</span> CONCEPTS</div>
+          <div id="h_pdf" style="position:absolute; left:320px; top:380px; width:440px; height:540px; border-radius:24px; background:linear-gradient(225deg,#c9c2b4 0,#c9c2b4 48px,#F3EFE6 48px); box-shadow:0 24px 60px rgba(0,0,0,.5); transform:rotate(3deg);">
+            <div style="position:absolute; left:34px; top:34px; font:800 30px 'JetBrains Mono',monospace; color:#F2B544; background:#0B1220; border-radius:8px; padding:6px 14px;">PDF</div>
+            <div style="position:absolute; left:34px; top:150px; width:380px; font:700 62px 'Space Grotesk',sans-serif; line-height:1.02; color:#0B1220;">AI ENGINEER ROADMAP</div>
+            <div style="position:absolute; left:34px; bottom:40px; font:600 30px 'JetBrains Mono',monospace; color:#4a5468;">8 areas &middot; 160 concepts</div>
+          </div>
+          <div class="chip" id="h_cta" style="left:110px; top:990px; width:860px; background:#F2B544; color:#0B1220; font-size:72px;">Comment ROADMAP</div>
+          <div class="x c" id="h_dm" style="top:1140px; font-size:64px;">PDF seedhe <span class="gold">DM</span> mein</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="52" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="52" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="52" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H"], tag: "AI ENGINEER" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 shows the question; the pile of new tools and 50 courses get struck, then 6 skills
+      tl.fromTo(["#a1", "#a2"], { scale: 1.06 }, { scale: 1, duration: 0.6, ease: "power2.out" }, 0);
+      tl.fromTo(".at", { opacity: 0, y: 30, scale: 1.2 }, { opacity: 1, y: 0, scale: 1, duration: 0.25, stagger: 0.18, ease: "back.out(1.6)" }, at("A", "haphte"));
+      wipe("#a_s1", at("A", "nahi"), 0.3);
+      tl.to(".at", { opacity: 0.3, duration: 0.2 }, at("A", "nahi") + 0.25);
+      show("#a_50", at("A", "50"), { s: 1.3 });
+      wipe("#a_s2", at("A", "nahi", 1), 0.3);
+      show("#a_6", at("A", "6"), { s: 1.8, y: 0 });
+      // each skill scene: name lands on the word, the meaning on the definition
+      const heads = { B: ["prompting", "model"], C: ["embeddings", "text"], D: ["rag", "files"], E: ["agents", "tools"], F: ["evals", "har"], G: ["production", "cost"] };
+      Object.entries(heads).forEach(([sc, [w, m]]) => {
+        const k = sc.toLowerCase();
+        show("#" + k + "_n", S[sc] + 0.05, { s: 1.3 });
+        show("#" + k + "_name", at(sc, w), { s: 1.3 });
+        show("#" + k + "_mean", at(sc, m), { s: 1 });
+      });
+      // B prompting
+      show("#b_int", at("B", "intern"), { s: 1 });
+      show("#b_bad", at("B", "samjhate"), { s: 0.9 });
+      wipe("#b_bs", at("B", "saaf-saaf"), 0.3);
+      show("#b_good", at("B", "saaf-saaf") + 0.2, { s: 0.9 });
+      show("#b_ex", at("B", "example"), { s: 1.4 });
+      // C embeddings
+      show("#c_txt", at("C", "text"), { s: 1 });
+      show("#c_arr", at("C", "numbers"), { s: 1 });
+      show("#c_vec", at("C", "numbers") + 0.1, { s: 1 });
+      show("#c_box", at("C", "search"), { s: 0.9 });
+      show("#c_res", at("C", "budget"), { s: 0.9 });
+      show("#c_same", at("C", "mil"), { s: 1.4 });
+      // D RAG
+      tl.fromTo(["#d_f1", "#d_f2", "#d_f3"], { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.25, stagger: 0.12 }, at("D", "files"));
+      show("#d_a1", at("D", "jawab") - 0.2, { s: 1 });
+      show("#d_m", at("D", "jawab") - 0.1, { s: 1 });
+      show("#d_a2", at("D", "jawab") + 0.15, { s: 1 });
+      show("#d_j", at("D", "jawab") + 0.3, { s: 1.2 });
+      show("#d_ob", at("D", "open-book"), { s: 1.4 });
+      // E agents
+      show("#e_m", at("E", "model"), { s: 1 });
+      show("#e_a1", at("E", "search") - 0.1, { s: 1 });
+      show("#e_s", at("E", "search"), { s: 1.2 });
+      show("#e_a2", at("E", "code") - 0.1, { s: 1 });
+      show("#e_c", at("E", "code"), { s: 1.2 });
+      show("#e_loop", at("E", "kaam"), { s: 1 });
+      show("#e_done", at("E", "poora"), { s: 1.4 });
+      // F evals (example scores)
+      show("#f_lbl", at("F", "test"), { s: 1 });
+      show(["#f_v1", "#f_p1"], at("F", "test"), { s: 1 }); wipe("#f_b1", at("F", "test"), 0.4);
+      show(["#f_v2", "#f_p2"], at("F", "sudhra"), { s: 1 }); wipe("#f_b2", at("F", "sudhra"), 0.4);
+      show(["#f_v3", "#f_p3"], at("F", "bigda"), { s: 1 }); wipe("#f_b3", at("F", "bigda"), 0.4);
+      show("#f_q", at("F", "bigda") + 0.3, { s: 1.2 });
+      // G production: 10 people vs thousands
+      const gd = q("#g_demo"), ga = q("#g_app");
+      for (let i = 0; i < 10; i++) { const d = document.createElement("div"); d.className = "tok gdot"; d.style.cssText += ";left:" + (60 + i * 64) + "px;top:850px;width:48px;height:48px;border-radius:24px;background:#8592AD;border:none;"; gd.appendChild(d); }
+      for (let i = 0; i < 240; i++) { const d = document.createElement("div"); d.className = "tok adot"; d.style.cssText += ";left:" + (60 + (i % 30) * 32) + "px;top:" + (1010 + Math.floor(i / 30) * 30) + "px;width:22px;height:22px;border-radius:11px;background:#F2B544;border:none;"; ga.appendChild(d); }
+      show("#g_c", at("G", "cost"), { s: 1.2 });
+      show("#g_s", at("G", "speed"), { s: 1.2 });
+      show("#g_m", at("G", "monitoring"), { s: 1.2 });
+      show("#g_dt", at("G", "demo"), { s: 1 });
+      tl.fromTo(".gdot", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.15, stagger: 0.04 }, at("G", "10"));
+      show("#g_at", at("G", "asli"), { s: 1 });
+      tl.fromTo(".adot", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.1, stagger: 0.004 }, at("G", "hazaron") - 0.3);
+      // H roadmap PDF and call to action
+      show("#h_t", at("H", "6"), { s: 1.1 });
+      tl.fromTo("#h_pdf", { opacity: 0, x: 80, rotation: 10 }, { opacity: 1, x: 0, rotation: 3, duration: 0.4, ease: "back.out(1.6)" }, at("H", "roadmap"));
+      show("#h_cta", at("H", "roadmap", 1), { s: 1.5, y: 0 });
+      tl.to("#h_cta", { scale: 1.06, duration: 0.18, yoyo: true, repeat: 3 }, at("H", "comment"));
+      show("#h_dm", at("H", "pdf"), { s: 1 });
+      M.finish({ kw: { engineer: "gold", skills: "gold", prompting: "gold", embeddings: "gold", rag: "gold", agents: "gold", evals: "gold", production: "gold", roadmap: "gold", nahi: "hot" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "tts": "owner",
+ "owner_model": "eleven_flash_v2_5",
+ "owner_tempo": 1.0,
+ "prime": "सुनो, ये बहुत interesting है!",
+ "audio": "v2",
+ "pace": 1.26,
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ]
+ ],
+ "sources": [
+  "https://huggingface.co/learn/agents-course/unit0/introduction"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "results_first",
+ "copy": {
+  "hi": {
+   "A": "@hook AI agents सीखने के लिए | हज़ारों रुपये क्यों दोगे? | Hugging Face का agents course | पूरा free है, | certificate के साथ।",
+   "B": "इसमें 4{four} main units हैं। | पहली: agents की basics, | model कैसे सोचता है और tools कैसे चलाता है। | दूसरी: 3{three} frameworks, | smolagents, LangGraph और LlamaIndex।",
+   "C": "तीसरी: real use cases। | और चौथी: final assignment।",
+   "D": "Certificate भी दो तरह के, | और दोनों free। | सिर्फ़ Unit 1{one} पूरा करो, | तो fundamentals का certificate। | Unit 1{one}, एक use case | और final challenge, | तो पूरा completion certificate।",
+   "E": "कोई deadline नहीं। | हर unit करीब एक हफ्ते का, | हफ्ते में 3{तीन} से 4{चार} घंटे। | बस Python और LLMs की basic समझ चाहिए।",
+   "F": "हर unit का link | और 4{four} weeks का plan चाहिए? | AGENTS comment करो, | पूरी guide सीधे DM में।"
+  }
+ }
+}

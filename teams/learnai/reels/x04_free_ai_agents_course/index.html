@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Free AI Agents Course</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="46.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <div class="beat" id="sA">
+          <div class="x c gold" id="a1" style="top:230px; font-size:150px;">AI AGENTS</div>
+          <div class="x c" id="a2" style="top:400px; font-size:92px;">seekhne ke liye</div>
+          <div class="x c red" id="a3" style="top:560px; font-size:200px;">₹ ₹ ₹</div>
+          <div class="x c" id="a4" style="top:790px; font-size:88px;">hazaron rupaye?</div>
+          <div class="strike" id="a_strike" style="left:200px; top:735px; width:680px;"></div>
+          <img id="a_shot" src="assets/hf_course.png" style="position:absolute; left:130px; top:520px; width:820px; height:731px; border-radius:28px; border:4px solid #26324B; opacity:0;" />
+          <div class="chip" id="a_free" style="left:560px; top:560px; width:420px; background:#4CC38A; color:#0B1220; font-size:62px; transform:rotate(-6deg);">100% FREE</div>
+          <div class="chip" id="a_cert" style="left:110px; top:1130px; width:520px; background:#F2B544; color:#0B1220; font-size:56px;">+ CERTIFICATE</div>
+          <div class="src" id="a_src" style="top:1262px;">Source: huggingface.co/learn</div>
+        </div>
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:210px; font-size:120px;"><span class="gold">4</span> MAIN UNITS</div>
+          <div class="card" id="b_u1" style="left:60px; top:400px; width:470px; height:380px;">
+            <div class="x gold" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">01</div>
+            <div class="x" style="left:40px; top:110px; font-size:64px;">AGENT<br/>BASICS</div>
+            <div class="x cyan" id="b_u1a" style="left:40px; top:262px; font-size:46px;">model sochta</div>
+            <div class="x cyan" id="b_u1b" style="left:40px; top:318px; font-size:46px;">+ tool chalata</div>
+          </div>
+          <div class="card" id="b_u2" style="left:550px; top:400px; width:470px; height:380px;">
+            <div class="x gold" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">02</div>
+            <div class="x" style="left:40px; top:116px; font-size:50px;">3 FRAMEWORKS</div>
+            <div class="x cyan" id="b_f1" style="left:40px; top:200px; font-size:48px;">smolagents</div>
+            <div class="x cyan" id="b_f2" style="left:40px; top:260px; font-size:48px;">LangGraph</div>
+            <div class="x cyan" id="b_f3" style="left:40px; top:320px; font-size:48px;">LlamaIndex</div>
+          </div>
+          <div class="card" style="left:60px; top:810px; width:470px; height:380px; border-style:dashed; background:rgba(17,26,44,.4);"><div class="x mut" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">03</div></div>
+          <div class="card" style="left:550px; top:810px; width:470px; height:380px; border-style:dashed; background:rgba(17,26,44,.4);"><div class="x mut" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">04</div></div>
+        </div>
+        <div class="beat" id="sC">
+          <div class="x c" style="top:210px; font-size:120px;"><span class="gold">4</span> MAIN UNITS</div>
+          <div class="card cgrid" style="left:60px; top:400px; width:470px; height:380px;">
+            <div class="x gold" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">01</div>
+            <div class="x" style="left:40px; top:110px; font-size:64px;">AGENT<br/>BASICS</div>
+            <div class="x cyan" style="left:40px; top:262px; font-size:46px;">model sochta</div>
+            <div class="x cyan" style="left:40px; top:318px; font-size:46px;">+ tool chalata</div>
+          </div>
+          <div class="card cgrid" style="left:550px; top:400px; width:470px; height:380px;">
+            <div class="x gold" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">02</div>
+            <div class="x" style="left:40px; top:116px; font-size:50px;">3 FRAMEWORKS</div>
+            <div class="x cyan" style="left:40px; top:200px; font-size:48px;">smolagents</div>
+            <div class="x cyan" style="left:40px; top:260px; font-size:48px;">LangGraph</div>
+            <div class="x cyan" style="left:40px; top:320px; font-size:48px;">LlamaIndex</div>
+          </div>
+          <div class="card" id="c_p3" style="left:60px; top:810px; width:470px; height:380px; border-style:dashed; background:rgba(17,26,44,.4);"><div class="x mut" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">03</div></div>
+          <div class="card" id="c_p4" style="left:550px; top:810px; width:470px; height:380px; border-style:dashed; background:rgba(17,26,44,.4);"><div class="x mut" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">04</div></div>
+          <div class="card cgrid" id="c_u3" style="left:60px; top:810px; width:470px; height:380px;">
+            <div class="x gold" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">03</div>
+            <div class="x" style="left:40px; top:110px; font-size:64px;">USE<br/>CASES</div>
+            <div class="x cyan" id="c_u3a" style="left:40px; top:290px; font-size:46px;">real problems</div>
+          </div>
+          <div class="card cgrid" id="c_u4" style="left:550px; top:810px; width:470px; height:380px; border-color:#F2B544;">
+            <div class="x gold" style="left:40px; top:34px; font-size:56px; font-family:'JetBrains Mono',monospace;">04</div>
+            <div class="x" style="left:40px; top:110px; font-size:64px;">FINAL<br/>ASSIGNMENT</div>
+            <div class="x gold" id="c_u4a" style="left:40px; top:290px; font-size:46px;">final project</div>
+          </div>
+        </div>
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:200px; font-size:112px;">CERTIFICATE</div>
+          <div class="chip" id="d_free" style="left:170px; top:350px; width:740px; background:#4CC38A; color:#0B1220; font-size:56px;">2 TYPES · DONO FREE</div>
+          <div class="card" id="d_l" style="left:60px; top:500px; width:470px; height:640px;">
+            <div class="x mut" id="d_lt" style="left:36px; top:40px; font-size:52px;">FUNDAMENTALS</div>
+            <div class="x green" id="d_l1" style="left:36px; top:170px; font-size:58px;">✓ Unit 1</div>
+            <div class="chip" id="d_lb" style="left:36px; top:500px; width:398px; background:#F2B544; color:#0B1220; font-size:50px;">CERTIFIED</div>
+          </div>
+          <div class="card" id="d_r" style="left:550px; top:500px; width:470px; height:640px;">
+            <div class="x mut" id="d_rt" style="left:36px; top:40px; font-size:52px;">COMPLETION</div>
+            <div class="x green" id="d_r1" style="left:36px; top:170px; font-size:58px;">✓ Unit 1</div>
+            <div class="x green" id="d_r2" style="left:36px; top:260px; font-size:58px;">✓ 1 use case</div>
+            <div class="x green" id="d_r3" style="left:36px; top:350px; font-size:58px;">✓ final challenge</div>
+            <div class="chip" id="d_rb" style="left:36px; top:500px; width:398px; background:#F2B544; color:#0B1220; font-size:50px;">CERTIFIED</div>
+          </div>
+        </div>
+        <div class="beat" id="sE">
+          <div class="x c" id="e_dl" style="top:220px; font-size:140px;">DEADLINE</div>
+          <div class="strike" id="e_strike" style="left:190px; top:290px; width:700px;"></div>
+          <div class="x c green" id="e_no" style="top:390px; font-size:72px;">koi nahi</div>
+          <div class="x c" id="e_wk" style="top:520px; font-size:84px;">1 UNIT ≈ <span class="gold">1 HAFTA</span></div>
+          <div id="e_days"></div>
+          <div class="x c gold" id="e_hr" style="top:800px; font-size:96px;">3-4 GHANTE / HAFTA</div>
+          <div class="x c mut" id="e_need" style="top:960px; font-size:60px;">CHAHIYE:</div>
+          <div class="chip" id="e_py" style="left:80px; top:1060px; width:440px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:50px;">Python basics</div>
+          <div class="chip" id="e_llm" style="left:560px; top:1060px; width:440px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:50px;">LLM basics</div>
+        </div>
+        <div class="beat" id="sF">
+          <div id="f_pdf" style="position:absolute; left:320px; top:210px; width:440px; height:540px; border-radius:24px; background:linear-gradient(225deg,#c9c2b4 0,#c9c2b4 48px,#F3EFE6 48px); box-shadow:0 24px 60px rgba(0,0,0,.5); transform:rotate(3deg);">
+            <div style="position:absolute; left:34px; top:34px; font:800 30px 'JetBrains Mono',monospace; color:#F2B544; background:#0B1220; border-radius:8px; padding:6px 14px;">PDF</div>
+            <div style="position:absolute; left:34px; top:140px; width:380px; font:700 54px 'Space Grotesk',sans-serif; line-height:1.04; color:#0B1220;">FREE AI AGENTS COURSE GUIDE</div>
+            <div style="position:absolute; left:34px; bottom:40px; font:600 30px 'JetBrains Mono',monospace; color:#4a5468;">@ai.learnvora</div>
+          </div>
+          <div class="x c" id="f_l1" style="top:800px; font-size:58px;"><span class="green">✓</span> har unit ka link</div>
+          <div class="x c" id="f_l2" style="top:880px; font-size:58px;"><span class="green">✓</span> 4 weeks ka plan</div>
+          <div class="chip" id="f_cta" style="left:110px; top:1000px; width:860px; background:#F2B544; color:#0B1220; font-size:72px;">Comment AGENTS</div>
+          <div class="x c" id="f_dm" style="top:1150px; font-size:64px;">guide seedhe <span class="gold">DM</span> mein</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="46.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="46.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="46.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F"], tag: "FREE AI COURSE" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0 already shows the hook (AI agents, rupees); "kyun doge" strikes the money, then the real course page
+      tl.fromTo(["#a1", "#a2", "#a3", "#a4"], { scale: 1.06 }, { scale: 1, duration: 0.6, ease: "power2.out" }, 0);
+      wipe("#a_strike", at("A", "doge"), 0.3);
+      hide(["#a3", "#a4", "#a_strike"], at("A", "hugging") - 0.2, 0.15);
+      tl.fromTo("#a_shot", { opacity: 0, scale: 0.9, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "power3.out" }, at("A", "hugging"));
+      tl.to("#a_shot", { scale: 1.04, duration: 3.2, ease: "none" }, at("A", "hugging") + 0.4);
+      show("#a_src", at("A", "hugging") + 0.2, { s: 1 });
+      show("#a_free", at("A", "free"), { s: 1.8, y: 0 });
+      show("#a_cert", at("A", "certificate"), { s: 1.3 });
+      // B: 4 units, the first two fill in as he names them
+      show("#b_t", at("B", "4"), { s: 1.2 });
+      show("#b_u1", at("B", "pahli"), { s: 0.9 });
+      show("#b_u1a", at("B", "sochta"), { s: 1 });
+      show("#b_u1b", at("B", "chalata"), { s: 1 });
+      show("#b_u2", at("B", "doosri"), { s: 0.9 });
+      show("#b_f1", at("B", "smolagents"), { s: 1 });
+      show("#b_f2", at("B", "langgraph"), { s: 1 });
+      show("#b_f3", at("B", "llamaindex"), { s: 1 });
+      // C: units 3 and 4
+      hide("#c_p3", at("C", "teesri"), 0.1);
+      show("#c_u3", at("C", "teesri"), { s: 0.9 });
+      show("#c_u3a", at("C", "real"), { s: 1 });
+      hide("#c_p4", at("C", "chauthi"), 0.1);
+      show("#c_u4", at("C", "chauthi"), { s: 0.9 });
+      show("#c_u4a", at("C", "assignment"), { s: 1 });
+      tl.fromTo(".cgrid", { scale: 1 }, { scale: 1.04, duration: 0.15, yoyo: true, repeat: 1, immediateRender: false }, at("C", "assignment") + 0.2);
+      // D: two certificates, both free
+      show("#d_t", S.D + 0.05, { s: 1 });
+      show("#d_free", at("D", "donon"), { s: 1.3 });
+      show("#d_l", at("D", "sirf"), { s: 0.9 });
+      show("#d_l1", at("D", "1"), { s: 1.2 });
+      tl.to("#d_lt", { color: "#F2B544", duration: 0.2 }, at("D", "fundamentals"));
+      show("#d_lb", at("D", "certificate", 1), { s: 1.6, y: 0 });
+      show("#d_r", at("D", "unit", 1), { s: 0.9 });
+      show("#d_r1", at("D", "1", 1), { s: 1.2 });
+      show("#d_r2", at("D", "use"), { s: 1.2 });
+      show("#d_r3", at("D", "final"), { s: 1.2 });
+      tl.to("#d_rt", { color: "#F2B544", duration: 0.2 }, at("D", "completion"));
+      show("#d_rb", at("D", "certificate", 2), { s: 1.6, y: 0 });
+      // E: no deadline, a week per unit, 3-4 hours, what you need
+      const days = q("#e_days");
+      for (let i = 0; i < 7; i++) { const d = document.createElement("div"); d.className = "tok eday"; d.style.cssText += ";left:" + (72 + i * 136) + "px;top:640px;width:120px;height:120px;"; days.appendChild(d); }
+      show("#e_dl", S.E + 0.05, { s: 1 });
+      wipe("#e_strike", at("E", "nahi"), 0.3);
+      show("#e_no", at("E", "nahi") + 0.1, { s: 1.2 });
+      show("#e_wk", at("E", "haphte"), { s: 1.1 });
+      tl.fromTo(".eday", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.2, stagger: 0.05 }, at("E", "haphte") + 0.1);
+      tl.to(".eday", { backgroundColor: "#F2B544", borderColor: "#F2B544", duration: 0.15, stagger: 0.06 }, at("E", "3"));
+      show("#e_hr", at("E", "ghante"), { s: 1.3 });
+      show("#e_need", at("E", "bas"), { s: 1 });
+      show("#e_py", at("E", "python"), { s: 0.9 });
+      show("#e_llm", at("E", "llms"), { s: 0.9 });
+      // F: the guide and the call to action
+      tl.fromTo("#f_pdf", { opacity: 0, x: 80, rotation: 10 }, { opacity: 1, x: 0, rotation: 3, duration: 0.4, ease: "back.out(1.6)" }, S.F + 0.05);
+      show("#f_l1", at("F", "link"), { s: 1 });
+      show("#f_l2", at("F", "plan"), { s: 1 });
+      show("#f_cta", at("F", "agents"), { s: 1.5, y: 0 });
+      tl.to("#f_cta", { scale: 1.06, duration: 0.18, yoyo: true, repeat: 3 }, at("F", "comment"));
+      show("#f_dm", at("F", "guide"), { s: 1 });
+      M.finish({ kw: { agents: "gold", free: "good", certificate: "gold", deadline: "hot", python: "cyan", agents: "gold", dm: "gold" } });
+
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
