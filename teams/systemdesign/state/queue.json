@@ -1,29 +1,63 @@
 {
   "items": [
     {
-      "id": "s022",
+      "id": "s023",
       "track": "series",
-      "day": 22,
+      "day": 23,
       "unit": "P2",
-      "title": "API gateway: bahut saari services ka ek front door",
-      "format": "component",
-      "one_idea": "An API gateway is the single entry point for clients in front of many services: it routes each request to the right service, can combine several service calls into one response, and handles shared edge jobs (authentication, throttling, logging) once; the price is one more moving part and one more network hop.",
-      "hook_type": "surprising_fact",
-      "spoken_hook": "Gateway पाँच calls को एक call बना देता है।",
-      "hook_formula": "surprising_fact: composition, five client calls become one (the five is an EXAMPLE)",
-      "hook_source": "https://microservices.io/patterns/apigateway.html",
-      "sources": [
-        "https://microservices.io/patterns/apigateway.html",
-        "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html",
-        "https://en.wikipedia.org/wiki/API_management",
-        "https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/"
+      "title": "Rate limiting: token bucket se burst bhi, speed limit bhi",
+      "format": "pattern",
+      "one_idea": "A token bucket rate limiter gives each client a bucket that holds up to a fixed number of tokens and refills at a fixed rate; every request takes one token, so a client can burst up to the bucket size but cannot go above the refill rate over time, and a request that finds the bucket empty is rejected with 429 Too Many Requests.",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: हर user की requests की limit कैसे लगाओगे?",
+      "hook_formula": "interviewer_asked: the standard rate-limiter interview question, one complete sentence of 8 words after the opener, no question after it; the next line starts the answer (a bucket of tokens)",
+      "hook_source": "https://stripe.com/blog/rate-limiters",
+      "hook_10s": "Interviewer ने पूछा: हर user की requests की limit कैसे लगाओगे? Answer है token bucket: हर user की एक bucket, और हर request एक token लेती है। Bucket खाली, तो request reject। [frame 0: one bucket of ten round tokens, request dots arriving from the left and each taking a token]",
+      "hook_candidates": [
+        {
+          "formula": "interviewer_asked: the rate limiter question",
+          "hook": "Interviewer ने पूछा: हर user की requests की limit कैसे लगाओगे?"
+        },
+        {
+          "formula": "relatable_stake: one client floods the API",
+          "hook": "एक user ने API पर हज़ार requests भेजीं, बाकी सबका app अटक गया।"
+        },
+        {
+          "formula": "surprising_fact: Stripe's limiter is a bucket per user",
+          "hook": "Stripe हर user को एक bucket देता है, और request उसमें से token लेती है।"
+        }
       ],
-      "length_target_s": 160,
-      "cover_headline": "One Front Door For Many Services",
-      "thumb_text": "API GATEWAY",
+      "visual_idea": "One fixed frame: a bucket drawn as a row of ten round tokens on the right, a client sending request dots from the left. Each arriving dot takes one token and the row shrinks; a small tap above the bucket drops one new token at a steady beat, and a full bucket shows the extra token spilling over and vanishing. A burst of dots empties the row in one go, the next dot bounces off with a red 429 tag, then the dots that arrive at the tap's beat get through one by one. A two-line chart under it shows tokens left going down fast on a burst and climbing back slowly.",
+      "everyday_anchor": "A tea-stall coupon booklet: you get ten coupons, can spend all ten at once, then the stall hands you one new coupon every minute; with no coupon left, the cup waits.",
+      "example": "EXAMPLE: bucket capacity 10 tokens, refill 1 token per second, one request costs 1 token. A client sends 10 requests in one instant and all pass (burst), the 11th gets 429, one second later one more request passes. Over a long time it cannot average more than 1 request per second. All numbers are invented.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Token_bucket",
+        "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html",
+        "https://stripe.com/blog/rate-limiters",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429",
+        "https://nginx.org/en/docs/http/ngx_http_limit_req_module.html"
+      ],
+      "facts_to_verify": [
+        "Wikipedia Token bucket (fetched 2026-11-12 by the researcher): the bucket holds at most b tokens; a token is added every 1/r seconds; tokens arriving at a full bucket are discarded; a packet of n bytes needs n tokens, and if enough exist they are removed and it is sent; with too few tokens the packet does not conform and may be dropped or queued; burstiness is set by the depth of the bucket. 'One request takes one token' is our simplification of the per-byte packet case; say so or label it as the request version.",
+        "AWS API Gateway throttling: uses the token bucket algorithm where a token counts for a request; rate = tokens added per second, burst = bucket capacity; clients 'may receive' 429 Too Many Requests when over the limits; throttles are best-effort targets, not guaranteed ceilings. Do not say 'always 429'.",
+        "Stripe blog: 'We use the token bucket algorithm to do rate limiting', every Stripe user has a bucket and each request removes a token, built on Redis. This is Stripe's own statement; per-user buckets and Redis are NOT claimed for AWS or for 'everyone'. The post gives no Stripe bucket size or refill numbers: none may be claimed.",
+        "MDN 429: the client sent too many requests in a given amount of time; a Retry-After header MAY be included (optional); limits are typically by client IP but can be per user or application.",
+        "NGINX limit_req calls its method 'leaky bucket' and rejects with 503 by default: do not call NGINX a token bucket. Use only if a leaky-bucket contrast is added; otherwise leave out.",
+        "Not supported by any page, keep out of the script: 'token bucket is the best or most common limiter', 'Redis is how it is done everywhere', any production bucket size, and which fixed or sliding window algorithm is better (that is Day 24). The catch beat is our own reasoning, said as such: with many servers the buckets must live in one shared place, or each server gives its own bucket.",
+        "The example numbers (10 tokens, 1 per second) are EXAMPLE. If code is shown on screen, run it first and show its real output."
+      ],
+      "length_target_s": 150,
+      "cover_headline": "Rate Limiting: The Token Bucket",
+      "thumb_text": "TOKEN BUCKET",
+      "keywords": [
+        "token bucket algorithm",
+        "rate limiting kya hai",
+        "rate limiter system design interview",
+        "api rate limiting hindi",
+        "429 too many requests"
+      ],
       "status": "planned",
       "qa_passed": false,
-      "script_file": "state/scripts/s022.txt",
       "script_locked": false
     }
   ]
