@@ -16,6 +16,6 @@ Code: l, r equals zero, len of a minus one। | While l less than r: s equals a 
 
 एक हज़ार numbers पर worst case में 999{nine-hundred-ninety-nine} iterations हैं। | Time O of n, extra space O of one।
 
-Trap: यह सिर्फ़ sorted array पर चलता है। | Array five, one, four, nine और target ten पर यही code None देता है, जबकि one और nine का sum ten है। | Random arrays पर यह पाँच हज़ार में से 815{आठसौपंद्रह} बार गलत निकला, इसलिए पहले sort करो या hash map लो।
+Trap: यह सिर्फ़ sorted array पर चलता है। | Array five, one, four, nine और target ten पर यही code None देता है, जबकि one और nine का sum ten है। | Random arrays पर यह पाँच हज़ार में से 827{आठसौसत्ताईस} बार गलत निकला, इसलिए पहले sort करो या hash map लो।
 
 याद रखो: sorted array में sum कम हो तो left बढ़ाओ, ज़्यादा हो तो right घटाओ। | अब तुम्हारा turn! | Array two, three, seven, nine, twelve और target sixteen पर answer indices क्या होंगे? | Comment करो। | जवाब है two और three। | ऐसे ही DSA patterns के लिए follow करो।
