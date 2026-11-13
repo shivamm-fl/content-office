@@ -1,0 +1,14 @@
+LLM mein temperature, top-k aur top-p ka difference batao.
+Top-k = 3 ho to "namkeen" bahar kyun? Teenon ka kaam alag hai.
+
+"Aaj mausam bahut ___" ke options socho: achha, garam, thanda... aur namkeen. Har word ka apna chance hai.
+
+Top-k fixed ginti rakhta hai: k = 3 to sirf achha, garam, thanda. Namkeen bahar, chance jitna bhi ho.
+Top-p ginti nahi, chance ka jod dekhta hai: sabse likely words jodta jata hai jab tak kul chance p se upar na chala jaye. Model pakka ho to ek-do words, uljha ho to zyada.
+Temperature list nahi kaatta, chances ki shape badalta hai: kam ho to top word aur aage, zyada ho to chances barabari ki taraf.
+
+Interview mein bolo: top-k fixed number of words, top-p chance ke jod se words, temperature chances kitne sharp ya flat.
+
+Top-k 3 rakha aur temperature bahut zyada kar diya, to namkeen aa sakta hai ya nahi? Comment karo.
+
+Source: Hugging Face, "How to generate text". Words aur chances illustration hain.

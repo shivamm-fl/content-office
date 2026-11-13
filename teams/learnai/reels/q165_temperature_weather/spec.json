@@ -1,0 +1,81 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   1,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Interviewer ने पूछा: LLM में temperature, top-k और top-p का difference बताओ। ... तीनों AI को अगला word चुनने में मदद करते हैं, पर तीनों का काम अलग है।",
+   "B": "[thoughtful] मान लो AI को sentence पूरा करना है: आज मौसम बहुत... AI के पास options हैं: अच्छा, गरम, ठंडा... और नमकीन। हर word का अपना एक chance है।",
+   "C": "Top-k एक fixed गिनती रखता है। k equals three, तो सिर्फ़ सबसे likely तीन words: अच्छा, गरम, ठंडा। नमकीन बाहर, उसका chance जितना भी हो।",
+   "D": "Top-p गिनती नहीं, chance का जोड़ देखता है। सबसे likely words जोड़ता जाता है, जब तक उनका कुल chance p से ऊपर न चला जाए। Model पक्का हो, तो एक-दो words ही बचते हैं। Model उलझा हो, तो ज़्यादा।",
+   "E": "Temperature list नहीं काटता, वो chances की shape बदलता है। Temperature कम, तो top word और भी आगे। Temperature ज़्यादा, तो chances बराबरी की तरफ़ जाते हैं, और कम likely words को भी मौका मिलने लगता है।",
+   "F": "Interview में बोलो: top-k, fixed number of words। Top-p, chance के जोड़ से words। Temperature, chances कितने sharp या flat।",
+   "G": "[curious] अब बताओ: top-k three रखा, और temperature बहुत ज़्यादा कर दिया। तो नमकीन आ सकता है या नहीं? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://huggingface.co/blog/how-to-generate"
+ ],
+ "hook_type": "interviewer_asked",
+ "template": "common_belief",
+ "remake_of": "q105",
+ "approved": "owner 2026-11-13 (pasted this script: 'isse bana')"
+}
