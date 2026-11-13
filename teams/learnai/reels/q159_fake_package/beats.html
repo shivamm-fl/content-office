@@ -1,0 +1,109 @@
+        <style>
+          /* narration recipe v4 safe area: captions y 1190-1450, x 80-1000; content y 250-1160 */
+          #caps { top:1190px !important; left:80px !important; width:920px !important; height:260px !important; }
+          .term { position:absolute; background:#070C16; border:3px solid #26324B; border-radius:26px; }
+          .mono { position:absolute; font-family:"JetBrains Mono",monospace; font-weight:600; color:#E8EDF6; white-space:nowrap; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .bub { position:absolute; left:80px; width:920px; height:92px; border-radius:24px; background:#1B2538; border:3px solid #26324B; }
+          .bub .who { position:absolute; left:28px; top:26px; font:600 34px "JetBrains Mono",monospace; color:#8592AD; }
+          .bub .cmd { position:absolute; left:110px; top:22px; font:600 42px "JetBrains Mono",monospace; color:#F2B544; white-space:nowrap; }
+          .stamp { position:absolute; padding:12px 30px; border-radius:16px; font:700 54px "Space Grotesk",sans-serif; border:5px solid; transform:rotate(-6deg); background:rgba(11,18,32,.92); }
+          .tile { position:absolute; width:170px; height:100px; border-radius:18px; background:#111A2C; border:3px solid #26324B; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+          .tile .r { font:600 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .tile .n { font:700 36px "JetBrains Mono",monospace; color:#E8596B; }
+          .step { position:absolute; left:80px; width:920px; height:100px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .step .n { position:absolute; left:32px; top:16px; font:700 62px "Space Grotesk",sans-serif; color:#E8596B; }
+          .step .t { position:absolute; left:110px; top:24px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .chk { position:absolute; left:80px; width:920px; height:100px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .chk .t { position:absolute; left:40px; top:24px; font:700 52px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:88px;">AI ne ek <span class="red">nakli package</span><br/>install karne ko bola</div>
+          <div class="term" id="a_term" style="left:80px; top:470px; width:920px; height:230px;">
+            <div class="mono" style="left:36px; top:34px; font-size:46px;"><span class="green">$</span> pip install <span class="gold">huggingface-cli</span></div>
+            <div class="mono" id="a_err" style="left:36px; top:120px; font-size:34px; color:#E8596B;">ERROR: No matching distribution found</div>
+            <div class="ill" style="right:28px; top:186px;">illustration</div>
+          </div>
+          <div class="card" id="a_pkg" style="left:80px; top:730px; width:920px; height:170px; border-color:#F2B544;">
+            <div class="x mut" style="left:40px; top:28px; font-size:40px;">researcher ne banaya:</div>
+            <div class="mono" style="left:40px; top:88px; font-size:50px; color:#F2B544;">huggingface-cli</div>
+            <div class="x" style="right:40px; top:90px; font-size:48px;">(khaali)</div>
+          </div>
+          <div class="x c gold" id="a_n" style="top:920px; font-size:150px;">0</div>
+          <div class="x c" id="a_dl" style="top:1080px; font-size:50px;">downloads, sirf <span class="gold">3 mahine</span> mein</div>
+          <div class="src" id="a_src" style="top:1140px; font-size:30px;">Source: The Register (2024)</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c mut" id="b_l" style="top:250px; font-size:52px;">naam tha</div>
+          <div class="mono" id="b_name" style="left:80px; width:920px; text-align:center; top:320px; font-size:92px; color:#F2B544;">huggingface-cli</div>
+          <div class="bub" id="b_1" style="top:480px;"><div class="who">AI</div><div class="cmd">pip install huggingface-cli</div></div>
+          <div class="bub" id="b_2" style="top:590px;"><div class="who">AI</div><div class="cmd">pip install huggingface-cli</div></div>
+          <div class="bub" id="b_3" style="top:700px;"><div class="who">AI</div><div class="cmd">pip install huggingface-cli</div></div>
+          <div class="ill" id="b_ill" style="right:80px; top:800px;">illustration</div>
+          <div class="term" id="b_readme" style="left:80px; top:850px; width:920px; height:260px; border-color:#F2B544;">
+            <div class="mono" style="left:36px; top:28px; font-size:36px; color:#8592AD;">README.md · Alibaba ka ek project</div>
+            <div id="b_hl" style="position:absolute; left:26px; top:104px; width:860px; height:76px; border-radius:12px; background:rgba(242,181,68,.28); transform-origin:0 50%;"></div>
+            <div class="mono" style="left:36px; top:112px; font-size:46px;">pip install huggingface-cli</div>
+            <div class="src" style="left:0; width:890px; top:206px; font-size:28px;">Source: The Register</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:84px;">AI naam <span class="red">yaad</span> nahi rakhta</div>
+          <div class="x c gold" id="c_t2" style="top:380px; font-size:110px;">ANDAZA lagata hai</div>
+          <div class="card" id="c_a" style="left:80px; top:570px; width:400px; height:150px;"><div class="mono" style="left:0; width:400px; text-align:center; top:44px; font-size:50px;">huggingface</div></div>
+          <div class="x" id="c_plus" style="left:490px; width:100px; text-align:center; top:590px; font-size:96px;">+</div>
+          <div class="card" id="c_b" style="left:600px; top:570px; width:400px; height:150px;"><div class="mono" style="left:0; width:400px; text-align:center; top:44px; font-size:50px;">cli</div></div>
+          <div class="x c" id="c_eq" style="top:740px; font-size:90px;">=</div>
+          <div class="card" id="c_r" style="left:180px; top:860px; width:720px; height:150px; border-color:#F2B544;"><div class="mono" style="left:0; width:720px; text-align:center; top:44px; font-size:56px; color:#F2B544;">huggingface-cli</div></div>
+          <div class="stamp" id="c_st" style="left:560px; top:990px; color:#4CC38A; border-color:#4CC38A;">SAHI LAGTA HAI</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c red" id="d_t" style="top:250px; font-size:110px;">DIKKAT</div>
+          <div class="x c" id="d_t2" style="top:390px; font-size:64px;">galat naam, har baar <span class="gold">wahi</span></div>
+          <div id="d_tiles" style="position:absolute; left:80px; top:500px; width:920px; height:220px;">
+            <div class="tile" style="left:0px; top:0;"><div class="r">run 1</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:187px; top:0;"><div class="r">run 2</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:374px; top:0;"><div class="r">run 3</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:561px; top:0;"><div class="r">run 4</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:748px; top:0;"><div class="r">run 5</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:0px; top:118px;"><div class="r">run 6</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:187px; top:118px;"><div class="r">run 7</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:374px; top:118px;"><div class="r">run 8</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:561px; top:118px;"><div class="r">run 9</div><div class="n">fake-x</div></div>
+            <div class="tile" style="left:748px; top:118px;"><div class="r">run 10</div><div class="n">fake-x</div></div>
+          </div>
+          <div class="x c gold" id="d_pct" style="top:750px; font-size:200px;">0%</div>
+          <div class="x c" id="d_pl" style="top:970px; font-size:52px;">nakli naam: <span class="red">10 mein 10</span> baar wapas</div>
+          <div class="src" id="d_src" style="top:1060px; font-size:30px;">Source: USENIX Security 2025 paper</div>
+          <div class="chip" id="d_att" style="left:290px; top:250px; width:500px; background:#E8596B; color:#0B1220; font-size:60px;">ATTACKER</div>
+          <div class="step" id="d_s1" style="top:390px;"><div class="n">1</div><div class="t">AI se poocho</div></div>
+          <div class="step" id="d_s2" style="top:510px;"><div class="n">2</div><div class="t">nakli naam note karo</div></div>
+          <div class="step" id="d_s3" style="top:630px;"><div class="n">3</div><div class="t">wahi naam <span class="red">register</span></div></div>
+          <div class="step" id="d_s4" style="top:750px;"><div class="n">4</div><div class="t">package mein <span class="red">kuch bhi</span></div></div>
+          <div class="x c gold" id="d_slop" style="top:930px; font-size:112px;">SLOPSQUATTING</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="chip" id="e_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="card" id="e_1" style="left:80px; top:380px; width:920px; height:170px;">
+            <div class="x mut" style="left:40px; top:26px; font-size:42px;">AI ka bataya package</div>
+            <div class="x" style="left:40px; top:84px; font-size:60px;">seedhe install: <span class="red">NAHI</span></div>
+          </div>
+          <div class="x" id="e_pl" style="left:80px; top:590px; font-size:56px;">pehle dekho:</div>
+          <div class="chk" id="e_c1" style="top:670px;"><div class="t">kab bana?</div></div>
+          <div class="chk" id="e_c2" style="top:790px;"><div class="t">kitne log use karte hain?</div></div>
+          <div class="card" id="e_ag" style="left:80px; top:930px; width:920px; height:200px; border-color:#4CC38A;">
+            <div class="x mut" style="left:0; width:920px; text-align:center; top:28px; font-size:46px;">coding agent install kare sirf</div>
+            <div class="x green" style="left:0; width:920px; text-align:center; top:92px; font-size:76px;">APPROVED LIST se</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_1" style="top:400px; font-size:80px;">Hugging Face ki <span class="gold">asli</span> CLI</div>
+          <div class="x c" id="f_2" style="top:510px; font-size:76px;">kis package se aati hai?</div>
+          <div class="chip" id="f_c" style="left:290px; top:820px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
