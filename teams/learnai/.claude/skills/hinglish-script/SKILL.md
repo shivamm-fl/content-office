@@ -5,6 +5,8 @@ description: How to write the spoken script (script.txt / spec.json copy) of eve
 
 # Hinglish reel script (owner standard, 2026-10-14)
 
+**Narration recipe v4 (owner, 2026-11-13) comes first: `docs-notes/narration-recipe-v4.md`.** It is how every script is written and voiced now: a calm teacher talking to one learner, one idea through one concrete example, intuition before the name, one claim per sentence, no slop phrases, one paragraph per scene with sparse delivery tags (`[warm, conversational]`, `[curious]`, `[thoughtful]`, `[short pause]`), `...` for a thinking beat, numbers spelled out, and NO `|` pause marks or `@hook` tone tags. Where this file still shows the old format, pace or lengths, the recipe wins; the hook types and this floor's content rules still hold.
+
 Why: the owner's own script tool produced scripts that read like a senior engineer explaining to a junior; ours read like a docs summary ("model docs ke hisaab se..."). The owner will not hand over a script every time, so write them like this yourself. Reference scripts: `docs-notes/script-references.md` (read it first, then `docs-notes/script-style-v3.md`). Never copy their wording; copy the shape.
 
 ## The shape (60 to 90 s, 130 to 190 spoken words)

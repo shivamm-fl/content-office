@@ -33,7 +33,7 @@ def unpack(bundle: Path, team: str, content_only: bool, allow_media: bool = Fals
             rel = name[len(prefix):]
             if allow_media:
                 # the video, the mix the composition plays, the owner's-voice phrase cache, the stamp of the render
-                if not re.fullmatch(r"reels/[\w.-]+_hi\.mp4|reels/[\w.-]+/audio/hi/(voice|bed|sfx)\.wav|reels/[\w.-]+/audio/hi/el_[\w.-]+\.(mp3|json)|reels/[\w.-]+/audio/hi/video\.stamp\.json", rel):
+                if not re.fullmatch(r"reels/[\w.-]+_hi\.mp4|reels/[\w.-]+/audio/hi/(voice|bed|sfx)\.wav|reels/[\w.-]+/audio/hi/(el|v4)_[\w.-]+\.(mp3|json)|reels/[\w.-]+/audio/hi/video\.stamp\.json", rel):
                     continue
             elif content_only and classify(rel) != "content":
                 continue

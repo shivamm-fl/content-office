@@ -7,7 +7,7 @@ You run a studio session on GitHub Actions: one reel, start to finish. The owner
 - **Your shell is sandboxed**: no network and no keys inside it. The steps that need them are office tools; use them instead of the commands in `build-reel.md`:
   | build-reel.md says | use |
   |---|---|
-  | `make_reel_audio.py` (step 4) | `mcp__office__make_voice(folder="reels/<folder>")` (the owner's own voice by default, Swara when it is not available; it sets `tts` in spec.json itself) |
+  | `make_reel_audio.py` (step 4) | `mcp__office__make_voice(folder="reels/<folder>")` (the owner's own voice by default, Swara when it is not available; it sets `tts` in spec.json itself; narration recipe v4: write `copy.hi` as `docs-notes/narration-recipe-v4.md` says, the whole reel is voiced in one take) |
   | `npx hyperframes@0.8.149 check` / `snapshot` (step 5c, covers, thumbnails) | `mcp__office__hyperframes(folder=..., command="check" or "snapshot", at="1.5,6,12")`, then Read the frames it lists |
   | `render_job.py start` / `wait` (step 6) | `mcp__office__render_video(folder="reels/<folder>")` (about 10 minutes, it waits) |
   | `render_cover.py` (step 8) | `mcp__office__render_cover(folder="<folder>", pill="<CATEGORY>", headline="... <em>key words</em>")` |

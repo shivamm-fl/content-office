@@ -6,7 +6,7 @@
      - everything goes on the ONE paused timeline M.tl; set the start state with tl.set(el,{...},0) and animate with tl.to/fromTo(..., immediateRender:false)
      - no tl.call, no setTimeout/setInterval, no Math.random (use a seeded generator), no CSS transitions/animations, no <video>
      - numbers that count or objects that follow a path: tween a plain object {u:0} with onUpdate (see loop.spin and arrow.travel)
-     - canvas 1080x1920; content in y 170-1300, x 60-1020; the caption lane y 1330-1600 stays empty; labels >= 36 px
+     - canvas 1080x1920; content in y 250-1160, x 60-1020; the caption lane y 1190-1450 stays empty; labels >= 36 px
    Every helper takes (host, options) where host is the scene div (A = M.$("#sA")), adds tweens, and returns a handle whose methods take the time t in seconds
    (use M.P(sc,k) / M.W(sc,"word") for t, never a guessed number).
 
@@ -28,7 +28,7 @@
    M.box(host,{x,y,w,h,label,sub,icon,color,fill,size,subsize})    handle: show(t) hide(t) glow(t,color) unglow(t) move(t,{x,y},dur)  cx cy x y w h  edge("l|r|t|b") -> [x,y]
    M.arrow(host,{from:[x,y],to:[x,y],color,w,bend,dash,label,size})  handle: show(t,dur) hide(t) travel(t,dur,color)   (bend curves it)
    M.icon(host,kind,x,y,size,color)  handle: show(t) hide(t)   kinds: Object.keys(Viz.ICONS)
-   M.fit(host,{x,y,w,h,maxScale,minScale,align:"center|top"})   call LAST in a scene: scales the finished scene up into the safe area and centres it (default y 170-1300; pass y/h to start below the hook text)
+   M.fit(host,{x,y,w,h,maxScale,minScale,align:"center|top"})   call LAST in a scene: scales the finished scene up into the safe area and centres it (default y 250-1160; pass y/h to start below the hook text)
    M.pop(els,t,each) / M.out(els,t)   pop elements in / fade them out (your own elements)    M.ca(hex,alpha)  -> rgba() string (tween rgba, not 8-digit hex) */
 window.Viz = (function () {
   const NS = "http://www.w3.org/2000/svg";
@@ -87,7 +87,7 @@ window.Viz = (function () {
     // Elements marked data-nofit are not measured: label wrappers, and the travelling dots of M.arrow, M.flow and M.loop, which sit at 0,0 until they move (before 2026-10-12 they stretched
     // the box to the corner and every scene was fitted about 0.7-0.9x too small).
     M.fit = (host, o) => {
-      const R = Object.assign({ x: 60, y: 170, w: 960, h: 1130, maxScale: 1.45, minScale: 0.6, align: "center" }, o || {});
+      const R = Object.assign({ x: 60, y: 250, w: 960, h: 910, maxScale: 1.45, minScale: 0.6, align: "center" }, o || {});
       let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
       host.querySelectorAll(":scope > *:not(svg)").forEach((el) => {
         if (el.hasAttribute("data-nofit")) return;

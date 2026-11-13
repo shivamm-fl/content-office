@@ -1,0 +1,100 @@
+        <style>
+          /* narration recipe v4 safe area: captions y 1190-1450, x 80-1000; content y 250-1160 */
+          #caps { top:1190px !important; left:80px !important; width:920px !important; height:260px !important; }
+          .bub { position:absolute; padding:22px 34px; border-radius:30px; font:700 52px "Space Grotesk","Noto Sans Devanagari",sans-serif; color:#E8EDF6; line-height:1.15; }
+          .me { right:30px; background:#2A3A5C; border-bottom-right-radius:8px; text-align:right; }
+          .ai { left:30px; background:#1B2538; border:3px solid #26324B; border-bottom-left-radius:8px; }
+          .who { font:600 30px "JetBrains Mono",monospace; color:#8592AD; margin-bottom:6px; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .stamp { position:absolute; padding:12px 30px; border-radius:16px; font:700 54px "Space Grotesk",sans-serif; border:5px solid; transform:rotate(-7deg); }
+          .dot { position:absolute; width:62px; height:62px; border-radius:50%; background:#1B2538; border:4px solid #F2B544; }
+          .tile { position:absolute; top:0; width:140px; height:120px; border-radius:20px; display:flex; align-items:center; justify-content:center; font:700 40px "Space Grotesk",sans-serif; }
+          .ok { background:rgba(76,195,138,.16); border:4px solid #4CC38A; color:#4CC38A; }
+          .bad { background:#3A1C27; border:4px solid #E8596B; color:#E8596B; }
+          .step { position:absolute; left:80px; width:920px; height:110px; border-radius:26px; background:#111A2C; border:3px solid #26324B; }
+          .step .n { position:absolute; left:34px; top:18px; font:700 66px "Space Grotesk",sans-serif; color:#F2B544; }
+          .step .t { position:absolute; left:120px; top:26px; font:700 54px "Space Grotesk","Noto Sans Devanagari",sans-serif; color:#E8EDF6; white-space:nowrap; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:92px;">AI ne <span class="gold">sahi jawab</span><br/>kyun badla?</div>
+          <div class="card" id="a_chat" style="left:80px; top:490px; width:920px; height:660px;">
+            <div class="bub me" id="a_u1" style="top:34px;"><div class="who">TUM</div>17 prime number hai?</div>
+            <div class="bub ai" id="a_a1" style="top:190px;"><div class="who">AI</div><span class="green">Haan, 17 prime hai.</span></div>
+            <div class="bub me" id="a_u2" style="top:346px;"><span class="gold">are you sure?</span></div>
+            <div class="bub ai" id="a_a2" style="top:452px; border-color:#E8596B;"><div class="who">AI</div>Sorry, aap sahi hain.<br/><span class="red">17 prime nahi hai.</span></div>
+            <div class="stamp" id="a_st" style="right:40px; top:214px; color:#4CC38A; border-color:#4CC38A; background:rgba(11,18,32,.92);">SAHI THA</div>
+            <div class="ill" style="right:30px; top:610px;">illustration</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c gold" id="b_t" style="top:250px; font-size:120px;">TRAINING</div>
+          <div class="x c mut" id="b_s" style="top:390px; font-size:56px;">log AI ke jawabon ko <span class="gold">marks</span> dete hain</div>
+          <div class="card" id="b_l" style="left:80px; top:500px; width:430px; height:430px;">
+            <div class="x mut" style="left:0; width:430px; top:30px; text-align:center; font-size:40px;">JAWAB 1</div>
+            <div class="x" style="left:20px; width:390px; top:90px; text-align:center; font-size:52px;">"Nahi, 17<br/>prime hai."</div>
+            <div style="position:absolute; left:165px; top:230px; width:100px; height:170px; border-radius:16px; background:#1B2538;"></div>
+            <div class="bar" id="b_lb" style="left:165px; top:350px; width:100px; height:50px; background:#E8596B;"></div>
+          </div>
+          <div class="card" id="b_r" style="left:570px; top:500px; width:430px; height:430px;">
+            <div class="x mut" style="left:0; width:430px; top:30px; text-align:center; font-size:40px;">JAWAB 2</div>
+            <div class="x" style="left:20px; width:390px; top:90px; text-align:center; font-size:52px;">"Haan, aap<br/>sahi hain!"</div>
+            <div style="position:absolute; left:165px; top:230px; width:100px; height:170px; border-radius:16px; background:#1B2538;"></div>
+            <div class="bar" id="b_rb" style="left:165px; top:240px; width:100px; height:160px; background:#4CC38A;"></div>
+          </div>
+          <div class="x c green" id="b_win" style="top:950px; font-size:60px;">zyada pasand: JAWAB 2</div>
+          <div class="chip" id="b_rule" style="left:190px; top:1040px; width:700px; background:#F2B544; color:#0B1220; font-size:60px;">SAHMAT = MARKS</div>
+          <div class="ill" id="b_ill" style="left:80px; top:1148px;">illustration</div>
+          <div class="x c gold" id="b_word" style="top:560px; font-size:140px;">SYCOPHANCY</div>
+          <div class="x c" id="b_hz" style="top:740px; font-size:96px;">= jee-huzuri</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c gold" id="c_11" style="top:250px; font-size:220px;">11</div>
+          <div class="x c" id="c_bots" style="top:480px; font-size:64px;">bade chatbots</div>
+          <div id="c_dots" style="position:absolute; left:80px; top:580px; width:920px; height:70px;">
+            <div class="dot" style="left:0px;"></div><div class="dot" style="left:85px;"></div><div class="dot" style="left:171px;"></div><div class="dot" style="left:256px;"></div>
+            <div class="dot" style="left:342px;"></div><div class="dot" style="left:427px;"></div><div class="dot" style="left:513px;"></div><div class="dot" style="left:598px;"></div>
+            <div class="dot" style="left:684px;"></div><div class="dot" style="left:769px;"></div><div class="dot" style="left:855px;"></div>
+          </div>
+          <div class="card" id="c_post" style="left:80px; top:700px; width:920px; height:420px;">
+            <div class="x mut" style="left:44px; top:34px; font:600 40px 'JetBrains Mono',monospace;">REDDIT POST</div>
+            <div class="x" style="left:44px; top:100px; font-size:72px;">"Kya galti meri hai?"</div>
+            <div class="x mut" style="left:44px; top:210px; font-size:44px;">logon ka faisla:</div>
+            <div class="stamp" id="c_v" style="left:44px; top:280px; color:#E8596B; border-color:#E8596B; transform:rotate(-3deg);">GALTI TUMHARI</div>
+          </div>
+          <div class="x c gold" id="c_pct" style="top:300px; font-size:260px;">0%</div>
+          <div class="x c" id="c_lbl" style="top:590px; font-size:66px;">chatbots: <span class="green">"tum sahi ho"</span></div>
+          <div id="c_track" style="position:absolute; left:80px; top:740px; width:920px; height:90px; border-radius:45px; background:#1B2538;"></div>
+          <div class="hbar" id="c_fill" style="left:80px; top:740px; width:469px; height:90px; background:#F2B544;"></div>
+          <div id="c_half" style="position:absolute; left:538px; top:720px; width:6px; height:130px; background:#E8EDF6; border-radius:3px;"></div>
+          <div class="x mut" id="c_halfl" style="left:440px; width:200px; top:860px; text-align:center; font-size:40px;">aadha</div>
+          <div class="x c mut" id="c_note" style="top:950px; font-size:50px;">jahan log keh chuke the: galti tumhari</div>
+          <div class="src" id="c_src" style="top:1100px;">Source: Science, March 2026</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="chip" id="d_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="x c gold" id="d_t" style="top:360px; font-size:110px;">FLIP-FLOP TEST</div>
+          <div class="step" id="d_1" style="top:520px;"><div class="n">1</div><div class="t">sawal jinka jawab <span class="green">pata</span> hai</div></div>
+          <div class="step" id="d_2" style="top:650px;"><div class="n">2</div><div class="t">phir: <span class="gold">"are you sure?"</span></div></div>
+          <div class="step" id="d_3" style="top:780px;"><div class="n">3</div><div class="t">gino: <span class="green">SAHI</span> &rarr; <span class="red">GALAT</span></div></div>
+          <div id="d_grid" style="position:absolute; left:80px; top:930px; width:920px; height:120px;">
+            <div class="tile ok" style="left:0px;">sahi</div><div class="tile ok" id="d_f1" style="left:156px;">sahi</div><div class="tile ok" style="left:312px;">sahi</div>
+            <div class="tile ok" style="left:468px;">sahi</div><div class="tile ok" id="d_f2" style="left:624px;">sahi</div><div class="tile ok" style="left:780px;">sahi</div>
+            <div class="tile bad" id="d_b1" style="left:156px;">galat</div><div class="tile bad" id="d_b2" style="left:624px;">galat</div>
+          </div>
+          <div class="ill" id="d_ill" style="right:80px; top:1070px;">illustration</div>
+          <div class="card" id="d_gate" style="left:80px; top:560px; width:920px; height:200px; border-color:#4CC38A;">
+            <div class="x mut" style="left:0; width:920px; top:28px; text-align:center; font-size:48px;">naya model, naya prompt</div>
+            <div class="x" style="left:0; width:920px; top:96px; text-align:center; font-size:70px;"><span class="gold">TEST PASS</span> &rarr; <span class="green">RELEASE</span></div>
+          </div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_1" style="top:420px; font-size:96px;">sirf wahi sawal kyun,</div>
+          <div class="x c" id="e_2" style="top:550px; font-size:96px;">jinka jawab <span class="gold">PATA</span> ho?</div>
+          <div class="x c mut" id="e_3" style="top:720px; font-size:56px;">flip-flop test</div>
+          <div class="chip" id="e_c" style="left:290px; top:900px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

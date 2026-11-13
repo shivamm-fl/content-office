@@ -1,7 +1,7 @@
 /* MOTION kit, CLEAN style (owner decision 2026-10-14, see .claude/skills/clean-reel/SKILL.md): a quiet static background, flat cards with a soft shadow,
    no glow, no flicker, no glitch, no flash. Same class names as before, so every template keeps working.
    Layers: #bg (static gradient + faint grid + vignette) < #cam (camera; holds the .beat scenes) < chrome (progress, tag, handle) < #caps.
-   Safe area: content y 170-1300, x 60-1020. Captions lane y 1330-1600. Keep the bottom 250 px and top 150 px free of key info (Instagram UI). */
+   Safe area (narration recipe v4, owner 2026-11-13): content y 250-1160, x 60-1020. Captions lane y 1190-1450, x 80-1000. Nothing key above y 250 or below y 1460 (Instagram UI). */
 :root { --bg:#070B14; --bg2:#0B1220; --panel:#101828; --text:#E8EDF6; --muted:#8592AD; --accent:#A78BFA; --cyan:#5BC0EB; --hot:#E8596B; --good:#4CC38A; --violet:#9A8CEB;
   --head:"Space Grotesk","Noto Sans Devanagari",sans-serif; --lat:"Space Grotesk","Noto Sans Devanagari",sans-serif; --code:"JetBrains Mono",monospace; }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -24,8 +24,8 @@ html, body { width:1080px; height:1920px; overflow:hidden; background:var(--bg);
 #tagdot { width:10px; height:10px; border-radius:50%; background:var(--accent); }
 .brk { display:none; }
 #handle { position:absolute; right:60px; top:86px; font-family:var(--code); font-weight:500; font-size:24px; letter-spacing:.04em; color:rgba(232,237,246,.7); }
-/* ---------- captions (lane y 1330-1600) ---------- */
-#caps { position:absolute; left:40px; top:1330px; width:1000px; height:270px; }
+/* ---------- captions (lane y 1190-1450) ---------- */
+#caps { position:absolute; left:80px; top:1190px; width:920px; height:260px; }
 .capline { position:absolute; left:0; top:0; width:1000px; height:270px; display:flex; flex-wrap:wrap; align-content:center; align-items:center; justify-content:center; gap:0 24px; opacity:0; font-family:var(--lat); font-weight:700; font-size:68px; line-height:1.12; text-align:center; }
 .cw { display:inline-block; color:#fff; -webkit-text-stroke:9px rgba(5,8,15,.95); paint-order:stroke fill; }
 /* ---------- overlays (no longer used: flash / wipe / glitch bars stay hidden) ---------- */

@@ -8,7 +8,9 @@ TTS engines (spec.json "tts"):
                Token syntax `display{spoken}`: display text is what the caption shows, spoken is what the voice reads (e.g. `token{टोकन}`).
                Unbraced words are spoken as written, so Roman English in a Hinglish line is read as English.
   "elevenlabs" legacy (reels 1-2 only, paid plan needed for more). "kokoro" legacy English.
-  "owner"      OPT-IN ONLY: the owner's own cloned voice on ElevenLabs. Use it only when the owner asks ("meri voice use karo") and gives the key
+  "owner_v4"   THE DEFAULT for new reels (owner 2026-11-13, docs-notes/narration-recipe-v4.md): the owner's voice "Shivam Trainer" on eleven_v4, the WHOLE reel in one
+               request, stability 0.5 / similarity 0.8 / seed 121126, delivery tags like [curious], no tempo change, cache audio/hi/v4_<sha>.*.
+  "owner"      the OLD recipe (one request per phrase), kept only for reels already voiced with it (their el_* phrase cache): the owner's own cloned voice on ElevenLabs. Use it only when the owner asks ("meri voice use karo") and gives the key
                (ELEVENLABS_API_KEY in env or ai-course/.env, never committed); otherwise every reel stays on Edge. Recipe the owner approved
                (.claude/skills/owner-voice/SKILL.md): voice "Shivam Trainer", model eleven_flash_v2_5 at owner_tempo 0.9 for new reels (owner 2026-10-19; spec "owner_model" / "owner_tempo", new_reel.py writes both; a spec without them keeps eleven_multilingual_v2 at tempo 1.0), NO voice_settings, one request per phrase with
                previous_text/next_text, spec "prime" = an unspoken lead-in for the first phrase, exact word timings and trimming from the character alignment.
@@ -36,6 +38,20 @@ PACE = float(spec.get("pace", 1.0))   # speed multiplier on every tone rate (1.0
 SC = spec["scenes"]; MIN = spec["min"]; langs = sys.argv[2:] or list(spec["copy"].keys())
 SIL = set(spec.get("silent", []))   # scenes without any voice (footage / intro): they last their "min" seconds and have no copy
 ENGINE = spec.get("tts", "edge")
+def _v4_to_phrases(s):
+    """Swara / the old recipe on a recipe-v4 paragraph: the delivery tags ([curious] ...) are never read aloud, and a paragraph without `|` marks
+    becomes one phrase per sentence (ends at । ? ! or a single full stop before a space), so cues and ph[scene][k] line up with the v4 voice."""
+    s = re.sub(r"\[[^\]]*\]\s*", "", s)
+    if "|" in s: return s
+    out, st = [], 0
+    for k, ch in enumerate(s):
+        if ch in "।?!" or (ch == "." and (k + 1 == len(s) or s[k + 1].isspace()) and not (k and s[k - 1] == ".")):
+            out.append(s[st:k + 1].strip()); st = k + 1
+    out.append(s[st:].strip())
+    return " | ".join(x for x in out if x)
+if ENGINE != "owner_v4":
+    for _cp in spec.get("copy", {}).values():
+        for _k in list(_cp): _cp[_k] = _v4_to_phrases(_cp[_k])
 
 def trim(y, pad=0.04):
     a = np.abs(y) > 0.015; i, j = int(np.argmax(a)), len(a) - int(np.argmax(a[::-1]))
@@ -187,11 +203,110 @@ def owner_phrase(text, prev, nxt, cache_dir):
     y, _ = sf.read(wav, dtype="float32"); a = max(0.0, words[0][1] - 0.05); b = min(len(y) / SR, words[-1][1] + words[-1][2] + 0.18)
     return y[int(a * SR):int(b * SR)], words, a
 
+# ---------------- owner's voice, narration recipe v4 (owner 2026-11-13, spec "tts": "owner_v4") ----------------
+# The whole reel is ONE request (continuous delivery), eleven_v4, fixed settings and seed, no tempo change ever (cut words instead).
+# Copy per scene is plain text with sparse delivery tags ([warm, conversational], [curious], [thoughtful], [short pause]) and "..." beats; no `|` pauses, no braces.
+# Scenes are joined with a paragraph break. Every generation is cached: v4_<h>.mp3 + v4_<h>.json (alignment) + v4_<h>.marker.json (sha256 of text, model, voice, settings, seed).
+V4_MODEL, V4_SETTINGS, V4_SEED = "eleven_v4", {"stability": 0.5, "similarity_boost": 0.8}, 121126
+V4_TAG = re.compile(r"\[[^\]]*\]")
+def v4_scene(lang, sid):   # the scene as written (display form); old-format pause marks and tone tags are never sent
+    s = spec["copy"][lang][sid].strip(); s = re.sub(r"(?<!\S)@\w+\s+", "", s); return re.sub(r"\s*\|{1,3}\s*", " ", s)
+def v4_spoken(s): return re.sub(r"[^\s{}]+\{([^}]*)\}", r"\1", s)   # display{spoken}: the voice gets the spoken form, the captions keep the display form
+def v4_text(lang): return "\n\n".join(v4_spoken(v4_scene(lang, sid)) for sid in SC if sid not in SIL)
+def v4_hash(text, voice_id): return hashlib.sha256(json.dumps([text, V4_MODEL, voice_id, V4_SETTINGS, V4_SEED], ensure_ascii=False).encode()).hexdigest()
+def v4_get(text, d):
+    """-> (mp3 path, alignment) for the whole reel. Reuses a cached generation whose hash matches; otherwise ONE paid call, no retry."""
+    import base64, urllib.request, urllib.error
+    name = spec.get("v4_voice", "Shivam Trainer"); key = os.environ.get("ELEVENLABS_API_KEY")   # the key comes only from the environment
+    if not key:   # no key: reuse a cached generation of exactly this text with the same voice name, model, settings and seed
+        for mk in sorted(d.glob("v4_*.marker.json")):
+            m = json.loads(mk.read_text(encoding="utf-8"))
+            if m["voice_name"] == name and m["sha256"] == v4_hash(text, m["voice_id"]):
+                if os.environ.get("OWNER_VOICE_DRY"): print("owner_v4: 0 characters to generate (cached)"); sys.exit(0)
+                return mk.with_name(mk.name.replace(".marker.json", ".mp3")), json.loads(mk.with_name(mk.name.replace(".marker.json", ".json")).read_text(encoding="utf-8"))
+        sys.exit("owner_v4: no cached generation for this text and ELEVENLABS_API_KEY is not set")
+    def call(url, body=None):
+        req = urllib.request.Request(url, data=None if body is None else json.dumps(body).encode(), headers={"xi-api-key": key, **({"Content-Type": "application/json"} if body else {})})
+        try: return json.loads(urllib.request.urlopen(req, timeout=300).read())
+        except urllib.error.HTTPError as e: sys.exit(f"owner_v4: ElevenLabs HTTP {e.code}: {e.read()[:300]!r} (stopped, no retry)")
+    hits = [v for v in call("https://api.elevenlabs.io/v1/voices")["voices"] if v["name"] == name and v.get("category") == "cloned"]
+    if len(hits) != 1: sys.exit(f"owner_v4: {len(hits)} cloned voices named exactly {name!r}; need exactly one")
+    vid = hits[0]["voice_id"]; h = v4_hash(text, vid); mp3, js, mk = d / f"v4_{h[:12]}.mp3", d / f"v4_{h[:12]}.json", d / f"v4_{h[:12]}.marker.json"
+    if mp3.exists() and js.exists() and mk.exists() and json.loads(mk.read_text(encoding="utf-8"))["sha256"] == h:
+        if os.environ.get("OWNER_VOICE_DRY"): print(f"owner_v4: 0 characters to generate (cached {mp3.name})"); sys.exit(0)
+        print(f"owner_v4: cached {mp3.name}"); return mp3, json.loads(js.read_text(encoding="utf-8"))
+    if os.environ.get("OWNER_VOICE_DRY"): print(f"owner_v4: would generate {len(text)} characters with {name} ({V4_MODEL})"); sys.exit(0)
+    print(f"owner_v4: generating {len(text)} characters with {name} ({V4_MODEL}), one request")
+    r = call(f"https://api.elevenlabs.io/v1/text-to-speech/{vid}/with-timestamps?output_format=mp3_44100_128",
+             {"text": text, "model_id": V4_MODEL, "voice_settings": V4_SETTINGS, "seed": V4_SEED})
+    mp3.write_bytes(base64.b64decode(r["audio_base64"])); js.write_text(json.dumps({"alignment": r.get("alignment"), "normalized_alignment": r.get("normalized_alignment")}, ensure_ascii=False), encoding="utf-8")
+    mk.write_text(json.dumps({"sha256": h, "model": V4_MODEL, "voice_name": name, "voice_id": vid, "voice_settings": V4_SETTINGS, "seed": V4_SEED, "characters": len(text),
+                              "created": time.strftime("%Y-%m-%dT%H:%M:%S"), "text": text}, ensure_ascii=False, indent=1), encoding="utf-8")
+    return mp3, json.loads(js.read_text(encoding="utf-8"))
+def v4_char_times(text, al):
+    """per character of `text`: (start, end) from the returned alignment (difflib maps them if the service changed the text)."""
+    a = al.get("alignment") or al["normalized_alignment"]; chars = a["characters"]; st, en = a["character_start_times_seconds"], a["character_end_times_seconds"]
+    if "".join(chars) == text: return list(zip(st, en))
+    import difflib; out = [None] * len(text); sm = difflib.SequenceMatcher(None, text, "".join(chars), autojunk=False)
+    for i, j, n in sm.get_matching_blocks():
+        for k in range(n): out[i + k] = (st[j + k], en[j + k])
+    print(f"owner_v4: alignment text differs from the sent text; mapped {sum(x is not None for x in out)}/{len(text)} characters")
+    return out
+def v4_sentences(s):
+    out, st = [], 0
+    for k, ch in enumerate(s):
+        if ch in "।?!" or (ch == "." and (k + 1 == len(s) or s[k + 1].isspace()) and not (k and s[k - 1] == ".")):
+            out.append((st, k + 1)); st = k + 1
+    if s[st:].strip(): out.append((st, len(s)))
+    return out
+def v4_layout(lang, d):
+    """one generation -> (voice @SR, TOTAL, scene starts, captions, sentence spans per scene, voiced length per scene)."""
+    text = v4_text(lang); mp3, al = v4_get(text, d); times = v4_char_times(text, al)
+    wav = mp3.with_suffix(".wav")
+    if not wav.exists(): subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp3), "-ar", str(SR), "-ac", "1", str(wav)], check=True)   # resample only, never a tempo change
+    y, _ = sf.read(wav, dtype="float32"); OFF = 0.10
+    tagged = [False] * len(text)
+    for m in V4_TAG.finditer(text):
+        for k in range(m.start(), m.end()): tagged[k] = True
+    spans, pos = {}, 0
+    for sid in SC:
+        if sid in SIL: continue
+        s = v4_spoken(v4_scene(lang, sid)); i = text.index(s, pos); spans[sid] = (i, i + len(s)); pos = i + len(s)
+    def words_in(a, b):   # spoken words in text[a:b]: whitespace-separated, tags removed, times from the alignment
+        out, cur = [], None
+        for k in range(a, b):
+            ch = text[k]
+            if ch.isspace() or tagged[k]: cur = None; continue
+            tt = times[k]
+            if tt is None: continue
+            if cur is None: cur = [ch, tt[0], tt[1]]; out.append(cur)
+            else: cur[0] += ch; cur[2] = tt[1]
+        return [(w, s_, e_ - s_) for w, s_, e_ in out if re.search(r"\w", w)]
+    TOTAL = math.ceil((OFF + len(y) / SR + END_PAD) * 2) / 2
+    voice = np.zeros(int(TOTAL * SR), "float32"); voice[int(OFF * SR):int(OFF * SR) + len(y)] = y[:len(voice) - int(OFF * SR)]
+    starts, caps, ph, vdur, prev = {}, [], {}, {}, -1.0
+    for sid in SC:
+        if sid in SIL: starts[sid] = max(prev + 0.5, 0.0); prev = starts[sid]; continue
+        a, b = spans[sid]; ws = words_in(a, b)
+        st0 = 0.0 if not starts else max(prev + 0.5, OFF + ws[0][1] - 0.15); starts[sid] = st0; prev = st0
+        vdur[sid] = ws[-1][1] + ws[-1][2] - ws[0][1]
+        body = V4_TAG.sub(" ", v4_scene(lang, sid)); toks = [t for t in M.tokens(body) if re.search(r"\w", t[0])]   # "..." is a beat, not a caption word
+        if len(toks) != len(ws): print(f"owner_v4 {sid}: {len(toks)} caption tokens vs {len(ws)} voiced words (mapped by position)")
+        for w, s_, e_ in edge_caps(toks, ws, 0.0): caps.append({"t": w, "s": round(OFF + s_, 3), "e": round(OFF + e_, 3), "scene": sid})
+        ph[sid] = []   # sentence spans (cues and timeline.js use ph[scene][k]): a sentence ends at । ? ! or at a single "." before a space ("..." is a beat)
+        for s0, s1 in v4_sentences(text[a:b]):
+            sw = words_in(a + s0, a + s1)
+            if sw: ph[sid].append({"s": round(OFF + sw[0][1], 3), "e": round(OFF + sw[-1][1] + sw[-1][2], 3)})
+    print(f"owner_v4: {len(y) / SR:.2f}s of voice, total {TOTAL}s")
+    return voice, TOTAL, starts, caps, ph, vdur
+
 def build(lang):
     os.environ["ELEVENLABS_SPEED"] = str(spec.get("speed", {}).get(lang, "1.0"))
     if ENGINE in ("elevenlabs", "kokoro"): os.environ[f"TTS_PROVIDER_{lang.upper()}"] = ENGINE
     edge = ENGINE in ("edge", "elevenlabs_ts"); owner = ENGINE == "owner"
     d = proj / "audio" / lang; d.mkdir(parents=True, exist_ok=True); scenes = {}; starts = {}; t = 0.0
+    if ENGINE == "owner_v4":
+        voice, TOTAL, starts, caps, ph, vdur = v4_layout(lang, d); return finish(lang, d, voice, TOTAL, starts, caps, ph, vdur)
     if owner:   # every phrase of the reel in order, for previous_text / next_text and the credit count
         flat = [owner_text(M.tokens(re.sub(r"^@\w+\s+", "", ph, flags=re.S))) for sid2 in SC if sid2 not in SIL for ph in re.split(r"\s*\|{1,3}\s*", spec["copy"][lang][sid2])]
         ctx = [(flat[j - 1] if j else spec.get("prime"), flat[j + 1] if j + 1 < len(flat) else None) for j in range(len(flat))]
@@ -245,6 +360,10 @@ def build(lang):
                 items = pcaps if pcaps is not None else phrase_caps(M.tokens(txt), pf, lang, pd)
                 for w, s_, e_ in items:
                     caps.append({"t": w, "s": round(off + ra + max(0, s_), 3), "e": round(off + ra + min(pd, e_), 3), "scene": sid})
+    return finish(lang, d, voice, TOTAL, starts, caps, ph, vdur)
+
+def finish(lang, d, voice, TOTAL, starts, caps, ph, vdur):
+    """voice track laid out -> mouth envelope, cues, mix (shared by every engine)."""
     starts["end"] = TOTAL; sf.write(d / "voice.wav", voice, SR)
     hop = SR // FPS; n = int(TOTAL * FPS); rms = np.array([np.sqrt(np.mean(voice[i*hop:(i+1)*hop] ** 2)) for i in range(n)])
     env = np.convolve(np.clip(rms / np.percentile(rms[rms > 0.01], 90), 0, 1), [0.25, 0.5, 0.25], "same")

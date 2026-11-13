@@ -29,7 +29,7 @@ Build it on one of the five retention templates (from the reference reel the own
 - Reported, unproven claims are said as reported ("viral chat", "Anthropic ka daava") and a recreated UI is labelled "recreated". If an idea the owner gives cannot be verified, use the verified version and tell him.
 - Interview reels end the teaching with a one-line answer to say in the interview.
 - Close with a question that has a real answer ("T = 2 par 100 baar poochho to kitni baar paani?"), then "Comment karo".
-- Spec: `"tts": "owner"`, `"owner_tempo": 1.0` (faster than the old 0.9), mostly single `|` pauses, `min` 2.0 per scene. Lint with `scripts/lint_script.py` and fix every FAIL.
+- Spec: `"tts": "owner_v4"` and `copy.hi` written as `docs-notes/narration-recipe-v4.md` says (owner 2026-11-13: one take on eleven_v4, delivery tags, no `|` pauses, no tempo change), `min` 2.0 per scene. Lint with `scripts/lint_script.py` and fix every FAIL.
 
 ## 3. Build the visuals by hand
 
@@ -39,7 +39,7 @@ The owner wants Claude to build the picture itself (not Codex).
 - **Kinetic text is the main element:** 90 to 200 px lines, key word gold, red or green, nothing under 44 px.
 - **Real screenshots** of the source page (browser screenshot, cropped), 960 px wide, with a slow push-in and a highlighter drawn on the exact phrase being spoken, plus a "Source: site" label.
 - One picture that changes beats many static ones: the a018 bar chart changes shape at T = 1, 0.5 and 2.
-- Frame 0 shows the hook (the feed autoplays muted). Content stays in y 170 to 1300; captions own 1330 to 1600.
+- Frame 0 shows the hook (the feed autoplays muted). Content stays in y 250 to 1160; captions own 1190 to 1450 (narration recipe v4).
 - Tools:
   - `reels/_kit/fx.css` and `fx.js` (copied into each new reel's `kit/` by `new_reel.py`) give `at(scene, word, n)` (it keeps decimals like 7.9, which `M.W` strips), `show`, `hide`, `wipe`, `count`.
   - Write only the scenes (`beats.html`) and the timeline (`timeline.js`, ending with `M.finish({kw})`), then run `python scripts/wrap_reel.py reels/<folder> beats.html timeline.js "<TAG>" "<title>"`.

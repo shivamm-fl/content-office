@@ -1,34 +1,35 @@
 ---
 name: owner-voice
-description: Voice a LearnAI reel with the OWNER'S OWN cloned ElevenLabs voice ("Shivam Trainer") using the recipe he approved on 2026-10-15 (Flash v2.5 at tempo 0.9 since 2026-10-19, multilingual_v2 before, voice defaults, one request per phrase, primed first line, exact word timings). OPT-IN ONLY — use it only when the owner explicitly says "meri voice use karo" / "my voice" / "ElevenLabs se bana" AND the ElevenLabs key is available; every other reel (including all CI builds) stays on the free Edge TTS default.
+description: Voice a Learnvora reel with the OWNER'S OWN cloned ElevenLabs voice ("Shivam Trainer") on narration recipe v4 (owner 2026-11-13) - eleven_v4, the whole reel in one take, stability 0.5 / similarity 0.8 / seed 121126, sparse delivery tags, no tempo change. Use for every new reel ("tts": "owner_v4"); in the office the make_voice tool runs it. Reels voiced before 2026-11-13 keep the old phrase recipe on a revision.
 ---
 
-# Owner's voice (ElevenLabs)
+# Owner's voice (ElevenLabs), narration recipe v4
 
-**In the office (owner decision 2026-10-17) this is the DEFAULT voice**: the studio's `make_voice` tool uses it whenever the ElevenLabs characters of the month cover the reel, and falls back to Swara (Edge TTS, `"tts": "edge"`) otherwise. The office keeps the key; agents never see or need it. The rest of this file is the recipe (in ai-course it stays opt-in). This skill changes only the voice, nothing else of the pipeline.
+The full recipe (writing, format, safe area, loudness, checks) is `docs-notes/narration-recipe-v4.md`. This skill is the voice part only.
 
-## When (ai-course, local)
-- The owner asks for his own voice in this session and the key is present (`ELEVENLABS_API_KEY` in the environment or in `ai-course/.env`, which is git-ignored). Never put the key in a committed file, a spec, a log or a message.
+**In the office** the studio tool `make_voice` voices the reel: it sets `"tts": "owner_v4"` and uses the owner's voice whenever the month's characters cover the reel, and Swara (Edge TTS) otherwise. The office keeps the key; agents never see it, print it or write it anywhere.
 
-## The recipe (why each point: the owner tested the alternatives)
-- Voice `Shivam Trainer` (`KgBloOsGmp6r57GIimqQ`), not the older `Shivam` clone. Model `eleven_multilingual_v2`.
-- **Model (owner decision 2026-10-19): `eleven_flash_v2_5` at `"owner_tempo": 0.9` for every new reel.** Same voice, half the price per character ($0.04 instead of $0.08 per 1,000); he listened to the first 20 seconds of Day 1 and the whole of Day 2 this way and approved it. `scripts/new_reel.py` writes `"owner_model": "eleven_flash_v2_5", "owner_tempo": 0.9` into the spec. A spec without `owner_model` is a reel voiced before this decision: it stays on `eleven_multilingual_v2` at tempo 1.0 (a new model is a new voice for a reel the owner already approved, and it spends the month's characters again). `owner_tempo` slows or speeds the cached audio with ffmpeg (0.9 = 10 percent slower), so a new tempo costs nothing; the model is part of the phrase cache key.
-- **No voice_settings** (stability/style/speed tweaks sounded unnatural). **No eleven_v3, no audio tags** like `[excited]` (sounded like shouting).
-- **One request per phrase**, never the whole script: one request makes it rushed with no pauses. `previous_text` / `next_text` keep the intonation continuous (not billed).
-- **Primed first line**: spec `"prime": "सुनो, ये बहुत interesting है!"` is sent as the first phrase's `previous_text` — never spoken, it lifts the hook's energy. The owner picked this over plain, "expressive settings" and v3.
-- Mixed script: Hindi in Devanagari, English in Latin. Do not transliterate English ("मॉडल") and do not write Hindi in Roman. In braced tokens the engine takes the Latin form (`JSON{जेसन}` → JSON, `30{thirty}` → thirty).
-- Trim and caption timings come from the character alignment (`/with-timestamps`): exact, no whisper.
+## The recipe (owner 2026-11-13: "tu voice abhi bhi shivam trainer hi rakhna"; q158 and q159 approved: "mast mast")
+- Voice: the cloned voice named exactly `Shivam Trainer` (looked up by name; the run stops on zero or several matches). Not the older `Shivam` clone.
+- Model `eleven_v4`, `voice_settings` `{"stability": 0.5, "similarity_boost": 0.8}`, `seed` 121126, no other settings.
+- The whole reel is ONE request (scenes joined by a paragraph break), so the delivery is continuous. Never stitch sentence-by-sentence clips.
+- Never speed up, slow down or pitch-shift the voice to fit a length: cut words.
+- Captions and scene starts come from the returned character alignment (tags removed). Sentence spans (`ph[scene][k]`, for cues and timelines) split at । ? ! and at a single full stop before a space.
+- Every generation is cached in `audio/hi/v4_<sha12>.mp3` + `.json` + `.marker.json` (sha256 of text, model, voice, settings, seed); the runner keeps them with the reel's media, so a revision that does not change the narration costs nothing.
+- On an API error the run stops; it never retries a paid call by itself.
 
-## Writing for this voice (reels)
-Short punchy phrases with `...`, `?`, `!` carry the expression (the voice follows the text, not settings):
+## Writing for this voice
+- One paragraph per scene in `copy.hi`. Delivery tags only `[warm, conversational]`, `[curious]`, `[thoughtful]`, `[short pause]`, at the start of a paragraph or before an answer. `...` for a thinking beat. No `|`, no `@hook`.
+- Numbers and maths in words ("fifty one percent", "ग्यारह बड़े chatbots"); no digits or symbols.
 ```
-"A": "@hook Chatbot ने customer को बोला... | refund तीस दिन में! | और policy में? | सिर्फ़ सात दिन।",
-"B": "Document उसके पास था... | फिर भी गलत जवाब! | यही interview में पूछा जाता है। | और जवाब? | तीन वजहें।"
+"A": "[warm, conversational] मान लो AI से पूछा: seventeen prime number है? बोला, हाँ। तुमने लिखा, are you sure? [short pause] जवाब आया: Sorry, आप सही हैं, seventeen prime नहीं है। ... जवाब सही था। फिर बदला क्यों?",
+"B": "[thoughtful] Training में लोग AI के जवाबों को marks देते हैं। और लोगों को कौन सा जवाब अच्छा लगता है? ... जो उनसे सहमत हो।"
 ```
-Pauses: `|` 0.3 s between phrases (reel rhythm), `||` 0.6 s only at a real section change; a question gets its own phrase so the pause lands after it. Close with comment + follow (clean-reel rule 7), never "save kar lo".
 
-## Run
-1. In `spec.json`: `"tts": "owner", "prime": "सुनो, ये बहुत interesting है!"` (keep `"audio": "v2"`; `pace` is ignored for this voice).
-2. `OWNER_VOICE_DRY=1 .venv/bin/python scripts/make_reel_audio.py reels/<folder>` → prints the characters to generate (the plan has about 32k characters a month). Tell the owner the number before a full reel; a 10–15 s test (the hook scene) first.
-3. `.venv/bin/python scripts/make_reel_audio.py reels/<folder>` → voice, word-exact captions, mix at -14 LUFS. Phrases are cached by content (`audio/hi/el_*.mp3`): editing one phrase regenerates only it and its two neighbours.
-4. Render as usual. Reference implementation outside the repo: `~/ai-engineering-course-videos/tools/eleven.py`, `eleven_project.py`.
+## Run (local)
+1. `OWNER_VOICE_DRY=1 python scripts/make_reel_audio.py reels/<folder>` prints the characters it would generate (`0 characters` when cached). Credits are limited (about 900 to 1,000 characters a reel): when the owner asked to see the script, show it with this number and wait.
+2. `ELEVENLABS_API_KEY=... python scripts/make_reel_audio.py reels/<folder>` (the key only from the environment) makes the voice, the word-exact captions and the v2 mix.
+3. Transcribe the voice with Whisper (unprompted) and compare it with the script; check the start and the end are not clipped. `render_reel.py` brings the final video to -14 LUFS, true peak <= -1 dBTP.
+
+## Old recipe (reels voiced before 2026-11-13 only)
+`"tts": "owner"`: one request per phrase on `eleven_flash_v2_5` (or `eleven_multilingual_v2`), `owner_tempo`, a primed first line, pause marks `|`. The studio keeps it for a reel whose `el_*` phrase cache exists, so an approved voice is not bought again or changed. Never start a new reel on it.

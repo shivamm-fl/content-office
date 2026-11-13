@@ -1,0 +1,104 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "pop",
+   "A",
+   1,
+   0
+  ],
+  [
+   "click",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   0,
+   0
+  ],
+  [
+   "dip",
+   "D",
+   1,
+   -0.1
+  ],
+  [
+   "tick",
+   "D",
+   2,
+   0
+  ],
+  [
+   "warn",
+   "D",
+   3,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   2,
+   0
+  ],
+  [
+   "pop",
+   "F",
+   0,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] AI ने एक package install करने को बोला, जो था ही नहीं। एक researcher ने उसी नाम से खाली package बना दिया... तीन महीने में पंद्रह हज़ार से ज़्यादा downloads।",
+   "B": "नाम था huggingface-cli. AI बार-बार यही command देता था: pip install huggingface-cli. Alibaba के एक project की README में भी यही command लिखी मिली।",
+   "C": "[thoughtful] AI को हर package का नाम याद नहीं रहता। वो अंदाज़ा लगाता है कि नाम कैसा होना चाहिए, और वो अंदाज़ा सुनने में बिल्कुल सही लगता है।",
+   "D": "[curious] दिक्कत ये है... गलत नाम बार-बार वही आता है। Researchers ने हर सवाल दस बार पूछा। Forty three percent नकली नाम दसों बार लौटे। तो attacker बस वही नाम register कर लेता है, और package में जो चाहे डाल देता है। इसे slopsquatting कहते हैं।",
+   "E": "[warm, conversational] Interview में बोलो: AI का बताया package सीधे install नहीं होगा। पहले देखो, कब बना, कितने लोग use करते हैं। और coding agent सिर्फ़ approved list से install करे।",
+   "F": "[curious] अब बताओ: Hugging Face की असली CLI किस package से आती है? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://www.theregister.com/2024/03/28/ai_bots_hallucinate_software_packages/",
+  "https://arxiv.org/abs/2406.10279",
+  "https://socket.dev/blog/slopsquatting-how-ai-hallucinations-are-fueling-a-new-class-of-supply-chain-attacks",
+  "https://huggingface.co/docs/huggingface_hub/guides/cli"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "results_first",
+ "approved": "owner 2026-11-13 (q159 bana)"
+}

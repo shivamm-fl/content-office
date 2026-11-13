@@ -2,7 +2,7 @@
   python scripts/save_library_items.py <out_dir> <items.json>   items: [{"id","folder","title","duration_s","track"}]
 No approval, schedule or post (company rule 1). Mirrors tools/save_daily_office_20261102.py. Replaces only a version this tool delivered (office-delivery.json)."""
 import concurrent.futures, hashlib, json, os, subprocess, sys, time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]; TEAM = "learnai"; T = ROOT / "teams" / TEAM
@@ -31,7 +31,7 @@ for it in ITEMS:
     assert video.stat().st_size < 25 * 1024 * 1024 and cover.stat().st_size < 25 * 1024 * 1024
     own.append(dict(item=it["id"], title=it["title"], track=it.get("track", "generic"), folder=it["folder"], version=version, duration_s=it["duration_s"],
                     caption=caption, youtube=youtube, video_sha256=vh, cover_sha256=ch, saved_at=datetime.now(timezone.utc).isoformat(),
-                    production_date_ist="2026-11-07", owner_approved=False, published=False,
+                    production_date_ist=datetime.now(timezone(timedelta(hours=5, minutes=30))).date().isoformat(), owner_approved=False, published=False,
                     review_scope="Rendered on GitHub runner; full decode, frame sheets and cover inspected; facts from fetched primary pages. No human listening claimed."))
     for kind, path, sha in (("video", video, vh), ("cover", cover, ch)):
         assets.append(dict(key=f"reel-library/{TEAM}/{it['id']}/{version}/{'video.mp4' if kind == 'video' else 'cover.png'}", path=path, sha=sha, item=it["id"], kind=kind))

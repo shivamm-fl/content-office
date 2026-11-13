@@ -27,7 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from apply_work import REPO, unpack  # noqa: E402
 from save_work import classify  # noqa: E402
 
-MEDIA = re.compile(r"reels/[\w.-]+_hi\.mp4|reels/[\w.-]+/audio/hi/(voice|bed|sfx)\.wav|reels/[\w.-]+/audio/hi/el_[\w.-]+\.(mp3|json)")
+MEDIA = re.compile(r"reels/[\w.-]+_hi\.mp4|reels/[\w.-]+/audio/hi/(voice|bed|sfx)\.wav|reels/[\w.-]+/audio/hi/(el|v4)_[\w.-]+\.(mp3|json)")
 
 
 def read(path: Path):

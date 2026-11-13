@@ -8,11 +8,12 @@ import { makeStudio } from "./studio.mjs";
 const PYTHON = process.platform === "win32" ? "python" : "python3";
 
 /** A team folder whose make_reel_audio.py is a stub: the dry run reports `dry`, a real run prints "recorded". */
-function team({ dry }) {
+function team({ dry, oldPhraseCache = false }) {
   const dir = mkdtempSync(join(tmpdir(), "studio-test-"));
   mkdirSync(join(dir, "scripts"), { recursive: true });
-  mkdirSync(join(dir, "reels", "q101_x"), { recursive: true });
+  mkdirSync(join(dir, "reels", "q101_x", "audio", "hi"), { recursive: true });
   writeFileSync(join(dir, "reels", "q101_x", "spec.json"), JSON.stringify({ tts: "owner", copy: { hi: { A: "namaste" } } }));
+  if (oldPhraseCache) writeFileSync(join(dir, "reels", "q101_x", "audio", "hi", "el_0123456789ab.mp3"), "");
   writeFileSync(join(dir, "scripts", "make_reel_audio.py"),
     `import os\nprint(${JSON.stringify(dry)} if os.environ.get("OWNER_VOICE_DRY") else "recorded")\n`);
   return dir;
@@ -31,8 +32,20 @@ test("every phrase already recorded: the owner's voice is used and never swapped
   assert.equal(r.isError, false);
   assert.match(r.text, /the owner's own voice/);
   assert.match(r.text, /0 characters used \(every phrase was already recorded\)/);
-  assert.equal(r.spec.tts, "owner");
+  assert.equal(r.spec.tts, "owner_v4");
+  assert.equal(r.spec.v4_voice, "Shivam Trainer");
   assert.ok(r.progress.some((m) => /already recorded \(0 characters\)/.test(m)));
+});
+
+test("narration recipe v4 is the default; a reel already voiced with the old phrase recipe keeps it (no paid voice twice)", async () => {
+  process.env.ELEVENLABS_API_KEY = "test-key-that-is-not-valid";
+  const fresh = await voice(team({ dry: "owner_v4: 0 characters to generate (cached)" }));
+  assert.equal(fresh.spec.tts, "owner_v4");
+  assert.match(fresh.text, /narration recipe v4/);
+  const old = await voice(team({ dry: "owner voice: 12 phrases, 0 to generate, 0 characters", oldPhraseCache: true }));
+  assert.equal(old.spec.tts, "owner");
+  assert.ok(old.spec.prime);
+  assert.match(old.text, /old phrase recipe/);
 });
 
 test("new phrases and an account that cannot be read: Swara, as before", async () => {

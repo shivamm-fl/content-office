@@ -168,7 +168,7 @@ def pack(team: str, item: str, run: str, out: Path) -> list[Path]:
         raise SystemExit(f"{item} has no video to keep")
     folder, mp4, e = w
     audio = folder / "audio/hi"
-    files = [mp4, *(audio / n for n in SOUND), *sorted(audio.glob("el_*.mp3")), *sorted(audio.glob("el_*.json")), folder / STAMP]
+    files = [mp4, *(audio / n for n in SOUND), *sorted(audio.glob("el_*.mp3")), *sorted(audio.glob("el_*.json")), *sorted(audio.glob("v4_*.mp3")), *sorted(audio.glob("v4_*.json")), folder / STAMP]
     out.mkdir(parents=True, exist_ok=True)
     made = [out / "media.tgz"]
     with tarfile.open(made[0], "w:gz") as tf:

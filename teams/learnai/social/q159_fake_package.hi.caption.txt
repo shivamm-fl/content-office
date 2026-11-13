@@ -1,0 +1,14 @@
+AI ne ek package install karne ko bola, jo tha hi nahi.
+Phir usi naam ke khaali package par 3 mahine mein 15,000+ downloads aaye.
+
+Ek researcher ne ye khaali package usi naam se bana diya tha.
+
+Naam tha huggingface-cli. AI baar-baar yahi command deta tha: pip install huggingface-cli. Alibaba ke ek project ki README mein bhi yahi command likhi mili.
+
+AI ko har package ka naam yaad nahi rehta. Wo andaza lagata hai ki naam kaisa hona chahiye, aur wo andaza sunne mein bilkul sahi lagta hai. Dikkat ye hai ki galat naam baar-baar wahi aata hai: researchers ne har sawal 10 baar poocha, aur 43% nakli naam dason baar laute. To attacker bas wahi naam register kar leta hai aur package mein jo chahe daal deta hai. Isse slopsquatting kehte hain.
+
+Interview mein bolo: AI ka bataya package seedhe install nahi hoga. Pehle dekho kab bana aur kitne log use karte hain, aur coding agent sirf approved list se install kare.
+
+Hugging Face ki asli CLI kis package se aati hai? Comment karo.
+
+Source: The Register (March 2024, huggingface-cli experiment by Lasso Security); "We Have a Package for You!" (USENIX Security 2025, arXiv 2406.10279); Socket on slopsquatting. Terminal and chat lines on screen are illustrations.

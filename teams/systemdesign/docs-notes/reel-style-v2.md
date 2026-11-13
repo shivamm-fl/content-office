@@ -18,7 +18,7 @@ Why: on 2026-10-14 the owner compared our reels with a Hindi AI account whose re
 - Every scene has something on screen in its first 0.3 s (a header label such as `3 FIXES`, `POSITION`). No two seconds of an empty background; no scene that is only dashed outlines.
 - Shows-then-marks: objects appear, one moves (a gold row jumps to the start), the result is marked (green and red bars, a ring).
 - Opaque rows that sit on top of other rows must not hide text under them (the visual lint flags `text_occluded` and `content_overlap`): leave the covered row out instead.
-- Keep the last scene (share) inside y 170 to 1300, never in the caption lane.
+- Keep the last scene (share) inside y 250 to 1160, never in the caption lane.
 
 ## 4. Process (unchanged, plus)
 `visual_plan.md` first, `lint_visuals.py`, `hyperframes check`, snapshots at the end of every beat, render, `frames.py` and Read every sheet. Fix an overlap or empty second yourself before the reviewers see it.

@@ -98,7 +98,7 @@ function run(cmd, args, { cwd, env, timeoutMs = 20 * 60_000 }) {
 export const STUDIO_TOOLS = [
   {
     name: "make_voice",
-    description: "Make the voice, the captions' word timings and the mix of a reel (scripts/make_reel_audio.py) from reels/<folder>/spec.json. Uses the owner's own voice (ElevenLabs, 'Shivam Trainer') by default and falls back to Swara (Edge TTS) when the owner's voice is not available or its monthly characters are used up. Run it again after you change the narration. Returns which voice was used and the length.",
+    description: "Make the voice, the captions' word timings and the mix of a reel (scripts/make_reel_audio.py) from reels/<folder>/spec.json. Uses the owner's own voice (ElevenLabs, 'Shivam Trainer') on narration recipe v4 by default (eleven_v4, the whole reel in one take; write copy.hi as docs-notes/narration-recipe-v4.md says) and falls back to Swara (Edge TTS) when the owner's voice is not available or its monthly characters are used up. A reel already voiced with the old phrase-by-phrase recipe keeps it. Run it again after you change the narration. Returns which voice was used and the length.",
     inputSchema: { type: "object", properties: { folder: { type: "string", description: "reels/<folder>" } }, required: ["folder"] },
   },
   {
@@ -160,7 +160,11 @@ export function makeStudio({ teamDir, python, onProgress }) {
     const writeSpec = (s) => writeFileSync(specPath, `${JSON.stringify(s, null, 2)}\n`);
     let reason = "the owner's ElevenLabs key is not set up";
     if (key) {
-      const owner = { ...spec, tts: "owner", prime: spec.prime || OWNER_PRIME };
+      // narration recipe v4 (owner 2026-11-13): every new reel is voiced on eleven_v4 in one take. A reel already voiced with the old
+      // phrase-by-phrase recipe (its el_* phrase cache is there) keeps that recipe, so an approved voice is never bought again or changed.
+      const audioDir = join(abs, "audio", "hi");
+      const legacy = spec.tts !== "owner_v4" && existsSync(audioDir) && readdirSync(audioDir).some((f) => /^el_.*\.mp3$/.test(f));
+      const owner = legacy ? { ...spec, tts: "owner", prime: spec.prime || OWNER_PRIME } : { ...spec, tts: "owner_v4", v4_voice: spec.v4_voice || "Shivam Trainer" };
       writeSpec(owner);
       onProgress("Checking the owner's voice credits");
       const dry = await py(["scripts/make_reel_audio.py", rel], { env: { ELEVENLABS_API_KEY: key, OWNER_VOICE_DRY: "1" }, timeoutMs: 120_000 });
@@ -172,7 +176,7 @@ export function makeStudio({ teamDir, python, onProgress }) {
       if (cached || (dry.code === 0 && Number.isFinite(need) && left !== null && left >= need + 100)) {
         onProgress(cached ? "The owner's voice: every phrase is already recorded (0 characters)" : `Recording in the owner's voice (${need} characters, ${left} left this month)`);
         const r = await py(["scripts/make_reel_audio.py", rel], { env: { ELEVENLABS_API_KEY: key }, timeoutMs: 20 * 60_000 });
-        if (r.code === 0) return text(`Voice: the owner's own voice (ElevenLabs), ${need} characters used${cached ? " (every phrase was already recorded)" : `, about ${left - need} left this month`}.\n${r.out.slice(-1500)}`);
+        if (r.code === 0) return text(`Voice: the owner's own voice (ElevenLabs, ${legacy ? "the old phrase recipe this reel was voiced with" : "narration recipe v4"}), ${need} characters used${cached ? " (every phrase was already recorded)" : `, about ${left - need} left this month`}.\n${r.out.slice(-1500)}`);
         reason = `the owner's voice failed (${r.out.trim().split("\n").pop()?.slice(0, 200)})`;
       } else {
         reason = left === null ? "the ElevenLabs account could not be read" : `the owner's voice has ${left} characters left this month and this reel needs ${Number.isFinite(need) ? need : "more"}`;

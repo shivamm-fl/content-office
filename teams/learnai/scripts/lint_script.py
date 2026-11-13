@@ -1,6 +1,6 @@
 """Lint a reel script against the owner's standard (.claude/skills/hinglish-script).
   python3 scripts/lint_script.py reels/<folder>/spec.json      # or a plain text file of the spoken script
-Exit 1 on any FAIL. WARN is judgement. Words are counted after braces are resolved; 2.3 words per second is the voice rate (measured: 165 words = 70 s) (pace 1.26 with pauses)."""
+Exit 1 on any FAIL. WARN is judgement. Words are counted after braces are resolved; 2.9 words per second is the voice rate of narration recipe v4 (measured 2026-11-13: 165 words = 55 s, 169 words = 59 s)."""
 import json, re, sys
 from pathlib import Path
 
@@ -11,10 +11,11 @@ if p.suffix == ".json":
     text = " ".join(scenes.values())
 else:
     text = raw
+text = re.sub(r"\[[^\]]*\]", " ", text)   # recipe-v4 delivery tags are not spoken
 text = re.sub(r"@\w+ ?", "", text).replace("|", " ")
 spoken = re.sub(r"\S+\{([^}]*)\}", r"\1", text)          # display{spoken} -> spoken
-hook = re.split(r"[।?!]", spoken.strip(), maxsplit=2)
-hook_text = " ".join(hook[:2]) if len(hook) > 1 else spoken[:160]
+hook = re.findall(r"[^।?!]+[।?!]*", spoken.strip())[:2]   # the first two sentences WITH their ? / ! / । (a question the viewer recognises is a hook)
+hook_text = " ".join(hook) if hook else spoken[:160]
 last = spoken.strip()[-260:]
 out = []
 def chk(level, name, ok, detail=""):
@@ -63,8 +64,8 @@ chk("WARN", "closing asks for a comment and does not end on 'save kar lo' (a fol
 digits = [m for m in re.findall(r"(?<![\w{-])\d[\d.,]*(?![\w}]*\})", re.sub(r"\S+\{[^}]*\}", "", text))]
 chk("FAIL", "every number has a {spoken} form (Hindi before a Hindi word, English before an English word)", not digits, ", ".join(digits[:6]))
 words = len(spoken.split())
-secs = words / 2.3
-chk("WARN", "length 60 to 180 s (about 2.3 words per second; 400 words are about 175 s)", 55 <= secs <= 180, f"{words} words, about {secs:.0f} s")
+secs = words / 2.9
+chk("WARN", "length 60 to 180 s (about 2.9 words per second; 500 words are about 172 s)", 55 <= secs <= 180, f"{words} words, about {secs:.0f} s")
 bad = re.findall(r"(\w+\{[^}\s-]+ [^}]*\})", text)
 chk("FAIL", "no multi-word braces (said twice)", not bad, "; ".join(bad[:3]))
 

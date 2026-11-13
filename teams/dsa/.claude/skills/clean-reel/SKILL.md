@@ -5,6 +5,8 @@ description: The Learnvora DSA house style for every reel (series reels) since 2
 
 # Clean reel style (owner decision 2026-10-14)
 
+**Voice and narration: `docs-notes/narration-recipe-v4.md` (owner, 2026-11-13) replaces this skill's voice parts (Swara pace, pause marks, tone tags). The visual style and the v2 music mix stay.**
+
 Why: the owner compared our neon look (moving floor grid, dust, orbs, glitch cuts, white flashes, glows, sparkle bursts, bouncing pops) with a clean build and said the neon one is "jhagmag, chamkila, not professional". The clean build, its voice speed and its sound were approved. Professional = restraint: one picture per idea, few colours, nothing moving that does not carry meaning.
 
 The kit already implements the look and the sound. Your job is to not fight it.

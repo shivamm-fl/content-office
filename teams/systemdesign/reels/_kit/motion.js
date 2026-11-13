@@ -12,7 +12,7 @@
    Layout: M.card(host,{x,y,w,h,gold,from:"rise|flip|pop"},t) glass card, children go inside it;  M.ticker(host,"TEXT · TEXT",t,{y,size,dur})
    Impact: M.burst(host,x,y,t,{n,r,color,dur})  particle burst + shockwave ring;  M.ring(host,x,y,t,{r,color,s,d});  M.streaks(host,t,{n,y0,y1,color})  horizontal speed lines sweeping across
    Camera/transitions: M.cam(t,{s,x,y,r,d}) camera move;  M.flash(t);  M.wipe(t);  M.glitchCut(t);  M.shake(t,amp);  M.zoomCut(t)   (cut beats between scenes with one of these)
-   M.finish() LAST: captions + registers nothing (HTML must do window.__timelines["main"] = M.tl).  Safe area: content y 170-1300, captions lane y 1330-1600. */
+   M.finish() LAST: captions + registers nothing (HTML must do window.__timelines["main"] = M.tl).  Safe area: content y 250-1160, captions lane y 1190-1450 (narration recipe v4). */
 window.Mo = (function () {
   const ACC = "#4CC9F0", CYAN = "#5BC0EB", HOT = "#E8596B", GOOD = "#4CC38A", VIOLET = "#9A8CEB", TEXT = "#E8EDF6", MUTED = "#8592AD";
   const $ = (s) => document.querySelector(s);
@@ -124,7 +124,7 @@ window.Mo = (function () {
     M.flash = () => {}; M.shake = () => {}; M.wipe = push; M.glitchCut = push; M.zoomCut = push;
     M.glitch = () => {};
 
-    // ---------- captions (lane y 1330-1600) ----------
+    // ---------- captions (lane y 1190-1450) ----------
     M.finish = (fo) => { fo = fo || {}; const kw = {}; Object.entries(fo.kw || {}).forEach(([k, v]) => (kw[k.toLowerCase()] = v));
       const COL = { gold: ACC, acc: ACC, cyan: CYAN, hot: HOT, red: HOT, good: GOOD, green: GOOD, violet: VIOLET };
       const caps = DL.caps, capsEl = $("#caps");
