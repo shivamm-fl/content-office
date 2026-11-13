@@ -1,0 +1,67 @@
+        <style>
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .plot { position:absolute; left:80px; width:920px; height:560px; border-radius:26px; background:#0D1526; border:3px solid #26324B; overflow:hidden; }
+          .dot { position:absolute; width:16px; height:16px; margin:-8px 0 0 -8px; border-radius:50%; background:#8592AD; }
+          .q { position:absolute; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%; background:#F2B544; box-shadow:0 0 0 8px rgba(242,181,68,.25); }
+          .zone { position:absolute; width:300px; height:300px; margin:-150px 0 0 -150px; border-radius:50%; border:3px dashed rgba(91,192,235,.5); background:rgba(91,192,235,.06); }
+          .mono { position:absolute; font-family:"JetBrains Mono",monospace; font-weight:600; color:#E8EDF6; white-space:nowrap; }
+          .house { position:absolute; width:110px; height:80px; border-radius:12px; background:#1B2538; border:3px solid #26324B; }
+          .chk { position:absolute; left:80px; width:920px; height:130px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .chk .k { position:absolute; left:36px; top:34px; font:700 52px "Space Grotesk",sans-serif; white-space:nowrap; }
+          .chk .v { position:absolute; left:420px; top:38px; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .pt { position:absolute; font:600 30px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:92px;">Millions of vectors,<br/><span class="gold">sabse paas wala?</span></div>
+          <div class="plot" id="a_plot" style="top:500px;"></div>
+          <div class="chip" id="a_chip" style="left:240px; top:1090px; width:600px; background:#F2B544; color:#0B1220; font-size:46px;">INTERVIEW QUESTION</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c gold" id="b_t" style="top:250px; font-size:100px;">VECTOR</div>
+          <div class="card" id="b_q" style="left:80px; top:390px; width:920px; height:120px;"><div class="x" style="left:36px; top:30px; font-size:52px;">"best budget laptop for coding"</div></div>
+          <div class="x c" id="b_ar" style="top:520px; font-size:70px;">&darr;</div>
+          <div class="mono" id="b_v" style="left:140px; top:620px; font-size:46px; color:#5BC0EB;">[0.12, -0.80, 0.33, ... ]</div>
+          <div class="plot" id="b_map" style="top:720px; height:380px;">
+            <div class="dot" style="left:300px; top:150px; background:#F2B544;"></div><div class="pt" style="left:320px; top:120px;">budget laptop for coding</div>
+            <div class="dot" style="left:340px; top:220px; background:#F2B544;"></div><div class="pt" style="left:360px; top:205px;">sasta laptop programming ke liye</div>
+            <div class="dot" style="left:760px; top:320px; background:#E8596B;"></div><div class="pt" style="left:560px; top:330px;">aam ka achaar recipe</div>
+          </div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:100px;"><span class="red">BRUTE FORCE</span></div>
+          <div class="x c mut" id="c_s" style="top:380px; font-size:50px;">har vector se naapo</div>
+          <div class="plot" id="c_plot" style="top:470px; height:440px;"></div>
+          <div class="x c" id="c_city" style="top:940px; font-size:52px;">jaise chaabi <span class="red">har ghar</span> mein dhoondhna</div>
+          <div class="x c red" id="c_m" style="top:1040px; font-size:52px;">har query = millions comparisons</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:92px;"><span class="cyan">VECTOR DATABASE</span></div>
+          <div class="x c mut" id="d_s" style="top:375px; font-size:50px;">pehle se groups (mohalle)</div>
+          <div class="plot" id="d_plot" style="top:470px;"></div>
+          <div class="chip" id="d_ann" style="left:140px; top:1060px; width:800px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:44px;">approximate nearest neighbor</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:92px;">APPROXIMATE <span class="gold">kyun?</span></div>
+          <div class="plot" id="e_plot" style="top:390px;"></div>
+          <div class="chip" id="e_a" style="left:80px; top:990px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:36px;">accuracy: thodi kam</div>
+          <div class="chip" id="e_s" style="left:560px; top:990px; width:440px; border:4px solid #4CC38A; color:#4CC38A; font-size:36px;">speed: bahut zyada</div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="chk" id="f_1" style="top:420px;"><div class="k red">BRUTE FORCE</div><div class="v">har vector check</div></div>
+          <div class="chk" id="f_2" style="top:580px;"><div class="k cyan">VECTOR DB</div><div class="v">sirf zaroori hissa</div></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_1" style="top:360px; font-size:84px;">sirf <span class="gold">10,000</span> vectors</div>
+          <div class="x c" id="g_2" style="top:490px; font-size:84px;">tab bhi vector DB?</div>
+          <div class="chip" id="g_c" style="left:290px; top:720px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

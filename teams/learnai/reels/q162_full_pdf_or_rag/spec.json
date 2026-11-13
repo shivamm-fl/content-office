@@ -1,0 +1,81 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   1,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Company की handbook forty pages की है, और team उस पर RAG बनाने बैठ गई। रुको... शायद इसकी ज़रूरत ही नहीं।",
+   "B": "[thoughtful] Open book exam सोचो। किताब पतली है, तो पूरी किताब साथ ले जाओ। Library बहुत बड़ी हो, तब index cards बनाओ। RAG वही index cards हैं: पहले काम के टुकड़े ढूँढो, फिर सिर्फ़ वही model को दो।",
+   "C": "और index cards में गलती भी होती है: टुकड़ा गलत जगह से कटा, या सही टुकड़ा मिला ही नहीं। तो rule simple है: knowledge base two hundred thousand tokens से छोटा, यानी करीब five hundred pages, तो पूरा prompt में डाल दो।",
+   "D": "पर हर सवाल के साथ पूरी handbook भेजना महँगा पड़ेगा? उसके लिए prompt caching: बार-बार भेजा गया हिस्सा दोबारा process नहीं होता। Anthropic के हिसाब से latency दो गुना से ज़्यादा कम, और cost ninety percent तक कम।",
+   "E": "Data five hundred pages से बहुत बड़ा हो, तब RAG बनाओ।",
+   "F": "Interview में बोलो: पहले देखो data prompt में fit होता है या नहीं। Fit हो, तो पूरा डालो और cache करो। न हो, तब RAG।",
+   "G": "[curious] अब बताओ: तुम्हारा सबसे बड़ा PDF कितने pages का है? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://www.anthropic.com/news/contextual-retrieval"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "common_belief",
+ "remake_of": "q101",
+ "approved": "owner 2026-11-13 (scripts reviewed; 'bana')"
+}

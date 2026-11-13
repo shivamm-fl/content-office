@@ -1,0 +1,11 @@
+Company ki handbook 40 pages ki hai, aur team us par RAG banane baith gayi. Ruko, shayad iski zaroorat hi nahi.
+
+Open book exam socho: kitaab patli ho to poori le jao, library badi ho tab index cards banao. RAG wahi index cards hain, aur unme galti bhi hoti hai: tukda galat jagah se kata, ya sahi tukda mila hi nahi.
+
+Rule: knowledge base 2 lakh tokens se chhota (lagbhag 500 pages) ho to poora prompt mein daal do. Har sawal ke saath wahi handbook jaye to prompt caching lagao: Anthropic ke hisaab se latency 2x se zyada kam, cost 90% tak kam. Data usse bahut bada ho, tab RAG.
+
+Interview mein bolo: pehle dekho data prompt mein fit hota hai ya nahi.
+
+Tumhara sabse bada PDF kitne pages ka hai? Comment karo.
+
+Source: Anthropic, "Introducing Contextual Retrieval" (Sep 2024). Handbook wala scene example hai.

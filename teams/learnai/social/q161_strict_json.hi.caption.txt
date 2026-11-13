@@ -1,0 +1,13 @@
+Tumhara app LLM se JSON leta hai. Ek din jawab shuru hua "Sure, here is your JSON." se, aur app crash.
+
+Few-shot yaani prompt mein do-teen solved examples, taaki model pattern dekhkar waisa hi likhe. Isme model ke weights nahi badalte.
+
+Par examples samjhate hain, majbur nahi karte. Hazaron requests mein kabhi JSON tootega, kabhi koi field gaayab hogi.
+
+Fix: structured outputs. API ko JSON schema do, aur output usi saanche mein bandhkar aata hai, jaise form mein fixed boxes.
+
+Interview mein bolo: few-shot pattern sikhata hai, schema use pakka karta hai.
+
+Full prompting guide chahiye? Comment karo PROMPT, guide seedha tumhare DM mein.
+
+Source: Claude docs, structured outputs; GPT-3 paper (arXiv 2005.14165). App crash wala scene example hai.

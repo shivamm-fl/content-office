@@ -1,0 +1,88 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   1,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] One billion vectors. RAM सिर्फ़ one twenty eight GB। और हर search hundred milliseconds में चाहिए। पहला ख़याल speed का आता है... पर पहली दिक्कत speed है ही नहीं।",
+   "B": "[thoughtful] हिसाब लगाओ। हर vector में seven sixty eight numbers, हर number four bytes। One billion vectors, यानी करीब three TB... RAM से चौबीस गुना बड़ा।",
+   "C": "Fix one: vector को छोटा करो। Paint shop की shade card की तरह: exact रंग नहीं, सबसे पास वाले shade का number। Vector को चौंसठ टुकड़ों में काटो, हर टुकड़े के लिए two fifty six shades में से एक number, यानी एक byte। ID मिलाकर पूरा data करीब seventy two GB। RAM में fit। इसे product quantization कहते हैं।",
+   "D": "Fix two: हर vector मत देखो। Vectors को पैंसठ हज़ार groups में बाँटो, और query सिर्फ़ पास के thirty two groups में जाए। One billion की जगह करीब पाँच लाख vectors check। इसे IVF कहते हैं।",
+   "E": "Fix three: shade का number थोड़ा अंदाज़ा है, तो top hundred results को SSD पर रखे पूरे vectors से दोबारा जाँचो। Research में DiskANN ने sixty four GB RAM और एक सस्ती SSD पर one billion points में search करके दिखाई, three milliseconds से कम में।",
+   "F": "Interview में बोलो: billion scale पर पहले memory, फिर speed। छोटा करो, कम ढूँढो, और top results दोबारा जाँचो।",
+   "G": "[curious] अब बताओ: code thirty two bytes का कर दिया, तो RAM कितनी लगेगी... और बदले में क्या खोओगे? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://github.com/facebookresearch/faiss/wiki/Faiss-indexes",
+  "https://papers.nips.cc/paper/2019/hash/09853c7fb1d3f8ee67a61b6bf4a7f8e6-Abstract.html"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "common_belief",
+ "remake_of": "q147",
+ "approved": "owner 2026-11-13 (scripts reviewed; 'bana')"
+}

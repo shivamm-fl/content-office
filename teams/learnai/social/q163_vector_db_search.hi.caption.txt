@@ -1,0 +1,13 @@
+Millions of vectors, aur tumhe sabse paas wala chahiye, palak jhapakte. Kaise nikaloge?
+
+Vector yaani numbers ki list jo sentence ka matlab pakadti hai; milte-julte matlab wale vectors paas-paas hote hain.
+
+Brute force: query ko har vector se naapo. Jaise khoi hui chaabi poore shahar ke har ghar mein dhoondhna: milegi zaroor, par har query par millions comparisons.
+
+Vector database pehle hi vectors ko groups (mohallon) mein baant deta hai, aur query sirf paas wale kuch mohalle dekhti hai. Ise approximate nearest neighbor search kehte hain. Kabhi chaabi saath wale us mohalle mein hogi jo dekha hi nahi gaya: thodi accuracy dekar bahut saari speed.
+
+Interview mein bolo: brute force har vector check karta hai, vector database search space ko groups mein baantkar sirf zaroori hissa.
+
+Sirf 10,000 vectors hon, tab bhi vector database lagaoge? Comment karo.
+
+Source: Faiss wiki, "Faiss indexes". Dots illustration hain.

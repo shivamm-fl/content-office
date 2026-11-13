@@ -1,0 +1,13 @@
+Ek hi sawal do baar poocha, aur AI ne do alag jawab diye. Kyun?
+
+AI har baar agla word aise chunta hai jaise menu se dish: masala dosa sabse popular, phir idli, phir vada, aur sabse neeche pineapple pizza.
+
+Top-k: menu mein sirf top k dishes. k = 3 ho to dosa, idli, vada; pizza bahar.
+Top-p: chance ka jod. Top dishes jodte jao jab tak kul chance p tak na pahunch jaye. Model pakka ho to menu chhota, uljha ho to lamba.
+Temperature: menu nahi kaatta, chef ka mood badalta hai. Kam ho to har baar bestseller, zyada ho to experiment.
+
+Interview mein bolo: top-k fixed ginti, top-p chance ka jod, temperature chances kitne sharp ya flat.
+
+Top-k 3 rakha aur temperature bahut zyada kar diya, to pineapple pizza aa sakta hai ya nahi? Comment karo.
+
+Source: Hugging Face, "How to generate text". Menu aur numbers illustration hain.

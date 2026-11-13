@@ -1,0 +1,87 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   1,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] एक ही सवाल दो बार पूछा... और AI ने दो अलग जवाब दिए। इसके पीछे तीन knobs हैं: temperature, top-k और top-p। Interview में इन्हीं का फर्क पूछा जाता है।",
+   "B": "[thoughtful] AI हर बार अगला word ऐसे चुनता है, जैसे menu से dish। हर dish का एक chance है: masala dosa सबसे popular, फिर idli, फिर vada... और सबसे नीचे, pineapple pizza।",
+   "C": "Top-k कहता है: menu में सिर्फ़ top k dishes रखो। k equals three, तो dosa, idli, vada। Pineapple pizza बाहर, चाहे कुछ भी हो।",
+   "D": "Top-p गिनती नहीं, chance का जोड़ देखता है। Top dishes जोड़ते जाओ, जब तक उनका कुल chance p तक न पहुँच जाए। Dosa अकेला ही ninety percent orders ले ले, तो menu में बस dosa। Orders बिखरे हों, तो menu लंबा।",
+   "E": "Temperature menu नहीं काटता, chef का mood बदलता है। Temperature कम, तो chef हर बार bestseller ही बनाएगा। Temperature ज़्यादा, तो chef experiment करेगा, और कम popular dishes भी आने लगेंगी। इसीलिए एक ही सवाल के दो जवाब।",
+   "F": "Interview में बोलो: top-k, fixed गिनती। Top-p, chance का जोड़। Temperature, chances कितने sharp या flat।",
+   "G": "[curious] अब बताओ: top-k three रखा, और temperature बहुत ज़्यादा कर दिया। तो pineapple pizza आ सकता है या नहीं? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://huggingface.co/blog/how-to-generate"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "results_first",
+ "remake_of": "q105",
+ "approved": "owner 2026-11-13 (scripts reviewed; 'bana')"
+}

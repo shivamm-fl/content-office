@@ -1,0 +1,9 @@
+1 billion vectors, 128 GB RAM: kaise fit karoge?
+
+Raw data lagbhag 3 TB hai. Product quantization se har vector 64 bytes (+8 ka ID, lagbhag 72 GB), IVF se query sirf 32 / 65,536 groups mein (lagbhag 5 lakh vectors), aur top 100 ko SSD par poore vectors se rerank. DiskANN ne 64 GB RAM + SSD par 1 billion points 3 ms se kam mein search dikhaya.
+
+Sources:
+https://github.com/facebookresearch/faiss/wiki/Faiss-indexes
+https://papers.nips.cc/paper/2019/hash/09853c7fb1d3f8ee67a61b6bf4a7f8e6-Abstract.html
+
+AI-assisted visuals and narration.

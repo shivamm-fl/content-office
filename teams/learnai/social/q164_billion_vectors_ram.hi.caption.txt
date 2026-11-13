@@ -1,0 +1,13 @@
+1 billion vectors, RAM sirf 128 GB, aur search 100 ms mein. Pehli dikkat speed nahi, memory hai.
+
+Hisaab: 768 numbers x 4 bytes x 1 billion = lagbhag 3 TB, RAM se 24 guna.
+
+Fix 1, chhota karo: paint shop ki shade card ki tarah exact rang nahi, sabse paas wale shade ka number. Vector ke 64 tukde, har tukda 1 byte. ID milakar lagbhag 72 GB, RAM mein fit. Ise product quantization kehte hain.
+Fix 2, kam dhoondho: 65,000 groups, query sirf paas ke 32 mein. 1 billion ki jagah lagbhag 5 lakh vectors. Ise IVF kehte hain.
+Fix 3, dobara jaancho: top 100 results ko SSD par rakhe poore vectors se. Research mein DiskANN ne 64 GB RAM aur ek sasti SSD par 1 billion points mein 3 ms se kam mein search dikhaya.
+
+Interview mein bolo: billion scale par pehle memory, phir speed.
+
+Code 32 bytes ka kar diya, to RAM kitni lagegi aur kya khooge? Comment karo.
+
+Source: Faiss wiki; DiskANN (NeurIPS 2019). Saara hisaab humne khud calculate kiya.

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Nearest Vector Among Millions</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="68" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .plot { position:absolute; left:80px; width:920px; height:560px; border-radius:26px; background:#0D1526; border:3px solid #26324B; overflow:hidden; }
+          .dot { position:absolute; width:16px; height:16px; margin:-8px 0 0 -8px; border-radius:50%; background:#8592AD; }
+          .q { position:absolute; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%; background:#F2B544; box-shadow:0 0 0 8px rgba(242,181,68,.25); }
+          .zone { position:absolute; width:300px; height:300px; margin:-150px 0 0 -150px; border-radius:50%; border:3px dashed rgba(91,192,235,.5); background:rgba(91,192,235,.06); }
+          .mono { position:absolute; font-family:"JetBrains Mono",monospace; font-weight:600; color:#E8EDF6; white-space:nowrap; }
+          .house { position:absolute; width:110px; height:80px; border-radius:12px; background:#1B2538; border:3px solid #26324B; }
+          .chk { position:absolute; left:80px; width:920px; height:130px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .chk .k { position:absolute; left:36px; top:34px; font:700 52px "Space Grotesk",sans-serif; white-space:nowrap; }
+          .chk .v { position:absolute; left:420px; top:38px; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .pt { position:absolute; font:600 30px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:92px;">Millions of vectors,<br/><span class="gold">sabse paas wala?</span></div>
+          <div class="plot" id="a_plot" style="top:500px;"></div>
+          <div class="chip" id="a_chip" style="left:240px; top:1090px; width:600px; background:#F2B544; color:#0B1220; font-size:46px;">INTERVIEW QUESTION</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c gold" id="b_t" style="top:250px; font-size:100px;">VECTOR</div>
+          <div class="card" id="b_q" style="left:80px; top:390px; width:920px; height:120px;"><div class="x" style="left:36px; top:30px; font-size:52px;">"best budget laptop for coding"</div></div>
+          <div class="x c" id="b_ar" style="top:520px; font-size:70px;">&darr;</div>
+          <div class="mono" id="b_v" style="left:140px; top:620px; font-size:46px; color:#5BC0EB;">[0.12, -0.80, 0.33, ... ]</div>
+          <div class="plot" id="b_map" style="top:720px; height:380px;">
+            <div class="dot" style="left:300px; top:150px; background:#F2B544;"></div><div class="pt" style="left:320px; top:120px;">budget laptop for coding</div>
+            <div class="dot" style="left:340px; top:220px; background:#F2B544;"></div><div class="pt" style="left:360px; top:205px;">sasta laptop programming ke liye</div>
+            <div class="dot" style="left:760px; top:320px; background:#E8596B;"></div><div class="pt" style="left:560px; top:330px;">aam ka achaar recipe</div>
+          </div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:100px;"><span class="red">BRUTE FORCE</span></div>
+          <div class="x c mut" id="c_s" style="top:380px; font-size:50px;">har vector se naapo</div>
+          <div class="plot" id="c_plot" style="top:470px; height:440px;"></div>
+          <div class="x c" id="c_city" style="top:940px; font-size:52px;">jaise chaabi <span class="red">har ghar</span> mein dhoondhna</div>
+          <div class="x c red" id="c_m" style="top:1040px; font-size:52px;">har query = millions comparisons</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:92px;"><span class="cyan">VECTOR DATABASE</span></div>
+          <div class="x c mut" id="d_s" style="top:375px; font-size:50px;">pehle se groups (mohalle)</div>
+          <div class="plot" id="d_plot" style="top:470px;"></div>
+          <div class="chip" id="d_ann" style="left:140px; top:1060px; width:800px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:44px;">approximate nearest neighbor</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:92px;">APPROXIMATE <span class="gold">kyun?</span></div>
+          <div class="plot" id="e_plot" style="top:390px;"></div>
+          <div class="chip" id="e_a" style="left:80px; top:990px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:36px;">accuracy: thodi kam</div>
+          <div class="chip" id="e_s" style="left:560px; top:990px; width:440px; border:4px solid #4CC38A; color:#4CC38A; font-size:36px;">speed: bahut zyada</div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="chk" id="f_1" style="top:420px;"><div class="k red">BRUTE FORCE</div><div class="v">har vector check</div></div>
+          <div class="chk" id="f_2" style="top:580px;"><div class="k cyan">VECTOR DB</div><div class="v">sirf zaroori hissa</div></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_1" style="top:360px; font-size:84px;">sirf <span class="gold">10,000</span> vectors</div>
+          <div class="x c" id="g_2" style="top:490px; font-size:84px;">tab bhi vector DB?</div>
+          <div class="chip" id="g_c" style="left:290px; top:720px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="68" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="68" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="68" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // a fixed scatter (seeded, so every render is identical): 6 groups ("mohalle") of 14 points, plus the true nearest point of the query
+      let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+      const C = [[150, 130], [450, 110], [760, 150], [170, 420], [470, 400], [770, 430]];
+      const P = []; C.forEach((c, g) => { for (let i = 0; i < 14; i++) P.push([c[0] + (rnd() - 0.5) * 170, c[1] + (rnd() - 0.5) * 150, g]); });
+      const Q = [330, 300], NEAR = [340, 230, 1];
+      const plot = (host, opts = {}) => {
+        const h = q(host), sy = (opts.h || 560) / 560, out = { dots: [], zones: [] };
+        if (opts.zones) C.forEach((c, g) => { const z = document.createElement("div"); z.className = "zone"; z.style.left = c[0] + "px"; z.style.top = c[1] * sy + "px"; h.appendChild(z); out.zones.push(z); });
+        P.concat([NEAR]).forEach((p) => { const d = document.createElement("div"); d.className = "dot"; d.style.left = p[0] + "px"; d.style.top = p[1] * sy + "px"; h.appendChild(d); out.dots.push([d, p]); });
+        const qd = document.createElement("div"); qd.className = "q"; qd.style.left = Q[0] + "px"; qd.style.top = Q[1] * sy + "px"; h.appendChild(qd); out.q = qd;
+        return out;
+      };
+      // A: the cloud of vectors and one query, on screen at frame 0
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      plot("#a_plot");
+      show("#a_chip", at("A", "interview") - 0.05, { s: 0.9 });
+      // B: a sentence becomes a list of numbers; close meaning = close points
+      show("#b_t", at("B", "vector") - 0.1, { s: 1.2 });
+      show("#b_q", at("B", "best") - 0.1, { s: 0.94 });
+      show("#b_ar", at("B", "sentence") - 0.05, { s: 1, y: -10 });
+      show("#b_v", at("B", "numbers") - 0.05, { s: 1 });
+      show("#b_map", at("B", "milte-julte") - 0.1, { s: 0.94 });
+      // C: brute force checks every point
+      show("#c_t", at("C", "seedha") - 0.05, { s: 1.2 });
+      show("#c_s", at("C", "query") - 0.05, { s: 1 });
+      const cp = plot("#c_plot", { h: 440 });
+      cp.dots.forEach(([d], i) => tl.to(d, { backgroundColor: "#E8596B", duration: 0.05 }, at("C", "har") + i * 0.025));
+      show("#c_city", at("C", "chaabi") - 0.1, { s: 1.05 });
+      show("#c_m", at("C", "millions") - 0.1, { s: 1.1 });
+      // D: groups first, then only the nearby groups are opened
+      show("#d_t", at("D", "vector") - 0.1, { s: 1.15 });
+      show("#d_s", at("D", "groups") - 0.1, { s: 1 });
+      const dp = plot("#d_plot", { zones: true });
+      dp.dots.forEach(([d, p]) => tl.to(d, { backgroundColor: ["#F2B544", "#5BC0EB", "#9A8CEB", "#4CC38A", "#E8596B", "#D4A373"][p[2]], duration: 0.3 }, at("D", "groups")));
+      tl.set(dp.q, { opacity: 0 }, 0); show(dp.q, at("D", "query") - 0.05, { s: 2, y: 0 });
+      [0, 1, 2, 5].forEach((g) => { tl.to(dp.zones[g], { opacity: 0.15, duration: 0.3 }, at("D", "sirf")); dp.dots.filter(([, p]) => p[2] === g && p !== NEAR).forEach(([d]) => tl.to(d, { opacity: 0.15, duration: 0.3 }, at("D", "sirf"))); });
+      tl.to(dp.dots[dp.dots.length - 1][0], { opacity: 0.15, duration: 0.3 }, at("D", "sirf"));
+      show("#d_ann", at("D", "approximate") - 0.1, { s: 1.05 });
+      // E: the true nearest point sits in a group that was not opened
+      show("#e_t", at("E", "approximate") - 0.1, { s: 1.1 });
+      const ep = plot("#e_plot", { zones: true });
+      [0, 1, 2, 5].forEach((g) => { tl.set(ep.zones[g], { opacity: 0.15 }, 0); ep.dots.filter(([, p]) => p[2] === g).forEach(([d]) => tl.set(d, { opacity: 0.15 }, 0)); });
+      const miss = ep.dots[ep.dots.length - 1][0];
+      tl.set(miss, { backgroundColor: "#E8596B", width: 26, height: 26, margin: "-13px 0 0 -13px" }, 0);
+      tl.to(miss, { opacity: 1, duration: 0.3 }, at("E", "chaabi") - 0.1);
+      tl.fromTo(miss, { scale: 1 }, { scale: 1.8, duration: 0.3, yoyo: true, repeat: 3 }, at("E", "chaabi"));
+      show("#e_a", at("E", "accuracy") - 0.1, { s: 1.05 });
+      show("#e_s", at("E", "speed") - 0.1, { s: 1.05 });
+      // F: interview answer
+      show("#f_chip", at("F", "interview") - 0.05, { s: 0.85 });
+      show("#f_1", at("F", "brute") - 0.1, { s: 0.92 });
+      show("#f_2", at("F", "vector") - 0.1, { s: 0.92 });
+      // G: the question
+      show("#g_1", at("G", "sirf") - 0.1, { s: 1.1 });
+      show("#g_2", at("G", "tab") - 0.1, { s: 1.1 });
+      show("#g_c", at("G", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { vector: "cyan", vectors: "cyan", brute: "hot", force: "hot", chaabi: "gold", millions: "hot", groups: "gold", approximate: "gold",
+                       accuracy: "hot", speed: "good", database: "cyan", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
