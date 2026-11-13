@@ -1,29 +1,63 @@
 {
   "items": [
     {
-      "id": "s023",
+      "id": "s024",
       "track": "series",
-      "day": 23,
+      "day": 24,
       "unit": "P2",
-      "title": "Rate limiting: token bucket se burst bhi, speed limit bhi",
-      "format": "pattern",
-      "one_idea": "A token bucket rate limiter gives each client a bucket that holds up to a fixed number of tokens and refills at a fixed rate; every request takes one token, so a client can burst up to the bucket size but cannot go above the refill rate over time, and a request that finds the bucket empty is rejected with 429 Too Many Requests.",
-      "hook_type": "interviewer_asked",
-      "spoken_hook": "Interviewer ने पूछा: हर user की requests की limit कैसे लगाओगे?",
-      "hook_formula": "interviewer_asked: the standard rate-limiter interview question; the next line starts the answer (a bucket of tokens)",
-      "hook_source": "https://stripe.com/blog/rate-limiters",
+      "title": "Fixed window vs sliding window: limit ke edge par double requests kyun nikal jaati hain",
+      "format": "trade-off",
+      "one_idea": "A fixed window rate limiter keeps one counter per time block and resets it at each edge, so a client can send a full limit just before the edge and another full limit just after it (up to twice the limit in a short span); a sliding window fixes this, either exactly by logging every request timestamp (memory grows with traffic) or approximately by weighting the previous window's count (two numbers per client).",
+      "hook_type": "direct_question",
+      "spoken_hook": "Limit 100 per minute: दो सेकंड में 200 कैसे?",
+      "hook_10s": "Limit 100 per minute: दो सेकंड में 200 कैसे? सोचो limit है एक minute में 100, और counter minute के edge पर zero हो जाता है। तो edge से ठीक पहले 100 और ठीक बाद 100, limit टूटी बिना टूटे। [frame 0: a timeline split into two blocks, 100 requests stacked just left of the block edge and 100 just right of it, a '2 sec' bracket across the edge]",
+      "hook_candidates": [
+        {
+          "formula": "direct_question: the contradiction as one short question",
+          "text": "Limit 100 per minute: दो सेकंड में 200 कैसे?"
+        },
+        {
+          "formula": "direct_question: the counter reset as the question",
+          "text": "Counter zero हो जाए, तो limit कितनी सच्ची रहती है?"
+        },
+        {
+          "formula": "direct_question: which window is safer",
+          "text": "Fixed window या sliding window: कौन सी limit ज़्यादा सच्ची है?"
+        }
+      ],
+      "hook_formula": "direct_question: an everyday-looking limit (100 per minute) set against a number that breaks it (200 in 2 seconds), answered by the very next line with the window edge",
+      "hook_source": "https://redis.io/tutorials/howtos/ratelimiting/",
+      "visual_idea": "A horizontal timeline cut into equal blocks by tall edge lines, each block with a counter chip; a stack of 10 request squares piles up just left of an edge and 10 more just right of it while a bracket across the edge shows the short span, then a window frame slides along the same timeline, the old squares dropping out of its left side and the count recomputed live.",
+      "everyday_anchor": "A cinema or gym that lets in 100 people per hour counted from the top of the hour: 100 walk in at 9:59 and 100 more at 10:01, so 200 arrive in two minutes although the hourly rule was never broken.",
+      "example": "EXAMPLE: limit 10 requests per 10 seconds (Redis tutorial's own example): 10 requests at second 9 and 10 more at second 11 is 20 in 2 seconds. Sliding window counter EXAMPLE (Cloudflare's numbers): 42 requests in the previous minute, 18 in the current one, 15 seconds into it: 42 x 0.75 + 18 = 49.5.",
       "sources": [
-        "https://en.wikipedia.org/wiki/Token_bucket",
-        "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html",
-        "https://stripe.com/blog/rate-limiters",
-        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429"
+        "https://redis.io/tutorials/howtos/ratelimiting/",
+        "https://blog.cloudflare.com/counting-things-a-lot-of-different-things/",
+        "https://en.wikipedia.org/wiki/Rate_limiting"
+      ],
+      "facts_to_verify": [
+        "Fixed window: time is split into fixed blocks, one counter per block, the new block starts a fresh count; boundary burst: 10 at second 9 plus 10 at second 11 is 20 in 2 seconds under a '10 per 10 seconds' limit, up to 2x at boundaries (Redis tutorial, fetched by the strategist this session; re-fetch)",
+        "Sliding window log: stores each request's timestamp, removes entries older than the window, counts the rest; no boundary bursts; memory grows linearly per client, e.g. a 10,000-per-hour limit holds up to 10,000 entries (Redis tutorial); Cloudflare calls it more accurate but with 'huge processing and memory requirements'",
+        "Sliding window counter: previous count x (1 - elapsed fraction) + current count; Cloudflare example 42, 18, 15 s into the minute gives 49.5; it assumes a constant rate in the previous window so it is an approximation; Cloudflare measured 0.003% of 400 million requests wrongly allowed or limited and 'only two numbers per counter' (Cloudflare post)",
+        "Redis tutorial's own advice: no single best algorithm; sliding window counter is a good balance for most APIs. Say it as that tutorial's advice, not as an industry fact",
+        "Cloudflare's post does not use the words 'boundary problem'; it says the naive fixed window lets regular traffic spikes through. Use the boundary burst wording only with the Redis page",
+        "Wikipedia Rate limiting only lists the algorithm names (no explanations): do not cite it for any mechanism",
+        "Optional: run a 15-line Python simulation of both counters on the EXAMPLE numbers and show its real output (20 allowed in 2 seconds vs 10)"
       ],
       "length_target_s": 150,
-      "cover_headline": "Rate Limiting: The Token Bucket",
-      "thumb_text": "TOKEN BUCKET",
+      "cover_headline": "Fixed Window vs Sliding Window",
+      "thumb_text": "2X BURST",
+      "keywords": [
+        "fixed window vs sliding window rate limiting",
+        "sliding window counter explained",
+        "rate limiter boundary burst",
+        "rate limiting interview question",
+        "fixed window counter rate limiter",
+        "system design rate limiter algorithms"
+      ],
       "status": "planned",
       "qa_passed": false,
-      "script_file": "state/scripts/s023.txt",
+      "script_file": "state/scripts/s024.txt",
       "script_locked": false
     }
   ]
