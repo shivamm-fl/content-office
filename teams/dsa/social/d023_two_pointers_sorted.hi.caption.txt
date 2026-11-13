@@ -1,0 +1,9 @@
+Day 23/150: Two pointers: sorted array mein pair sum, 999 checks
+
+Sorted array mein do numbers dhoondhne hain jinka sum target ho. Brute force har pair dekhta hai: ek hazar numbers par 499,500 pairs. Two pointers mein ek pointer left end par, ek right end par. Sum kam ho to left badhao, zyada ho to right ghatao, kyunki sorted array mein har step ek index hamesha ke liye hata deta hai. Time O(n), extra space O(1). Actual Python code video mein hai (code chalaya).
+
+Trap: yeh sirf sorted array par chalta hai. Random arrays par yeh code 5000 mein se 827 baar galat nikla (apna run, EXAMPLE sizes).
+
+Ab tumhara turn: array [2, 3, 7, 9, 12] aur target 16 par answer indices kya honge? Comment mein likho.
+
+#dsa #twopointers #interviewprep

@@ -251,33 +251,18 @@
       "hook_type": "surprising_fact",
       "spoken_hook": "Sorted array में pair sum: पाँच लाख नहीं, 999 checks।",
       "hook_formula": "number_payoff",
-      "hook_source": "surprising_fact; the numbers are run in qa/d023/run.py (1000 elements: 499,500 pairs vs 999 worst-case iterations). The next line defines pair sum. Two pointers O(n)/O(1) verified at doocs 0167. No company claim.",
-      "hook_10s": "Sorted array में pair sum: पाँच लाख नहीं, 999 checks। Problem: sorted array में दो numbers ढूँढो जिनका sum target के बराबर हो। Brute force एक हज़ार numbers पर 499,500 pairs देखता है। [Frame 0: a row of 1000 cells; a dense grid of 499,500 pair lines beside a single row of 999 steps]",
-      "hook_candidates": [
-        {
-          "formula": "number_payoff",
-          "text": "Sorted array में pair sum: पाँच लाख नहीं, 999 checks।"
-        },
-        {
-          "formula": "direct_question",
-          "text": "Sorted array में sum वाला pair, n squared के बिना कैसे ढूँढें?"
-        },
-        {
-          "formula": "relatable_stake",
-          "text": "Sorted array पर सारे pairs चलाए, interviewer बोला O(n) चाहिए!"
-        }
-      ],
-      "one_idea": "Two pointers on a sorted array: put one pointer at each end and compare a[l]+a[r] with the target; if the sum is too small no remaining partner can rescue a[l], if too large no remaining partner can rescue a[r], so every step discards one index for good and the search finishes in O(n) time and O(1) extra space instead of checking all n(n-1)/2 pairs.",
-      "visual_idea": "A row of six cells (1,3,4,6,8,11) with an L tag on the left end and an R tag on the right end. A faint grid of all pairs shrinks to a single diagonal as each step greys out the discarded cell (the cell stays crossed out for the rest of the run). Each step lights the two cells, shows their sum against the target bar, and the lower or higher side tag hops inward. A final scene shows the same code on an unsorted row where the pointers skip the real pair.",
+      "hook_source": "surprising_fact; numbers run in qa/d023/run.py (1000 elements: 499,500 pairs vs 999 worst-case iterations). Two pointers O(n)/O(1) verified at doocs 0167.",
+      "one_idea": "Two pointers on a sorted array: one pointer at each end, compare a[l]+a[r] with the target; if too small no remaining partner can rescue a[l], if too large none can rescue a[r], so every step discards one index for good: O(n) time, O(1) extra space instead of all n(n-1)/2 pairs.",
+      "visual_idea": "A row of six cells (1,3,4,6,8,11) with L and R tags; each step lights two cells, shows sum vs target, the tag hops inward and the discarded cell greys. Final scene: same code on an unsorted row skips the real pair.",
       "example": "EXAMPLE a=[1,3,4,6,8,11], target 10: (1,11)=12 move r; (1,8)=9 move l; (3,8)=11 move r; (3,6)=9 move l; (4,6)=10 found at indices 2 and 3. Check: [2,3,7,9,12], target 16 gives indices 2 and 3.",
-      "code_outline": "def pair_sum(a, target): l, r = 0, len(a)-1; while l < r: s = a[l]+a[r]; if s == target: return [l, r]; if s < target: l += 1 else: r -= 1; return None. Code run in qa/d023/run.py.",
+      "code_outline": "def pair_sum(a, target): l, r = 0, len(a)-1; while l < r: s = a[l]+a[r]; if s == target: return [l, r]; if s < target: l += 1 else: r -= 1; return None. Run in qa/d023/run.py.",
       "sources": [
         "https://leetcode.doocs.org/en/lc/167/"
       ],
       "facts_to_verify": [
-        "doocs LC 167: pointers at both ends, move left if sum < target, move right if sum > target, O(n) time, O(1) space, input sorted; fetched this session.",
-        "qa/d023/run.py: matched brute force on 5000 random sorted arrays (0 mismatches); same code on shuffled input wrong on 815 of 5000; [5,1,4,9] target 10 returns None though 1+9=10; n=1000 gives 499,500 pairs vs 999 worst-case iterations (EXAMPLE sizes, our own run).",
-        "The why-it-works argument (a[l] cannot pair with anything at or left of r once a[l]+a[r] < target) is our own derivation from sortedness."
+        "doocs LC 167: pointers at both ends, O(n) time, O(1) space, sorted input.",
+        "qa/d023/run.py (seed 23): matched brute force on 5000 random sorted arrays; same code on unsorted input wrong on 827 of 5000; [5,1,4,9] target 10 returns None; n=1000 gives 499,500 pairs vs 999 worst-case iterations (EXAMPLE sizes, own run).",
+        "Why-it-works argument is our own derivation from sortedness."
       ],
       "length_target_s": 120,
       "cover_headline": "Two Pointers: O(n) On Sorted Arrays",

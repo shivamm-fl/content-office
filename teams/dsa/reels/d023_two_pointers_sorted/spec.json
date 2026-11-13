@@ -1,0 +1,117 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "click",
+      "B",
+      1,
+      0.3
+    ],
+    [
+      "pop",
+      "C",
+      1,
+      1
+    ],
+    [
+      "err",
+      "D",
+      1,
+      2.8
+    ],
+    [
+      "ok",
+      "E",
+      5,
+      0.7
+    ],
+    [
+      "dip",
+      "F",
+      0,
+      -0.1
+    ],
+    [
+      "click",
+      "G",
+      1,
+      0.3
+    ],
+    [
+      "ok",
+      "H",
+      1,
+      0
+    ],
+    [
+      "err",
+      "I",
+      1,
+      3.9
+    ],
+    [
+      "ok",
+      "J",
+      4,
+      0.5
+    ],
+    [
+      "save",
+      "J",
+      5,
+      0.4
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Sorted array में pair sum: पाँच लाख नहीं, 999{nine-hundred-ninety-nine} checks।",
+      "B": "Problem: sorted array में दो numbers ढूँढो जिनका sum target के बराबर हो। | Brute force हर pair check करता है। | एक हज़ार numbers पर यह 499,500{four-ninety-nine-thousand-five-hundred} pairs हैं, यानी O of n squared।",
+      "C": "Signal यह है: array sorted है, और condition दो elements के sum पर है। | तब two pointers चलता है: एक pointer left end पर, एक right end पर।",
+      "D": "Array: one, three, four, six, eight, eleven, target ten। | Left पर one, right पर eleven: sum twelve, यानी target से ज़्यादा। | Eleven बहुत बड़ा है। | Sorted है, तो left की हर value eleven से छोटी या बराबर है, और बाकी सब partners भी। | तो eleven किसी भी pair में target नहीं बनाएगा। | Right pointer को left करो।",
+      "E": "One और eight: nine, यानी कम है। | One बहुत छोटा है, क्योंकि उसका सबसे बड़ा partner eight भी target तक नहीं पहुँचा। | Left pointer को right करो। | Three और eight: eleven, ज़्यादा, तो right left। | Three और six: nine, कम, तो left right। | Four और six: ten। | Found, indices two और three।",
+      "F": "@emph हर step एक index हमेशा के लिए हटाता है। | इसलिए सब pairs देखने की ज़रूरत नहीं रहती।",
+      "G": "Code: l, r equals zero, len of a minus one। | While l less than r: s equals a of l plus a of r। | अगर s equals target, तो return। | अगर s less than target, तो l plus equals one, वरना r minus equals one।",
+      "H": "एक हज़ार numbers पर worst case में 999{nine-hundred-ninety-nine} iterations हैं। | Time O of n, extra space O of one।",
+      "I": "Trap: यह सिर्फ़ sorted array पर चलता है। | Array five, one, four, nine और target ten पर यही code None देता है, जबकि one और nine का sum ten है। | Random arrays पर यह पाँच हज़ार में से 827{आठसौसत्ताईस} बार गलत निकला, इसलिए पहले sort करो या hash map लो।",
+      "J": "याद रखो: sorted array में sum कम हो तो left बढ़ाओ, ज़्यादा हो तो right घटाओ। | अब तुम्हारा turn! | Array two, three, seven, nine, twelve और target sixteen पर answer indices क्या होंगे? | Comment करो। | जवाब है two और three। | ऐसे ही DSA patterns के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}

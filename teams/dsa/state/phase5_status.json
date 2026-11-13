@@ -600,5 +600,22 @@
   "hook_type": "interviewer_asked",
   "format": "problem",
   "title": "Merge Sorted Array: पीछे से merge करो, extra space के बिना O(m+n)"
+ },
+ "d023": {
+  "status": "built",
+  "track": "series",
+  "folder": "reels/d023_two_pointers_sorted",
+  "mp4": "reels/d023_two_pointers_sorted_hi.mp4",
+  "duration_s": 125.0,
+  "cover": "brand/covers/d023_two_pointers_sorted.png",
+  "caption": "social/d023_two_pointers_sorted.hi.caption.txt",
+  "published": false,
+  "qa_passed": false,
+  "hook_formula": "number_payoff",
+  "hook_source": "surprising_fact; numbers run in qa/d023/run.py. Two pointers O(n)/O(1) verified at doocs 0167.",
+  "hook_score": 0,
+  "hook_type": "surprising_fact",
+  "format": "pattern",
+  "title": "Two pointers: sorted array में दोनों सिरों से चलो, O(n) और O(1) space"
  }
 }

@@ -1,0 +1,6 @@
+Two Pointers On A Sorted Array: O(n) Time, O(1) Space
+
+Two pointers finds a pair with a given sum in a sorted array without checking every pair. Put one pointer at each end and compare a[l] + a[r] with the target. If the sum is too small, no remaining partner can rescue a[l], so move l right; if it is too big, no remaining partner can rescue a[r], so move r left. Each step discards one index for good, so the loop runs at most n - 1 times: O(n) time and O(1) extra space (LeetCode 167 uses the same idea). On the example [1,3,4,6,8,11] with target 10 it finds indices 2 and 3 (0-based; LeetCode 167 itself reports 1-based indices). It needs sorted input: on [5,1,4,9] with target 10 the same code returns None, and on our own run of 5000 random unsorted arrays it was wrong 827 times. For n = 1000 there are 499,500 pairs against at most 999 iterations (example sizes from our own run).
+
+Sources:
+https://leetcode.doocs.org/en/lc/167/
