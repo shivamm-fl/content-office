@@ -1,0 +1,79 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   1,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] तुम्हारा app LLM से JSON लेता है। सब ठीक चल रहा था... फिर एक दिन जवाब की शुरुआत में लिखा आया: Sure, here is your JSON. और app crash।",
+   "B": "[thoughtful] पहला idea: few-shot, यानी prompt में दो-तीन solved examples, ताकि model pattern देखकर वैसा ही लिखे। इसमें model के weights नहीं बदलते, सब prompt के अंदर होता है।",
+   "C": "पर examples समझाते हैं, मजबूर नहीं करते। जैसे form भरवाने के लिए sample दिखा दिया... फिर भी कोई ना कोई गलत भर ही देता है। हज़ारों requests में कभी JSON टूटेगा, कभी कोई field गायब होगी।",
+   "D": "Fix: structured outputs। API को JSON schema दो, यानी fields और उनके type की list। फिर model का output उसी साँचे में बँधकर आता है। जैसे form में fixed boxes: बाहर लिखने की जगह ही नहीं।",
+   "E": "Interview में बोलो: few-shot pattern सिखाता है, schema उसे पक्का करता है। Strict format चाहिए, तो structured outputs।",
+   "F": "[curious] Full prompting guide चाहिए? Comment करो PROMPT, guide सीधा तुम्हारे DM में।"
+  }
+ },
+ "sources": [
+  "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+  "https://arxiv.org/abs/2005.14165"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "wont_work_unless",
+ "remake_of": "r12",
+ "approved": "owner 2026-11-13 (scripts reviewed; 'bana')"
+}

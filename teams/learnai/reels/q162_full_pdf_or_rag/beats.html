@@ -1,0 +1,95 @@
+        <style>
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .stamp { position:absolute; padding:12px 30px; border-radius:16px; font:700 64px "Space Grotesk",sans-serif; border:5px solid; transform:rotate(-6deg); background:rgba(11,18,32,.92); }
+          .book { position:absolute; border-radius:14px; background:#F3EFE4; box-shadow:0 18px 40px rgba(0,0,0,.45); }
+          .book .t { position:absolute; left:20px; top:20px; font:700 34px "Space Grotesk",sans-serif; color:#1B2433; }
+          .book .p { position:absolute; left:20px; bottom:18px; font:600 26px "JetBrains Mono",monospace; color:#5E6B85; }
+          .pill { position:absolute; padding:16px 26px; border-radius:18px; background:#1B2538; border:3px solid #26324B; font:700 40px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .panel { position:absolute; top:0; width:440px; height:520px; border-radius:26px; background:#111A2C; border:3px solid #26324B; }
+          .panel .h { position:absolute; left:0; width:440px; top:26px; text-align:center; font:700 44px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .panel .f { position:absolute; left:0; width:440px; bottom:30px; text-align:center; font:700 42px "Space Grotesk",sans-serif; }
+          .card2 { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .req { position:absolute; left:40px; height:62px; border-radius:12px; }
+          .lbl { position:absolute; font:600 30px "JetBrains Mono",monospace; color:#8592AD; white-space:nowrap; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:88px;"><span class="gold">40 page</span> ki handbook<br/>par RAG?</div>
+          <div class="book" id="a_b" style="left:120px; top:560px; width:260px; height:340px;"><div class="t">Company<br/>Handbook</div><div class="p">40 pages</div></div>
+          <div class="x" id="a_ar" style="left:420px; top:670px; font-size:90px;">&rarr;</div>
+          <div class="card" id="a_rag" style="left:540px; top:560px; width:420px; height:340px;">
+            <div class="x mut" style="left:30px; top:26px; font:600 30px 'JetBrains Mono',monospace;">RAG pipeline</div>
+            <div class="pill" style="left:30px; top:90px; font-size:34px;">chunks</div>
+            <div class="pill" style="left:30px; top:170px; font-size:34px;">vector DB</div>
+            <div class="pill" style="left:30px; top:250px; font-size:34px;">retrieve</div>
+          </div>
+          <div class="stamp" id="a_st" style="left:330px; top:940px; color:#E8596B; border-color:#E8596B;">RUKO</div>
+          <div class="ill" style="right:80px; top:1110px;">example</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c gold" id="b_t" style="top:250px; font-size:100px;">OPEN BOOK EXAM</div>
+          <div class="panel" id="b_p1" style="left:80px; top:420px;">
+            <div class="h">patli kitaab</div>
+            <div class="book" style="left:150px; top:120px; width:140px; height:200px;"><div class="p" style="font-size:22px;">thin</div></div>
+            <div class="f green">poori le jao</div>
+          </div>
+          <div class="panel" id="b_p2" style="left:560px; top:420px;">
+            <div class="h">badi library</div>
+            <div style="position:absolute; left:60px; top:120px; width:320px; height:200px;">
+              <div class="book" style="left:0; top:0; width:60px; height:200px;"></div><div class="book" style="left:70px; top:0; width:60px; height:200px;"></div>
+              <div class="book" style="left:140px; top:0; width:60px; height:200px;"></div><div class="book" style="left:210px; top:0; width:60px; height:200px;"></div>
+              <div class="book" style="left:280px; top:0; width:40px; height:200px;"></div>
+            </div>
+            <div class="f gold">index cards</div>
+          </div>
+          <div class="x c" id="b_rag" style="top:990px; font-size:64px;">RAG = <span class="gold">index cards</span></div>
+          <div class="x c mut" id="b_flow" style="top:1080px; font-size:44px;">tukde dhoondho &rarr; sirf wahi model ko</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c red" id="c_t" style="top:250px; font-size:84px;">index cards mein galti</div>
+          <div class="card2" id="c_e1" style="top:380px; height:120px;"><div class="x" style="left:36px; top:30px; font-size:50px;">tukda <span class="red">galat jagah</span> se kata</div></div>
+          <div class="card2" id="c_e2" style="top:520px; height:120px;"><div class="x" style="left:36px; top:30px; font-size:50px;">sahi tukda <span class="red">mila hi nahi</span></div></div>
+          <div class="card2" id="c_rule" style="top:690px; height:380px; border-color:#4CC38A;">
+            <div class="x mut" style="left:36px; top:30px; font:600 32px 'JetBrains Mono',monospace;">RULE</div>
+            <div class="x" style="left:36px; top:86px; font-size:64px;">&lt; <span class="gold">200,000 tokens</span></div>
+            <div class="x mut" style="left:36px; top:176px; font-size:50px;">&asymp; 500 pages</div>
+            <div class="x green" style="left:36px; top:270px; font-size:64px;">poora prompt mein</div>
+          </div>
+          <div class="src" id="c_src" style="top:1100px; font-size:30px;">Source: Anthropic, Sep 2024</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_q" style="top:255px; font-size:54px;">har sawal par poori handbook?</div>
+          <div class="x c gold" id="d_t" style="top:345px; font-size:96px;">PROMPT CACHING</div>
+          <div class="card2" id="d_reqs" style="top:500px; height:330px;">
+            <div class="lbl" style="left:40px; top:20px;">request 1</div>
+            <div class="req" style="top:56px; width:560px; background:#F2B544;"></div><div class="req" style="top:56px; left:610px; width:200px; background:#5BC0EB;"></div>
+            <div class="lbl" style="left:40px; top:132px;">request 2</div>
+            <div class="req" id="d_c2" style="top:168px; width:560px; background:#F2B544;"></div><div class="req" style="top:168px; left:610px; width:200px; background:#5BC0EB;"></div>
+            <div class="lbl" id="d_cl" style="left:220px; top:182px; color:#0B1220; font-weight:700;">CACHED</div>
+            <div class="lbl" style="left:40px; top:244px;">handbook (same)</div><div class="lbl" style="left:610px; top:244px;">sawal</div>
+          </div>
+          <div class="chip" id="d_s1" style="left:80px; top:880px; width:440px; border:4px solid #4CC38A; color:#4CC38A; font-size:44px;">latency 2x+ kam</div>
+          <div class="chip" id="d_s2" style="left:560px; top:880px; width:440px; border:4px solid #4CC38A; color:#4CC38A; font-size:44px;">cost 90% tak kam</div>
+          <div class="src" id="d_src" style="top:1100px; font-size:30px;">Source: Anthropic, Sep 2024</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_1" style="top:420px; font-size:76px;">500 pages se <span class="gold">bahut bada?</span></div>
+          <div class="x c green" id="e_2" style="top:580px; font-size:160px;">TAB RAG</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="card2" id="f_q" style="top:390px; height:130px; border-color:#F2B544;"><div class="x c" style="left:0; width:920px; top:34px; font-size:56px;">data prompt mein fit?</div></div>
+          <div class="card2" id="f_y" style="top:570px; height:200px; left:80px; width:440px; border-color:#4CC38A;"><div class="x green" style="left:30px; top:24px; font-size:56px;">HAAN</div><div class="x" style="left:30px; top:100px; font-size:44px;">poora + cache</div></div>
+          <div class="card2" id="f_n" style="top:570px; height:200px; left:560px; width:440px; border-color:#E8596B;"><div class="x red" style="left:30px; top:24px; font-size:56px;">NAHI</div><div class="x" style="left:30px; top:100px; font-size:44px;">RAG</div></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_1" style="top:380px; font-size:84px;">tumhara sabse bada PDF</div>
+          <div class="x c gold" id="g_2" style="top:500px; font-size:110px;">kitne pages?</div>
+          <div class="chip" id="g_c" style="left:290px; top:760px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

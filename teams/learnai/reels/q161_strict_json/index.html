@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Strict JSON: Few-Shot or Structured Outputs</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="59" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .term { position:absolute; background:#070C16; border:3px solid #26324B; border-radius:26px; }
+          .mono { position:absolute; font-family:"JetBrains Mono",monospace; font-weight:600; color:#E8EDF6; white-space:nowrap; }
+          .stamp { position:absolute; padding:12px 30px; border-radius:16px; font:700 58px "Space Grotesk",sans-serif; border:5px solid; transform:rotate(-6deg); background:rgba(11,18,32,.92); }
+          .ex { position:absolute; left:36px; width:850px; height:84px; border-radius:18px; background:#1B2538; }
+          .ex .i { position:absolute; left:24px; top:22px; font:700 36px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .ex .o { position:absolute; right:24px; top:24px; font:600 32px "JetBrains Mono",monospace; white-space:nowrap; }
+          .form { position:absolute; top:0; width:280px; height:300px; border-radius:20px; background:#F3EFE4; }
+          .form .l { position:absolute; left:22px; font:600 26px "JetBrains Mono",monospace; color:#5E6B85; }
+          .form .v { position:absolute; left:22px; font:700 36px "Space Grotesk",sans-serif; color:#1B2433; white-space:nowrap; }
+          .tile { position:absolute; width:130px; height:70px; border-radius:14px; display:flex; align-items:center; justify-content:center; font:700 30px "JetBrains Mono",monospace; }
+          .ok { background:rgba(76,195,138,.16); border:3px solid #4CC38A; color:#4CC38A; }
+          .bad { background:#3A1C27; border:3px solid #E8596B; color:#E8596B; }
+          .chk { position:absolute; left:80px; width:920px; height:130px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .chk .k { position:absolute; left:36px; top:34px; font:700 54px "Space Grotesk",sans-serif; white-space:nowrap; }
+          .chk .v { position:absolute; left:420px; top:36px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:92px;">App LLM se<br/><span class="gold">JSON</span> leta hai</div>
+          <div class="term" style="left:80px; top:500px; width:920px; height:470px;">
+            <div class="mono" style="left:36px; top:30px; font-size:32px; color:#8592AD;">LLM response:</div>
+            <div class="mono" id="a_ok" style="left:36px; top:90px; font-size:42px; color:#4CC38A;">{"sentiment": "positive"}</div>
+            <div class="mono" id="a_bad1" style="left:36px; top:190px; font-size:40px; color:#E8596B;">Sure, here is your JSON.</div>
+            <div class="mono" id="a_bad2" style="left:36px; top:250px; font-size:40px;">{"sentiment": "positive"}</div>
+            <div class="mono" id="a_err" style="left:36px; top:340px; font-size:34px; color:#E8596B;">JSONDecodeError</div>
+            <div class="ill" style="left:36px; top:420px;">example</div>
+          </div>
+          <div class="stamp" id="a_st" style="left:560px; top:880px; color:#E8596B; border-color:#E8596B;">APP CRASH</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c gold" id="b_t" style="top:250px; font-size:120px;">FEW-SHOT</div>
+          <div class="x c mut" id="b_s" style="top:390px; font-size:52px;">prompt mein solved examples</div>
+          <div class="card" style="left:80px; top:500px; width:920px; height:420px;">
+            <div class="ex" id="b_e1" style="top:36px;"><div class="i">"Mast phone"</div><div class="o green">{"sentiment": "positive"}</div></div>
+            <div class="ex" id="b_e2" style="top:140px;"><div class="i">"Battery bekaar"</div><div class="o red">{"sentiment": "negative"}</div></div>
+            <div class="ex" id="b_e3" style="top:244px; border:3px dashed #F2B544;"><div class="i">"Camera theek hai"</div><div class="o gold">?</div></div>
+          </div>
+          <div class="chip" id="b_w" style="left:190px; top:960px; width:700px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:52px;">weights: koi change nahi</div>
+          <div class="ill" style="right:80px; top:922px;">example</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:76px;">samjhate hain,<br/><span class="red">majbur nahi karte</span></div>
+          <div id="c_forms" style="position:absolute; left:80px; top:470px; width:920px; height:300px;">
+            <div class="form" id="c_f1" style="left:0;"><div class="l" style="top:20px;">SAMPLE</div><div class="l" style="top:80px;">naam</div><div class="v" style="top:112px;">Rahul</div><div class="l" style="top:180px;">umar</div><div class="v" style="top:212px;">25</div></div>
+            <div class="form" id="c_f2" style="left:320px;"><div class="l" style="top:20px;">FORM 1</div><div class="l" style="top:80px;">naam</div><div class="v" style="top:112px;">Priya</div><div class="l" style="top:180px;">umar</div><div class="v" style="top:212px;">31</div></div>
+            <div class="form" id="c_f3" style="left:640px; border:5px solid #E8596B;"><div class="l" style="top:20px;">FORM 2</div><div class="l" style="top:80px;">naam</div><div class="v" style="top:112px;">31</div><div class="l" style="top:180px;">umar</div><div class="v" style="top:212px; color:#E8596B;">Priya ji</div></div>
+          </div>
+          <div id="c_grid" style="position:absolute; left:80px; top:830px; width:920px; height:240px;"></div>
+          <div class="ill" style="right:80px; top:1112px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c gold" id="d_t" style="top:262px; font-size:78px;">STRUCTURED OUTPUTS</div>
+          <div class="term" id="d_schema" style="left:80px; top:400px; width:920px; height:250px; border-color:#F2B544;">
+            <div class="mono" style="left:36px; top:26px; font-size:30px; color:#8592AD;">JSON schema</div>
+            <div class="mono" style="left:36px; top:86px; font-size:38px;">{ "sentiment":</div>
+            <div class="mono" style="left:96px; top:146px; font-size:38px; color:#F2B544;">"positive" | "negative" }</div>
+          </div>
+          <div id="d_mould" style="position:absolute; left:180px; top:720px; width:720px; height:110px; border:5px dashed #4CC38A; border-radius:22px;"></div>
+          <div class="mono" id="d_out" style="left:220px; top:748px; font-size:44px; color:#4CC38A;">{"sentiment": "positive"}</div>
+          <div class="x c" id="d_box" style="top:880px; font-size:56px;">form mein <span class="green">fixed boxes</span></div>
+          <div class="src" id="d_src" style="top:1110px; font-size:30px;">Source: Claude docs, structured outputs</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="chip" id="e_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="chk" id="e_1" style="top:420px;"><div class="k gold">FEW-SHOT</div><div class="v">pattern sikhata</div></div>
+          <div class="chk" id="e_2" style="top:580px;"><div class="k green">SCHEMA</div><div class="v">pakka karta</div></div>
+          <div class="x c" id="e_3" style="top:780px; font-size:60px;">strict format = <span class="green">structured outputs</span></div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_1" style="top:300px; font-size:84px;">Full prompting guide?</div>
+          <div class="x c mut" id="f_2" style="top:450px; font-size:46px; letter-spacing:.2em;">COMMENT</div>
+          <div class="x c gold" id="f_3" style="top:510px; font-size:180px;">PROMPT</div>
+          <div class="chip" id="f_dm" style="left:240px; top:780px; width:600px; background:#F2B544; color:#0B1220; font-size:46px;">guide seedha DM mein</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="59" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="59" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="59" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the response that crashed the app (example)
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.to("#a_ok", { opacity: 0.35, duration: 0.3 }, at("A", "phir") - 0.1);
+      show("#a_bad1", at("A", "sure") - 0.1, { s: 1, y: 10 });
+      show("#a_bad2", at("A", "sure") + 0.3, { s: 1, y: 10 });
+      show("#a_err", at("A", "crash") - 0.3, { s: 1, y: 10 });
+      show("#a_st", at("A", "crash") - 0.05, { s: 1.8 });
+      // B: few-shot
+      show("#b_t", at("B", "few-shot") - 0.1, { s: 1.3 });
+      show("#b_s", at("B", "prompt") - 0.05, { s: 1 });
+      show("#b_e1", at("B", "solved") - 0.05, { s: 0.94 });
+      show("#b_e2", at("B", "examples"), { s: 0.94 });
+      show("#b_e3", at("B", "pattern") - 0.05, { s: 0.94 });
+      show("#b_w", at("B", "weights") - 0.1, { s: 1.2 });
+      // C: examples explain, they do not force
+      show("#c_t", at("C", "examples") - 0.1, { s: 1.1 });
+      show("#c_f1", at("C", "sample") - 0.1, { s: 0.9 });
+      show("#c_f2", at("C", "phir") - 0.05, { s: 0.9 });
+      show("#c_f3", at("C", "galat") - 0.1, { s: 0.9 });
+      const grid = q("#c_grid");
+      for (let i = 0; i < 18; i++) {
+        const t = document.createElement("div"); const bad = i === 7 || i === 13;
+        t.className = "tile " + (bad ? "bad" : "ok"); t.id = "c_g" + i; t.textContent = bad ? (i === 7 ? "{ ..." : "{ }?") : "{ }";
+        t.style.left = (i % 6) * 156 + "px"; t.style.top = Math.floor(i / 6) * 82 + "px"; grid.appendChild(t);
+        show(t, at("C", "hazaron") + i * 0.05, { s: 0.6, y: 0, d: 0.18 });
+      }
+      tl.fromTo("#c_g7", { scale: 1 }, { scale: 1.18, duration: 0.2, yoyo: true, repeat: 1 }, at("C", "tootega"));
+      tl.fromTo("#c_g13", { scale: 1 }, { scale: 1.18, duration: 0.2, yoyo: true, repeat: 1 }, at("C", "gaayab"));
+      // D: structured outputs
+      show("#d_t", at("D", "structured") - 0.1, { s: 1.2 });
+      show("#d_schema", at("D", "schema") - 0.15, { s: 0.94 });
+      show("#d_mould", at("D", "output") - 0.1, { s: 1, y: 0 });
+      tl.fromTo("#d_out", { opacity: 0, y: -120 }, { opacity: 1, y: 0, duration: 0.5, ease: "back.out(1.4)" }, at("D", "saanche") - 0.1);
+      show("#d_box", at("D", "fixed") - 0.1, { s: 1.1 });
+      show("#d_src", at("D", "schema"), { s: 1, y: 0 });
+      // E: interview answer
+      show("#e_chip", at("E", "interview") - 0.05, { s: 0.85 });
+      show("#e_1", at("E", "few-shot") - 0.1, { s: 0.92 });
+      show("#e_2", at("E", "schema") - 0.1, { s: 0.92 });
+      show("#e_3", at("E", "strict") - 0.1, { s: 1.1 });
+      // F: the guide
+      show("#f_1", at("F", "full") - 0.1, { s: 1.1 });
+      show("#f_2", at("F", "comment") - 0.1, { s: 1, y: 0 });
+      show("#f_3", at("F", "comment") + 0.1, { s: 1.5 });
+      show("#f_dm", at("F", "seedha") - 0.1, { s: 0.9 });
+      M.finish({ kw: { json: "gold", crash: "hot", "few-shot": "gold", weights: "cyan", majbur: "hot", galat: "hot", structured: "good", outputs: "good",
+                       schema: "good", pakka: "good", prompt: "gold", dm: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

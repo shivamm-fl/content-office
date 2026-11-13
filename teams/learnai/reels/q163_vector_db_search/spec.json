@@ -1,0 +1,87 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   1,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Millions of vectors... और तुम्हें सबसे पास वाला चाहिए, पलक झपकते। Interview में यही पूछते हैं: कैसे निकालोगे?",
+   "B": "[thoughtful] पहले vector समझो। User ने लिखा: best budget laptop for coding। ये sentence numbers की एक list बन जाता है, जो उसका मतलब पकड़ती है। मिलते-जुलते मतलब वाले sentences के vectors पास-पास होते हैं।",
+   "C": "सीधा तरीका: query को हर vector से नापो, और सबसे पास वाले उठा लो। ये brute force है, जैसे खोई हुई चाबी पूरे शहर के हर घर में ढूँढना। मिलेगी ज़रूर... पर millions vectors पर हर query के लिए millions comparisons।",
+   "D": "Vector database पहले ही vectors को groups में बाँट देता है, जैसे शहर को मोहल्लों में। Query आई, तो सिर्फ़ पास वाले कुछ मोहल्ले देखे जाते हैं। इसे approximate nearest neighbor search कहते हैं।",
+   "E": "Approximate क्यों? क्योंकि कभी-कभी चाबी साथ वाले उस मोहल्ले में होगी, जो देखा ही नहीं गया। Trade-off यही है: थोड़ी accuracy देकर बहुत सारी speed।",
+   "F": "Interview में बोलो: brute force हर vector check करता है। Vector database search space को groups में बाँटकर सिर्फ़ ज़रूरी हिस्सा check करता है।",
+   "G": "[curious] अब बताओ: सिर्फ़ दस हज़ार vectors हों, तब भी vector database लगाओगे? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://github.com/facebookresearch/faiss/wiki/Faiss-indexes"
+ ],
+ "hook_type": "interviewer_asked",
+ "template": "better_best",
+ "remake_of": "r09",
+ "approved": "owner 2026-11-13 (scripts reviewed; 'bana')"
+}

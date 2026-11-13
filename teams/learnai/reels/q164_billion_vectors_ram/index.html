@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>1 Billion Vectors in 128 GB RAM</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="85" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          .stat { position:absolute; left:80px; width:920px; height:150px; border-radius:26px; background:#111A2C; border:3px solid #26324B; }
+          .stat .k { position:absolute; left:36px; top:46px; font:600 38px "JetBrains Mono",monospace; color:#8592AD; }
+          .stat .v { position:absolute; right:36px; top:30px; font:700 80px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .strike { position:absolute; height:12px; background:#E8596B; border-radius:6px; transform-origin:0 50%; }
+          .hb { position:absolute; left:80px; height:70px; border-radius:16px; transform-origin:0 50%; }
+          .lb { position:absolute; left:80px; font:700 40px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .sw { position:absolute; top:0; width:52px; height:110px; border-radius:10px; }
+          .pc { position:absolute; width:22px; height:46px; border-radius:6px; background:#5BC0EB; }
+          .cell { position:absolute; width:36px; height:36px; border-radius:7px; background:#1B2538; }
+          .src { position:absolute; left:60px; width:960px; text-align:right; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .box { position:absolute; border-radius:24px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font:700 50px "Space Grotesk",sans-serif; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="stat" style="top:280px;"><div class="k">vectors</div><div class="v gold">1,000,000,000</div></div>
+          <div class="stat" style="top:460px;"><div class="k">RAM</div><div class="v">128 GB</div></div>
+          <div class="stat" style="top:640px;"><div class="k">search</div><div class="v">100 ms</div></div>
+          <div class="chip" id="a_sp" style="left:290px; top:860px; width:500px; border:4px solid #F2B544; color:#F2B544; font-size:64px;">SPEED?</div>
+          <div class="strike" id="a_x" style="left:270px; top:906px; width:540px;"></div>
+          <div class="x c red" id="a_no" style="top:990px; font-size:56px;">pehli dikkat speed nahi</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:80px;">hisaab</div>
+          <div class="x c" id="b_eq" style="top:370px; font-size:56px;">768 numbers &times; 4 bytes &times; 1 billion</div>
+          <div class="x c gold" id="b_tb" style="top:470px; font-size:170px;">&asymp; 3 TB</div>
+          <div class="lb" id="b_l1" style="top:700px;">RAM 128 GB</div>
+          <div class="hb" id="b_ram" style="top:760px; width:36px; background:#4CC38A;"></div>
+          <div class="lb" id="b_l2" style="top:860px;">data 3 TB</div>
+          <div class="hb" id="b_data" style="top:920px; width:864px; background:#E8596B;"></div>
+          <div class="x red" id="b_24" style="left:780px; top:1010px; font-size:72px;">24x</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:76px;">FIX 1: <span class="gold">chhota karo</span></div>
+          <div class="x c mut" id="c_sc" style="top:360px; font-size:46px;">paint shop ki shade card</div>
+          <div id="c_sw" style="position:absolute; left:80px; top:430px; width:920px; height:110px;"></div>
+          <div class="x c" id="c_pick" style="top:560px; font-size:48px;">exact rang nahi, <span class="gold">shade ka number</span></div>
+          <div id="c_pcs" style="position:absolute; left:80px; top:650px; width:920px; height:110px;"></div>
+          <div class="x c" id="c_b" style="top:780px; font-size:50px;">64 tukde &times; <span class="gold">1 byte</span></div>
+          <div class="lb" id="c_l" style="top:870px;">RAM 128 GB</div>
+          <div class="hb" id="c_track" style="top:930px; width:864px; background:#1B2538;"></div>
+          <div class="hb" id="c_fit" style="top:930px; width:486px; background:#4CC38A;"></div>
+          <div class="x" id="c_72" style="left:600px; top:935px; font-size:52px;">&asymp; 72 GB</div>
+          <div class="x c gold" id="c_pq" style="top:1040px; font-size:60px;">PRODUCT QUANTIZATION</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:76px;">FIX 2: <span class="cyan">kam dhoondho</span></div>
+          <div class="x c mut" id="d_s" style="top:360px; font-size:46px;">65,000 groups</div>
+          <div id="d_grid" style="position:absolute; left:100px; top:440px; width:880px; height:430px;"></div>
+          <div class="x c" id="d_32" style="top:890px; font-size:56px;">query: sirf <span class="cyan">32 groups</span></div>
+          <div class="x c" id="d_5l" style="top:980px; font-size:56px;">&asymp; 5 lakh check, <span class="red">1 billion nahi</span></div>
+          <div class="x c cyan" id="d_ivf" style="top:1070px; font-size:64px;">IVF</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:72px;">FIX 3: <span class="green">dobara jaancho</span></div>
+          <div class="box" id="e_ram" style="left:80px; top:380px; width:400px; height:240px; background:#111A2C; border:3px solid #26324B;"><span class="mut" style="font-size:36px;">RAM</span>shade codes</div>
+          <div class="x" id="e_ar" style="left:496px; top:470px; font-size:40px;">top 100<br/>&rarr;</div>
+          <div class="box" id="e_ssd" style="left:700px; top:380px; width:300px; height:240px; background:#111A2C; border:3px solid #4CC38A;"><span class="mut" style="font-size:36px;">SSD</span>poore vectors</div>
+          <div class="card" id="e_dk" style="left:80px; top:680px; width:920px; height:380px; border-color:#F2B544;">
+            <div class="x gold" style="left:40px; top:30px; font-size:64px;">DiskANN</div>
+            <div class="x" style="left:40px; top:120px; font-size:52px;">64 GB RAM + sasti SSD</div>
+            <div class="x" style="left:40px; top:200px; font-size:52px;">1 billion points</div>
+            <div class="x green" style="left:40px; top:280px; font-size:60px;">&lt; 3 ms</div>
+          </div>
+          <div class="src" id="e_src" style="top:1090px;">Source: DiskANN, NeurIPS 2019</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="x c" id="f_1" style="top:380px; font-size:76px;">pehle <span class="red">memory</span>, phir <span class="cyan">speed</span></div>
+          <div class="chip" id="f_a" style="left:240px; top:540px; width:600px; border:4px solid #F2B544; color:#F2B544; font-size:52px;">chhota karo (PQ)</div>
+          <div class="chip" id="f_b" style="left:240px; top:660px; width:600px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:52px;">kam dhoondho (IVF)</div>
+          <div class="chip" id="f_c" style="left:240px; top:780px; width:600px; border:4px solid #4CC38A; color:#4CC38A; font-size:52px;">dobara jaancho</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_1" style="top:340px; font-size:84px;">code = <span class="gold">32 bytes</span></div>
+          <div class="x c" id="g_2" style="top:470px; font-size:84px;">RAM kitni?</div>
+          <div class="x c" id="g_3" style="top:590px; font-size:84px;"><span class="red">kya khooge?</span></div>
+          <div class="chip" id="g_c" style="left:290px; top:800px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="85" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="85" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="85" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the three numbers at frame 0; speed is crossed out
+      show("#a_sp", at("A", "speed") - 0.1, { s: 1.3 });
+      wipe("#a_x", at("A", "speed", 1) - 0.05, 0.35);
+      show("#a_no", at("A", "speed", 1) + 0.2, { s: 1.05 });
+      // B: the arithmetic (1e9 x 768 x 4 bytes = 3.07 TB = 24 x 128 GB)
+      show("#b_t", at("B", "hisab") - 0.1, { s: 1.1 });
+      show("#b_eq", at("B", "seven") - 0.1, { s: 1 });
+      show("#b_tb", at("B", "three") - 0.1, { s: 1.4 });
+      show("#b_l1", at("B", "ram") - 0.1, { s: 1, y: 0 }); wipe("#b_ram", at("B", "ram"), 0.3);
+      show("#b_l2", at("B", "ram") + 0.2, { s: 1, y: 0 }); wipe("#b_data", at("B", "chaubis") - 0.2, 0.7);
+      show("#b_24", at("B", "chaubis"), { s: 1.5 });
+      // C: product quantization (64 pieces x 1 byte + 8-byte id = 72 bytes; 72 GB of 128)
+      show("#c_t", at("C", "fix") - 0.1, { s: 1.1 });
+      show("#c_sc", at("C", "paint") - 0.1, { s: 1 });
+      const sw = q("#c_sw");
+      for (let i = 0; i < 16; i++) { const d = document.createElement("div"); d.className = "sw"; d.style.left = i * 57.5 + "px"; d.style.background = `hsl(${30 + i * 3}, ${55 + i}%, ${28 + i * 3.6}%)`; sw.appendChild(d); show(d, at("C", "paint") + i * 0.03, { s: 1, y: 8, d: 0.15 }); }
+      tl.to(sw.children[9], { y: -18, boxShadow: "0 0 0 5px #F2B544", duration: 0.3 }, at("C", "number") - 0.2);
+      show("#c_pick", at("C", "exact") - 0.1, { s: 1 });
+      const pcs = q("#c_pcs");
+      for (let i = 0; i < 64; i++) { const d = document.createElement("div"); d.className = "pc"; d.style.left = (i % 32) * 28.6 + "px"; d.style.top = Math.floor(i / 32) * 58 + "px"; pcs.appendChild(d); show(d, at("C", "chaunsath") + i * 0.012, { s: 1, y: 0, d: 0.1 }); }
+      show("#c_b", at("C", "byte") - 0.1, { s: 1.1 });
+      show("#c_l", at("C", "id") - 0.1, { s: 1, y: 0 }); show("#c_track", at("C", "id") - 0.1, { s: 1, y: 0 });
+      wipe("#c_fit", at("C", "seventy") - 0.2, 0.6); show("#c_72", at("C", "seventy"), { s: 1.2 });
+      show("#c_pq", at("C", "product") - 0.1, { s: 1.15 });
+      // D: IVF: 65,000 groups drawn as a grid; the 32 nearest light up (32 / 65,536 of a billion = ~4.9 lakh)
+      show("#d_t", at("D", "fix") - 0.1, { s: 1.1 });
+      show("#d_s", at("D", "painsath") - 0.1, { s: 1 });
+      const g = q("#d_grid"), hot = new Set();
+      for (let r = 4; r < 8; r++) for (let c = 8; c < 16; c++) hot.add(r * 22 + c);
+      for (let i = 0; i < 220; i++) { const d = document.createElement("div"); d.className = "cell"; d.style.left = (i % 22) * 40 + "px"; d.style.top = Math.floor(i / 22) * 43 + "px"; g.appendChild(d);
+        show(d, at("D", "painsath") + (i % 22) * 0.015, { s: 1, y: 0, d: 0.12 });
+        if (hot.has(i)) tl.to(d, { backgroundColor: "#5BC0EB", duration: 0.2 }, at("D", "thirty") + 0.1); }
+      show("#d_32", at("D", "thirty") - 0.1, { s: 1.05 });
+      show("#d_5l", at("D", "paanch") - 0.1, { s: 1.05 });
+      show("#d_ivf", at("D", "ivf") - 0.1, { s: 1.3 });
+      // E: rerank the top 100 with the full vectors on SSD; DiskANN
+      show("#e_t", at("E", "fix") - 0.1, { s: 1.1 });
+      show("#e_ram", at("E", "shade") - 0.1, { s: 0.94 });
+      show("#e_ar", at("E", "top") - 0.1, { s: 1, y: 0 });
+      show("#e_ssd", at("E", "ssd") - 0.1, { s: 0.94 });
+      show("#e_dk", at("E", "diskann") - 0.15, { s: 0.94 });
+      show("#e_src", at("E", "diskann"), { s: 1, y: 0 });
+      // F: interview answer
+      show("#f_chip", at("F", "interview") - 0.05, { s: 0.85 });
+      show("#f_1", at("F", "billion") - 0.1, { s: 1.05 });
+      show("#f_a", at("F", "chhota") - 0.1, { s: 0.95 });
+      show("#f_b", at("F", "kam") - 0.1, { s: 0.95 });
+      show("#f_c", at("F", "top") - 0.1, { s: 0.95 });
+      // G: the question
+      show("#g_1", at("G", "code") - 0.1, { s: 1.1 });
+      show("#g_2", at("G", "ram") - 0.1, { s: 1.1 });
+      show("#g_3", at("G", "badle") - 0.1, { s: 1.1 });
+      show("#g_c", at("G", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { billion: "gold", ram: "good", speed: "cyan", three: "hot", tb: "hot", chaubis: "hot", shade: "gold", byte: "gold", seventy: "good",
+                       product: "gold", quantization: "gold", ivf: "cyan", diskann: "gold", memory: "hot", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
