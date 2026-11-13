@@ -1,0 +1,12 @@
+Fixed window vs sliding window: limit ke edge par double requests kyun nikal jaati hain
+
+Day 24/150: Fixed window rate limiter har time block ka alag counter rakhta hai, isliye edge ke aas-paas ek client chhote span mein limit se 2x tak requests bhej sakta hai. Sliding window log har request ka timestamp rakhke exact count deta hai (memory traffic ke saath badhti hai). Sliding window counter pichhli aur abhi wali window ki sirf do counts se andaza lagata hai. Example ke numbers invented hain: limit 10 per 10 seconds; mere simulation mein fixed window ne 20 allow kin aur sliding window counter ne 11. Cloudflare ke analysis mein 400 million requests mein sirf 0.003% galat allow ya rate limit hui. Redis ke tutorial ke hisaab se zyaadatar APIs ke liye sliding window counter achha balance hai.
+
+Comment karke batao: 1 fixed, 2 log ya 3 counter?
+
+Sources:
+https://redis.io/tutorials/howtos/ratelimiting/
+https://blog.cloudflare.com/counting-things-a-lot-of-different-things/
+
+Tags: fixed window vs sliding window,sliding window counter explained,rate limiter boundary burst,rate limiting interview question,system design
+AI-assisted visuals and narration.

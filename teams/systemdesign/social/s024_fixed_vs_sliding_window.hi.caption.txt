@@ -1,0 +1,9 @@
+Day 24/150: Limit 100 per minute, phir bhi do second mein 200 requests kaise nikal jaati hain?
+
+Fixed window mein har time block ka apna counter hota hai, aur edge par counter zero ho jaata hai. Edge se pehle limit tak aur edge ke baad limit tak, to chhote span mein 2x tak requests nikal sakti hain. Example ke numbers invented hain: limit 10 per 10 seconds, second 9 par 10 aur second 11 par 10 requests. Mere simulation mein fixed window ne 20 allow kin, sliding window counter ne 11.
+
+Fix sliding window hai: log har request ka timestamp rakhta hai (exact, par memory badhti hai), counter sirf do numbers rakhta hai (andaza). Redis ke tutorial ke hisaab se zyaadatar APIs ke liye sliding window counter achha balance hai.
+
+Comment karke batao: tum kaun sa chalaoge, 1 fixed, 2 log ya 3 counter?
+
+#SystemDesign #RateLimiting #Backend

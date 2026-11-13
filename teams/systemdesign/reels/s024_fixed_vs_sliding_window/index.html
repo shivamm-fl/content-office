@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Fixed window vs sliding window: limit ke edge par double requests kyun nikal jaati hain</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="138.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+                <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="138.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="138.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="138.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 024 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J] = SC.map((k) => M.$("#s" + k));
+      const S = M.S;
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:22px;font-size:40px;color:${col}`; } return d; };
+      const stamp = (host, txt, cx, y, col, t, size, w) => { const W = w || 460; const d = el(host, `left:${cx - W / 2}px;width:${W}px;text-align:center;top:${y}px;padding:14px 0;border:3px solid ${col};border-radius:14px;background:rgba(14,18,30,.95);font:700 ${size || 52}px var(--code);color:${col};white-space:nowrap;box-sizing:border-box`, txt); return show(d, t, { opacity: 0, scale: 1.08 }); };
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${cx - w / 2}px;width:${w}px;top:${y}px;height:${h || 76}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 40}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const ring = (host, x, y, w, h, col, t, tOff) => { const d = show(el(host, `left:${x - 6}px;top:${y - 6}px;width:${w + 12}px;height:${h + 12}px;border-radius:20px;border:5px solid ${col};box-sizing:border-box`), t, { opacity: 0, y: 0 }); if (tOff != null) gone(d, tOff); return d; };
+      const sv = (kind, size, col) => `<svg viewBox="0 0 64 64" width="${size}" height="${size}" style="overflow:visible">${Viz.ICONS[kind](col)}</svg>`;
+      const ico = (host, kind, cx, cy, size, col, t) => show(el(host, `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`, sv(kind, size, col)), t, { opacity: 0, scale: 0.8, y: 0 });
+      const dot = (host, x0, y0, x1, y1, t, col, dur, o) => { o = o || {}; const d = el(host, `left:${x0 - 22}px;top:${y0 - 22}px;width:44px;height:44px;border-radius:50%;box-sizing:border-box;${o.hollow ? `border:6px solid ${col}` : `background:${col}`}`);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, t);
+        tl.to(d, { x: x1 - x0, y: y1 - y0, duration: dur, ease: "power1.inOut", immediateRender: false }, t);
+        if (!o.stay) tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d; };
+      Viz.ICONS.server = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="8" y="8" width="48" height="16" rx="4"/><rect x="8" y="28" width="48" height="16" rx="4"/><rect x="8" y="48" width="48" height="12" rx="4"/><path d="M16 16h4M16 36h4"/></g>`;
+      Viz.ICONS.phone = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><rect x="16" y="4" width="32" height="56" rx="7"/><path d="M28 52h8"/></g>`;
+      Viz.ICONS.door = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M16 56V8h32v48M8 56h48"/></g><circle cx="40" cy="34" r="3.5" fill="${c}"/>`;
+      Viz.ICONS.bell = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M10 48h44M16 48a16 16 0 0 1 32 0M32 24v-8M26 16h12"/></g>`;
+      Viz.ICONS.gauge = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M8 46a24 24 0 0 1 48 0"/><path d="M32 46l12-16"/></g>`;
+      Viz.ICONS.balancer = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="32" cy="12" r="6"/><circle cx="10" cy="52" r="6"/><circle cx="32" cy="52" r="6"/><circle cx="54" cy="52" r="6"/><path d="M32 18v28M9 17L12 46M35 17l17 29"/></g>`;
+
+      // tile: bordered card with an icon and a label (row) or a tall gateway card (col)
+      const tile = (host, x, y, w, h, label, icon, col, t, size, o) => { o = o || {};
+        const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;${o.col ? "flex-direction:column;justify-content:center;" : ""}align-items:center;gap:${o.col ? 18 : 14}px;${o.col ? "" : "padding:0 18px;"}font:700 ${size || 34}px var(--code);color:${INK};white-space:nowrap`, sv(icon, o.isz || 56, col) + `<span>${label}</span>`);
+        return show(d, t, { opacity: 0, y: 12 }); };
+      // ===== s024 helpers =====
+      Viz.ICONS.shield = (c) => `<g fill="none" stroke="${c}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"><path d="M32 6l20 8v16c0 14-9 24-20 28C21 54 12 44 12 30V14z"/><path d="M23 32l7 7 12-14"/></g>`;
+      const GOLD = "#F2B84B";
+      const BT = 800, XS = (t) => 60 + t * 46;
+      const swap = (host, items, cx, y, w, h, size) => { // items [[text,t,col]]: one chip at a time, old one fades 0.01 s before the next
+        const out = []; items.forEach(([txt, t, col], k) => { const d = chip(host, txt, cx, y, w, col, t, size || 36, h || 80); if (k > 0) tl.to(out[k - 1], { opacity: 0, duration: 0.01, immediateRender: false }, t - 0.01); out.push(d); }); return out; };
+      // TLF: the timeline frame: two blocks (0-10 s, 10-20 s), gold edge line, tick labels
+      const TLF = (host, o) => {
+        o = o || {}; const dy = o.dy || 0, t0 = o.t0, BH = o.bh || 170, f = { dy, BH };
+        f.b1 = show(el(host, `left:60px;top:${BT + dy}px;width:460px;height:${BH}px;border-radius:14px 0 0 14px;border:3px solid ${CYAN};background:${M.ca(CYAN, 0.1)};box-sizing:border-box`), t0, { opacity: 0, y: 0 });
+        f.b2 = show(el(host, `left:520px;top:${BT + dy}px;width:460px;height:${BH}px;border-radius:0 14px 14px 0;border:3px solid ${CYAN};background:${M.ca(CYAN, 0.1)};box-sizing:border-box`), t0, { opacity: 0, y: 0 });
+        if (o.edge !== false) f.edge = show(el(host, `left:514px;top:${BT + dy - 215}px;width:12px;height:${215 + BH + 8}px;border-radius:5px;background:${GOLD}`), t0, { opacity: 0, y: 0 });
+        f.tk = {}; (o.ticks || [[0, "0 s"], [9, "9"], [10, "10"], [11, "11"], [20, "20 s"]]).forEach(([t, l]) => {
+          f.tk[t] = show(el(host, `left:${XS(t) - 50}px;width:100px;text-align:center;top:${BT + dy + BH + 14 + (t === 10 ? 48 : 0)}px;font:700 40px var(--code);color:#B4BFD6`, l), t0, { opacity: 0, y: 0 }); });
+        f.sq = (side, t, col, each, n) => { const cx = side === "L" ? 474 : 566, arr = [];
+          for (let i = 0; i < (n || 10); i++) { const r = Math.floor(i / 2), c = i % 2;
+            arr.push(show(el(host, `left:${cx - 38 + c * 40}px;top:${BT + dy - 44 - r * 40}px;width:36px;height:36px;border-radius:7px;background:${col || CYAN}`), t + (each || 0.04) * i, { opacity: 0, scale: 0.6, y: 0 })); }
+          return arr; };
+        f.ctr = (idx, items) => swap(host, items, idx ? 750 : 290, BT + dy + BH + 100, 340, 100, 44);
+        f.bracket = (t, label, col, lw) => { const L = el(host, `left:436px;top:${BT + dy - 232}px;width:168px;height:6px;border-radius:3px;background:${col}`);
+          const l1 = el(host, `left:436px;top:${BT + dy - 232}px;width:6px;height:26px;border-radius:3px;background:${col}`), l2 = el(host, `left:598px;top:${BT + dy - 232}px;width:6px;height:26px;border-radius:3px;background:${col}`);
+          [L, l1, l2].forEach((d) => show(d, t, { opacity: 0, y: 0 })); const c = chip(host, label, 520, BT + dy - 330, lw || 320, col, t, 38, 72); return [L, l1, l2, c]; };
+        f.win = (t, x0, x1, col) => show(el(host, `left:${x0}px;top:${BT + dy - 24}px;width:${x1 - x0}px;height:${BH + 48}px;border-radius:14px;border:5px solid ${col || GOLD};background:${M.ca(col || GOLD, 0.07)};box-sizing:border-box`), t, { opacity: 0, y: 0 });
+        return f; };
+
+      // ===== A: hook =====
+      // diagram: A
+      M.hook(["100 per minute:", "200 in 2 sec?"], { size: 92, top: 230 });
+      const ta = TLF(A, { t0: 0.05 });
+      ta.sq("L", at("A", "100"), CYAN, 0.04); ta.sq("R", at("A", "200") - 0.2, CYAN, 0.04);
+      ta.ctr(0, [["COUNTER 100", at("A", "100") + 0.45, CYAN]]); ta.ctr(1, [["COUNTER 100", at("A", "200") + 0.3, CYAN]]);
+      chip(A, "LIMIT 100 / MIN", 540, 1215, 600, GOLD, 0.3, 40, 80);
+      ta.bracket(at("A", "kaise") - 0.4, "200 IN 2 S", HOT, 340);
+      M.fit(A, { y: 460, h: 840 });
+
+      // ===== B: counter resets at the edge; window = time block; 100 before, 100 after =====
+      // diagram: B
+      const tb = TLF(B, { t0: M.P("B", 0) });
+      const edgeB = chip(B, "EDGE", 520, 470, 170, GOLD, at("B", "edge"), 36, 64); gone(edgeB, at("B", "Window") - 0.1);
+      const bw1 = tb.ctr(0, [["COUNTER", at("B", "counter"), CYAN], ["COUNTER 100", at("B", "100") + 0.4, GOOD]]);
+      const bw2 = tb.ctr(1, [["COUNTER 0", at("B", "zero"), GOLD], ["COUNTER 100", at("B", "100", 1) + 0.6, GOOD]]);
+      const bwin = tb.win(at("B", "Window"), 60, 520);
+      const bwl = chip(B, "WINDOW", 250, 640, 240, GOLD, at("B", "Window"), 36, 66);
+      tl.to(bwin, { x: 460, duration: 0.5, ease: "power2.inOut", immediateRender: false }, at("B", "har", 1));
+      goneAll([bwin, bwl], at("B", "edge", 1) - 0.2);
+      tb.sq("L", at("B", "100"), CYAN, 0.04); tb.sq("R", at("B", "100", 1), CYAN, 0.04);
+      M.fit(B);
+
+      // ===== C: rate limiter = guard in front of the server =====
+      // diagram: C
+      const c0 = M.P("C", 0), GX = 390;
+      tile(C, GX - 140, 215, 280, 130, "CLIENT", "phone", CYAN, c0, 34);
+      const gd = tile(C, GX - 210, 560, 420, 150, "GUARD", "shield", GOLD, c0 + 0.05, 40);
+      tile(C, GX - 140, 1000, 280, 130, "SERVER", "server", CYAN, c0 + 0.1, 34);
+      [[345, 215], [710, 290]].forEach(([y0, h0]) => show(el(C, `left:${GX - 3}px;top:${y0}px;width:6px;height:${h0}px;background:repeating-linear-gradient(180deg,${GREY} 0 14px,transparent 14px 28px)`), c0, { opacity: 0, y: 0 }));
+      const gaugeLab = show(el(C, `left:640px;width:380px;text-align:center;top:690px;font:700 34px var(--code);color:${GREY}`, "COUNTER"), c0 + 0.1);
+      const gslots = [], gfill = [];
+      for (let i = 0; i < 5; i++) { const x = 650 + i * 72;
+        gslots.push(show(el(C, `left:${x}px;top:604px;width:62px;height:62px;border-radius:10px;border:3px dashed ${GREY};box-sizing:border-box`), c0 + 0.1, { opacity: 0, y: 0 }));
+        const f = el(C, `left:${x}px;top:604px;width:62px;height:62px;border-radius:10px;background:${GOLD}`); tl.set(f, { opacity: 0 }, 0); gfill.push(f); }
+      ring(C, GX - 210, 560, 420, 150, GOLD, at("C", "gaard"), at("C", "ginta") - 0.1);
+      [20.7, 21.1, 21.5, 21.9].forEach((t, i) => { dot(C, GX, 345, GX, 995, t, CYAN, 0.85); tl.fromTo(gfill[i], { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, immediateRender: false }, t + 0.35); });
+      tl.fromTo(gfill[4], { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, immediateRender: false }, at("C", "limit") + 0.1);
+      const rd = el(C, `left:${GX - 22}px;top:${345 - 22}px;width:44px;height:44px;border-radius:50%;background:${HOT}`);
+      tl.set(rd, { opacity: 0 }, 0); tl.fromTo(rd, { opacity: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, at("C", "upar") - 0.1);
+      tl.to(rd, { y: 170, duration: 0.4, ease: "power2.in", immediateRender: false }, at("C", "upar") - 0.1); tl.to(rd, { y: 0, duration: 0.45, ease: "power2.out", immediateRender: false }, at("C", "upar") + 0.3);
+      tl.to(rd, { opacity: 0, duration: 0.2, immediateRender: false }, at("C", "deta") + 0.1);
+      stamp(C, "BLOCKED", 800, 225, HOT, at("C", "rok"), 44, 300);
+      M.fit(C);
+
+      // ===== D: the example: 10 per 10 s; 10 at second 9, 10 at second 11 =====
+      // diagram: D
+      const d0 = M.P("D", 0);
+      M.pill(D, "EXAMPLE", d0, { x: 380, y: 190, size: 44 });
+      const td = TLF(D, { t0: d0, dy: -60, bh: 120 });
+      chip(D, "LIMIT 10 / 10 S", 540, 285, 520, GOLD, at("D", "10"), 40, 76);
+      [[9, "9"], [10, "Second", 1], [11, "11"]].forEach(([k, w, n]) => { const word = k === 10 ? "10" : w; tl.to(td.tk[k], { color: GOLD, duration: 0.2, immediateRender: false }, k === 9 ? at("D", "9") : k === 10 ? at("D", "10", 3) : at("D", "11")); });
+      td.sq("L", at("D", "9"), CYAN, 0.04);
+      td.ctr(0, [["COUNTER 10", at("D", "9") + 0.5, GOOD]]);
+      const newW = chip(D, "NEW WINDOW", 520, 470, 330, GOLD, at("D", "nayi"), 38, 70); gone(newW, at("D", "Second", 2) - 0.1);
+      td.ctr(1, [["COUNTER 0", at("D", "zero") - 0.2, GOLD], ["COUNTER 10", at("D", "10", 4) + 0.5, GOOD]]);
+      td.sq("R", at("D", "10", 4), CYAN, 0.04);
+      td.bracket(at("D", "yaani"), "20 IN 2 S", HOT, 330);
+      chip(D, "2X LIMIT", 860, 425, 240, HOT, at("D", "double"), 36, 72);
+      const sim = panel(D, 90, 1085, 900, 170, GOOD, "SIMULATION"); show(sim, at("D", "code"), { opacity: 0, y: 0 });
+      const simL = show(el(D, `left:130px;top:1170px;font:700 44px var(--code);color:${INK};white-space:nowrap`, 'fixed window allowed: <span class="s20">20</span>'), at("D", "code") + 0.3, { opacity: 0, y: 0 });
+      tl.to(simL.querySelector(".s20"), { color: HOT, duration: 0.2, immediateRender: false }, at("D", "20", 1));
+      M.fit(D);
+
+      // ===== E: the fix: a moving window, last 10 s from now =====
+      // diagram: E
+      const e0 = M.P("E", 0);
+      const te = TLF(E, { t0: e0, bh: 120 });
+      te.sq("L", e0, CYAN, 0); te.sq("R", e0, CYAN, 0);
+      tl.to(te.edge, { opacity: 0, duration: 0.3, immediateRender: false }, at("E", "block"));
+      tl.to([te.b1, te.b2], { opacity: 0.35, duration: 0.3, immediateRender: false }, at("E", "nahi"));
+      const ew = te.win(at("E", "chalti"), 60, 520);
+      tl.to(ew, { x: 46, duration: 1.2, ease: "power2.inOut", immediateRender: false }, at("E", "abhi") - 0.2);
+      chip(E, "LAST 10 S", 250, 640, 330, GOLD, at("E", "peechhe"), 36, 70);
+      tl.to(te.tk[11], { color: GOLD, duration: 0.2, immediateRender: false }, at("E", "abhi"));
+      chip(E, "NOW", 566, 1030, 150, GOLD, at("E", "abhi"), 36, 66);
+      stamp(E, "SLIDING WINDOW", 540, 330, GOLD, at("E", "sliding"), 48, 600);
+      const mt = at("E", "do");
+      show(panel(E, 70, 1120, 440, 190, CYAN, null), mt, { opacity: 0, y: 0 });
+      show(el(E, `left:70px;width:440px;text-align:center;top:1132px;font:700 38px var(--code);color:${INK}`, "1 · LOG"), mt, { opacity: 0, y: 0 });
+      [0, 1, 2].forEach((k) => chip(E, "9", 150 + k * 140, 1230, 110, CYAN, mt + 0.3 + 0.12 * k, 38, 60));
+      show(panel(E, 570, 1120, 440, 190, GOLD, null), mt + 0.4, { opacity: 0, y: 0 });
+      show(el(E, `left:570px;width:440px;text-align:center;top:1132px;font:700 38px var(--code);color:${INK}`, "2 · COUNTER"), mt + 0.4, { opacity: 0, y: 0 });
+      chip(E, "PREV", 690, 1230, 180, GOLD, mt + 0.8, 36, 60); chip(E, "NOW", 890, 1230, 180, GOLD, mt + 0.95, 36, 60);
+      M.fit(E);
+
+      // ===== F: sliding window log =====
+      // diagram: F
+      const f0 = M.P("F", 0), FD = -170;
+      stamp(F, "SLIDING LOG", 540, 190, GOLD, f0, 46, 520);
+      const tf = TLF(F, { t0: f0, dy: FD, edge: false, bh: 80 });
+      const sqf = tf.sq("L", f0, CYAN, 0);
+      const lp = show(panel(F, 80, 830, 920, 290, GOLD, "LOG"), f0, { opacity: 0, y: 0 });
+      const slot = (i) => [141 + (i % 7) * 114, i < 7 ? 930 : 1010];
+      const oldC = [], tsC = [];
+      for (let i = 0; i < 3; i++) { const [x, y] = slot(i); oldC.push(show(el(F, `left:${x}px;top:${y}px;width:100px;height:66px;border-radius:12px;border:3px dashed ${GREY};background:${M.ca(GREY, 0.2)};box-sizing:border-box`), at("F", "request") + 0.08 * i, { opacity: 0, scale: 0.7, y: 0 })); }
+      for (let i = 0; i < 10; i++) { const [x, y] = slot(i + 3); tsC.push(chip(F, "9", x + 50, y, 100, CYAN, at("F", "timestamp") + 0.07 * i, 40, 66)); }
+      const oldL = chip(F, "OLD", 250, 885, 120, GREY, at("F", "purane"), 30, 44);
+      const fwin = tf.win(at("F", "window"), 106, 566);
+      oldC.forEach((d, i) => { tl.to(d, { borderColor: HOT, duration: 0.2, immediateRender: false }, at("F", "purane")); tl.to(d, { opacity: 0, y: 70, duration: 0.5, ease: "power2.in", immediateRender: false }, at("F", "hata")); });
+      gone(oldL, at("F", "hata") + 0.5);
+      const stp = swap(F, [["1 STORE", at("F", "pahla", 1), GOLD], ["2 REMOVE", at("F", "doosra"), GOLD], ["3 COUNT", at("F", "teesra"), GOLD]], 260, 768, 340, 56, 36);
+      const cnt = chip(F, "COUNT", 230, 1155, 300, CYAN, at("F", "bache"), 36, 70);
+      const lt = chip(F, "<", 460, 1155, 100, GREY, at("F", "limit"), 40, 70);
+      const lim = chip(F, "LIMIT", 690, 1155, 280, GOLD, at("F", "limit"), 36, 70);
+      const okS = stamp(F, "PASS", 540, 1245, GOOD, at("F", "pass"), 44, 260);
+      tl.to(tf.tk[11], { color: GOLD, duration: 0.2, immediateRender: false }, at("F", "Second"));
+      gone(okS, at("F", "Second") - 0.1);
+      tl.to(cnt, { opacity: 0, duration: 0.01, immediateRender: false }, at("F", "seconds") - 0.01); tl.to(lt, { opacity: 0, duration: 0.01, immediateRender: false }, at("F", "seconds") - 0.01); tl.to(lim, { opacity: 0, duration: 0.01, immediateRender: false }, at("F", "seconds") - 0.01);
+      chip(F, "COUNT 10", 230, 1155, 300, CYAN, at("F", "seconds") + 0.2, 36, 70);
+      chip(F, "=", 460, 1155, 100, GREY, at("F", "seconds") + 0.2, 40, 70);
+      chip(F, "LIMIT 10", 690, 1155, 280, GOLD, at("F", "seconds") + 0.2, 36, 70);
+      const rq = el(F, `left:548px;top:${BT + FD - 330}px;width:36px;height:36px;border-radius:7px;background:${HOT}`);
+      tl.set(rq, { opacity: 0 }, 0); tl.fromTo(rq, { opacity: 0, y: 0 }, { opacity: 1, duration: 0.1, immediateRender: false }, at("F", "nayi") - 0.3);
+      tl.to(rq, { y: 150, duration: 0.35, ease: "power2.in", immediateRender: false }, at("F", "nayi") - 0.3); tl.to(rq, { y: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, at("F", "nayi") + 0.05);
+      tl.to(rq, { opacity: 0, duration: 0.2, immediateRender: false }, at("F", "nayi") + 0.6);
+      const rjS = stamp(F, "REJECT", 540, 1245, HOT, at("F", "reject"), 44, 300);
+      const exC = chip(F, "EXACT", 830, 520, 240, GOOD, at("F", "exact"), 38, 70); gone(exC, at("F", "10000") - 0.4);
+      const hr = chip(F, "10,000 / HOUR", 790, 520, 330, GOLD, at("F", "10000"), 34, 70); gone(hr, at("F", "10000", 1) - 0.4);
+      const manyC = chip(F, "10,000 ENTRIES", 790, 520, 330, HOT, at("F", "10000", 1) - 0.05, 34, 70);
+      const gr0 = at("F", "10000") + 0.1; const fadeOut = at("F", "rakhna") - 0.1;
+      [...tsC, ...oldC, cnt, lt, lim, rjS, rq].forEach(() => {});
+      goneAll([...tsC, rjS], fadeOut);
+      tl.to(lp, { opacity: 1, duration: 0.01, immediateRender: false }, fadeOut);
+      const cells = [];
+      for (let r = 0; r < 6; r++) for (let c = 0; c < 29; c++) { const k = r * 29 + c;
+        cells.push(show(el(F, `left:${125 + c * 30}px;top:${925 + r * 30}px;width:22px;height:22px;border-radius:5px;background:${HOT}`), gr0 + k * 0.012, { opacity: 0, y: 0 })); }
+      M.fit(F);
+
+      // ===== G: sliding window counter: two numbers, 42 x 0.75 + 18 = 49.5 =====
+      // diagram: G
+      const g0 = M.P("G", 0) - 0.3;
+      const gp = show(el(G, `left:60px;top:520px;width:460px;height:200px;border-radius:14px 0 0 14px;border:3px solid ${CYAN};background:${M.ca(CYAN, 0.1)};box-sizing:border-box`), g0, { opacity: 0, y: 0 });
+      const gc = show(el(G, `left:520px;top:520px;width:460px;height:200px;border-radius:0 14px 14px 0;border:3px solid ${CYAN};background:${M.ca(CYAN, 0.1)};box-sizing:border-box`), g0, { opacity: 0, y: 0 });
+      show(el(G, `left:60px;width:460px;text-align:center;top:455px;font:700 34px var(--code);color:${GREY}`, "PREVIOUS"), g0, { opacity: 0, y: 0 });
+      show(el(G, `left:520px;width:460px;text-align:center;top:455px;font:700 34px var(--code);color:${GREY}`, "CURRENT"), g0, { opacity: 0, y: 0 });
+      chip(G, "2 NUMBERS", 540, 300, 400, GOLD, at("G", "numbers"), 40, 76);
+      const pD = [], cD = [];
+      for (let i = 0; i < 42; i++) pD.push(show(el(G, `left:${74 + Math.floor(i / 3) * 32}px;top:${555 + (i % 3) * 40}px;width:26px;height:26px;border-radius:6px;background:${CYAN}`), at("G", "42") + 0.02 * i, { opacity: 0, scale: 0.6, y: 0 }));
+      for (let i = 0; i < 18; i++) cD.push(show(el(G, `left:${534 + Math.floor(i / 3) * 32}px;top:${555 + (i % 3) * 40}px;width:26px;height:26px;border-radius:6px;background:${CYAN}`), at("G", "18") + 0.03 * i, { opacity: 0, scale: 0.6, y: 0 }));
+      pD.slice(11).forEach((d) => tl.to(d, { backgroundColor: GOLD, duration: 0.3, immediateRender: false }, at("G", "075")));
+      show(el(G, `left:60px;width:460px;text-align:center;top:650px;font:700 40px var(--code);color:${INK}`, "42"), at("G", "42"), { opacity: 0, y: 0 });
+      show(el(G, `left:520px;width:460px;text-align:center;top:650px;font:700 40px var(--code);color:${INK}`, "18"), at("G", "18"), { opacity: 0, y: 0 });
+      const gshade = show(el(G, `left:175px;top:520px;width:345px;height:200px;background:${M.ca(GOLD, 0.35)}`), at("G", "075"), { opacity: 0, y: 0 });
+      const gwin = show(el(G, `left:175px;top:496px;width:460px;height:248px;border-radius:14px;border:5px solid ${GOLD};box-sizing:border-box`), at("G", "seconds"), { opacity: 0, y: 0 });
+      chip(G, "15 S IN", 700, 790, 220, GOLD, at("G", "15"), 36, 66);
+      chip(G, "× 0.75", 347, 790, 200, GOLD, at("G", "075"), 38, 66);
+      const fm = [["PREV", 60, 200, at("G", "previous")], ["× (1 − ELAPSED)", 275, 380, at("G", "minus")], ["+ CURRENT", 670, 290, at("G", "current")]];
+      [[60, 200], [275, 380], [670, 290]].forEach(([x, w]) => show(el(G, `left:${x}px;top:${890 - 38}px;width:${w}px;height:76px;border-radius:14px;border:3px dashed ${GREY};box-sizing:border-box`), g0, { opacity: 0, y: 0 }));
+      [[60, 150], [225, 220], [460, 180], [655, 270]].forEach(([x, w]) => show(el(G, `left:${x}px;top:${1000 - 38}px;width:${w}px;height:76px;border-radius:14px;border:3px dashed ${GREY};box-sizing:border-box`), g0, { opacity: 0, y: 0 }));
+      fm.forEach(([l, x, w, t]) => chip(G, l, x + w / 2, 890, w, CYAN, t, 34, 76));
+      const nm = [["42", 60, 150, at("G", "42", 1), INK], ["× 0.75", 225, 220, at("G", "075"), GOLD], ["+ 18", 460, 180, at("G", "plus", 1), INK], ["= 49.5", 655, 270, at("G", "495"), GOLD]];
+      nm.forEach(([l, x, w, t, col]) => chip(G, l, x + w / 2, 1000, w, col === INK ? CYAN : GOLD, t, 40, 76));
+      const bTrack = show(el(G, `left:100px;top:1120px;width:820px;height:56px;border-radius:10px;border:3px solid ${GREY};box-sizing:border-box`), g0, { opacity: 0, y: 0 });
+      const bFill = el(G, `left:103px;top:1123px;width:811px;height:50px;border-radius:7px;background:${GOLD};transform-origin:left center`);
+      tl.set(bFill, { opacity: 0 }, 0); tl.fromTo(bFill, { opacity: 1, scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power2.out", immediateRender: false }, at("G", "495"));
+      show(el(G, `left:918px;top:1100px;width:6px;height:96px;border-radius:3px;background:${HOT}`), at("G", "Limit"), { opacity: 0, y: 0 });
+      chip(G, "LIMIT 50", 780, 1215, 280, HOT, at("G", "Limit"), 36, 70);
+      chip(G, "PASS", 340, 1215, 200, GOOD, at("G", "pass"), 40, 70);
+      M.fit(G);
+
+      // ===== H: the catch: estimate; Cloudflare 0.003 %; my simulation =====
+      // diagram: H
+      const h0 = M.P("H", 0) - 0.3;
+      const hCatch = stamp(H, "THE CATCH", 540, 195, HOT, h0, 48, 440); gone(hCatch, at("H", "catch") + 0.9);
+      const hPill = M.pill(H, "EXAMPLE", at("H", "catch") + 1.2, { x: 380, y: 190, size: 44 });
+      const strip = (y, tBlocks) => { const a = show(el(H, `left:60px;top:${y}px;width:460px;height:90px;border-radius:14px 0 0 14px;border:3px solid ${CYAN};background:${M.ca(CYAN, 0.1)};box-sizing:border-box`), tBlocks, { opacity: 0, y: 0 });
+        const b = show(el(H, `left:520px;top:${y}px;width:460px;height:90px;border-radius:0 14px 14px 0;border:3px solid ${CYAN};background:${M.ca(CYAN, 0.1)};box-sizing:border-box`), tBlocks, { opacity: 0, y: 0 });
+        const w = show(el(H, `left:175px;top:${y - 22}px;width:460px;height:134px;border-radius:14px;border:5px solid ${GOLD};background:${M.ca(GOLD, 0.07)};box-sizing:border-box`), tBlocks, { opacity: 0, y: 0 }); return [a, b, w]; };
+      const gS = strip(350, h0), rS = strip(650, h0);
+      const gLab = chip(H, "GUESS", 200, 290, 220, GOLD, h0, 34, 56), rLab = chip(H, "REAL", 190, 590, 200, GOLD, h0, 34, 56);
+      const estC = chip(H, "ESTIMATE", 800, 290, 280, GOLD, at("H", "andaza"), 34, 56);
+      const gDots = [], rDots = [];
+      for (let i = 0; i < 12; i++) { const x = 60 + (i + 0.5) * (460 / 12) - 15; gDots.push(show(el(H, `left:${x}px;top:${350 + 30}px;width:30px;height:30px;border-radius:8px;background:${CYAN}`), at("H", "maanta") + 0.07 * i, { opacity: 0, scale: 0.6, y: 0 })); }
+      for (let i = 0; i < 12; i++) { const x = 72 + (i % 4) * 26, y = 650 + 6 + Math.floor(i / 4) * 26; rDots.push(show(el(H, `left:${x}px;top:${y}px;width:22px;height:22px;border-radius:6px;background:${CYAN}`), at("H", "barabar") + 0.05 * i, { opacity: 0, scale: 0.6, y: 0 })); }
+      const gCnt = chip(H, "COUNTS 9", 405, 500, 300, GOLD, at("H", "phaili"), 36, 66);
+      const rCnt = chip(H, "REALLY 0", 405, 800, 300, HOT, at("H", "theen"), 36, 66);
+      const secA = [estC, ...gS, ...rS, gLab, rLab, gCnt, rCnt, ...gDots, ...rDots, hPill];
+      goneAll(secA, at("H", "Cloudflare") + 0.6);
+      const sA = at("H", "400") - 0.1;
+      const cfBar = show(el(H, `left:100px;top:330px;width:880px;height:560px;border-radius:16px;border:3px solid ${CYAN};background-color:${M.ca(CYAN, 0.08)};background-image:radial-gradient(circle,${M.ca(CYAN, 0.8)} 5px,transparent 6px);background-size:28px 28px;box-sizing:border-box`), sA, { opacity: 0, y: 0 });
+      const cfs = [cfBar, chip(H, "400 MILLION", 540, 250, 460, CYAN, sA, 44, 76)];
+      const tick = show(el(H, `left:940px;top:850px;width:28px;height:28px;border-radius:6px;background:${HOT}`), at("H", "0003") - 0.1, { opacity: 0, scale: 0.6, y: 0 });
+      const cfA = M.arrow(H, { from: [840, 960], to: [940, 886], color: HOT, w: 7 }); cfA.show(at("H", "0003"), 0.3); cfA.hide(at("H", "simulation") - 0.3);
+      cfs.push(tick, chip(H, "0.003 %", 640, 985, 300, HOT, at("H", "0003"), 44, 80));
+      cfs.push(chip(H, "WRONG CALLS", 330, 985, 400, HOT, at("H", "galat"), 38, 80));
+      cfs.push(show(el(H, `left:100px;width:880px;text-align:center;top:1085px;font:700 34px var(--code);color:#AEB9D0`, "SOURCE: CLOUDFLARE BLOG"), at("H", "Cloudflare"), { opacity: 0, y: 0 }));
+      goneAll(cfs, at("H", "simulation") - 0.3);
+      const simC = show(panel(H, 90, 460, 900, 340, GOOD, "MY SIMULATION"), at("H", "simulation"), { opacity: 0, y: 0 });
+      show(el(H, `left:130px;top:580px;font:700 38px var(--code);color:${INK};white-space:nowrap`, "fixed window allowed: 20"), at("H", "simulation") + 0.2, { opacity: 0, y: 0 });
+      const s2 = show(el(H, `left:130px;top:670px;font:700 38px var(--code);color:${INK};white-space:nowrap`, 'sliding window counter allowed: <span class="s11">11</span>'), at("H", "limit") + 0.2, { opacity: 0, y: 0 });
+      tl.to(s2.querySelector(".s11"), { color: GOLD, duration: 0.2, immediateRender: false }, at("H", "11"));
+      const bar = (y, n, col, t, lab) => { const d = el(H, `left:120px;top:${y}px;width:${n * 40}px;height:76px;border-radius:10px;background:${col};transform-origin:left center;display:flex;align-items:center;justify-content:flex-start;padding-left:22px;box-sizing:border-box;font:700 44px var(--code);color:#16203A`, lab); tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 1, scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out", immediateRender: false }, t); };
+      bar(900, 20, HOT, at("H", "simulation") + 0.5, "20"); bar(1000, 11, GOLD, at("H", "11"), "11");
+      show(el(H, `left:517px;top:880px;width:6px;height:210px;background:repeating-linear-gradient(180deg,#E8EDF6 0 12px,transparent 12px 22px)`), at("H", "limit"), { opacity: 0, y: 0 });
+      chip(H, "LIMIT 10", 520, 1125, 300, GOLD, at("H", "limit"), 40, 70);
+      M.fit(H);
+
+      // ===== I: no single best: three rows =====
+      // diagram: I
+      const i0 = M.P("I", 0) - 0.4;
+      M.pill(I, "REDIS TIP", at("I", "tutorial"), { x: 380, y: 190, size: 44 });
+      const rows = [["FIXED", 1, "2X BURST", HOT], ["LOG", 12, "EXACT", GOOD], ["COUNTER", 2, "CLOSE", GOLD]];
+      rows.forEach(([lab, n, acc, col], r) => { const y = 290 + r * 300, t = i0 + 0.1 + 0.2 * r;
+        show(panel(I, 80, y, 920, 270, GREY, null), t, { opacity: 0, y: 0 });
+        show(el(I, `left:120px;top:${y + 28}px;font:700 52px var(--code);color:${INK}`, lab), t + 0.1, { opacity: 0, y: 0 });
+        chip(I, acc, 800, y + 28, 260, col, t + 0.2, 38, 72);
+        show(el(I, `left:120px;top:${y + 150}px;font:700 32px var(--code);color:${GREY}`, "MEMORY"), t + 0.1, { opacity: 0, y: 0 });
+        for (let k = 0; k < n; k++) show(el(I, `left:${330 + k * 56}px;top:${y + 160}px;width:46px;height:46px;border-radius:9px;background:${CYAN}`), t + 0.3 + 0.04 * k, { opacity: 0, scale: 0.6, y: 0 });
+        if (lab === "LOG") show(el(I, `left:${330 + 12 * 56}px;top:${y + 150}px;font:700 44px var(--code);color:${GREY}`, "…"), t + 0.9, { opacity: 0, y: 0 }); });
+      ring(I, 80, 890, 920, 270, GOLD, at("I", "counter"), null);
+      M.fit(I);
+
+      // ===== J: comment + follow =====
+      // diagram: J
+      const j0 = M.P("J", 0) - 0.3;
+      tile(J, 330, 230, 420, 150, "WHICH ONE?", "gauge", GOLD, j0, 40);
+      [["1", 230, "FIXED", "clock"], ["2", 540, "LOG", "doc"], ["3", 850, "COUNTER", "gauge"]].forEach(([k, cx, l, ic]) => { tile(J, cx - 140, 500, 280, 300, k, ic, GOLD, j0 + 0.1 * Number(k), 72, { col: 1, isz: 100 }); chip(J, l, cx, 830, 270, CYAN, j0 + 0.1 * Number(k), 34, 64); ring(J, cx - 140, 500, 280, 300, CYAN, at("J", k), at("J", k) + 0.7); });
+      show(el(J, "left:130px;width:820px;top:960px;height:100px;border-radius:50px;border:1.5px solid rgba(150,175,215,.5);font:500 34px var(--code);color:#AEB9D0;display:flex;align-items:center;padding:0 34px;box-sizing:border-box", "Add a comment..."), at("J", "comment"), { opacity: 0 });
+      const kf = M.pill(J, "+  FOLLOW", at("J", "follow") - 0.4, { x: 340, y: 1150, size: 52, kind: "acc" });
+      tl.fromTo(kf, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("J", "follow"));
+      M.fit(J);
+
+      SC.slice(1).forEach((k) => M.wipe(S[k]));
+      M.finish({ kw: { Limit: "gold", limit: "gold", window: "cyan", Window: "cyan", counter: "gold", edge: "hot", "200": "hot", "20": "hot", zero: "hot", sliding: "good", log: "cyan", catch: "hot", reject: "hot", EXAMPLE: "gold", follow: "gold", comment: "cyan", double: "hot", exact: "good", andaza: "hot", rok: "hot", gaard: "gold" } });
+      window.__timelines["main"] = tl;   // register (must stay literal for the linter)
+
+    </script>
+  </body>
+</html>

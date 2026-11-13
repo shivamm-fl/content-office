@@ -1,0 +1,129 @@
+{
+  "tts": "owner",
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26,
+  "audio": "v2",
+  "owner_model": "eleven_flash_v2_5",
+  "owner_tempo": 0.9,
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      null,
+      null,
+      0.5
+    ],
+    [
+      "err",
+      null,
+      null,
+      2.4
+    ],
+    [
+      "ok",
+      null,
+      null,
+      17
+    ],
+    [
+      "click",
+      null,
+      null,
+      28.4
+    ],
+    [
+      "click",
+      null,
+      null,
+      32.8
+    ],
+    [
+      "err",
+      null,
+      null,
+      37.2
+    ],
+    [
+      "dip",
+      null,
+      null,
+      42.8
+    ],
+    [
+      "err",
+      null,
+      null,
+      70.2
+    ],
+    [
+      "dip",
+      null,
+      null,
+      84.2
+    ],
+    [
+      "ok",
+      null,
+      null,
+      100.6
+    ],
+    [
+      "pop",
+      null,
+      null,
+      126.8
+    ],
+    [
+      "save",
+      null,
+      null,
+      136.4
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "@hook Limit 100{one-hundred} per minute: दो सेकंड में 200{two-hundred} कैसे?",
+      "B": "क्योंकि counter हर minute के edge पर zero हो जाता है। | Window यानी time का एक block, और fixed window में हर block का अपना counter होता है। | तो edge से ठीक पहले 100{one-hundred} requests, ठीक बाद 100{one-hundred} और, दोनों बार counter खुश।",
+      "C": "Rate limiter यानी server के आगे वो गार्ड जो हर user की requests गिनता है, और limit से ऊपर वाली रोक देता है।",
+      "D": "EXAMPLE, ये numbers मैंने मान लिए हैं: limit 10{ten} requests per 10{ten} seconds। | Second 9{nine} पर 10{ten} requests आईं, सब pass। | Second 10{ten} पर नई window, counter zero। | Second 11{eleven} पर 10{ten} और आईं, सब pass। | यानी दो second में 20{twenty} requests, limit का double। | मैंने code चलाया, fixed window ने 2{two} seconds में 20{twenty} allow कीं।",
+      "E": "तो fix क्या है? | Window को block नहीं, चलती खिड़की बनाओ: अभी से पीछे के 10{ten} seconds। | इसे sliding window कहते हैं, और इसके दो तरीके हैं।",
+      "F": "पहला, sliding window log। | पहला step: हर request का timestamp यानी उसका time, list में रखो। | दूसरा step: window से पुराने timestamps हटा दो। | तीसरा step: जो बचे उन्हें गिनो, limit से कम हों तो pass। | Second 11{eleven} पर पीछे 10{ten} seconds में second 9{nine} वाली 10{ten} requests अभी हैं, तो नई reject। | ये exact है, पर हर request का entry रखना पड़ता है: 10,000{ten-thousand} per hour की limit में एक user के 10,000{ten-thousand} entries।",
+      "G": "दूसरा, sliding window counter। | इसमें सिर्फ़ दो numbers रखते हैं: पिछली window की count, और अभी वाली की। | Formula: previous count times one minus elapsed fraction, plus current count। | EXAMPLE: पिछले minute में 42{forty-two}, अभी वाले में 18{eighteen}, और 15{fifteen} seconds बीते हैं। | तो 42{forty-two} times 0.75{zero-point-seven-five} plus 18{eighteen}, यानी 49.5{forty-nine-point-five}। | Limit 50{fifty} है, तो pass।",
+      "H": "अब catch। | ये अंदाज़ा है, क्योंकि ये मानता है कि पिछली window में requests बराबर फैली थीं। | Cloudflare ने 400{four-hundred} million requests पर देखा कि सिर्फ़ 0.003{zero-point-zero-zero-three} percent गलत allow या block हुईं। | मेरे simulation में limit 10{ten} पर 11{eleven} निकलीं, तो इसे लगभग limit समझो, पक्का cap नहीं।",
+      "I": "कोई एक best नहीं है। | Redis के tutorial की सलाह है कि ज़्यादातर APIs के लिए sliding window counter ठीक balance है।",
+      "J": "तुम्हारे API में कौन सा चलाओगे? | 1{one} fixed, 2{two} log या 3{three} counter? comment में लिखो। || ऐसे और system design concepts के लिए follow करो।"
+    }
+  },
+  "prime": "सुनो, ये बहुत interesting है!"
+}
