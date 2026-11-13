@@ -1,0 +1,50 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J"
+ ],
+ "min": {
+  "A": 1.2,
+  "B": 1.2,
+  "C": 1.2,
+  "D": 1.2,
+  "E": 1.2,
+  "F": 1.2,
+  "G": 1.2,
+  "H": 1.2,
+  "I": 1.2,
+  "J": 1.2
+ },
+ "cues": [],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] AI engineer बनना है? तो ये चीज़ें master करो।",
+   "B": "Master these LLM concepts.",
+   "C": "Master these RAG concepts.",
+   "D": "Master these AI agent concepts.",
+   "E": "Master these evals concepts.",
+   "F": "Master these AI system design concepts.",
+   "G": "Master these AI security concepts.",
+   "H": "Master these deployment concepts.",
+   "I": "And master these backend concepts.",
+   "J": "[curious] Full roadmap चाहिए? तो comment करो, \"AI\"... और roadmap सीधा तुम्हारे DM में।"
+  }
+ },
+ "hook_type": "direct_question",
+ "template": "list_lead_magnet",
+ "source_reel": "face_videos/ai_engineer_roadmap_v3.mp4 (owner's own words, face04)",
+ "approved": "owner 2026-11-13 (full faceless, new narration)"
+}
