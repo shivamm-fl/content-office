@@ -290,33 +290,17 @@
       "hook_type": "relatable_stake",
       "spoken_hook": "Palindrome check लिखा, पर Panama case में गलत False आया!",
       "hook_formula": "wrong_way_first",
-      "hook_source": "relatable_stake, real bug: s == s[::-1] returns False on 'A man, a plan, a canal: Panama' (run in qa/d024/run.py). Problem and two-pointer answer verified at doocs 0125. No company claim.",
-      "hook_10s": "Palindrome check लिखा, पर Panama वाला case False आया! एक line थी: s बराबर s reversed। पर case और comma-space ने उसे तोड़ दिया। असली सवाल है Valid Palindrome, सिर्फ़ letters और digits गिनकर। [Frame 0: the string 'A man, a plan, a canal: Panama' with s == s[::-1] -> False in red]",
-      "hook_candidates": [
-        {
-          "formula": "wrong_way_first",
-          "text": "Palindrome check लिखा, पर Panama वाला case False आया!"
-        },
-        {
-          "formula": "number_payoff",
-          "text": "Valid Palindrome: string की copy बनाए बिना, सिर्फ़ दो indices से।"
-        },
-        {
-          "formula": "interviewer_plain_problem_question",
-          "text": "Interviewer ने पूछा: Valid Palindrome, extra space के बिना कैसे?"
-        }
-      ],
-      "one_idea": "Valid Palindrome: a string is a palindrome if, after lowercasing and ignoring every non-alphanumeric character, it reads the same both ways; the naive s == s[::-1] fails because case and punctuation count, and building a cleaned copy fixes it at O(n) extra space, so put one pointer at each end, skip non-alphanumeric characters on either side, compare the two characters case-insensitively and move inward: O(n) time, O(1) extra space.",
-      "visual_idea": "The string 'A man, a plan, a canal: Panama' as a row of character tiles. Scene 1: the row beside its mirror, the first A against the last a lights red (case) and a comma tile lands under a tile, with s == s[::-1] -> False. Scene 2: punctuation and space tiles grey out and a cleaned second row of 21 tiles is built below as an O(n) memory bar. Scene 3: L and R tags sit on the original row, hop over grey tiles, light two letters green and meet in the middle with no second row. Scene 4: 'race a car' stops on a red mismatch of e and a.",
-      "example": "EXAMPLE 'A man, a plan, a canal: Panama' gives true (21 letters after cleaning, 19 loop iterations); 'race a car' gives false; ' ' gives true (empty after cleaning); '0P' gives false (digit zero vs letter p).",
+      "hook_source": "relatable_stake; the naive s == s[::-1] on the Panama string is False (qa/d024/run.py).",
+      "one_idea": "Valid Palindrome: after lowercasing and ignoring non-alphanumeric characters it reads the same both ways; naive s == s[::-1] fails on case and punctuation, a cleaned copy costs O(n) extra space, two pointers skipping non-alphanumeric characters give O(n) time, O(1) extra space.",
+      "visual_idea": "The string 'A man, a plan, a canal: Panama' as a row of character tiles. Scene 1: row beside its mirror, s == s[::-1] -> False in red. Scene 2: punctuation tiles grey out, cleaned second row of 21 tiles as an O(n) memory bar. Scene 3: L and R tags hop over grey tiles, light two letters green, meet in the middle with no second row. Scene 4: 'race a car' stops on a red mismatch of e and a.",
+      "example": "EXAMPLE 'A man, a plan, a canal: Panama' gives true (21 letters after cleaning, 19 loop iterations); 'race a car' gives false; ' ' gives true; '0P' gives false.",
       "code_outline": "def is_palindrome(s): l, r = 0, len(s)-1; while l < r: if not s[l].isalnum(): l += 1 elif not s[r].isalnum(): r -= 1 elif s[l].lower() != s[r].lower(): return False else: l += 1; r -= 1; return True. Run in qa/d024/run.py.",
       "sources": [
         "https://leetcode.doocs.org/en/lc/125/"
       ],
       "facts_to_verify": [
-        "doocs LC 125: lowercase, ignore non-alphanumeric, empty string counts as palindrome; two pointers skip non-alphanumeric and compare, O(n) time, O(1) space (fetched 2026-11-14).",
-        "qa/d024/run.py (seed 24): two-pointer matched the cleaned-copy check on 5000 random strings; naive s == s[::-1] wrong on 1001 of 5000; Panama example naive False, two-pointer True, 19 iterations; 2000 of 2000 noisy palindromes accepted.",
-        "Cleaned-copy O(n) extra space and the naive failure are our own derivation; LeetCode page not used."
+        "doocs LC 125: two pointers, skip non-alphanumeric, compare lowercase, O(n) time, O(1) space.",
+        "qa/d024/run.py: Panama string is 30 characters, naive s == s[::-1] False, cleaned copy 21 characters and a palindrome, the two-pointer code returns True after 19 loop iterations; race a car False; ' ' True; '0P' False."
       ],
       "length_target_s": 120,
       "cover_headline": "Valid Palindrome With O(1) Space",

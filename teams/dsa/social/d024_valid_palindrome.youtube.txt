@@ -1,0 +1,6 @@
+Valid Palindrome In Python: Two Pointers, O(n) Time, O(1) Space
+
+Valid Palindrome (LeetCode 125): after lowercasing and ignoring non-alphanumeric characters, does the string read the same forwards and backwards? The naive s == s[::-1] returns False on "A man, a plan, a canal: Panama" because case, commas and spaces still count. Building a cleaned copy fixes that (21 characters for this string) but costs O(n) extra space. Two pointers do it with no copy: l starts at the front and r at the back, a non-alphanumeric character moves its pointer inward, otherwise the two characters are compared in lowercase, a mismatch returns False and a match moves both pointers in. Each step moves l or r and neither moves back, so the time is O(n) and the extra space is O(1) (the same approach as the doocs solution for LeetCode 125). On the Panama string the loop runs 19 times and returns True; "race a car" returns False when e meets a; a string of only spaces is empty after cleaning, so the result is True (loop counts are from our own run).
+
+Sources:
+https://leetcode.doocs.org/en/lc/125/

@@ -617,5 +617,22 @@
   "hook_type": "surprising_fact",
   "format": "pattern",
   "title": "Two pointers: sorted array में दोनों सिरों से चलो, O(n) और O(1) space"
+ },
+ "d024": {
+  "status": "built",
+  "track": "series",
+  "folder": "reels/d024_valid_palindrome",
+  "published": false,
+  "qa_passed": false,
+  "hook_formula": "wrong_way_first",
+  "hook_source": "relatable_stake; the naive s == s[::-1] on the Panama string is False (qa/d024/run.py).",
+  "hook_type": "relatable_stake",
+  "format": "problem",
+  "title": "Valid Palindrome: दोनों सिरों से compare करो, extra copy के बिना O(n) और O(1) space",
+  "mp4": "reels/d024_valid_palindrome_hi.mp4",
+  "cover": "brand/covers/d024_valid_palindrome.png",
+  "caption": "social/d024_valid_palindrome.hi.caption.txt",
+  "duration_s": 149.5,
+  "hook_score": 0
  }
 }

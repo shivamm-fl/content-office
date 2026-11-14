@@ -1,0 +1,9 @@
+Day 24/150: Valid Palindrome: Panama string par s == s[::-1] galat False kyun deta hai
+
+Valid Palindrome mein string ko lowercase karke sirf letters aur digits rakhne hain, phir dekhna hai ki aage aur peeche se same padhta hai ya nahi. s == s[::-1] "A man, a plan, a canal: Panama" par False deta hai, kyunki capital A, comma aur space bhi gine jaate hain. Cleaned copy banao to sahi hai, par nayi string se extra space O(n) lagti hai. Do pointers mein l shuru par, r aakhir par: non-alphanumeric skip karo, baaki ko lowercase karke compare karo, mismatch par turant False. Time O(n), extra space O(1). Actual Python code video mein hai (code chalaya).
+
+Edge case: sirf space wali string cleaned hokar empty hai, aur empty True hai.
+
+Ab tumhara turn: string "race a car" ke aakhir mein ek aur c jodo, to result kya aayega? Comment mein likho.
+
+#dsa #twopointers #interviewprep
