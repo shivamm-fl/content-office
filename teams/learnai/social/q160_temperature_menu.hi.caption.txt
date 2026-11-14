@@ -1,13 +1,14 @@
-Ek hi sawal do baar poocha, aur AI ne do alag jawab diye. Kyun?
+LLM mein temperature, top-k aur top-p ka difference batao.
+Top-k = 3 ho to "namkeen" bahar kyun? Teenon ka kaam alag hai.
 
-AI har baar agla word aise chunta hai jaise menu se dish: masala dosa sabse popular, phir idli, phir vada, aur sabse neeche pineapple pizza.
+"Aaj mausam bahut ___" ke options socho: achha, garam, thanda... aur namkeen. Har word ka apna chance hai.
 
-Top-k: menu mein sirf top k dishes. k = 3 ho to dosa, idli, vada; pizza bahar.
-Top-p: chance ka jod. Top dishes jodte jao jab tak kul chance p tak na pahunch jaye. Model pakka ho to menu chhota, uljha ho to lamba.
-Temperature: menu nahi kaatta, chef ka mood badalta hai. Kam ho to har baar bestseller, zyada ho to experiment.
+Top-k fixed ginti rakhta hai: k = 3 to sirf achha, garam, thanda. Namkeen bahar, chance jitna bhi ho.
+Top-p ginti nahi, chance ka jod dekhta hai: sabse likely words jodta jata hai jab tak kul chance p se upar na chala jaye. Model pakka ho to ek-do words, uljha ho to zyada.
+Temperature list nahi kaatta, chances ki shape badalta hai: kam ho to top word aur aage, zyada ho to chances barabari ki taraf.
 
-Interview mein bolo: top-k fixed ginti, top-p chance ka jod, temperature chances kitne sharp ya flat.
+Interview mein bolo: top-k fixed number of words, top-p chance ke jod se words, temperature chances kitne sharp ya flat.
 
-Top-k 3 rakha aur temperature bahut zyada kar diya, to pineapple pizza aa sakta hai ya nahi? Comment karo.
+Top-k 3 rakha aur temperature bahut zyada kar diya, to namkeen aa sakta hai ya nahi? Comment karo.
 
-Source: Hugging Face, "How to generate text". Menu aur numbers illustration hain.
+Source: Hugging Face, "How to generate text". Words aur chances illustration hain.

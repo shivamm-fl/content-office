@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1080, height=1920" />
-    <title>One Question, Two Answers</title>
+    <title>Temperature, Top-K, Top-P: The Difference</title>
     <script src="assets/gsap.min.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="kit/motion.css" />
@@ -22,7 +22,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="74.5" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="72" data-width="1080" data-height="1920">
       <div id="bg" data-layout-allow-overflow>
         <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
         <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
@@ -30,12 +30,7 @@
       </div>
       <div id="cam">
         <style>
-          /* narration recipe v4 safe area: captions y 1190-1450, content y 250-1160 */
           .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
-          .bub { position:absolute; padding:20px 30px; border-radius:28px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; }
-          .me { right:30px; background:#2A3A5C; border-bottom-right-radius:8px; }
-          .ai { left:30px; background:#1B2538; border:3px solid #26324B; border-bottom-left-radius:8px; }
-          .who { font:600 28px "JetBrains Mono",monospace; color:#8592AD; margin-bottom:4px; }
           .knob { position:absolute; top:0; width:290px; height:110px; border-radius:24px; display:flex; align-items:center; justify-content:center; font:700 44px "Space Grotesk",sans-serif; border:4px solid; }
           .row { position:absolute; left:40px; width:840px; height:96px; }
           .row .nm { position:absolute; left:0; top:22px; width:300px; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
@@ -45,49 +40,49 @@
           .seg { position:absolute; top:0; height:70px; }
           .chk { position:absolute; left:80px; width:920px; height:120px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
           .chk .k { position:absolute; left:36px; top:30px; font:700 54px "Space Grotesk",sans-serif; color:#F2B544; white-space:nowrap; }
-          .chk .v { position:absolute; left:420px; top:32px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .chk .v { position:absolute; left:400px; top:34px; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .blank { display:inline-block; width:200px; border-bottom:6px solid #F2B544; margin-left:12px; }
         </style>
 
         <div class="beat" id="sA">
-          <div class="x c" id="a_h" style="top:250px; font-size:96px;">Ek hi sawal,<br/><span class="gold">do alag jawab</span></div>
-          <div class="card" id="a_chat" style="left:80px; top:500px; width:920px; height:470px;">
-            <div class="bub me" style="top:30px;"><div class="who">TUM</div>Chai ke saath kya?</div>
-            <div class="bub ai" id="a_r1" style="top:200px;"><div class="who">AI &middot; pehli baar</div>Samosa</div>
-            <div class="bub ai" id="a_r2" style="top:200px; left:auto; right:30px; border-color:#F2B544;"><div class="who">AI &middot; doosri baar</div><span class="gold">Biscuit</span></div>
-            <div class="ill" style="right:28px; top:420px;">illustration</div>
+          <div class="x c mut" id="a_s" style="top:250px; font-size:46px; letter-spacing:.1em;">INTERVIEWER NE POOCHA</div>
+          <div class="x c" id="a_h" style="top:320px; font-size:92px;">difference batao</div>
+          <div id="a_knobs" style="position:absolute; left:80px; top:480px; width:920px; height:110px;">
+            <div class="knob" style="left:0; color:#E8596B; border-color:#E8596B;">TEMP</div>
+            <div class="knob" style="left:315px; color:#F2B544; border-color:#F2B544;">TOP-K</div>
+            <div class="knob" style="left:630px; color:#5BC0EB; border-color:#5BC0EB;">TOP-P</div>
           </div>
-          <div id="a_knobs" style="position:absolute; left:80px; top:1010px; width:920px; height:110px;">
-            <div class="knob" id="a_k1" style="left:0; color:#E8596B; border-color:#E8596B;">TEMP</div>
-            <div class="knob" id="a_k2" style="left:315px; color:#F2B544; border-color:#F2B544;">TOP-K</div>
-            <div class="knob" id="a_k3" style="left:630px; color:#5BC0EB; border-color:#5BC0EB;">TOP-P</div>
+          <div class="card" id="a_w" style="left:80px; top:660px; width:920px; height:200px;">
+            <div class="x mut" style="left:40px; top:30px; font:600 30px 'JetBrains Mono',monospace;">teenon ka kaam</div>
+            <div class="x" style="left:40px; top:86px; font-size:64px;">agla <span class="gold">word</span> chunna</div>
           </div>
+          <div class="x c red" id="a_d" style="top:900px; font-size:60px;">par kaam teenon ka alag</div>
         </div>
 
         <div class="beat" id="sB">
-          <div class="x c gold" id="b_t" style="top:250px; font-size:110px;">MENU</div>
-          <div class="x c mut" id="b_s" style="top:390px; font-size:52px;">agla word = agli dish</div>
-          <div class="card" id="b_m" style="left:80px; top:500px; width:920px; height:600px;">
-            <div class="x mut" style="left:40px; top:26px; font:600 30px 'JetBrains Mono',monospace;">DISH &middot; CHANCE</div>
-            <div class="row" id="b_r1" style="top:80px;"><div class="nm">masala dosa</div><div class="bar" style="width:346px;"></div></div>
-            <div class="row" id="b_r2" style="top:180px;"><div class="nm">idli</div><div class="bar" style="width:155px;"></div></div>
-            <div class="row" id="b_r3" style="top:280px;"><div class="nm">vada</div><div class="bar" style="width:104px;"></div></div>
+          <div class="card" id="b_q" style="left:80px; top:250px; width:920px; height:150px; border-color:#F2B544;"><div class="x" style="left:40px; top:40px; font-size:64px;">aaj mausam bahut<span class="blank"></span></div></div>
+          <div class="card" id="b_m" style="left:80px; top:440px; width:920px; height:600px;">
+            <div class="x mut" style="left:40px; top:26px; font:600 30px 'JetBrains Mono',monospace;">WORD &middot; CHANCE</div>
+            <div class="row" id="b_r1" style="top:80px;"><div class="nm">achha</div><div class="bar" style="width:346px;"></div></div>
+            <div class="row" id="b_r2" style="top:180px;"><div class="nm">garam</div><div class="bar" style="width:155px;"></div></div>
+            <div class="row" id="b_r3" style="top:280px;"><div class="nm">thanda</div><div class="bar" style="width:104px;"></div></div>
             <div class="row" id="b_r4" style="top:370px;"><div class="nm mut">...</div></div>
-            <div class="row" id="b_r5" style="top:460px;"><div class="nm">pineapple pizza</div><div class="bar" style="width:10px; left:430px;"></div></div>
+            <div class="row" id="b_r5" style="top:460px;"><div class="nm">namkeen</div><div class="bar" style="width:10px;"></div></div>
           </div>
-          <div class="ill" style="left:80px; top:1112px;">illustration</div>
+          <div class="ill" style="left:80px; top:1052px;">illustration</div>
         </div>
 
         <div class="beat" id="sC">
           <div class="x c gold" id="c_t" style="top:250px; font-size:120px;">TOP-K</div>
           <div class="chip" id="c_k" style="left:340px; top:400px; width:400px; background:#F2B544; color:#0B1220; font-size:60px;">k = 3</div>
           <div class="card" style="left:80px; top:520px; width:920px; height:560px;">
-            <div class="row" style="top:40px;"><div class="nm">masala dosa</div><div class="bar" style="width:346px;"></div></div>
-            <div class="row" style="top:140px;"><div class="nm">idli</div><div class="bar" style="width:155px;"></div></div>
-            <div class="row" style="top:240px;"><div class="nm">vada</div><div class="bar" style="width:104px;"></div></div>
+            <div class="row" style="top:40px;"><div class="nm">achha</div><div class="bar" style="width:346px;"></div></div>
+            <div class="row" style="top:140px;"><div class="nm">garam</div><div class="bar" style="width:155px;"></div></div>
+            <div class="row" style="top:240px;"><div class="nm">thanda</div><div class="bar" style="width:104px;"></div></div>
             <div id="c_cut" style="position:absolute; left:30px; top:344px; width:860px; height:6px; background:#F2B544; border-radius:3px; transform-origin:0 50%;"></div>
-            <div class="row" id="c_r4" style="top:380px;"><div class="nm">pineapple pizza</div><div class="bar" style="width:10px; left:430px;"></div><div class="x" id="c_x"></div></div>
+            <div class="row" id="c_r4" style="top:380px;"><div class="nm">namkeen</div><div class="bar" style="width:10px;"></div><div class="x" id="c_x"></div></div>
           </div>
-          <div class="x c red" id="c_out" style="top:1100px; font-size:56px;">pizza BAHAR</div>
+          <div class="x c red" id="c_out" style="top:1100px; font-size:56px;">namkeen BAHAR</div>
         </div>
 
         <div class="beat" id="sD">
@@ -97,7 +92,7 @@
             <div class="x" style="left:40px; top:26px; font-size:46px;">Model <span class="green">pakka</span></div>
             <div class="stack" style="top:110px;"><div class="seg" id="d_s1" style="left:0; width:756px; background:#F2B544;"></div><div class="seg" style="left:756px; width:84px; background:#26324B;"></div></div>
             <div style="position:absolute; left:796px; top:96px; width:6px; height:98px; background:#5BC0EB; border-radius:3px;"></div>
-            <div class="x" id="d_m1" style="left:40px; top:200px; font-size:44px;">menu: <span class="gold">bas dosa</span></div>
+            <div class="x" id="d_m1" style="left:40px; top:200px; font-size:44px;">bache: <span class="gold">ek-do words</span></div>
           </div>
           <div class="card" id="d_c2" style="left:80px; top:810px; width:920px; height:300px;">
             <div class="x" style="left:40px; top:26px; font-size:46px;">Model <span class="red">uljha</span></div>
@@ -107,36 +102,36 @@
               <div class="seg d2" style="left:666px; width:90px; background:#B67A20;"></div>
             </div>
             <div style="position:absolute; left:796px; top:96px; width:6px; height:98px; background:#5BC0EB; border-radius:3px;"></div>
-            <div class="x" id="d_m2" style="left:40px; top:205px; font-size:44px;">menu: <span class="gold">lamba</span></div>
+            <div class="x" id="d_m2" style="left:40px; top:205px; font-size:44px;">bache: <span class="gold">zyada words</span></div>
           </div>
           <div class="ill" style="right:80px; top:1118px;">illustration &middot; p = 0.9</div>
         </div>
 
         <div class="beat" id="sE">
           <div class="x c" id="e_t" style="top:250px; font-size:110px;"><span class="red">TEMPERATURE</span></div>
-          <div class="x c mut" id="e_s" style="top:385px; font-size:52px;">menu nahi, chef ka mood</div>
+          <div class="x c mut" id="e_s" style="top:385px; font-size:52px;">list nahi kaatta, shape badalta</div>
           <div class="card" style="left:80px; top:490px; width:920px; height:480px;">
-            <div class="row" style="top:30px;"><div class="nm">masala dosa</div><div class="bar" id="e_b1" style="width:346px;"></div></div>
-            <div class="row" style="top:130px;"><div class="nm">idli</div><div class="bar" id="e_b2" style="width:155px;"></div></div>
-            <div class="row" style="top:230px;"><div class="nm">vada</div><div class="bar" id="e_b3" style="width:104px;"></div></div>
-            <div class="row" style="top:330px;"><div class="nm">pineapple pizza</div><div class="bar" id="e_b4" style="width:10px; left:430px;"></div></div>
+            <div class="row" style="top:30px;"><div class="nm">achha</div><div class="bar" id="e_b1" style="width:346px;"></div></div>
+            <div class="row" style="top:130px;"><div class="nm">garam</div><div class="bar" id="e_b2" style="width:155px;"></div></div>
+            <div class="row" style="top:230px;"><div class="nm">thanda</div><div class="bar" id="e_b3" style="width:104px;"></div></div>
+            <div class="row" style="top:330px;"><div class="nm">namkeen</div><div class="bar" id="e_b4" style="width:10px;"></div></div>
           </div>
-          <div class="chip" id="e_lo" style="left:80px; top:1010px; width:440px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:42px;">kam: bestseller</div>
-          <div class="chip" id="e_hi" style="left:560px; top:1010px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:42px;">zyada: experiment</div>
+          <div class="chip" id="e_lo" style="left:80px; top:1010px; width:440px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:40px;">kam: top word aage</div>
+          <div class="chip" id="e_hi" style="left:560px; top:1010px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:40px;">zyada: barabari</div>
           <div class="ill" style="right:80px; top:1112px;">illustration</div>
         </div>
 
         <div class="beat" id="sF">
           <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
-          <div class="chk" id="f_1" style="top:420px;"><div class="k">TOP-K</div><div class="v">fixed ginti</div></div>
-          <div class="chk" id="f_2" style="top:570px;"><div class="k" style="color:#5BC0EB;">TOP-P</div><div class="v">chance ka jod</div></div>
+          <div class="chk" id="f_1" style="top:420px;"><div class="k">TOP-K</div><div class="v">fixed number of words</div></div>
+          <div class="chk" id="f_2" style="top:570px;"><div class="k" style="color:#5BC0EB;">TOP-P</div><div class="v">chance ke jod se</div></div>
           <div class="chk" id="f_3" style="top:720px;"><div class="k" style="color:#E8596B;">TEMP</div><div class="v">sharp ya flat</div></div>
         </div>
 
         <div class="beat" id="sG">
           <div class="x c" id="g_1" style="top:330px; font-size:76px;">top-k = <span class="gold">3</span></div>
           <div class="x c" id="g_2" style="top:450px; font-size:76px;">temperature <span class="red">bahut zyada</span></div>
-          <div class="x c" id="g_3" style="top:600px; font-size:84px;">pineapple pizza aayega?</div>
+          <div class="x c" id="g_3" style="top:600px; font-size:84px;">namkeen aayega?</div>
           <div class="chip" id="g_c" style="left:290px; top:820px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
         </div>
 
@@ -146,50 +141,46 @@
       <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
       <div id="caps"></div>
       <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
-      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="74.5" data-track-index="20" data-volume="1"></audio>
-      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="74.5" data-track-index="21" data-volume="1"></audio>
-      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="74.5" data-track-index="22" data-volume="1"></audio>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="72" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="72" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="72" data-track-index="22" data-volume="1"></audio>
     </div>
     <script>
       const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI INTERVIEW" });
       const { tl, S } = M;
       const { at, q, qa, show, hide, wipe, count } = FX(M);
-      // A: same question, two answers (illustration); the three knobs
+      // A: the interviewer's question and the three knobs on screen at frame 0
       tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
-      show("#a_r1", at("A", "ek") + 0.6, { s: 0.9 });
-      show("#a_r2", at("A", "alag"), { s: 0.9 });
-      show("#a_k1", at("A", "temperature") - 0.05, { s: 1.3 });
-      show("#a_k2", at("A", "top-k") - 0.05, { s: 1.3 });
-      show("#a_k3", at("A", "top-p") - 0.05, { s: 1.3 });
-      // B: the menu = next-word choices
-      show("#b_t", at("B", "menu") - 0.1, { s: 1.3 });
-      show("#b_s", at("B", "menu") + 0.3, { s: 1 });
-      show("#b_m", at("B", "chance") - 0.1, { s: 0.94 });
-      show("#b_r1", at("B", "masala") - 0.05, { s: 1, y: 10 });
-      show("#b_r2", at("B", "idli") - 0.05, { s: 1, y: 10 });
-      show("#b_r3", at("B", "phir", 1) + 0.2, { s: 1, y: 10 });
-      show("#b_r4", at("B", "aur") , { s: 1, y: 10 });
-      show("#b_r5", at("B", "pineapple") - 0.05, { s: 1, y: 10 });
+      show("#a_w", at("A", "teenon") - 0.1, { s: 0.94 });
+      show("#a_d", at("A", "teenon", 1) - 0.1, { s: 1.1 });
+      // B: the sentence and its next-word options with chances (illustration)
+      show("#b_q", at("B", "aaj") - 0.1, { s: 0.94 });
+      show("#b_m", at("B", "options") - 0.1, { s: 0.94 });
+      show("#b_r1", at("B", "achha") - 0.05, { s: 1, y: 10 });
+      show("#b_r2", at("B", "garam") - 0.05, { s: 1, y: 10 });
+      show("#b_r3", at("B", "garam") + 0.6, { s: 1, y: 10 });
+      show("#b_r4", at("B", "aur") - 0.05, { s: 1, y: 10 });
+      show("#b_r5", at("B", "aur") + 0.15, { s: 1, y: 10 });
       // C: top-k keeps a fixed count
       show("#c_t", at("C", "top-k") - 0.1, { s: 1.3 });
       show("#c_k", at("C", "three") - 0.1, { s: 1.4 });
       wipe("#c_cut", at("C", "three"), 0.5);
-      tl.fromTo("#c_r4", { opacity: 1 }, { opacity: 0.35, duration: 0.3 }, at("C", "pineapple"));
+      tl.fromTo("#c_r4", { opacity: 1 }, { opacity: 0.35, duration: 0.3 }, at("C", "namkin"));
       wipe("#c_x", at("C", "bahar") - 0.1, 0.35);
       show("#c_out", at("C", "bahar"), { s: 1.3 });
       // D: top-p adds chances up to p
       show("#d_t", at("D", "top-p") - 0.1, { s: 1.3 });
       show("#d_s", at("D", "chance") - 0.05, { s: 1 });
-      show("#d_c1", at("D", "dosa") - 0.15, { s: 0.94 });
-      wipe("#d_s1", at("D", "ninety") - 0.1, 0.7);
-      show("#d_m1", at("D", "bas") - 0.05, { s: 1.1 });
-      show("#d_c2", at("D", "orders", 1) - 0.15, { s: 0.94 });
-      qa(".d2").forEach((el, i) => wipe(el, at("D", "orders", 1) + 0.1 + i * 0.12, 0.2));
-      show("#d_m2", at("D", "lanba") - 0.1, { s: 1.1 });
-      // E: temperature reshapes the chances (softmax of the same scores at T 1, 0.4 and 2.5)
+      show("#d_c1", at("D", "model") - 0.15, { s: 0.94 });
+      wipe("#d_s1", at("D", "pakka") - 0.1, 0.7);
+      show("#d_m1", at("D", "ek-do") - 0.05, { s: 1.1 });
+      show("#d_c2", at("D", "model", 1) - 0.15, { s: 0.94 });
+      qa(".d2").forEach((el, i) => wipe(el, at("D", "model", 1) + 0.1 + i * 0.12, 0.2));
+      show("#d_m2", at("D", "zyada") - 0.1, { s: 1.1 });
+      // E: temperature reshapes the chances (softmax of the same scores at T 1, 0.4 and 2.5; 616 px per unit of probability)
       show("#e_t", at("E", "temperature") - 0.1, { s: 1.2 });
-      show("#e_s", at("E", "chef") - 0.05, { s: 1 });
-      const W = { lo: [520, 70, 26, 3], hi: [238, 172, 147, 59] };   // 616 px per unit of probability
+      show("#e_s", at("E", "chances") - 0.05, { s: 1 });
+      const W = { lo: [520, 70, 26, 3], hi: [238, 172, 147, 59] };
       ["#e_b1", "#e_b2", "#e_b3", "#e_b4"].forEach((el, i) => tl.to(el, { width: W.lo[i], duration: 0.6, ease: "power2.inOut" }, at("E", "kam")));
       show("#e_lo", at("E", "kam"), { s: 1.1 });
       ["#e_b1", "#e_b2", "#e_b3", "#e_b4"].forEach((el, i) => tl.to(el, { width: W.hi[i], duration: 0.7, ease: "power2.inOut" }, at("E", "zyada")));
@@ -202,9 +193,9 @@
       // G: the question
       show("#g_1", at("G", "ab") - 0.05, { s: 1.1 });
       show("#g_2", at("G", "temperature") - 0.1, { s: 1.1 });
-      show("#g_3", at("G", "pineapple") - 0.1, { s: 1.15 });
+      show("#g_3", at("G", "namkin") - 0.1, { s: 1.15 });
       show("#g_c", at("G", "comment") - 0.1, { s: 0.85 });
-      M.finish({ kw: { "top-k": "gold", "top-p": "cyan", temperature: "hot", menu: "gold", pineapple: "hot", pizza: "hot", three: "gold", ninety: "gold",
+      M.finish({ kw: { "top-k": "gold", "top-p": "cyan", temperature: "hot", namkin: "hot", three: "gold", pakka: "good", uljha: "hot",
                        kam: "cyan", zyada: "hot", sharp: "gold", flat: "gold", comment: "gold" } });
 
       window.__timelines["main"] = tl;

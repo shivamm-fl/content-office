@@ -58,30 +58,24 @@
    "F",
    1,
    0
-  ],
-  [
-   "tick",
-   "G",
-   1,
-   0
   ]
  ],
  "copy": {
   "hi": {
-   "A": "[warm, conversational] एक ही सवाल दो बार पूछा... और AI ने दो अलग जवाब दिए। इसके पीछे तीन knobs हैं: temperature, top-k और top-p। Interview में इन्हीं का फर्क पूछा जाता है।",
-   "B": "[thoughtful] AI हर बार अगला word ऐसे चुनता है, जैसे menu से dish। हर dish का एक chance है: masala dosa सबसे popular, फिर idli, फिर vada... और सबसे नीचे, pineapple pizza।",
-   "C": "Top-k कहता है: menu में सिर्फ़ top k dishes रखो। k equals three, तो dosa, idli, vada। Pineapple pizza बाहर, चाहे कुछ भी हो।",
-   "D": "Top-p गिनती नहीं, chance का जोड़ देखता है। Top dishes जोड़ते जाओ, जब तक उनका कुल chance p तक न पहुँच जाए। Dosa अकेला ही ninety percent orders ले ले, तो menu में बस dosa। Orders बिखरे हों, तो menu लंबा।",
-   "E": "Temperature menu नहीं काटता, chef का mood बदलता है। Temperature कम, तो chef हर बार bestseller ही बनाएगा। Temperature ज़्यादा, तो chef experiment करेगा, और कम popular dishes भी आने लगेंगी। इसीलिए एक ही सवाल के दो जवाब।",
-   "F": "Interview में बोलो: top-k, fixed गिनती। Top-p, chance का जोड़। Temperature, chances कितने sharp या flat।",
-   "G": "[curious] अब बताओ: top-k three रखा, और temperature बहुत ज़्यादा कर दिया। तो pineapple pizza आ सकता है या नहीं? Comment करो।"
+   "A": "[warm, conversational] Interviewer ने पूछा: LLM में temperature, top-k और top-p का difference बताओ। ... तीनों AI को अगला word चुनने में मदद करते हैं, पर तीनों का काम अलग है।",
+   "B": "[thoughtful] मान लो AI को sentence पूरा करना है: आज मौसम बहुत... AI के पास options हैं: अच्छा, गरम, ठंडा... और नमकीन। हर word का अपना एक chance है।",
+   "C": "Top-k एक fixed गिनती रखता है। k equals three, तो सिर्फ़ सबसे likely तीन words: अच्छा, गरम, ठंडा। नमकीन बाहर, उसका chance जितना भी हो।",
+   "D": "Top-p गिनती नहीं, chance का जोड़ देखता है। सबसे likely words जोड़ता जाता है, जब तक उनका कुल chance p से ऊपर न चला जाए। Model पक्का हो, तो एक-दो words ही बचते हैं। Model उलझा हो, तो ज़्यादा।",
+   "E": "Temperature list नहीं काटता, वो chances की shape बदलता है। Temperature कम, तो top word और भी आगे। Temperature ज़्यादा, तो chances बराबरी की तरफ़ जाते हैं, और कम likely words को भी मौका मिलने लगता है।",
+   "F": "Interview में बोलो: top-k, fixed number of words। Top-p, chance के जोड़ से words। Temperature, chances कितने sharp या flat।",
+   "G": "[curious] अब बताओ: top-k three रखा, और temperature बहुत ज़्यादा कर दिया। तो नमकीन आ सकता है या नहीं? Comment करो।"
   }
  },
  "sources": [
   "https://huggingface.co/blog/how-to-generate"
  ],
- "hook_type": "relatable_stake",
- "template": "results_first",
+ "hook_type": "interviewer_asked",
+ "template": "common_belief",
  "remake_of": "q105",
- "approved": "owner 2026-11-13 (scripts reviewed; 'bana')"
+ "approved": "owner 2026-11-13 (pasted this script: 'isse bana')"
 }
