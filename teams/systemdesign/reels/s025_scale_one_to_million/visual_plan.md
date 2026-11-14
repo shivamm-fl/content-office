@@ -1,0 +1,19 @@
+# Visual plan: s025, 1 user to 10 lakh users
+
+Idea in one line: a website grows by fixing the one part that fills first at each step.
+The picture: one vertical architecture (users on top, servers below) that gains one part per step; the part that fills first shows a red/amber load meter, and the meter drops after the fix.
+
+| Scene | Spoken (short) | The picture: what is drawn, what moves, what changes (at least six words) | On-screen labels (1-3 words each) | Built with (helper names or custom) |
+|---|---|---|---|---|
+| A | launch day, 10 lakh users, one server | A dense crowd of user dots pours red lines into one SERVER box whose load meter is full | 1 SERVER, hook text | custom: crowd, lines, meter |
+| B | one user, one server holds app and database | One user dot, one ONE SERVER panel with APP and DATABASE tiles inside, a low green load meter | ONE SERVER, APP, DATABASE, LOAD, EXAMPLE, 1 USER | custom: panel, M.box, meter |
+| C | 1,000 users, app and database share one machine | The same panel; the meter climbs to amber, HEAVY QUERY over the database, SLOW over the app; then the two tiles slide apart into two boxes, each with a low meter | 1,000 USERS, HEAVY QUERY, SLOW | custom: M.box move, meter |
+| D | one app server fills; vertical scaling vs horizontal; load balancer | Single APP box meter full amber; a bigger box hits a dashed LIMIT line and a red cross (SITE DEAD); then three app boxes appear under a LOAD BALANCER, request dots go one by one to a free server, one server gets a cross and dots go to the other two | 10,000 USERS, VERTICAL, LIMIT, SITE DEAD, HORIZONTAL, LOAD BALANCER | custom: boxes, dots, lines, meters |
+| E | three apps, one database fills; cache; hit and miss; 90 of 100 | Frame of D with the database meter filling amber; a CACHE box lands between apps and database; a green dot returns from cache (HIT), a red dot goes on to the database and a gold copy comes back (MISS); counts 100 IN, 90 HIT, 10 TO DB and the DB meter drops | 1 LAKH USERS, CACHE, HIT, MISS, COPY, 100 IN, 90 HIT, 10 TO DB | custom |
+| F | read more than write; leader and replicas | App box, thick READ arrow and thin WRITE arrow into one DATABASE; two REPLICA boxes appear, dashed copy arrows from the LEADER, reads re-route to the replicas and the leader meter drops | READ, WRITE, LEADER, REPLICA | custom |
+| G | 10 lakh users, static files, CDN | Three far-apart user icons pull IMG and CSS from one SERVERS box along long red lines; three CDN boxes appear next to the users, short lines replace the long ones, the SERVERS meter drops | 10 LAKH USERS, IMG, CSS, CDN, SERVERS | custom |
+| H | catch: replica and cache can be stale | Leader STOCK 4 vs replica STOCK 5 with a slow dashed copy arrow and a STALE stamp; below, database STOCK 4 vs cache STOCK 5 and a STALE stamp | REPLICATION LAG, STALE, STOCK 4, STOCK 5, EXAMPLE | custom |
+| I | interview: see what fills first, fix only that | Three rows (APP SERVER, DATABASE, STATIC FILES) with load meters; the database meter fills red, a ring marks it, then the meter drops green | APP SERVER, DATABASE, STATIC FILES | M.box + meter |
+| J | which fills first at 1 lakh users? 1, 2 or 3 | The same three rows with number badges 1, 2, 3 popping on their words, a comment bar and a + FOLLOW pill pressing on "follow" | 1, 2, 3, comment, + FOLLOW | custom |
+
+FIX (reviewer notes): B shows START HERE and empty dashed slots at scene start; D puts the red X beside the app label; H adds a clock icon on the slow copy arrow; F labels the leader box LEADER DB; I is now a check-and-fix habit (CHECK ALL chip, a frame scans the three rows, the full row drops, FIX THAT ONE); J shows the three parts as an open question (grey bars with ?, PICK ONE) instead of a ranking. All scenes are squeezed to x 126-954 and stretched to y 330-1160.

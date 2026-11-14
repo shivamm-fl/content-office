@@ -1,0 +1,14 @@
+1 user se 10 lakh users tak: ek website kaise scale hoti hai, step by step
+
+Day 25/150: Website ek server se 10 lakh users tak aise badhti hai ki har step par jo cheez sabse pehle bhar rahi hai, sirf wahi theek ki jaaye. Step 1: database ko app se alag server par rakho. Step 2: ek machine bada karna vertical scaling hai, kai jaise servers jodna horizontal scaling hai; servers ke aage load balancer har nayi request ek free server ko bhejta hai. Step 3: cache mein recent jawab rakho; hit cache se milta hai, miss par database se laakar copy cache mein rakhte hain. Step 4: database ki replicas banao, leader writes leta hai aur replicas zyaadatar reads sambhalti hain. Step 5: static files CDN se do, jo duniya bhar mein phaile servers hain. Catch: replica mein data purana ho sakta hai (replication lag), cache mein bhi. Users aur requests ke numbers invented example hain, ek common raste ka, kisi company ki history nahi.
+
+Comment karke batao: 1 lakh users par sabse pehle kya bharega, 1 app server, 2 database ya 3 static files?
+
+Sources:
+https://en.wikipedia.org/wiki/Scalability
+https://en.wikipedia.org/wiki/Database_replication
+https://en.wikipedia.org/wiki/Content_delivery_network
+https://en.wikipedia.org/wiki/Cache_(computing)
+
+Tags: how to scale a website,scale from 1 user to 1 million,system design scaling steps,scalability interview hindi,load balancer cache cdn database replica
+AI-assisted visuals and narration.

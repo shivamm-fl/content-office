@@ -1,0 +1,9 @@
+Day 25/150: Launch ke din 10 lakh users aaye aur server sirf ek ho, to kya karoge?
+
+Ek website ek server se 10 lakh users tak aise badhti hai: har step par dekho ki sabse pehle kya bhar raha hai, aur bas wahi theek karo. Pehle database ko app se alag server par rakho. Phir app ke kai servers lagao aur unke aage load balancer. Phir cache lagao taaki database tak kam requests jayein. Phir database ki replicas banao jo zyaadatar reads sambhalti hain. Aakhir mein images aur CSS jaisi static files CDN se do. Users 1, 1,000, 10,000, 1 lakh aur 10 lakh invented numbers hain, ek common raste ka example, kisi company ki history nahi.
+
+Catch: replica aur cache mein data thoda purana ho sakta hai (replication lag).
+
+Comment karke batao: 1 lakh users par sabse pehle kya bharega, 1 app server, 2 database ya 3 static files?
+
+#SystemDesign #Scalability #Backend
