@@ -1,0 +1,19 @@
+A: [warm, conversational] Launch के दिन 10{दस} लाख users, और server सिर्फ एक।
+
+B: चलो एक ही server से शुरू करते हैं, और हर step पर देखते हैं कि क्या सबसे पहले भर रहा है, बस वही ठीक करते हैं। अभी 1{one} user है, और उस एक server में सब कुछ है: website का code, यानी app, और data रखने वाला database। EXAMPLE, ये numbers मैंने मान लिए हैं।
+
+C: [curious] पहला step। मान लो users 1,000{one-thousand} हो गए। अब app और database एक ही machine की CPU और memory बाँट रहे हैं। Database भारी query चलाए, तो app slow हो जाता है। तो database को अपने अलग server पर ले जाओ।
+
+D: दूसरा step। अब users 10,000{ten-thousand} हैं, और अकेला app server भर गया। एक तरीका है उसी machine को बड़ा करना, इसे vertical scaling कहते हैं। पर उसकी हद होती है, और वो dead हुई तो पूरी site dead। दूसरा तरीका है horizontal scaling, यानी एक जैसे कई servers जोड़ना। मान लो three app servers। अब request किसके पास जाए? यहाँ आता है load balancer, यानी servers के आगे खड़ा वो हिस्सा जो हर नई request एक free server को भेजता है। एक server dead हो जाए, तो बाकी दो काम चलाते रहते हैं।
+
+E: [thoughtful] तीसरा step। App servers तीन हैं, पर database अब भी एक है। 1{एक} लाख users पर तीनों उसी से पूछ रहे हैं, और वही भर जाता है। पर ज़्यादातर बार वही चीज़ पूछी जा रही है, जैसे home page की list। तो cache लगाओ, यानी हाल का जवाब पास में रख लो, ताकि हर बार database तक न जाना पड़े। जवाब मिल गया तो hit, नहीं मिला तो miss: तब database से लाओ और copy cache में रख लो। मान लो 100{one-hundred} requests में से 90{ninety} hit हुईं, तो database तक सिर्फ 10{ten} पहुँचीं।
+
+F: चौथा step। Users पढ़ते ज़्यादा हैं, लिखते कम। तो database की copies बनाओ, जिन्हें replica कहते हैं। Main database यानी leader सारे writes लेता है, बदलाव replicas तक पहुँचते हैं, और replicas ज़्यादातर reads सँभालते हैं। मान लो two replicas हैं, तो reads दो जगह बँट गईं।
+
+G: पाँचवाँ step। अब 10{दस} लाख users पर images और CSS जैसी static files, यानी जो सबके लिए एक जैसी हैं, उन्हें हर बार अपने servers से क्यों देना? CDN लगाओ, यानी दुनिया भर में फैले servers, जो ये files user के पास वाले server से दे देते हैं। File जल्दी पहुँचती है, और servers का load घटता है।
+
+H: [thoughtful] अब catch। Replica में data थोड़ा पुराना हो सकता है, क्योंकि leader से बदलाव पहुँचने में time लगता है, इसे replication lag कहते हैं। Cache में भी पुराना जवाब रह सकता है।
+
+I: Interview में बोलो: पहले देखूँगा कि सबसे पहले क्या भर रहा है, और बस उसी को ठीक करूँगा।
+
+J: तुम्हारी site पर 1{एक} लाख users आएँ, तो सबसे पहले क्या भरेगा? 1{one} app server, 2{two} database या 3{three} static files? comment में लिखो। ऐसे और system design concepts के लिए follow करो।

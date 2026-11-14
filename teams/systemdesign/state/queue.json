@@ -1,26 +1,62 @@
 {
   "items": [
     {
-      "id": "s024",
+      "id": "s025",
       "track": "series",
-      "day": 24,
+      "day": 25,
       "unit": "P2",
-      "title": "Fixed window vs sliding window: limit ke edge par double requests kyun nikal jaati hain",
-      "format": "trade-off",
-      "one_idea": "A fixed window rate limiter keeps one counter per time block and starts a fresh count each window, so a client can send a full limit just before the edge and another just after (up to 2x in a short span); a sliding window fixes this, exactly by logging every request timestamp (memory grows with traffic) or approximately by weighting the previous window's count (two numbers per client).",
-      "hook_type": "direct_question",
-      "spoken_hook": "Limit 100 per minute: दो सेकंड में 200 कैसे?",
-      "hook_formula": "direct_question: an everyday-looking limit set against a number that breaks it, answered by the next line",
-      "sources": [
-        "https://redis.io/tutorials/howtos/ratelimiting/",
-        "https://blog.cloudflare.com/counting-things-a-lot-of-different-things/"
+      "title": "1 user se 10 lakh users tak: ek website kaise scale hoti hai, step by step",
+      "format": "case-study",
+      "one_idea": "A website grows from one server to a million users by fixing the one thing that fills up first at each step: split the database from the app server, add servers behind a load balancer, add a cache and read replicas to protect the database, and put static files on a CDN.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Launch के दिन 10 लाख users, और server सिर्फ एक।",
+      "hook_10s": "Launch के दिन 10 लाख users, और server सिर्फ एक। चलिए एक ही server से शुरू करते हैं, और हर step पर वही चीज़ ठीक करते हैं जो सबसे पहले भर जाती है। [frame 0: one small server box with a thin stream of user dots that thickens into a flood]",
+      "hook_candidates": [
+        {
+          "text": "Launch के दिन 10 लाख users, और server सिर्फ एक।",
+          "formula": "relatable_stake: the launch-day fear, a number against one box"
+        },
+        {
+          "text": "1 user से 10 लाख users तक, 5 steps में।",
+          "formula": "surprising_fact/promise: a count of steps for a big jump"
+        },
+        {
+          "text": "Interviewer ने पूछा: एक website को 10 लाख users तक कैसे ले जाओगे?",
+          "formula": "interviewer_asked: the classic scale question"
+        }
       ],
-      "length_target_s": 150,
-      "cover_headline": "Fixed Window vs Sliding Window",
-      "thumb_text": "2X BURST",
+      "hook_formula": "relatable_stake: the launch-day fear, one server against a flood of users, a plain statement with no question after it",
+      "hook_source": "our own rotation: relatable_stake is the single-use type last used longest ago (Day 21) among Days 19 to 24",
+      "visual_idea": "One growing diagram on one canvas: a single box holds app and database while user dots arrive, then the box splits in two (app, database), the app becomes three boxes behind a balancer, a cache box and a replica copy appear beside the database, and a CDN box takes the image files off the path. At each step one box turns calm amber to show what filled first, and a small load meter beside it drops after the fix.",
+      "everyday_anchor": "A small tea stall at a fair that suddenly has a queue: first you split cooking from serving, then add counters, then keep ready-made cups on the shelf, so the one stove does not set the speed.",
+      "example": "EXAMPLE: users 1, then 1,000, then 1 lakh, then 10 lakh; every number and the order of steps is an illustration of one common path, not a real company's history.",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Scalability",
+        "https://en.wikipedia.org/wiki/Database_replication",
+        "https://en.wikipedia.org/wiki/Content_delivery_network",
+        "https://en.wikipedia.org/wiki/Cache_(computing)"
+      ],
+      "facts_to_verify": [
+        "Wikipedia Scalability: horizontal scaling adds nodes, vertical scaling adds resources to one node; some applications do not scale horizontally; more hardware is not always the answer (fetched this session)",
+        "Wikipedia Database replication: one leader takes writes, replicas mainly serve reads and may serve stale data due to replication lag (fetched this session)",
+        "Wikipedia CDN: geographically distributed proxy servers that serve static files closer to users, reducing load and page load times (fetched this session)",
+        "Wikipedia Cache: a hit is served faster than the slower store, a miss fetches from the backing store and copies it in (fetched this session)",
+        "Not sourced and kept out: any real company's growth path (the Instagram engineering post could not be fetched this session), any users-per-server number, latency or cost figure; the order of steps is said as a typical path, and every number is labelled EXAMPLE",
+        "Builder: re-verify the four pages; do not mention load balancer, stateless or autoscaling as taught elsewhere, define each term in one plain sentence inside the reel"
+      ],
+      "length_target_s": 165,
+      "cover_headline": "1 User to 1 Million Users",
+      "thumb_text": "1 TO 1M",
+      "keywords": [
+        "how to scale a website",
+        "scale from 1 user to 1 million",
+        "system design scaling steps",
+        "scalability interview hindi",
+        "load balancer cache cdn database replica"
+      ],
       "status": "planned",
       "qa_passed": false,
-      "script_file": "state/scripts/s024.txt",
+      "script_file": "state/scripts/s025.txt",
       "script_locked": false
     }
   ]
