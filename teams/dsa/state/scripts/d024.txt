@@ -1,0 +1,23 @@
+Palindrome check लिखा, पर Panama case में गलत False आया!
+
+Problem: Valid Palindrome। | String में lowercase करो और हर non-alphanumeric character ignore करो, यानी सिर्फ़ letters और digits रखो। | अगर आगे से और पीछे से वही पढ़ता है, तो True।
+
+Given string: A man, a plan, a canal: Panama। | पहला try: s equals s of colon colon minus one, यानी string की reversed copy से compare। | यह False देता है, क्योंकि capital A और small a अलग हैं, और comma और space भी गिने जाते हैं। | Ignore करना था, पर compare ने ignore नहीं किया।
+
+तो पहले string साफ़ करो: सिर्फ़ alphanumeric characters, lowercase में, एक नई string में। | Panama वाली string से twenty one characters बचते हैं, और reverse से compare करने पर True आता है। | यह सही है, पर नई string बनती है, तो extra space O of n है।
+
+असली बात: copy की ज़रूरत ही नहीं है। | Palindrome में पहला और आख़िरी character match होना चाहिए, फिर अंदर की तरफ़ यही। | तो दो pointers: l शुरू पर, r आख़िर पर। | अगर l पर alphanumeric नहीं है, तो l आगे बढ़ाओ। | अगर r पर नहीं है, तो r पीछे लाओ। | वरना दोनों को lowercase करके compare करो। | Mismatch हो तो तुरंत False, match हो तो दोनों अंदर।
+
+Dry run। | l पर capital A, r पर small a: lowercase में दोनों a, match, दोनों अंदर। | l पर space है, skip, और फिर m और m match। | Comma और space भी skip होते हैं। | Pointers बीच में मिलते हैं, और जवाब True।
+
+Mismatch देखो: race a car। | r, a, c match होते हैं। | फिर l पर e है और r पर a। | e not equal a, तो False।
+
+Code: l, r equals zero, len of s minus one। | While l less than r: अगर s of l alnum नहीं है, तो l plus equals one। | Elif s of r alnum नहीं है, तो r minus equals one। | Elif lowercase में दोनों अलग हैं, तो return False। | Else दोनों अंदर। | आख़िर में return True।
+
+हर step में l या r चलता है और कभी वापस नहीं आता, तो time O of n है। | नई string नहीं बनती, सिर्फ़ दो integers हैं, तो extra space O of one है।
+
+Edge case: सिर्फ़ space वाली string cleaned होकर empty है, और empty True है।
+
+Interview में बोलो: दो pointers, non-alphanumeric skip, lowercase compare, O of n time और O of one space।
+
+Comment करो: string race a car के आख़िर में एक और c जोड़ो, तो result क्या आएगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।
