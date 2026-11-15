@@ -1,73 +1,35 @@
 {
- "items": [
-  {
-   "id": "s026",
-   "track": "series",
-   "day": 26,
-   "unit": "P2",
-   "title": "Ek server se fleet tak: ek request ka poora raasta, 6 stops mein",
-   "format": "recap",
-   "one_idea": "A fleet is one request's path through six stops (CDN, API gateway with rate limiting, load balancer with health checks, stateless app servers with autoscaling, cache, database with replicas), and each stop exists because one thing filled up first; any stop that stays single is the next single point of failure.",
-   "hook_type": "surprising_fact",
-   "spoken_hook": "100{one-hundred} servers, पर एक अकेला box site गिरा सकता है।",
-   "hook_formula": "surprising_fact: a claim that corrects the belief 'more servers means safe' (one single shared part still stops everything); plain statement, no question after it; the term single point of failure is defined on the next line",
-   "hook_source": "https://en.wikipedia.org/wiki/Single_point_of_failure",
-   "hook_10s": "100 servers, पर एक अकेला box site गिरा सकता है। ये single point of failure है, यानी वो हिस्सा जिसके गिरने से पूरा system रुक जाए। [frame 0: a row of 100 small green server squares and one grey box in front turning red while the row greys out]",
-   "hook_candidates": [
+  "items": [
     {
-     "text": "सौ servers, पर एक अकेली चीज़ site down कर देगी।",
-     "formula": "surprising_fact: corrects 'more servers is safe'"
-    },
-    {
-     "text": "Sale की रात इस site का हर box एक अलग वजह से है।",
-     "formula": "relatable_stake (rejected: the type ran twice in Days 20 to 25 and the line does not give a payoff in two seconds)"
-    },
-    {
-     "text": "Interviewer ने पूछा: एक server से 100 servers तक, क्या क्या बदलता है?",
-     "formula": "interviewer_asked (rejected: used once, Day 23, so surprising_fact is the older of the two single-use types)"
+      "id": "s026",
+      "track": "series",
+      "day": 26,
+      "unit": "P2",
+      "title": "Ek server se fleet tak: ek request ka poora raasta, 6 stops mein",
+      "format": "recap",
+      "one_idea": "A fleet is one request's path through six stops (CDN, API gateway with rate limiting, load balancer with health checks, stateless app servers with autoscaling, cache, database with replicas), and each stop exists because one thing filled up first; any stop that stays single is the next single point of failure.",
+      "hook_type": "surprising_fact",
+      "spoken_hook": "100{one-hundred} servers, पर एक अकेला box site गिरा सकता है।",
+      "hook_formula": "surprising_fact: a claim that corrects the belief 'more servers means safe'; plain statement, no question after it; SPOF defined on the next line",
+      "hook_source": "https://en.wikipedia.org/wiki/Single_point_of_failure",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Single_point_of_failure",
+        "https://en.wikipedia.org/wiki/Load_balancing_(computing)",
+        "https://microservices.io/patterns/apigateway.html",
+        "https://en.wikipedia.org/wiki/Autoscaling",
+        "https://en.wikipedia.org/wiki/Content_delivery_network",
+        "https://en.wikipedia.org/wiki/Stateless_protocol",
+        "https://en.wikipedia.org/wiki/Cache_(computing)",
+        "https://en.wikipedia.org/wiki/Database_replication",
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/429"
+      ],
+      "length_target_s": 135,
+      "cover_headline": "From One Server to a Fleet",
+      "thumb_text": "6 STOPS",
+      "status": "planned",
+      "qa_passed": false,
+      "script_file": "state/scripts/s026.txt",
+      "script_locked": false
     }
-   ],
-   "visual_idea": "One horizontal map drawn left to right and built stop by stop: a request dot leaves a phone and passes CDN, gateway, load balancer, three app servers, cache, then a database with two replicas; at each stop a bar that was full empties as the box appears, and at the end the one box with no twin pulses red until a second copy slides in beside it.",
-   "everyday_anchor": "A railway station on a festival weekend: ticket counters, entry gates, platforms and the single announcement system each exist because one thing jammed first, and the one gate with no twin is where the whole crowd stops.",
-   "example": "EXAMPLE (labelled in the reel): sale night, traffic 10x; images from the CDN, one bot gets a 429, the rest spread over 3 servers and autoscaling adds a 4th; 90 of 100 requests are cache hits so 10 reach the database; a second case where one server is dead, the health check removes it and the cart survives because it lives in a shared store.",
-   "sources": [
-    "https://en.wikipedia.org/wiki/Single_point_of_failure",
-    "https://en.wikipedia.org/wiki/Load_balancing_(computing)",
-    "https://microservices.io/patterns/apigateway.html",
-    "https://en.wikipedia.org/wiki/Autoscaling",
-    "https://en.wikipedia.org/wiki/Content_delivery_network",
-    "https://en.wikipedia.org/wiki/Stateless_protocol",
-    "https://en.wikipedia.org/wiki/Cache_(computing)",
-    "https://en.wikipedia.org/wiki/Database_replication",
-    "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/429"
-   ],
-   "facts_to_verify": [
-    "SPOF definition: a part that would stop the whole system if it failed; redundancy (backups) addresses it (Wikipedia SPOF)",
-    "Load balancer polls servers and removes failed ones from the pool (Wikipedia Load balancing)",
-    "API gateway = single entry point, routing, composition, can check authorization; it is another component and adds a hop (microservices.io); that it is itself a SPOF is our own reasoning, say 'typically'",
-    "Autoscaling adds servers when load is high and removes them when low (Wikipedia Autoscaling)",
-    "CDN = geographically distributed proxy servers that serve content closer to users (Wikipedia CDN)",
-    "Stateless: receiver keeps no session state between requests; sessions are usually a cookie id pointing to state kept elsewhere (Wikipedia Stateless protocol); 'cart in a shared store' is the design move, our own explanation",
-    "Cache hit and miss definitions (Wikipedia Cache); database replication: leader takes writes, replicas mainly reads and may be stale due to replication lag (Wikipedia Database replication)",
-    "429 Too Many Requests means too many requests in a given time (MDN)",
-    "All user, server and hit numbers are EXAMPLE; no named company's setup, no speed or cost figures",
-    "Stand-alone: no 'yesterday', no day numbers, no 'Part N'; at most the six stops each defined in one plain sentence"
-   ],
-   "length_target_s": 135,
-   "cover_headline": "From One Server to a Fleet",
-   "thumb_text": "6 STOPS",
-   "keywords": [
-    "system design scaling roadmap",
-    "load balancer cache cdn explained",
-    "single point of failure",
-    "how to scale a website system design",
-    "system design interview scalability recap",
-    "hinglish system design"
-   ],
-   "status": "planned",
-   "qa_passed": false,
-   "script_file": "state/scripts/s026.txt",
-   "script_locked": false
-  }
- ]
+  ]
 }

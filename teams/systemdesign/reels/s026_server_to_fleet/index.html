@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Ek server se fleet tak: ek request ka poora raasta, 6 stops mein</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="129.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="129.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="129.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="129.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I","J"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 026 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I, J] = SC.map((k) => M.$("#s" + k));
+      const ST = window.REEL.hi.starts;
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6", AMB = "#F2B84B", DEAD = "#5B6577";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      let MP = { a: 400, b: 1165, A: 330, B: 1160, sx: 0.88 };
+      const setMap = (a, b, A, B) => { MP = { a, b, A, B, sx: 0.88 }; };
+      const ident = () => { MP = { a: 0, b: 1000, A: 0, B: 1000, sx: 1 }; };
+      const MX = (x) => 540 + (x - 540) * MP.sx, MW = (w) => w * MP.sx, KY = () => (MP.B - MP.A) / (MP.b - MP.a), MY = (y) => MP.A + (y - MP.a) * KY();
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${MX(cx) - MW(w) / 2}px;width:${MW(w)}px;top:${MY(y)}px;height:${h || 72}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 36}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const stamp = (host, txt, cx, y, w, col, t) => show(el(host, `left:${MX(cx) - MW(w) / 2}px;width:${MW(w)}px;top:${MY(y)}px;height:76px;border-radius:14px;border:3px solid ${col};background:rgba(14,18,30,.95);box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 40px var(--code);color:${col};white-space:nowrap`, txt), t, { opacity: 0, scale: 1.08 });
+      const meter = (host, x, y, w, lv, col, t) => {
+        const W = MW(w), tr = el(host, `left:${MX(x)}px;top:${MY(y)}px;width:${W}px;height:24px;border-radius:12px;background:rgba(150,175,215,.2);overflow:hidden`);
+        const f = el(tr, `left:0;top:0;width:${W}px;height:24px;transform-origin:0 50%;background:${col}`);
+        tl.set(f, { scaleX: lv, backgroundColor: col }, 0); show(tr, t, { opacity: 0, y: 0 });
+        return { tr, set: (tt, l, c, d) => tl.to(f, { scaleX: l, backgroundColor: c, duration: d || 0.7, ease: "power2.out", immediateRender: false }, tt) };
+      };
+      const line = (host, X1, Y1, X2, Y2, col, w, t, dash) => {
+        const x1 = MX(X1), y1 = MY(Y1), x2 = MX(X2), y2 = MY(Y2);
+        const L = Math.hypot(x2 - x1, y2 - y1), a = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+        const d = el(host, `left:${x1}px;top:${y1 - w / 2}px;width:${L}px;height:${w}px;` + (dash ? `border-top:${w}px dashed ${col}` : `background:${col};border-radius:${w / 2}px`));
+        gsap.set(d, { rotation: a, transformOrigin: "0 50%" }); return show(d, t, { opacity: 0 });
+      };
+      const dot = (host, X1, Y1, X2, Y2, col, t, dur, hollow) => {
+        const x1 = MX(X1), y1 = MY(Y1), x2 = MX(X2), y2 = MY(Y2);
+        const d = el(host, `left:${x1 - 14}px;top:${y1 - 14}px;width:28px;height:28px;border-radius:50%;box-sizing:border-box;` + (hollow ? `border:4px solid ${col}` : `background:${col}`));
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.05, immediateRender: false }, t);
+        tl.to(d, { x: x2 - x1, y: y2 - y1, duration: dur, ease: "none", immediateRender: false }, t); tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d;
+      };
+      const crowd = (host, cx, y, n, perRow, t, col) => {
+        const rows = Math.ceil(n / perRow), w = perRow * 40, wrap = el(host, `left:${MX(cx) - w / 2}px;top:${MY(y)}px;width:${w}px;height:${rows * 40}px`);
+        for (let i = 0; i < n; i++) el(wrap, `left:${(i % perRow) * 40 + 7}px;top:${Math.floor(i / perRow) * 40 + 7}px;width:26px;height:26px;border-radius:50%;background:${col || CYAN};opacity:.85`);
+        return show(wrap, t, { opacity: 0, y: 10 });
+      };
+      const ic = (host, kind, x, y, size, col) => M.icon(host, kind, MX(x + size / 2) - size / 2, MY(y), size, col);
+      const SHOW0 = (sc) => ST[sc] + 0.15;
+      // a flat tile: icon + label, any size; o.col stacks the icon above the label
+      const T = (host, x, y, w, h, label, icon, col, t, o) => { o = o || {};
+        const d = el(host, `left:${MX(x)}px;top:${MY(y)}px;width:${MW(w)}px;height:${h * KY()}px;border-radius:22px;border:3px solid ${M.ca(col, 0.6)};background:#16203A;box-sizing:border-box;display:flex;flex-direction:${o.col ? "column" : "row"};align-items:center;justify-content:center;gap:${o.col ? 2 : 14}px;font:800 ${o.size || 40}px var(--lat);color:${INK};white-space:nowrap`,
+          `<svg viewBox="0 0 64 64" width="${o.is || 48}" height="${o.is || 48}" style="flex:none;overflow:visible">${icon ? Viz.ICONS[icon](col) : ""}</svg><span>${label}</span>`);
+        return show(d, t, { opacity: 0, scale: 0.92, y: 0 }); };
+      const RING = (host, x, y, w, h, col, t, t2) => { const r = el(host, `left:${MX(x) - 7}px;top:${MY(y) - 7}px;width:${MW(w) + 14}px;height:${h * KY() + 14}px;border-radius:26px;border:4px solid ${col};box-sizing:border-box;pointer-events:none`);
+        tl.set(r, { opacity: 0 }, 0); tl.to(r, { opacity: 1, duration: 0.25, immediateRender: false }, t); if (t2 != null) tl.to(r, { opacity: 0, duration: 0.25, immediateRender: false }, t2); return r; };
+      const SLOT = (host, x, y, w, h, t, lab) => show(el(host, `left:${MX(x)}px;top:${MY(y)}px;width:${MW(w)}px;height:${h * KY()}px;border-radius:22px;border:3px dashed ${M.ca(GREY, 0.6)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 ${lab && lab.length < 5 ? 30 : 38}px var(--lat);color:#7F8BAA;white-space:nowrap`, lab || ""), t, { opacity: 0, y: 0 });
+      const SW = "<svg viewBox='0 0 64 64' width='44' height='44'>";
+
+      // ===== the route frame (same place in every scene C to G) =====
+      const ROW = { cdn: 350, gw: 495, lb: 640, app: 785, cache: 930, db: 1075, rep: 1220 }, TH = 110, TX = 70, TWD = 500, TC = 320, RCX = 810, RW = 380;
+      const KEYS = { app: ["APP SERVERS", "gear"], cdn: ["CDN", "globe"], gw: ["API GATEWAY", "shield"], lb: ["LOAD BALANCER", "bolt"], cache: ["CACHE", "bolt"], db: ["DATABASE", "db"] };
+      const RM = () => { setMap(250, 1330, 330, 1160); MP.sx = 1; };
+      const mkT = (host, key, t, col) => T(host, TX, ROW[key], TWD, TH, KEYS[key][0], KEYS[key][1], col || CYAN, t);
+      const slotK = (host, key, t) => SLOT(host, TX, ROW[key], TWD, TH, t, KEYS[key][0]);
+      const AX = (i) => TX + i * 129;
+      const mkApp = (host, i, t) => T(host, AX(i), ROW.app, 112, TH, "APP", "gear", CYAN, t, { col: 1, size: 32, is: 36 });
+      const slotApp = (host, i, t) => SLOT(host, AX(i), ROW.app, 112, TH, t, "APP");
+      const wire = (host, a, b, t) => line(host, TC, ROW[a] + TH, TC, ROW[b], GREY, 5, t);
+      const lbLine = (host, i, t) => line(host, TC, ROW.lb + TH, AX(i) + 56, ROW.app, GREY, 4, t);
+      const cacheLine = (host, i, t) => line(host, AX(i) + 56, ROW.app + TH, TC, ROW.cache, GREY, 4, t);
+      const userIc = (host, t) => ic(host, "user", 275, 240, 90, CYAN).show(t);
+
+      // diagram: A
+      ident();
+      M.hook(["100 servers,", "1 box can sink it."], { size: 88, top: 250 });
+      const gridCells = (host, x0, y0, t, P, CS) => { P = P || 36; CS = CS || 28; const w = el(host, `left:${x0}px;top:${y0}px;width:${P * 10}px;height:${P * 10}px`); const cs = [];
+        for (let r = 0; r < 10; r++) for (let c = 0; c < 10; c++) cs.push(el(w, `left:${c * P}px;top:${r * P}px;width:${CS}px;height:${CS}px;border-radius:6px;background:${GOOD}`));
+        show(w, t, { opacity: 0, y: 8 }); return { w, cs, grey: (tt, d) => tl.to(cs, { backgroundColor: DEAD, duration: d || 0.5, stagger: { each: 0.004, from: "random" }, ease: "none", immediateRender: false }, tt), green: (tt, d) => tl.to(cs, { backgroundColor: GOOD, duration: d || 0.5, stagger: { each: 0.004, from: "random" }, ease: "none", immediateRender: false }, tt) }; };
+      const gA = gridCells(A, 320, 500, 0.05, 44, 36);
+      [420, 540, 660].forEach((x, i) => line(A, x, 945, x, 1010, GREY, 5, 0.3 + i * 0.1));
+      const aBox = T(A, 240, 1010, 600, 150, "ONE BOX", "gear", GREY, 0.1);
+      RING(A, 240, 1010, 600, 150, AMB, at("A", "akela", 0), at("A", "gira", 0) - 0.1);
+      tl.to(aBox, { borderColor: M.ca(HOT, 0.9), duration: 0.3, immediateRender: false }, at("A", "gira", 0));
+      ic(A, "cross", 740, 1045, 80, HOT).show(at("A", "gira", 0));
+      gA.grey(at("A", "gira", 0) + 0.3, 0.6);
+      M.fit(A, { y: 460, h: 800 });
+
+      // diagram: B
+      ident();
+      const gB = gridCells(B, 360, 520, SHOW0("B"));
+      const b1 = T(B, 190, 960, 300, 120, "BOX", "gear", GREY, SHOW0("B"));
+      const bL1 = line(B, 440, 890, 340, 960, GREY, 5, SHOW0("B"));
+      const bL2 = line(B, 640, 890, 740, 960, GREY, 5, at("B", "bachne", 0) + 0.1);
+      const bSp = stamp(B, "SPOF", 540, 1130, 260, HOT, at("B", "point", 0));
+      tl.to(b1, { borderColor: M.ca(HOT, 0.9), duration: 0.3, immediateRender: false }, at("B", "girne", 0));
+      const bX = ic(B, "cross", 410, 975, 60, HOT); bX.show(at("B", "girne", 0));
+      gB.grey(at("B", "system", 0), 0.6);
+      gone(bSp, at("B", "isi", 0)); bX.hide(at("B", "isi", 0));
+      const b2 = T(B, 590, 960, 300, 120, "COPY", "gear", GOOD, at("B", "bachne", 0));
+      gB.green(at("B", "bachne", 0) + 0.3, 0.6);
+      const bFrame = show(el(B, `left:343px;top:503px;width:394px;height:394px;border-radius:18px;border:4px dashed ${AMB};box-sizing:border-box`), at("B", "fleet", 0), { opacity: 0, y: 0 });
+      const bFleet = chip(B, "FLEET", 540, 440, 240, AMB, at("B", "fleet", 0), 36, 64);
+      const tB3 = at("B", "ek", 0) - 0.2;
+      goneAll([gB.w, b1, b2, bFrame, bFleet, bL1, bL2], tB3 - 0.1);
+      RM();
+      const bU = userIc(B, tB3 + 0.1);
+      ["cdn", "gw", "lb", "cache", "db"].forEach((k, i) => slotK(B, k, tB3 + 0.1 + i * 0.1));
+      slotK(B, "app", tB3 + 0.3);
+      dot(B, TC, 335, TC, 1130, AMB, at("B", "raasta", 0), 2.9);
+      ["cdn", "gw", "lb", "app", "cache", "db"].forEach((k, i) => show(el(B, `left:${MX(RCX) - 30}px;top:${MY(ROW[k] + 20)}px;font:800 56px var(--code);color:${AMB}`, "?"), at("B", "har", 0) + i * 0.22, { opacity: 0, y: 0 }));
+      chip(B, "WHY HERE?", RCX, 252, 340, AMB, at("B", "kyun", 0) - 0.2, 40, 60);
+      M.fit(B, { y: 230, h: 1010 });
+
+      // diagram: C
+      ident();
+      chip(C, "MORE TRAFFIC", 540, 310, 420, CYAN, at("C", "Traffic", 0), 34, 64);
+      crowd(C, 540, 390, 8, 8, SHOW0("C"), CYAN); crowd(C, 540, 430, 8, 8, at("C", "badhta", 0), CYAN); crowd(C, 540, 470, 8, 8, at("C", "badhta", 0) + 0.2, CYAN);
+      line(C, 540, 520, 540, 640, GREY, 5, at("C", "Traffic", 0) + 0.2);
+      const cT = T(C, 190, 640, 700, 170, "ONE PART", "gear", CYAN, SHOW0("C")); const cM = meter(C, 190, 835, 700, 0.25, GOOD, SHOW0("C"));
+      const cF = chip(C, "FILLS FIRST", 540, 890, 420, AMB, at("C", "pehle", 0), 34, 64);
+      cM.set(at("C", "bharti", 0), 1, HOT, 0.8);
+      const tJ = at("C", "judta", 0) - 0.9;
+      goneAll([cT, cM.tr, cF], tJ);
+      const cT1 = T(C, 190, 640, 330, 170, "PART", "gear", CYAN, tJ + 0.3); const cM1 = meter(C, 190, 835, 330, 1, HOT, tJ + 0.3);
+      const cT2 = T(C, 560, 640, 330, 170, "+ BOX", "bolt", GOOD, at("C", "judta", 0) - 0.2); const cM2 = meter(C, 560, 835, 330, 0.3, GOOD, at("C", "judta", 0) - 0.2);
+      cM1.set(at("C", "judta", 0) + 0.2, 0.3, GOOD, 0.7);
+      chip(C, "6 STOPS", 540, 955, 340, CYAN, at("C", "6", 0) - 0.1, 36, 64);
+      [1, 2, 3, 4, 5, 6].forEach((n, i) => { const bd = el(C, `left:${160 + i * 152 - 48}px;top:1040px;width:96px;height:96px;border-radius:50%;border:4px solid ${AMB};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 52px var(--code);color:${AMB}`, String(n)); show(bd, at("C", "6", 0) + i * 0.12, { opacity: 0, scale: 0.6, y: 0 }); });
+      M.fit(C, { y: 230, h: 1010 });
+
+      // diagram: D
+      RM();
+      userIc(D, SHOW0("D"));
+      ["cdn", "gw", "lb", "cache", "db"].forEach((k) => D["s_" + k] = slotK(D, k, SHOW0("D")));
+      [0, 1, 2].forEach((i) => slotApp(D, i, SHOW0("D")));
+      const tCdn = at("D", "CDN", 0) - 0.15, tGw = at("D", "gateway", 0) - 0.25;
+      gone(D.s_cdn, tCdn - 0.4); gone(D.s_gw, tGw - 0.4);
+      mkT(D, "cdn", tCdn); line(D, TC, 330, TC, ROW.cdn, GREY, 5, tCdn + 0.1); RING(D, TX, ROW.cdn, TWD, TH, AMB, tCdn + 0.1, tGw - 0.3);
+      const dM = meter(D, 620, ROW.cdn + 78, 380, 1, HOT, tCdn + 0.4);
+      const imgEl = show(el(D, `left:${MX(RCX) - 45}px;top:${MY(ROW.cdn)}px;width:90px;height:90px`, `<svg viewBox="0 0 64 64" width="90" height="90">${Viz.ICONS.image(CYAN)}</svg>`), at("D", "images", 0), { opacity: 0, y: 0 });
+      tl.to(imgEl, { x: MX(TC + 60) - MX(RCX), y: MY(262) - MY(ROW.cdn), duration: 0.7, ease: "power2.inOut", immediateRender: false }, at("D", "de", 0));
+      gone(imgEl, at("D", "de", 0) + 0.75);
+      chip(D, "FILE LOAD", RCX, ROW.cdn, RW, HOT, tCdn + 0.4, 40, 60); dM.set(at("D", "bojh", 0) + 0.2, 0.25, GOOD, 0.8);
+      mkT(D, "gw", tGw); wire(D, "cdn", "gw", tGw + 0.1); RING(D, TX, ROW.gw, TWD, TH, AMB, tGw + 0.1);
+      const dC1 = chip(D, "ONE ENTRY", RCX, ROW.gw, RW, CYAN, at("D", "single", 0) - 0.1, 40, 60);
+      gone(dC1, at("D", "login", 0) - 0.4);
+      const dC2 = chip(D, "LOGIN CHECK", RCX, ROW.gw, RW, CYAN, at("D", "login", 0), 40, 60);
+      gone(dC2, at("D", "rate", 0) - 0.35);
+      const dC3 = chip(D, "RATE LIMIT", RCX, ROW.gw, RW, AMB, at("D", "rate", 0), 40, 60);
+      gone(dC3, at("D", "429", 0) - 0.3);
+      [0, 1, 2, 3].forEach((i) => dot(D, TC, 330, TC, ROW.gw, HOT, at("D", "zyada", 0) + 0.1 + i * 0.22, 0.45));
+      [0, 1].forEach((i) => dot(D, TC, ROW.gw, TC, 330, HOT, at("D", "429", 0) + 0.1 + i * 0.15, 0.45, true));
+      stamp(D, "429", RCX, ROW.gw, 220, HOT, at("D", "429", 0));
+      chip(D, "TOO MANY", RCX, ROW.gw + 80, RW, HOT, at("D", "bahut", 0), 38, 56);
+      M.fit(D, { y: 230, h: 1010 });
+
+      // diagram: E
+      RM();
+      userIc(E, SHOW0("E")); mkT(E, "cdn", SHOW0("E")); mkT(E, "gw", SHOW0("E")); line(E, TC, 330, TC, ROW.cdn, GREY, 5, SHOW0("E")); wire(E, "cdn", "gw", SHOW0("E"));
+      const eSl = {}; ["lb", "cache", "db"].forEach((k) => eSl[k] = slotK(E, k, SHOW0("E")));
+      const eSa = [0, 1, 2].map((i) => slotApp(E, i, SHOW0("E")));
+      const tLb = at("E", "balancer", 0) - 0.3;
+      gone(eSl.lb, tLb - 0.4); mkT(E, "lb", tLb); wire(E, "gw", "lb", tLb + 0.1); RING(E, TX, ROW.lb, TWD, TH, AMB, tLb + 0.1, at("E", "chautha", 0) - 0.2);
+      const tAp = at("E", "free", 0) - 0.2;
+      const eA = [0, 1, 2].map((i) => { gone(eSa[i], tAp - 0.4 + i * 0.15); return mkApp(E, i, tAp + i * 0.15); });
+      [0, 1, 2].forEach((i) => lbLine(E, i, tAp + 0.3));
+      dot(E, TC, ROW.lb + TH, AX(1) + 56, ROW.app + 30, AMB, at("E", "free", 0) + 0.1, 0.45); dot(E, TC, ROW.lb + TH, AX(0) + 56, ROW.app + 30, AMB, at("E", "free", 0) + 0.7, 0.45);
+      const eF = chip(E, "SERVER FULL", RCX, ROW.lb, RW, HOT, tLb + 0.4, 40, 60); const eMt = meter(E, 620, ROW.lb + 78, 380, 1, HOT, tLb + 0.4);
+      tl.to(eA[1], { borderColor: M.ca(HOT, 0.9), duration: 0.3, immediateRender: false }, at("E", "bharta", 0) + 0.2);
+      gone(eF, at("E", "capacity", 0) + 0.2); eMt.set(at("E", "capacity", 0) + 0.2, 0.3, GOOD, 0.8); tl.to(eA[1], { borderColor: M.ca(CYAN, 0.6), duration: 0.3, immediateRender: false }, at("E", "capacity", 0) + 0.3);
+      const eH = chip(E, "HEALTH CHECK", RCX, ROW.lb, RW, CYAN, at("E", "Health", 0), 40, 60);
+      [0, 1, 2].forEach((i) => dot(E, TC, ROW.lb + TH, AX(i) + 56, ROW.app, CYAN, at("E", "check", 0) + i * 0.1, 0.4, true));
+      [0, 1].forEach((i) => dot(E, AX(i) + 56, ROW.app, TC, ROW.lb + TH, GOOD, at("E", "check", 0) + 0.6 + i * 0.1, 0.4, true));
+      tl.to(eA[2], { borderColor: M.ca(HOT, 0.9), duration: 0.3, immediateRender: false }, at("E", "dead", 0));
+      const eX = ic(E, "cross", AX(2) + 66, ROW.app - 20, 48, HOT); eX.show(at("E", "dead", 0));
+      gone(eH, at("E", "pool", 0) - 0.3); const eP = chip(E, "OUT OF POOL", RCX, ROW.lb, RW, HOT, at("E", "pool", 0), 40, 60);
+      tl.to(eA[2], { opacity: 0.35, duration: 0.3, immediateRender: false }, at("E", "bahar", 0) + 0.1);
+      gone(eP, at("E", "chautha", 0) - 0.3);
+      RING(E, TX, ROW.app, 500, TH, AMB, at("E", "chautha", 0), at("E", "autoscaling", 0) - 0.3);
+      const eS1 = chip(E, "STATELESS", RCX, ROW.app - 6, RW, CYAN, at("E", "stateless", 0), 40, 60); gone(eS1, at("E", "cart", 0) - 0.4);
+      const eCart = chip(E, "CART", RCX, ROW.app - 6, 200, AMB, at("E", "cart", 0) - 0.1, 32, 50);
+      const eSt = T(E, 630, ROW.app + 84, 370, 56, "SHARED STORE", "db", AMB, at("E", "shared", 0) - 0.1, { size: 32, is: 36 });
+      tl.to(eCart, { y: 8, duration: 0.5, ease: "power2.inOut", immediateRender: false }, at("E", "store", 0));
+      gone(eCart, at("E", "rahti", 0) + 0.3); gone(eSt, at("E", "autoscaling", 0) - 0.3);
+      chip(E, "AUTOSCALING", RCX, ROW.app, RW, CYAN, at("E", "autoscaling", 0), 40, 60);
+      const eLm = meter(E, 620, ROW.app + 78, 380, 0.5, GOOD, at("E", "autoscaling", 0) + 0.2); eLm.set(at("E", "load", 1), 0.95, AMB, 0.6);
+      const eS4 = slotApp(E, 3, at("E", "load", 1) + 0.2); gone(eS4, at("E", "jodti", 0) - 0.05);
+      const eA4 = mkApp(E, 3, at("E", "jodti", 0)); eLm.set(at("E", "jodti", 0) + 0.3, 0.5, GOOD, 0.7);
+      gone(eA4, at("E", "ghatati", 0) + 0.1); eLm.set(at("E", "ghatati", 0) + 0.2, 0.75, AMB, 0.4);
+      M.fit(E, { y: 230, h: 1010 });
+
+      // diagram: F
+      RM();
+      userIc(F, SHOW0("F")); ["cdn", "gw", "lb"].forEach((k) => mkT(F, k, SHOW0("F"))); line(F, TC, 330, TC, ROW.cdn, GREY, 5, SHOW0("F")); wire(F, "cdn", "gw", SHOW0("F")); wire(F, "gw", "lb", SHOW0("F"));
+      const fA = [0, 1, 2].map((i) => mkApp(F, i, SHOW0("F"))); [0, 1, 2].forEach((i) => lbLine(F, i, SHOW0("F")));
+      const fSc = slotK(F, "cache", SHOW0("F")), fSd = slotK(F, "db", SHOW0("F"));
+      const fSr = [0, 1].map((i) => SLOT(F, 70 + i * 260, ROW.rep, 240, TH, SHOW0("F"), "REPLICA"));
+      const tCa = at("F", "cache", 0) - 0.2; gone(fSc, tCa - 0.4);
+      mkT(F, "cache", tCa); [0, 1, 2].forEach((i) => cacheLine(F, i, tCa + 0.1)); RING(F, TX, ROW.cache, TWD, TH, AMB, tCa + 0.1, at("F", "chhatha", 0) - 0.1);
+      const fC1 = chip(F, "SAVED COPY", RCX, ROW.cache, RW, CYAN, at("F", "haal", 0), 40, 60); gone(fC1, at("F", "mila", 0) - 0.35);
+      dot(F, AX(1) + 56, ROW.app + TH, TC, ROW.cache + 20, AMB, at("F", "mila", 0) - 0.1, 0.4); dot(F, TC, ROW.cache + 20, AX(1) + 56, ROW.app + TH, GOOD, at("F", "hit", 0) - 0.1, 0.4, true);
+      const fHit = chip(F, "HIT", RCX, ROW.cache, RW, GOOD, at("F", "hit", 0), 40, 60); gone(fHit, at("F", "miss", 0) - 0.4);
+      gone(fSd, at("F", "miss", 0) - 0.85); mkT(F, "db", at("F", "miss", 0) - 0.45); wire(F, "cache", "db", at("F", "miss", 0) - 0.4);
+      dot(F, AX(2) + 56, ROW.app + TH, TC, ROW.cache + 20, AMB, at("F", "nahi", 0) + 0.1, 0.35); dot(F, TC, ROW.cache + TH, TC, ROW.db + 30, AMB, at("F", "miss", 0) - 0.1, 0.45);
+      const fMiss = chip(F, "MISS", RCX, ROW.cache, RW, HOT, at("F", "miss", 0), 40, 60); gone(fMiss, at("F", "bharta", 0) - 0.3);
+      const fQ = chip(F, "SAME QUERY", RCX, ROW.db, RW, HOT, at("F", "miss", 0) - 0.2, 40, 60); const fQm = meter(F, 620, ROW.db + 78, 380, 1, HOT, at("F", "miss", 0) - 0.2);
+      [0, 1, 2, 3].forEach((i) => dot(F, TC, ROW.cache + TH, TC, ROW.db + 30, AMB, at("F", "wahi", 0) + 0.1 + i * 0.3, 0.3));
+      fQm.set(at("F", "baar", 1) + 0.4, 0.3, GOOD, 0.8);
+      RING(F, TX, ROW.db, TWD, TH, AMB, at("F", "database", 1) - 0.1);
+      gone(fQ, at("F", "leader", 0) - 0.4); gone(fQm.tr, at("F", "leader", 0) - 0.4);
+      chip(F, "LEADER", RCX, ROW.db, RW, AMB, at("F", "leader", 0), 40, 60);
+      dot(F, TC, ROW.cache + TH, TC, ROW.db + 30, AMB, at("F", "likhta", 0), 0.4);
+      const fRp = [0, 1].map((i) => { gone(fSr[i], at("F", "replicas", 0) - 1.0 + i * 0.3); return T(F, 70 + i * 260, ROW.rep, 240, TH, "REPLICA", "db", GOOD, at("F", "replicas", 0) - 0.6 + i * 0.3); });
+      line(F, 220, ROW.db + TH, 190, ROW.rep, CYAN, 4, at("F", "copies", 0) + 0.2, true); line(F, 420, ROW.db + TH, 450, ROW.rep, CYAN, 4, at("F", "copies", 0) + 0.3, true);
+      dot(F, 220, ROW.db + TH, 190, ROW.rep, AMB, at("F", "replicas", 0), 0.4, true); dot(F, 420, ROW.db + TH, 450, ROW.rep, AMB, at("F", "replicas", 0) + 0.1, 0.4, true);
+      RING(F, 70, ROW.rep, 240, TH, CYAN, at("F", "reads", 0)); RING(F, 330, ROW.rep, 240, TH, CYAN, at("F", "reads", 0) + 0.1);
+      chip(F, "READS", RCX, ROW.rep + 20, RW, CYAN, at("F", "reads", 0), 40, 60);
+      M.fit(F, { y: 230, h: 1010 });
+
+      // diagram: G
+      RM();
+      userIc(G, SHOW0("G")); ["cdn", "gw", "lb", "cache", "db"].forEach((k) => mkT(G, k, SHOW0("G")));
+      line(G, TC, 330, TC, ROW.cdn, GREY, 5, SHOW0("G")); wire(G, "cdn", "gw", SHOW0("G")); wire(G, "gw", "lb", SHOW0("G")); wire(G, "cache", "db", SHOW0("G"));
+      const gA3 = [0, 1, 2].map((i) => mkApp(G, i, SHOW0("G"))); [0, 1, 2].forEach((i) => { lbLine(G, i, SHOW0("G")); cacheLine(G, i, SHOW0("G")); });
+      const gSl4 = slotApp(G, 3, SHOW0("G"));
+      [0, 1].forEach((i) => T(G, 70 + i * 260, ROW.rep, 240, TH, "REPLICA", "db", GOOD, SHOW0("G")));
+      chip(G, "EXAMPLE", RCX, 255, 260, GREY, at("G", "EXAMPLE", 0), 38, 56);
+      chip(G, "10X", 160, 262, 150, CYAN, at("G", "10", 0), 36, 60);
+      dot(G, TC, 330, TC, ROW.cdn + 50, CYAN, at("G", "Images", 0), 0.3);
+      chip(G, "IMAGES", RCX, ROW.cdn, RW, CYAN, at("G", "Images", 0) + 0.1, 40, 60); dot(G, TC, ROW.cdn, TC, 330, GOOD, at("G", "CDN", 0) - 0.1, 0.35, true);
+      dot(G, TC, 330, TC, ROW.gw, HOT, at("G", "bot", 0), 0.5); dot(G, TC, ROW.gw, TC, 330, HOT, at("G", "429", 0) + 0.15, 0.45, true);
+      stamp(G, "BOT 429", RCX, ROW.gw, 300, HOT, at("G", "429", 0));
+      const gC3 = chip(G, "3 APPS", RCX, ROW.app, RW, CYAN, at("G", "3", 0), 40, 60); gone(gC3, at("G", "chautha", 0) - 0.4);
+      [0, 1, 2].forEach((i) => dot(G, TC, ROW.lb + TH, AX(i) + 56, ROW.app + 30, AMB, at("G", "bantin", 0) - 0.8 + i * 0.3, 0.4));
+      gone(gSl4, at("G", "jod", 0) - 0.6); mkApp(G, 3, at("G", "jod", 0) - 0.3); lbLine(G, 3, at("G", "jod", 0) - 0.2);
+      chip(G, "4 APPS", RCX, ROW.app, RW, CYAN, at("G", "chautha", 0), 40, 60);
+      chip(G, "90/100 HIT", RCX, ROW.cache, RW, GOOD, at("G", "90", 0), 40, 60);
+      [0, 1, 2].forEach((i) => dot(G, TC, ROW.cache, AX(i) + 56, ROW.app + TH, GOOD, at("G", "hit", 0) + i * 0.15, 0.4, true));
+      [0, 1].forEach((i) => dot(G, TC, ROW.cache + TH, TC, ROW.db + 30, AMB, at("G", "sirf", 0) + i * 0.3, 0.35));
+      chip(G, "10 TO DB", RCX, ROW.db, RW, AMB, at("G", "10", 1), 40, 60); meter(G, 620, ROW.db + 78, 380, 0.15, GOOD, at("G", "10", 1) + 0.2);
+      M.fit(G, { y: 230, h: 1010 });
+
+      // diagram: H
+      RM();
+      const HK = [["cdn", "CDN", "globe"], ["gw", "API GATEWAY", "shield"], ["lb", "LOAD BALANCER", "bolt"], ["app", "APP SERVERS", "gear"], ["cache", "CACHE", "bolt"], ["db", "DATABASE", "db"]];
+      const hT = {}; HK.forEach(([k, lab, icn]) => { hT[k] = T(H, 50, ROW[k], 360, TH, lab, icn, CYAN, SHOW0("H"), { size: 30, is: 38 }); });
+      for (let i = 0; i < 5; i++) line(H, 230, ROW[HK[i][0]] + TH, 230, ROW[HK[i + 1][0]], GREY, 5, SHOW0("H"));
+      const hB = {}; HK.forEach(([k], i) => { hB[k] = chip(H, "x1", 470, ROW[k] + 25, 100, HOT, at("H", "akela", 0) + i * 0.1, 40, 60); });
+      RING(H, 50, ROW.gw, 360, TH, HOT, at("H", "gateway", 0), at("H", "ban", 0)); RING(H, 50, ROW.lb, 360, TH, HOT, at("H", "balancer", 0), at("H", "ban", 0));
+      const hS = stamp(H, "NEW SPOF", 750, 262, 340, HOT, at("H", "single", 0));
+      const hX = ic(H, "cross", 380, ROW.gw - 24, 56, HOT); hX.show(at("H", "failure", 0));
+      ["lb", "app", "cache", "db"].forEach((k) => tl.to(hT[k], { opacity: 0.3, duration: 0.5, immediateRender: false }, at("H", "ban", 0)));
+      const tTw = at("H", "doosri", 0) - 0.1;
+      const hQ = [["gw", "API GATEWAY", "shield"], ["lb", "LOAD BALANCER", "bolt"]].map(([k, lab, icn], i) => { const s = SLOT(H, 560, ROW[k], 360, TH, at("H", "uski", 0) + i * 0.15); gone(s, tTw + i * 0.2 - 0.05); return T(H, 560, ROW[k], 360, TH, lab, icn, GOOD, tTw + i * 0.2, { size: 30, is: 38 }); });
+      gone(hS, tTw); hX.hide(tTw);
+      ["lb", "app", "cache", "db"].forEach((k) => tl.to(hT[k], { opacity: 1, duration: 0.5, immediateRender: false }, tTw + 0.3));
+      ["gw", "lb"].forEach((k, i) => { gone(hB[k], tTw - 0.2 + i * 0.1); chip(H, "x2", 470, ROW[k] + 25, 100, GOOD, tTw + 0.4 + i * 0.1, 40, 60); });
+      M.fit(H, { y: 230, h: 1010 });
+
+      // diagram: I
+      ident();
+      const ROWS = [["CDN", "globe", "FILE LOAD"], ["API GATEWAY", "shield", "LOGIN + LIMIT"], ["LOAD BALANCER", "bolt", "SERVER FULL"], ["APP SERVERS", "gear", "LOAD SWINGS"], ["CACHE", "bolt", "SAME QUERY"], ["DATABASE", "db", "ALL READS"]];
+      const tI = at("I", "har", 0) - 0.5;
+      ROWS.forEach(([lab, icn, ans], i) => { const y = 350 + i * 140, t0 = tI + i * 0.3;
+        T(I, 60, y, 440, 112, lab, icn, CYAN, t0, { size: 36, is: 44 }); chip(I, ans, 760, y + 26, 460, AMB, t0 + 0.1, 38, 60); });
+      chip(I, "WHAT FILLS?", 760, 262, 420, AMB, at("I", "bhar", 0) - 0.3, 38, 60); chip(I, "ALONE?", 280, 262, 300, AMB, at("I", "akela", 0) - 0.4, 38, 60);
+      const iR1 = el(I, `left:520px;top:335px;width:480px;height:830px;border-radius:20px;border:4px solid ${AMB};box-sizing:border-box`); tl.set(iR1, { opacity: 0 }, 0); tl.to(iR1, { opacity: 1, duration: 0.25, immediateRender: false }, at("I", "bhar", 0) - 0.3); tl.to(iR1, { opacity: 0, duration: 0.25, immediateRender: false }, at("I", "akela", 0) - 0.5);
+      const iR2 = el(I, `left:46px;top:335px;width:468px;height:830px;border-radius:20px;border:4px solid ${AMB};box-sizing:border-box`); tl.set(iR2, { opacity: 0 }, 0); tl.to(iR2, { opacity: 1, duration: 0.25, immediateRender: false }, at("I", "akela", 0) - 0.4);
+      M.fit(I);
+
+      // diagram: J
+      ident();
+      const JT = [["CDN", "globe"], ["API GATEWAY", "shield"], ["LOAD BALANCER", "bolt"], ["APP SERVERS", "gear"], ["CACHE", "bolt"], ["DATABASE", "db"]];
+      const jY = (i) => 330 + i * 108;
+      JT.forEach(([lab, icn], i) => { T(J, 170, jY(i), 700, 92, lab, icn, CYAN, SHOW0("J") + i * 0.06, { size: 40, is: 46 });
+        show(el(J, `left:${170 + 620}px;top:${jY(i) + 14}px;font:800 56px var(--code);color:${AMB}`, "?"), at("J", "hai", 0) + i * 0.06, { opacity: 0, y: 0 }); });
+      const jR = el(J, `left:163px;top:${jY(0) - 7}px;width:714px;height:106px;border-radius:26px;border:4px solid ${AMB};box-sizing:border-box`);
+      tl.set(jR, { opacity: 0 }, 0); tl.to(jR, { opacity: 1, duration: 0.2, immediateRender: false }, at("J", "tumhari", 0));
+      JT.forEach((_, i) => { if (i) tl.to(jR, { y: jY(i) - jY(0), duration: 0.15, ease: "power2.inOut", immediateRender: false }, at("J", "tumhari", 0) + i * 0.32); });
+      tl.to(jR, { opacity: 0, duration: 0.25, immediateRender: false }, at("J", "hai", 0) + 0.1);
+      show(el(J, `left:140px;width:800px;top:1010px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.5);font:500 38px var(--code);color:#A9B4CC;display:flex;align-items:center;padding:0 30px;box-sizing:border-box`, "Add a comment..."), at("J", "Comment", 0), { opacity: 0 });
+      const jF = chip(J, "+  FOLLOW", 540, 1115, 340, AMB, at("J", "follow", 0) - 0.4, 40, 64);
+      tl.fromTo(jF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("J", "follow", 0));
+      M.fit(J);
+
+      SC.slice(1).forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { dead: "hot", cache: "cyan", replica: "good", replicas: "good", cdn: "gold", balancer: "cyan", gateway: "cyan", database: "gold", hit: "good", miss: "hot", leader: "gold", bharta: "hot", bharti: "hot", akela: "hot", example: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

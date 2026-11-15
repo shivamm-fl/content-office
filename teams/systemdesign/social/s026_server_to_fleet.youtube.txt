@@ -1,0 +1,19 @@
+Ek server se fleet tak: ek request ka poora raasta, 6 stops mein
+
+Day 26/150: Ek request 6 stops se guzarti hai: CDN, API gateway (login check, rate limiting, 429 yaani bahut requests), load balancer (health check se dead server pool se bahar), stateless app servers (autoscaling load ke hisab se servers jodti aur ghatati hai), cache (hit ya miss) aur database (leader likhta hai, replicas reads sambhalti hain). Har stop isliye hai kyunki traffic badhne par ek cheez sabse pehle bhari. Catch: jo box akela hai, jaise ek gateway ya ek load balancer, wahi naya single point of failure ban sakta hai, isliye uski doosri copy chahiye. Sale night ke numbers invented example hain, kisi company ki history nahi.
+
+Comment karke batao: tumhari site mein kaun sa box akela hai?
+
+Sources:
+https://en.wikipedia.org/wiki/Single_point_of_failure
+https://en.wikipedia.org/wiki/Load_balancing_(computing)
+https://microservices.io/patterns/apigateway.html
+https://en.wikipedia.org/wiki/Autoscaling
+https://en.wikipedia.org/wiki/Content_delivery_network
+https://en.wikipedia.org/wiki/Stateless_protocol
+https://en.wikipedia.org/wiki/Cache_(computing)
+https://en.wikipedia.org/wiki/Database_replication
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/429
+
+Tags: single point of failure,system design scaling roadmap,load balancer cache cdn explained,how to scale a website,system design interview hindi
+AI-assisted visuals and narration.

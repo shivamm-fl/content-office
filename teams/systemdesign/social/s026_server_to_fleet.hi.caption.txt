@@ -1,0 +1,9 @@
+Day 26/150: 100 servers hain, par ek akela box poori site gira sakta hai.
+
+Ek request ka raasta 6 stops mein: CDN (images jaisi files user ke paas se), API gateway (login check aur rate limiting, zyada requests par 429), load balancer (health check se dead server pool se bahar), app servers (stateless, autoscaling se kam-zyada), cache (hit ya miss) aur database (leader likhta hai, replicas reads sambhalti hain). Har stop isliye hai kyunki traffic badhne par ek cheez sabse pehle bhari. Sale night ke numbers invented example hain, kisi company ke nahi.
+
+Catch: jo box akela hai, jaise ek gateway ya ek load balancer, wahi naya single point of failure ban sakta hai. Uski doosri copy chahiye.
+
+Comment karke batao: tumhari site mein kaun sa box akela hai?
+
+#SystemDesign #Scalability #Backend
