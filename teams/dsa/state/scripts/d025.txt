@@ -6,7 +6,7 @@ Given array: one, four, six, nine, thirteen, seventeen। Target nineteen।
 
 Two Sum वाला hash map यहाँ मना है, क्योंकि वह हर number store करता है। | एक हज़ार numbers पर 999{nine-hundred-ninety-nine} entries, यानी O of n space।
 
-तो हर number के लिए target minus number को उसके दाएँ हिस्से में binary search से ढूँढो। | Space O of one है, पर हर number पर log n probes लगते हैं, तो time O of n log n। | एक हज़ार numbers पर 7,987{seven-thousand-nine-hundred-eighty-seven} probes।
+तो हर number के लिए target minus number को उसके दाएँ हिस्से में binary search से ढूँढो। | Space O of one है, पर हर number पर log n probes लगते हैं, तो time O of n log n। | एक हज़ार numbers पर 8,977{eight-thousand-nine-hundred-seventy-seven} probes।
 
 पर array sorted है, तो हर number के लिए search करने की ज़रूरत ही नहीं। | दो pointers: l शुरू पर, r आख़िर पर, और दोनों का sum देखो। | Sum कम है तो l आगे, ज़्यादा है तो r पीछे। | Sorted होने की वजह से जो index हटता है, वह बाक़ी किसी pair में target नहीं बना सकता।
 
@@ -16,7 +16,7 @@ Code: l, r equals zero, len of numbers minus one। | While l less than r: s equ
 
 एक हज़ार numbers पर 999{nine-hundred-ninety-nine} steps से ज़्यादा नहीं लगते, तो time O of n है। | दो integers हैं, तो extra space O of one।
 
-Trap: l plus one, r plus one भूले तो answer two और four आएगा, जो गलत है। | और यह code unsorted array पर नहीं चलता: पाँच हज़ार random arrays में से 2,708{two-thousand-seven-hundred-eight} पर इसने real pair miss किया।
+Trap: l plus one, r plus one भूले तो answer two और four आएगा, जो गलत है। | और यह code unsorted array पर नहीं चलता: पाँच हज़ार random arrays में से 3,230{three-thousand-two-hundred-thirty} पर इसने real pair miss किया।
 
 Interview में बोलो: sorted है, तो दो pointers, sum कम हो तो l बढ़ाओ, ज़्यादा हो तो r घटाओ, O of n time और O of one space।
 
