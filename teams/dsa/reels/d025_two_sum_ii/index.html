@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Two Sum II</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="137" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+        <div class="beat" id="sK"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="137" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="137" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="137" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J","K"], tag: "DSA 025/150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const AMB = "#E9B44C", VIO = "#9A8CEB";
+      const $s = (k) => M.$("#s" + k);
+      const [A, B, C, D, E, F, G, H, I, J, K] = "ABCDEFGHIJK".split("").map($s);
+      const cp = (sc, i) => REEL.hi.caps.filter((c) => c.scene === sc)[i].s;
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size, ts) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, String(from)); const o = { v: from };
+        show(d, ts == null ? segs[0][0] - 0.3 : ts, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const tint = (d, t, col, fill) => tl.to(d, { borderColor: M.ca(col, .9), backgroundColor: M.ca(col, fill == null ? .28 : fill), duration: 0.3, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t);
+      const bigtxt = (host, css, txt, col, size, t) => show(lab(host, css, txt, col, size), t, { opacity: 0 });
+      const ghost = (host, x, y, w, h) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px dashed rgba(150,175,215,.35)`);
+      const chip = (host, x, y, w, h, txt, col, t, fs) => show(tile(host, x, y, w, h, txt, col, fs || 56), t, { opacity: 0, y: 18 });
+      const base = (sc, h) => { const p = panel(sc, 60, 230, 960, h || 1010, CYAN, null); show(p, ST[sc.id.slice(1)] + 0.05); return p; };
+      // a lit tile: dim from the start, lit on its word
+      const lt = (host, x, y, w, h, txt, col, fs, t, s0) => { const d = tile(host, x, y, w, h, txt, col, fs); dimIn(d, s0 + 0.1, 0.5); lit(d, t); return d; };
+
+      const CX = (i) => 24 + i * 92;
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      const code = (host, x, y, w, lines, fs, lh, s0) => {
+        const h = lines.length * lh + 36;
+        show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(8,13,26,.9);border:2px solid ${M.ca(CYAN, .35)}`), s0 + 0.1);
+        const Ls = lines.map((s, i) => show(el(host, `left:${x + 10}px;top:${y + 18 + i * lh}px;width:${w - 20}px;height:${lh}px;border-radius:8px;font:500 ${fs}px/${lh}px var(--code);color:#9FB0CC;white-space:pre;padding-left:12px;box-sizing:border-box`, esc(s)), s0 + 0.15, { opacity: 0 }));
+        const on = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: M.ca(ACC, .25), color: "#FFFFFF", duration: 0.3, immediateRender: false }, t); };
+        const off = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: "rgba(233,180,76,0)", color: "#9FB0CC", duration: 0.3, immediateRender: false }, t); };
+        return { on, off, h }; };
+      const seqTile = (host, x, y, w, h, col, fs, seq) => seq.map(([txt, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = seq[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[1]); return d; });
+
+      const GREY = "#B8C4DC", DIMC = "#5C6B88";
+      // swap: one tile slot whose text changes; items [txt, colour, time]
+      const swap = (host, x, y, w, h, fs, items) => items.map(([txt, col, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = items[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[2]); return d; });
+      // ring that moves between cells
+      const mkRing = (host, x, y, w, h, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:5px solid ${ACC};box-sizing:border-box`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); return d; };
+      const hop = (d, x, y, t, dur) => tl.to(d, { left: x, top: y, duration: dur || 0.35, ease: "power2.inOut", immediateRender: false }, t);
+      const bar = (host, x, y, w, hh, col, t, tOut) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${hh}px;border-radius:4px;background:${col}`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); if (tOut != null) tl.to(d, { opacity: 0, duration: 0.25, immediateRender: false }, tOut); return d; };
+      const W = (sc, w, n) => M.W(sc, w, n);
+      const TW = 140, TH = 120, VALS = ["1", "4", "6", "9", "13", "17"], SV = [1, 4, 6, 9, 13, 17];
+      const cxx = (i, x0) => x0 + i * 148;
+      const cells = (host, y, vals, x0, s0, litAt, col) => vals.map((v, i) => { const d = tile(host, cxx(i, x0), y, TW, TH, v, col || CYAN, 64);
+        if (litAt && litAt[i] != null) { dimIn(d, s0 + 0.1, 0.5); lit(d, litAt[i]); } else show(d, s0 + 0.1, { opacity: 0 }); return d; });
+      const idxs = (host, y, n, x0, s0) => [...Array(n)].map((_, i) => show(el(host, `left:${cxx(i, x0) + 35}px;top:${y + TH + 8}px;width:70px;height:46px;border-radius:10px;border:2px solid rgba(0,0,0,0);font:600 34px var(--code);color:#8592AD;display:flex;align-items:center;justify-content:center`, String(i)), s0 + 0.15, { opacity: 0 }));
+      const idxOn = (d, t) => tl.to(d, { color: GOOD, borderColor: M.ca(GOOD, .9), backgroundColor: M.ca(GOOD, .25), duration: 0.3, immediateRender: false }, t);
+      const TG = 60;
+      const tagX = (txt, i, x0) => cxx(i, x0) + (txt === "R" ? 72 : 8);
+      const tag = (host, txt, col, i, x0, y, t) => { const d = tile(host, tagX(txt, i, x0), y + TH + 60, TG, 62, txt, col, 40); show(d, t, { opacity: 0 }); return d; };
+      const tagHop = (d, txt, i, x0, y, t) => hop(d, tagX(txt, i, x0), y + TH + 60, t, 0.4);
+      const arcs = (host, y, x0, pairs, tIn) => { const H = 120;
+        const w = el(host, `left:0;top:${y - H - 10}px;width:960px;height:${H + 10}px`);
+        w.innerHTML = `<svg width="960" height="${H + 10}" viewBox="0 0 960 ${H + 10}" style="overflow:visible">` + pairs.map(([a, b]) => { const x1 = cxx(a, x0) + 70, x2 = cxx(b, x0) + 70, h = 36 + 20 * (b - a);
+          return `<path d="M${x1} ${H + 8} C${x1} ${H + 8 - h} ${x2} ${H + 8 - h} ${x2} ${H + 8}" fill="none" stroke="${AMB}" stroke-width="6" stroke-linecap="round"/>`; }).join("") + "</svg>";
+        tl.set(w, { opacity: 0 }, 0); tl.to(w, { opacity: 1, duration: 0.4, immediateRender: false }, tIn);
+        const ps = [...w.querySelectorAll("path")];
+        return { tint: (t, c) => tl.to(ps, { stroke: c, duration: 0.3, immediateRender: false }, t), hide: (t) => tl.to(w, { opacity: 0, duration: 0.3, immediateRender: false }, t) }; };
+      // sum cards: steps [sumText, verdictText, colour, tSum, tVerdict]
+      const stepUI = (host, y, steps, tTarget, s0) => {
+        const sums = swap(host, 40, y, 560, 110, 54, steps.map(([s, , , t]) => [s, CYAN, t]));
+        steps.forEach(([, , c, , tv], k) => tint(sums[k], tv, c, 0.18));
+        steps.forEach(([, v, c, , tv], k) => { const d = tile(host, 40, y + 130, 880, 100, v, c, 52); show(d, tv, { opacity: 0 }); if (steps[k + 1]) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, steps[k + 1][3]); });
+        lt(host, 620, y, 300, 110, "TARGET 19", ACC, 44, tTarget, s0); };
+
+      // 1-based position labels under a row of cells
+      const idx1 = (host, y, n, x0, s0) => [...Array(n)].map((_, i) => show(el(host, `left:${cxx(i, x0) + 35}px;top:${y + TH + 8}px;width:70px;height:46px;border-radius:10px;border:2px solid rgba(0,0,0,0);font:600 34px var(--code);color:#8592AD;display:flex;align-items:center;justify-content:center`, String(i + 1)), s0 + 0.15, { opacity: 0 }));
+      const c = (sc, i) => cp(sc, i);
+
+      // diagram: A
+      // ===== A: hook, the sorted row with positions from frame 0, the hash map is out
+      M.hook(["TWO SUM II:", "O(1) SPACE?"], { size: 96, top: 250 });
+      const pa = panel(A, 60, 500, 960, 760, CYAN, null); show(pa, 0.02);
+      cells(pa, 60, VALS, 40, 0, null); idx1(pa, 60, 6, 40, 0);
+      ghost(pa, 40, 300, 880, 130);
+      chip(pa, 40, 300, 880, 130, "NO HASH MAP", HOT, c("A", 3) - 0.1, 62);
+      chip(pa, 40, 470, 880, 130, "O(1) SPACE", GOOD, c("A", 8) - 0.1, 62);
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B
+      // ===== B: the problem, the given row, positions from 1, the space rule
+      const sB = ST.B; const pb = base(B, 1000);
+      M.pill(pb, "EXAMPLE", sB + 0.1, { x: 20, y: 14, size: 34 });
+      const litB = { 0: c("B", 39), 1: c("B", 40), 2: c("B", 41), 3: c("B", 42), 4: c("B", 43), 5: c("B", 44) };
+      const cB = cells(pb, 80, VALS, 40, sB, litB);
+      const ixB = idx1(pb, 80, 6, 40, sB);
+      ixB.forEach((d) => tl.to(d, { color: GOOD, duration: 0.3, immediateRender: false }, c("B", 24)));
+      lt(pb, 40, 300, 880, 90, "? + ? = TARGET", ACC, 52, c("B", 11), sB);
+      lt(pb, 40, 410, 880, 90, "POSITIONS", CYAN, 52, c("B", 18), sB);
+      lt(pb, 40, 520, 880, 90, "COUNT FROM 1", GOOD, 52, c("B", 24), sB);
+      lt(pb, 40, 630, 880, 90, "EXTRA SPACE O(1)", HOT, 52, c("B", 34), sB);
+      lt(pb, 40, 760, 880, 100, "TARGET 19", ACC, 60, c("B", 46), sB);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C
+      // ===== C: the hash map of Two Sum fills with n entries, and is not allowed
+      const sC = ST.C; const pc = base(C, 1010);
+      cells(pc, 30, VALS, 40, sC, null);
+      lt(pc, 40, 190, 520, 90, "NOT ALLOWED", HOT, 52, c("C", 6), sC);
+      lt(pc, 580, 190, 340, 90, "n = 1000", CYAN, 48, c("C", 16), sC);
+      panel(pc, 40, 300, 880, 380, CYAN, "HASH MAP");
+      const eC = ["1 → 1", "4 → 2", "6 → 3", "9 → 4", "13 → 5", "17 → 6"];
+      eC.forEach((t, k) => { const x = 70 + (k % 3) * 280, y = 370 + Math.floor(k / 3) * 120; show(ghost(pc, x, y, 250, 100), sC + 0.1, { opacity: 0 }); chip(pc, x, y, 250, 100, t, CYAN, c("C", 10) + k * 0.22, 44); });
+      counter(pc, "left:40px;width:420px;top:700px", 0, [[c("C", 19), c("C", 19) + 1.4, 999]], HOT, 130, c("C", 19) - 0.2);
+      lt(pc, 480, 715, 440, 100, "ENTRIES", GREY, 56, c("C", 20), sC);
+      lt(pc, 40, 860, 880, 110, "O(n) SPACE", HOT, 62, c("C", 22), sC);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D
+      // ===== D: binary search per element, halving ladder times n rows
+      const sD = ST.D; const pd = base(D, 1060);
+      const cD = cells(pd, 30, VALS, 40, sD, null); idx1(pd, 30, 6, 40, sD);
+      tint(cD[0], c("D", 1), AMB, 0.3);
+      show(tile(pd, cxx(0, 40) + 8, 30 + TH + 60, 60, 62, "i", AMB, 40), c("D", 1), { opacity: 0 });
+      lt(pd, 40, 290, 880, 90, "NEED = 19 − 1 = 18", ACC, 46, c("D", 7), sD);
+      [1, 2, 3, 4, 5].forEach((i) => tint(cD[i], c("D", 10), VIO, 0.2));
+      [["5 LEFT", 880], ["2 LEFT", 440], ["1 LEFT", 220]].forEach(([t, w], k) => chip(pd, 40, 400 + k * 56, w, 50, t, VIO, c("D", 13) + k * 0.35, 36));
+      [0, 1, 2, 3, 4].forEach((k) => [[40, 280], [340, 140], [500, 70]].forEach(([x, w]) => bar(pd, x, 595 + k * 38, w, 28, M.ca(VIO, .6), c("D", 24) + k * 0.2)));
+      lt(pd, 40, 800, 430, 100, "O(1) SPACE", GOOD, 46, c("D", 17), sD);
+      lt(pd, 490, 800, 430, 100, "O(n log n)", HOT, 52, c("D", 33), sD);
+      counter(pd, "left:40px;width:520px;top:905px", 0, [[c("D", 42), c("D", 42) + 1.5, 8977]], HOT, 110, c("D", 42) - 0.2);
+      lt(pd, 580, 925, 340, 100, "PROBES", GREY, 56, c("D", 43), sD);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E
+      // ===== E: sorted row, L and R at the ends, sum rule, one index leaves per step
+      const sE = ST.E; const pe = base(E, 1060); const EY = 190;
+      const cE = cells(pe, EY, VALS, 40, sE, null); idx1(pe, EY, 6, 40, sE);
+      SV.forEach((v, i) => bar(pe, cxx(i, 40) + 20, 640 - v * 9, 100, v * 9, M.ca(CYAN, .55), c("E", 2) + i * 0.12));
+      lt(pe, 40, 20, 880, 80, "SORTED", CYAN, 50, c("E", 2), sE);
+      const arE = arcs(pe, EY, 40, [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5]], c("E", 39));
+      arE.tint(c("E", 54), HOT); arE.hide(c("E", 56) + 0.3);
+      const tLE = tag(pe, "L", AMB, 0, 40, EY, c("E", 17)), tRE = tag(pe, "R", VIO, 5, 40, EY, c("E", 20));
+      lt(pe, 40, 665, 880, 80, "SUM = L + R", ACC, 52, c("E", 26), sE);
+      lt(pe, 40, 760, 880, 85, "< TARGET: L →", AMB, 50, c("E", 29), sE);
+      lt(pe, 40, 855, 880, 85, "> TARGET: ← R", HOT, 50, c("E", 34), sE);
+      lt(pe, 40, 950, 880, 85, "1 INDEX / STEP", GOOD, 50, c("E", 45), sE);
+      tagHop(tLE, "L", 1, 40, EY, c("E", 46)); dim(cE[0], c("E", 46), 0.18);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F
+      // ===== F: dry run, four steps, then positions from 1
+      const sF = ST.F; const pf = base(F, 900); const FY = 190;
+      const litF = { 0: c("F", 2), 5: c("F", 4), 1: c("F", 9), 4: c("F", 19), 2: c("F", 24), 3: c("F", 0) };
+      const cF = cells(pf, FY, VALS, 40, sF, litF);
+      const ixF = idx1(pf, FY, 6, 40, sF);
+      const tLF = tag(pf, "L", AMB, 0, 40, FY, sF + 0.1), tRF = tag(pf, "R", VIO, 5, 40, FY, sF + 0.1);
+      stepUI(pf, 470, [
+        ["1 + 17 = 18", "TOO SMALL", AMB, c("F", 5), c("F", 6)],
+        ["4 + 17 = 21", "TOO BIG", HOT, c("F", 12), c("F", 14)],
+        ["4 + 13 = 17", "TOO SMALL", AMB, c("F", 20), c("F", 21)],
+        ["6 + 13 = 19", "FOUND", GOOD, c("F", 27), c("F", 28)]], c("F", 0) + 0.2, sF);
+      tagHop(tLF, "L", 1, 40, FY, c("F", 7)); dim(cF[0], c("F", 8), 0.18);
+      tagHop(tRF, "R", 4, 40, FY, c("F", 15)); dim(cF[5], c("F", 16), 0.18);
+      tagHop(tLF, "L", 2, 40, FY, c("F", 22)); dim(cF[1], c("F", 23), 0.18);
+      [2, 4].forEach((i) => tint(cF[i], c("F", 28), GOOD, 0.3));
+      idxOn(ixF[2], c("F", 41)); idxOn(ixF[4], c("F", 43));
+      swap(pf, 40, 745, 880, 100, 52, [["0-BASED: 2, 4", HOT, c("F", 31)], ["ANSWER [3, 5]", GOOD, c("F", 41)]]);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G
+      // ===== G: the code, the active line lit as it is spoken
+      const sG = ST.G; const pg = base(G, 1090);
+      const cG = cells(pg, 40, VALS, 40, sG, null);
+      const tLG = tag(pg, "L", AMB, 0, 40, 40, c("G", 1)), tRG = tag(pg, "R", VIO, 5, 40, 40, c("G", 3));
+      tagHop(tLG, "L", 2, 40, 40, c("G", 29)); tagHop(tRG, "R", 4, 40, 40, c("G", 29));
+      lt(pg, 40, 295, 420, 100, "s = 19", CYAN, 56, c("G", 15), sG);
+      lt(pg, 500, 295, 420, 100, "[3, 5]", GOOD, 56, c("G", 29), sG);
+      const cdG = code(pg, 10, 420, 940, ["def two_sum(numbers, target):", "    l, r = 0, len(numbers) - 1", "    while l < r:", "        s = numbers[l] + numbers[r]", "        if s == target:", "            return [l + 1, r + 1]", "        if s < target:", "            l += 1", "        else:", "            r -= 1"], 36, 54, sG);
+      cdG.on(0, 0, c("G", 0)); cdG.off(0, 0, c("G", 1)); cdG.on(1, 1, c("G", 1));
+      cdG.off(1, 1, c("G", 10)); cdG.on(2, 2, c("G", 10)); cdG.off(2, 2, c("G", 15)); cdG.on(3, 3, c("G", 15));
+      cdG.off(3, 3, c("G", 24)); cdG.on(4, 4, c("G", 24)); cdG.off(4, 4, c("G", 29)); cdG.on(5, 5, c("G", 29));
+      cdG.off(5, 5, c("G", 36)); cdG.on(6, 6, c("G", 36)); cdG.off(6, 6, c("G", 41)); cdG.on(7, 7, c("G", 41));
+      cdG.off(7, 7, c("G", 46)); cdG.on(8, 9, c("G", 46));
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H
+      // ===== H: two fills close in, 999 steps, time O(n), space O(1)
+      const sH = ST.H; const ph = base(H, 1000);
+      lt(ph, 40, 40, 880, 90, "n = 1000", CYAN, 50, c("H", 1), sH);
+      show(el(ph, "left:40px;top:160px;width:880px;height:56px;border-radius:12px;border:2px solid rgba(150,175,215,.4)"), sH + 0.1, { opacity: 0 });
+      const fL = bar(ph, 40, 164, 0, 48, M.ca(AMB, .7), sH + 0.2), fR = bar(ph, 920, 164, 0, 48, M.ca(VIO, .7), sH + 0.2);
+      tl.to(fL, { width: 440, duration: 3.2, ease: "none", immediateRender: false }, c("H", 4));
+      tl.to(fR, { left: 480, width: 440, duration: 3.2, ease: "none", immediateRender: false }, c("H", 4));
+      counter(ph, "left:40px;width:880px;top:250px", 0, [[c("H", 4), c("H", 4) + 3.2, 999]], GOOD, 130, c("H", 4) - 0.2);
+      lt(ph, 40, 420, 880, 80, "STEPS", GREY, 46, c("H", 5), sH);
+      lt(ph, 40, 540, 880, 110, "TIME O(n)", ACC, 62, c("H", 12), sH);
+      [["l", AMB], ["r", VIO], ["s", CYAN]].forEach(([t, col], n) => lt(ph, 190 + n * 220, 690, 140, 120, t, col, 72, c("H", 17) + n * 0.15, sH));
+      lt(ph, 40, 850, 880, 110, "SPACE O(1)", GOOD, 62, c("H", 22), sH);
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I
+      // ===== I: trap one, forgot +1; trap two, an unsorted row
+      const sI = ST.I; const pI = base(I, 1060);
+      cells(pI, 20, VALS, 40, sI, null); const ixI = idx1(pI, 20, 6, 40, sI);
+      swap(pI, 40, 215, 880, 100, 50, [["+1 → [3, 5]", GOOD, c("I", 1)], ["NO +1 → [2, 4]", HOT, c("I", 7)], ["WRONG: [2, 4]", HOT, c("I", 14)]]);
+      lt(pI, 40, 360, 880, 66, "UNSORTED", HOT, 46, c("I", 20), sI);
+      const litI = { 0: c("I", 20), 1: c("I", 20) + 0.2, 2: c("I", 20) + 0.4, 3: c("I", 20) + 0.6 };
+      const cI = cells(pI, 440, ["5", "1", "4", "9"], 188, sI, litI);
+      const tLI = tag(pI, "L", AMB, 0, 188, 440, c("I", 24)), tRI = tag(pI, "R", VIO, 3, 188, 440, c("I", 24));
+      tagHop(tRI, "R", 2, 188, 440, c("I", 25)); tagHop(tLI, "L", 1, 188, 440, c("I", 26)); tagHop(tLI, "L", 2, 188, 440, c("I", 27));
+      chip(pI, 40, 705, 420, 90, "NONE", HOT, c("I", 23), 54);
+      [1, 3].forEach((i) => tint(cI[i], c("I", 34), GOOD, 0.3)); chip(pI, 480, 705, 440, 90, "1 + 9 = 10", GOOD, c("I", 34), 46);
+      counter(pI, "left:40px;width:520px;top:815px", 0, [[c("I", 31), c("I", 31) + 1.0, 3230]], HOT, 110, c("I", 31) - 0.2);
+      lt(pI, 580, 835, 340, 100, "OF 5,000", GREY, 50, c("I", 26), sI);
+      M.fit(I, { y: 200, h: 1100 });
+
+      // diagram: J
+      // ===== J: the interview line, lit as spoken
+      const sJ = ST.J; const pj = base(J, 1060); const JY = 30;
+      cells(pj, JY, VALS, 40, sJ, null); const tLJ = tag(pj, "L", AMB, 0, 40, JY, sJ + 0.1), tRJ = tag(pj, "R", VIO, 5, 40, JY, sJ + 0.1);
+      tagHop(tLJ, "L", 1, 40, JY, c("J", 12)); tagHop(tRJ, "R", 4, 40, JY, c("J", 17));
+      [["SORTED → 2 POINTERS", CYAN, c("J", 6)], ["SMALL SUM: L →", AMB, c("J", 9)], ["BIG SUM: ← R", HOT, c("J", 14)], ["TIME O(n)", ACC, c("J", 22)], ["SPACE O(1)", GOOD, c("J", 26)]]
+        .forEach(([t, col, tt], k) => lt(pj, 40, 300 + k * 145, 880, 115, t, col, 52, tt, sJ));
+      M.fit(J, { y: 200, h: 1100 });
+
+      // diagram: K
+      // ===== K: comment question and follow
+      const sK = ST.K; const pk = base(K, 1000); const KX = 262;
+      cells(pk, 40, ["2", "3", "4"], KX, sK, { 0: c("K", 3), 1: c("K", 4), 2: c("K", 5) }); idx1(pk, 40, 3, KX, sK);
+      lt(pk, 230, 250, 500, 90, "TARGET 6", ACC, 52, c("K", 7), sK);
+      swap(pk, 40, 380, 880, 140, 70, [["RESULT = ?", ACC, c("K", 10)]]);
+      const kCb = el(pk, "left:24px;top:600px;width:916px;height:110px;border-radius:55px;border:2px solid rgba(150,175,215,.4);font:500 46px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 40px", "Add a comment..."); show(kCb, c("K", 0), { opacity: 0 });
+      const kFb = M.pill(pk, "+  FOLLOW", c("K", 22) - 0.4, { x: 190, y: 790, w: 580, kind: "acc", size: 72 });
+      tl.fromTo(kFb, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, c("K", 22));
+      M.fit(K, { y: 200, h: 1100 });
+
+      "BCDEFGHIJK".split("").forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { Sum: "gold", extra: "hot", space: "gold", hash: "hot", mana: "hot", binary: "cyan", pointers: "cyan", sorted: "gold", kam: "good", zyada: "hot", Code: "gold", Trap: "hot", galat: "hot", unsorted: "hot", miss: "hot", Interview: "gold", Comment: "gold", follow: "gold", "999": "good", "8,977": "hot", "3,230": "hot" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

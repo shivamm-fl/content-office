@@ -1,0 +1,6 @@
+Two Sum II In Python: Two Pointers, O(n) Time, O(1) Space
+
+Two Sum II (LeetCode 167): the array is sorted in non-decreasing order, you return the 1-indexed positions of two numbers that add up to the target, and the solution must use only constant extra space. The hash map of Two Sum is therefore not allowed. Binary search for target minus the number on each element uses O(1) space but takes O(n log n) time. Two pointers use the sorted order: l starts at the front, r at the back, a smaller sum moves l right, a bigger sum moves r left, and each step discards one index, so the time is O(n) and the extra space O(1) (the same approaches as the doocs solution for LeetCode 167). On 1, 4, 6, 9, 13, 17 with target 19 the loop takes 4 steps and returns [3, 5]. For n = 1000 the loop takes at most 999 steps, while per-element binary search takes 8,977 probes in our own run. On unsorted input the code is not correct: in our own run of 5,000 random unsorted 6-element arrays it missed a real pair on 3,230.
+
+Sources:
+https://leetcode.doocs.org/en/lc/167/

@@ -329,34 +329,17 @@
       "spoken_hook": "Two Sum II: extra space के बिना pair कैसे ढूँढें?",
       "hook_formula": "plain_problem_question",
       "hook_source": "direct_question; the problem's own constant-extra-space rule (doocs 0167) makes the hash map of Two Sum illegal; counts in qa/d025/run.py.",
-      "hook_10s": "Two Sum II: extra space के बिना pair कैसे ढूँढें? | Array sorted है, और दो numbers चाहिए जिनका sum target हो, indices एक से गिनकर लौटाने हैं। | Hash map यहाँ मना है। [frame 0: sorted row of six cells with a crossed-out hash-map box beside it]",
-      "hook_candidates": [
-        {
-          "hook": "Two Sum II: extra space के बिना pair कैसे ढूँढें?",
-          "formula": "plain_problem_question"
-        },
-        {
-          "hook": "Two Sum में hash map चला, Two Sum II में मना क्यों?",
-          "formula": "contrast_with_known_problem"
-        },
-        {
-          "hook": "Sorted array का फ़ायदा: hash map छोड़ो, O(1) space में pair।",
-          "formula": "payoff_statement"
-        }
-      ],
       "one_idea": "Two Sum II: the array is sorted and the answer is 1-indexed with constant extra space, so the hash map of unsorted Two Sum is not allowed; binary search for the complement per element costs O(n log n) time, and two pointers from both ends use sortedness to discard one index per step: O(n) time, O(1) extra space.",
       "visual_idea": "Sorted row of six cells (1,4,6,9,13,17) with index labels 1..6 under them. Scene 1: a hash-map box fills with n entries, then gets crossed out (space rule). Scene 2: for one cell, a halving highlight narrows the right part to find target minus the value, repeated for each cell, as a stack of n halving bars. Scene 3: L and R tags light two cells, show sum vs 19, hop inward and grey the discarded cell, ending on cells 3 and 5 with the answer [3, 5] and a small note that index counting starts at 1.",
       "everyday_anchor": "none: audience is working engineers, technical register, no everyday analogy (owner 2026-10-26)",
-      "example": "EXAMPLE numbers=[1,4,6,9,13,17], target 19: (1,17)=18 too small, l moves; (4,17)=21 too big, r moves; (4,13)=17 too small, l moves; (6,13)=19 found at positions 3 and 5, answer [3, 5] (1-indexed, 4 steps). Binary search per element needs 6 probes and a hash map stores 4 entries on this example.",
-      "code_outline": "def two_sum(numbers, target): l, r = 0, len(numbers)-1; while l < r: s = numbers[l]+numbers[r]; if s == target: return [l+1, r+1]; if s < target: l += 1 else: r -= 1. Binary-search variant: for i, bisect the right part for target - numbers[i]. Run in qa/d025/run.py.",
+      "example": "EXAMPLE numbers=[1,4,6,9,13,17], target 19: (1,17)=18 too small, l moves; (4,17)=21 too big, r moves; (4,13)=17 too small, l moves; (6,13)=19 found at positions 3 and 5, answer [3, 5] (1-indexed, 4 steps).",
+      "code_outline": "def two_sum(numbers, target): l, r = 0, len(numbers)-1; while l < r: s = numbers[l]+numbers[r]; if s == target: return [l+1, r+1]; if s < target: l += 1 else: r -= 1. Run in qa/d025/run.py.",
       "sources": [
         "https://leetcode.doocs.org/en/lc/167/"
       ],
       "facts_to_verify": [
-        "doocs LC 167 (fetched this session): input is 1-indexed and sorted non-decreasing, exactly one solution, constant extra space; binary search O(n log n) time and O(1) space; two pointers O(n) time and O(1) space.",
-        "qa/d025/run.py: returns [3, 5] on [1,4,6,9,13,17] target 19 in 4 steps; two pointers and binary search valid on 5000 random sorted arrays; for n=1000 (EXAMPLE) 499,500 pairs, 999 two-pointer steps, 7,987 binary-search probes, 999 hash-map entries; same code on unsorted input misses a real pair on 2708 of 5000 (the d023 point, one line only here).",
-        "Hash map O(n) extra space and the sorted-input proof of why a pointer can be discarded are our own derivation, labelled so; d023 shows the same pair-sum demo, so this reel must not repeat its walkthrough.",
-        "Say the return is 1-indexed: the code returns [l + 1, r + 1]."
+        "doocs LC 167: sorted non-decreasing, 1-indexed, constant extra space; binary search O(n log n)/O(1); two pointers O(n)/O(1).",
+        "qa/d025/run.py: [3,5] in 4 steps; n=1000 EXAMPLE (values 1..1000, no pair): 999 steps, 8,977 binary-search probes, 999 hash-map entries; 5000 random unsorted 6-element arrays with a planted pair: the code returns None on 3,230."
       ],
       "length_target_s": 120,
       "cover_headline": "Two Sum II: O(1) Space On Sorted Input",
@@ -364,7 +347,6 @@
       "keywords": [
         "two sum ii",
         "leetcode 167",
-        "two sum ii input array is sorted",
         "two sum 2 python",
         "binary search vs two pointers",
         "DSA hinglish"

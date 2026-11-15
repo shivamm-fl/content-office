@@ -1,0 +1,7 @@
+Day 25/150: Two Sum II: sorted array mein extra space ke bina pair kaise dhoondhein
+
+Two Sum II mein array sorted hai, answer 1-indexed chahiye aur extra space constant (O(1)) rehni chahiye. Two Sum wala hash map yahan allowed nahi, kyunki wo n entries store karta hai. Har number ke liye binary search O(1) space deta hai, par time O(n log n). Sorted hone ka fayda lo: do pointers, l shuru par, r aakhir par. Sum kam ho to l aage, zyada ho to r peeche, har step ek index hamesha ke liye hat jaata hai. Time O(n), extra space O(1). Return l+1, r+1 yaad rakho. Ye code unsorted array par kaam nahi karta. Actual Python code video mein hai (code chalaya).
+
+Ab tumhara turn: array 2, 3, 4 aur target 6 par answer kya aayega? Comment mein likho.
+
+#dsa #twopointers #interviewprep
