@@ -1,19 +1,19 @@
-A: [warm, conversational] 100{one-hundred} servers, पर एक अकेला box site गिरा सकता है।
+[warm, conversational] 100{one-hundred} servers, पर एक अकेला box site गिरा सकता है।
 
-B: ये single point of failure है, यानी वो हिस्सा जिसके गिरने से पूरा system रुक जाए। इसी से बचने के लिए fleet बनती है, यानी servers की टोली। एक request का रास्ता देखते हैं, और हर box पर पूछते हैं: ये यहाँ क्यों है?
+ये single point of failure है, यानी वो हिस्सा जिसके गिरने से पूरा system रुक जाए। इसी से बचने के लिए fleet बनती है, यानी servers की टोली। एक request का रास्ता देखते हैं, और हर box पर पूछते हैं: ये यहाँ क्यों है?
 
-C: [curious] नियम एक ही है। Traffic बढ़ता है, तो कोई एक चीज़ सबसे पहले भरती है, और उसी के लिए एक box जुड़ता है। रास्ता 6{six} stops का है।
+[curious] नियम एक ही है। Traffic बढ़ता है, तो कोई एक चीज़ सबसे पहले भरती है, और उसी के लिए एक box जुड़ता है। रास्ता 6{six} stops का है।
 
-D: पहला stop, CDN, यानी दुनिया भर में फैले servers, जो images जैसी files user के पास से दे देते हैं। यहाँ भरता था: हर file का बोझ। दूसरा stop, API gateway, यानी सारे clients का एक single entry point। यहाँ login जाँचा जाता है, और rate limiting लगती है: जो ज़्यादा requests भेजे, उसे 429{four-twenty-nine} मिलता है, यानी बहुत requests हो गईं।
+पहला stop, CDN, यानी दुनिया भर में फैले servers, जो images जैसी files user के पास से दे देते हैं। यहाँ भरता था: हर file का बोझ। दूसरा stop, API gateway, यानी सारे clients का एक single entry point। यहाँ login जाँचा जाता है, और rate limiting लगती है: जो ज़्यादा requests भेजे, उसे 429{four-twenty-nine} मिलता है, यानी बहुत requests हो गईं।
 
-E: तीसरा stop, load balancer, जो हर request एक free server को भेजता है। यहाँ भरता था: एक server की capacity। Health check से dead server pool से बाहर हो जाता है। चौथा stop, app servers का group। ये stateless हैं, यानी कोई server user को याद नहीं रखता, cart जैसी चीज़ें shared store में रहती हैं। और autoscaling load के हिसाब से servers जोड़ती और घटाती है।
+तीसरा stop, load balancer, जो हर request एक free server को भेजता है। यहाँ भरता था: एक server की capacity। Health check से dead server pool से बाहर हो जाता है। चौथा stop, app servers का group। ये stateless हैं, यानी कोई server user को याद नहीं रखता, cart जैसी चीज़ें shared store में रहती हैं। और autoscaling load के हिसाब से servers जोड़ती और घटाती है।
 
-F: [thoughtful] पाँचवाँ stop, cache, यानी हाल का जवाब पास में रखा हुआ। जवाब मिला तो hit, नहीं मिला तो miss। यहाँ भरता था: database पर वही सवाल बार बार। छठा stop, database: leader लिखता है, और उसकी copies, यानी replicas, ज़्यादातर reads सँभालती हैं।
+[thoughtful] पाँचवाँ stop, cache, यानी हाल का जवाब पास में रखा हुआ। जवाब मिला तो hit, नहीं मिला तो miss। यहाँ भरता था: database पर वही सवाल बार बार। छठा stop, database: leader लिखता है, और उसकी copies, यानी replicas, ज़्यादातर reads सँभालती हैं।
 
-G: अब एक example। EXAMPLE,ये numbers मैंने मान लिए हैं। Sale की रात traffic 10{दस} गुना हुआ। Images CDN से गईं, एक bot को 429{four-twenty-nine} मिला, बाकी requests 3{three} servers में बँटीं, और autoscaling ने चौथा जोड़ दिया। 100{सौ} में से 90{ninety} requests cache hit, तो database तक सिर्फ 10{ten} पहुँचीं।
+अब एक example। EXAMPLE, ये numbers मैंने मान लिए हैं। Sale की रात traffic 10{दस} गुना हुआ। Images CDN से गईं, एक bot को 429{four-twenty-nine} मिला, बाकी requests 3{three} servers में बँटीं, और autoscaling ने चौथा जोड़ दिया। 100{सौ} में से 90{ninety} requests cache hit, तो database तक सिर्फ 10{ten} पहुँचीं।
 
-H: [thoughtful] अब catch। हर box एक और moving part है, और अगर कोई box अकेला है, जैसे एक gateway या एक load balancer, तो वही नया single point of failure बन सकता है। इसलिए उसकी भी दूसरी copy चाहिए।
+[thoughtful] अब catch। हर box एक और moving part है, और अगर कोई box अकेला है, जैसे एक gateway या एक load balancer, तो वही नया single point of failure बन सकता है। इसलिए उसकी भी दूसरी copy चाहिए।
 
-I: याद रखो: हर box एक सवाल का जवाब है, क्या भर रहा है, और क्या अकेला है।
+याद रखो: हर box एक सवाल का जवाब है, क्या भर रहा है, और क्या अकेला है।
 
-J: तुम्हारी site में कौन सा box अकेला है? Comment में लिखो। ऐसे और system design concepts के लिए follow करो।
+तुम्हारी site में कौन सा box अकेला है? Comment में लिखो। ऐसे और system design concepts के लिए follow करो।
