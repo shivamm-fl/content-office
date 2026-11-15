@@ -1,0 +1,23 @@
+Two Sum II: extra space के बिना pair कैसे ढूँढें?
+
+Problem: sorted array और target दिया है। | दो numbers ढूँढो जिनका sum target के बराबर हो, और उनके positions लौटाओ, एक से गिनकर, यानी one-indexed। | शर्त यह है कि extra space constant रहे, यानी O of one।
+
+Given array: one, four, six, nine, thirteen, seventeen। Target nineteen।
+
+Two Sum वाला hash map यहाँ मना है, क्योंकि वह हर number store करता है। | एक हज़ार numbers पर 999{nine-hundred-ninety-nine} entries, यानी O of n space।
+
+तो हर number के लिए target minus number को उसके दाएँ हिस्से में binary search से ढूँढो। | Space O of one है, पर हर number पर log n probes लगते हैं, तो time O of n log n। | एक हज़ार numbers पर 7,987{seven-thousand-nine-hundred-eighty-seven} probes।
+
+पर array sorted है, तो हर number के लिए search करने की ज़रूरत ही नहीं। | दो pointers: l शुरू पर, r आख़िर पर, और दोनों का sum देखो। | Sum कम है तो l आगे, ज़्यादा है तो r पीछे। | Sorted होने की वजह से जो index हटता है, वह बाक़ी किसी pair में target नहीं बना सकता।
+
+Dry run। | One और seventeen: eighteen, कम, l आगे। | Four और seventeen: twenty one, ज़्यादा, r पीछे। | Four और thirteen: seventeen, कम, l आगे। | Six और thirteen: nineteen, मिल गया। | Indices two और four हैं, पर answer एक से गिनकर होगा: three और five।
+
+Code: l, r equals zero, len of numbers minus one। | While l less than r: s equals numbers of l plus numbers of r। | अगर s equals target, तो return l plus one, r plus one। | अगर s less than target, तो l plus equals one, वरना r minus equals one।
+
+एक हज़ार numbers पर 999{nine-hundred-ninety-nine} steps से ज़्यादा नहीं लगते, तो time O of n है। | दो integers हैं, तो extra space O of one।
+
+Trap: l plus one, r plus one भूले तो answer two और four आएगा, जो गलत है। | और यह code unsorted array पर नहीं चलता: पाँच हज़ार random arrays में से 2,708{two-thousand-seven-hundred-eight} पर इसने real pair miss किया।
+
+Interview में बोलो: sorted है, तो दो pointers, sum कम हो तो l बढ़ाओ, ज़्यादा हो तो r घटाओ, O of n time और O of one space।
+
+Comment करो: array two, three, four, target six पर answer क्या आएगा? | Code और dry run के साथ DSA सीखने के लिए follow करो।
