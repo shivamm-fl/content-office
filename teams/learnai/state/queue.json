@@ -2606,11 +2606,9 @@
       "trap": "Exposing everything as a tool instead of choosing between tools (actions), resources (data) and prompts (templates).",
       "hook_type": "interviewer_asked",
       "spoken_hook": "Interviewer ने पूछा: अपना MCP server बनाओगे तो tools, resources या prompts expose करोगे?",
-      "hook_formula": "interviewer_asked (one complete self-contained question; the coordinator's example of 2026-11-16 given the required 'Interviewer ने पूछा:' opener)",
-      "hook_source": "state/growth_notes.md 2026-11-12 (best recent reels open on the exact interview question); 2026-11-16 growth-analyst read via the coordinator",
-      "visual_idea": "A ticket-system server drawn as a box with 12 function cards dropped into one tool shelf, the model facing a long menu; then the cards sorted into three shelves: 5 action cards with a gear (tool), 4 read-only cards with a document icon and a URI label (resource), 3 template cards with a slash icon (prompt); an arrow from each shelf to who triggers it: model, app, user.",
-      "everyday_anchor": "Like a restaurant: the waiter takes your order and brings food (tools act), the menu card and the notice board are there to read (resources), and the chef's set thali is a ready combo you pick by name (prompts).",
-      "example": "EXAMPLE, assumed ticket system with 12 functions (not a real product): 5 change data (create, close, assign, comment, escalate) = tools; 4 only read (ticket by id, open list, customer history, SLA policy doc) = resources; 3 are repeated workflows (triage, daily summary, draft reply) = prompts. Run: state/runs/q166_mcp_split_run.py. Docs' own example: a database server with tools to query, a resource holding the schema, a prompt with few-shot examples.",
+      "visual_idea": "A ticket-system server box with 12 function cards on one tool shelf; then sorted into three shelves with who triggers it.",
+      "everyday_anchor": "Restaurant: waiter acts (tools), menu card is read (resources), set thali is a ready combo (prompts).",
+      "example": "EXAMPLE, assumed ticket system with 12 functions: 5 tools, 4 resources, 3 prompts. Run: state/runs/q166_mcp_split_run.py.",
       "sources": [
         "https://modelcontextprotocol.io/docs/learn/server-concepts",
         "https://modelcontextprotocol.io/specification/latest/server/tools",
@@ -2618,13 +2616,7 @@
         "https://modelcontextprotocol.io/specification/latest/server/prompts",
         "https://modelcontextprotocol.io/docs/learn/architecture"
       ],
-      "facts_to_verify": [
-        "Verified by the researcher 2026-11-16: tools model-controlled, resources application-driven (unique URI, read-only per docs table), prompts user-controlled (slash-command example); methods tools/call, resources/read, prompts/get.",
-        "Say 'the spec recommends a human can deny tool calls' (SHOULD, not MUST).",
-        "'Exposing everything as a tool is wrong' is our own framing, not a docs statement; do not attribute it to MCP.",
-        "Pages reflect protocol 2026-07-28: do not mention an initialize handshake."
-      ],
-      "length_target_s": 75,
+      "length_target_s": 80,
       "cover_headline": "MCP Server: Tool, Resource or Prompt?",
       "thumb_text": "NOT ALL TOOLS",
       "keywords": [
@@ -2633,18 +2625,6 @@
         "build mcp server",
         "ai engineer interview"
       ],
-      "beats": {
-        "1_hook_0_8s": "The interviewer's question, whole, as the hook.",
-        "2_answer_8_18s": "Your answer: sort by who triggers it. Actions are tools, read-only data are resources, ready templates are prompts. Three parts.",
-        "3_tempting_fails_18_35s": "Put all 12 ticket functions as tools: the model reads a 12-item menu, and a harmless read sits next to close_ticket; the model can pick the wrong one. Show the 12-card shelf.",
-        "4_technique_35_62s": "Tool: model decides, acts, changes data; 5 cards (WHY: actions need a decision, spec recommends a human can deny). Resource: read-only, has a URI, the app supplies it as context; 4 cards (WHY: no call needed, no side effect). Prompt: user picks it like a slash command; 3 cards (WHY: the same workflow every time).",
-        "5_boundary_62_70s": "If the model itself must fetch data on demand mid-conversation (a search with a query), that read is a tool, not a resource: resources suit data the app can attach up front.",
-        "6_say_it_70_78s": "Jo kaam karta hai wo tool, jo sirf padhne ke liye hai wo resource, jo user ka ready template hai wo prompt.",
-        "7_close": "Easy comment question (one word or number) plus follow line: roz ek naya interview sawal, poore jawab ke saath."
-      },
-      "notes": "Hook asked, on the coordinator's 2026-11-16 correction; the two reels of the day use two different types. Bar: skip at or under 60 %, watch 13 s or more, saves 2 or more per 100 reach. Boundary (beat 5) is our own engineering judgment: confirm wording with the docs' note that resources are application-driven before the script. Last MCP reel: q124 (stdio vs HTTP, 2026-10-29), a different question; outside same-item 60-day rule.",
-      "qa_passed": false,
-      "approval_status": "pending",
       "production_date_ist": "2026-11-16"
     }
   ]

@@ -1,0 +1,14 @@
+Interviewer ne poocha: apna MCP server banaoge to tools, resources ya prompts expose karoge?
+
+Jawab: teeno, par do sawalon se baanto. Kaun trigger karta hai, aur kuch badalta hai ya nahi?
+
+Tool: jo kuch badalta hai, model khud call karta hai. Resource: sirf padhne ka data, app context mein deta hai, har ek ka URI. Prompt: template jo user khud chunta hai, slash command jaisa.
+Sab kuch tool bana dene se model ke saamne lambi list aati hai aur padhne wale calls badalne wale calls ke bagal mein baith jaate hain. Ye hamari salah hai, MCP docs ka statement nahi.
+
+EXAMPLE: ticket system ke 12 functions (maan liye gaye): 5 tools, 4 resources, 3 prompts.
+
+Tumhare system ka sabse risky function kaun sa hai? Comment karo.
+
+Source: modelcontextprotocol.io (server concepts, tools spec)
+
+#mcp #aiengineer #interview
