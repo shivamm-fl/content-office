@@ -1,0 +1,7 @@
+Day 26/150: 3Sum: duplicate triplets ke bina zero sum wale teen numbers kaise nikaaloge
+
+3Sum mein array se aise teen numbers chahiye jinka sum zero ho, aur har triplet sirf ek baar aana chahiye. Brute force teen loops se har triple dekhta hai: ek hazaar numbers par 166 million se zyada triples, yaani O(n^3). Sort karo, ek index i fix karo, aur baaki array par Two Sum II ke do pointers chalao: sum kam ho to l aage, zyada ho to r peeche, zero ho to triplet likho aur dono pointers andar. Duplicates ke liye i par, aur hit ke baad l aur r par, barabar values skip karo. Skip ke bina fifty zeros par 600 triplets nikalte hain, sahi answer ek hai. Time O(n^2), output chhodkar extra space O(1), sort ka internal stack gino to O(log n). Actual Python code video mein hai (code chalaya).
+
+Ab tumhara turn: array 0, 0, 0, 0 par kitne triplets aayenge? Comment mein likho.
+
+#dsa #twopointers #interviewprep

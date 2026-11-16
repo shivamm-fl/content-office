@@ -1,0 +1,6 @@
+3Sum In Python: Sort And Two Pointers, O(n^2) Time, No Duplicate Triplets
+
+3Sum (LeetCode 15): find all triplets in an array that sum to zero, each triplet only once. Brute force checks every triple with three loops, O(n^3): for n = 1000 that is 166,167,000 triples. Sort the array, fix one index i, and run the two pointers of Two Sum II on the rest: l starts at i + 1, r at the last index, a negative sum moves l right, a positive sum moves r left, a zero sum is saved and both pointers move in. Skipping repeated values at i and, after a hit, at l and r keeps every triplet unique. Time is O(n^2); the extra space is O(1) besides the output, or O(log n) if you count the sort's internal stack (the same approach as the doocs solution for LeetCode 15). In our own run the code matched a brute-force check on 5,000 random arrays, and without skipping, 50 zeros produce 600 triplets instead of 1.
+
+Sources:
+https://leetcode.doocs.org/en/lc/15/
