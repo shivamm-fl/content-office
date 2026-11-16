@@ -1,0 +1,23 @@
+Interviewer ने पूछा: Three Sum, duplicate triplets के बिना कैसे निकालोगे?
+
+Problem: array में तीन numbers ढूँढो जिनका sum zero हो। | हर triplet सिर्फ़ एक बार आना चाहिए।
+
+Given array: minus one, zero, one, two, minus one, minus four। | Answer दो triplets हैं: minus one, minus one, two, और minus one, zero, one।
+
+Brute force तीन loops से हर triple देखता है। | एक हज़ार numbers पर 166{one-hundred-sixty-six} million से ज़्यादा triples, यानी O of n cubed।
+
+Two Sum II याद करो: sorted array में दो pointers से pair एक pass में मिलता है। | तो एक number fix करो, बाकी array में बस ऐसा pair चाहिए जो उसे zero तक पहुँचाए, और यह वही Two Sum II है। | पहले sort करो, फिर हर fixed index i के लिए l को i plus one पर रखो और r को आख़िर पर।
+
+Sorted array: minus four, minus one, minus one, zero, one, two। | Sum कम है तो l आगे, ज़्यादा है तो r पीछे। | Sum zero आए तो triplet लिखो, और दोनों pointers अंदर करो।
+
+अब duplicates। | बराबर values sorted array में साथ बैठती हैं। | Index one पर minus one fix हुआ और minus one, zero, one मिला। | Index two पर फिर minus one है, उसका search वही pair देगा, तो यह triplet दो बार आएगा। | इसलिए nums of i, nums of i minus one के बराबर हो, तो i को skip करो। | यही hit के बाद l और r पर भी करो। | बिना skip के fifty zeros पर six hundred triplets निकलते हैं, सही answer एक है।
+
+Dry run। | I equals zero, minus four: चारों sums negative हैं, l और r मिल गए, कुछ नहीं। | I equals one, minus one: l पर minus one, r पर two, sum zero, पहला triplet। | फिर zero और one, sum zero, दूसरा triplet। | I equals two पर फिर minus one है, skip। | I equals three, zero: one और two का sum three, कुछ नहीं।
+
+Code में पहले nums dot sort। | हर i पर: nums of i greater than zero हो तो break, और बराबर पिछले के तो continue। | फिर l, r equals i plus one, last index। | Sum कम तो l plus equals one, ज़्यादा तो r minus equals one। | वरना append करो, दोनों अंदर करो, और बराबर values पर l और r को skip करो।
+
+हर i पर दोनों pointers मिलकर ज़्यादा से ज़्यादा n steps चलते हैं, तो time O of n squared। | Output छोड़कर extra space O of one है, और sort का internal stack गिनो तो O of log n।
+
+Interview में बोलो: sort करो, एक index fix करो, बाकी पर Two Sum II के दो pointers, और i, l, r तीनों पर duplicates skip करो।
+
+Comment करो: array zero, zero, zero, zero पर कितने triplets आएँगे? | जवाब है, सिर्फ़ एक, zero, zero, zero।

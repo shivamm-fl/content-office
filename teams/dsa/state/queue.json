@@ -352,6 +352,60 @@
         "DSA hinglish"
       ],
       "qa_passed": false
+    },
+    {
+      "id": "d026",
+      "track": "series",
+      "day": 26,
+      "unit": "P3",
+      "title": "3Sum: sort karo, ek number fix karo, baaki do pointers se, duplicates skip karo",
+      "format": "problem",
+      "status": "planned",
+      "script_file": "state/scripts/d026.txt",
+      "script_locked": false,
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: 3Sum, duplicate triplets के बिना कैसे निकालोगे?",
+      "hook_formula": "interviewer_one_complete_question",
+      "hook_source": "interviewer_asked, oldest of the two least used among the last six built (d022); the problem's own rule (no duplicate triplets) is the question; counts in qa/d026/run.py.",
+      "hook_10s": "Interviewer ने पूछा: 3Sum, duplicate triplets के बिना कैसे निकालोगे? Array में तीन numbers ऐसे ढूँढने हैं जिनका sum zero हो, और हर triplet सिर्फ़ एक बार आना चाहिए। [frame 0: sorted row -4,-1,-1,0,1,2 with the two -1 cells tinted the same colour]",
+      "hook_candidates": [
+        {
+          "formula": "interviewer_one_complete_question",
+          "text": "Interviewer ने पूछा: 3Sum, duplicate triplets के बिना कैसे निकालोगे?"
+        },
+        {
+          "formula": "plain_payoff_number",
+          "text": "3Sum: एक सौ छियासठ million triples नहीं, सिर्फ़ तीन लाख चौहत्तर हज़ार steps।"
+        },
+        {
+          "formula": "wrong_way_first",
+          "text": "3Sum लिखा, पर आउटपुट में same triplet दो बार आया!"
+        }
+      ],
+      "one_idea": "3Sum: sort the array, fix one value, and run Two Sum II's two pointers on the rest for the target minus that value; skipping repeated values at the fixed index and at both pointers is what keeps triplets unique, giving O(n^2) time instead of O(n^3).",
+      "visual_idea": "Sorted row of six cells (-4,-1,-1,0,1,2). A fixed-index tag sits on one cell while L and R tags start just right of it and at the far end, hop inward by sum versus zero and grey out the discarded cells. Duplicate -1 cells are tinted the same colour: a skipped fixed index gets a strike-through, and a version without skipping shows the triplet [-1,0,1] stacking twice in a result column.",
+      "everyday_anchor": "none: audience is working engineers, technical register, no everyday analogy (owner 2026-10-26)",
+      "example": "EXAMPLE nums=[-1,0,1,2,-1,-4], sorted [-4,-1,-1,0,1,2]: i=0 (-4) finds nothing in 4 pointer steps; i=1 (-1) finds [-1,-1,2] and [-1,0,1] in 2 steps; i=2 (-1) is a repeat and is skipped; i=3 (0) is non-negative and gives sum 3; answer [[-1,-1,2],[-1,0,1]].",
+      "code_outline": "def three_sum(nums): nums.sort(); res=[]; for i in range(len(nums)-2): if nums[i]>0: break; if i>0 and nums[i]==nums[i-1]: continue; l,r=i+1,len(nums)-1; while l<r: s=nums[i]+nums[l]+nums[r]; if s<0: l+=1 elif s>0: r-=1 else: res.append([nums[i],nums[l],nums[r]]); l+=1; r-=1; while l<r and nums[l]==nums[l-1]: l+=1; while l<r and nums[r]==nums[r+1]: r-=1. Run in qa/d026/run.py.",
+      "sources": [
+        "https://leetcode.doocs.org/en/lc/15/"
+      ],
+      "facts_to_verify": [
+        "doocs LC 15 (fetched 2026-11-16): unique triplets summing to zero, n 3..3000, values -10^5..10^5; sort, fix nums[i], skip repeated i, break when nums[i]>0, two pointers on the rest, skip repeats after a hit; time O(n^2), space O(log n) (sort stack; doocs wording), so say O(1) extra besides the output and the sort only if the builder re-verifies.",
+        "qa/d026/run.py: example gives [[-1,-1,2],[-1,0,1]] and equals brute force; 5000 random arrays (n 3..10, values -4..4) all match brute force with unique triplets; the same code with no duplicate skipping prints [-1,0,1] twice on the example and repeats triplets on 1,781 of 5000; 50 zeros without skipping give 600 results vs 1 with skipping; n=1000 (EXAMPLE, values -500..499): 166,167,000 triples for brute force vs 374,001 two-pointer steps (bound n^2/2 = 500,000)."
+      ],
+      "length_target_s": 150,
+      "cover_headline": "3Sum: Unique Triplets In O(n^2)",
+      "thumb_text": "3SUM",
+      "keywords": [
+        "3sum",
+        "leetcode 15",
+        "3sum python",
+        "three sum two pointers",
+        "3sum duplicates",
+        "DSA hinglish"
+      ],
+      "qa_passed": false
     }
   ]
 }
