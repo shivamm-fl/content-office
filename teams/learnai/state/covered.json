@@ -1471,6 +1471,32 @@
       "production_date_ist": "2026-11-12",
       "owner_approved": false,
       "published": false
+    },
+    {
+      "id": "q165",
+      "day": null,
+      "title": "Long Video: Whole Video or Sampled Frames",
+      "track": "interview",
+      "status": "planned",
+      "topic": "Long video to an AI: do not send every frame; transcript to find the moment, sampled frames (Gemini default 1 fps, 66 tokens per frame at low resolution), zoom with more fps on a short clip; fast action loses detail at 1 fps.",
+      "hook_formula": "relatable_stake",
+      "planned": "2026-11-16",
+      "production_date_ist": "2026-11-16",
+      "owner_approved": false,
+      "published": false
+    },
+    {
+      "id": "q166",
+      "day": null,
+      "title": "Own MCP Server: Tools, Resources, Prompts",
+      "track": "interview",
+      "status": "planned",
+      "topic": "Own MCP server: tools (model-controlled actions), resources (application-driven read-only data with URIs), prompts (user-controlled templates); do not expose everything as a tool.",
+      "hook_formula": "interviewer_asked",
+      "planned": "2026-11-16",
+      "production_date_ist": "2026-11-16",
+      "owner_approved": false,
+      "published": false
     }
   ]
 }

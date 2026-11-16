@@ -1,0 +1,10 @@
+frames if every frame is sent (30 fps): 108000
+tokens, every frame at 66/frame: 7128000
+tokens, every frame at 258/frame: 27864000
+frames at 1 fps: 3600 tokens (66/frame) + audio: 352800 frames only: 237600
+sampled 1 frame per 5 s: frames 720 tokens (66/frame): 47520
+zoom 30 s at 5 fps: frames 150 tokens (66/frame): 9900
+sampled + zoom total tokens: 57420
+every-frame vs sampled+zoom, times bigger (66/frame): 124
+1M window, every frame at 66/frame fits: False
+1M window, sampled+zoom fits: True

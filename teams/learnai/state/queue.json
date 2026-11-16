@@ -2568,6 +2568,108 @@
       ],
       "approval_status": "pending",
       "production_date_ist": "2026-11-12"
+    },
+    {
+      "id": "q165",
+      "track": "interview",
+      "day": null,
+      "unit": "I6",
+      "title": "Long Video: Whole Video or Sampled Frames",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "Do not send every frame of a long video. First use the transcript to find the moment, then send sampled frames (Gemini's API default is 1 frame per second; a sparser sample such as 1 frame per 5 s is cheaper), and zoom with more frames only on the short clip where detail matters. Fast action loses detail at 1 fps, so raise the frame rate for that part.",
+      "trap": "Sending every frame: cost and context explode; sample frames plus the transcript instead.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "एक घंटे की video, AI बीच का scene भूल गया।",
+      "hook_formula": "relatable_stake (short scene, one number, no jargon; owner-coordinator read of growth analyst 2026-11-16: one line of at most 10 words)",
+      "hook_source": "state/growth_notes.md 2026-11-06 and 2026-11-12 (full sentence scene, one number) and the 2026-11-16 growth-analyst read via the coordinator; the scene is an EXAMPLE, not a measured case",
+      "visual_idea": "A one-hour timeline strip with a scene in the middle that the AI answer card misses; a film strip of 108,000 frames against a 1,000,000-token window gauge that overflows; a three-step funnel: transcript line with a timestamp, a film strip thinned to one frame in five, a 30-second zoom clip with dense frames; a gauge showing 57,420 tokens against 7,128,000.",
+      "everyday_anchor": "Like finding one scene in a long cricket match recording: you do not rewatch every ball, you check the commentary, skim every few seconds and replay the one over that matters.",
+      "example": "EXAMPLE, assumed video: 1 hour, 30 fps camera, low media resolution (Gemini docs: 66 tokens per frame). Every frame: 108,000 frames = 7,128,000 tokens. Sampled 1 frame per 5 s: 720 frames = 47,520 tokens, plus a 30 s zoom at 5 fps: 150 frames = 9,900 tokens, total 57,420, about 124 times smaller. Run: state/runs/q165_video_tokens_run.py.",
+      "sources": [
+        "https://aistudio.google.com/docs/video-understanding",
+        "https://aistudio.google.com/docs/tokens"
+      ],
+      "facts_to_verify": [
+        "Recheck on the live page before the script: 66 tokens per frame at low media resolution (258 otherwise), audio 32 tokens per second, default sampling 1 fps, fast action may lose detail at 1 fps, custom fps and clipping exist (static mode only). WebFetch gave a model's extraction, not raw HTML.",
+        "The tokens page says 263 tokens per second for video; unreconciled with the video page, not used on screen.",
+        "Not verified, so not said as Google's advice: transcript plus sampled frames (it is our own advice)."
+      ],
+      "length_target_s": 75,
+      "cover_headline": "Long Video: Do Not Send Every Frame",
+      "thumb_text": "SAMPLE THE FRAMES",
+      "keywords": [
+        "long video ai",
+        "video understanding llm",
+        "frame sampling",
+        "ai engineer interview"
+      ],
+      "beats": {
+        "1_hook_0_8s": "Scene: hour-long video, AI forgot the middle scene. Interview question spoken by second 10: how do you make an AI understand a long video, whole video or chosen frames?",
+        "2_answer_8_18s": "Your answer: do not send the whole video; find the moment from the transcript, send sampled frames, zoom only where detail matters. Three steps.",
+        "3_tempting_fails_18_35s": "Every frame of a 1 hour, 30 fps video is 108,000 frames; at 66 tokens each that is 7,128,000 tokens, about seven times a 1,000,000-token window, and you pay for all of it.",
+        "4_technique_35_62s": "Step 1 transcript tells where to look (WHY: text is cheap and has timestamps). Step 2 sample one frame every 5 s: 720 frames, 47,520 tokens (WHY: neighbouring frames repeat). Step 3 zoom: 30 s at 5 fps, 150 frames, 9,900 tokens (WHY: detail only needed there). Total 57,420.",
+        "5_boundary_62_70s": "Gemini's default is 1 frame per second and its docs say fast action can lose detail at 1 fps: for sports or quick screen clicks raise the fps on that clip.",
+        "6_say_it_70_78s": "Poori video nahi bhejte: transcript se moment dhoondho, kam frames sample karo, aur jahan detail chahiye wahan hi fps badhao.",
+        "7_close": "Easy comment question (one word or number) plus follow line: roz ek naya interview sawal, poore jawab ke saath."
+      },
+      "notes": "Hook type chosen on the coordinator's 2026-11-16 correction (growth-analyst read): stake, not the least-used type (company_specific, 0 of the last six q, parked today). Bar: skip at or under 60 %, watch 13 s or more, saves 2 or more per 100 reach. Researcher fetched sources 2026-11-16. Agentic mode (Google's own claim of up to 88 % fewer tokens) exists but is left out: one boundary only.",
+      "qa_passed": false,
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-16"
+    },
+    {
+      "id": "q166",
+      "track": "interview",
+      "day": null,
+      "unit": "F8",
+      "title": "Own MCP Server: Tools, Resources, Prompts",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "Decide by who triggers it and whether it changes anything. Tools are actions the model decides to call; resources are read-only data the application supplies as context, each with a URI; prompts are reusable templates the user picks, like a slash command. Exposing everything as a tool gives the model a long menu and hides which calls are safe reads.",
+      "trap": "Exposing everything as a tool instead of choosing between tools (actions), resources (data) and prompts (templates).",
+      "hook_type": "interviewer_asked",
+      "spoken_hook": "Interviewer ने पूछा: अपना MCP server बनाओगे तो tools, resources या prompts expose करोगे?",
+      "hook_formula": "interviewer_asked (one complete self-contained question; the coordinator's example of 2026-11-16 given the required 'Interviewer ने पूछा:' opener)",
+      "hook_source": "state/growth_notes.md 2026-11-12 (best recent reels open on the exact interview question); 2026-11-16 growth-analyst read via the coordinator",
+      "visual_idea": "A ticket-system server drawn as a box with 12 function cards dropped into one tool shelf, the model facing a long menu; then the cards sorted into three shelves: 5 action cards with a gear (tool), 4 read-only cards with a document icon and a URI label (resource), 3 template cards with a slash icon (prompt); an arrow from each shelf to who triggers it: model, app, user.",
+      "everyday_anchor": "Like a restaurant: the waiter takes your order and brings food (tools act), the menu card and the notice board are there to read (resources), and the chef's set thali is a ready combo you pick by name (prompts).",
+      "example": "EXAMPLE, assumed ticket system with 12 functions (not a real product): 5 change data (create, close, assign, comment, escalate) = tools; 4 only read (ticket by id, open list, customer history, SLA policy doc) = resources; 3 are repeated workflows (triage, daily summary, draft reply) = prompts. Run: state/runs/q166_mcp_split_run.py. Docs' own example: a database server with tools to query, a resource holding the schema, a prompt with few-shot examples.",
+      "sources": [
+        "https://modelcontextprotocol.io/docs/learn/server-concepts",
+        "https://modelcontextprotocol.io/specification/latest/server/tools",
+        "https://modelcontextprotocol.io/specification/latest/server/resources",
+        "https://modelcontextprotocol.io/specification/latest/server/prompts",
+        "https://modelcontextprotocol.io/docs/learn/architecture"
+      ],
+      "facts_to_verify": [
+        "Verified by the researcher 2026-11-16: tools model-controlled, resources application-driven (unique URI, read-only per docs table), prompts user-controlled (slash-command example); methods tools/call, resources/read, prompts/get.",
+        "Say 'the spec recommends a human can deny tool calls' (SHOULD, not MUST).",
+        "'Exposing everything as a tool is wrong' is our own framing, not a docs statement; do not attribute it to MCP.",
+        "Pages reflect protocol 2026-07-28: do not mention an initialize handshake."
+      ],
+      "length_target_s": 75,
+      "cover_headline": "MCP Server: Tool, Resource or Prompt?",
+      "thumb_text": "NOT ALL TOOLS",
+      "keywords": [
+        "mcp server",
+        "mcp tools resources prompts",
+        "build mcp server",
+        "ai engineer interview"
+      ],
+      "beats": {
+        "1_hook_0_8s": "The interviewer's question, whole, as the hook.",
+        "2_answer_8_18s": "Your answer: sort by who triggers it. Actions are tools, read-only data are resources, ready templates are prompts. Three parts.",
+        "3_tempting_fails_18_35s": "Put all 12 ticket functions as tools: the model reads a 12-item menu, and a harmless read sits next to close_ticket; the model can pick the wrong one. Show the 12-card shelf.",
+        "4_technique_35_62s": "Tool: model decides, acts, changes data; 5 cards (WHY: actions need a decision, spec recommends a human can deny). Resource: read-only, has a URI, the app supplies it as context; 4 cards (WHY: no call needed, no side effect). Prompt: user picks it like a slash command; 3 cards (WHY: the same workflow every time).",
+        "5_boundary_62_70s": "If the model itself must fetch data on demand mid-conversation (a search with a query), that read is a tool, not a resource: resources suit data the app can attach up front.",
+        "6_say_it_70_78s": "Jo kaam karta hai wo tool, jo sirf padhne ke liye hai wo resource, jo user ka ready template hai wo prompt.",
+        "7_close": "Easy comment question (one word or number) plus follow line: roz ek naya interview sawal, poore jawab ke saath."
+      },
+      "notes": "Hook asked, on the coordinator's 2026-11-16 correction; the two reels of the day use two different types. Bar: skip at or under 60 %, watch 13 s or more, saves 2 or more per 100 reach. Boundary (beat 5) is our own engineering judgment: confirm wording with the docs' note that resources are application-driven before the script. Last MCP reel: q124 (stdio vs HTTP, 2026-10-29), a different question; outside same-item 60-day rule.",
+      "qa_passed": false,
+      "approval_status": "pending",
+      "production_date_ist": "2026-11-16"
     }
   ]
 }

@@ -1,0 +1,17 @@
+@hook Interviewer ने पूछा: अपना MCP server बनाओगे तो tools, resources या prompts expose करोगे?
+
+MCP यानी AI app को तुम्हारे tools और data से जोड़ने का standard तरीका। | तुम्हारा जवाब: तीनों, पर बाँटो दो सवालों से: कौन trigger करता है, और कुछ बदलता है या नहीं।
+
+मान लो एक ticket system है, 12{बारह} functions वाला। | आसान तरीका: सब tools बना दो। | तब ticket पढ़ने वाला function close_ticket के बगल में बैठा है। | ये हमारी सलाह है: पढ़ना और बदलना एक list में मत रखो। | ये EXAMPLE के मान लिए numbers हैं।
+
+पहला: जो कुछ बदलता है, वो tool, restaurant के waiter की तरह। | Model खुद तय करके call करता है। | हमारे 5{पाँच} ऐसे हैं: create, close, assign, comment, escalate। | क्योंकि असली data बदलता है, user को call मना करने का option दो।
+
+दूसरा: जो सिर्फ़ पढ़ता है, वो resource, menu card की तरह। | App उसे context में देता है, हर एक का URI यानी पता। | ये 4{चार} हैं: ticket by id, open list, customer history, SLA policy doc।
+
+तीसरा: जो workflow बार-बार चलता है, वो prompt, set thali की तरह। | यानी template जिसे user खुद चुनता है, slash command जैसा। | ये 3{तीन} हैं: triage, daily summary, draft reply।
+
+Boundary: अगर model को बातचीत के बीच query के साथ data माँगना पड़े, जैसे search, तो वो tool है, resource नहीं।
+
+@emph Interview में कहो: जो बदलता है और model call करता है, वो tool। | जो सिर्फ़ पढ़ने का data है, वो URI वाला resource, और user के चुने templates prompts।
+
+तुम्हारे system का सबसे risky function कौन सा है? Comment करो। | रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।

@@ -117,3 +117,10 @@ Numbers: a019 (number + "kyun?") 53.0 % skip, 10.8 s, 1,315 views: best series s
 Do: line 1 a full sentence with one concrete number or scene, first teaching line by second 8; no "Company A ... Kyun?" puzzle openers.
 Experiment: a021 opens on a fluent answer with one specific false detail and a number, direct_question by second 8. Bar: skip at or under 58 %, watch 11 s or more (a019 pattern). n=1 is a hint.
 Owner decision: none needed.
+
+## 2026-11-16 (growth analyst, standup for a021, n41, n42)
+Numbers: remakes q158, q159, q160 (n=3, 57 to 72 s, a short complete line of 10 words or fewer) median skip 55.9 % (59.7, 52.4, 55.9), watch 13.4, 18.0, 18.3 s; q160 (plain interviewer question, 3,894 views) is the best interview reel yet: 5.0 saves and 1.84 sends per 100 reach, 55 shares. q155, q156, q157, q161, q162 (n=5, long scene or number lines, "Ruko"/"kyun?" puzzles) median skip 66.2 %, watch 8.1 to 13.1 s; q162 (40-page handbook, "Ruko") 75.6 % and q156 (base URL) 74 % are the worst. a020 settled at 64.3 %, 6.2 s on 482 views: both bars missed. q163 and the 11-15 posts are not synced; a021 is not posted.
+Do differently: line 1 is one short complete sentence (10 words or fewer) with the payoff or the exact interview question, then the first teaching line; no clause-heavy scene with two numbers and no "Ruko". Length is not the lever (all remakes are 57 to 72 s).
+Hooks: n41 relatable_stake as a short statement ("AI ne ghante bhar ki video dekhi, aur beech ka scene bhool gaya" style, no jargon, full question by second 10); n42 interviewer_asked as one complete question ("Apna MCP server banao: tools, resources ya prompts expose karoge?"). company_specific stays parked (n=5, median ~64 %, no gain), nothing retired. Bar for both: skip at or under 60 %, watch 13 s or more, saves 2 or more per 100 reach; one reel each is a hint.
+a021 ("AI ने नकली किताब के 312 pages बताए। क्यों?"): same number plus "kyun?" shape as a019 (53 %), keep it; check the Roman hookscore because Devanagari first lines ran 84 to 89 % skip (n=3, hint). Bar: skip at or under 58 %, watch 11 s or more.
+Owner decision: none needed.

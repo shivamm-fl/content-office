@@ -3,6 +3,7 @@
 What the team is trying and what came out of it. One block per experiment; any agent may add or close one. The Producer picks one experiment for each work day at the standup. Keep it short and honest: a result with fewer than 3 reels is a hint, not a rule. When an experiment proves itself on our numbers, the growth analyst sends it to the owner as a `learning` card.
 
 Format:
+- **2026-11-16 short one-line hooks, two types**: q165 opens on a 10-word stake scene (an hour-long video, the AI forgot the middle scene) and q166 on the interviewer's full question (MCP: tools, resources or prompts); company_specific parked today. Reels: q165, q166. We will know it worked when: both reach skip at or under 60 %, watch 13 s or more, saves 2 or more per 100 reach. Result: pending.
 - **<date> <name>**: hypothesis (what we think will happen and why). Reels: <ids>. We will know it worked when: <metric and rough size>. Result: <filled in later, with the numbers and how many reels>.
 
 ## Running
