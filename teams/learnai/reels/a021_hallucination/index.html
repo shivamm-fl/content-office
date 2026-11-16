@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Hallucination: Why a Fluent Answer Can Be False</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="117" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div><div class="beat" id="sB"></div><div class="beat" id="sC"></div><div class="beat" id="sD"></div><div class="beat" id="sE"></div><div class="beat" id="sF"></div><div class="beat" id="sG"></div><div class="beat" id="sH"></div><div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="117" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="117" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="117" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I"], tag: "150 DAYS OF AI" });
+      Viz.install(M);
+      const { tl, S, P } = M; const { ACC, CYAN, HOT, GOOD, MUTED, TEXT, VIOLET } = M;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH"), I = M.$("#sI");
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const ca = M.ca; const LAT = "var(--lat)", COD = "var(--code)", PANEL = "#0E1626";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const glass = (host, x, y, w, h, col, rad) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${rad || 24}px;background:${PANEL}` + (col ? `;border-color:${ca(col, 0.55)}` : ""); return d; };
+      const show = (d, t, from, dur) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: dur || 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t, dur) => { tl.to(d, { opacity: 0, duration: dur || 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const pillC = (host, word, y, t, col = ACC) => {
+        const w = el(host, `left:80px;top:${y}px;width:920px;height:56px;display:flex;justify-content:center`);
+        w.innerHTML = `<div style="display:flex;align-items:center;padding:0 30px;border-radius:999px;border:2px solid ${col};background:${ca(col, .1)};font:700 36px ${COD};letter-spacing:.12em;color:${col}">${word}</div>`;
+        return show(w, t, { opacity: 0, y: -14 });
+      };
+      const title = (host, x, y, txt, col) => el(host, `left:${x}px;top:${y}px;font:700 40px ${COD};letter-spacing:.14em;color:${col || MUTED}`, txt);
+      const tile = (host, x, y, w, h, txt, col, size) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:3px solid ${col};background:${ca(col, .14)};display:flex;align-items:center;justify-content:center;font:800 ${size || 60}px ${LAT};color:${TEXT};white-space:pre`, txt);
+      const bubble = (host, x, y, w, h, txt, col, size) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:28px;border:3px solid ${col};background:${ca(col, .14)};display:flex;align-items:center;padding:0 32px;box-sizing:border-box;font:800 ${size || 50}px ${LAT};color:${TEXT};white-space:pre`, txt);
+      const strike = (host, x, y, w, t) => { const s = el(host, `left:${x}px;top:${y}px;width:${w}px;height:6px;border-radius:3px;background:${HOT};transform-origin:0 50%`); tl.set(s, { opacity: 0 }, 0); tl.fromTo(s, { opacity: 1, scaleX: 0 }, { scaleX: 1, duration: .35, ease: "power3.out", immediateRender: false }, t); return s; };
+
+      // toy scores (state/runs/a021_hallucination_run.py): next-word chances after "The Tin Lantern was written by"
+      const NAMES = ["Ramesh", "Anita", "Vikram", "Meera", "Sanjay", "I don't know"];
+      const PCT = [31.6, 21.2, 19.1, 14.2, 11.6, 2.3], SHOWN = [32, 21, 19, 14, 12, 2];
+      // next-word card: six rows (name, bar of true relative length, percent)
+      const nameCard = (host, y, rowH, hd, ttl) => {
+        const h = rowH - 12;
+        const c = glass(host, 80, y, 920, hd + 6 * rowH + 16, CYAN, 30); title(c, 34, 18, ttl);
+        const R = NAMES.map((w, i) => {
+          const idk = i === 5, col = idk ? HOT : CYAN;
+          const row = el(c, `left:24px;top:${hd + i * rowH}px;width:872px;height:${h}px;border-radius:18px;border:3px solid rgba(0,0,0,0)`);
+          const lab = el(row, `left:16px;top:0;width:300px;height:${h}px;display:flex;align-items:center;font:800 ${idk ? 38 : 44}px ${LAT};color:${TEXT}`, w);
+          const trk = el(row, `left:326px;top:${(h - 40) / 2}px;width:360px;height:40px;border-radius:10px;background:#233147`);
+          const fill = el(row, `left:326px;top:${(h - 40) / 2}px;width:360px;height:40px;border-radius:10px;background:${col};transform-origin:0 50%`);
+          const num = el(row, `left:700px;top:0;width:150px;height:${h}px;display:flex;align-items:center;justify-content:flex-end;font:800 44px ${COD};color:${TEXT}`, SHOWN[i] + "%");
+          const sc = Math.max(.02, PCT[i] / 35);
+          tl.set([lab, trk, fill, num], { opacity: 0 }, 0);
+          return { row, lab, trk, fill, num, sc, col };
+        });
+        const rowIn = (i, tLab, tBar) => { const r = R[i]; tl.to([r.lab, r.trk], { opacity: 1, duration: .35, immediateRender: false }, tLab); tl.set([r.fill, r.num], { opacity: 1 }, tBar); tl.fromTo(r.fill, { scaleX: .02 }, { scaleX: r.sc, duration: .5, ease: "power3.out", immediateRender: false }, tBar); };
+        const allIn = (t) => R.forEach(r => { tl.to([r.lab, r.trk, r.fill, r.num], { opacity: 1, duration: .35, immediateRender: false }, t); tl.set(r.fill, { scaleX: r.sc }, 0); });
+        const ring = (i, t, col) => R.forEach((r, k) => tl.to(r.row, { borderColor: k === i ? col : "rgba(0,0,0,0)", backgroundColor: k === i ? ca(col, .12) : "rgba(0,0,0,0)", duration: .3, immediateRender: false }, t));
+        return { c, R, rowIn, allIn, ring };
+      };
+      // three-step fix strip: 1 WAY OUT, 2 YOUR DOCS, 3 ASK 5x; step `on` is lit
+      const strip = (host, y, on, t) => {
+        const L = ["WAY OUT", "YOUR DOCS", "ASK 5x"];
+        L.forEach((l, i) => { const lit = i === on; const k = tile(host, 80 + i * 313, y, 294, 110, `<span style="color:${lit ? ACC : MUTED};margin-right:14px">${i + 1}</span>${l}`, lit ? ACC : "#34435F", 38); k.style.fontSize = "38px"; show(k, t + i * .12, { opacity: 0, y: -12 }); });
+      };
+
+      // diagram: A — the book that does not exist, and the chat that answers anyway.
+      M.hook(["AI ne nakli kitab ke", "312 pages bataye. Kyun?"], { size: 80, top: 215, until: at("A", "mainne") - .1 });
+      const aC = glass(A, 80, 440, 920, 860, CYAN, 30); title(aC, 34, 18, "CHATBOT"); show(aC, .05, { opacity: 0 }, .3);
+      const aB = tile(aC, 34, 90, 360, 230, "THE TIN\nLANTERN", ACC, 46); aB.style.lineHeight = "1.15"; show(aB, .1, { opacity: 0, y: 16 });
+      const aEx = el(aC, `left:424px;top:100px;height:56px;padding:0 24px;border-radius:999px;border:2px solid ${ACC};background:${ca(ACC, .1)};display:flex;align-items:center;font:700 34px ${COD};letter-spacing:.12em;color:${ACC}`, "EXAMPLE"); show(aEx, .2, { opacity: 0, y: -10 });
+      const aSt = el(aC, `left:424px;top:200px;width:460px;height:110px;border-radius:18px;border:3px solid ${HOT};background:${ca(HOT, .14)};display:flex;align-items:center;justify-content:center;font:800 38px ${COD};color:${HOT};letter-spacing:.06em`, "DOES NOT EXIST"); show(aSt, at("A", "nahi"), { opacity: 0, y: 14 });
+      const aQ = bubble(aC, 34, 370, 700, 120, "How many pages?", CYAN, 46); show(aQ, at("A", "pages", 1) - .4, { opacity: 0, x: -30, y: 0 });
+      const aR = bubble(aC, 150, 530, 736, 150, "312 pages, by Ramesh", GOOD, 46); show(aR, at("A", "312", 1), { opacity: 0, x: 30, y: 0 });
+      tl.to(aR, { borderColor: HOT, backgroundColor: ca(HOT, .14), duration: .4, immediateRender: false }, at("A", "hallucination"));
+      const aH = el(aC, `left:34px;top:712px;width:852px;text-align:center;font:800 54px ${COD};color:${HOT};letter-spacing:.08em`, "HALLUCINATION"); show(aH, at("A", "hallucination"), { opacity: 0, y: 12 });
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B — the model picks the likeliest next word; no step checks the facts.
+      pillC(B, "NEXT WORD", 205, P("B", 0));
+      const bS = glass(B, 80, 290, 920, 270, CYAN, 30); show(bS, P("B", 0), { opacity: 0 }, .3);
+      el(bS, `left:34px;top:95px;font:800 58px ${LAT};color:${TEXT}`, "was written by");
+      const bSlot = el(bS, `left:520px;top:62px;width:370px;height:146px;border-radius:20px;border:3px dashed ${MUTED};display:flex;align-items:center;justify-content:center;font:800 64px ${LAT};color:${TEXT}`, "");
+      const bAr = show(el(B, `left:80px;top:580px;width:920px;text-align:center;font:800 100px ${LAT};color:${MUTED}`, "↓"), at("B", "likely") - .5, { opacity: 0, y: -10 });
+      const bP = glass(B, 80, 730, 920, 280, GOOD, 30); title(bP, 34, 20, "PICKS LIKELY", GOOD); show(bP, at("B", "likely") - .4);
+      const bPt = tile(bP, 34, 90, 852, 160, "Ramesh", ACC, 80); show(bPt, at("B", "likely"), { opacity: 0, y: 14 });
+      tl.set(bSlot, { borderStyle: "solid" }, at("B", "likely") + .3);
+      const bFill = el(bSlot, `left:0;top:0;width:364px;height:140px;display:flex;align-items:center;justify-content:center;font:800 64px ${LAT};color:${ACC}`, "Ramesh"); show(bFill, at("B", "likely") + .3, { opacity: 0, y: 10 });
+      const bF = glass(B, 80, 1050, 920, 280, HOT, 30); title(bF, 34, 20, "FACT CHECK", HOT); show(bF, at("B", "facts") - .6);
+      const bFx = el(bF, `left:34px;top:80px;width:852px;height:170px;display:flex;align-items:center;justify-content:center;font:800 150px ${LAT};color:${HOT}`, "✕"); show(bFx, at("B", "facts"), { opacity: 0, scale: .7, y: 0 });
+      M.fit(B, { y: 170, h: 1130 });
+
+      // diagram: C — the model scores every name (toy numbers).
+      pillC(C, "EXAMPLE", 205, P("C", 0));
+      const cS = glass(C, 80, 285, 920, 130, CYAN, 30); show(cS, at("C", "Lantern"), { opacity: 0 }, .3);
+      el(cS, `left:34px;top:34px;font:800 46px ${LAT};color:${TEXT}`, `The Tin Lantern was written by <span style="color:${ACC}">___</span>`);
+      const cL = nameCard(C, 450, 104, 70, "SCORE"); show(cL.c, at("C", "score") - .6, { opacity: 0 }, .3);
+      const cW = [["Ramesh", "32"], ["Anita", "21"], ["Vikram", "19"], ["Meera", "14"], ["Sanjay", "12"]];
+      cW.forEach(([w, n], i) => cL.rowIn(i, at("C", w), at("C", n)));
+      cL.rowIn(5, at("C", "know") - .2, at("C", "2"));
+      M.fit(C, { y: 170, h: 1130 });
+
+      // diagram: D — the top name is the likeliest, not the true one; guessing earns marks, silence does not.
+      const dL = nameCard(D, 215, 84, 64, "SCORE"); show(dL.c, P("D", 0), { opacity: 0 }, .3); dL.allIn(P("D", 0) + .1);
+      dL.ring(0, at("D", "upar"), ACC);
+      const dLk = pillC(D, "LIKELY ≠ TRUE", 812, at("D", "sach"), ACC);
+      dL.ring(5, at("D", "neeche"), HOT);
+      const dG = glass(D, 80, 902, 440, 220, GOOD, 28); title(dG, 28, 16, "GUESS", GOOD); show(dG, at("D", "andaza"), { opacity: 0, y: 18 });
+      el(dG, `left:28px;top:84px;width:384px;text-align:center;font:800 64px ${COD};color:${GOOD}`, "MARKS ↑");
+      const dS = glass(D, 560, 902, 440, 220, HOT, 28); title(dS, 28, 16, "SILENT", HOT); show(dS, at("D", "chup"), { opacity: 0, y: 18 });
+      el(dS, `left:28px;top:84px;width:384px;text-align:center;font:800 56px ${COD};color:${HOT}`, "NO MARKS");
+      pillC(D, "LEARNS TO GUESS", 1157, at("D", "guess"), HOT);
+      M.fit(D, { y: 170, h: 1130 });
+
+      // diagram: E — fix 1: a way out. The model may say I don't know.
+      strip(E, 215, 0, P("E", 0) + .1);
+      const eC = glass(E, 80, 380, 920, 700, CYAN, 30); title(eC, 34, 18, "CHATBOT"); show(eC, at("E", "kaho") - .5, { opacity: 0 }, .3);
+      const eR = bubble(eC, 34, 90, 852, 120, "Say: I don't know", ACC, 46); show(eR, at("E", "kaho"), { opacity: 0, x: -30, y: 0 });
+      const eG = bubble(eC, 34, 280, 852, 120, "312 pages, Ramesh", HOT, 46); show(eG, at("E", "guess"), { opacity: 0, y: 14 });
+      strike(eC, 66, 340, 600, at("E", "guess") + .3);
+      const eN = bubble(eC, 34, 450, 852, 150, "I don't know", GOOD, 56); show(eN, at("E", "option"), { opacity: 0, y: 18 });
+      M.fit(E, { y: 170, h: 1130 });
+
+      // diagram: F — fix 2: your documents, a quote for every claim, drop the claims with no quote.
+      strip(F, 215, 1, P("F", 0) + .1);
+      const fD = glass(F, 80, 380, 920, 190, CYAN, 30); title(fD, 34, 16, "YOUR DOCS", CYAN); show(fD, at("F", "documents") - .3);
+      [0, 1, 2].forEach(i => el(fD, `left:${34 + i * 290}px;top:84px;width:262px;height:80px;border-radius:12px;background:#233147`));
+      const fA = glass(F, 80, 610, 920, 200, GOOD, 28); show(fA, at("F", "quote"), { opacity: 0, y: 18 });
+      el(fA, `left:34px;top:30px;font:800 46px ${LAT};color:${TEXT}`, "Claim A"); tile(fA, 520, 36, 366, 128, "QUOTE ✓", GOOD, 46);
+      const fB = glass(F, 80, 850, 920, 200, HOT, 28); show(fB, at("F", "claim"), { opacity: 0, y: 18 });
+      el(fB, `left:34px;top:30px;font:800 46px ${LAT};color:${TEXT}`, "Claim B"); tile(fB, 520, 36, 366, 128, "NO QUOTE", HOT, 44);
+      strike(fB, 34, 66, 250, at("F", "hata")); tl.to(fB, { opacity: .35, duration: .4, immediateRender: false }, at("F", "hata") + .1);
+      pillC(F, "REMOVED", 1085, at("F", "hata") + .2, HOT);
+      pillC(F, "YOU CAN CHECK", 1155, at("F", "khud"), GOOD);
+      M.fit(F, { y: 170, h: 1130 });
+
+      // diagram: G — fix 3: ask five times; three different names means the answer is not sure.
+      strip(G, 215, 2, P("G", 0) + .1);
+      pillC(G, "EXAMPLE", 345, P("G", 0) + .2);
+      const gC = glass(G, 80, 425, 920, 780, CYAN, 30); title(gC, 34, 18, "SAME QUESTION × 5"); show(gC, at("G", "wahi"), { opacity: 0 }, .3);
+      const gN = [["Anita", CYAN, 0], ["Ramesh", ACC, 0], ["Vikram", VIOLET, 0], ["Ramesh", ACC, 1], ["Vikram", VIOLET, 1]];
+      gN.forEach(([w, col, n], i) => { const r = bubble(gC, 34, 80 + i * 118, 852, 100, `<span style="color:${MUTED};margin-right:26px">${i + 1}</span>${w}`, col, 50); show(r, at("G", w, n), { opacity: 0, x: -24, y: 0 }); });
+      const gT = el(gC, `left:34px;top:672px;width:852px;text-align:center;font:800 48px ${COD};color:${HOT}`, "3 NAMES · NOT SURE"); show(gT, at("G", "teen"), { opacity: 0, y: 12 });
+      M.fit(G, { y: 170, h: 1130 });
+
+      // diagram: H — the fixes reduce hallucination, not remove it; check date, money, name yourself.
+      pillC(H, "ILLUSTRATION", 205, P("H", 0));
+      const hM = glass(H, 80, 290, 920, 440, CYAN, 30); title(hM, 34, 20, "HALLUCINATION"); show(hM, P("H", 0), { opacity: 0 }, .3);
+      el(hM, `left:34px;top:110px;width:852px;height:140px;border-radius:16px;background:#233147`);
+      const hF = el(hM, `left:34px;top:110px;width:852px;height:140px;border-radius:16px;background:${HOT};transform-origin:0 50%`); tl.set(hF, { opacity: 0 }, 0); tl.set(hF, { opacity: 1, scaleX: 1 }, P("H", 0) + .3);
+      tl.to(hF, { scaleX: .1, backgroundColor: GOOD, duration: .9, ease: "power2.inOut", immediateRender: false }, at("H", "kam"));
+      const hR = el(hM, `left:34px;top:300px;font:800 56px ${COD};color:${GOOD}`, "REDUCED ↓"); show(hR, at("H", "kam") + .5, { opacity: 0, y: 10 });
+      const hZ = el(hM, `left:34px;top:300px;width:852px;text-align:right;font:800 56px ${COD};color:${HOT}`, "NOT ZERO"); show(hZ, at("H", "khatam"), { opacity: 0, y: 10 });
+      [["DATE", "taarikh", 80], ["MONEY", "paisa", 380], ["NAME", "naam", 680]].forEach(([l, w, x]) => {
+        const k = tile(H, x, 780, 240, 230, l, ACC, 46); show(k, at("H", w), { opacity: 0, y: 18 });
+        const ck = el(H, `left:${x}px;top:1030px;width:240px;text-align:center;font:800 110px ${LAT};color:${GOOD}`, "✓"); show(ck, at("H", "aankh") + .1 + (x - 80) / 3000, { opacity: 0, y: 8 });
+      });
+      pillC(H, "YOU CHECK", 1190, at("H", "aankh"), GOOD);
+      M.fit(H, { y: 170, h: 1130 });
+
+      // diagram: I — comment and follow.
+      pillC(I, "COMMENT", 205, P("I", 0));
+      const iC = glass(I, 80, 285, 920, 440, CYAN, 30); title(iC, 34, 20, "CONFIDENT AI"); show(iC, P("I", 0), { opacity: 0 }, .3);
+      [0, 1].forEach(i => show(bubble(iC, 40, 96 + i * 160, 840, 130, i ? "Sounds right. Is it?" : "312 pages, by Ramesh", i ? CYAN : HOT, 48), P("I", 0) + .2 + i * .3, { opacity: 0, y: 14 }));
+      const iCm = glass(I, 80, 770, 920, 100, CYAN, 50);
+      el(iCm, `left:43px;top:28px;font:700 44px ${COD};color:#AEB9D1`, "COMMENT..."); show(iCm, at("I", "Comment"), { opacity: 0, y: 22 });
+      const iH = glass(I, 80, 900, 920, 120, ACC, 28);
+      el(iH, `left:38px;top:34px;font:800 49px ${COD};color:${TEXT}`, "@ai.learnvora");
+      el(iH, `left:615px;top:18px;width:240px;height:85px;border-radius:43px;background:${ACC};display:flex;align-items:center;justify-content:center;font:800 39px ${COD};color:#0B1220`, "FOLLOW");
+      show(iH, at("I", "follow") - .5, { opacity: 0, y: 22 });
+      M.fit(I, { y: 170, h: 1130 });
+
+      M.wipe(S.B); M.wipe(S.C); M.wipe(S.D); M.wipe(S.E); M.wipe(S.F); M.wipe(S.G); M.wipe(S.H); M.wipe(S.I);
+      M.finish({ kw: { hallucination: "hot", likely: "gold", score: "cyan", chance: "gold", guess: "hot", quote: "good", jhooth: "hot", pakka: "gold", kam: "good", jaanch: "cyan", nakli: "hot", facts: "hot", comment: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

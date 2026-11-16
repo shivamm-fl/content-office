@@ -1,0 +1,12 @@
+AI hallucination: why a fluent answer can be false
+
+Day 21/150: a language model picks the most likely next word, and nothing in that step checks facts, so a smooth, specific answer such as an author name or a page count can be made up. This is called hallucination. A 2025 paper (Kalai et al.) argues it persists partly because training and evaluation reward guessing over admitting uncertainty. Anthropic's guide lists ways to reduce it: allow the model to say "I don't know", ground answers in quotes from your own documents and retract claims with no supporting quote, and run the same prompt several times and compare (inconsistent answers can signal hallucination). These techniques reduce hallucination, they do not eliminate it, so check dates, money and names yourself. The book The Tin Lantern, the names and the percentages in the reel are invented toy examples, not a real model.
+
+Comment karke batao: kya AI ne tumhe kabhi koi nakli cheez confidently batayi hai?
+
+Sources:
+https://arxiv.org/abs/2509.04664
+https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations
+
+Tags: ai hallucination,why chatgpt makes things up,llm hallucination explained,how to reduce hallucination
+AI-assisted visuals and narration.
