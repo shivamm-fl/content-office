@@ -1,0 +1,140 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I"
+ ],
+ "min": {
+  "A": 2.5,
+  "B": 2.5,
+  "C": 2.5,
+  "D": 2.5,
+  "E": 2.5,
+  "F": 2.5,
+  "G": 2.5,
+  "H": 2.5,
+  "I": 2.5
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "click",
+   null,
+   null,
+   6.9
+  ],
+  [
+   "click",
+   null,
+   null,
+   9.6
+  ],
+  [
+   "click",
+   null,
+   null,
+   11.0
+  ],
+  [
+   "err",
+   null,
+   null,
+   14.7
+  ],
+  [
+   "click",
+   null,
+   null,
+   23.5
+  ],
+  [
+   "click",
+   null,
+   null,
+   26.7
+  ],
+  [
+   "click",
+   null,
+   null,
+   31.4
+  ],
+  [
+   "click",
+   null,
+   null,
+   34.0
+  ],
+  [
+   "click",
+   null,
+   null,
+   38.2
+  ],
+  [
+   "dip",
+   null,
+   null,
+   47.2
+  ],
+  [
+   "pop",
+   null,
+   null,
+   65.6
+  ],
+  [
+   "ok",
+   null,
+   null,
+   72.0
+  ],
+  [
+   "err",
+   null,
+   null,
+   73.6
+  ],
+  [
+   "ok",
+   null,
+   null,
+   94.0
+  ],
+  [
+   "pop",
+   null,
+   null,
+   117.0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Interviewer ने पूछा: Cache लगाने से system fast क्यों होता है?",
+   "B": "क्योंकि हर चीज़ एक जैसी दूर नहीं है। Memory हाथ के पास रखा मसाला डिब्बा है, disk गली की दुकान, और network दूसरे शहर का बाज़ार। नमक की चुटकी के लिए तुम बाज़ार नहीं जाते।",
+   "C": "अब यही दूरी computer में नापते हैं। ये numbers एक 2012{twenty-twelve} की मशहूर list से हैं, और सब about हैं। Memory से एक read, about 100{one-hundred} nanoseconds। SSD से random read, about 150{one-fifty} microseconds। उसी datacenter के दूसरे server तक round trip, about 500{five-hundred} microseconds। Disk seek, about 10{ten} milliseconds। और California से Netherlands जाकर packet लौटे, about 150{one-fifty} milliseconds।",
+   "D": "[thoughtful] ये units सुनने में सब छोटे लगते हैं, तो इन्हें इंसानी time में बदलते हैं। ये हमारा अपना हिसाब है, एक scale। मान लो memory की read 1{one} second की है। तब SSD की read 25{twenty-five} minutes की, datacenter का round trip about 83{eighty-three} minutes का, disk seek about 28{twenty-eight} घंटे का, और network का वो लंबा सफ़र about 17{seventeen} दिन का।",
+   "E": "यानी जो चीज़ memory से एक second में मिलती है, उसी के लिए दूर से इंतज़ार करना पड़े, तो हफ़्ते लग जाते हैं। इसीलिए cache लगाते हैं: बार बार चाहिए वाली चीज़ की एक copy, सबसे पास की memory में। चीज़ cache में मिल गई, तो वो hit। नहीं मिली, तो miss, और तब लंबा सफ़र करना पड़ता है।",
+   "F": "EXAMPLE, ये numbers मैंने मान लिए हैं। एक product page दिन में 1000{one-thousand} बार पढ़ा जाता है। Cache नहीं है, तो हर बार database तक जाना पड़ता है: 1000{one-thousand} लंबे trips। Cache है, तो पहली read miss है, एक ही trip होता है, और जवाब की copy cache में रख ली जाती है। बाकी 999{nine-hundred-ninety-nine} reads hit हैं, सीधे memory से।",
+   "G": "[thoughtful] एक catch है। Cache छोटा होता है, तो वो सब कुछ नहीं रख सकता। इसलिए वही चीज़ रखते हैं जो हाल में पढ़ी गई, क्योंकि वही अक्सर दोबारा माँगी जाती है।",
+   "H": "Interview में बोलो: cache सबसे पास रखी हुई copy है, इसलिए दूर का सफ़र बार बार नहीं, सिर्फ़ एक बार लगता है।",
+   "I": "तुम्हारे project में कौन सी चीज़ बार बार पढ़ी जाती है? Comment में लिखो। ऐसे और system design concepts के लिए follow करो।"
+  }
+ }
+}

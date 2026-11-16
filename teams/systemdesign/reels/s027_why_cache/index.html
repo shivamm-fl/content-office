@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Cache kyun lagate hain: memory, disk aur network ki speed ka fark</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="119" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+<div class="beat" id="sB"></div>
+<div class="beat" id="sC"></div>
+<div class="beat" id="sD"></div>
+<div class="beat" id="sE"></div>
+<div class="beat" id="sF"></div>
+<div class="beat" id="sG"></div>
+<div class="beat" id="sH"></div>
+<div class="beat" id="sI"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="119" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="119" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="119" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const SC = ["A","B","C","D","E","F","G","H","I"];
+      const M = Mo.init({ order: SC, tag: "SYSTEM DESIGN · DAY 027 / 150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M;
+      const [A, B, C, D, E, F, G, H, I] = SC.map((k) => M.$("#s" + k));
+            const ST = window.REEL.hi.starts;
+      const at = (sc, w, n) => M.W(sc, w, n);
+      const GREY = "#8592AD", INK = "#E8EDF6", AMB = "#F2B84B", DEAD = "#5B6577";
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const gone = (d, t) => { tl.to(d, { opacity: 0, duration: 0.25, ease: "power2.in", immediateRender: false }, t); return d; };
+      const goneAll = (a, t) => a.forEach((d) => gone(d, t));
+      let MP = { a: 400, b: 1165, A: 330, B: 1160, sx: 0.88 };
+      const setMap = (a, b, A, B) => { MP = { a, b, A, B, sx: 0.88 }; };
+      const ident = () => { MP = { a: 0, b: 1000, A: 0, B: 1000, sx: 1 }; };
+      const MX = (x) => 540 + (x - 540) * MP.sx, MW = (w) => w * MP.sx, KY = () => (MP.B - MP.A) / (MP.b - MP.a), MY = (y) => MP.A + (y - MP.a) * KY();
+      const chip = (host, txt, cx, y, w, col, t, size, h) => show(el(host, `left:${MX(cx) - MW(w) / 2}px;width:${MW(w)}px;top:${MY(y)}px;height:${h || 72}px;border-radius:14px;border:3px solid ${col};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 ${size || 36}px var(--code);color:${INK};white-space:nowrap`, txt), t, { opacity: 0, y: 10 });
+      const stamp = (host, txt, cx, y, w, col, t) => show(el(host, `left:${MX(cx) - MW(w) / 2}px;width:${MW(w)}px;top:${MY(y)}px;height:76px;border-radius:14px;border:3px solid ${col};background:rgba(14,18,30,.95);box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 40px var(--code);color:${col};white-space:nowrap`, txt), t, { opacity: 0, scale: 1.08 });
+      const meter = (host, x, y, w, lv, col, t) => {
+        const W = MW(w), tr = el(host, `left:${MX(x)}px;top:${MY(y)}px;width:${W}px;height:24px;border-radius:12px;background:rgba(150,175,215,.2);overflow:hidden`);
+        const f = el(tr, `left:0;top:0;width:${W}px;height:24px;transform-origin:0 50%;background:${col}`);
+        tl.set(f, { scaleX: lv, backgroundColor: col }, 0); show(tr, t, { opacity: 0, y: 0 });
+        return { tr, set: (tt, l, c, d) => tl.to(f, { scaleX: l, backgroundColor: c, duration: d || 0.7, ease: "power2.out", immediateRender: false }, tt) };
+      };
+      const line = (host, X1, Y1, X2, Y2, col, w, t, dash) => {
+        const x1 = MX(X1), y1 = MY(Y1), x2 = MX(X2), y2 = MY(Y2);
+        const L = Math.hypot(x2 - x1, y2 - y1), a = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+        const d = el(host, `left:${x1}px;top:${y1 - w / 2}px;width:${L}px;height:${w}px;` + (dash ? `border-top:${w}px dashed ${col}` : `background:${col};border-radius:${w / 2}px`));
+        gsap.set(d, { rotation: a, transformOrigin: "0 50%" }); return show(d, t, { opacity: 0 });
+      };
+      const dot = (host, X1, Y1, X2, Y2, col, t, dur, hollow) => {
+        const x1 = MX(X1), y1 = MY(Y1), x2 = MX(X2), y2 = MY(Y2);
+        const d = el(host, `left:${x1 - 14}px;top:${y1 - 14}px;width:28px;height:28px;border-radius:50%;box-sizing:border-box;` + (hollow ? `border:4px solid ${col}` : `background:${col}`));
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.05, immediateRender: false }, t);
+        tl.to(d, { x: x2 - x1, y: y2 - y1, duration: dur, ease: "none", immediateRender: false }, t); tl.to(d, { opacity: 0, duration: 0.15, immediateRender: false }, t + dur); return d;
+      };
+      const crowd = (host, cx, y, n, perRow, t, col) => {
+        const rows = Math.ceil(n / perRow), w = perRow * 40, wrap = el(host, `left:${MX(cx) - w / 2}px;top:${MY(y)}px;width:${w}px;height:${rows * 40}px`);
+        for (let i = 0; i < n; i++) el(wrap, `left:${(i % perRow) * 40 + 7}px;top:${Math.floor(i / perRow) * 40 + 7}px;width:26px;height:26px;border-radius:50%;background:${col || CYAN};opacity:.85`);
+        return show(wrap, t, { opacity: 0, y: 10 });
+      };
+      const ic = (host, kind, x, y, size, col) => M.icon(host, kind, MX(x + size / 2) - size / 2, MY(y), size, col);
+      const SHOW0 = (sc) => ST[sc] + 0.15;
+      // a flat tile: icon + label, any size; o.col stacks the icon above the label
+      const T = (host, x, y, w, h, label, icon, col, t, o) => { o = o || {};
+        const d = el(host, `left:${MX(x)}px;top:${MY(y)}px;width:${MW(w)}px;height:${h * KY()}px;border-radius:22px;border:3px solid ${M.ca(col, 0.6)};background:#16203A;box-sizing:border-box;display:flex;flex-direction:${o.col ? "column" : "row"};align-items:center;justify-content:center;gap:${o.col ? 2 : 14}px;font:800 ${o.size || 40}px var(--lat);color:${INK};white-space:nowrap`,
+          `<svg viewBox="0 0 64 64" width="${o.is || 48}" height="${o.is || 48}" style="flex:none;overflow:visible">${icon ? Viz.ICONS[icon](col) : ""}</svg><span>${label}</span>`);
+        return show(d, t, { opacity: 0, scale: 0.92, y: 0 }); };
+      const RING = (host, x, y, w, h, col, t, t2) => { const r = el(host, `left:${MX(x) - 7}px;top:${MY(y) - 7}px;width:${MW(w) + 14}px;height:${h * KY() + 14}px;border-radius:26px;border:4px solid ${col};box-sizing:border-box;pointer-events:none`);
+        tl.set(r, { opacity: 0 }, 0); tl.to(r, { opacity: 1, duration: 0.25, immediateRender: false }, t); if (t2 != null) tl.to(r, { opacity: 0, duration: 0.25, immediateRender: false }, t2); return r; };
+      const SLOT = (host, x, y, w, h, t, lab) => show(el(host, `left:${MX(x)}px;top:${MY(y)}px;width:${MW(w)}px;height:${h * KY()}px;border-radius:22px;border:3px dashed ${M.ca(GREY, 0.6)};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 ${lab && lab.length < 5 ? 30 : 38}px var(--lat);color:#7F8BAA;white-space:nowrap`, lab || ""), t, { opacity: 0, y: 0 });
+      const SW = "<svg viewBox='0 0 64 64' width='44' height='44'>";
+      // ===== shared bits =====
+      ident();
+      const LADROW = { mem: 690, disk: 850, net: 1090 };
+      // the ladder: one fixed frame (actor on top, three places down a dashed spine, farther = lower)
+      const ladder = (host, oy, labs, t) => {
+        const ys = { mem: oy + 170, disk: oy + 330, net: oy + 570 };
+        T(host, 70, oy, 360, 110, labs[0][0], labs[0][1], CYAN, t, { size: 40 });
+        line(host, 250, oy + 110, 250, ys.net + 55, GREY, 5, t, true);
+        [["mem", 1], ["disk", 2], ["net", 3]].forEach(([k, n]) => {
+          line(host, 250, ys[k] + 55, 470, ys[k] + 55, GREY, 5, t, true);
+          T(host, 470, ys[k], 520, 110, labs[n][0], labs[n][1], n === 3 ? AMB : CYAN, t + 0.05 * n, { size: 34, is: 46 });
+        });
+        return ys;
+      };
+      const trip = (host, oy, yS, t, dur, col) => {
+        dot(host, 250, oy + 110, 250, yS + 55, col, t, dur);
+        dot(host, 250, yS + 55, 470, yS + 55, col, t + dur, 0.2);
+      };
+      const sq = (host, x, y, s, col, t, from) => { const d = el(host, `left:${x}px;top:${y}px;width:${s}px;height:${s}px;border-radius:10px;background:${col}`); return show(d, t, from || { opacity: 0, scale: 0.8 }); };
+      const fly = (host, x1, y1, x2, y2, s, col, t, dur) => { const d = el(host, `left:${x1}px;top:${y1}px;width:${s}px;height:${s}px;border-radius:10px;background:${col}`);
+        tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.05, immediateRender: false }, t);
+        tl.to(d, { x: x2 - x1, y: y2 - y1, duration: dur, ease: "power2.inOut", immediateRender: false }, t); return d; };
+      const MIN = [["MEMORY", "bolt"], ["SSD", "chip"], ["SAME DATACENTER", "cloud"], ["DISK SEEK", "db"], ["ACROSS OCEAN", "globe"]];
+      const ROWY = (i) => 340 + i * 165;
+
+      // diagram: A
+      M.hook(["Why does a cache", "make it fast?"], { size: 88, top: 250 });
+      const lA = ladder(A, 520, [["CPU", "chip"], ["MEMORY", "bolt"], ["DISK", "db"], ["NETWORK", "cloud"]], 0.05);
+      trip(A, 520, lA.mem, at("A", "lagane", 0), 0.3, AMB);
+      trip(A, 520, lA.disk, at("A", "lagane", 0) + 0.1, 0.6, AMB);
+      trip(A, 520, lA.net, at("A", "lagane", 0) + 0.2, 1.0, AMB);
+      M.fit(A, { y: 460, h: 800 });
+
+      // diagram: B
+      const lB = ladder(B, 520, [["COOK", "user"], ["MEMORY · DABBA", "bolt"], ["DISK · SHOP", "db"], ["NETWORK · MANDI", "cloud"]], SHOW0("B"));
+      const rB = [RING(B, 470, lB.mem, 520, 110, AMB, at("B", "Memory", 0), at("B", "disk", 0) - 0.1),
+        RING(B, 470, lB.disk, 520, 110, AMB, at("B", "disk", 0), at("B", "network", 0) - 0.1),
+        RING(B, 470, lB.net, 520, 110, AMB, at("B", "network", 0), at("B", "namak", 0) - 0.1)];
+      const salt = chip(B, "PINCH OF SALT", 250, 390, 400, GOOD, at("B", "namak", 0), 36, 70);
+      trip(B, 520, lB.net, at("B", "baazar", 1), 1.0, AMB);
+      ic(B, "cross", 925, lB.net - 44, 76, HOT).show(at("B", "nahi", 1));
+      M.fit(B, { y: 330, h: 880 });
+
+      // diagram: C
+      const cN = ["100 ns", "150 µs", "500 µs", "10 ms", "150 ms"], cW = ["100", "150", "500", "10", "150"], cT = ["Memory", "SSD", "datacenter", "Disk", "California"];
+      const cNn = [0, 0, 0, 0, 1];
+      show(el(C, `left:290px;top:262px;width:500px;height:60px;border-radius:30px;border:3px solid ${AMB};background:#16203A;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:700 34px var(--code);color:${AMB}`, "ABOUT · 2012 LIST"), SHOW0("C"), { opacity: 0, y: 0 });
+      MIN.forEach(([lab, icn], i) => {
+        T(C, 70, ROWY(i), 520, 120, lab, icn, i === 4 ? AMB : CYAN, SHOW0("C") + i * 0.08, { size: 36, is: 50 });
+        const tS = at("C", cT[i], 0), tN = at("C", cW[i], cNn[i]);
+        RING(C, 70, ROWY(i), 520, 120, AMB, tS, i < 4 ? at("C", cT[i + 1], 0) - 0.1 : null);
+        chip(C, cN[i], 815, ROWY(i) + 24, 390, AMB, tN, 46, 72);
+      });
+      M.fit(C, { y: 250, h: 900 });
+
+      // diagram: D
+      const dN = ["1 SEC", "25 MIN", "83 MIN", "28 HOURS", "17 DAYS"], dW = [["1", 0], ["25", 0], ["83", 0], ["28", 0], ["17", 0]], dF = [4, 4, 4, 16, 240];
+      chip(D, "OUR SCALE: MEMORY = 1 SEC", 540, 262, 700, GOOD, SHOW0("D"), 32, 60);
+      MIN.forEach(([lab, icn], i) => {
+        T(D, 70, ROWY(i), 460, 120, lab, icn, i === 4 ? AMB : CYAN, SHOW0("D") + i * 0.08, { size: 32, is: 46 });
+        const t = at("D", dW[i][0], dW[i][1]);
+        chip(D, dN[i], 650, ROWY(i) + 24, 210, i === 4 ? HOT : AMB, t, 34, 72);
+        const tr = el(D, `left:780px;top:${ROWY(i) + 47}px;width:240px;height:26px;border-radius:13px;background:rgba(150,175,215,.2);overflow:hidden`);
+        const f = el(tr, `left:0;top:0;width:${dF[i]}px;height:26px;background:${i === 4 ? HOT : CYAN};transform-origin:0 50%`);
+        show(tr, SHOW0("D") + i * 0.08, { opacity: 0, y: 0 }); tl.set(f, { scaleX: 0 }, 0); tl.to(f, { scaleX: 1, duration: i === 4 ? 1.2 : 0.4, ease: "power2.out", immediateRender: false }, t);
+      });
+      M.fit(D, { y: 250, h: 900 });
+
+      // diagram: E
+      T(E, 70, 380, 400, 110, "CPU", "chip", CYAN, SHOW0("E"), { size: 40 });
+      line(E, 470, 435, 600, 435, GREY, 5, SHOW0("E"), true);
+      const eSlot = SLOT(E, 600, 380, 380, 110, SHOW0("E"), "");
+      const eCache = T(E, 600, 380, 380, 110, "CACHE", "bolt", GOOD, at("E", "cache", 0), { size: 40 });
+      goneAll([eSlot], at("E", "cache", 0) - 0.05);
+      line(E, 270, 490, 270, 980, GREY, 5, SHOW0("E"), true);
+      T(E, 70, 980, 910, 110, "FAR SERVER", "cloud", AMB, SHOW0("E") + 0.1, { size: 40 });
+      dot(E, 270, 490, 270, 980, AMB, at("E", "door", 0), 2.0);
+      chip(E, "WEEKS", 520, 700, 240, HOT, at("E", "hafte", 0), 44, 72);
+      fly(E, 700, 980, 790, 490, 40, AMB, at("E", "copy", 0), 0.6).style.borderRadius = "8px";
+      chip(E, "COPY", 790, 520, 200, AMB, at("E", "copy", 0) + 0.3, 36, 60);
+      dot(E, 470, 435, 600, 435, GOOD, at("E", "hit", 0), 0.3);
+      const eHit = chip(E, "HIT", 790, 296, 220, GOOD, at("E", "hit", 0) + 0.2, 44, 72);
+      gone(eHit, at("E", "miss", 0) - 0.1);
+      dot(E, 470, 435, 600, 435, HOT, at("E", "miss", 0), 0.3);
+      chip(E, "MISS", 790, 296, 220, HOT, at("E", "miss", 0) + 0.2, 44, 72);
+      dot(E, 270, 490, 270, 980, HOT, at("E", "lanba", 1), 1.0);
+      M.fit(E, { y: 250, h: 950 });
+
+      // diagram: F
+      chip(F, "EXAMPLE", 540, 262, 260, AMB, SHOW0("F"), 34, 60);
+      T(F, 70, 345, 520, 100, "PRODUCT PAGE", "doc", CYAN, SHOW0("F"), { size: 36, is: 46 });
+      chip(F, "1000 READS", 815, 355, 390, AMB, at("F", "1000", 0), 44, 72);
+      const bar = (host, y, w, col, t, dur) => { const f = el(host, `left:70px;top:${y}px;width:${w}px;height:56px;border-radius:12px;background:${col};transform-origin:0 50%`); tl.set(f, { opacity: 0, scaleX: 0 }, 0); tl.to(f, { opacity: 1, scaleX: 1, duration: dur || 0.8, ease: "power2.out", immediateRender: false }, t); return f; };
+      const trk = (host, y, t) => show(el(host, `left:70px;top:${y}px;width:940px;height:56px;border-radius:12px;background:rgba(150,175,215,.18)`), t, { opacity: 0, y: 0 });
+      trk(F, 590, SHOW0("F")); trk(F, 880, SHOW0("F"));
+      chip(F, "NO CACHE", 220, 500, 300, HOT, at("F", "Cache", 0), 36, 62);
+      bar(F, 590, 940, HOT, at("F", "1000", 1), 1.2);
+      chip(F, "1000 TRIPS", 540, 670, 400, HOT, at("F", "trips", 0), 44, 72);
+      chip(F, "WITH CACHE", 235, 790, 330, GOOD, at("F", "Cache", 1), 36, 62);
+      bar(F, 880, 6, AMB, at("F", "miss", 0), 0.2);
+      chip(F, "1 TRIP", 250, 960, 220, AMB, at("F", "trip", 0), 40, 66);
+      chip(F, "COPY IN CACHE", 800, 790, 420, AMB, at("F", "copy", 0), 34, 62);
+      const gBar = el(F, `left:78px;top:880px;width:932px;height:56px;border-radius:12px;background:${GOOD};transform-origin:0 50%`); tl.set(gBar, { opacity: 0, scaleX: 0 }, 0); tl.to(gBar, { opacity: 1, scaleX: 1, duration: 1.0, ease: "power2.out", immediateRender: false }, at("F", "999", 0));
+      chip(F, "999 HITS", 700, 960, 400, GOOD, at("F", "hit", 0), 44, 72);
+      M.fit(F, { y: 250, h: 920 });
+
+      // diagram: G
+      chip(G, "BIG STORE", 540, 290, 360, CYAN, SHOW0("G"), 36, 62);
+      const gCells = []; for (let r = 0; r < 4; r++) for (let c = 0; c < 6; c++) gCells.push(sq(G, 240 + c * 100, 380 + r * 100, 80, "#3A4A6A", SHOW0("G") + (r * 6 + c) * 0.01, { opacity: 0, scale: 1 }));
+      const gTile = el(G, `left:200px;top:880px;width:680px;height:200px;border-radius:22px;border:3px solid ${M.ca(GOOD, 0.6)};background:#16203A;box-sizing:border-box`);
+      show(gTile, at("G", "chhota", 0), { opacity: 0, y: 0 });
+      chip(G, "SMALL CACHE", 540, 820, 380, GOOD, at("G", "chhota", 0), 36, 62);
+      for (let i = 0; i < 4; i++) el(G, `left:${250 + i * 150}px;top:920px;width:120px;height:120px;border-radius:14px;border:3px dashed ${M.ca(GREY, 0.6)};box-sizing:border-box`);
+      gone(chip(G, "NO ROOM", 540, 1110, 360, HOT, at("G", "nahi", 0), 40, 66), at("G", "haal", 0) - 0.1);
+      const rec = [[0, 0], [1, 0], [0, 1], [2, 1]].map(([c, r]) => [240 + c * 100, 380 + r * 100]);
+      rec.forEach(([x, y], i) => {
+        const h = el(G, `left:${x - 6}px;top:${y - 6}px;width:92px;height:92px;border-radius:14px;border:4px solid ${AMB};box-sizing:border-box`); tl.set(h, { opacity: 0 }, 0); tl.to(h, { opacity: 1, duration: 0.25, immediateRender: false }, at("G", "haal", 0) + i * 0.1);
+        fly(G, x + 10, y + 10, 270 + i * 150, 940, 60, AMB, at("G", "rakhte", 0) + i * 0.12, 0.6);
+      });
+      chip(G, "RECENT", 860, 290, 200, AMB, at("G", "haal", 0), 36, 62);
+      chip(G, "ASKED AGAIN", 540, 1110, 420, GOOD, at("G", "dobara", 0), 40, 66);
+      tl.to(gTile, { borderColor: M.ca(GOOD, 0.95), duration: 0.2, immediateRender: false }, at("G", "dobara", 0));
+      M.fit(G, { y: 250, h: 920 });
+
+      // diagram: H
+      chip(H, "INTERVIEW ANSWER", 540, 262, 560, AMB, SHOW0("H"), 34, 60);
+      T(H, 70, 380, 400, 110, "CPU", "chip", CYAN, SHOW0("H"), { size: 40 });
+      const hSlot = SLOT(H, 600, 380, 380, 110, SHOW0("H"), "");
+      T(H, 600, 380, 380, 110, "CACHE", "bolt", GOOD, at("H", "cache", 0), { size: 40 });
+      goneAll([hSlot], at("H", "cache", 0) - 0.05);
+      line(H, 470, 435, 600, 435, GOOD, 8, at("H", "paas", 0));
+      line(H, 270, 490, 270, 980, GREY, 5, SHOW0("H"), true);
+      T(H, 70, 980, 910, 110, "FAR SERVER", "cloud", AMB, SHOW0("H") + 0.1, { size: 40 });
+      chip(H, "COPY", 790, 520, 200, AMB, at("H", "copy", 0), 36, 60);
+      [0, 1, 2].forEach((i) => dot(H, 470, 435, 600, 435, GOOD, at("H", "baar", 0) + i * 0.3, 0.25));
+      chip(H, "MANY", 535, 510, 200, GOOD, at("H", "baar", 0), 40, 62);
+      dot(H, 270, 490, 270, 980, AMB, at("H", "sirf", 0), 1.0);
+      chip(H, "ONCE", 520, 700, 220, AMB, at("H", "ek", 0), 44, 72);
+      M.fit(H, { y: 250, h: 950 });
+
+      // diagram: I
+      const IT = [["PROFILE", "user"], ["PRODUCT PAGE", "doc"], ["IMAGES", "image"]];
+      const iY = (i) => 330 + i * 130;
+      chip(I, "READ AGAIN & AGAIN?", 540, 262, 640, AMB, SHOW0("I"), 34, 58);
+      IT.forEach(([lab, icn], i) => { T(I, 170, iY(i) + 20, 700, 100, lab, icn, CYAN, SHOW0("I") + i * 0.06, { size: 38, is: 46 });
+        show(el(I, `left:${170 + 620}px;top:${iY(i) + 34}px;font:800 56px var(--code);color:${AMB}`, "?"), at("I", "kaun", 0) + i * 0.1, { opacity: 0, y: 0 }); });
+      show(el(I, `left:140px;width:800px;top:790px;height:76px;border-radius:38px;border:1.5px solid rgba(150,175,215,.5);font:500 38px var(--code);color:#A9B4CC;display:flex;align-items:center;padding:0 30px;box-sizing:border-box`, "Add a comment..."), at("I", "Comment", 0), { opacity: 0, y: 12 });
+      const iF = chip(I, "+  FOLLOW", 540, 920, 340, AMB, at("I", "follow", 0) - 0.4, 40, 64);
+      tl.fromTo(iF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("I", "follow", 0));
+      M.fit(I);
+
+      SC.slice(1).forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { cache: "cyan", memory: "cyan", hit: "good", miss: "hot", network: "gold", disk: "gold", copy: "gold", example: "gold", follow: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

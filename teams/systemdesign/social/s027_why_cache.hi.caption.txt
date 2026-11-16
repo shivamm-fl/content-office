@@ -1,0 +1,9 @@
+Day 27/150: Cache lagane se system fast kyun hota hai? Kyunki memory, disk aur network alag-alag door hain.
+
+Ek 2012 ki mashhur list ke about numbers: memory read 100 ns, SSD random read 150 us, datacenter round trip 500 us, disk seek 10 ms, California-Netherlands packet 150 ms. Memory ko 1 second maano (hamara apna hisab), to network ka safar about 17 din ka hota hai. Isliye bar bar chahiye wali cheez ki ek copy sabse paas rakhte hain: mili to hit, nahi mili to miss. Product page ke 1000 reads wala example maana hua hai.
+
+Interview mein bolo: cache sabse paas rakhi hui copy hai, isliye door ka safar bar bar nahi, sirf ek bar lagta hai.
+
+Comment karke batao: tumhare project mein kaun si cheez bar bar padhi jaati hai?
+
+#SystemDesign #Caching #Backend

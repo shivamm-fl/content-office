@@ -7,55 +7,20 @@
       "unit": "P3",
       "title": "Cache kyun lagate hain: memory, disk aur network ki speed ka fark",
       "format": "concept",
-      "one_idea": "Memory, disk and network are different distances away from the CPU (nanoseconds, microseconds to milliseconds, tens to hundreds of milliseconds), so keeping a copy of data you need again and again in the nearest place (a cache) skips the slow trip.",
+      "one_idea": "Memory, disk and network are different distances away from the CPU, so keeping a copy of data you need again and again in the nearest place (a cache) skips the slow trip.",
       "hook_type": "interviewer_asked",
       "spoken_hook": "Interviewer ने पूछा: Cache लगाने से system fast क्यों होता है?",
-      "hook_10s": "Interviewer ने पूछा: Cache लगाने से system fast क्यों होता है? क्योंकि हर चीज़ एक जैसी दूर नहीं है। Memory हाथ के पास रखा मसाला डिब्बा है, disk गली की दुकान, और network दूसरे शहर का बाज़ार। [frame 0: three boxes on a line, a spice jar near the cook, a shop down the lane, a far city, with a cook figure at the left]",
-      "hook_candidates": [
-        {
-          "hook": "Interviewer ने पूछा: Cache लगाने से system fast क्यों होता है?",
-          "formula": "interviewer_asked: one complete 9-word question, answer starts on the next line with the distance picture"
-        },
-        {
-          "hook": "Memory से पढ़ना और network से पढ़ना: कितना फ़र्क है?",
-          "formula": "direct_question: a plain question about the gap itself"
-        },
-        {
-          "hook": "Memory की एक read के समय में, network की read दिनों लगा देती है।",
-          "formula": "surprising_fact: the gap scaled to human time (needs the scaled numbers on screen, our arithmetic from sourced figures)"
-        }
-      ],
-      "hook_formula": "interviewer_asked: Interviewer ने पूछा: + one complete 9-word question on the topic (why a cache makes a system fast); the first teaching line is the distance analogy (spice jar, lane shop, far-city market), no question or staged reaction between hook and teaching",
+      "hook_formula": "interviewer_asked: one complete 9-word question; first teaching line is the distance analogy, nothing between",
       "hook_source": "https://en.wikipedia.org/wiki/Cache_(computing)",
-      "visual_idea": "A horizontal ladder of three places away from a CPU box: memory (right next to it), SSD or disk (a few steps), another server across the network (far right, a long arrow). Each trip is an arrow whose length and travel time grow; then the same ladder rescaled so memory = 1 second and the network trip lasts weeks. Then a small copy box (the cache) appears next to the CPU, the first read travels the long arrow once, and every later read is the short arrow.",
-      "everyday_anchor": "A cook keeps the masala dabba on the counter (memory), the rest of the stock in the shop down the lane (disk), and the wholesale mandi in another city (network); you do not go to the mandi for every pinch of salt.",
-      "example": "EXAMPLE only: a product page read 1,000 times a day; without a cache each read goes to the database, with a cache one read goes to the database and 999 are served from memory. The sourced latency figures (2012 list: main memory about 100 ns, 4K random SSD read 150 us, datacenter round trip 500 us, disk seek 10 ms, a packet from California to the Netherlands and back 150 ms) are shown as 'about, from a 2012 list'; the 'if memory were 1 second' scale is our own arithmetic on those figures (150 us = 25 min, 500 us = about 83 min, 10 ms = about 28 hours, 150 ms = about 17 days).",
       "sources": [
         "https://gist.github.com/jboner/2841832",
         "https://en.wikipedia.org/wiki/Memory_hierarchy",
         "https://en.wikipedia.org/wiki/Cache_(computing)",
         "https://en.wikipedia.org/wiki/Locality_of_reference"
       ],
-      "facts_to_verify": [
-        "Re-fetch the gist (Latency Comparison Numbers, ~2012, credited to Jeff Dean and Peter Norvig): main memory reference 100 ns, read 4K randomly from SSD 150,000 ns, round trip within same datacenter 500,000 ns, disk seek 10,000,000 ns, packet CA->Netherlands->CA 150,000,000 ns. Say 'about' and 'from a 2012 list'; a commenter notes queuing and contention are not included.",
-        "Memory hierarchy page table (a 2020s AMD Zen 4 system): L1 1 ns, main memory 82.5 ns, SSD 0.2 ms, HDD 4.16 ms; use only as 'newer numbers have the same order', keep the shown numbers to one list.",
-        "Cache (computing) page: hit, miss, a miss costs a more expensive access to the backing store and the data is usually copied into the cache; hit rate is the share of accesses that are hits.",
-        "Locality of reference page: a cache is a simple example of exploiting temporal locality (recently used data is used again); do not show a hit-rate number, the page gives none.",
-        "Check the scaled-time arithmetic (memory 100 ns = 1 s): 150 us = 1,500 s = 25 min; 500 us = 5,000 s = about 83 min; 10 ms = 100,000 s = about 28 h; 150 ms = 1,500,000 s = about 17 days.",
-        "Do not say a cache is 'always' faster, 'N times' for a real company, or name a cache product's speed: no fetched page supports it. Say that a cache has to be small and a copy can go stale only if it is taught in this reel; otherwise leave staleness out (one idea per reel).",
-        "No code is shown on screen, so nothing to run; if the builder adds a timing demo it must run it first and show the real output."
-      ],
-      "length_target_s": 120,
+      "length_target_s": 125,
       "cover_headline": "Why Caches Make Systems Fast",
       "thumb_text": "MEMORY vs NETWORK",
-      "keywords": [
-        "why use cache in system design",
-        "cache kya hota hai hindi",
-        "memory vs disk vs network latency",
-        "latency numbers every programmer should know",
-        "system design interview cache explained",
-        "cache hit and cache miss"
-      ],
       "status": "planned",
       "qa_passed": false,
       "script_file": "state/scripts/s027.txt",
