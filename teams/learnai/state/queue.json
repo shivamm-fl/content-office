@@ -2577,23 +2577,12 @@
       "title": "Long Video: Whole Video or Sampled Frames",
       "format": "question",
       "status": "planned",
-      "one_idea": "Do not send every frame of a long video. First use the transcript to find the moment, then send sampled frames (Gemini's API default is 1 frame per second; a sparser sample such as 1 frame per 5 s is cheaper), and zoom with more frames only on the short clip where detail matters. Fast action loses detail at 1 fps, so raise the frame rate for that part.",
-      "trap": "Sending every frame: cost and context explode; sample frames plus the transcript instead.",
+      "one_idea": "Do not send every frame of a long video. First use the transcript to find the moment, then send sampled frames (Gemini default 1 frame per second; sparser such as 1 per 5 s is cheaper), and zoom with more frames only on the short clip where detail matters. Fast action loses detail at 1 fps, so raise the frame rate for that part.",
       "hook_type": "relatable_stake",
       "spoken_hook": "एक घंटे की video, AI बीच का scene भूल गया।",
-      "hook_formula": "relatable_stake (short scene, one number, no jargon; owner-coordinator read of growth analyst 2026-11-16: one line of at most 10 words)",
-      "hook_source": "state/growth_notes.md 2026-11-06 and 2026-11-12 (full sentence scene, one number) and the 2026-11-16 growth-analyst read via the coordinator; the scene is an EXAMPLE, not a measured case",
-      "visual_idea": "A one-hour timeline strip with a scene in the middle that the AI answer card misses; a film strip of 108,000 frames against a 1,000,000-token window gauge that overflows; a three-step funnel: transcript line with a timestamp, a film strip thinned to one frame in five, a 30-second zoom clip with dense frames; a gauge showing 57,420 tokens against 7,128,000.",
-      "everyday_anchor": "Like finding one scene in a long cricket match recording: you do not rewatch every ball, you check the commentary, skim every few seconds and replay the one over that matters.",
-      "example": "EXAMPLE, assumed video: 1 hour, 30 fps camera, low media resolution (Gemini docs: 66 tokens per frame). Every frame: 108,000 frames = 7,128,000 tokens. Sampled 1 frame per 5 s: 720 frames = 47,520 tokens, plus a 30 s zoom at 5 fps: 150 frames = 9,900 tokens, total 57,420, about 124 times smaller. Run: state/runs/q165_video_tokens_run.py.",
       "sources": [
         "https://aistudio.google.com/docs/video-understanding",
         "https://aistudio.google.com/docs/tokens"
-      ],
-      "facts_to_verify": [
-        "Recheck on the live page before the script: 66 tokens per frame at low media resolution (258 otherwise), audio 32 tokens per second, default sampling 1 fps, fast action may lose detail at 1 fps, custom fps and clipping exist (static mode only). WebFetch gave a model's extraction, not raw HTML.",
-        "The tokens page says 263 tokens per second for video; unreconciled with the video page, not used on screen.",
-        "Not verified, so not said as Google's advice: transcript plus sampled frames (it is our own advice)."
       ],
       "length_target_s": 75,
       "cover_headline": "Long Video: Do Not Send Every Frame",
@@ -2603,20 +2592,7 @@
         "video understanding llm",
         "frame sampling",
         "ai engineer interview"
-      ],
-      "beats": {
-        "1_hook_0_8s": "Scene: hour-long video, AI forgot the middle scene. Interview question spoken by second 10: how do you make an AI understand a long video, whole video or chosen frames?",
-        "2_answer_8_18s": "Your answer: do not send the whole video; find the moment from the transcript, send sampled frames, zoom only where detail matters. Three steps.",
-        "3_tempting_fails_18_35s": "Every frame of a 1 hour, 30 fps video is 108,000 frames; at 66 tokens each that is 7,128,000 tokens, about seven times a 1,000,000-token window, and you pay for all of it.",
-        "4_technique_35_62s": "Step 1 transcript tells where to look (WHY: text is cheap and has timestamps). Step 2 sample one frame every 5 s: 720 frames, 47,520 tokens (WHY: neighbouring frames repeat). Step 3 zoom: 30 s at 5 fps, 150 frames, 9,900 tokens (WHY: detail only needed there). Total 57,420.",
-        "5_boundary_62_70s": "Gemini's default is 1 frame per second and its docs say fast action can lose detail at 1 fps: for sports or quick screen clicks raise the fps on that clip.",
-        "6_say_it_70_78s": "Poori video nahi bhejte: transcript se moment dhoondho, kam frames sample karo, aur jahan detail chahiye wahan hi fps badhao.",
-        "7_close": "Easy comment question (one word or number) plus follow line: roz ek naya interview sawal, poore jawab ke saath."
-      },
-      "notes": "Hook type chosen on the coordinator's 2026-11-16 correction (growth-analyst read): stake, not the least-used type (company_specific, 0 of the last six q, parked today). Bar: skip at or under 60 %, watch 13 s or more, saves 2 or more per 100 reach. Researcher fetched sources 2026-11-16. Agentic mode (Google's own claim of up to 88 % fewer tokens) exists but is left out: one boundary only.",
-      "qa_passed": false,
-      "approval_status": "pending",
-      "production_date_ist": "2026-11-16"
+      ]
     },
     {
       "id": "q166",

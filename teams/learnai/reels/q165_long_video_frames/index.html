@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Long Video: Whole Video or Sampled Frames</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="107" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          .q_strip { position:absolute; left:80px; width:920px; height:80px; border-radius:16px; background:#1B2538; border:3px solid #26324B; }
+          .q_tag { position:absolute; font:700 40px "Space Grotesk",sans-serif; white-space:nowrap; }
+          .q_big { position:absolute; left:0; width:1080px; text-align:center; font:700 120px "JetBrains Mono",monospace; white-space:nowrap; }
+          .q_row { position:absolute; left:80px; width:920px; height:110px; border-radius:24px; background:#111A2C; border:3px solid #26324B; font:700 50px "Space Grotesk",sans-serif; display:flex; align-items:center; padding-left:36px; white-space:nowrap; }
+          .q_tl { position:absolute; height:70px; border-radius:6px; }
+          .q_ln { position:absolute; left:40px; font:600 42px "JetBrains Mono",monospace; white-space:nowrap; color:#8592AD; }
+          .q_tile { position:absolute; border-radius:4px; background:#26324B; }
+          .q_bar { position:absolute; left:80px; height:90px; border-radius:14px; transform-origin:0 50%; }
+          .q_ep { position:absolute; left:790px; top:250px; padding:8px 20px; border-radius:999px; border:3px solid #F2B544; color:#F2B544; font:700 34px "Space Grotesk",sans-serif; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="chip" id="a_h" style="left:280px; top:270px; width:520px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:54px;">1 HOUR VIDEO</div>
+          <div class="q_strip" id="a_st" style="top:400px;"></div>
+          <div class="q_tl" id="a_sc" style="left:480px; top:405px; width:120px; background:#F2B544;"></div>
+          <div class="q_tag gold" id="a_sl" style="left:470px; top:490px;">SCENE</div>
+          <div class="card" id="a_ai" style="left:80px; top:650px; width:920px; height:330px; border-color:#5BC0EB;">
+            <div class="q_tag cyan" style="left:40px; top:28px; font-size:36px;">AI ANSWER</div>
+            <div class="q_ln" style="top:100px; color:#E8EDF6;">0:00 intro . . . ok</div>
+            <div class="q_ln" style="top:170px; color:#E8EDF6;">58:00 outro . . . ok</div>
+            <div class="q_ln red" id="a_miss" style="top:240px;">middle scene ?  &#10007;</div>
+          </div>
+          <div class="q_row" id="a_1" style="top:620px;"><span class="gold" style="margin-right:24px;">1</span>TRANSCRIPT</div>
+          <div class="q_row" id="a_2" style="top:780px;"><span class="gold" style="margin-right:24px;">2</span>SAMPLE FRAMES</div>
+          <div class="q_row" id="a_3" style="top:940px;"><span class="gold" style="margin-right:24px;">3</span>ZOOM CLIP</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="q_tag cyan" id="b_l1" style="left:80px; top:300px;">5 HR MATCH</div>
+          <div class="q_strip" id="b_bar" style="top:380px; height:150px;"></div>
+          <div id="b_seg" style="position:absolute; left:80px; top:380px; width:920px; height:150px;"></div>
+          <div class="q_tag" id="b_l2" style="left:80px; top:620px;">COMMENTARY</div>
+          <div id="b_com" style="position:absolute; left:80px; top:690px; width:920px; height:60px;"></div>
+          <div class="x c gold" id="b_ov" style="top:810px; font-size:120px;">OVER 37</div>
+          <div class="card" id="b_open" style="left:180px; top:980px; width:720px; height:200px; border-color:#F2B544;"><div class="q_tag gold" style="left:40px; top:30px; font-size:36px;">OPEN HERE</div><div class="q_tl" style="left:40px; top:100px; width:640px; height:60px; background:#F2B544;"></div></div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="chip" id="c_h" style="left:100px; top:270px; width:300px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:48px;">1 HOUR</div>
+          <div class="chip" id="c_f" style="left:430px; top:270px; width:300px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:48px;">30 FPS</div>
+          <div class="q_ep" id="c_ep" style="left:770px; top:285px;">EXAMPLE</div>
+          <div class="q_big" id="c_fr" style="top:400px;">0</div>
+          <div class="q_tag mut" id="c_frl" style="left:0; width:1080px; text-align:center; top:540px;">frames</div>
+          <div class="x c" id="c_x" style="top:620px; font-size:64px;">&times; 66 <span class="gold">tokens</span></div>
+          <div class="q_big red" id="c_tk" style="top:720px; font-size:112px;">0</div>
+          <div class="q_bar" id="c_full" style="top:920px; width:920px; background:#E8596B;"></div>
+          <div class="q_bar" id="c_win" style="top:920px; width:129px; background:#F2B544;"></div>
+          <div class="q_tag gold" id="c_wl" style="left:80px; top:1030px;">1M WINDOW</div>
+          <div class="q_tag red" id="c_7" style="left:760px; top:1030px; font-size:60px;">7&times; OVER</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="chip" id="d_h" style="left:200px; top:270px; width:680px; background:#F2B544; color:#0B1220; font-size:50px;">STEP 1 &middot; TRANSCRIPT</div>
+          <div class="card" id="d_c" style="left:80px; top:390px; width:920px; height:430px;">
+            <div class="q_ln" style="top:36px;">00:12  welcome back</div>
+            <div class="q_ln" style="top:116px;">21:05  toss and teams</div>
+            <div class="q_ln" id="d_hit" style="top:196px; color:#F2B544; font-weight:800;">37:20  four runs, what a shot!</div>
+            <div class="q_ln" style="top:276px;">52:40  rain stops play</div>
+            <div class="q_ln" style="top:350px; font-size:34px; color:#4CC38A;">text = small and cheap</div>
+          </div>
+          <div class="q_strip" id="d_st" style="top:960px;"></div>
+          <div class="q_tl" id="d_mk" style="left:600px; top:955px; width:14px; height:90px; background:#F2B544;"></div>
+          <div class="q_tag gold" id="d_t" style="left:520px; top:1070px;">37:20</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="chip" id="e_h" style="left:200px; top:270px; width:680px; background:#F2B544; color:#0B1220; font-size:50px;">STEP 2 &middot; SAMPLE</div>
+          <div class="q_tag mut" id="e_l1" style="left:80px; top:390px;">1 / SEC</div>
+          <div id="e_r1" style="position:absolute; left:80px; top:450px; width:920px; height:110px;"></div>
+          <div class="q_tag gold" id="e_l2" style="left:80px; top:610px;">1 / 5 SEC</div>
+          <div id="e_r2" style="position:absolute; left:80px; top:670px; width:920px; height:110px;"></div>
+          <div class="q_big" id="e_n" style="top:840px; font-size:130px;">720</div>
+          <div class="q_tag mut" id="e_nl" style="left:0; width:1080px; text-align:center; top:985px;">frames</div>
+          <div class="q_big gold" id="e_tk" style="top:1050px; font-size:96px;">47,520</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_h" style="left:200px; top:270px; width:680px; background:#F2B544; color:#0B1220; font-size:50px;">STEP 3 &middot; ZOOM</div>
+          <div id="f_g1">
+            <div class="q_strip" id="f_st" style="top:400px;"></div>
+            <div class="q_tl" id="f_mk" style="left:560px; top:395px; width:30px; height:90px; background:#F2B544;"></div>
+            <div class="card" id="f_z" style="left:80px; top:560px; width:920px; height:230px; border-color:#F2B544;"><div class="q_tag gold" style="left:30px; top:20px; font-size:36px;">30 S CLIP &middot; 5 FPS</div><div id="f_zt" style="position:absolute; left:30px; top:100px; width:860px; height:90px;"></div></div>
+            <div class="x c" id="f_a" style="top:850px; font-size:90px;">150 <span class="mut" style="font-size:50px;">frames</span></div>
+            <div class="x c gold" id="f_b" style="top:980px; font-size:90px;">9,900 <span class="mut" style="font-size:50px;">tokens</span></div>
+          </div>
+          <div id="f_g2">
+            <div class="q_tag red" style="left:80px; top:420px;">EVERY FRAME &middot; 7,128,000</div>
+            <div class="q_bar" style="top:490px; width:920px; background:#E8596B;"></div>
+            <div class="q_tag green" style="left:80px; top:660px;">OUR WAY &middot; 57,420</div>
+            <div class="q_bar" id="f_sl" style="top:730px; width:7px; background:#4CC38A;"></div>
+            <div class="x c green" id="f_124" style="top:900px; font-size:120px;">124&times; LESS</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="card" id="g_p1" style="left:80px; top:290px; width:920px; height:330px; border-color:#E8596B;">
+            <div class="q_tag red" style="left:36px; top:20px; font-size:38px;">1 FPS</div>
+            <svg width="920" height="330" style="position:absolute;left:0;top:0;" id="g_s1"></svg>
+          </div>
+          <div class="card" id="g_p2" style="left:80px; top:700px; width:920px; height:330px; border-color:#4CC38A;">
+            <div class="q_tag green" style="left:36px; top:20px; font-size:38px;">MORE FPS</div>
+            <svg width="920" height="330" style="position:absolute;left:0;top:0;" id="g_s2"></svg>
+          </div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="chip" id="h_c" style="left:240px; top:270px; width:600px; background:#F2B544; color:#0B1220; font-size:50px;">INTERVIEW ANSWER</div>
+          <div class="q_row" id="h_1" style="top:390px;"><span class="cyan" style="margin-right:20px;">TRANSCRIPT</span>&rarr; find</div>
+          <div class="q_row" id="h_2" style="top:530px;"><span class="gold" style="margin-right:20px;">FEW FRAMES</span>&rarr; sample</div>
+          <div class="q_row" id="h_3" style="top:670px;"><span class="green" style="margin-right:20px;">FPS UP</span>&rarr; clip only</div>
+          <div class="card" id="h_cm" style="left:120px; top:850px; width:840px; height:210px; border-color:#5BC0EB;">
+            <div class="chip" id="h_o1" style="left:50px; top:60px; width:340px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:44px;">SPEECH</div>
+            <div class="chip" id="h_o2" style="left:450px; top:60px; width:340px; border:4px solid #F2B544; color:#F2B544; font-size:44px;">ACTION</div>
+          </div>
+          <div class="chip" id="h_f" style="left:300px; top:1100px; width:480px; background:#F2B544; color:#0B1220; font-size:50px;">+ FOLLOW</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="107" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="107" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="107" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI INTERVIEW" });
+      const { tl } = M;
+      const { at, q, qa, hide, count } = FX(M);
+      const show = (el, t, o = {}) => tl.fromTo(el, { opacity: 0, y: o.y ?? 24 }, { opacity: 1, y: 0, duration: o.d ?? 0.45, ease: "power3.out" }, t);
+      const grow = (el, t, d) => tl.fromTo(el, { scaleX: 0, opacity: 1 }, { scaleX: 1, duration: d ?? 0.5, ease: "power3.out" }, t);
+      const fmt = (v) => Math.round(v).toLocaleString("en-US");
+      const mk = (host, cls, css) => { const d = document.createElement("div"); d.className = cls; d.style.cssText = css; q(host).appendChild(d); return d; };
+      const hideAt = (el, t) => tl.to(el, { opacity: 0, duration: 0.25, ease: "power1.in" }, t);
+      // diagram: A
+      // A: the hour strip with the missed scene; the AI answer card skips it, then three step rows
+      show("#a_h", 0.05, { y: 0, d: 0.3 }); show("#a_st", 0.05, { y: 0, d: 0.3 }); show("#a_sc", 0.1, { y: 0, d: 0.3 });
+      show("#a_sl", 0.2, { y: 0, d: 0.3 });
+      tl.fromTo("#a_miss", { opacity: 0 }, { opacity: 1, duration: 0.3 }, at("A", "bhool") - 0.1);
+      tl.fromTo("#a_ai", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.3);
+      hideAt("#a_ai", at("A", "jawab") + 0.3); hideAt("#a_sl", at("A", "jawab") + 0.3);
+      show("#a_1", at("A", "transcript") - 0.1, { y: 0 }); show("#a_2", at("A", "frames") - 0.1, { y: 0 }); show("#a_3", at("A", "zoom") - 0.1, { y: 0 });
+      // diagram: B
+      // B: 5-hour bar, commentary text bars, the over opened
+      show("#b_l1", at("B", "paanch") - 0.1); show("#b_bar", at("B", "paanch") - 0.1);
+      const seg = q("#b_seg");
+      for (let i = 0; i < 20; i++) { const d = mk("#b_seg", "q_tl", `left:${i * 46}px; top:0; width:42px; height:150px; background:${i === 12 ? "#F2B544" : "#26324B"}; border-radius:6px;`); show(d, at("B", "recording") + i * 0.02, { y: 0, d: 0.15 }); }
+      show("#b_l2", at("B", "commentary") - 0.1); 
+      const widths = [160, 90, 210, 70, 120, 150, 80, 40];
+      let cx = 0; widths.forEach((w, i) => { const d = mk("#b_com", "q_tl", `left:${cx}px; top:${(i % 2) * 24}px; width:${w * 1.0}px; height:20px; background:${i === 5 ? "#F2B544" : "#8592AD"};`); cx += w + 20; show(d, at("B", "commentary") + i * 0.05, { y: 0, d: 0.15 }); });
+      show("#b_ov", at("B", "over") - 0.1, { y: 0 }); show("#b_open", at("B", "kholte") - 0.3);
+      // diagram: C
+      // C: 108,000 frames x 66 tokens = 7,128,000 against the 1,000,000 window (true scale)
+      show("#c_h", at("C", "ghante") - 0.1); show("#c_f", at("C", "thirty") - 0.1); show("#c_ep", at("C", "maan"));
+      show("#c_fr", at("C", "tees") - 0.2, { y: 0 }); show("#c_frl", at("C", "tees") - 0.2, { y: 0 });
+      count("#c_fr", 0, 108000, at("C", "laakh") - 0.2, 1.0, fmt);
+      show("#c_x", at("C", "sixty") - 0.1); show("#c_tk", at("C", "kul") - 0.1, { y: 0 });
+      count("#c_tk", 0, 7128000, at("C", "ikahttar") - 0.1, 1.5, fmt);
+      grow("#c_full", at("C", "das") - 0.2, 0.9); show("#c_win", at("C", "das") - 0.1, { y: 0 }); show("#c_wl", at("C", "limit") - 0.1); show("#c_7", at("C", "saat") - 0.1, { y: 0 });
+      // diagram: D
+      // D: the transcript card, one gold line, a marker on the hour strip
+      show("#d_h", at("D", "pahla") - 0.1); show("#d_c", at("D", "transcript") - 0.1);
+      tl.fromTo("#d_hit", { opacity: 0.35 }, { opacity: 1, duration: 0.3 }, at("D", "pal") - 0.1);
+      show("#d_st", at("D", "sasta") - 0.1, { y: 0 }); show("#d_mk", at("D", "pata") - 0.1, { y: 0 }); show("#d_t", at("D", "pata") - 0.1, { y: 0 });
+      // diagram: E
+      // E: dense strip vs thin strip, every fifth tile gold
+      show("#e_h", at("E", "doosra") - 0.1); show("#e_l1", at("E", "sample") - 0.2); show("#e_r1", at("E", "sample") - 0.2);
+      for (let i = 0; i < 60; i++) { const d = mk("#e_r1", "q_tile", `left:${i * 15.3}px; top:0; width:11px; height:110px;`); show(d, at("E", "sample") + i * 0.004, { y: 0, d: 0.12 }); }
+      show("#e_l2", at("E", "paanch") - 0.2); show("#e_r2", at("E", "paanch") - 0.2);
+      for (let i = 0; i < 12; i++) { const d = mk("#e_r2", "q_tile", `left:${i * 76.5}px; top:0; width:11px; height:110px; background:#F2B544;`); show(d, at("E", "paanch") + i * 0.03, { y: 0, d: 0.12 }); }
+      show("#e_n", at("E", "seven") - 0.1, { y: 0 }); show("#e_nl", at("E", "seven") - 0.1, { y: 0 }); show("#e_tk", at("E", "saintalis") - 0.1, { y: 0 });
+      count("#e_n", 0, 720, at("E", "seven") - 0.1, 0.5, fmt); count("#e_tk", 0, 47520, at("E", "saintalis") - 0.1, 0.8, fmt);
+      // diagram: F
+      // F: the hour strip opens a 30 s clip of dense frames; then the true-scale total
+      show("#f_h", at("F", "teesra") - 0.1); show("#f_st", at("F", "teesra") - 0.1, { y: 0 });
+      show("#f_mk", at("F", "transcript") + 0.1, { y: 0 }); show("#f_z", at("F", "tees") - 0.1);
+      for (let i = 0; i < 30; i++) { const d = mk("#f_zt", "q_tile", `left:${i * 29}px; top:0; width:22px; height:90px; background:#F2B544;`); show(d, at("F", "five") + i * 0.02, { y: 0, d: 0.12 }); }
+      show("#f_a", at("F", "ek") - 0.1, { y: 0 }); show("#f_b", at("F", "nau") - 0.1, { y: 0 });
+      hideAt("#f_g1", at("F", "kul") - 0.3);
+      tl.set("#f_g2", { opacity: 0 }, 0); tl.fromTo("#f_g2", { opacity: 0 }, { opacity: 1, duration: 0.4 }, at("F", "kul"));
+      show("#f_124", at("F", "chaubis") - 0.1, { y: 0 });
+      // diagram: G
+      // G: ball path, sparse dots against dense dots
+      const svgs = (id, xs, hitIdx) => { const s = q(id); let h = '<rect x="470" y="150" width="26" height="150" rx="12" fill="#8592AD" transform="rotate(-18 483 225)"/>'; xs.forEach((x, i) => { const y = 120 + 0.0006 * (x - 484) * (x - 484) * 0 + Math.abs(x - 484) * 0.12 + 40; h += `<circle id="${id.slice(1)}_${i}" cx="${x}" cy="${y}" r="${i === hitIdx ? 26 : 20}" fill="${i === hitIdx ? "none" : "#F2B544"}" ${i === hitIdx ? 'stroke="#F2B544" stroke-width="6"' : ""}/>`; }); s.innerHTML = h; };
+      svgs("#g_s1", [110, 860], -1); svgs("#g_s2", [110, 220, 330, 440, 530, 640, 750, 860], 4);
+      show("#g_p1", at("G", "tez") - 0.1); tl.fromTo("#g_s1", { opacity: 0 }, { opacity: 1, duration: 0.4 }, at("G", "tez"));
+      show("#g_p2", at("G", "isliye") - 0.2); tl.fromTo("#g_s2", { opacity: 0 }, { opacity: 1, duration: 0.4 }, at("G", "isliye") - 0.1);
+      const miss = mk("#g_p1", "x red", "left:330px; top:14px; font-size:44px;"); miss.innerHTML = "BAT HIT MISSED &#10007;"; show(miss, at("G", "gend") - 0.1);
+      const hit = mk("#g_p2", "x green", "left:330px; top:14px; font-size:44px;"); hit.innerHTML = "BAT HIT &#10003;"; show(hit, at("G", "badhao") - 0.2);
+      // diagram: H
+      // H: the answer in three rows, comment options, follow press
+      show("#h_c", at("H", "interview") - 0.05); show("#h_1", at("H", "transcript") - 0.1, { y: 0 }); show("#h_2", at("H", "frames") - 0.1, { y: 0 }); show("#h_3", at("H", "fps") - 0.1, { y: 0 });
+      show("#h_cm", at("H", "boli") - 0.5); show("#h_o1", at("H", "boli") - 0.1, { y: 0 }); show("#h_o2", at("H", "dikhne") - 0.1, { y: 0 });
+      show("#h_f", at("H", "follow") - 0.4);
+      tl.fromTo("#h_f", { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1 }, at("H", "follow"));
+      M.finish({ kw: { frame: "gold", frames: "gold", tokens: "gold", transcript: "cyan", sample: "gold", fps: "good", zoom: "good", laakh: "hot", guna: "hot", over: "gold", comment: "gold", follow: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

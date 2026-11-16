@@ -1,0 +1,15 @@
+Ek ghante ki video, AI beech ka scene bhool gaya. Interview mein poochte hain: ek ghante ki video AI model ko kaise doge?
+
+Jawab: har frame mat bhejo.
+Step 1: transcript padho, wahi se pal milta hai.
+Step 2: poori video se kuch frames sample karo (Gemini default 1 frame per second, 5 second mein 1 bhi chalta hai).
+Step 3: us pal ka 30 second ka clip kaato aur uspar zyada fps se zoom karo.
+
+EXAMPLE (maan liye numbers): 1 ghanta, 30 fps, 66 tokens per frame. Har frame = 7,128,000 tokens. Sample + zoom = 57,420 tokens, lagbhag 124 guna kam.
+Tez action par 1 fps mein detail kho jaati hai, isliye us clip par fps badhao.
+
+Interview mein bolo: main poori video nahi bhejta, transcript se pal dhoondhta hoon, kam frames sample karta hoon, aur fps sirf chhote clip par badhata hoon.
+
+Tumhari video mein zyada kaam ki cheez kya hai, boli hui baat ya dikhne wali action? Comment karo.
+
+Source: Google Gemini API docs (video understanding). Transcript + sampling ka tareeka humari apni salah hai.

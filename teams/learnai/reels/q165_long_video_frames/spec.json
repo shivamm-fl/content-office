@@ -1,0 +1,112 @@
+{
+  "tts": "owner_v4",
+  "v4_voice": "Shivam Trainer",
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2,
+    "B": 2,
+    "C": 2,
+    "D": 2,
+    "E": 2,
+    "F": 2,
+    "G": 2,
+    "H": 2
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "tick",
+      "B",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "C",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "F",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "G",
+      1,
+      0
+    ],
+    [
+      "tick",
+      "H",
+      1,
+      0
+    ],
+    [
+      "err",
+      null,
+      null,
+      2.5
+    ],
+    [
+      "ok",
+      null,
+      null,
+      79.9
+    ],
+    [
+      "pop",
+      null,
+      null,
+      105.1
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "[warm, conversational] एक घंटे की video, AI बीच का scene भूल गया। Interview में यही पूछा जाता है: एक घंटे की video को AI model को कैसे दोगे? तुम्हारा जवाब: हर frame मत भेजो। Transcript से सही पल ढूँढो, कुछ frames sample करो, और zoom सिर्फ़ छोटे clip पर करो।",
+      "B": "[thoughtful] जैसे पाँच घंटे की cricket match की recording में एक over ढूँढनी हो। ... तुम पूरी नहीं देखते, commentary सुनकर वो हिस्सा खोलते हो।",
+      "C": "मान लो video एक घंटे की है और thirty fps की है, यानी एक सेकंड में तीस frames, तीस तस्वीरें। हर frame भेजो, तो एक लाख आठ हज़ार frames हुए। Gemini के docs में एक frame करीब sixty six tokens का है, यानी model के पढ़ने के छोटे टुकड़े। कुल इकहत्तर लाख अट्ठाईस हज़ार tokens, जो दस लाख tokens की limit से करीब सात गुना है।",
+      "D": "पहला step: transcript पढ़ो, यानी video में जो बोला गया उसका text। क्योंकि वो सस्ता है, और उसी से पता चलता है कि तुम्हारा पल कहाँ है।",
+      "E": "दूसरा step: पूरी video से कुछ frames sample करो। Gemini default में एक सेकंड का एक frame लेता है, पर पाँच सेकंड का एक भी चलता है। एक घंटे में seven twenty frames, यानी सैंतालीस हज़ार पाँच सौ बीस tokens।",
+      "F": "तीसरा step: transcript वाले पल का तीस सेकंड का clip काटो, और उस पर five fps से zoom करो। वो एक सौ पचास frames, यानी नौ हज़ार नौ सौ tokens। क्योंकि जहाँ सवाल है, वहीं detail चाहिए। ... कुल सत्तावन हज़ार चार सौ बीस tokens, यानी करीब एक सौ चौबीस गुना कम।",
+      "G": "[thoughtful] एक boundary: तेज़ action पर एक fps में detail खो जाती है, जैसे गेंद का बल्ले से लगना। इसलिए उस clip पर fps बढ़ाओ।",
+      "H": "Interview में कहो: मैं पूरी video नहीं भेजता। Transcript से पल ढूँढता हूँ, कम frames sample करता हूँ, और fps सिर्फ़ उस छोटे clip पर बढ़ाता हूँ। [curious] तुम्हारी video में सबसे ज़्यादा काम की चीज़ क्या है, बोली हुई बात या दिखने वाली action? Comment करो। रोज़ एक नया interview सवाल, पूरे जवाब के साथ, follow करो।"
+    }
+  },
+  "hook_type": "relatable_stake",
+  "sources": [
+    "https://aistudio.google.com/docs/video-understanding",
+    "https://aistudio.google.com/docs/tokens"
+  ]
+}
