@@ -1,6 +1,4 @@
 functions: 12
-tools (actions, model decides): 5
-resources (read-only data, app supplies): 4
-prompts (templates, user picks): 3
-sum check: True
-all-as-tools tool list length the model must choose from: 12 vs 5
+5 tool (model decides to call) ['create_ticket', 'close_ticket', 'assign_ticket', 'add_comment', 'escalate_ticket']
+4 resource (app supplies, has a URI) ['ticket_by_id', 'open_tickets', 'customer_history', 'sla_policy_doc']
+3 prompt (user picks, like a slash command) ['triage', 'daily_summary', 'draft_reply']
