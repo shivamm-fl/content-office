@@ -1,0 +1,13 @@
+Cache kahan rakhein: browser, CDN, app cache ya database?
+
+Cache ek jagah nahi hota: same data browser, CDN, application cache aur database memory, in chaar jagah copy ho sakta hai. Jo layer user ke paas, wo fast par kam logon mein shared; aur copy stale ho sakti hai (max-age). Product photo ki request walk ek maana hua example hai.
+
+Sources:
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching
+https://en.wikipedia.org/wiki/Content_delivery_network
+https://en.wikipedia.org/wiki/Cache_(computing)
+https://dev.mysql.com/doc/refman/8.0/en/innodb-buffer-pool.html
+https://aws.amazon.com/caching/
+
+Tags: where to put cache in system design,browser cache vs CDN vs database cache,caching layers system design,cache hindi system design interview
+AI-assisted visuals and narration.

@@ -1,0 +1,6 @@
+Day 28/150: Cache aakhir rakhein kahan: browser, CDN ya database?
+
+Ek jagah nahi, typically 4 jagah. Browser cache sirf tumhare phone ka hai, CDN ek shahar ke bahut users mein shared hai, application cache app servers ki memory mein rehta hai, aur database ki apni memory mein bhi data cached hota hai. Jo layer user ke jitni paas, utni fast, par utne kam logon mein shared. Aur ek catch hai: stale copy, kyunki max-age tak browser purani copy dikha sakta hai. Product photo ki walk ek maana hua example hai.
+
+Comment karke batao: tumhare app mein kaun si cheez bar bar badalti hai aur browser mein cache nahi honi chahiye?
+#SystemDesign #Caching #Backend

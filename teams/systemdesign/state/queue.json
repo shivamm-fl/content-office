@@ -10,26 +10,8 @@
       "one_idea": "A cache is not one box: the same data can be copied at several places on its way (browser, CDN, application cache, database memory), and each layer closer to the user answers faster but is shared by fewer people and can go stale.",
       "hook_type": "direct_question",
       "spoken_hook": "Cache आखिर रखें कहाँ: browser, CDN या database?",
-      "hook_10s": "Cache आखिर रखें कहाँ: browser, CDN या database? एक photo की request निकलती है, तो रास्ते में चार जगह उसकी copy मिल सकती है, और जो जितनी पास, उतनी fast. [frame 0: one request arrow leaving a phone and passing four stacked doors, each door holding a small copy of the same photo]",
-      "hook_candidates": [
-        {
-          "hook": "Cache आखिर रखें कहाँ: browser, CDN या database?",
-          "formula": "direct_question: the exact choice the viewer is unsure about, three named options"
-        },
-        {
-          "hook": "एक photo की copy रास्ते में चार जगह रहती है.",
-          "formula": "surprising_fact: a count the viewer has not thought about"
-        },
-        {
-          "hook": "Interviewer ने पूछा: आप cache किन-किन layers पर लगाओगे?",
-          "formula": "interviewer_asked: one complete 9-word question"
-        }
-      ],
       "hook_formula": "direct_question: the real design choice as one short question with three options; first teaching line is the one-photo journey, nothing between",
       "hook_source": "https://aws.amazon.com/caching/",
-      "visual_idea": "One request arrow travels left to right from a phone through four stacked stops (browser, CDN, app cache, database memory) with a copy of the same photo icon sitting at each stop; the arrow turns back at the first stop that holds the copy, and the stops closer to the phone are drawn small (one user) and the far ones wide (many users), with a short arrow length that shows the saved trip.",
-      "everyday_anchor": "Needing a textbook: your own bag first, then the neighbourhood library branch, then the main library's front desk, and last the basement stacks; you stop at the nearest place that has it.",
-      "example": "EXAMPLE: one product photo is requested; request 1 misses at every layer and reaches the database, request 2 from the same phone hits the browser copy, request 3 from another phone in the same city hits the CDN copy. Layer names and the three requests are an invented walk, no real company and no timing numbers.",
       "sources": [
         "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
         "https://en.wikipedia.org/wiki/Content_delivery_network",
@@ -37,17 +19,7 @@
         "https://dev.mysql.com/doc/refman/8.0/en/innodb-buffer-pool.html",
         "https://aws.amazon.com/caching/"
       ],
-      "facts_to_verify": [
-        "MDN: a private cache is tied to one client, typically the browser cache; a shared cache sits between client and server and can be shared among users; personalized responses need Cache-Control: private",
-        "MDN: Cache-Control max-age sets how long a response stays fresh (604800 s is one week); after that it is stale and is revalidated with the origin",
-        "MDN: managed caches (reverse proxies, CDNs) are deployed by developers to offload the origin; stored responses can be deleted via dashboard or API",
-        "Wikipedia CDN: a geographically distributed network of proxy servers and data centers that serves content from locations close to the user; personalized or changing content is harder to cache",
-        "Wikipedia Cache (computing): cache hit and cache miss definitions; web caches in browsers and proxies reuse previous responses",
-        "MySQL docs: the InnoDB buffer pool is an area of main memory where InnoDB caches table and index data as it is accessed, so frequently used data is read from memory",
-        "AWS caching page: an integrated cache is an in-memory layer that caches frequently accessed data from the origin database (used only for the application/in-memory layer; no product or number claim)",
-        "Run nothing: no code on screen. Layer order is a typical design, say 'typically'; no speed or hit-rate numbers; no real company setup"
-      ],
-      "length_target_s": 140,
+      "length_target_s": 135,
       "cover_headline": "Where Caches Live, Browser to Database",
       "thumb_text": "4 CACHE LAYERS",
       "keywords": [
@@ -59,7 +31,17 @@
       "status": "planned",
       "qa_passed": false,
       "script_locked": false,
-      "script_file": "state/scripts/s028.txt"
+      "script_file": "state/scripts/s028.txt",
+      "facts_to_verify": [
+        "Browser cache is a private cache; CDN is a shared cache (MDN)",
+        "max-age sets how long a stored response counts as fresh (MDN)",
+        "InnoDB buffer pool is main memory where table and index data is cached (MySQL docs)",
+        "CDN = geographically distributed servers delivering content closer to users (Wikipedia)",
+        "Caching exists at several layers: client, web/CDN, app, database (AWS)"
+      ],
+      "visual_idea": "One request arrow travels left to right from a phone through four stacked stops (browser, CDN, app cache, database memory) with a copy of the same photo icon sitting at each stop; the arrow turns back at the first stop that holds the copy; closer stops drawn small (one user), far ones wide (many users).",
+      "everyday_anchor": "Needing a textbook: bag, neighbourhood library branch, main library front desk, basement stacks; you stop at the nearest place that has it.",
+      "example": "EXAMPLE: one product photo; request 1 misses everywhere and reaches the database, request 2 from the same phone hits the browser copy, request 3 from another phone in the same city hits the CDN copy. Invented walk, no real company, no timing numbers."
     }
   ]
 }
