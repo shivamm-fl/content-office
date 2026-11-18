@@ -2626,6 +2626,46 @@
         "ai engineer interview"
       ],
       "production_date_ist": "2026-11-16"
+    },
+    {
+      "id": "q168",
+      "track": "interview",
+      "day": null,
+      "unit": "E4",
+      "title": "Vectorless RAG: PageIndex",
+      "format": "question",
+      "status": "planned",
+      "one_idea": "Traditional RAG chunks a long document, embeds the chunks and returns the most similar ones, but similar is not always relevant and chunking loses context. PageIndex (VectifyAI) instead builds a hierarchical tree index of the document (titles, summaries, page ranges) and lets the LLM reason over it to pick the section that holds the answer: no embeddings, no vector database, still RAG. Called vectorless, reasoning-based RAG.",
+      "hook_type": "relatable_stake",
+      "spoken_hook": "Why are we using vector databases in RAG when we can literally let AI search for information on its own?",
+      "everyday_anchor": "A 500-page annual report: you would open the index and go to the right section, not read similar-looking paragraphs.",
+      "sources": [
+        "https://github.com/VectifyAI/PageIndex",
+        "https://pageindex.ai/blog/pageindex-intro"
+      ],
+      "notes": "Owner script, locked. Source claims are PageIndex's own; the tree nodes carry title, summary and start/end index (page ranges). Not a repeat of q11 chunking or q163 vector db search.",
+      "script_file": "state/scripts/q168.txt",
+      "script_locked": true,
+      "length_target_s": 80,
+      "cover_headline": "Vectorless RAG: No Vector DB",
+      "thumb_text": "NO VECTOR DB",
+      "keywords": [
+        "vectorless rag",
+        "pageindex",
+        "rag without vector database",
+        "ai engineer interview"
+      ],
+      "production_date_ist": "2026-11-18",
+      "example": "EXAMPLE, assumed: a 500-page annual report and the question why the company made a loss. Similarity search returns look-alike chunks; the tree lets the model open the right section.",
+      "facts_to_verify": [
+        "PageIndex (VectifyAI) describes itself as a vectorless, reasoning-based RAG engine: no vector DB, no chunking (github.com/VectifyAI/PageIndex, fetched 2026-11-18)",
+        "It builds a tree index of the document and the LLM reasons over it to select a section (pageindex.ai/blog/pageindex-intro, fetched 2026-11-18)",
+        "Tree nodes carry title, summary and start/end index; the blog does not say 'page numbers' outright, so the on-screen label says page range",
+        "Similarity is not true relevance is PageIndex's own argument, not a measured result"
+      ],
+      "visual_idea": "A 500-page report stack at frame zero; left side chunks into many cards with look-alike matches lighting the wrong ones; right side a tree of headings and subheadings with a page range on each, and an arrow that walks down the tree to one section holding the answer; final card crosses out the vector database.",
+      "hook_formula": "Owner script: question the viewer holds",
+      "hook_source": "owner's own script, 2026-11-18, kept word for word"
     }
   ]
 }

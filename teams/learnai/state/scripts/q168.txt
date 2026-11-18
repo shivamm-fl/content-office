@@ -1,0 +1,33 @@
+Why are we using vector databases in RAG when we can literally let AI search for information on its own?
+
+समझो, तुम्हारे पास एक company की 500{five-hundred} pages की annual report है।
+
+और तुम्हें पता करना है कि company loss में क्यों गई।
+
+अब traditional RAG क्या करेगा?
+
+पूरी PDF के chunks बनाएगा, embeddings generate करेगा और similarity search से relevant chunks ढूँढेगा।
+
+But the problem is, similarity doesn't always mean relevance.
+
+हो सकता है तुम्हारे question से semantically similar chunks मिल जाएँ, लेकिन actual answer किसी और section में हो।
+
+और chunking की वजह से document का original context भी lose हो सकता है।
+
+अब अगर मैं तुम्हें यही PDF दूँ, तो तुम कैसे information ढूँढोगे?
+
+तुम सीधे index देखोगे, relevant section में जाओगे और वहाँ answer ढूँढोगे। Right?
+
+तो LLM से भी यही क्यों न करवाएँ?
+
+And that's exactly what PageIndex does.
+
+ये पूरे document का एक hierarchical tree structure बनाता है, with headings, subheadings, summaries and page numbers.
+
+अब LLM खुद reason करता है कि कौन सा section explore करना चाहिए, कहाँ answer मिल सकता है और वहाँ से information retrieve करता है।
+
+Basically, हमने similarity-based retrieval को reasoning-based retrieval से replace कर दिया।
+
+No embeddings, no vector database, and you're still doing RAG.
+
+And this is called Vectorless RAG.
