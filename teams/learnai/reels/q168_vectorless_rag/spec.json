@@ -1,0 +1,118 @@
+{
+  "tts": "owner_v4",
+  "v4_voice": "Shivam Trainer",
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ],
+  "min": {
+    "A": 2,
+    "B": 2,
+    "C": 2,
+    "D": 2,
+    "E": 2,
+    "F": 2,
+    "G": 2,
+    "H": 2
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "tick",
+      "B",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "C",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "D",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "E",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "F",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "G",
+      0,
+      0
+    ],
+    [
+      "tick",
+      "H",
+      0,
+      0
+    ],
+    [
+      "err",
+      null,
+      null,
+      25.3
+    ],
+    [
+      "ok",
+      null,
+      null,
+      30.6
+    ],
+    [
+      "ok",
+      null,
+      null,
+      65.5
+    ],
+    [
+      "pop",
+      null,
+      null,
+      77
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "Why are we using vector databases in RAG when we can literally let AI search for information on its own?",
+      "B": "समझो, तुम्हारे पास एक company की 500{five-hundred} pages की annual report है।\n\nऔर तुम्हें पता करना है कि company loss में क्यों गई।",
+      "C": "अब traditional RAG क्या करेगा?\n\nपूरी PDF के chunks बनाएगा, embeddings generate करेगा और similarity search से relevant chunks ढूँढेगा।",
+      "D": "But the problem is, similarity doesn't always mean relevance.\n\nहो सकता है तुम्हारे question से semantically similar chunks मिल जाएँ, लेकिन actual answer किसी और section में हो।\n\nऔर chunking की वजह से document का original context भी lose हो सकता है।",
+      "E": "अब अगर मैं तुम्हें यही PDF दूँ, तो तुम कैसे information ढूँढोगे?\n\nतुम सीधे index देखोगे, relevant section में जाओगे और वहाँ answer ढूँढोगे। Right?\n\nतो LLM से भी यही क्यों न करवाएँ?",
+      "F": "And that's exactly what PageIndex does.\n\nये पूरे document का एक hierarchical tree structure बनाता है, with headings, subheadings, summaries and page numbers.",
+      "G": "अब LLM खुद reason करता है कि कौन सा section explore करना चाहिए, कहाँ answer मिल सकता है और वहाँ से information retrieve करता है।",
+      "H": "Basically, हमने similarity-based retrieval को reasoning-based retrieval से replace कर दिया।\n\nNo embeddings, no vector database, and you're still doing RAG.\n\nAnd this is called Vectorless RAG."
+    }
+  },
+  "hook_type": "relatable_stake",
+  "sources": [
+    "https://github.com/VectifyAI/PageIndex",
+    "https://pageindex.ai/blog/pageindex-intro"
+  ]
+}

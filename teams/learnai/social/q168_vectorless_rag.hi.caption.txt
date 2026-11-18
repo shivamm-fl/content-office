@@ -1,0 +1,11 @@
+Vector database ki jagah AI khud document mein search kar sakta hai? Interview mein yahi poochte hain: vectorless RAG kya hota hai?
+
+Traditional RAG: PDF ke chunks, embeddings, similarity search. Problem: similar ka matlab hamesha relevant nahi, aur chunking se context toot sakta hai.
+PageIndex (VectifyAI) ka tareeka: document ka hierarchical tree (headings, summaries, page range) banao aur LLM khud reason kare ki kaun sa section kholna hai.
+Matlab no embeddings, no vector database, phir bhi RAG. Isse vectorless, reasoning-based RAG kehte hain.
+
+EXAMPLE (maan liye): 500 pages ki annual report, sawal: company loss mein kyun gayi.
+
+Tumhare hisaab se kis document pe vectorless RAG zyada kaam karega? Comment karo.
+
+Source: PageIndex ka GitHub repo aur blog (VectifyAI). Ye PageIndex ke apne claims hain.

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Vectorless RAG: PageIndex</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="79" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="79" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="79" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="79" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H"], tag: "AI ENGINEER INTERVIEW" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const at = (sc, w, n) => M.W(sc, w, n); const ca = M.ca; const MUT = M.MUTED;
+      const A = M.$("#sA"), B = M.$("#sB"), C = M.$("#sC"), D = M.$("#sD"), E = M.$("#sE"), F = M.$("#sF"), G = M.$("#sG"), H = M.$("#sH");
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const hide = (d, t, to) => { tl.to(d, { opacity: to == null ? 0 : to, duration: 0.3, ease: "power2.in", immediateRender: false }, t); return d; };
+      const chip = (host, txt, x, y, w, h, col, t, size) => show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border:3px solid ${col};border-radius:${Math.round(h / 2)}px;background:linear-gradient(${ca(col, 0.14)},${ca(col, 0.14)}),#0F1626;color:${col};font:700 ${size || 42}px var(--lat);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt), t);
+      const ex = (host, t, x, y) => show(el(host, `left:${x ?? 760}px;top:${y ?? 252}px;padding:6px 20px;border:2px solid ${MUT};border-radius:999px;font:700 30px var(--lat);color:${MUT};letter-spacing:.1em`, "EXAMPLE"), t);
+      const cross = (host, x, y, w, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:8px;border-radius:4px;background:${HOT};transform-origin:0 50%`); tl.set(d, { scaleX: 0 }, 0); tl.to(d, { scaleX: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, t); return d; };
+      const cred = (host, t, y) => show(el(host, `left:0;width:1080px;text-align:center;top:${y}px;font:500 30px var(--lat);color:${MUT}`, "Source: github.com/VectifyAI/PageIndex"), t);
+      const head = (host, txt, t, y, col) => show(el(host, `left:0;width:1080px;text-align:center;top:${y || 270}px;font:700 46px var(--lat);color:${col || CYAN};letter-spacing:.12em`, txt), t);
+      const lines3 = (tt) => [[150, 26], [110, 54], [130, 80]].forEach(([w, y]) => el(tt, `left:22px;top:${y}px;width:${w}px;height:12px;border-radius:6px;background:${ca("#8592AD", 0.45)}`));
+      const tileCss = (i, dy) => `left:${110 + (i % 4) * 225}px;top:${430 + Math.floor(i / 4) * 128 + dy}px;width:200px;height:108px;border-radius:14px;background:#16213A;border:2px solid ${ca(CYAN, 0.5)}`;
+      const NEAR = [1, 2, 5];
+
+      const report = (host, x, y, w, h, t) => {
+        const c = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`);
+        [[28, 28, 0.35], [14, 14, 0.6], [0, 0, 1]].forEach(([dx, dy, op], i) => {
+          const pg = el(c, `left:${dx}px;top:${dy}px;width:${w - 28}px;height:${h - 28}px;border-radius:18px;background:#16213A;border:2px solid ${ca(CYAN, 0.55 * op)};opacity:${op}`);
+          if (i === 2) { el(pg, `left:0;top:0;width:100%;height:${Math.round(h * 0.2)}px;border-radius:16px 16px 0 0;background:${ca(CYAN, 0.2)};display:flex;align-items:center;justify-content:center;font:700 ${Math.round(w * 0.075)}px var(--lat);color:#E8EDF6;letter-spacing:.08em`, "ANNUAL REPORT");
+            for (let k = 0; k < 6; k++) el(pg, `left:${Math.round(w * 0.07)}px;top:${Math.round(h * 0.3) + k * Math.round(h * 0.085)}px;width:${Math.round((w - 28) * (k % 3 === 2 ? 0.45 : 0.8))}px;height:${Math.round(h * 0.03)}px;border-radius:6px;background:${ca("#8592AD", 0.4)}`); }
+        });
+        return show(c, t);
+      };
+
+      // diagram: A
+      M.hook(["Vector DB", "kyun chahiye?"], { size: 100, top: 250 });
+      report(A, 90, 600, 440, 440, 0.05);
+      chip(A, "500 PAGES", 110, 1075, 380, 80, ACC, 0.1, 42);
+      const db = M.icon(A, "db", 700, 640, 220, CYAN); db.show(at("A", "databases"));
+      const dbl = show(el(A, `left:640px;top:880px;width:340px;text-align:center;font:700 44px var(--lat);color:${CYAN}`, "VECTOR DB"), at("A", "databases"));
+      const ai = M.icon(A, "model", 700, 960, 150, GOOD); ai.show(at("A", "AI"));
+      show(el(A, `left:870px;top:990px;font:700 52px var(--lat);color:${GOOD}`, "AI"), at("A", "AI"));
+      const arA = M.arrow(A, { from: [690, 1035], to: [545, 880], color: GOOD, w: 10 }); arA.show(at("A", "search"), 0.4);
+      hide(dbl, at("A", "own"), 0.35); hide(db.el, at("A", "own"), 0.25);
+
+      // diagram: B
+      head(B, "ONE REPORT", M.P("B", 0), 270, MUT);
+      report(B, 200, 380, 680, 640, M.P("B", 0));
+      M.count(B, 500, at("B", "500"), { x: 0, y: 1030, w: 1080, size: 100, suffix: " PAGES", dur: 0.8, color: ACC });
+      ex(B, at("B", "annual"), 790, 252);
+      chip(B, "WHY LOSS?", 330, 640, 420, 110, HOT, at("B", "loss"), 54);
+
+      // diagram: C
+      head(C, "PDF  ▸  CHUNKS", M.P("C", 0));
+      const TILE = [];
+      for (let i = 0; i < 12; i++) { const tt = el(C, tileCss(i, 0)); lines3(tt); TILE.push(tt); show(tt, at("C", "chunks") + i * 0.07, { opacity: 0, scale: 0.85 }); }
+      const MAP = el(C, `left:110px;top:870px;width:860px;height:290px;border-radius:24px;background:#10192E;border:2px solid ${ca(CYAN, 0.35)}`); show(MAP, at("C", "embeddings"));
+      show(el(C, `left:130px;top:880px;font:700 36px var(--code);color:${CYAN};letter-spacing:.1em`, "EMBEDDINGS"), at("C", "embeddings"));
+      const DOT = [[150, 110], [230, 190], [170, 230], [330, 120], [420, 220], [500, 100], [590, 200], [690, 130], [770, 220], [740, 80], [330, 230], [820, 150]];
+      const dots = DOT.map(([x, y], i) => show(el(MAP, `left:${x - 14}px;top:${y - 14}px;width:28px;height:28px;border-radius:50%;background:${ca(CYAN, 0.85)}`), at("C", "embeddings") + 0.3 + i * 0.05, { opacity: 0, scale: 0.4 }));
+      show(el(MAP, "left:190px;top:130px;width:40px;height:40px;border-radius:8px;transform:rotate(45deg);background:" + ACC), at("C", "similarity"), { opacity: 0, scale: 0.5 });
+      show(el(MAP, `left:250px;top:56px;font:700 36px var(--lat);color:${ACC}`, "QUERY"), at("C", "similarity"));
+      NEAR.forEach((k, j) => { const t0 = at("C", "relevant") + j * 0.12;
+        tl.to(dots[k], { backgroundColor: ACC, duration: 0.2, immediateRender: false }, t0); tl.to(TILE[k], { borderColor: ACC, backgroundColor: ca(ACC, 0.18), duration: 0.2, immediateRender: false }, t0); });
+
+      // diagram: D
+      const g1 = el(D, "left:0;top:0;width:1080px;height:1300px"); g1.setAttribute("data-nofit", "");
+      const DT = []; for (let i = 0; i < 12; i++) { const tt = el(g1, tileCss(i, -40)); lines3(tt); DT.push(tt); }
+      tl.set(g1, { opacity: 0 }, 0); tl.set(g1, { opacity: 1 }, M.P("D", 0)); tl.set(g1, { opacity: 0 }, M.P("D", 2) - 0.05);
+      NEAR.forEach((k, j) => tl.to(DT[k], { borderColor: ACC, backgroundColor: ca(ACC, 0.18), duration: 0.25, immediateRender: false }, at("D", "similarity") + j * 0.12));
+      chip(g1, "LOOK-ALIKE", 340, 880, 400, 90, ACC, at("D", "similarity") + 0.2, 44);
+      NEAR.forEach((k, j) => show(el(g1, `left:${110 + (k % 4) * 225 + 70}px;top:${430 + Math.floor(k / 4) * 128 - 20}px;width:60px;height:60px;border-radius:50%;background:${HOT};color:#fff;font:800 44px var(--lat);display:flex;align-items:center;justify-content:center`, "✗"), at("D", "relevance") + j * 0.12, { opacity: 0, scale: 0.5 }));
+      tl.to(DT[10], { borderColor: GOOD, backgroundColor: ca(GOOD, 0.22), duration: 0.3, immediateRender: false }, at("D", "answer"));
+      chip(g1, "ANSWER", 110 + 2 * 225 - 10, 430 + 2 * 128 - 40 + 120, 220, 80, GOOD, at("D", "answer") + 0.1, 40);
+      ex(g1, M.P("D", 0), 760, 262);
+      const g2 = el(D, "left:0;top:0;width:1080px;height:1300px"); g2.setAttribute("data-nofit", "");
+      tl.set(g2, { opacity: 0 }, 0); tl.set(g2, { opacity: 1 }, M.P("D", 2));
+      head(g2, "CHUNK EDGE", M.P("D", 2), 290, HOT); ex(g2, M.P("D", 2), 760, 262);
+      const c1 = el(g2, `left:160px;top:470px;width:760px;height:160px;border-radius:20px 20px 0 0;background:#16213A;border:2px solid ${ca(CYAN, 0.6)};border-bottom:0;font:600 50px var(--lat);display:flex;align-items:center;justify-content:center`, "The loss came from");
+      const c2 = el(g2, `left:160px;top:630px;width:760px;height:160px;border-radius:0 0 20px 20px;background:#16213A;border:2px solid ${ca(CYAN, 0.6)};border-top:0;font:600 50px var(--lat);display:flex;align-items:center;justify-content:center`, "a one-time write-off");
+      show(c1, M.P("D", 2) + 0.1); show(c2, M.P("D", 2) + 0.1);
+      const seam = el(g2, "left:150px;top:628px;width:780px;height:6px;border-radius:3px;background:#E8EDF6;transform-origin:0 50%"); tl.set(seam, { scaleX: 0 }, 0); tl.to(seam, { scaleX: 1, duration: 0.35, ease: "power3.out", immediateRender: false }, at("D", "chunking"));
+      tl.to(c2, { y: 60, duration: 0.45, ease: "power3.out", immediateRender: false }, at("D", "chunking") + 0.2);
+      tl.to(c2, { opacity: 0.4, duration: 0.3, immediateRender: false }, at("D", "lose"));
+      chip(g2, "CONTEXT LOST", 290, 930, 500, 100, HOT, at("D", "context"), 48);
+
+      // diagram: E
+      head(E, "YOU + PDF", M.P("E", 0)); ex(E, M.P("E", 0), 760, 262);
+      const idx = show(el(E, `left:120px;top:370px;width:840px;height:430px;border-radius:24px;background:#16213A;border:2px solid ${ca(CYAN, 0.55)}`), at("E", "index"));
+      el(idx, `left:34px;top:16px;font:700 38px var(--code);color:${CYAN};letter-spacing:.12em`, "INDEX");
+      const rowEls = [["Business", "4–60"], ["Financials", "180–260"], ["Risks", "261–300"], ["Notes", "301–500"]].map(([n, r], i) => el(idx, `left:24px;top:${74 + i * 84}px;width:792px;height:72px;border-radius:12px;border:2px solid transparent;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font:600 44px var(--lat)`, `<span>${n}</span><span style="font:600 40px var(--code);color:#8592AD">${r}</span>`));
+      tl.to(rowEls[1], { borderColor: ACC, backgroundColor: ca(ACC, 0.18), duration: 0.25, immediateRender: false }, at("E", "relevant"));
+      const pg = show(el(E, `left:200px;top:850px;width:680px;height:170px;border-radius:20px;background:#16213A;border:2px solid ${ca(ACC, 0.7)}`), at("E", "jaaoge"));
+      el(pg, `left:30px;top:20px;font:700 44px var(--code);color:${ACC}`, "PAGES 180–260");
+      [[600, 90], [420, 120]].forEach(([w, y]) => el(pg, `left:30px;top:${y}px;width:${w}px;height:14px;border-radius:7px;background:${ca("#8592AD", 0.45)}`));
+      chip(E, "ANSWER", 610, 862, 250, 74, GOOD, at("E", "answer") + 0.05, 40);
+      const llm = M.icon(E, "model", 140, 1040, 110, CYAN); llm.show(at("E", "LLM"));
+      show(el(E, `left:275px;top:1060px;font:700 56px var(--lat);color:${CYAN}`, "LLM ?"), at("E", "LLM"));
+
+      // the PageIndex tree
+      const NODE = { root: [290, 318, 500, 130, "ANNUAL REPORT", "1–500"], bus: [60, 520, 300, 150, "Business", "4–60"], fin: [390, 520, 300, 150, "Financials", "180–260"], risk: [720, 520, 300, 150, "Risks", "261–300"], rev: [230, 770, 290, 150, "Revenue", "181–210"], loss: [560, 770, 290, 150, "Loss", "211–240"] };
+      const SVGNS = "http://www.w3.org/2000/svg";
+      const tree = (host, tAppear, build) => {
+        const sv = document.createElementNS(SVGNS, "svg"); sv.setAttribute("viewBox", "0 0 1080 1300"); sv.setAttribute("width", 1080); sv.setAttribute("height", 1300); sv.style.cssText = "position:absolute;left:0;top:0"; host.appendChild(sv);
+        const edges = [["root", "bus"], ["root", "fin"], ["root", "risk"], ["fin", "rev"], ["fin", "loss"]].map(([a, b]) => { const P_ = NODE[a], Q_ = NODE[b]; const x1 = P_[0] + P_[2] / 2, y1 = P_[1] + P_[3], x2 = Q_[0] + Q_[2] / 2, y2 = Q_[1], ym = (y1 + y2) / 2;
+          const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", `M${x1} ${y1} C${x1} ${ym} ${x2} ${ym} ${x2} ${y2}`); p.setAttribute("fill", "none"); p.setAttribute("stroke", ca(CYAN, 0.6)); p.setAttribute("stroke-width", "4"); sv.appendChild(p); return p; });
+        const h = { nodes: {}, chips: [], sums: [], edges }; tl.set(edges, { opacity: 0 }, 0);
+        Object.entries(NODE).forEach(([k, [x, y, w, hh, name, rng]]) => {
+          const n = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${hh}px;border-radius:18px;background:#16213A;border:3px solid ${ca(k === "root" ? ACC : CYAN, 0.8)}`);
+          el(n, `left:0;top:14px;width:100%;text-align:center;font:700 ${k === "root" ? 46 : 42}px var(--lat);color:#E8EDF6`, name);
+          const sm = el(n, `left:20px;top:${hh - 62}px;width:${k === "root" ? 150 : 100}px;height:36px`); el(sm, "left:0;top:4px;width:100%;height:8px;border-radius:4px;background:rgba(133,146,173,.55)"); el(sm, "left:0;top:22px;width:70%;height:8px;border-radius:4px;background:rgba(133,146,173,.55)");
+          const cp = el(n, `right:16px;top:${hh - 66}px;padding:2px 12px;border-radius:10px;border:2px solid ${ca(ACC, 0.8)};font:700 36px var(--code);color:${ACC};white-space:nowrap`, rng);
+          h.nodes[k] = n; h.chips.push(cp); h.sums.push(sm); });
+        const ns = Object.values(h.nodes);
+        if (build) { const tt = [at("F", "tree"), at("F", "headings"), at("F", "headings") + 0.15, at("F", "headings") + 0.3, at("F", "subheadings"), at("F", "subheadings") + 0.15];
+          ns.forEach((n, i) => show(n, tt[i], { opacity: 0, y: 30 })); edges.forEach((p, i) => tl.to(p, { opacity: 1, duration: 0.4, immediateRender: false }, tt[i + 1] - 0.1));
+          h.sums.forEach((s) => show(s, at("F", "summaries"), { opacity: 0 })); h.chips.forEach((c) => show(c, at("F", "page"), { opacity: 0, scale: 0.8 }));
+        } else { ns.forEach((n, i) => show(n, tAppear + i * 0.06, { opacity: 0, y: 20 })); edges.forEach((p, i) => tl.to(p, { opacity: 1, duration: 0.3, immediateRender: false }, tAppear + 0.1 + i * 0.05)); h.sums.forEach((s) => show(s, tAppear, { opacity: 0 })); h.chips.forEach((c) => show(c, tAppear, { opacity: 0 })); }
+        return h; };
+      // diagram: F
+      head(F, "PAGEINDEX TREE", at("F", "PageIndex"), 250, CYAN).style.fontSize = "36px";
+      tree(F, 0, true);
+      chip(F, "PAGE RANGE", 300, 960, 480, 90, ACC, at("F", "page"), 46);
+      ex(F, at("F", "tree"), 760, 1075); cred(F, at("F", "tree"), 1135);
+      // diagram: G
+      head(G, "PAGEINDEX TREE", M.P("G", 0), 250, CYAN).style.fontSize = "36px";
+      const tg = tree(G, M.P("G", 0) + 0.05, false);
+      const llmG = M.icon(G, "model", 60, 290, 120, CYAN); llmG.show(at("G", "LLM"));
+      show(el(G, `left:60px;top:415px;font:700 44px var(--lat);color:${CYAN}`, "LLM"), at("G", "LLM"));
+      chip(G, "REASON", 820, 310, 200, 80, ACC, at("G", "reason"), 38);
+      [tg.nodes.bus, tg.nodes.risk, tg.nodes.rev].forEach((n) => tl.to(n, { opacity: 0.3, duration: 0.4, immediateRender: false }, at("G", "explore")));
+      tl.to(tg.nodes.fin, { borderColor: ACC, backgroundColor: ca(ACC, 0.18), duration: 0.3, immediateRender: false }, at("G", "section"));
+      tl.to(tg.edges[1], { stroke: ACC, strokeWidth: 8, duration: 0.3, immediateRender: false }, at("G", "section"));
+      tl.to(tg.nodes.loss, { borderColor: GOOD, backgroundColor: ca(GOOD, 0.22), duration: 0.3, immediateRender: false }, at("G", "answer"));
+      tl.to(tg.edges[4], { stroke: GOOD, strokeWidth: 8, duration: 0.3, immediateRender: false }, at("G", "answer"));
+      const ap = show(el(G, `left:200px;top:990px;width:680px;height:150px;border-radius:20px;background:#16213A;border:2px solid ${ca(GOOD, 0.8)}`), at("G", "retrieve"));
+      el(ap, `left:30px;top:16px;font:700 42px var(--code);color:${GOOD}`, "PAGES 211–240"); el(ap, "left:30px;top:84px;width:420px;height:14px;border-radius:7px;background:rgba(133,146,173,.45)");
+      chip(G, "ANSWER", 610, 1003, 250, 74, GOOD, at("G", "retrieve") + 0.15, 40); ex(G, M.P("G", 0), 760, 250);
+
+      // diagram: H
+      cred(H, M.P("H", 0), 252);
+      const r1 = chip(H, "SIMILARITY SEARCH", 120, 320, 840, 120, CYAN, at("H", "similarity-based"), 50);
+      chip(H, "REASONING", 120, 470, 840, 120, GOOD, at("H", "reasoning-based"), 54);
+      tl.to(r1, { opacity: 0.4, duration: 0.3, immediateRender: false }, at("H", "replace")); cross(H, 140, 376, 800, at("H", "replace"));
+      const c3 = show(el(H, `left:90px;top:680px;width:400px;height:170px;border-radius:20px;background:#16213A;border:2px solid ${ca(CYAN, 0.6)}`), at("H", "embeddings"));
+      el(c3, "left:0;top:50px;width:100%;text-align:center;font:700 40px var(--lat);color:#E8EDF6", "EMBEDDINGS");
+      const c4 = show(el(H, `left:590px;top:680px;width:400px;height:170px;border-radius:20px;background:#16213A;border:2px solid ${ca(CYAN, 0.6)}`), at("H", "vector"));
+      el(c4, "left:0;top:50px;width:100%;text-align:center;font:700 40px var(--lat);color:#E8EDF6", "VECTOR DB");
+      cross(H, 100, 765, 380, at("H", "embeddings") + 0.5); cross(H, 600, 765, 380, at("H", "database") + 0.4);
+      tl.to([c3, c4], { opacity: 0.45, duration: 0.3, immediateRender: false }, at("H", "RAG") - 0.1);
+      chip(H, "RAG  ✓", 290, 910, 500, 110, GOOD, at("H", "RAG"), 56);
+      show(el(H, `left:90px;top:1050px;width:900px;height:110px;border-radius:20px;border:3px solid ${ACC};background:${ca(ACC, 0.14)};color:${ACC};font:800 56px var(--lat);display:flex;align-items:center;justify-content:center;letter-spacing:.06em;white-space:nowrap`, "VECTORLESS RAG"), at("H", "Vectorless"));
+
+      ["B", "C", "D", "E", "F", "G", "H"].forEach((s) => M.wipe(M.S[s]));
+      M.finish({ kw: { vector: "hot", database: "hot", databases: "hot", similarity: "cyan", relevance: "gold", chunks: "cyan", chunking: "hot", embeddings: "cyan", index: "gold", tree: "gold", LLM: "good", reason: "good", reasoning: "good", "reasoning-based": "good", Vectorless: "gold", PageIndex: "gold", RAG: "gold" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
