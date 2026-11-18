@@ -1,0 +1,13 @@
+policy length: 648 | 'sirf unopened' starts at offset: 290
+
+=== size 300, overlap 0 ===
+chunk0 offset 0-300 score=4: ...' address on the order. Refund kitne din mein milega: 7 din, sirf unope'
+chunk1 offset 300-600 score=1: 'ned items par. Opened items ka refund nahi milta. Bill zaroori hai. Pickup bhi hota hai. S'...
+chunk2 offset 600-648 score=0: 'o 5 on Sunday. Prices may change without notice.'...
+RETRIEVED: chunk at offset 0 | 'unopened' visible in it: False
+
+=== size 300, overlap 50 ===
+chunk0 offset 0-300 score=4: ...' address on the order. Refund kitne din mein milega: 7 din, sirf unope'
+chunk1 offset 250-550 score=5: 'r. Refund kitne din mein milega: 7 din, sirf unopened items par. Opened items ka refund na'...
+chunk2 offset 500-648 score=0: 'nvoice. Bulk orders need a separate quote from sales. Store timings are 10 to 7 on weekday'...
+RETRIEVED: chunk at offset 250 | 'unopened' visible in it: True
