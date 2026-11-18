@@ -1,0 +1,49 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0
+ },
+ "cues": [],
+ "copy": {
+  "hi": {
+   "A": "[curious] एक researcher ने AI से अपना ही birthday पूछा, और साथ में लिखा: पता हो, तभी बताना। ... तीन बार पूछा। तीन अलग dates आईं, और तीनों गलत।",
+   "B": "[thoughtful] AI हर बार अगला word वही चुनता है जिसके chances सबसे ज़्यादा हों। \"Sun rises in the\" के बाद \"East\" आता है, क्योंकि ये बात हर जगह लिखी है।",
+   "C": "पर किसी एक इंसान का birthday शायद ही कहीं लिखा हो। फिर भी model कोई ना कोई date चुन लेता है, पूरे confidence से। इसे hallucination कहते हैं: बना हुआ जवाब, जो सच जैसा लगे।",
+   "D": "पर उसने \"मुझे नहीं पता\" क्यों नहीं बोला? Exam में answer नहीं आता था, तो भी कुछ लिखकर आते थे ना? खाली छोड़ा तो zero पक्का, guess लग गया तो पूरे marks।",
+   "E": "AI के tests भी ऐसे ही marks देते हैं, इसलिए model guess करना सीखता है।",
+   "F": "[short pause] OpenAI के researchers ने इसका fix भी exam से निकाला: JEE{जे-ई-ई}, NEET, GATE वाली negative marking। गलत जवाब पर minus, \"नहीं पता\" पर zero। तब अंदाज़ा लगाना घाटे का सौदा बन जाता है।",
+   "G": "[warm, conversational] तो जो fact ज़रूरी हो, वो सवाल दो-तीन बार पूछो। जवाब बदल रहा है, तो model guess कर रहा है।",
+   "H": "[curious] तुम hallucination कम कैसे करोगे? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://arxiv.org/abs/2509.04664",
+  "https://arxiv.org/html/2509.04664v1",
+  "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"
+ ],
+ "series": "Fine-Tune Yourself, Step 4/100",
+ "hook_type": "surprising_fact",
+ "template": "results_first",
+ "approved": "owner 2026-11-18 (script review: 'bana de'; CTA in his words)"
+}

@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI galat jawab confidence se kyun deta hai</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="68" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          /* narration recipe v4 safe area: captions y 1190-1450, x 80-1000; content y 250-1160 */
+          #caps { top:1190px !important; left:80px !important; width:920px !important; height:260px !important; }
+          .mono { position:absolute; font-family:"JetBrains Mono",monospace; font-weight:600; color:#E8EDF6; white-space:nowrap; }
+          .ill { position:absolute; font:500 28px "JetBrains Mono",monospace; color:#8592AD; }
+          .stamp { position:absolute; padding:12px 34px; border-radius:16px; font:700 64px "Space Grotesk",sans-serif; border:6px solid; transform:rotate(-6deg); background:rgba(11,18,32,.92); white-space:nowrap; }
+          .try { position:absolute; width:290px; height:210px; border-radius:26px; background:#111A2C; border:3px solid #26324B; }
+          .try .l { position:absolute; left:0; width:290px; top:20px; text-align:center; font:600 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .try .v { position:absolute; left:0; width:290px; top:78px; text-align:center; font:700 72px "JetBrains Mono",monospace; color:#E8EDF6; }
+          .try .dots { position:absolute; left:0; width:290px; top:70px; text-align:center; font:700 72px "JetBrains Mono",monospace; color:#8592AD; }
+          .try .xx { position:absolute; right:16px; top:8px; font:700 56px "Space Grotesk",sans-serif; color:#E8596B; }
+          .lbl { position:absolute; width:200px; text-align:center; font:700 40px "Space Grotesk",sans-serif; color:#8592AD; }
+          .row { position:absolute; left:80px; width:920px; height:110px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .row .k { position:absolute; left:36px; top:28px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .row .v { position:absolute; right:40px; top:18px; font:700 66px "JetBrains Mono",monospace; white-space:nowrap; }
+          .exm { position:absolute; width:280px; height:150px; border-radius:26px; background:#111A2C; border:4px solid #F2B544; display:flex; align-items:center; justify-content:center; font:700 76px "Space Grotesk",sans-serif; color:#F2B544; }
+          .scr { position:absolute; height:12px; border-radius:6px; background:#5BC0EB; transform-origin:0 50%; }
+          .mini { position:absolute; padding:4px 12px; border-radius:10px; background:#1B2538; border:2px solid #F2B544; font:600 24px "JetBrains Mono",monospace; color:#F2B544; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:84px;">AI se apna hi<br/><span class="gold">birthday</span> poocha</div>
+          <div class="card" id="a_q" style="left:80px; top:460px; width:920px; height:260px;">
+            <div class="x mut" style="left:40px; top:24px; font-size:34px;">researcher:</div>
+            <div class="x" id="a_qq" style="left:40px; top:78px; font-size:52px;">Mera birthday kya hai?</div>
+            <div id="a_hl" style="position:absolute; left:28px; top:146px; width:560px; height:74px; border-radius:12px; background:rgba(242,181,68,.28); transform-origin:0 50%;"></div>
+            <div class="x gold" id="a_if" style="left:40px; top:152px; font-size:52px;">Pata ho, tabhi batana.</div>
+            <div class="x mut" id="a_dd" style="left:620px; top:160px; font-size:40px;">(DD-MM)</div>
+          </div>
+          <div class="try" id="a_t1" style="left:80px; top:760px;"><div class="l">try 1</div><div class="dots" id="a_d1">...</div><div class="v" id="a_v1">03-07</div><div class="xx" id="a_x1">✗</div></div>
+          <div class="try" id="a_t2" style="left:395px; top:760px;"><div class="l">try 2</div><div class="dots" id="a_d2">...</div><div class="v" id="a_v2">15-06</div><div class="xx" id="a_x2">✗</div></div>
+          <div class="try" id="a_t3" style="left:710px; top:760px;"><div class="l">try 3</div><div class="dots" id="a_d3">...</div><div class="v" id="a_v3">01-01</div><div class="xx" id="a_x3">✗</div></div>
+          <div class="stamp" id="a_st" style="left:280px; top:975px; color:#E8596B; border-color:#E8596B;">TEENO GALAT</div>
+          <div class="src" id="a_src" style="top:1135px; font-size:28px;">Source: Kalai et al. 2025, arXiv 2509.04664 · recreated</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:74px;">Agla word:<br/><span class="gold">sabse zyada chance</span></div>
+          <div class="card" id="b_box" style="left:80px; top:440px; width:920px; height:130px;">
+            <div class="x" id="b_w1" style="left:44px; top:32px; font-size:62px;">Sun</div>
+            <div class="x" id="b_w2" style="left:200px; top:32px; font-size:62px;">rises</div>
+            <div class="x" id="b_w3" style="left:390px; top:32px; font-size:62px;">in</div>
+            <div class="x" id="b_w4" style="left:470px; top:32px; font-size:62px;">the</div>
+            <div id="b_blank" style="position:absolute; left:610px; top:98px; width:250px; height:8px; border-radius:4px; background:#8592AD;"></div>
+            <div class="x gold" id="b_fill" style="left:610px; top:32px; width:250px; text-align:center; font-size:62px;">East</div>
+          </div>
+          <div class="bar" id="b_bar1" style="left:120px; top:640px; width:170px; height:380px; background:#26324B;"></div>
+          <div class="bar" id="b_bar1g" style="left:120px; top:640px; width:170px; height:380px; background:#F2B544;"></div>
+          <div class="bar" id="b_bar2" style="left:350px; top:930px; width:170px; height:90px; background:#26324B;"></div>
+          <div class="bar" id="b_bar3" style="left:580px; top:960px; width:170px; height:60px; background:#26324B;"></div>
+          <div class="bar" id="b_bar4" style="left:810px; top:975px; width:170px; height:45px; background:#26324B;"></div>
+          <div class="lbl" id="b_l1" style="left:105px; top:1036px; color:#F2B544;">East</div>
+          <div class="lbl" id="b_l2" style="left:335px; top:1036px;">West</div>
+          <div class="lbl" id="b_l3" style="left:565px; top:1036px;">sky</div>
+          <div class="lbl" id="b_l4" style="left:795px; top:1036px;">morning</div>
+          <div class="x mut" id="b_leg" style="left:350px; top:700px; font-size:38px;">lamba bar = zyada chance</div>
+          <div id="b_minis">
+            <div class="mini" style="left:330px; top:640px;">...in the East</div>
+            <div class="mini" style="left:560px; top:690px;">...in the East</div>
+            <div class="mini" style="left:380px; top:745px;">...in the East</div>
+            <div class="mini" style="left:620px; top:800px;">...in the East</div>
+            <div class="mini" style="left:330px; top:855px;">...in the East</div>
+            <div class="mini" style="left:600px; top:870px;">...in the East</div>
+          </div>
+          <div class="ill" id="b_ill" style="right:80px; top:1100px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:80px;">Ek insaan ka <span class="gold">birthday</span>?</div>
+          <div class="x c mut" id="c_t2" style="top:350px; font-size:50px;">shaayad hi kahin likha</div>
+          <div id="c_bars">
+            <div class="bar" style="left:80px;  top:700px; width:60px; height:110px; background:#26324B;"></div>
+            <div class="bar" style="left:157px; top:720px; width:60px; height:90px;  background:#26324B;"></div>
+            <div class="bar" style="left:234px; top:690px; width:60px; height:120px; background:#26324B;"></div>
+            <div class="bar" style="left:311px; top:715px; width:60px; height:95px;  background:#26324B;"></div>
+            <div class="bar" style="left:388px; top:700px; width:60px; height:110px; background:#26324B;"></div>
+            <div class="bar" style="left:465px; top:695px; width:60px; height:115px; background:#26324B;"></div>
+            <div class="bar" style="left:542px; top:725px; width:60px; height:85px;  background:#26324B;"></div>
+            <div class="bar" style="left:619px; top:705px; width:60px; height:105px; background:#26324B;"></div>
+            <div class="bar" style="left:696px; top:690px; width:60px; height:120px; background:#26324B;"></div>
+            <div class="bar" style="left:773px; top:712px; width:60px; height:98px;  background:#26324B;"></div>
+            <div class="bar" style="left:850px; top:700px; width:60px; height:110px; background:#26324B;"></div>
+            <div class="bar" style="left:927px; top:718px; width:60px; height:92px;  background:#26324B;"></div>
+          </div>
+          <div class="x c mut" id="c_ax" style="top:826px; font-size:36px;">saal ki har date: koi clear winner nahi</div>
+          <div class="bar" id="c_pick" style="left:465px; top:695px; width:60px; height:115px; background:#F2B544;"></div>
+          <div class="card" id="c_date" style="left:330px; top:450px; width:420px; height:150px; border-color:#F2B544;"><div class="mono" style="left:0; width:420px; text-align:center; top:30px; font-size:84px; color:#F2B544;">15-06</div></div>
+          <div class="chip" id="c_conf" style="left:640px; top:420px; background:#4CC38A; color:#0B1220; font-size:40px; transform:rotate(6deg);">CONFIDENT ✓</div>
+          <div class="x c gold" id="c_hal" style="top:900px; font-size:116px;">HALLUCINATION</div>
+          <div class="x c" id="c_def" style="top:1040px; font-size:54px;">bana hua jawab, jo <span class="green">sach jaisa</span> lage</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="card" id="d_bub" style="left:180px; top:300px; width:720px; height:150px; border-style:dashed; border-color:#8592AD;"><div class="x mut" style="left:0; width:720px; text-align:center; top:42px; font-size:62px;">"Mujhe nahi pata"</div></div>
+          <div class="x c red" id="d_q" style="top:500px; font-size:90px;">kyun nahi bola?</div>
+          <div class="card" id="d_sheet" style="left:80px; top:260px; width:920px; height:400px; background:#E9E4D6; border-color:#C9C1AA;">
+            <div class="mono" style="left:44px; top:30px; font-size:36px; color:#5A5444;">EXAM · Q7</div>
+            <div class="x" style="left:44px; top:96px; font-size:50px; color:#1E2432;">Q7. Ye kya hai? ________</div>
+            <div class="x red" id="d_na" style="left:44px; top:178px; font-size:44px; color:#C2394B;">answer nahi aata...</div>
+            <div class="scr" id="d_s1" style="left:44px; top:262px; width:780px; background:#2B5FB0;"></div>
+            <div class="scr" id="d_s2" style="left:44px; top:302px; width:640px; background:#2B5FB0;"></div>
+            <div class="scr" id="d_s3" style="left:44px; top:342px; width:720px; background:#2B5FB0;"></div>
+          </div>
+          <div class="card" id="d_k" style="left:80px; top:700px; width:440px; height:400px;">
+            <div class="x c mut" style="left:0; width:440px; top:34px; font-size:48px;">KHAALI chhoda</div>
+            <div class="x red" id="d_k0" style="left:0; width:440px; text-align:center; top:110px; font-size:180px;">0</div>
+            <div class="x" id="d_kp" style="left:0; width:440px; text-align:center; top:310px; font-size:50px;">pakka</div>
+          </div>
+          <div class="card" id="d_g" style="left:560px; top:700px; width:440px; height:400px; border-color:#4CC38A;">
+            <div class="x c gold" style="left:0; width:440px; top:34px; font-size:48px;">GUESS kiya</div>
+            <div class="x green" id="d_gm" style="left:0; width:440px; text-align:center; top:140px; font-size:96px;">+ marks</div>
+            <div class="x mut" id="d_gl" style="left:0; width:440px; text-align:center; top:300px; font-size:42px;">lag gaya to poore</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:84px;">AI ka <span class="gold">test</span></div>
+          <div class="row" id="e_r1" style="top:400px;"><div class="k">Sahi jawab</div><div class="v green">1</div></div>
+          <div class="row" id="e_r2" style="top:530px;"><div class="k">Galat jawab</div><div class="v red">0</div></div>
+          <div class="row" id="e_r3" style="top:660px;"><div class="k">"Mujhe nahi pata"</div><div class="v red">0</div></div>
+          <div class="x c" id="e_arr" style="top:800px; font-size:80px;">↓</div>
+          <div class="x c gold" id="e_g" style="top:900px; font-size:96px;">GUESS karna seekho</div>
+          <div class="src" id="e_src" style="top:1110px; font-size:28px;">Source: Kalai et al. 2025, arXiv 2509.04664</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_oa" style="left:240px; top:250px; width:600px; background:#E8EDF6; color:#0B1220; font-size:48px;">OpenAI researchers</div>
+          <div class="x c" id="f_fix" style="top:360px; font-size:70px;">ka <span class="gold">fix</span>: exam se</div>
+          <div class="exm" id="f_j" style="left:80px; top:490px;">JEE</div>
+          <div class="exm" id="f_n" style="left:400px; top:490px;">NEET</div>
+          <div class="exm" id="f_ga" style="left:720px; top:490px;">GATE</div>
+          <div class="x c red" id="f_neg" style="top:690px; font-size:92px;">NEGATIVE MARKING</div>
+          <div class="row" id="f_r1" style="top:830px;"><div class="k">Galat jawab</div><div class="v red" id="f_m">MINUS</div></div>
+          <div class="row" id="f_r2" style="top:960px;"><div class="k">"Nahi pata"</div><div class="v" id="f_z" style="color:#E8EDF6;">0</div></div>
+          <div class="card" id="f_g" style="left:80px; top:690px; width:920px; height:300px; border-color:#E8596B;">
+            <div class="x c" style="left:0; width:920px; top:40px; font-size:60px;">andaza lagaya →</div>
+            <div class="x c red" id="f_gh" style="left:0; width:920px; top:140px; font-size:110px;">GHAATA</div>
+          </div>
+          <div class="src" id="f_src" style="top:1110px; font-size:28px;">Source: Kalai et al. 2025, Sec 4.2 (JEE, NEET, GATE)</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_t" style="top:250px; font-size:80px;"><span class="gold">Zaruri</span> fact?</div>
+          <div class="x c" id="g_t2" style="top:360px; font-size:70px;">2-3 baar poochho</div>
+          <div class="try" id="g_t1" style="left:80px; top:520px;"><div class="l">try 1</div><div class="dots" id="g_d1">...</div><div class="v" id="g_v1">03-07</div></div>
+          <div class="try" id="g_tt2" style="left:395px; top:520px;"><div class="l">try 2</div><div class="dots" id="g_d2">...</div><div class="v" id="g_v2">15-06</div></div>
+          <div class="try" id="g_t3" style="left:710px; top:520px;"><div class="l">try 3</div><div class="dots" id="g_d3">...</div><div class="v" id="g_v3">01-01</div></div>
+          <div class="x c" id="g_b" style="top:790px; font-size:62px;">jawab <span class="red">badal raha</span> hai?</div>
+          <div class="stamp" id="g_st" style="left:330px; top:900px; color:#F2B544; border-color:#F2B544;">= GUESS</div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_1" style="top:330px; font-size:84px;">Tum <span class="gold">hallucination</span></div>
+          <div class="x c" id="h_2" style="top:440px; font-size:84px;">kam kaise karoge?</div>
+          <div class="card" id="h_bar" style="left:80px; top:700px; width:920px; height:120px; border-radius:60px;">
+            <div class="x mut" style="left:50px; top:34px; font-size:44px;">Add a comment...</div>
+          </div>
+          <div class="chip" id="h_c" style="left:290px; top:880px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="68" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="68" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="68" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H"], tag: "FINE-TUNE YOURSELF \u00b7 STEP 4" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the researcher asks his own birthday, three tries, three wrong dates. Headline is on screen at frame 0.
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_q", 0.25, { s: 0.96, y: 16 });
+      show("#a_qq", at("A", "birthday") - 0.1, { s: 1, y: 10 });
+      wipe("#a_hl", at("A", "pata") - 0.05, 0.5);
+      show("#a_if", at("A", "pata") - 0.05, { s: 1, y: 8 });
+      show("#a_dd", at("A", "batana"), { s: 1, y: 8 });
+      show("#a_t1", at("A", "teen") - 0.05, { s: 0.9 });
+      show("#a_t2", at("A", "baar") - 0.05, { s: 0.9 });
+      show("#a_t3", at("A", "poocha", 1) - 0.05, { s: 0.9 });
+      [1, 2, 3].forEach((i) => {
+        const t = [at("A", "teen", 1), at("A", "alag"), at("A", "dates")][i - 1];
+        hide("#a_d" + i, t - 0.05, 0.1);
+        show("#a_v" + i, t, { s: 1.25, y: 0 });
+      });
+      show("#a_src", at("A", "teen", 1), { s: 1, y: 0 });
+      [1, 2, 3].forEach((i) => show("#a_x" + i, at("A", "teenon") + (i - 1) * 0.1, { s: 1.6, y: 0 }));
+      show("#a_st", at("A", "galat") - 0.05, { s: 1.5, y: 0 });
+
+      // B: the next word is the one with the biggest chance; "Sun rises in the ___" -> East
+      show("#b_t", at("B", "agla") - 0.1, { s: 1.05 });
+      ["#b_bar1", "#b_bar2", "#b_bar3", "#b_bar4"].forEach((el, i) =>
+        tl.fromTo(el, { scaleY: 0 }, { scaleY: 1, duration: 0.45, ease: "power2.out" }, at("B", "chances") - 0.1 + i * 0.08));
+      show("#b_ill", at("B", "chances"), { s: 1, y: 0 });
+      show("#b_leg", at("B", "chances") + 0.3, { s: 1, y: 10 });
+      tl.fromTo("#b_bar1g", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power2.out" }, at("B", "sabse") - 0.05);
+      show("#b_box", at("B", '"sun') - 0.2, { s: 0.97, y: 12 });
+      show("#b_w1", at("B", '"sun') - 0.05, { s: 1, y: 8, d: 0.2 });
+      show("#b_w2", at("B", "rises") - 0.05, { s: 1, y: 8, d: 0.2 });
+      show("#b_w3", at("B", "in") - 0.05, { s: 1, y: 8, d: 0.2 });
+      show("#b_w4", at("B", "the") - 0.05, { s: 1, y: 8, d: 0.2 });
+      hide("#b_blank", at("B", '"east') - 0.05, 0.1);
+      show("#b_fill", at("B", '"east') - 0.05, { s: 1.4, y: 0 });
+      show("#b_l1", at("B", '"east') - 0.05, { s: 1.2, y: 0 });
+      ["#b_l2", "#b_l3", "#b_l4"].forEach((el, i) => show(el, at("B", '"east') + 0.2 + i * 0.1, { s: 1, y: 6 }));
+      hide("#b_leg", at("B", "har", 1) - 0.15);
+      qa("#b_minis .mini").forEach((el, i) => show(el, at("B", "har", 1) + i * 0.09, { s: 0.7, y: 0, d: 0.22 }));
+
+      // C: a birthday is written almost nowhere -> flat chances -> the model still picks one -> hallucination
+      show("#c_t", at("C", "ek") - 0.1, { s: 1.05 });
+      show("#c_t2", at("C", "shaayad") - 0.05, { s: 1, y: 10 });
+      qa("#c_bars .bar").forEach((el, i) =>
+        tl.fromTo(el, { scaleY: 0 }, { scaleY: 1, duration: 0.35, ease: "power2.out" }, at("C", "likha") - 0.2 + i * 0.05));
+      show("#c_ax", at("C", "ho") + 0.1, { s: 1, y: 8 });
+      tl.fromTo("#c_pick", { scaleY: 0 }, { scaleY: 1.25, duration: 0.4, ease: "back.out(1.7)" }, at("C", "date") - 0.05);
+      show("#c_date", at("C", "chun") - 0.05, { s: 0.7, y: 20 });
+      show("#c_conf", at("C", "confidence") - 0.1, { s: 1.4, y: 0 });
+      show("#c_hal", at("C", "hallucination") - 0.1, { s: 1.25 });
+      show("#c_def", at("C", "bana") - 0.05, { s: 1, y: 12 });
+
+      // D: why not "I don't know"? -> the exam: blank = 0 for sure, guess = marks if it lands
+      show("#d_bub", at("D", '"mujhe') - 0.1, { s: 0.94 });
+      show("#d_q", at("D", "kyun") - 0.05, { s: 1.2 });
+      hide("#d_bub", at("D", "exam") - 0.2); hide("#d_q", at("D", "exam") - 0.2);
+      show("#d_sheet", at("D", "exam") - 0.05, { s: 0.96, y: 16 });
+      show("#d_na", at("D", "nahi", 2) - 0.05, { s: 1, y: 6 });
+      wipe("#d_s1", at("D", "likhkar") - 0.05, 0.35);
+      wipe("#d_s2", at("D", "likhkar") + 0.3, 0.3);
+      wipe("#d_s3", at("D", "aate") + 0.15, 0.35);
+      show("#d_k", at("D", "khaali") - 0.1, { s: 0.94 });
+      show("#d_k0", at("D", "zero") - 0.05, { s: 1.5, y: 0 });
+      show("#d_kp", at("D", "pakka") - 0.05, { s: 1, y: 6 });
+      show("#d_g", at("D", "guess") - 0.1, { s: 0.94 });
+      show("#d_gl", at("D", "lag") - 0.05, { s: 1, y: 6 });
+      show("#d_gm", at("D", "poore") - 0.05, { s: 1.4, y: 0 });
+
+      // E: AI tests score the same way -> guessing pays
+      show("#e_t", at("E", "ai") - 0.05, { s: 1.05 });
+      show("#e_r1", at("E", "tests") - 0.05, { s: 0.94 });
+      show("#e_r2", at("E", "tests") + 0.35, { s: 0.94 });
+      show("#e_r3", at("E", "tests") + 0.7, { s: 0.94 });
+      show("#e_src", at("E", "tests"), { s: 1, y: 0 });
+      show("#e_arr", at("E", "isliye") - 0.05, { s: 1, y: -20 });
+      show("#e_g", at("E", "guess") - 0.1, { s: 1.25 });
+
+      // F: the fix from exams: JEE, NEET, GATE -> wrong = minus, don't know = 0 -> guessing costs
+      show("#f_oa", at("F", "openai") - 0.1, { s: 0.9 });
+      show("#f_fix", at("F", "fix") - 0.05, { s: 1.05 });
+      show("#f_j", at("F", "jee") - 0.05, { s: 1.3 });
+      show("#f_n", at("F", "neet") - 0.05, { s: 1.3 });
+      show("#f_ga", at("F", "gate") - 0.05, { s: 1.3 });
+      show("#f_src", at("F", "jee"), { s: 1, y: 0 });
+      show("#f_neg", at("F", "negative") - 0.05, { s: 1.2 });
+      show("#f_r1", at("F", "galat") - 0.05, { s: 0.94 });
+      show("#f_m", at("F", "minus") - 0.05, { s: 1.4, y: 0 });
+      show("#f_r2", at("F", '"nahi') - 0.05, { s: 0.94 });
+      show("#f_z", at("F", "zero") - 0.05, { s: 1.4, y: 0 });
+      ["#f_neg", "#f_r1", "#f_r2"].forEach((el) => hide(el, at("F", "tab") - 0.1));
+      show("#f_g", at("F", "andaza") - 0.1, { s: 0.94 });
+      show("#f_gh", at("F", "ghaate") - 0.05, { s: 1.4, y: 0 });
+
+      // G: the viewer's test: ask 2-3 times; the answer changes -> it is a guess (same dates as the hook)
+      show("#g_t", at("G", "fact") - 0.1, { s: 1.05 });
+      show("#g_t2", at("G", "do-teen") - 0.05, { s: 1.05 });
+      ["#g_t1", "#g_tt2", "#g_t3"].forEach((el, i) => show(el, at("G", "do-teen") + i * 0.22, { s: 0.9 }));
+      show("#g_b", at("G", "jawab") - 0.05, { s: 1, y: 10 });
+      [1, 2, 3].forEach((i) => {
+        const t = at("G", "badal") + (i - 1) * 0.16;
+        hide("#g_d" + i, t - 0.05, 0.1);
+        show("#g_v" + i, t, { s: 1.25, y: 0 });
+      });
+      show("#g_st", at("G", "guess") - 0.05, { s: 1.5, y: 0 });
+
+      // H: the question
+      show("#h_1", at("H", "tum") - 0.05, { s: 1.1 });
+      show("#h_2", at("H", "kam") - 0.05, { s: 1.1 });
+      show("#h_bar", at("H", "comment") - 0.1, { s: 0.95 });
+      show("#h_c", at("H", "karo") - 0.05, { s: 0.85 });
+      M.finish({ kw: { birthday: "gold", teenon: "hot", galat: "hot", chances: "gold", east: "gold", hallucination: "gold", confidence: "good",
+                       zero: "hot", guess: "gold", marks: "good", jee: "gold", neet: "gold", gate: "gold", negative: "hot", minus: "hot",
+                       ghaate: "hot", "do-teen": "gold", badal: "hot", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
