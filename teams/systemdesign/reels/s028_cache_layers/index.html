@@ -113,6 +113,7 @@
       M.hook(["Where do you", "keep the cache?"], { size: 88, top: 250 });
       const fA = frame(A, LAB4, ICONS4, 0.05, { noSlots: true });
       [1, 2, 3, 4].forEach((k) => show(el(A, `left:${BX}px;top:${BY(k)}px;width:76px;height:76px;border-radius:14px;border:3px dashed ${AMB};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 52px var(--code);color:${AMB}`, "?"), 0.4 + 0.1 * k, { opacity: 0, y: 0 }));
+      [[1, "browser"], [2, "CDN"], [4, "database"]].forEach(([k, w]) => bd(A, BX, BY(k), AMB, at("A", w, 0) + 0.15));
       RING(A, TL(1), YS(1), WID[0], TH, ACC, at("A", "browser", 0), at("A", "CDN", 0) - 0.1);
       RING(A, TL(2), YS(2), WID[1], TH, ACC, at("A", "CDN", 0), at("A", "database", 0) - 0.1);
       RING(A, TL(4), YS(4), WID[3], TH, ACC, at("A", "database", 0));
@@ -134,7 +135,11 @@
       M.icon(B, "check", TL(2) - 60, YS(2) + 38, 44, GOOD).show(at("B", "mil", 0) + 0.2);
       RING(B, TL(2), YS(2), WID[1], TH, GOOD, at("B", "vahin", 0));
       gone(p4, at("B", "Request", 0) - 0.1);
-      chip(B, "SAME FOR REQUESTS", 770, OY + 28, 400, AMB, at("B", "Request", 0) + 0.1, 30, 64);
+      const tRq = at("B", "Request", 0);
+      goneAll([fB.ph, fB.t[1], fB.t[2], fB.t[3], fB.t[4]], tRq - 0.2);
+      tile(B, 60, OY, 360, "PHONE", "phone", CYAN, tRq + 0.2);
+      [1, 2, 3, 4].forEach((k) => tile(B, TL(k), YS(k), WID[k - 1], LAB4[k], ICONS4[k - 1], k === 4 ? AMB : CYAN, tRq + 0.2 + 0.05 * k));
+      bd(B, 330, OY + 28, AMB, tRq + 0.4, "book"); bd(B, BX, BY(2), GOOD, tRq + 0.4, "book"); X(B, BX + 10, BY(1) + 4, 56, tRq + 0.4);
       M.fit(B, { y: 250, h: 950 });
 
       // ===== C: request 1 misses everywhere =====
@@ -191,9 +196,11 @@
       chip(E, "DOTS = USERS", 700, OY + 28, 320, ACC, at("E", "sirf", 0), 32, 64);
       step(E, 1, 1, at("E", "pahla", 0)); step(E, 2, 2, at("E", "doosra", 0)); step(E, 3, 3, at("E", "teesra", 0));
       RING(E, TL(1), YS(1), WID[0], TH, ACC, at("E", "browser", 0), at("E", "doosra", 0) - 0.1); sE[0].lit(at("E", "sirf", 0));
+      goneAll([chip(E, "ONLY YOU", 300, YS(1) + 28, 300, AMB, at("E", "sirf", 0), 32, 64)], at("E", "fast", 0) - 0.35);
       chip(E, "FASTEST", 300, YS(1) + 28, 300, GOOD, at("E", "fast", 0), 32, 64);
       RING(E, TL(2), YS(2), WID[1], TH, ACC, at("E", "CDN", 0), at("E", "teesra", 0) - 0.1); sE[1].lit(at("E", "shared", 0));
       chip(E, "ONE CITY", 235, YS(2) + 20, 230, AMB, at("E", "shahar", 0), 30, 80);
+      chip(E, "APP SERVERS", 420, YS(3) + TH + 6, 300, AMB, at("E", "servers", 0), 28, 44);
       RING(E, TL(3), YS(3), WID[2], TH, ACC, at("E", "application", 0)); sE[2].lit(at("E", "memory", 0));
       M.fit(E, { y: 250, h: 950 });
 
@@ -212,7 +219,7 @@
       [0, 2].forEach((r) => { const g = el(bp, `left:18px;top:${52 + r * 22}px;width:430px;height:14px;border-radius:7px;background:${AMB};transform-origin:0 50%`); tl.set(g, { opacity: 0, scaleX: 0 }, 0); tl.to(g, { opacity: 1, scaleX: 1, duration: 0.6, ease: "power2.out", immediateRender: false }, at("F", "padha", 0) + r * 0.2); });
       chip(F, "NEAR = FAST", 590, OY + 28, 300, GOOD, at("F", "paas", 0), 30, 64);
       chip(F, "NEAR = FEW", 890, OY + 28, 250, AMB, at("F", "kam", 0), 30, 64);
-      [1, 2, 3, 4].forEach((k) => { const t = at("F", "har", 0) + 0.45 * (k - 1); down(F, k, t, AMB); M.icon(F, "check", TL(k) - 50, YS(k) + 38, 40, GOOD).show(t + 0.15 + 0.2 * k + 0.25); });
+      [1, 2, 3, 4].forEach((k) => { const t = at("F", "har", 0) + 0.45 * (k - 1); down(F, k, t, ["#F2B84B", "#4FD08A", "#6FD0F0", "#B39DF0"][k - 1]); M.icon(F, "check", TL(k) - 50, YS(k) + 38, 40, GOOD).show(t + 0.15 + 0.2 * k + 0.25); });
       M.fit(F, { y: 250, h: 1000 });
 
       // ===== G: stale copy =====
@@ -227,27 +234,31 @@
       tl.to(barf, { scaleX: 0.75, duration: 3.0, ease: "none", immediateRender: false }, at("G", "fresh", 0));
       gone(dbOld, at("G", "badal", 0) - 0.05);
       bd(G, BX, BY(4), GOOD, at("G", "badal", 0));
-      chip(G, "NEW PHOTO", 800, YS(4) + TH + 24, 320, GOOD, at("G", "badal", 0) + 0.1, 30, 60);
+      const ng = chip(G, "NEW PHOTO", 800, YS(4) + TH + 24, 320, GOOD, at("G", "badal", 0) + 0.1, 30, 60);
       const tG = at("G", "phone", 0);
       down(G, 1, tG, AMB); back(G, 1, tG + 0.7, HOT);
       chip(G, "OLD PHOTO", 760, OY + 28, 300, HOT, at("G", "dikhaega", 0), 34, 64);
       tl.to(bG[0], { borderColor: HOT, duration: 0.3, immediateRender: false }, at("G", "dikhaega", 0));
       X(G, BX + 36, BY(1) - 22, 44, at("G", "nahi", 0));
+      gone(ng, at("G", "tumhara", 0) - 0.3);
+      chip(G, "CAN'T REACH IT", 740, YS(4) + TH + 24, 400, HOT, at("G", "tumhara", 0), 30, 60);
       tl.to(barf, { scaleX: 0, duration: 1.4, ease: "none", immediateRender: false }, at("G", "hafta", 1));
       M.fit(G, { y: 250, h: 1000 });
 
       // ===== H: comment + follow =====
       // diagram: H
-      const IT = [["PRICE", "coin"], ["STOCK COUNT", "numbers"], ["USER PROFILE", "user"]];
-      const iY = (i) => 400 + i * 200;
-      chip(H, "CHANGES OFTEN?", 540, 270, 700, ACC, SHOW0("H"), 40, 70);
+      const IT = [["LIVE PRICE", "coin"], ["STOCK COUNT", "numbers"], ["USER PROFILE", "user"]];
+      const iY = (i) => 340 + i * 175;
+      chip(H, "CHANGES OFTEN?", 540, 235, 700, ACC, SHOW0("H"), 40, 70);
       IT.forEach(([lab, icn], i) => {
-        show(el(H, `left:90px;top:${iY(i)}px;width:900px;height:150px;border-radius:24px;border:3px solid ${M.ca(CYAN, 0.6)};background:#16203A;box-sizing:border-box;display:flex;align-items:center;gap:18px;padding-left:30px;font:800 46px var(--lat);color:${INK};white-space:nowrap`, `<svg viewBox="0 0 64 64" width="60" height="60" style="flex:none;overflow:visible">${Viz.ICONS[icn](CYAN)}</svg><span>${lab}</span>`), SHOW0("H") + i * 0.06, { opacity: 0, scale: 0.92, y: 0 });
-        show(el(H, `left:700px;top:${iY(i) + 35}px;width:250px;height:80px;border-radius:14px;border:3px solid ${AMB};background:#0E1426;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:10px;font:800 56px var(--code);color:${AMB}`, `<svg viewBox="0 0 64 64" width="52" height="52">${Viz.ICONS.globe(AMB)}</svg><span>?</span>`), at("H", "kaun", 0) + i * 0.1, { opacity: 0, y: 0 }); });
-      show(el(H, `left:90px;top:1010px;width:900px;height:90px;border-radius:45px;border:2px solid rgba(150,175,215,.6);font:500 42px var(--code);color:#C3CCE0;display:flex;align-items:center;padding:0 36px;box-sizing:border-box`, "Add a comment..."), at("H", "Comment", 0), { opacity: 0, y: 12 });
-      const hF = chip(H, "+  FOLLOW", 540, 1130, 420, AMB, at("H", "follow", 0) - 0.4, 46, 76);
+        show(el(H, `left:60px;top:${iY(i)}px;width:500px;height:130px;border-radius:24px;border:3px solid ${M.ca(CYAN, 0.6)};background:#16203A;box-sizing:border-box;display:flex;align-items:center;gap:16px;padding-left:26px;font:800 40px var(--lat);color:${INK};white-space:nowrap`, `<svg viewBox="0 0 64 64" width="56" height="56" style="flex:none;overflow:visible">${Viz.ICONS[icn](CYAN)}</svg><span>${lab}</span>`), SHOW0("H") + i * 0.06, { opacity: 0, scale: 0.92, y: 0 });
+        line(H, 560, iY(i) + 65, 640, iY(i) + 65, GREY, 5, SHOW0("H") + 0.2 + i * 0.06, true);
+        show(el(H, `left:640px;top:${iY(i)}px;width:380px;height:130px;border-radius:24px;border:3px solid ${M.ca(CYAN, 0.6)};background:#16203A;box-sizing:border-box;display:flex;align-items:center;gap:14px;padding-left:22px;font:800 34px var(--lat);color:${INK};white-space:nowrap`, `<svg viewBox="0 0 64 64" width="52" height="52" style="flex:none;overflow:visible">${Viz.ICONS.globe(CYAN)}</svg><span>BROWSER</span>`), SHOW0("H") + 0.25 + i * 0.06, { opacity: 0, scale: 0.92, y: 0 });
+        show(el(H, `left:916px;top:${iY(i) + 27}px;width:76px;height:76px;border-radius:16px;border:3px dashed ${AMB};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 52px var(--code);color:${AMB}`, "?"), at("H", "kaun", 0) + i * 0.1, { opacity: 0, y: 0 }); });
+      show(el(H, `left:90px;top:900px;width:900px;height:90px;border-radius:45px;border:2px solid rgba(150,175,215,.6);font:500 42px var(--code);color:#C3CCE0;display:flex;align-items:center;padding:0 36px;box-sizing:border-box`, "Add a comment..."), at("H", "Comment", 0), { opacity: 0, y: 12 });
+      const hF = chip(H, "+  FOLLOW", 540, 1030, 420, AMB, at("H", "follow", 0) - 0.4, 46, 76);
       tl.fromTo(hF, { scale: 1 }, { scale: 0.92, duration: 0.12, yoyo: true, repeat: 1, immediateRender: false }, at("H", "follow", 0));
-      M.fit(H, { y: 250, h: 1000 });
+      M.fit(H, { y: 250, h: 950 });
 
       SC.slice(1).forEach((k) => M.wipe(M.S[k]));
       M.finish({ kw: { cache: "cyan", browser: "cyan", CDN: "cyan", database: "gold", copy: "gold", miss: "hot", hit: "good", stale: "hot", example: "gold", follow: "gold" } });
