@@ -1,0 +1,91 @@
+{
+  "tts": "edge",
+  "v4_voice": "Shivam Trainer",
+  "audio": "v2",
+  "tone": "calm",
+  "scenes": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J"
+  ],
+  "min": {
+    "A": 2.5,
+    "B": 2.5,
+    "C": 2.5,
+    "D": 2.5,
+    "E": 2.5,
+    "F": 2.5,
+    "G": 2.5,
+    "H": 2.5,
+    "I": 2.5,
+    "J": 2.5
+  },
+  "tail": {},
+  "cues": [
+    [
+      "impact",
+      null,
+      null,
+      0.05
+    ],
+    [
+      "pop",
+      "B",
+      3,
+      0.2
+    ],
+    [
+      "click",
+      "C",
+      1,
+      0.3
+    ],
+    [
+      "err",
+      "C",
+      2,
+      0.2
+    ],
+    [
+      "ok",
+      "E",
+      3,
+      0.3
+    ],
+    [
+      "err",
+      "F",
+      2,
+      0.3
+    ],
+    [
+      "save",
+      "J",
+      1,
+      0.2
+    ]
+  ],
+  "copy": {
+    "hi": {
+      "A": "[warm, conversational] Container With Most Water: सारे pairs क्यों check करने हैं? Nine walls के सारे pairs देखो तो thirty six checks, पर सिर्फ़ eight काफ़ी हैं।",
+      "B": "Problem: height की list है, हर index पर एक vertical wall, और दो walls चुननी हैं जिनके बीच सबसे ज़्यादा पानी आए। Given array: one, eight, six, two, five, four, eight, three, seven। पानी की area होती है दोनों walls में से छोटी height गुणा उनके बीच का gap। Index one और index eight चुनो: छोटी wall seven है, gap seven है, area forty nine।",
+      "C": "Brute force हर pair की area निकालता है। Example के लिए, एक हज़ार walls पर चार लाख निन्यानवे हज़ार पाँच सौ pairs, यानी O of n squared। Bottleneck: हर pair नया सवाल है, पिछले से हम कुछ सीखते नहीं।",
+      "D": "[thoughtful] Insight यह है: सबसे चौड़े container से शुरू करो। Left pointer पहली wall पर, right pointer आख़िरी wall पर। अब छोटी wall को देखो। मान लो वो left है। उसके साथ right को कहीं भी अंदर लाओ, तो gap घटेगा और height छोटी wall से ऊपर जा ही नहीं सकती। तो उस wall के साथ हर नया container आज की area से छोटा या बराबर है। इसलिए छोटी wall का काम पूरा हुआ, उसका pointer अंदर करो।",
+      "E": "Dry run। L zero, r eight: one और seven, area eight। One छोटी है, l आगे। L one, r eight: eight और seven, area forty nine, best यही। Seven छोटी है, r पीछे। Next areas हैं eighteen, forty, sixteen, fifteen, four, और आख़िर में six। कुल eight steps।",
+      "F": "[thoughtful] अब उल्टा rule सोचो: taller wall को move करो। इसी array पर l पर one हमेशा छोटी रहती है, तो l वहीं अटका रहता है और r अंदर आता जाता है। Answer eight आता है, और forty nine वाला container कभी देखा ही नहीं जाता। क्योंकि छोटी wall को छोड़ दिया, तो उसके साथ का अच्छा pair खो गया।",
+      "G": "Code में l equals zero, r equals len of height minus one, best equals zero। While l less than r: area निकालो, min of height l, height r, गुणा r minus l, और best को max से update करो। अगर height l, height r से छोटी है तो l plus equals one, वरना r minus equals one। आख़िर में best return करो।",
+      "H": "हर iteration में दोनों pointers में से एक आगे बढ़ता है, तो कुल n minus one iterations, यानी time O of n। सिर्फ़ l, r और best रखे हैं, तो extra space O of one।",
+      "I": "Interview में बोलो: सबसे चौड़े container से शुरू करो, और हर बार छोटी wall का pointer अंदर करो, क्योंकि उस wall के साथ कोई narrower container बेहतर नहीं हो सकता।",
+      "J": "Comment करो: array one, one, zero पर answer क्या आएगा? जवाब है, one।"
+    }
+  },
+  "voice": "hi-IN-SwaraNeural",
+  "pace": 1.26
+}

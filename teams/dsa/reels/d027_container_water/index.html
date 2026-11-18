@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Container With Most Water</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/viz.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+      /* ===== reel-specific CSS ===== */
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="161.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+
+      <div id="cam">
+        <!-- ===== BEATS: one <div class="beat" id="sX"> per scene id in spec.json (order must match). Content lives at absolute px inside the 1080x1920 canvas, y 170-1300.
+             Each beat is a PICTURE of the idea (diagram, map, flow, chart, metaphor), not the spoken sentence: see docs-notes/diagram-first-visuals.md ===== -->
+        <div class="beat" id="sA"></div>
+        <div class="beat" id="sB"></div>
+        <div class="beat" id="sC"></div>
+        <div class="beat" id="sD"></div>
+        <div class="beat" id="sE"></div>
+        <div class="beat" id="sF"></div>
+        <div class="beat" id="sG"></div>
+        <div class="beat" id="sH"></div>
+        <div class="beat" id="sI"></div>
+        <div class="beat" id="sJ"></div>
+      </div>
+
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="161.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="161.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="161.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const M = Mo.init({ order: ["A","B","C","D","E","F","G","H","I","J"], tag: "DSA 027/150" });
+      Viz.install(M);
+      const { tl } = M; const { ACC, CYAN, HOT, GOOD } = M; const ST = M.S;
+      const AMB = "#E9B44C", VIO = "#9A8CEB";
+      const $s = (k) => M.$("#s" + k);
+      const [A, B, C, D, E, F, G, H, I, J] = "ABCDEFGHIJ".split("").map($s);
+      const cp = (sc, i) => REEL.hi.caps.filter((c) => c.scene === sc)[i].s;
+      const el = (host, css, html) => { const d = M.mk("abs", host); d.style.cssText += ";" + css; if (html != null) d.innerHTML = html; return d; };
+      const show = (d, t, from) => { tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, from || { opacity: 0, y: 24 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.45, ease: "power3.out", immediateRender: false }, t); return d; };
+      const panel = (host, x, y, w, h, col, label) => { const d = M.mk("glass", host); d.style.cssText += `;left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-color:${M.ca(col, 0.45)}`;
+        if (label) { const l = M.mk("lab", d, label); l.style.cssText += `;left:0;width:${w}px;top:16px;font-size:34px;color:${col}`; } return d; };
+      const tile = (host, x, y, w, h, txt, col, fs) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px solid ${M.ca(col || CYAN, .55)};background:${M.ca(col || CYAN, .12)};font:700 ${fs || 38}px var(--code);display:flex;align-items:center;justify-content:center;white-space:nowrap`, txt);
+      const lab = (host, css, txt, col, size) => el(host, css + `;font:700 ${size || 44}px var(--code);color:${col || "#B8C4DC"};text-align:center;white-space:nowrap`, txt);
+      const counter = (host, css, from, segs, col, size, ts) => { const d = el(host, css + `;font:800 ${size || 96}px var(--code);color:${col};text-align:center;white-space:nowrap`, String(from)); const o = { v: from };
+        show(d, ts == null ? segs[0][0] - 0.3 : ts, { opacity: 0 });
+        segs.forEach(([t0, t1, to]) => tl.to(o, { v: to, duration: t1 - t0, ease: "power2.inOut", immediateRender: false, onUpdate: () => { d.textContent = Math.round(o.v).toLocaleString("en-US"); } }, t0));
+        return d; };
+      const ring = (d, t, col) => tl.to(d, { borderColor: col, backgroundColor: M.ca(col, .35), duration: 0.25, immediateRender: false }, t);
+      const tint = (d, t, col, fill) => tl.to(d, { borderColor: M.ca(col, .9), backgroundColor: M.ca(col, fill == null ? .28 : fill), duration: 0.3, immediateRender: false }, t);
+      const dim = (d, t, op) => tl.to(d, { opacity: op == null ? 0.15 : op, duration: 0.35, immediateRender: false }, t);
+      const dimIn = (d, t, op) => { tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: op, duration: 0.4, immediateRender: false }, t); return d; };
+      const lit = (d, t) => tl.to(d, { opacity: 1, duration: 0.35, immediateRender: false }, t);
+      const hide = (d, t) => tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, t);
+      const bigtxt = (host, css, txt, col, size, t) => show(lab(host, css, txt, col, size), t, { opacity: 0 });
+      const ghost = (host, x, y, w, h) => el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:14px;border:2px dashed rgba(150,175,215,.35)`);
+      const chip = (host, x, y, w, h, txt, col, t, fs) => show(tile(host, x, y, w, h, txt, col, fs || 56), t, { opacity: 0, y: 18 });
+      const base = (sc, h) => { const p = panel(sc, 60, 230, 960, h || 1010, CYAN, null); show(p, ST[sc.id.slice(1)] + 0.05); return p; };
+      // a lit tile: dim from the start, lit on its word
+      const lt = (host, x, y, w, h, txt, col, fs, t, s0) => { const d = tile(host, x, y, w, h, txt, col, fs); dimIn(d, s0 + 0.1, 0.5); lit(d, t); return d; };
+
+      const CX = (i) => 24 + i * 92;
+      const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      const code = (host, x, y, w, lines, fs, lh, s0) => {
+        const h = lines.length * lh + 36;
+        show(el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:16px;background:rgba(8,13,26,.9);border:2px solid ${M.ca(CYAN, .35)}`), s0 + 0.1);
+        const Ls = lines.map((s, i) => show(el(host, `left:${x + 10}px;top:${y + 18 + i * lh}px;width:${w - 20}px;height:${lh}px;border-radius:8px;font:500 ${fs}px/${lh}px var(--code);color:#9FB0CC;white-space:pre;padding-left:12px;box-sizing:border-box`, esc(s)), s0 + 0.15, { opacity: 0 }));
+        const on = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: M.ca(ACC, .25), color: "#FFFFFF", duration: 0.3, immediateRender: false }, t); };
+        const off = (a, b, t) => { for (let i = a; i <= b; i++) tl.to(Ls[i], { backgroundColor: "rgba(233,180,76,0)", color: "#9FB0CC", duration: 0.3, immediateRender: false }, t); };
+        return { on, off, h }; };
+      const seqTile = (host, x, y, w, h, col, fs, seq) => seq.map(([txt, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = seq[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[1]); return d; });
+
+      const GREY = "#B8C4DC", DIMC = "#5C6B88";
+      // swap: one tile slot whose text changes; items [txt, colour, time]
+      const swap = (host, x, y, w, h, fs, items) => items.map(([txt, col, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); show(d, t, { opacity: 0, scale: k ? 1.06 : 1 });
+        const nt = items[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, nt[2]); return d; });
+      // ring that moves between cells
+      const mkRing = (host, x, y, w, h, t) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:18px;border:5px solid ${ACC};box-sizing:border-box`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); return d; };
+      const hop = (d, x, y, t, dur) => tl.to(d, { left: x, top: y, duration: dur || 0.35, ease: "power2.inOut", immediateRender: false }, t);
+      const bar = (host, x, y, w, hh, col, t, tOut) => { const d = el(host, `left:${x}px;top:${y}px;width:${w}px;height:${hh}px;border-radius:4px;background:${col}`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, t); if (tOut != null) tl.to(d, { opacity: 0, duration: 0.25, immediateRender: false }, tOut); return d; };
+      const W = (sc, w, n) => M.W(sc, w, n);
+      const TW = 140, TH = 120, VALS = ["−4", "−1", "−1", "0", "1", "2"], UNS = ["−1", "0", "1", "2", "−1", "−4"];
+      const cxx = (i, x0) => x0 + i * 148;
+      const cells = (host, y, vals, x0, s0, litAt, col) => vals.map((v, i) => { const d = tile(host, cxx(i, x0), y, TW, TH, v, col || CYAN, 64);
+        if (litAt && litAt[i] != null) { dimIn(d, s0 + 0.1, 0.5); lit(d, litAt[i]); } else show(d, s0 + 0.1, { opacity: 0 }); return d; });
+      const idxs = (host, y, n, x0, s0) => [...Array(n)].map((_, i) => show(el(host, `left:${cxx(i, x0) + 35}px;top:${y + TH + 8}px;width:70px;height:46px;border-radius:10px;border:2px solid rgba(0,0,0,0);font:600 34px var(--code);color:#8592AD;display:flex;align-items:center;justify-content:center`, String(i)), s0 + 0.15, { opacity: 0 }));
+      const idxOn = (d, t) => tl.to(d, { color: GOOD, borderColor: M.ca(GOOD, .9), backgroundColor: M.ca(GOOD, .25), duration: 0.3, immediateRender: false }, t);
+      const TG = 60;
+      const tagX = (txt, i, x0) => cxx(i, x0) + (txt === "R" ? 72 : 8);
+      const tag = (host, txt, col, i, x0, y, t) => { const d = tile(host, tagX(txt, i, x0), y + TH + 60, TG, 62, txt, col, 40); show(d, t, { opacity: 0 }); return d; };
+      const tagHop = (d, txt, i, x0, y, t) => hop(d, tagX(txt, i, x0), y + TH + 60, t, 0.4);
+      const arcs = (host, y, x0, pairs, tIn) => { const H = 120;
+        const w = el(host, `left:0;top:${y - H - 10}px;width:960px;height:${H + 10}px`);
+        w.innerHTML = `<svg width="960" height="${H + 10}" viewBox="0 0 960 ${H + 10}" style="overflow:visible">` + pairs.map(([a, b]) => { const x1 = cxx(a, x0) + 70, x2 = cxx(b, x0) + 70, h = 36 + 20 * (b - a);
+          return `<path d="M${x1} ${H + 8} C${x1} ${H + 8 - h} ${x2} ${H + 8 - h} ${x2} ${H + 8}" fill="none" stroke="${AMB}" stroke-width="6" stroke-linecap="round"/>`; }).join("") + "</svg>";
+        tl.set(w, { opacity: 0 }, 0); tl.to(w, { opacity: 1, duration: 0.4, immediateRender: false }, tIn);
+        const ps = [...w.querySelectorAll("path")];
+        return { tint: (t, c) => tl.to(ps, { stroke: c, duration: 0.3, immediateRender: false }, t), hide: (t) => tl.to(w, { opacity: 0, duration: 0.3, immediateRender: false }, t) }; };
+      // sum cards: steps [sumText, verdictText, colour, tSum, tVerdict]
+      const stepUI = (host, y, steps, tTarget, s0) => {
+        const sums = swap(host, 40, y, 560, 110, 54, steps.map(([s, , , t]) => [s, CYAN, t]));
+        steps.forEach(([, , c, , tv], k) => tint(sums[k], tv, c, 0.18));
+        steps.forEach(([, v, c, , tv], k) => { const d = tile(host, 40, y + 130, 880, 100, v, c, 52); show(d, tv, { opacity: 0 }); if (steps[k + 1]) tl.to(d, { opacity: 0, duration: 0.2, immediateRender: false }, steps[k + 1][3]); });
+        lt(host, 620, y, 300, 110, "TARGET 19", ACC, 44, tTarget, s0); };
+
+      // 1-based position labels under a row of cells
+      const idx1 = (host, y, n, x0, s0) => [...Array(n)].map((_, i) => show(el(host, `left:${cxx(i, x0) + 35}px;top:${y + TH + 8}px;width:70px;height:46px;border-radius:10px;border:2px solid rgba(0,0,0,0);font:600 34px var(--code);color:#8592AD;display:flex;align-items:center;justify-content:center`, String(i + 1)), s0 + 0.15, { opacity: 0 }));
+      const c = (sc, i) => cp(sc, i);
+      const swapF = (host, x, y, w, h, fs, items) => items.map(([txt, col, t], k) => { const d = tile(host, x, y, w, h, txt, col, fs); tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.15, ease: "power3.out", immediateRender: false }, t);
+        const nt = items[k + 1]; if (nt) tl.to(d, { opacity: 0, duration: 0.1, immediateRender: false }, nt[2]); return d; });
+      // ---- container helpers: nine walls, water rectangle, pointer tags
+      const HT = [1, 8, 6, 2, 5, 4, 8, 3, 7];
+      const PX0 = 30, PITCH = 104, BW = 84;
+      const bx = (i) => PX0 + i * PITCH;
+      const bars = (host, base, U, s0, o) => { o = o || {}; return HT.map((h, i) => { const d = tile(host, bx(i), base - h * U, BW, h * U, o.vals ? String(h) : "", CYAN, h * U < 60 ? 30 : 38);
+        d.style.alignItems = "flex-start"; d.style.paddingTop = h * U < 60 ? "3px" : "6px"; d.style.boxSizing = "border-box";
+        if (o.lit && o.lit[i] != null) { dimIn(d, s0 + 0.1, 0.5); lit(d, o.lit[i]); } else show(d, s0 + 0.1, { opacity: 0 }); return d; }); };
+      const ground = (host, base, s0) => show(el(host, `left:20px;top:${base}px;width:920px;height:4px;border-radius:2px;background:rgba(150,175,215,.45)`), s0 + 0.1, { opacity: 0 });
+      const idxl = (host, base, s0) => HT.map((_, i) => show(el(host, `left:${bx(i) + 7}px;top:${base + 8}px;width:70px;height:46px;font:600 34px var(--code);color:#8592AD;display:flex;align-items:center;justify-content:center`, String(i)), s0 + 0.15, { opacity: 0 }));
+      const ptag = (host, txt, col, i, base, t) => { const d = tile(host, bx(i) + 12, base + 64, 60, 62, txt, col, 40); show(d, t, { opacity: 0 }); return d; };
+      const phop = (d, i, base, t) => hop(d, bx(i) + 12, base + 64, t, 0.35);
+      const water = (host, base, U, steps, col) => { const g = ([l, r]) => { const m = Math.min(HT[l], HT[r]); return { left: bx(l) + BW / 2, width: (r - l) * PITCH, top: base - m * U, height: m * U }; };
+        const g0 = g(steps[0]); const d = el(host, `left:${g0.left}px;top:${g0.top}px;width:${g0.width}px;height:${g0.height}px;border:3px solid ${M.ca(col || CYAN, .85)};background:${M.ca(col || CYAN, .2)};box-sizing:border-box;border-radius:6px`);
+        tl.set(d, { opacity: 0 }, 0); tl.to(d, { opacity: 1, duration: 0.3, immediateRender: false }, steps[0][2]);
+        steps.slice(1).forEach((s) => tl.to(d, Object.assign(g(s), { duration: 0.4, ease: "power2.inOut", immediateRender: false }), s[2]));
+        return d; };
+
+      // diagram: A
+      // ===== A: hook, nine walls, 36 pairs against 8 checks
+      M.hook(["MOST WATER:", "CHECK ALL PAIRS?"], { size: 90, top: 250 });
+      const BA = 440, UA = 44; const pa = panel(A, 60, 500, 960, 780, CYAN, null); show(pa, 0.02);
+      bars(pa, BA, UA, 0, {}); ground(pa, BA, 0);
+      ptag(pa, "L", CYAN, 0, BA, c("A", 10)); ptag(pa, "R", VIO, 8, BA, c("A", 10));
+      water(pa, BA, UA, [[0, 8, c("A", 11)]]);
+      lt(pa, 480, 540, 450, 100, "PAIRS", GREY, 56, c("A", 14), 0);
+      counter(pa, "left:30px;width:430px;top:525px", 0, [[c("A", 17) - 0.1, c("A", 18) + 0.3, 36]], HOT, 100, c("A", 15));
+      lt(pa, 30, 680, 430, 110, "8", GOOD, 100, c("A", 22), 0); lt(pa, 480, 690, 450, 100, "CHECKS", GOOD, 56, c("A", 23), 0);
+      M.fit(A, { y: 460, h: 840 });
+
+      // diagram: B
+      // ===== B: the problem, the given heights, area = min x gap, the 49 container
+      const sB = ST.B; const pb = base(B, 960); const BB = 500, UB = 52;
+      M.pill(pb, "EXAMPLE", sB + 0.1, { x: 20, y: 10, size: 34 });
+      const barsB = bars(pb, BB, UB, sB, { vals: true, lit: { 0: c("B", 24), 1: c("B", 25), 2: c("B", 26), 3: c("B", 27), 4: c("B", 28), 5: c("B", 29), 6: c("B", 30), 7: c("B", 31), 8: c("B", 32) } });
+      ground(pb, BB, sB); idxl(pb, BB, sB);
+      lt(pb, 30, 610, 900, 100, "AREA = MIN × GAP", ACC, 56, c("B", 35), sB);
+      tint(barsB[1], c("B", 50), GOOD, 0.3); tint(barsB[8], c("B", 53), GOOD, 0.3);
+      water(pb, BB, UB, [[1, 8, c("B", 54)]], GOOD);
+      lt(pb, 30, 740, 280, 110, "MIN 7", CYAN, 50, c("B", 57), sB); lt(pb, 340, 740, 280, 110, "GAP 7", VIO, 50, c("B", 60), sB); lt(pb, 650, 740, 280, 110, "= 49", GOOD, 56, c("B", 63), sB);
+      M.fit(B, { y: 200, h: 1100 });
+
+      // diagram: C
+      // ===== C: brute force, every pair, 499,500 pairs, each one a new question
+      const sC = ST.C; const pc = base(C, 990); const BC = 300, UC = 34;
+      bars(pc, BC, UC, sC, {}); ground(pc, BC, sC);
+      const wC = water(pc, BC, UC, [[0, 1, c("C", 2)], [0, 2, c("C", 4)], [1, 2, c("C", 5)], [1, 3, c("C", 7)]]);
+      hide(wC, c("C", 8));
+      swapF(pc, 30, 360, 900, 90, 50, [["(0, 1) → 1", AMB, c("C", 2)], ["(0, 2) → 2", AMB, c("C", 4)], ["(1, 2) → 6", AMB, c("C", 5)], ["(1, 3) → 4", AMB, c("C", 7)]]);
+      lt(pc, 30, 470, 430, 90, "n = 1000", CYAN, 52, c("C", 12), sC); lt(pc, 500, 470, 430, 90, "PAIRS", GREY, 52, c("C", 21), sC);
+      counter(pc, "left:30px;width:900px;top:580px", 0, [[c("C", 15), c("C", 21) + 0.3, 499500]], HOT, 112, c("C", 14));
+      lt(pc, 30, 730, 900, 110, "O(n²)", HOT, 84, c("C", 26), sC);
+      lt(pc, 30, 860, 430, 90, "NEW QUESTION", HOT, 44, c("C", 30), sC); lt(pc, 490, 860, 440, 90, "NOTHING LEARNED", HOT, 40, c("C", 36), sC);
+      M.fit(C, { y: 200, h: 1100 });
+
+      // diagram: D
+      // ===== D: widest first, the short wall is a cap, move the short side
+      const sD = ST.D; const pd = base(D, 1000); const BD = 400, UD = 48;
+      const barsD = bars(pd, BD, UD, sD, { vals: true }); ground(pd, BD, sD);
+      const lD = ptag(pd, "L", CYAN, 0, BD, c("D", 9)), rD = ptag(pd, "R", VIO, 8, BD, c("D", 14));
+      water(pd, BD, UD, [[0, 8, c("D", 5)], [0, 7, c("D", 31)], [0, 6, c("D", 33)], [0, 5, c("D", 35)], [0, 8, c("D", 38)], [1, 8, c("D", 75)]]);
+      phop(rD, 7, BD, c("D", 31)); phop(rD, 6, BD, c("D", 33)); phop(rD, 5, BD, c("D", 35)); phop(rD, 8, BD, c("D", 38));
+      tint(barsD[0], c("D", 21), AMB, 0.3);
+      const capD = el(pd, `left:20px;top:${BD - UD - 2}px;width:920px;height:0;border-top:4px dashed ${M.ca(AMB, .9)}`); tl.set(capD, { opacity: 0 }, 0); tl.to(capD, { opacity: 1, duration: 0.4, immediateRender: false }, c("D", 41));
+      lt(pd, 30, 530, 900, 100, "WIDEST FIRST", ACC, 56, c("D", 3), sD);
+      lt(pd, 30, 640, 900, 100, "SHORT WALL = CAP", AMB, 52, c("D", 42), sD);
+      lt(pd, 30, 750, 900, 100, "GAP ↓  AREA ≤ NOW", HOT, 50, c("D", 60), sD);
+      lt(pd, 30, 860, 900, 100, "MOVE SHORT SIDE", GOOD, 54, c("D", 67), sD);
+      phop(lD, 1, BD, c("D", 74)); dim(barsD[0], c("D", 74), 0.3);
+      M.fit(D, { y: 200, h: 1100 });
+
+      // diagram: E
+      // ===== E: dry run, eight areas
+      const sE = ST.E; const pe = base(E, 840); const BE = 400, UE = 48;
+      const barsE = bars(pe, BE, UE, sE, { vals: true }); ground(pe, BE, sE); idxl(pe, BE, sE);
+      const lE = ptag(pe, "L", CYAN, 0, BE, c("E", 2)), rE = ptag(pe, "R", VIO, 8, BE, c("E", 4));
+      const T = [c("E", 37) - 0.4, c("E", 38) - 0.4, c("E", 39) - 0.4, c("E", 40) - 0.4, c("E", 44) - 0.4];
+      water(pe, BE, UE, [[0, 8, c("E", 6)], [1, 8, c("E", 16)], [1, 7, c("E", 36) - 0.4], [1, 6, T[0]], [1, 5, T[1]], [1, 4, T[2]], [1, 3, T[3]], [1, 2, T[4]]]);
+      phop(lE, 1, BE, c("E", 14)); dim(barsE[0], c("E", 14), 0.3);
+      phop(rE, 7, BE, c("E", 31)); dim(barsE[8], c("E", 31), 0.3);
+      [[6, 7, T[0]], [5, 6, T[1]], [4, 5, T[2]], [3, 4, T[3]], [2, 3, T[4]]].forEach(([to, from, t]) => { phop(rE, to, BE, t); dim(barsE[from], t, 0.3); });
+      swapF(pe, 30, 540, 560, 100, 54, [["1 × 8 = 8", AMB, c("E", 10)], ["7 × 7 = 49", GOOD, c("E", 24)], ["3 × 6 = 18", AMB, c("E", 36)], ["8 × 5 = 40", AMB, c("E", 37)], ["4 × 4 = 16", AMB, c("E", 38)], ["5 × 3 = 15", AMB, c("E", 39)], ["2 × 2 = 4", AMB, c("E", 40)], ["6 × 1 = 6", AMB, c("E", 44)]]);
+      swapF(pe, 620, 540, 310, 100, 46, [["BEST 8", ACC, c("E", 10) + 0.4], ["BEST 49", GOOD, c("E", 26)]]);
+      lt(pe, 30, 670, 430, 100, "8 STEPS", GOOD, 56, c("E", 46), sE); lt(pe, 490, 670, 440, 100, "NOT 36", HOT, 56, c("E", 47), sE);
+      M.fit(E, { y: 200, h: 1100 });
+
+      // diagram: F
+      // ===== F: the opposite rule (move the taller wall) never reaches 49
+      const sF = ST.F; const pf = base(F, 990); const BF = 380, UF = 46;
+      const barsF = bars(pf, BF, UF, sF, { vals: true }); ground(pf, BF, sF);
+      ptag(pf, "L", CYAN, 0, BF, c("F", 9) - 0.2); const rF = ptag(pf, "R", VIO, 8, BF, c("F", 9) - 0.2);
+      const tF = [1, 2, 3, 4, 5, 6, 7].map((k) => c("F", 12) + k * 0.55);
+      water(pf, BF, UF, [[0, 8, c("F", 9)]].concat(tF.map((t, k) => [0, 7 - k, t])));
+      tF.forEach((t, k) => { phop(rF, 7 - k, BF, t); dim(barsF[8 - k], t, 0.3); });
+      tint(barsF[0], c("F", 14), AMB, 0.3);
+      lt(pf, 30, 540, 430, 96, "MOVE TALLER ✗", HOT, 44, c("F", 4), sF);
+      swapF(pf, 490, 540, 440, 96, 46, [["1 × 8 = 8", AMB, c("F", 10)]].concat(tF.map((t, k) => [`1 × ${7 - k} = ${7 - k}`, AMB, t + 0.1])));
+      lt(pf, 30, 650, 430, 96, "BEST 8", HOT, 54, c("F", 32), sF);
+      const ghF = el(pf, `left:${bx(1) + BW / 2}px;top:${BF - 7 * UF}px;width:${7 * PITCH}px;height:${7 * UF}px;border:3px dashed ${M.ca(GOOD, .9)};box-sizing:border-box;border-radius:6px`);
+      tl.set(ghF, { opacity: 0 }, 0); tl.to(ghF, { opacity: 1, duration: 0.4, immediateRender: false }, c("F", 36));
+      lt(pf, 490, 650, 440, 96, "49 NEVER SEEN", HOT, 40, c("F", 41), sF);
+      lt(pf, 30, 760, 900, 96, "SHORT WALL DROPPED", AMB, 46, c("F", 49), sF);
+      lt(pf, 30, 870, 900, 96, "GOOD PAIR LOST", HOT, 52, c("F", 57), sF);
+      M.fit(F, { y: 200, h: 1100 });
+
+      // diagram: G
+      // ===== G: the real code, lit as spoken
+      const sG = ST.G; const pg = base(G, 1050);
+      swap(pg, 30, 20, 900, 80, 46, [["INIT", ACC, sG + 0.2], ["AREA", AMB, c("G", 20)], ["MOVE", CYAN, c("G", 39)], ["RETURN", GOOD, c("G", 57)]]);
+      const cg = code(pg, 10, 115, 940, ["def max_area(height):", "    l, r = 0, len(height) - 1", "    best = 0", "    while l < r:", "        area = min(height[l],", "                   height[r]) * (r - l)", "        best = max(best, area)", "        if height[l] < height[r]:", "            l += 1", "        else:", "            r -= 1", "    return best"], 36, 52, sG);
+      [[0, 0, c("G", 0), c("G", 2)], [1, 1, c("G", 2), c("G", 12)], [2, 2, c("G", 12), c("G", 15)], [3, 3, c("G", 15), c("G", 20)], [4, 5, c("G", 20), c("G", 32)], [6, 6, c("G", 32), c("G", 39)], [7, 8, c("G", 39), c("G", 52)], [9, 10, c("G", 52), c("G", 57)]]
+        .forEach(([a, b, t0, t1]) => { cg.on(a, b, t0); cg.off(a, b, t1); });
+      cg.on(11, 11, c("G", 57));
+      lt(pg, 30, 800, 280, 100, "l = 0", CYAN, 46, c("G", 4), sG); lt(pg, 340, 800, 280, 100, "r = 8", VIO, 46, c("G", 11), sG); lt(pg, 650, 800, 280, 100, "best = 0", ACC, 46, c("G", 14), sG);
+      lt(pg, 30, 920, 900, 100, "max_area(height) → 49", GOOD, 46, c("G", 59), sG);
+      M.fit(G, { y: 200, h: 1100 });
+
+      // diagram: H
+      // ===== H: one pointer moves per step, n - 1 steps, three variables
+      const sH = ST.H; const pH = base(H, 960); const RH = 190;
+      lt(pH, 30, 20, 900, 90, "ONE POINTER MOVES", CYAN, 50, c("H", 3), sH);
+      HT.forEach((h, i) => show(tile(pH, bx(i), RH, BW, 90, String(h), CYAN, 44), sH + 0.1, { opacity: 0 }));
+      const lH = ptag(pH, "L", CYAN, 0, RH + 26, sH + 0.2);
+      const rH = tile(pH, bx(8) + 12, RH - 68, 60, 62, "R", VIO, 40); show(rH, sH + 0.2, { opacity: 0 });
+      const hopsH = [["L", 1], ["R", 7], ["R", 6], ["R", 5], ["R", 4], ["R", 3], ["R", 2], ["R", 1]];
+      hopsH.forEach(([w, to], k) => { const t = c("H", 3) + 0.2 + k * 0.27; if (w === "L") phop(lH, to, RH + 26, t); else hop(rH, bx(to) + 12, RH - 68, t, 0.3); });
+      lt(pH, 30, 400, 300, 100, "MOVES", GREY, 52, c("H", 3), sH);
+      counter(pH, "left:340px;width:260px;top:400px", 0, [[c("H", 3) + 0.3, c("H", 3) + 2.4, 8]], GOOD, 100, c("H", 3));
+      lt(pH, 640, 400, 290, 100, "n − 1", ACC, 56, c("H", 12), sH);
+      lt(pH, 30, 540, 900, 130, "O(n)", ACC, 84, c("H", 19), sH);
+      lt(pH, 30, 710, 280, 100, "l", CYAN, 56, c("H", 23), sH); lt(pH, 340, 710, 280, 100, "r", VIO, 56, c("H", 24), sH); lt(pH, 650, 710, 280, 100, "best", ACC, 56, c("H", 26), sH);
+      lt(pH, 30, 840, 900, 110, "SPACE O(1)", GOOD, 58, c("H", 31), sH);
+      M.fit(H, { y: 200, h: 1100 });
+
+      // diagram: I
+      // ===== I: the interview line, lit as spoken
+      const sI = ST.I; const pI = base(I, 900); const BI = 400, UI = 48;
+      const barsI = bars(pI, BI, UI, sI, { vals: true }); ground(pI, BI, sI);
+      const lI = ptag(pI, "L", CYAN, 0, BI, c("I", 3)); ptag(pI, "R", VIO, 8, BI, c("I", 3));
+      water(pI, BI, UI, [[0, 8, c("I", 5)], [1, 8, c("I", 16)]]);
+      lt(pI, 30, 540, 900, 100, "1  WIDEST FIRST", ACC, 52, c("I", 3), sI);
+      lt(pI, 30, 650, 900, 100, "2  MOVE SHORT SIDE", AMB, 52, c("I", 12), sI);
+      lt(pI, 30, 760, 900, 100, "3  NARROWER: NOT BETTER", GOOD, 44, c("I", 24), sI);
+      phop(lI, 1, BI, c("I", 16)); dim(barsI[0], c("I", 16), 0.3);
+      M.fit(I, { y: 200, h: 1100 });
+
+      // diagram: J
+      // ===== J: comment question, heights one, one, zero
+      const sJ = ST.J; const pJ = base(J, 760); const BJ = 400, UJ = 150, JX = (i) => 190 + i * 200;
+      const kCb = el(pJ, "left:24px;top:30px;width:900px;height:110px;border-radius:55px;border:2px solid rgba(150,175,215,.4);font:500 46px var(--code);color:#B8C4DC;display:flex;align-items:center;padding:0 40px", "Add a comment..."); show(kCb, sJ + 0.1, { opacity: 0 });
+      [1, 1, 0].forEach((h, i) => { const d = tile(pJ, JX(i), BJ - Math.max(h, 0.05) * UJ, 120, Math.max(h, 0.05) * UJ, h ? "1" : "", CYAN, 56); d.style.boxSizing = "border-box"; d.style.alignItems = "flex-start"; d.style.paddingTop = "8px";
+        dimIn(d, sJ + 0.1, 0.5); lit(d, c("J", [3, 4, 5][i])); });
+      show(lab(pJ, `left:${JX(2)}px;width:120px;top:${BJ - 78}px`, "0", GREY, 56), c("J", 5), { opacity: 0 });
+      ground(pJ, BJ, sJ);
+      const wJ = el(pJ, `left:${JX(0) + 60}px;top:${BJ - UJ}px;width:200px;height:${UJ}px;border:3px solid ${M.ca(GOOD, .85)};background:${M.ca(GOOD, .2)};box-sizing:border-box;border-radius:6px`); tl.set(wJ, { opacity: 0 }, 0); tl.to(wJ, { opacity: 1, duration: 0.3, immediateRender: false }, c("J", 12));
+      swap(pJ, 30, 480, 900, 130, 66, [["RESULT = ?", ACC, c("J", 8)], ["ANSWER = 1", GOOD, c("J", 12)]]);
+      M.fit(J, { y: 200, h: 1100 });
+
+      "BCDEFGHIJ".split("").forEach((k) => M.wipe(M.S[k]));
+      M.finish({ kw: { Container: "gold", pairs: "hot", thirty: "hot", eight: "good", Brute: "hot", Bottleneck: "hot", Insight: "gold", chhoti: "gold", Dry: "gold", taller: "hot", Code: "gold", squared: "hot", Interview: "gold", Comment: "gold", forty: "good" } });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

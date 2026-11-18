@@ -405,22 +405,7 @@
       "hook_type": "direct_question",
       "spoken_hook": "Container With Most Water: सारे pairs क्यों check करने हैं?",
       "hook_formula": "direct_question_number",
-      "hook_source": "direct_question; hookscore 45.6 WEAK but no DEALBREAKER; the queue number-payoff hook linted FAIL, so the payoff moved to line 2 (scriptwriter, 2026-11-18).",
-      "hook_10s": "Container With Most Water: पूरे array में सिर्फ़ आठ checks। Problem: height की list, दो walls चुनो जिनके बीच सबसे ज़्यादा पानी आए। नौ walls के छत्तीस pairs हैं, फिर भी आठ checks काफ़ी हैं। [frame 0: nine bars with two pointer tags at the two ends and a counter 8]",
-      "hook_candidates": [
-        {
-          "hook": "Container With Most Water: पूरे array में सिर्फ़ आठ checks।",
-          "formula": "number_payoff"
-        },
-        {
-          "hook": "सबसे ज़्यादा पानी वाला container: हर pair check किए बिना कैसे?",
-          "formula": "direct_question_constraint"
-        },
-        {
-          "hook": "Container With Most Water: लंबी दीवार हटाई, तो answer गलत आया!",
-          "formula": "wrong_way_first"
-        }
-      ],
+      "hook_source": "direct_question; the planned number-payoff hook linted FAIL, so the payoff (36 pairs vs 8 checks) moved to line 2.",
       "one_idea": "Container With Most Water: start with the widest container and move the pointer at the shorter wall inward, because that wall can never do better with a narrower container, so the best area is found in n-1 steps instead of checking all n(n-1)/2 pairs.",
       "visual_idea": "Nine vertical bars (1,8,6,2,5,4,8,3,7) with L and R tags at the two ends. A translucent rectangle between the two tags, height of the shorter bar, width the gap; its area is a running best label. The shorter bar greys out and its tag hops inward each step; a side panel replays the wrong rule (move the taller wall) where the rectangle stays tiny and the 49 container between bars 1 and 8 is never reached.",
       "everyday_anchor": "none: audience is working engineers, technical register, no everyday analogy (owner 2026-10-26)",
@@ -430,10 +415,9 @@
         "https://leetcode.doocs.org/en/lc/11/"
       ],
       "facts_to_verify": [
-        "doocs LC 11 (fetched 2026-11-18): two pointers from both ends, area = min of the two heights times the gap, move the pointer at the shorter line; time O(n), space O(1). The page gives no proof of why the shorter wall moves; the discard argument is our own derivation, labelled so.",
-        "Constraints (n up to 10^5, heights up to 10^4) rendered garbled on the doocs page; do not show them on screen unless checked.",
-        "qa/d027/run.py: example gives 49 in 8 steps and equals brute force; two-pointer matches brute force on 5000 random arrays (seed 27); always-move-left wrong on 2695 of 5000, move-taller wrong on 3868 of 5000 (tiny case [1,1,0] gives 0, correct 1); move-taller on the example gives 8; n=1000 has 499,500 pairs vs 999 iterations (EXAMPLE).",
-        "Builder: run the code and show its real output on screen."
+        "doocs LC 11 (fetched 2026-11-18): two pointers from both ends, area = min height times gap, move the pointer at the shorter line; O(n) time, O(1) space. The discard argument is our own derivation, labelled so.",
+        "Do not show the constraints on screen.",
+        "qa/d027/run.py: example gives 49 in 8 steps = brute force; two-pointer matches brute force on 5000 random arrays; move-taller on the example gives 8 (areas 8,7,6,5,4,3,2,1); in our run always-move-left is wrong on 1729/5000 and move-taller on 2854/5000; n=1000 has 499,500 pairs vs 999 iterations (EXAMPLE)."
       ],
       "length_target_s": 150,
       "cover_headline": "Container With Most Water In O(n)",
@@ -443,7 +427,6 @@
         "leetcode 11",
         "container with most water python",
         "two pointers",
-        "most water two pointer proof",
         "DSA hinglish"
       ],
       "qa_passed": false

@@ -1,0 +1,7 @@
+Day 27/150: Container With Most Water: chhoti deewar ka pointer andar karo, O(n) mein
+
+Container With Most Water mein heights ki list se do walls chunni hain jinke beech sabse zyada paani aaye: area = chhoti height guna gap. Brute force har pair dekhta hai: ek hazaar walls par 499,500 pairs, yaani O(n^2). Sabse chaude container se shuru karo, l pehli wall par aur r aakhiri par. Chhoti wall ke saath koi narrower container behtar nahi ho sakta, isliye us wall ka pointer andar karo. Is array par 8 areas dekhne se 49 mil jaata hai. Taller wall ko move karne wala rule wahi array par sirf 8 deta hai. Time O(n), extra space O(1). Actual Python code video mein hai (code chalaya).
+
+Ab tumhara turn: array 1, 1, 0 par answer kya aayega? Comment mein likho.
+
+#dsa #twopointers #interviewprep
