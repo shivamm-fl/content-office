@@ -1,0 +1,15 @@
+A: [warm, conversational] Cache आखिर रखें कहाँ: browser, CDN या database?
+
+B: जवाब है: एक जगह नहीं, typically 4{चार} जगह। मान लो तुम्हें एक textbook चाहिए। पहले अपना bag देखते हो, फिर मोहल्ले की library, फिर main library का front desk, और आखिर में basement की stacks। जहाँ सबसे पहले मिल जाए, वहीं रुक जाते हो। Request का भी यही हाल है।
+
+C: EXAMPLE, ये walk मैंने मान ली है। तुम्हारे phone पर एक product की photo खुलती है। Phone ने server से photo माँगी, इसे request कहते हैं। Request 1{one}: किसी layer में copy नहीं है। चारों जगह से खाली हाथ लौटकर वो database तक पहुँचती है, और लौटते हुए हर layer अपनी एक copy रख लेती है। जो चीज़ cache में न मिले, वो miss। मिल जाए, तो hit।
+
+D: [curious] Request 2{two}: उसी phone से वही photo। Browser के पास copy है, तो network तक जाना ही नहीं पड़ा। Request 3{three}: उसी शहर के दूसरे phone से। उसके browser में कुछ नहीं, पर CDN में copy है, और वो पास के server से मिल गई। CDN यानी दुनिया भर में फैले servers, जो user के पास से content देते हैं।
+
+E: अब चारों layers देखते हैं। पहला step, browser cache: सिर्फ़ तुम्हारे phone का, सबसे पास, इसलिए सबसे fast, पर दूसरे किसी को फ़ायदा नहीं। दूसरा step, CDN: एक शहर के बहुत users में shared, तो एक के माँगने पर सबको फ़ायदा। तीसरा step, application cache: app के servers की memory में रखी copies, ताकि database तक बार-बार न जाना पड़े।
+
+F: चौथा step, database की अपनी memory, जैसे MySQL का InnoDB buffer pool, यानी वो memory जहाँ table का पढ़ा हुआ data रखा जाता है। यानी जो layer user के जितनी पास, उतनी fast, पर उतने कम लोगों में shared। इसीलिए एक layer काफ़ी नहीं: हर layer अलग लोगों का सफ़र बचाती है।
+
+G: [thoughtful] पर एक catch है, stale copy। Cache-Control का max-age बोलता है कि copy कितनी देर fresh मानी जाए, जैसे 1{एक} हफ़्ता। हफ़्ते में photo बदल गई, तो phone पुरानी ही दिखाएगा। और किसी के phone के browser तक तुम्हारा हाथ नहीं पहुँचता, वो हफ़्ता पूरा होने तक वही copy दिखाएगा।
+
+H: तुम्हारे app में कौन सी चीज़ है जो बार-बार बदलती है और browser में cache नहीं होनी चाहिए? Comment में लिखो। ऐसे और system design concepts के लिए follow करो।
