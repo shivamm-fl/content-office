@@ -10,6 +10,6 @@ E: अब चारों layers देखते हैं। पहला step,
 
 F: चौथा step, database की अपनी memory, जैसे MySQL का InnoDB buffer pool, यानी वो memory जहाँ table का पढ़ा हुआ data रखा जाता है। यानी जो layer user के जितनी पास, उतनी fast, पर उतने कम लोगों में shared। इसीलिए एक layer काफ़ी नहीं: हर layer अलग लोगों का सफ़र बचाती है।
 
-G: [thoughtful] पर एक catch है, stale copy। Cache-Control का max-age बोलता है कि copy कितनी देर fresh मानी जाए, जैसे 1{एक} हफ़्ता। हफ़्ते में photo बदल गई, तो phone पुरानी ही दिखाएगा। और किसी के phone के browser तक तुम्हारा हाथ नहीं पहुँचता, वो हफ़्ता पूरा होने तक वही copy दिखाएगा।
+G: [thoughtful] पर एक catch है, stale copy। Cache-Control का max-age बोलता है कि copy कितनी देर fresh मानी जाए, जैसे 1{एक} हफ़्ता। हफ़्ते में photo बदल गई, तो phone पुरानी ही दिखाएगा। और आम तौर पर किसी के phone के browser तक तुम्हारा हाथ नहीं पहुँचता, वो हफ़्ता पूरा होने तक वही copy दिखाएगा।
 
 H: तुम्हारे app में कौन सी चीज़ है जो बार-बार बदलती है और browser में cache नहीं होनी चाहिए? Comment में लिखो। ऐसे और system design concepts के लिए follow करो।
