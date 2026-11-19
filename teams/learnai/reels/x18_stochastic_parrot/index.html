@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI tota hai? Stochastic parrot</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="84.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          /* narration recipe v4 safe area: captions y 1190-1450, x 80-1000; content y 250-1160. Scene A: face below (y 900-1920), captions moved up to ~y 740. */
+          #caps { top:1190px !important; left:80px !important; width:920px !important; height:260px !important; }
+          .mono { position:absolute; font-family:"JetBrains Mono",monospace; font-weight:600; color:#E8EDF6; white-space:nowrap; }
+          .ill { position:absolute; font:500 28px "JetBrains Mono",monospace; color:#8592AD; }
+          .stamp { position:absolute; padding:10px 30px; border-radius:16px; font:700 60px "Space Grotesk",sans-serif; border:6px solid; transform:rotate(-6deg); background:rgba(11,18,32,.92); white-space:nowrap; }
+          .pill { position:absolute; padding:16px 34px; border-radius:999px; font:700 54px "Space Grotesk",sans-serif; white-space:nowrap; border:4px solid; }
+          .bub { position:absolute; left:80px; width:920px; border-radius:26px; background:#1B2538; border:3px solid #26324B; }
+          .bub .who { position:absolute; left:28px; top:22px; font:600 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .bub .txt { position:absolute; left:180px; top:16px; font:600 42px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .lbl { position:absolute; width:170px; text-align:center; font:700 36px "Space Grotesk",sans-serif; color:#8592AD; }
+          .usr { position:absolute; width:150px; height:84px; border-radius:18px; background:#1B2538; border:3px solid #26324B; display:flex; align-items:center; justify-content:center; font:600 28px "JetBrains Mono",monospace; color:#8592AD; }
+          .opt { position:absolute; width:430px; height:200px; border-radius:30px; background:#111A2C; border:4px solid #26324B; display:flex; align-items:center; justify-content:center; font:700 64px "Space Grotesk",sans-serif; }
+          #a_vidwrap { position:absolute; left:0; top:900px; width:1080px; height:1020px; overflow:hidden; }
+          #a_vid { position:absolute; left:0; top:0; width:1080px; height:1020px; object-fit:cover; transform-origin:50% 30%; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div id="a_vidwrap"><video id="a_vid" class="clip" src="assets/face_hook.mp4" data-start="0" data-duration="5.8" data-track-index="5" muted playsinline></video></div>
+          <div class="x c mut" id="a_l" style="top:230px; font-size:46px;">Researchers ne AI ko bola:</div>
+          <svg id="a_parrot" style="position:absolute; left:150px; top:300px; width:200px; height:210px;" viewBox="0 0 200 210">
+            <path d="M70 150 L40 205 L80 165 Z" fill="#2E9E6B"/>
+            <ellipse cx="100" cy="120" rx="52" ry="68" fill="#4CC38A"/>
+            <ellipse cx="88" cy="128" rx="30" ry="48" fill="#2E9E6B"/>
+            <circle cx="122" cy="62" r="42" fill="#4CC38A"/>
+            <circle cx="132" cy="54" r="12" fill="#FFFFFF"/><circle cx="135" cy="55" r="6" fill="#0B1220"/>
+            <path d="M156 58 Q192 66 170 100 Q166 80 150 76 Z" fill="#F2B544"/>
+          </svg>
+          <div class="x gold" id="a_tota" style="left:400px; top:310px; font-size:170px;">TOTA</div>
+          <div class="pill" id="a_rattu" style="left:80px; top:560px; color:#E8EDF6; border-color:#26324B; background:#111A2C;">RATTU tota</div>
+          <div class="strike" id="a_rs" style="left:70px; top:600px; width:440px;"></div>
+          <div class="pill" id="a_random" style="left:560px; top:560px; color:#0B1220; border-color:#F2B544; background:#F2B544;">RANDOM tota</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c gold" id="b_t1" style="top:250px; font-size:124px;">STOCHASTIC</div>
+          <div class="x c gold" id="b_t2" style="top:380px; font-size:124px;">PARROT</div>
+          <div class="src" id="b_src" style="top:530px; text-align:center; font-size:32px;">"On the Dangers of Stochastic Parrots" · Bender, Gebru et al. · 2021</div>
+          <div class="card" id="b_temp" style="left:240px; top:620px; width:600px; height:110px; border-color:#5BC0EB;"><div class="mono" style="left:0; width:600px; text-align:center; top:26px; font-size:50px; color:#5BC0EB;">temperature = 0</div></div>
+          <div class="bub" id="b_r1" style="top:770px; height:96px;"><div class="who">run 1</div><div class="txt">...born in <span class="gold">Queens, New York</span></div></div>
+          <div class="bub" id="b_r2" style="top:886px; height:96px;"><div class="who">run 2</div><div class="txt">...born in <span class="red">New York City</span></div></div>
+          <div class="stamp" id="b_st" style="left:360px; top:1010px; color:#E8596B; border-color:#E8596B;">JAWAB BADLA?!</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c mut" id="c_l" style="top:250px; font-size:52px;">har step pe, har token ka chance</div>
+          <div class="x c gold" id="c_n" style="top:340px; font-size:150px;">0</div>
+          <div class="x c" id="c_nl" style="top:520px; font-size:54px;">tokens ki vocabulary</div>
+          <div class="card" id="c_box" style="left:80px; top:250px; width:920px; height:130px;">
+            <div class="x" style="left:44px; top:32px; font-size:62px;">Sun rises in the</div>
+            <div id="c_blank" style="position:absolute; left:560px; top:98px; width:300px; height:8px; border-radius:4px; background:#8592AD;"></div>
+            <div class="x gold" id="c_fill" style="left:560px; top:32px; width:300px; text-align:center; font-size:62px;">East</div>
+          </div>
+          <div id="c_bars">
+            <div class="bar" id="c_b1" style="left:110px; top:420px; width:150px; height:380px; background:#F2B544;"></div>
+            <div class="bar" id="c_b2" style="left:290px; top:420px; width:150px; height:380px; background:#5B6B8C;"></div>
+            <div class="bar" id="c_b3" style="left:470px; top:420px; width:150px; height:380px; background:#5B6B8C;"></div>
+            <div class="bar" id="c_b4" style="left:650px; top:420px; width:150px; height:380px; background:#5B6B8C;"></div>
+            <div class="bar" id="c_b5" style="left:830px; top:420px; width:150px; height:380px; background:#5B6B8C;"></div>
+          </div>
+          <div class="lbl" id="c_l1" style="left:100px; top:812px; color:#F2B544;">East</div>
+          <div class="lbl" id="c_l2" style="left:280px; top:812px;">West</div>
+          <div id="c_lrest"><div class="lbl" style="left:460px; top:812px;">sky</div><div class="lbl" style="left:640px; top:812px;">morning</div><div class="lbl" style="left:820px; top:812px;">sea</div></div>
+          <div class="ill" id="c_ill" style="right:80px; top:860px;">illustration</div>
+          <div id="c_dice" style="position:absolute; left:110px; top:920px; width:130px; height:130px; border-radius:24px; background:#E8EDF6;">
+            <div style="position:absolute; left:24px; top:24px; width:22px; height:22px; border-radius:50%; background:#0B1220;"></div>
+            <div style="position:absolute; left:84px; top:24px; width:22px; height:22px; border-radius:50%; background:#0B1220;"></div>
+            <div style="position:absolute; left:54px; top:54px; width:22px; height:22px; border-radius:50%; background:#0B1220;"></div>
+            <div style="position:absolute; left:24px; top:84px; width:22px; height:22px; border-radius:50%; background:#0B1220;"></div>
+            <div style="position:absolute; left:84px; top:84px; width:22px; height:22px; border-radius:50%; background:#0B1220;"></div>
+          </div>
+          <div class="x" id="c_pick" style="left:280px; top:950px; font-size:64px;">→ <span class="gold">East</span></div>
+          <div class="x c gold" id="c_samp" style="top:900px; font-size:110px;">SAMPLING</div>
+          <div class="x c" id="c_eq" style="top:1040px; font-size:60px;">= <span class="gold">stochastic</span></div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c gold" id="d_t" style="top:250px; font-size:96px;">TEMPERATURE</div>
+          <div id="d_track" style="position:absolute; left:140px; top:410px; width:800px; height:14px; border-radius:7px; background:#26324B;"></div>
+          <div class="mono" id="d_lo" style="left:120px; top:440px; font-size:34px; color:#8592AD;">0</div>
+          <div class="mono" id="d_hi" style="left:920px; top:440px; font-size:34px; color:#8592AD;">2</div>
+          <div id="d_knob" style="position:absolute; left:500px; top:387px; width:60px; height:60px; border-radius:50%; background:#5BC0EB; border:6px solid #0B1220;"></div>
+          <div class="mono" id="d_val" style="left:440px; top:470px; width:180px; text-align:center; font-size:40px; color:#5BC0EB;">T = 1</div>
+          <div class="bar" id="d_b1" style="left:110px; top:540px; width:150px; height:380px; background:#F2B544;"></div>
+          <div class="bar" id="d_b2" style="left:290px; top:540px; width:150px; height:380px; background:#5B6B8C;"></div>
+          <div class="bar" id="d_b3" style="left:470px; top:540px; width:150px; height:380px; background:#5B6B8C;"></div>
+          <div class="bar" id="d_b4" style="left:650px; top:540px; width:150px; height:380px; background:#5B6B8C;"></div>
+          <div class="bar" id="d_b5" style="left:830px; top:540px; width:150px; height:380px; background:#5B6B8C;"></div>
+          <div class="lbl" style="left:100px; top:930px; color:#F2B544;">East</div>
+          <div class="lbl" style="left:280px; top:930px;">West</div>
+          <div class="lbl" style="left:460px; top:930px;">sky</div>
+          <div class="lbl" style="left:640px; top:930px;">morning</div>
+          <div class="lbl" style="left:820px; top:930px;">sea</div>
+          <div class="ill" style="right:80px; top:980px;">illustration</div>
+          <div class="pill" id="d_rt" style="left:300px; top:1030px; color:#0B1220; border-color:#F2B544; background:#F2B544;">= RATTU tota</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="chip" id="e_cto" style="left:250px; top:250px; width:580px; background:#E8EDF6; color:#0B1220; font-size:40px;">ex-OpenAI CTO</div>
+          <div class="x c" id="e_mm" style="top:340px; font-size:86px;">Mira Murati</div>
+          <div class="x c mut" id="e_lab" style="top:440px; font-size:44px;">Thinking Machines Lab</div>
+          <div class="bub" id="e_q" style="top:530px; height:100px;"><div class="who">prompt</div><div class="txt">Tell me about Richard Feynman</div></div>
+          <div class="mono" id="e_m" style="left:80px; width:920px; text-align:center; top:650px; font-size:32px; color:#8592AD;">open model: Qwen3-235B</div>
+          <div class="card" id="e_t0" style="left:240px; top:700px; width:600px; height:96px; border-color:#5BC0EB;"><div class="mono" style="left:0; width:600px; text-align:center; top:20px; font-size:46px; color:#5BC0EB;">temperature = 0</div></div>
+          <div class="x c" id="e_runs" style="top:820px; font-size:64px;"><span id="e_rn">0</span> runs</div>
+          <div class="x c red" id="e_80" style="top:880px; font-size:190px;">80</div>
+          <div class="x c" id="e_80l" style="top:1070px; font-size:50px;">alag jawab</div>
+          <div class="src" id="e_src" style="top:1130px; font-size:26px;">Source: Thinking Machines Lab blog, Sep 2025</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="card" id="f_srv" style="left:290px; top:250px; width:500px; height:110px; border-color:#5BC0EB;"><div class="x c" style="left:0; width:500px; top:24px; font-size:56px; color:#5BC0EB;">SERVER · GPU</div></div>
+          <div id="f_batch" style="position:absolute; left:60px; top:400px; width:960px; height:130px; border:4px dashed #8592AD; border-radius:26px;"></div>
+          <div class="mono" id="f_bl" style="left:80px; top:540px; font-size:36px; color:#8592AD;">BATCH · size <span id="f_bn">4</span></div>
+          <div class="usr" id="f_you" style="left:80px; top:423px; border-color:#F2B544; color:#F2B544;">tum</div>
+          <div class="usr" id="f_u1" style="left:235px; top:423px;">user</div>
+          <div class="usr" id="f_u2" style="left:390px; top:423px;">user</div>
+          <div class="usr" id="f_u3" style="left:545px; top:423px;">user</div>
+          <div class="usr" id="f_u4" style="left:700px; top:423px;">user</div>
+          <div class="usr" id="f_u5" style="left:855px; top:423px;">user</div>
+          <div id="f_sum">
+            <div class="mono" style="left:80px; top:620px; font-size:37px;">(0.1 + 0.2) + 0.3 = 0.600000000000000<span class="red">1</span></div>
+            <div class="mono" style="left:80px; top:700px; font-size:37px;">0.1 + (0.2 + 0.3) = 0.6</div>
+            <div class="mono" style="left:80px; top:770px; font-size:28px; color:#8592AD;">order badla, aakhri digit badla (python, float64)</div>
+          </div>
+          <div class="mono" id="f_tk" style="left:80px; top:840px; font-size:34px; color:#8592AD;">token #103:</div>
+          <div class="bub" id="f_b1" style="top:890px; height:96px;"><div class="who">992x</div><div class="txt">...born in <span class="gold">Queens, New York</span></div></div>
+          <div class="bub" id="f_b2" style="top:1000px; height:96px;"><div class="who">8x</div><div class="txt">...born in <span class="red">New York City</span></div></div>
+          <div class="x c" id="f_big1" style="top:330px; font-size:80px;">Tumhara jawab</div>
+          <div class="x c gold" id="f_big2" style="top:450px; font-size:80px;">= us waqt kitne log</div>
+          <div class="x c gold" id="f_big3" style="top:560px; font-size:80px;">online the</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_k" style="left:190px; top:250px; width:700px; background:#4CC38A; color:#0B1220; font-size:46px;">batch-invariant kernels</div>
+          <div class="x c green" id="g_n" style="top:380px; font-size:180px;">1000 / 1000</div>
+          <div class="x c" id="g_s" style="top:590px; font-size:64px;">jawab <span class="green">same</span></div>
+          <div class="card" id="g_t" style="left:80px; top:740px; width:920px; height:300px; border-color:#E8596B;">
+            <div class="x mut" style="left:44px; top:34px; font-size:44px;">AI app ke tests</div>
+            <div class="x" style="left:44px; top:110px; font-size:60px;">temperature 0 <span class="red">≠</span> same output</div>
+            <div class="x red" id="g_w" style="left:44px; top:200px; font-size:48px;">sirf iss pe bharosa mat karo</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="chip" id="h_c" style="left:180px; top:250px; width:720px; background:#E8EDF6; color:#0B1220; font-size:44px;">ChatGPT launch + kuch din</div>
+          <div class="card" id="h_q" style="left:80px; top:390px; width:920px; height:390px; border-color:#F2B544;">
+            <div class="x" style="left:44px; top:36px; font-size:46px;">Sam Altman</div>
+            <div class="mono" style="left:44px; top:100px; font-size:30px; color:#8592AD;">Dec 2022</div>
+            <div class="x" style="left:44px; top:170px; width:840px; font-size:64px; line-height:1.2; white-space:normal;">
+              <span id="h_w1">i am a</span> <span id="h_w2" class="gold">stochastic parrot,</span> <span id="h_w3">and so r u</span></div>
+            <div class="mono" style="right:40px; top:340px; font-size:24px; color:#8592AD;">quote</div>
+          </div>
+          <div class="x c gold" id="h_m" style="top:850px; font-size:84px;">Main bhi tota, tum bhi</div>
+          <div class="src" id="h_src" style="top:1110px; font-size:26px;">Source: Wikipedia, "Stochastic parrot"</div>
+        </div>
+
+        <div class="beat" id="sI">
+          <div class="x c" id="i_t" style="top:300px; font-size:96px;">Tum kis <span class="gold">side</span> ho?</div>
+          <div class="opt" id="i_o1" style="left:80px; top:500px; color:#4CC38A;">TOTA HAI</div>
+          <div class="opt" id="i_o2" style="left:570px; top:500px; color:#E8596B;">TOTA NAHI</div>
+          <div class="chip" id="i_c" style="left:290px; top:800px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="84.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="84.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="84.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I"], tag: "FINE-TUNE YOURSELF \u00b7 STEP 4" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the owner's face (muted, retimed to the voice) in the lower half; captions sit above his face; parrot + RATTU vs RANDOM on top
+      tl.set("#caps", { y: -450 }, 0);
+      tl.set("#caps", { y: 0 }, at("B", "stochastic") - 0.2);
+      tl.fromTo("#a_vid", { scale: 1.0 }, { scale: 1.05, duration: 5.4, ease: "none" }, 0);
+      tl.fromTo("#a_l", { scale: 1.04 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_parrot", at("A", "tota") - 0.1, { s: 0.6, y: 0 });
+      show("#a_tota", at("A", "tota") - 0.05, { s: 1.3, y: 0 });
+      show("#a_rattu", at("A", "rattu") - 0.05, { s: 0.9 });
+      wipe("#a_rs", at("A", "tota", 1) + 0.25, 0.35);
+      show("#a_random", at("A", "random") - 0.05, { s: 1.25, y: 0 });
+
+      // B: the name, the paper, and the open loop: temperature 0, answer still changes
+      show("#b_t1", at("B", "stochastic") - 0.1, { s: 1.15 });
+      show("#b_t2", at("B", "parrot") - 0.1, { s: 1.15 });
+      show("#b_src", at("B", "parrot"), { s: 1, y: 0 });
+      show("#b_temp", at("B", "zero") - 0.05, { s: 0.9 });
+      show("#b_r1", at("B", "jawab") - 0.05, { s: 0.94 });
+      show("#b_r2", at("B", "badal") - 0.05, { s: 0.94 });
+      show("#b_st", at("B", "jata") - 0.05, { s: 1.5, y: 0 });
+
+      // C: every token gets a chance -> "Sun rises in the ___" bars -> dice -> sampling
+      show("#c_l", at("C", "har") - 0.05, { s: 1, y: 10 });
+      show("#c_n", at("C", "do") - 0.1, { s: 1 });
+      count("#c_n", 0, 200019, at("C", "do") - 0.05, 0.9, (v) => Math.round(v).toLocaleString("en-IN"));
+      show("#c_nl", at("C", "tokens") - 0.05, { s: 1, y: 8 });
+      ["#c_l", "#c_n", "#c_nl"].forEach((el) => hide(el, at("C", '"sun') - 0.3));
+      show("#c_box", at("C", '"sun') - 0.15, { s: 0.97, y: 12 });
+      const P1 = [0.685, 0.153, 0.093, 0.042, 0.028], P2 = [0.437, 0.206, 0.161, 0.108, 0.088], P0 = [1, 0, 0, 0, 0];
+      P1.forEach((p, i) => tl.fromTo("#c_b" + (i + 1), { scaleY: 0 }, { scaleY: p, duration: 0.5, ease: "power2.out" }, at("C", "the") + 0.15 + i * 0.07));
+      show("#c_ill", at("C", "the") + 0.3, { s: 1, y: 0 });
+      hide("#c_blank", at("C", "east") - 0.08, 0.1);
+      show("#c_fill", at("C", "east") - 0.05, { s: 1.4, y: 0 });
+      show("#c_l1", at("C", "east") - 0.05, { s: 1.2, y: 0 });
+      show("#c_l2", at("C", "west") - 0.05, { s: 1.2, y: 0 });
+      show("#c_lrest", at("C", "west") + 0.3, { s: 1, y: 6 });
+      show("#c_dice", at("C", "dice") - 0.1, { s: 0.6, y: 0 });
+      tl.to("#c_dice", { rotation: 720, duration: 0.9, ease: "power2.out" }, at("C", "dice"));
+      show("#c_pick", at("C", "chunta") - 0.05, { s: 1.2, y: 0 });
+      hide("#c_dice", at("C", "ise") - 0.15); hide("#c_pick", at("C", "ise") - 0.15);
+      show("#c_samp", at("C", "sampling") - 0.1, { s: 1.25 });
+      show("#c_eq", at("C", "stochastic") - 0.1, { s: 1.1 });
+
+      // D: temperature slider reshapes the same bars: T=1 -> T=2 (flatter) -> T=0 (only East) = rattu tota
+      show("#d_t", at("D", "temperature") - 0.1, { s: 1.1 });
+      ["#d_track", "#d_lo", "#d_hi", "#d_knob", "#d_val"].forEach((el) => show(el, at("D", "temperature") + 0.15, { s: 1, y: 0 }));
+      P1.forEach((p, i) => tl.fromTo("#d_b" + (i + 1), { scaleY: 0 }, { scaleY: p, duration: 0.45, ease: "power2.out" }, at("D", "temperature") + 0.25 + i * 0.05));
+      count("#d_val", 1, 1, at("D", "temperature") + 0.15, 0.05, (v) => "T = " + v.toFixed(1));   // shows T = 1.0 until the knob moves
+      tl.to("#d_knob", { x: 380, duration: 0.6, ease: "power2.inOut" }, at("D", "zyada") - 0.05);
+      count("#d_val", 1, 2, at("D", "zyada") - 0.05, 0.6, (v) => "T = " + v.toFixed(1));
+      P2.forEach((p, i) => tl.to("#d_b" + (i + 1), { scaleY: p, duration: 0.6, ease: "power2.inOut" }, at("D", "zyada") - 0.05));
+      [2, 3, 4, 5].forEach((i) => tl.to("#d_b" + i, { backgroundColor: "#9FB3D9", duration: 0.3 }, at("D", "kam") - 0.05));
+      tl.to("#d_knob", { x: -380, duration: 0.7, ease: "power2.inOut" }, at("D", "zero") - 0.1);
+      count("#d_val", 2, 0, at("D", "zero") - 0.1, 0.7, (v) => "T = " + v.toFixed(1));
+      P0.forEach((p, i) => tl.to("#d_b" + (i + 1), { scaleY: p, duration: 0.6, ease: "power2.inOut" }, at("D", "zero") - 0.1));
+      show("#d_rt", at("D", "rattu") - 0.05, { s: 1.3, y: 0 });
+
+      // E: Mira Murati's lab, one prompt, temperature 0, 1000 runs -> 80 different answers
+      show("#e_cto", at("E", "openai") - 0.1, { s: 0.9 });
+      show("#e_mm", at("E", "mira") - 0.1, { s: 1.1 });
+      show("#e_lab", at("E", "lab") - 0.1, { s: 1, y: 8 });
+      show("#e_m", at("E", "open") - 0.05, { s: 1, y: 6 });
+      show("#e_q", at("E", "sawal") - 0.1, { s: 0.94 });
+      show("#e_t0", at("E", "temperature") - 0.05, { s: 0.9 });
+      show("#e_runs", at("E", "hazar") - 0.1, { s: 1 });
+      count("#e_rn", 0, 1000, at("E", "hazar") - 0.05, 0.8, (v) => Math.round(v).toString());
+      hide("#e_runs", at("E", "assi") - 0.2);
+      show("#e_80", at("E", "assi") - 0.05, { s: 1.5, y: 0 });
+      show("#e_80l", at("E", "alag") - 0.05, { s: 1, y: 8 });
+      show("#e_src", at("E", "assi"), { s: 1, y: 0 });
+
+      // F: your request rides in a batch with other users; batch size changes the GPU sum order; last digit moves; token 103 flips
+      show("#f_srv", at("F", "server") - 0.1, { s: 0.94 });
+      show("#f_batch", at("F", "tumhara") - 0.1, { s: 0.98, y: 0 });
+      show("#f_you", at("F", "tumhara") - 0.05, { s: 1.2, y: 0 });
+      show("#f_u1", at("F", "doosre") - 0.05, { s: 1.2, y: 0 });
+      show("#f_u2", at("F", "logon") - 0.05, { s: 1.2, y: 0 });
+      show("#f_u3", at("F", "savalon") - 0.05, { s: 1.2, y: 0 });
+      show("#f_bl", at("F", "batch") - 0.05, { s: 1, y: 0 });
+      show("#f_u4", at("F", "size") - 0.05, { s: 1.3, y: -20 });
+      show("#f_u5", at("F", "size") + 0.12, { s: 1.3, y: -20 });
+      count("#f_bn", 4, 6, at("F", "badla") - 0.05, 0.3, (v) => Math.round(v).toString());
+      show("#f_sum", at("F", "gpu") - 0.1, { s: 1, y: 12 });
+      show("#f_tk", at("F", "token") - 0.1, { s: 1, y: 0 });
+      show("#f_b1", at("F", "palat") - 0.1, { s: 0.94 });
+      show("#f_b2", at("F", "gaya") - 0.05, { s: 0.94 });
+      ["#f_srv", "#f_batch", "#f_bl", "#f_you", "#f_u1", "#f_u2", "#f_u3", "#f_u4", "#f_u5", "#f_sum", "#f_tk", "#f_b1", "#f_b2"].forEach((el) => hide(el, at("F", "yaani") - 0.2));
+      show("#f_big1", at("F", "tumhara", 1) - 0.05, { s: 1.1 });
+      show("#f_big2", at("F", "kitne") - 0.1, { s: 1.1 });
+      show("#f_big3", at("F", "use") - 0.1, { s: 1.1 });
+
+      // G: the fix and the lesson for app tests
+      show("#g_k", at("G", "batch-invariant") - 0.1, { s: 0.9 });
+      show("#g_n", at("G", "hazar") - 0.1, { s: 1.2 });
+      show("#g_s", at("G", "same") - 0.1, { s: 1, y: 8 });
+      show("#g_t", at("G", "tests") - 0.1, { s: 0.95 });
+      show("#g_w", at("G", "bharosa") - 0.05, { s: 1, y: 6 });
+
+      // H: Altman's tweet, word by word
+      show("#h_c", at("H", "chatgpt") - 0.1, { s: 0.9 });
+      show("#h_q", at("H", "sam") - 0.1, { s: 0.95 });
+      show("#h_src", at("H", "sam"), { s: 1, y: 0 });
+      show("#h_w1", at("H", '"i') - 0.05, { s: 1, y: 6, d: 0.2 });
+      show("#h_w2", at("H", "stochastic") - 0.05, { s: 1.15, y: 0, d: 0.25 });
+      show("#h_w3", at("H", "and") - 0.05, { s: 1, y: 6, d: 0.2 });
+      show("#h_m", at("H", "main") - 0.05, { s: 1.2 });
+
+      // I: pick a side
+      show("#i_t", at("I", "tum") - 0.05, { s: 1.1 });
+      show("#i_o1", at("I", "hai") - 0.1, { s: 0.9 });
+      show("#i_o2", at("I", "nahi") - 0.1, { s: 0.9 });
+      show("#i_c", at("I", "comment") - 0.05, { s: 0.85 });
+      M.finish({ kw: { tota: "gold", rattu: "hot", random: "gold", stochastic: "gold", parrot: "gold", zero: "cyan", temperature: "cyan",
+                       sampling: "gold", east: "gold", dice: "gold", assi: "hot", batch: "gold", gpu: "cyan", decimal: "hot", digit: "hot",
+                       "batch-invariant": "good", same: "good", bharosa: "hot", side: "gold", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

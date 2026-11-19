@@ -1,0 +1,54 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam Trainer",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0,
+  "I": 2.0
+ },
+ "cues": [],
+ "copy": {
+  "hi": {
+   "A": "[curious] AI को researchers ने तोता बोला था। रट्टू तोता नहीं... random तोता।",
+   "B": "Stochastic parrot. और ये random इतना अजीब है कि zero temperature पे भी जवाब बदल जाता है।",
+   "C": "[thoughtful] हर step पे model दो लाख tokens में से हर एक को एक chance देता है। \"Sun rises in the\" के बाद East सबसे ऊपर, West नीचे। फिर इन chances के हिसाब से dice फेंक के एक token चुनता है। इसे sampling कहते हैं। यही stochastic है।",
+   "D": "Temperature इस dice को control करता है। ज़्यादा temperature, तो कम chance वाले tokens भी निकलते हैं। Zero, तो हमेशा top token। यानी रट्टू तोता।",
+   "E": "[curious] पर OpenAI की पुरानी CTO Mira Murati की lab ने एक open model से एक ही सवाल, temperature zero पे, एक हज़ार बार पूछा। ... अस्सी अलग जवाब आए।",
+   "F": "[thoughtful] वजह? Server पे तुम्हारा सवाल दूसरे लोगों के सवालों के साथ एक batch में चलता है। Batch का size बदला, तो GPU का हिसाब अलग order में हुआ, decimal का आखिरी digit हिला, और एक token पलट गया। यानी तुम्हारा जवाब इस पे depend करता है कि उस वक़्त और कितने लोग AI use कर रहे थे।",
+   "G": "उन्होंने batch-invariant kernels बनाए, और हज़ार के हज़ार जवाब same आए। तो AI app के tests में सिर्फ़ temperature zero पे भरोसा मत करना।",
+   "H": "[warm, conversational] और ChatGPT launch के कुछ दिन बाद Sam Altman ने खुद लिखा: \"i am a stochastic parrot, and so r{are} u{you}.\" मैं भी तोता, तुम भी।",
+   "I": "[curious] तुम किस side हो? AI तोता है या नहीं? Comment करो।"
+  }
+ },
+ "sources": [
+  "https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/",
+  "https://en.wikipedia.org/wiki/Thinking_Machines_Lab",
+  "https://en.wikipedia.org/wiki/Stochastic_parrot",
+  "https://languagehat.com/linguist-vs-chatbots/"
+ ],
+ "series": "Fine-Tune Yourself, Step 4/100",
+ "hook_type": "surprising_fact",
+ "template": "famous_line_decoded",
+ "face_hook": "face_videos/WhatsApp Video 2026-11-19 at 12.04.18 PM (2).mp4, take 7.7-11.9 s, muted, scene A only",
+ "approved": "owner 2026-11-19 ('bana ye wala')"
+}
