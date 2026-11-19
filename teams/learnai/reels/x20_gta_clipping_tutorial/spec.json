@@ -1,0 +1,45 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "tail": {},
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "cues": [],
+ "copy": {
+  "hi": {
+   "A": "[curious] GTA 6{six} clipping का सबसे easy तरीका: बस दो link paste करो, और viral clips खुद बन जाएँगी।",
+   "B": "[warm, conversational] Step 1{one}: Claude{क्लॉड} का app download करो, और Claude{क्लॉड} Code खोलो।",
+   "C": "Step 2{two}: उसमें इस GitHub repo का link और YouTube video का link दो, और बोलो: best clips बना दो।",
+   "D": "बाकी सब Claude{क्लॉड} खुद कर लेगा।",
+   "E": "ये पूरी video देखता है, best moments पकड़ता है, हर clip को viral score देता है, और captions के साथ vertical clips बना देता है।",
+   "F": "तुम बस download करो, और post करो।",
+   "G": "[curious] Repo का link और पूरा prompt चाहिए? Comment करो CLIP, सब सीधा तुम्हारे DM में।"
+  }
+ },
+ "sources": [
+  "https://github.com/mutonby/openshorts (README: Claude Code skill + MCP; never named in the reel)",
+  "https://claude.com/pricing (Claude Code: Pro plan, not Free)"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "free_tool_tutorial_keyword_dm",
+ "keyword": "CLIP",
+ "approved": "owner 2026-11-19 (tutorial version of x19, 'sabse easy', no technicalities; separate item, x19 untouched)"
+}
