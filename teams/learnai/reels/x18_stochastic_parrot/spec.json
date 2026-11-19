@@ -29,7 +29,7 @@
  "cues": [],
  "copy": {
   "hi": {
-   "A": "[curious] AI को researchers ने तोता बोला था। रट्टू तोता नहीं... random तोता।",
+   "A": "[curious] AI को researchers ने तोता बोला था। रट्टू तोता नहीं, random तोता।",
    "B": "Stochastic parrot. और ये random इतना अजीब है कि zero temperature पे भी जवाब बदल जाता है।",
    "C": "[thoughtful] हर step पे model दो लाख tokens में से हर एक को एक chance देता है। \"Sun rises in the\" के बाद East सबसे ऊपर, West नीचे। फिर इन chances के हिसाब से dice फेंक के एक token चुनता है। इसे sampling कहते हैं। यही stochastic है।",
    "D": "Temperature इस dice को control करता है। ज़्यादा temperature, तो कम chance वाले tokens भी निकलते हैं। Zero, तो हमेशा top token। यानी रट्टू तोता।",
