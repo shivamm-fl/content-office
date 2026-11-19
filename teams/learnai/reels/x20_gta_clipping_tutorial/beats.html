@@ -20,6 +20,24 @@
           .seg { position:absolute; height:70px; border-radius:10px; background:#F2B544; transform-origin:0 50%; }
           .score { position:absolute; width:110px; height:64px; border-radius:16px; background:#0B1220; border:3px solid #4CC38A; display:flex; align-items:center; justify-content:center; font:700 38px "JetBrains Mono",monospace; color:#4CC38A; }
           .plat { position:absolute; width:280px; height:100px; border-radius:24px; background:#111A2C; border:3px solid #4CC38A; display:flex; align-items:center; justify-content:center; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; }
+
+          .capp { position:absolute; left:40px; top:330px; width:1000px; height:780px; border-radius:26px; overflow:hidden; background:#262624; border:2px solid #3d3c38; color:#ece9e1; font-family:"Space Grotesk",sans-serif; }
+          .ctb { position:absolute; left:0; right:0; top:0; height:58px; background:#1f1e1d; }
+          .cdot { position:absolute; top:22px; width:14px; height:14px; border-radius:50%; background:#4a4844; }
+          .cnm { position:absolute; left:0; right:0; top:0; height:58px; line-height:58px; text-align:center; font-size:26px; font-weight:700; color:#ece9e1; }
+          .cill { position:absolute; right:22px; top:72px; font:600 20px "JetBrains Mono",monospace; color:#8d8a82; letter-spacing:.12em; }
+          .ctabs { position:absolute; left:330px; top:80px; width:340px; height:64px; border-radius:18px; background:#1f1e1d; display:flex; padding:6px; box-sizing:border-box; }
+          .ctab { flex:1; text-align:center; line-height:52px; font-size:28px; font-weight:600; color:#a19f97; border-radius:13px; position:relative; }
+          .con { position:absolute; inset:0; border-radius:13px; background:#3a3936; color:#ece9e1; }
+          .cbox { position:absolute; left:40px; width:920px; border-radius:24px; background:#30302e; border:2px solid #46453f; }
+          .cph { position:absolute; left:28px; top:22px; font-size:32px; color:#8d8a82; }
+          .ctx { position:absolute; left:28px; font-size:34px; line-height:1.3; color:#ece9e1; white-space:nowrap; }
+          .clink { position:absolute; left:28px; height:56px; padding:0 18px; border-radius:14px; background:#3a3936; border:2px solid #55534d; font:600 30px "JetBrains Mono",monospace; color:#ece9e1; display:flex; align-items:center; gap:12px; white-space:nowrap; }
+          .csend { position:absolute; right:18px; bottom:16px; width:58px; height:58px; border-radius:16px; background:#d97757; display:flex; align-items:center; justify-content:center; }
+          .cchip { position:absolute; height:60px; border-radius:16px; border:2px solid #46453f; background:#2b2b29; display:flex; align-items:center; gap:10px; padding:0 18px; font-size:28px; font-weight:600; color:#ece9e1; white-space:nowrap; }
+          .cmsg { position:absolute; right:40px; top:176px; max-width:780px; border-radius:22px; background:#3a3936; padding:18px 24px; font-size:28px; line-height:1.35; color:#ece9e1; }
+          .cstl { position:absolute; left:44px; height:52px; font-size:32px; color:#d6d3ca; padding-left:52px; line-height:52px; white-space:nowrap; }
+          .cstl .ic { position:absolute; left:0; top:9px; width:34px; height:34px; }
         </style>
 
         <div class="beat" id="sA">
@@ -38,38 +56,38 @@
 
         <div class="beat" id="sB">
           <div class="stepc" id="b_s">STEP 1</div>
-          <div class="card" id="b_dl" style="left:180px; top:380px; width:720px; height:300px; border-color:#D97757;">
-            <div class="x c" style="left:0; width:720px; top:50px; font-size:86px;">Claude</div>
-            <div class="mono" style="left:0; width:720px; text-align:center; top:150px; font-size:30px; color:#8592AD;">claude.com/download</div>
-            <div id="b_btn" style="position:absolute; left:210px; top:205px; width:300px; height:70px; border-radius:20px; background:#D97757; color:#0B1220; font:700 38px 'Space Grotesk',sans-serif; display:flex; align-items:center; justify-content:center;">Download</div>
+          <div id="b_br" style="position:absolute; left:80px; top:330px; width:920px; height:452px; border-radius:22px; overflow:hidden; border:3px solid #3A4766; background:#1F1E1D;">
+            <div style="position:absolute; left:0; right:0; top:0; height:62px; background:#2B2A28;"></div>
+            <div style="position:absolute; top:23px; left:22px; width:16px; height:16px; border-radius:50%; background:#E8596B;"></div><div style="position:absolute; top:23px; left:48px; width:16px; height:16px; border-radius:50%; background:#F2B544;"></div><div style="position:absolute; top:23px; left:74px; width:16px; height:16px; border-radius:50%; background:#4CC38A;"></div>
+            <div style="position:absolute; left:120px; top:12px; width:600px; height:38px; border-radius:19px; background:#3A3936; font:500 24px 'Space Grotesk',sans-serif; color:#E8E6DF; line-height:38px; padding-left:24px;">claude.com/download</div>
+            <img src="assets/claude_dl.png" style="position:absolute; left:0; top:62px; width:920px; height:388px;"/>
           </div>
-          <div class="win" id="b_win" style="top:740px; height:330px;">
-            <div class="bar"></div><div class="dot" style="left:24px; background:#E8596B;"></div><div class="dot" style="left:52px; background:#F2B544;"></div><div class="dot" style="left:80px; background:#4CC38A;"></div>
-            <div class="mono" style="left:120px; top:16px; font-size:28px; color:#8592AD;">Claude</div>
-            <div id="b_tab" style="position:absolute; left:40px; top:100px; padding:14px 32px; border-radius:18px; background:#D97757; color:#0B1220; font:700 48px 'Space Grotesk',sans-serif;">Claude Code</div>
-            <div class="mono" style="left:40px; top:210px; font-size:32px; color:#8592AD;">kya banana hai?</div>
-          </div>
-          <div class="ill" id="b_ill" style="right:80px; top:1080px;">illustration</div>
+          <div id="b_ring" style="position:absolute; left:302px; top:650px; width:200px; height:46px; border:5px solid #F2B544; border-radius:12px;"></div>
+          <div class="src" id="b_src" style="top:792px; font-size:26px;">Source: claude.com/download</div>
+          <div class="capp" id="b_app"><div class="ctb"><div class="cdot" style="left:22px"></div><div class="cdot" style="left:46px"></div><div class="cdot" style="left:70px"></div><div class="cnm">Claude</div></div><div class="cill">ILLUSTRATION</div><div class="ctabs"><div class="ctab">Chat</div><div class="ctab">Code<div id="b_on" class="con">Code</div></div></div><div class="cbox" style="top:560px; height:140px;"><div class="cph">Type a task&hellip;</div><div class="csend"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div></div></div>
+          <svg id="b_cur" style="position:absolute; left:0; top:0; width:44px; height:60px;" viewBox="0 0 27 40"><path d="M2 2 L2 33 L9.5 26 L15 38.5 L20.5 36 L15 24 L25 24 Z" fill="#fff" stroke="#0b1220" stroke-width="2.4" stroke-linejoin="round"/></svg>
         </div>
 
         <div class="beat" id="sC">
           <div class="stepc" id="c_s">STEP 2</div>
-          <div class="win" id="c_win" style="top:360px; height:620px;">
-            <div class="bar"></div><div class="dot" style="left:24px; background:#E8596B;"></div><div class="dot" style="left:52px; background:#F2B544;"></div><div class="dot" style="left:80px; background:#4CC38A;"></div>
-            <div class="mono" style="left:120px; top:16px; font-size:28px; color:#8592AD;">Claude Code</div>
-            <div id="c_l1" style="position:absolute; left:40px; top:110px; padding:16px 28px; border-radius:18px; background:#1F2A40; border:3px solid #F2B544; font:700 40px 'Space Grotesk',sans-serif; color:#F2B544; white-space:nowrap;"><svg width="30" height="34" viewBox="0 0 30 34" style="vertical-align:-4px;"><rect x="3" y="14" width="24" height="18" rx="4" fill="#F2B544"/><path d="M8 14 V9 a7 7 0 0 1 14 0 V14" stroke="#F2B544" stroke-width="4" fill="none"/></svg> GitHub repo link</div>
-            <div id="c_l2" style="position:absolute; left:40px; top:220px; padding:16px 28px; border-radius:18px; background:#1F2A40; border:3px solid #5BC0EB; font:600 36px 'JetBrains Mono',monospace; color:#5BC0EB; white-space:nowrap;">youtube.com/watch?v=...</div>
-            <div class="x" id="c_say" style="left:40px; top:350px; font-size:60px;">"best clips <span class="gold">bana do</span>"</div>
-            <div id="c_send" style="position:absolute; right:40px; bottom:40px; width:110px; height:110px; border-radius:50%; background:#D97757; color:#0B1220; font:800 64px 'Space Grotesk',sans-serif; display:flex; align-items:center; justify-content:center;">↑</div>
-          </div>
-          <div class="ill" style="right:80px; top:1000px;">illustration</div>
+          <div class="capp" id="c_app"><div class="ctb"><div class="cdot" style="left:22px"></div><div class="cdot" style="left:46px"></div><div class="cdot" style="left:70px"></div><div class="cnm">Claude</div></div><div class="cill">ILLUSTRATION</div><div class="ctabs"><div class="ctab">Chat</div><div class="ctab">Code<div id="c_on" class="con">Code</div></div></div><div class="cbox" style="top:200px; height:430px;">
+              <div id="c_ph" class="cph">Type a task&hellip;</div>
+              <div id="c_t1" class="ctx" style="top:24px;">Is GitHub repo ko setup karo:</div>
+              <div id="c_t1b" class="clink" style="top:82px;"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#ece9e1" stroke-width="2.4" stroke-linecap="round" style="vertical-align:-5px;"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</div>
+              <div id="c_t2" class="ctx" style="top:162px;">aur is YouTube video se:</div>
+              <div id="c_t2b" class="clink" style="top:220px; color:#9db7e8;">youtube.com/watch?v=...</div>
+              <div id="c_t3" class="ctx" style="top:300px; font-weight:700;">best clips bana do.</div>
+              <div id="c_send" class="csend"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div></div>
+            <div class="cchip" style="left:40px; top:660px;"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#ece9e1" stroke-width="2" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2h8.5A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg><span>clips</span></div>
+            <div class="cchip" style="left:240px; top:660px;">Local</div></div>
         </div>
 
         <div class="beat" id="sD">
-          <div class="x c" id="d_t" style="top:260px; font-size:80px;">baaki sab <span class="gold">Claude</span> khud</div>
-          <div class="tick" id="d_k1" style="top:430px;"><div class="t">repo download</div><div class="k" id="d_v1">✓</div></div>
-          <div class="tick" id="d_k2" style="top:550px;"><div class="t">setup</div><div class="k" id="d_v2">✓</div></div>
-          <div class="tick" id="d_k3" style="top:670px;"><div class="t">video ka kaam shuru</div><div class="k" id="d_v3">✓</div></div>
+          <div class="capp" id="d_app"><div class="ctb"><div class="cdot" style="left:22px"></div><div class="cdot" style="left:46px"></div><div class="cdot" style="left:70px"></div><div class="cnm">Claude</div></div><div class="cill">ILLUSTRATION</div><div class="ctabs"><div class="ctab">Chat</div><div class="ctab">Code<div id="d_on" class="con">Code</div></div></div><div id="d_msg" class="cmsg">Is GitHub repo ko setup karo <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#ece9e1" stroke-width="2.4" stroke-linecap="round" style="vertical-align:-5px;"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>&bull;&bull;&bull;&bull;&bull;&bull; aur is YouTube video se best clips bana do.</div>
+            <div id="d_s1" class="cstl" style="top:330px;"><div class="ic"><svg id="d_sp1" viewBox="0 0 36 36" width="34" height="34" style="position:absolute;left:0;top:0;"><circle cx="18" cy="18" r="14" fill="none" stroke="#d97757" stroke-width="4" stroke-dasharray="60 30"/></svg><svg id="d_ck1" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#3ddc84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:0;top:0;"><path d="M4 12.5l5 5L20 6.5"/></svg></div>Repo download</div>
+            <div id="d_s2" class="cstl" style="top:392px;"><div class="ic"><svg id="d_sp2" viewBox="0 0 36 36" width="34" height="34" style="position:absolute;left:0;top:0;"><circle cx="18" cy="18" r="14" fill="none" stroke="#d97757" stroke-width="4" stroke-dasharray="60 30"/></svg><svg id="d_ck2" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#3ddc84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:0;top:0;"><path d="M4 12.5l5 5L20 6.5"/></svg></div>Setup</div>
+            <div id="d_s3" class="cstl" style="top:454px;"><div class="ic"><svg id="d_sp3" viewBox="0 0 36 36" width="34" height="34" style="position:absolute;left:0;top:0;"><circle cx="18" cy="18" r="14" fill="none" stroke="#d97757" stroke-width="4" stroke-dasharray="60 30"/></svg><svg id="d_ck3" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#3ddc84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:0;top:0;"><path d="M4 12.5l5 5L20 6.5"/></svg></div>Video se clips ban rahi hain</div>
+            <div class="cbox" style="top:560px; height:140px;"><div class="cph">Type a task&hellip;</div><div class="csend"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div></div></div>
         </div>
 
         <div class="beat" id="sE">

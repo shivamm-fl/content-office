@@ -11,26 +11,39 @@
         tl.to(`#a_p${i}`, { borderColor: "#4CC38A", duration: 0.2 }, at("A", w) - 0.05);
       });
 
-      // B: step 1, download the Claude app, open Claude Code
+      // B: step 1, the real claude.com/download page (cursor clicks "Download for Windows"), then the dark Claude app opens on the Code tab
       show("#b_s", at("B", "step") - 0.1, { s: 1 });
-      show("#b_dl", at("B", "claude") - 0.1, { s: 0.95 });
-      show("#b_ill", at("B", "claude"), { s: 1, y: 0 });
-      tl.to("#b_btn", { scale: 0.9, duration: 0.12, yoyo: true, repeat: 1 }, at("B", "download"));
-      show("#b_win", at("B", "claude", 1) - 0.1, { s: 0.95 });
-      show("#b_tab", at("B", "code") - 0.05, { s: 1.2, y: 0 });
+      show("#b_br", at("B", "claude") - 0.15, { s: 0.96 });
+      show("#b_src", at("B", "claude"), { s: 1, y: 0 });
+      show("#b_cur", at("B", "app") - 0.25, { s: 1, y: 0, d: 0.15 });
+      tl.fromTo("#b_cur", { x: 820, y: 760 }, { x: 395, y: 662, duration: 0.5, ease: "power2.inOut" }, at("B", "app") - 0.2);
+      show("#b_ring", at("B", "download") - 0.05, { s: 1.2, y: 0 });
+      tl.to("#b_cur", { scale: 0.85, duration: 0.1, yoyo: true, repeat: 1 }, at("B", "download"));
+      ["#b_br", "#b_ring", "#b_src", "#b_cur"].forEach((el) => hide(el, at("B", "claude", 1) - 0.2));
+      show("#b_app", at("B", "claude", 1) - 0.1, { s: 0.96 });
+      show("#b_on", at("B", "code") - 0.05, { s: 1, y: 0, d: 0.15 });
 
-      // C: step 2, give it the two links and say "best clips bana do"
+      // C: step 2, the prompt typed into the composer: hidden repo link, YouTube link, "best clips bana do", send
       show("#c_s", at("C", "step") - 0.1, { s: 1 });
-      show("#c_win", at("C", "usmen") - 0.1, { s: 0.96 });
-      show("#c_l1", at("C", "github") - 0.05, { s: 1.1, y: 0 });
-      show("#c_l2", at("C", "youtube") - 0.05, { s: 1.1, y: 0 });
-      show("#c_say", at("C", "best") - 0.1, { s: 1.1 });
-      show("#c_send", at("C", "do", 1) - 0.1, { s: 1.4, y: 0 });
+      show("#c_app", at("C", "usmen") - 0.15, { s: 0.98, y: 0 });
+      hide("#c_ph", at("C", "github") - 0.12, 0.1);
+      show("#c_t1", at("C", "github") - 0.05, { s: 1, y: 6, d: 0.2 });
+      show("#c_t1b", at("C", "repo"), { s: 1.1, y: 0, d: 0.2 });
+      show("#c_t2", at("C", "youtube") - 0.05, { s: 1, y: 6, d: 0.2 });
+      show("#c_t2b", at("C", "video") - 0.05, { s: 1.1, y: 0, d: 0.2 });
+      show("#c_t3", at("C", "best") - 0.1, { s: 1, y: 6, d: 0.2 });
+      tl.to("#c_send", { scale: 1.25, duration: 0.15, yoyo: true, repeat: 1 }, at("C", "do", 1) - 0.05);
 
-      // D: the rest is Claude's job
-      show("#d_t", at("D", "baaki") - 0.05, { s: 1.1 });
-      ["#d_k1", "#d_k2", "#d_k3"].forEach((el, i) => show(el, at("D", "sab") + i * 0.32, { s: 0.94 }));
-      ["#d_v1", "#d_v2", "#d_v3"].forEach((el, i) => show(el, at("D", "sab") + 0.2 + i * 0.32, { s: 1.6, y: 0 }));
+      // D: sent; Claude does the rest (spinner -> check on each line)
+      show("#d_app", at("D", "baaki") - 0.25, { s: 1, y: 0, d: 0.15 });
+      show("#d_msg", at("D", "baaki") - 0.2, { s: 0.95, y: 30 });
+      [1, 2, 3].forEach((i) => {
+        const t = at("D", "sab") + (i - 1) * 0.3;
+        show("#d_s" + i, t - 0.15, { s: 1, y: 8, d: 0.2 });
+        tl.to("#d_sp" + i, { rotation: 540, transformOrigin: "50% 50%", duration: 0.9, ease: "none" }, t - 0.15);
+        tl.set("#d_sp" + i, { opacity: 0 }, t + 0.45);
+        show("#d_ck" + i, t + 0.45, { s: 1.4, y: 0, d: 0.15 });
+      });
 
       // E: what the tool does: watches the whole video -> best moments -> viral score -> captions -> vertical
       show("#e_l1", at("E", "poori") - 0.05, { s: 1, y: 8 });
