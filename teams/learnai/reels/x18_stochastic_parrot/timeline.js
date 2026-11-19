@@ -1,7 +1,10 @@
       // A: the owner's face (muted, retimed to the voice) in the lower half; captions sit above his face; parrot + RATTU vs RANDOM on top
       tl.set("#caps", { y: -450 }, 0);
-      tl.set("#caps", { y: 0 }, at("B", "stochastic") - 0.2);
-      tl.fromTo("#a_vid", { scale: 1.0 }, { scale: 1.05, duration: 5.4, ease: "none" }, 0);
+      // owner 2026-11-19: his face only for "AI ko researchers ne tota bola tha"; from "rattu" the hook is faceless
+      tl.set("#caps", { y: 0 }, at("A", "rattu") - 0.03);
+      tl.fromTo("#a_vid", { scale: 1.0 }, { scale: 1.04, duration: 2.9, ease: "none" }, 0);
+      tl.to("#a_vidwrap", { opacity: 0, y: 120, duration: 0.25, ease: "power2.in" }, at("A", "rattu") - 0.2);
+      tl.to(["#a_l", "#a_parrot", "#a_tota"], { y: 180, duration: 0.4, ease: "power2.inOut" }, at("A", "rattu") - 0.2);
       tl.fromTo("#a_l", { scale: 1.04 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
       show("#a_parrot", at("A", "tota") - 0.1, { s: 0.6, y: 0 });
       show("#a_tota", at("A", "tota") - 0.05, { s: 1.3, y: 0 });
