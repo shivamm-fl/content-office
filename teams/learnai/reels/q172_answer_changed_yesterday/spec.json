@@ -1,0 +1,88 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   0,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Meta के interview में पूछा गया: सही जवाब कल बदल गया, पर training data में पुराना जवाब भरा पड़ा है। सही जवाब कैसे दोगे?",
+   "B": "[thoughtful] Example लो: तुम्हारी company ने कल return window thirty days से घटाकर fifteen days कर दी। पुराने blogs, FAQs, हर जगह thirty लिखा है, और model ने वही पढ़ा है। पूछो, तो वो thirty ही बोलेगा।",
+   "C": "पहला कदम: बदलने वाली जानकारी model की memory से मत लो। नया policy page retrieve करो, और prompt में उसकी date के साथ दो।",
+   "D": "पर एक trap है। Research में दिखा कि model साफ़ evidence मान लेता है, भले वो उसकी memory से टकराए। पर context में कहीं पुरानी बात भी पड़ी हो, तो वो उसी को पकड़ता है जो पहले से मानता है। इसे confirmation bias कहते हैं।",
+   "E": "इसलिए index से पुराने versions हटाओ, या उन्हें expired mark करो। Prompt में लिखो: context और तुम्हारी जानकारी टकराएँ, तो सबसे नई date वाला context सही है। और test set में ऐसे सवाल रखो जिनका जवाब बदल चुका है।",
+   "F": "[warm, conversational] Interview में बोलो: बदलने वाले facts fresh retrieval से आते हैं। पुराने versions index से हटाओ, नई date वाले context को priority दो, और बदले हुए facts का अलग test रखो।",
+   "G": "[curious] अब बताओ: पुराना blog और नया policy page, दोनों retrieve हो गए। Model को कैसे पता चलेगा कि किसे मानना है? Comment करो।"
+  }
+ },
+ "hook_type": "company_specific",
+ "company": "Meta",
+ "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+ "sources": [
+  "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+  "https://arxiv.org/abs/2305.13300"
+ ],
+ "approved": "owner 2026-11-20 (scripts reviewed in chat; 'ok abhi 4 bana de, baaki 2 baad mein')"
+}

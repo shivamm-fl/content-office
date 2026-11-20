@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>The Answer Changed Yesterday</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="79.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .doc { position:absolute; border-radius:22px; background:#111A2C; border:3px solid #26324B; padding:18px 26px; box-sizing:border-box; }
+          .doc .h { font:700 40px "Space Grotesk",sans-serif; color:#8592AD; white-space:nowrap; }
+          .doc .v { font:700 56px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .stamp { position:absolute; padding:8px 20px; border:5px solid #E8596B; color:#E8596B; border-radius:12px; font:800 44px "Space Grotesk",sans-serif; transform:rotate(-10deg); }
+          .bub { position:absolute; padding:20px 28px; border-radius:28px; font:700 50px "Space Grotesk",sans-serif; white-space:nowrap; box-sizing:border-box; }
+          .box2 { position:absolute; border-radius:26px; background:#111A2C; border:4px solid #26324B; box-sizing:border-box; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:24px 34px; box-sizing:border-box; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:90px;">jawab <span class="green">kal badla</span>,<br/>data mein <span class="red">purana</span></div>
+          <div class="shot" id="a_p" style="top:540px;"><img src="assets/sub_header.png"/></div>
+          <div class="x c" id="a_co" style="top:880px; font-size:66px;">Meta interview</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="doc" id="b_pol" style="left:200px; top:280px; width:680px;"><div class="h">Return window</div><div class="v"><span id="b_old">30 days</span> &rarr; <span class="green" id="b_new">15 days</span></div></div>
+          <div class="x" id="b_kal" style="left:900px; top:300px; font-size:44px; color:#F2B544;">kal</div>
+          <div class="doc" id="b_s1" style="left:60px; top:520px; width:300px;"><div class="h">blog</div><div class="v red">30 days</div></div>
+          <div class="doc" id="b_s2" style="left:390px; top:520px; width:300px;"><div class="h">FAQ</div><div class="v red">30 days</div></div>
+          <div class="doc" id="b_s3" style="left:720px; top:520px; width:300px;"><div class="h">forum</div><div class="v red">30 days</div></div>
+          <div class="box2" id="b_m" style="left:240px; top:740px; width:600px; height:150px;"><div class="x c" style="left:0; width:600px; top:40px; font-size:56px;">memory: <span class="red">30</span></div></div>
+          <div class="bub" id="b_a" style="left:340px; top:940px; background:#E8596B; color:#0B1220;">"30 days"</div>
+          <div class="ill" style="right:80px; top:1110px;">example</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:76px;">memory se <span class="red">mat lo</span></div>
+          <div class="box2" id="c_m" style="left:240px; top:380px; width:600px; height:130px;"><div class="x c" style="left:0; width:600px; top:34px; font-size:52px;">memory: 30</div></div>
+          <div class="strike" id="c_x" style="left:260px; top:440px; width:560px;"></div>
+          <div class="doc" id="c_new" style="left:140px; top:580px; width:800px; border-color:#4CC38A;"><div class="h">Return policy &middot; <span id="c_date" style="color:#F2B544;">updated 19 Nov</span></div><div class="v green">15 days</div></div>
+          <div class="chip" id="c_pr" style="left:190px; top:820px; width:700px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:46px;">prompt mein, date ke saath</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:80px;">ek <span class="gold">trap</span></div>
+          <div class="box2" id="d_c1" style="left:60px; top:390px; width:440px; height:200px;"><div class="x" style="left:30px; top:24px; font-size:40px; color:#8592AD;">context</div><div class="x green" style="left:30px; top:90px; font-size:60px;">15 days</div></div>
+          <div class="bub" id="d_a1" style="left:600px; top:440px; background:#4CC38A; color:#0B1220;">"15 days" &#10003;</div>
+          <div class="box2" id="d_c2" style="left:60px; top:650px; width:440px; height:280px;"><div class="x" style="left:30px; top:24px; font-size:40px; color:#8592AD;">context</div><div class="x green" style="left:30px; top:90px; font-size:56px;">15 days</div><div class="x red" style="left:30px; top:170px; font-size:56px;">30 days (blog)</div></div>
+          <div class="bub" id="d_a2" style="left:600px; top:740px; background:#E8596B; color:#0B1220;">"30 days" &#10007;</div>
+          <div class="chip" id="d_cb" style="left:140px; top:990px; width:800px; background:#F2B544; color:#0B1220; font-size:50px;">CONFIRMATION BIAS</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:80px;">teen <span class="green">fix</span></div>
+          <div class="doc" id="e_old" style="left:60px; top:390px; width:440px;"><div class="h">old blog</div><div class="v">30 days</div></div>
+          <div class="stamp" id="e_st" style="left:250px; top:440px;">EXPIRED</div>
+          <div class="ans" id="e_rule" style="top:600px; font-size:42px;">takraen to: <span class="gold">nayi date wala context sahi</span></div>
+          <div class="ans" id="e_test" style="top:780px; font-size:42px;">test set: <span class="cyan">jinka jawab badal chuka</span></div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="f_1" style="top:390px;">badalte facts: <span class="green">fresh retrieval</span></div>
+          <div class="ans" id="f_2" style="top:540px;">purane versions <span class="red">index se hatao</span></div>
+          <div class="ans" id="f_3" style="top:690px;">nayi date wale context ko <span class="gold">priority</span></div>
+          <div class="ans" id="f_4" style="top:840px;">badle facts ka <span class="cyan">alag test</span></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="doc" id="g_1" style="left:60px; top:300px; width:440px;"><div class="h">purana blog</div><div class="v red">30 days</div></div>
+          <div class="doc" id="g_2" style="left:580px; top:300px; width:440px;"><div class="h">naya policy page</div><div class="v green">15 days</div></div>
+          <div class="x c" id="g_q" style="top:540px; font-size:76px;">model <span class="gold">kise maane</span>?</div>
+          <div class="chip" id="g_c" style="left:290px; top:720px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="79.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="79.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="79.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G"], tag: "AI ENGINEER INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the question on frame 0, the source post, the company
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_p", at("A", "meta") - 0.05, { s: 0.94 });
+      show("#a_co", at("A", "meta") + 0.3, { s: 1.05 });
+      // B: the policy changed yesterday, the old value is everywhere the model read
+      show("#b_pol", at("B", "return") - 0.2, { s: 0.94 });
+      tl.set("#b_new", { opacity: 0 }, 0); tl.to("#b_new", { opacity: 1, duration: 0.2 }, at("B", "fifteen") - 0.1);
+      tl.to("#b_old", { color: "#8592AD", textDecoration: "line-through", duration: 0.2 }, at("B", "fifteen") - 0.1);
+      show("#b_kal", at("B", "kal") - 0.1, { s: 1.2 });
+      show("#b_s1", at("B", "blogs") - 0.15, { s: 0.92 });
+      show("#b_s2", at("B", "faqs") - 0.15, { s: 0.92 });
+      show("#b_s3", at("B", "har") - 0.1, { s: 0.92 });
+      show("#b_m", at("B", "model") - 0.1, { s: 0.94 });
+      show("#b_a", at("B", "thirty", 2) - 0.1, { s: 1.15 });
+      // C: do not use memory: retrieve the new page with its date
+      show("#c_t", at("C", "pahla") - 0.1, { s: 1.08 });
+      show("#c_m", at("C", "memory") - 0.2, { s: 0.94 });
+      wipe("#c_x", at("C", "mat") - 0.05, 0.35);
+      show("#c_new", at("C", "naya") - 0.1, { s: 0.94 });
+      tl.fromTo("#c_date", { scale: 1 }, { scale: 1.15, duration: 0.2, yoyo: true, repeat: 1 }, at("C", "date") - 0.1);
+      show("#c_pr", at("C", "prompt") - 0.1, { s: 1.05 });
+      // D: clear evidence wins, mixed evidence lets the old belief win
+      show("#d_t", at("D", "trap") - 0.1, { s: 1.1 });
+      show("#d_c1", at("D", "saaf") - 0.15, { s: 0.94 });
+      show("#d_a1", at("D", "maan") - 0.1, { s: 1.1 });
+      show("#d_c2", at("D", "context") - 0.1, { s: 0.94 });
+      show("#d_a2", at("D", "pakadta") - 0.1, { s: 1.1 });
+      show("#d_cb", at("D", "confirmation") - 0.1, { s: 1.08 });
+      // E: expire old versions, a prompt rule, a test set
+      show("#e_t", at("E", "isliye") - 0.1, { s: 1.08 });
+      show("#e_old", at("E", "purane") - 0.1, { s: 0.94 });
+      show("#e_st", at("E", "expired") - 0.1, { s: 1.6 });
+      show("#e_rule", at("E", "prompt") - 0.1, { s: 0.94 });
+      show("#e_test", at("E", "test") - 0.1, { s: 0.94 });
+      // F: interview answer
+      show("#f_chip", at("F", "interview") - 0.05, { s: 0.85 });
+      show("#f_1", at("F", "badalne") - 0.1, { s: 0.94 });
+      show("#f_2", at("F", "purane") - 0.1, { s: 0.94 });
+      show("#f_3", at("F", "nayi") - 0.1, { s: 0.94 });
+      show("#f_4", at("F", "badle") - 0.1, { s: 0.94 });
+      // G: the question
+      show("#g_1", at("G", "purana") - 0.1, { s: 0.94 });
+      show("#g_2", at("G", "naya") - 0.1, { s: 0.94 });
+      show("#g_q", at("G", "model") - 0.1, { s: 1.08 });
+      show("#g_c", at("G", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { meta: "gold", purana: "hot", thirty: "hot", fifteen: "good", memory: "hot", retrieve: "cyan", date: "gold", trap: "gold",
+                       confirmation: "gold", bias: "gold", expired: "hot", fresh: "good", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

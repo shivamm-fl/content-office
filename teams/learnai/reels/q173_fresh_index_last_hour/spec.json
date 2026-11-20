@@ -1,0 +1,97 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "H",
+   0,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Perplexity के interview में पूछा गया: पिछले एक घंटे की घटना पर सवाल आए, तो index fresh कैसे रखोगे?",
+   "B": "[thoughtful] Example: match अभी ख़त्म हुआ, और user पूछता है, कौन जीता? अगर index हर रात एक बार बनता है, तो system के पास कल रात तक की ख़बर है। जवाब पुराना आएगा।",
+   "C": "पहला fix: पूरा index रोज़ दोबारा मत बनाओ। नया या बदला हुआ document आते ही बस उसे जोड़ो। इसे incremental indexing कहते हैं। Elasticsearch जैसे search engine में नया document लगभग one second में searchable हो जाता है।",
+   "D": "दूसरा: हर document पर लिखो कि वो कब publish हुआ। सवाल में अभी, आज या latest हो, तो ranking में नए documents ऊपर।",
+   "E": "तीसरा: कुछ सवाल index के भरोसे छोड़ो ही मत। Live score, आज का weather, share price: ऐसे सवाल पहचानो, और सीधे live search या API से जवाब लाओ।",
+   "F": "[curious] Follow-up: इसकी कीमत? बार-बार update में compute लगता है, और ताज़ा ख़बर कभी-कभी गलत निकलती है। इसलिए जवाब के साथ source और time दिखाओ।",
+   "G": "[warm, conversational] Interview में बोलो: nightly rebuild की जगह incremental indexing, हर document पर timestamp, recency वाले सवालों में नए documents को boost, और सबसे ताज़ा सवालों के लिए live search।",
+   "H": "[curious] अब बताओ: आज Sensex कितने पर बंद हुआ, ये index से दोगे या live API से? Comment करो।"
+  }
+ },
+ "hook_type": "company_specific",
+ "company": "Perplexity",
+ "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+ "sources": [
+  "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+  "https://www.elastic.co/guide/en/elasticsearch/reference/current/near-real-time.html"
+ ],
+ "approved": "owner 2026-11-20 (scripts reviewed in chat; 'ok abhi 4 bana de, baaki 2 baad mein')"
+}
