@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Trapping Rain Water</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="125.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .vio { color:#A78BFA; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .ch { position:absolute; left:0; width:1080px; height:640px; }
+          .bar2 { position:absolute; border-radius:12px 12px 0 0; background:#3A3466; border:3px solid #A78BFA; border-bottom:none; box-sizing:border-box; }
+          .wat { position:absolute; background:rgba(91,192,235,.78); border-radius:6px 6px 0 0; }
+          .hv { position:absolute; text-align:center; font:700 44px "JetBrains Mono",monospace; color:#E8EDF6; }
+          .ix { position:absolute; text-align:center; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .floor { position:absolute; height:6px; border-radius:3px; background:#8592AD; }
+          .ptr { position:absolute; width:76px; height:66px; border-radius:16px; font:700 44px "JetBrains Mono",monospace; display:flex; align-items:center; justify-content:center; color:#0B1220; }
+          .lvl { position:absolute; height:0; border-top:5px dashed #F2B544; }
+          .cell { position:absolute; width:110px; height:96px; border-radius:16px; background:#1B2538; border:3px solid #26324B; font:700 48px "JetBrains Mono",monospace; color:#E8EDF6; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+          .code { position:absolute; left:50px; width:980px; border-radius:24px; background:#0D1526; border:3px solid #26324B; padding:22px 0; box-sizing:border-box; }
+          .code .ln { position:relative; box-sizing:border-box; height:47px; padding-left:26px; font:500 31px "JetBrains Mono",monospace; color:#C9D3E6; white-space:pre; line-height:47px; }
+          .code .ln.hl { background:rgba(167,139,250,.0); }
+          .k { color:#A78BFA; } .f { color:#5BC0EB; } .n2 { color:#F2B544; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:26px 34px; box-sizing:border-box; font:700 48px "Space Grotesk",sans-serif; color:#E8EDF6; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c vio" id="a_h" style="top:250px; font-size:100px;">TRAPPING<br/>RAIN WATER</div>
+          <div class="x c" id="a_q" style="top:470px; font-size:62px;">bina <span class="red">extra array</span>?</div>
+          <div class="ch" id="a_ch" style="top:520px;"></div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:80px;">kitna <span class="cyan">paani</span> rukega?</div>
+          <div class="x c" id="b_arr" style="top:380px; font-size:62px; font-family:'JetBrains Mono',monospace;">[<span id="b_v0">4</span>, <span id="b_v1">2</span>, <span id="b_v2">0</span>, <span id="b_v3">3</span>, <span id="b_v4">2</span>, <span id="b_v5">5</span>]</div>
+          <div class="ch" id="b_ch" style="top:470px;"></div>
+          <div class="chip" id="b_ans" style="left:290px; top:1060px; width:500px; background:#5BC0EB; color:#0B1220; font-size:52px;">answer: 9 units</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:72px;">ek bar ke upar <span class="cyan">kitna</span>?</div>
+          <div class="x c" id="c_f" style="top:250px; font-size:60px; font-family:'JetBrains Mono',monospace;">water = <span class="n2">min</span>(<span class="vio">Lmax</span>, <span class="cyan">Rmax</span>) &minus; h</div>
+          <div class="x c" id="c_n" style="top:350px; font-size:60px; font-family:'JetBrains Mono',monospace;">min(<span class="vio">4</span>, <span class="cyan">5</span>) &minus; 0 = <span class="n2">4</span></div>
+          <div class="ch" id="c_ch" style="top:470px;"></div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c red" id="d_t" style="top:250px; font-size:90px;">BRUTE FORCE</div>
+          <div class="ch" id="d_ch" style="top:330px;"></div>
+          <div class="x c" id="d_big" style="top:850px; font-size:58px;">10,000 bars &rarr; <span class="red">~100 million</span> steps</div>
+          <div class="x c red" id="d_o" style="top:940px; font-size:80px; font-family:'JetBrains Mono',monospace;">O(n&sup2;)</div>
+          <div class="x c" id="d_bn" style="top:1060px; font-size:56px;">wahi max <span class="red">baar-baar</span></div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:80px;">pehle se <span class="vio">rakh lo</span></div>
+          <div class="x" id="e_l" style="left:60px; top:430px; font-size:44px; color:#A78BFA; font-family:'JetBrains Mono',monospace;">left_max</div>
+          <div id="e_lr" style="position:absolute; left:0; top:500px; width:1080px; height:100px;"></div>
+          <div class="x" id="e_r" style="left:60px; top:650px; font-size:44px; color:#5BC0EB; font-family:'JetBrains Mono',monospace;">right_max</div>
+          <div id="e_rr" style="position:absolute; left:0; top:720px; width:1080px; height:100px;"></div>
+          <div class="chip" id="e_time" style="left:80px; top:900px; width:440px; background:#4CC38A; color:#0B1220; font-size:48px;">time O(n)</div>
+          <div class="chip" id="e_space" style="left:560px; top:900px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:48px;">space O(n)</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:80px;">sirf <span class="n2">chhoti</span> side</div>
+          <div class="chip" id="f_lm" style="left:60px; top:370px; width:440px; border:4px solid #A78BFA; color:#A78BFA; font-size:46px;">left max = 4</div>
+          <div class="chip" id="f_rm" style="left:580px; top:370px; width:440px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:46px;">right max &ge; 5</div>
+          <div class="ch" id="f_ch" style="top:470px;"></div>
+          <div class="chip" id="f_rule" style="left:60px; top:370px; width:960px; background:#F2B544; color:#0B1220; font-size:44px;">chhoti side: paani jodo, pointer andar</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_t" style="top:250px; font-size:80px;">DRY RUN</div>
+          <div class="x c" id="g_tot" style="top:360px; font-size:64px; font-family:'JetBrains Mono',monospace;">total = <span class="cyan" id="g_n">0</span></div>
+          <div class="ch" id="g_ch" style="top:470px;"></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="code" id="h_code" style="top:260px;">
+            <div class="ln" id="h_l0"><span class="k">def</span> <span class="f">trap</span>(height):</div>
+            <div class="ln" id="h_l1">    l, r = <span class="n2">0</span>, len(height) - <span class="n2">1</span></div>
+            <div class="ln" id="h_l2">    left_max = right_max = <span class="n2">0</span></div>
+            <div class="ln" id="h_l3">    water = <span class="n2">0</span></div>
+            <div class="ln" id="h_l4">    <span class="k">while</span> l &lt; r:</div>
+            <div class="ln" id="h_l5">        <span class="k">if</span> height[l] &lt; height[r]:</div>
+            <div class="ln" id="h_l6">            left_max = max(left_max, height[l])</div>
+            <div class="ln" id="h_l7">            water += left_max - height[l]</div>
+            <div class="ln" id="h_l8">            l += <span class="n2">1</span></div>
+            <div class="ln" id="h_l9">        <span class="k">else</span>:</div>
+            <div class="ln" id="h_l10">            right_max = max(right_max, height[r])</div>
+            <div class="ln" id="h_l11">            water += right_max - height[r]</div>
+            <div class="ln" id="h_l12">            r -= <span class="n2">1</span></div>
+            <div class="ln" id="h_l13">    <span class="k">return</span> water</div>
+          </div>
+          <div class="x" id="h_run" style="left:60px; top:1010px; font-size:40px; font-family:'JetBrains Mono',monospace; color:#4CC38A;">&gt;&gt;&gt; trap([4, 2, 0, 3, 2, 5])&nbsp;&nbsp;9</div>
+        </div>
+
+        <div class="beat" id="sI">
+          <div class="x c" id="i_t" style="top:300px; font-size:76px;">har step: <span class="vio">ek pointer</span> andar</div>
+          <div class="chip" id="i_time" style="left:140px; top:520px; width:800px; background:#4CC38A; color:#0B1220; font-size:64px;">time O(n)</div>
+          <div class="chip" id="i_space" style="left:140px; top:680px; width:800px; background:#4CC38A; color:#0B1220; font-size:64px;">extra space O(1)</div>
+        </div>
+
+        <div class="beat" id="sJ">
+          <div class="chip" id="j_chip" style="left:240px; top:250px; width:600px; background:#A78BFA; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="j_1" style="top:390px; font-family:'JetBrains Mono',monospace; font-size:44px;">water = min(Lmax, Rmax) &minus; h</div>
+          <div class="ans" id="j_2" style="top:560px;">chhoti side ka max hi <span class="cyan">paani tay</span> karta</div>
+          <div class="ans" id="j_3" style="top:730px;">har baar <span class="n2">chhoti side</span> aage badhao</div>
+        </div>
+
+        <div class="beat" id="sK">
+          <div class="x c" id="k_arr" style="top:280px; font-size:66px; font-family:'JetBrains Mono',monospace;">[5, 0, 0, 0, 1]</div>
+          <div class="ch" id="k_ch" style="top:380px;"></div>
+          <div class="x c" id="k_q" style="top:880px; font-size:76px;">kitna <span class="cyan">paani</span>?</div>
+          <div class="chip" id="k_c" style="left:290px; top:1010px; width:500px; background:#A78BFA; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="125.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="125.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="125.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"], tag: "DSA 028/150" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // bar charts drawn from the real array (seek-safe: built once, animated by the timeline)
+      const H = [4, 2, 0, 3, 2, 5], WAT = [0, 2, 4, 1, 2, 0];
+      const el = (cls, host, css, txt) => { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css); if (txt !== undefined) d.textContent = txt; host.appendChild(d); return d; };
+      const chart = (sel, arr, o = {}) => {
+        const h = q(sel), U = o.u || 80, BW = o.bw || 120, GAP = o.gap || 30, base = o.base || 420, n = arr.length;
+        const left0 = (1080 - (n * BW + (n - 1) * GAP)) / 2, x = (i) => left0 + i * (BW + GAP);
+        const c = { U, BW, base, x, cx: (i) => x(i) + BW / 2, bars: [], water: [], lab: [], idx: [], h };
+        el("floor", h, { left: (left0 - 20) + "px", width: (n * BW + (n - 1) * GAP + 40) + "px", top: base + "px" });
+        arr.forEach((v, i) => {
+          const wv = o.filled ? o.filled[i] : 0;
+          c.water.push(el("wat", h, { left: x(i) + "px", width: BW + "px", top: (base - (v + wv) * U) + "px", height: (wv * U) + "px" }));
+          c.bars.push(el("bar2", h, { left: x(i) + "px", width: BW + "px", top: (base - v * U) + "px", height: (v * U) + "px" }));
+          c.lab.push(el("hv", h, { left: x(i) + "px", width: BW + "px", top: (base + 12) + "px" }, String(v)));
+          if (o.idx) c.idx.push(el("ix", h, { left: x(i) + "px", width: BW + "px", top: (base + 64) + "px" }, "i=" + i));
+        });
+        return c;
+      };
+      const fill = (c, i, wv, t, d) => tl.to(c.water[i], { height: wv * c.U, top: c.base - (H[i] + wv) * c.U, duration: d ?? 0.5, ease: "power2.out" }, t);
+      const ptr = (c, txt, i, color) => el("ptr", c.h, { left: (c.cx(i) - 38) + "px", top: (c.base + 108) + "px", background: color }, txt);
+      const lvl = (c, i0, i1, v) => el("lvl", c.h, { left: c.x(i0) + "px", width: (c.x(i1) + c.BW - c.x(i0)) + "px", top: (c.base - v * c.U) + "px" });
+      const hlBar = (c, i, t, color) => tl.to(c.bars[i], { backgroundColor: color, duration: 0.25 }, t);
+
+      // A: frame 0 shows the filled picture and the question
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      chart("#a_ch", H, { u: 70, base: 400, filled: WAT });
+      // B: the problem, the rain, the given array, the answer
+      show("#b_t", at("B", "problem") - 0.1, { s: 1.08 });
+      const b = chart("#b_ch", H, { idx: true });
+      b.bars.forEach((d, i) => { tl.fromTo(d, { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.4, ease: "power2.out" }, at("B", "bar") - 0.2 + i * 0.1); });
+      WAT.forEach((w, i) => { if (w) fill(b, i, w, at("B", "paani") - 0.3 + i * 0.12, 0.9); });
+      tl.set("#b_arr", { opacity: 0 }, 0); tl.to("#b_arr", { opacity: 1, duration: 0.2 }, at("B", "given") - 0.1);
+      [["#b_v0", "four", 0], ["#b_v1", "two", 0], ["#b_v2", "zero", 0], ["#b_v3", "three", 0], ["#b_v4", "two", 1], ["#b_v5", "five", 0]].forEach(([s, w, n], i) => {
+        tl.fromTo(s, { color: "#E8EDF6" }, { color: "#A78BFA", duration: 0.15 }, at("B", w, n) - 0.05);
+        tl.to(b.bars[i], { borderColor: "#F2B544", duration: 0.12, yoyo: true, repeat: 1 }, at("B", w, n) - 0.05);
+      });
+      show("#b_ans", at("B", "answer") - 0.1, { s: 1.08 });
+      // C: one bar: left max, right max, the smaller one sets the level; then the formula
+      show("#c_t", at("C", "ek") - 0.1, { s: 1.05 });
+      const c = chart("#c_ch", H, { idx: true });
+      tl.to(c.bars[2], { borderColor: "#F2B544", duration: 0.2 }, at("C", "bar"));
+      const cpt = el("ptr", c.h, { left: (c.cx(2) - 38) + "px", top: (c.base + 108) + "px", background: "#F2B544" }, "?");
+      tl.set(cpt, { opacity: 0 }, 0); show(cpt, at("C", "bar") - 0.1, { s: 1.3 });
+      hlBar(c, 0, at("C", "left") - 0.1, "#A78BFA");
+      const lv4 = lvl(c, 0, 2, 4); tl.set(lv4, { opacity: 0 }, 0); tl.to(lv4, { opacity: 1, duration: 0.2 }, at("C", "left") + 0.3);
+      tl.to(c.bars[5], { backgroundColor: "#5BC0EB", borderColor: "#5BC0EB", duration: 0.25 }, at("C", "right") - 0.1);
+      const lv5 = lvl(c, 2, 5, 5); lv5.style.borderTopColor = "#5BC0EB"; tl.set(lv5, { opacity: 0 }, 0); tl.to(lv5, { opacity: 1, duration: 0.2 }, at("C", "right") + 0.3);
+      fill(c, 2, 4, at("C", "chhoti") - 0.1, 0.8);
+      hide("#c_t", at("C", "water") - 0.2); show("#c_f", at("C", "water") - 0.1, { s: 1.05 });
+      show("#c_n", at("C", "index") - 0.1, { s: 1.05 });
+      tl.to("#c_n .n2", { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1 }, at("C", "four", 1));
+      // D: brute force scans both sides for every bar
+      show("#d_t", at("D", "brute") - 0.1, { s: 1.15 });
+      const d = chart("#d_ch", H, { u: 60, base: 380 });
+      tl.to(d.bars[2], { borderColor: "#F2B544", duration: 0.2 }, at("D", "har"));
+      const scan = el("wat", d.h, { left: d.x(0) + "px", width: d.BW + "px", top: (d.base - 320) + "px", height: "320px", background: "rgba(232,89,107,.22)" });
+      tl.set(scan, { opacity: 0 }, 0); tl.to(scan, { opacity: 1, duration: 0.15 }, at("D", "donon") - 0.2);
+      tl.to(scan, { left: d.x(5), duration: 1.6, ease: "none" }, at("D", "donon"));
+      tl.to(scan, { left: d.x(0), duration: 1.2, ease: "none" }, at("D", "donon") + 1.6);
+      tl.to(scan, { opacity: 0, duration: 0.2 }, at("D", "ten") - 0.1);
+      show("#d_big", at("D", "ten") - 0.1, { s: 1.05 });
+      show("#d_o", at("D", "o") - 0.1, { s: 1.3 });
+      show("#d_bn", at("D", "bottleneck") - 0.1, { s: 1.05 });
+      // E: two helper arrays: O(n) time, O(n) space
+      show("#e_t", at("E", "do") - 0.1, { s: 1.08 });
+      const LM = [4, 4, 4, 4, 4, 5], RM = [5, 5, 5, 5, 5, 5];
+      const row = (sel, vals, color, t) => vals.forEach((v, i) => { const cl = el("cell", q(sel), { left: (160 + i * 130) + "px", top: "0px", borderColor: color }, String(v)); tl.set(cl, { opacity: 0 }, 0); show(cl, t + i * 0.1, { s: 0.9, y: 0 }); });
+      show("#e_l", at("E", "left") - 0.15, { s: 1 }); row("#e_lr", LM, "#A78BFA", at("E", "left"));
+      show("#e_r", at("E", "right") - 0.15, { s: 1 }); row("#e_rr", RM, "#5BC0EB", at("E", "right"));
+      show("#e_time", at("E", "time") - 0.1, { s: 1.08 });
+      show("#e_space", at("E", "extra") - 0.1, { s: 1.08 });
+      // F: only the smaller side matters: L at 4, R at 5, so the left water is set by left max
+      show("#f_t", at("F", "formula") - 0.1, { s: 1.08 });
+      const f = chart("#f_ch", H, { idx: true });
+      const fl = ptr(f, "L", 0, "#A78BFA"), fr = ptr(f, "R", 5, "#5BC0EB");
+      tl.set([fl, fr], { opacity: 0 }, 0); show(fl, at("F", "left") - 0.1, { s: 1.3 }); show(fr, at("F", "right") - 0.1, { s: 1.3 });
+      hlBar(f, 0, at("F", "four") - 0.1, "#A78BFA");
+      tl.to(f.bars[5], { backgroundColor: "#5BC0EB", borderColor: "#5BC0EB", duration: 0.25 }, at("F", "five") - 0.1);
+      [1, 2, 3, 4].forEach((i) => tl.to(f.bars[i], { borderColor: "#F2B544", duration: 0.2 }, at("F", "left", 2) + (i - 1) * 0.12));
+      show("#f_rm", at("F", "five", 1) - 0.4, { s: 1.08 });
+      show("#f_lm", at("F", "abhi") - 0.3, { s: 1.08 });
+      const flv = lvl(f, 1, 4, 4); tl.set(flv, { opacity: 0 }, 0); tl.to(flv, { opacity: 1, duration: 0.25 }, at("F", "tay") - 0.4);
+      ["#f_lm", "#f_rm"].forEach((s) => hide(s, at("F", "isliye") - 0.15));
+      tl.set("#f_rule", { opacity: 0 }, 0); show("#f_rule", at("F", "isliye"), { s: 1.04 });
+      // G: dry run: only L moves, water adds up to 9, R never moves
+      show("#g_t", at("G", "dry") - 0.1, { s: 1.1 });
+      const g = chart("#g_ch", H, { idx: true });
+      const gl = ptr(g, "L", 0, "#A78BFA"), gr = ptr(g, "R", 5, "#5BC0EB");
+      const lv = lvl(g, 0, 4, 4); tl.set(lv, { opacity: 0 }, 0); tl.to(lv, { opacity: 1, duration: 0.2 }, at("G", "left") - 0.1);
+      const TOT = [0, 2, 6, 7, 9], tots = TOT.map((v, k) => { const t = el("x c", q("#sG"), { top: "360px", fontSize: "64px", fontFamily: "JetBrains Mono, monospace" }); t.innerHTML = 'total = <span class="cyan">' + v + "</span>"; tl.set(t, { opacity: k ? 0 : 1 }, 0); return t; });
+      tl.set("#g_tot", { opacity: 0 }, 0);
+      [1, 2, 3, 4].forEach((i, k) => {
+        tl.to(gl, { left: g.cx(i) - 38, duration: 0.35, ease: "power2.out" }, at("G", "index", k) - 0.1);
+        if (WAT[i]) fill(g, i, WAT[i], at("G", "paani", k) - 0.05, 0.5);
+        hide(tots[k], at("G", "paani", k) + 0.25, 0.1); tl.to(tots[k + 1], { opacity: 1, duration: 0.15 }, at("G", "paani", k) + 0.3);
+      });
+      tl.fromTo(gr, { scale: 1 }, { scale: 1.35, duration: 0.2, yoyo: true, repeat: 3 }, at("G", "right") - 0.05);
+      // H: the actual code, one line lit as it is spoken
+      show("#h_code", at("H", "code") - 0.1, { s: 0.97 });
+      const HL = "rgba(167,139,250,.30)";
+      const lit = (ids, t) => ids.forEach((id) => { tl.to(id, { backgroundColor: HL, duration: 0.15 }, t); });
+      const unlit = (ids, t) => ids.forEach((id) => { tl.to(id, { backgroundColor: "rgba(0,0,0,0)", duration: 0.15 }, t); });
+      lit(["#h_l5"], at("H", "height") - 0.1);
+      lit(["#h_l6"], at("H", "left") - 0.1);
+      lit(["#h_l7"], at("H", "left", 1) - 0.1);
+      lit(["#h_l8"], at("H", "l", 2) - 0.1);
+      unlit(["#h_l5", "#h_l6", "#h_l7", "#h_l8"], at("H", "varna") - 0.1);
+      lit(["#h_l9", "#h_l10", "#h_l11"], at("H", "varna"));
+      lit(["#h_l12"], at("H", "r") - 0.1);
+      show("#h_run", at("H", "r") + 0.3, { s: 1, y: 10 });
+      // I: complexity
+      show("#i_t", at("I", "har") - 0.1, { s: 1.05 });
+      show("#i_time", at("I", "time") - 0.1, { s: 1.08 });
+      show("#i_space", at("I", "extra") - 0.1, { s: 1.08 });
+      // J: interview answer
+      show("#j_chip", at("J", "interview") - 0.05, { s: 0.85 });
+      show("#j_1", at("J", "min") - 0.2, { s: 0.94 });
+      show("#j_2", at("J", "two") - 0.1, { s: 0.94 });
+      show("#j_3", at("J", "isliye") - 0.1, { s: 0.94 });
+      // K: the question
+      show("#k_arr", at("K", "array") - 0.1, { s: 1.08 });
+      chart("#k_ch", [5, 0, 0, 0, 1], { base: 420 });
+      show("#k_q", at("K", "kitna") - 0.1, { s: 1.08 });
+      show("#k_c", at("K", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { trapping: "#A78BFA", rain: "#A78BFA", water: "#A78BFA", paani: "cyan", left: "#A78BFA", right: "cyan", max: "#A78BFA",
+                       chhoti: "gold", pointer: "#A78BFA", squared: "hot", bottleneck: "hot", comment: "#A78BFA" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .vio { color:#A78BFA; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .ch { position:absolute; left:0; width:1080px; height:640px; }
+          .bar2 { position:absolute; border-radius:12px 12px 0 0; background:#3A3466; border:3px solid #A78BFA; border-bottom:none; box-sizing:border-box; }
+          .wat { position:absolute; background:rgba(91,192,235,.78); border-radius:6px 6px 0 0; }
+          .hv { position:absolute; text-align:center; font:700 44px "JetBrains Mono",monospace; color:#E8EDF6; }
+          .ix { position:absolute; text-align:center; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .floor { position:absolute; height:6px; border-radius:3px; background:#8592AD; }
+          .ptr { position:absolute; width:76px; height:66px; border-radius:16px; font:700 44px "JetBrains Mono",monospace; display:flex; align-items:center; justify-content:center; color:#0B1220; }
+          .lvl { position:absolute; height:0; border-top:5px dashed #F2B544; }
+          .cell { position:absolute; width:110px; height:96px; border-radius:16px; background:#1B2538; border:3px solid #26324B; font:700 48px "JetBrains Mono",monospace; color:#E8EDF6; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+          .code { position:absolute; left:50px; width:980px; border-radius:24px; background:#0D1526; border:3px solid #26324B; padding:22px 0; box-sizing:border-box; }
+          .code .ln { position:relative; box-sizing:border-box; height:47px; padding-left:26px; font:500 31px "JetBrains Mono",monospace; color:#C9D3E6; white-space:pre; line-height:47px; }
+          .code .ln.hl { background:rgba(167,139,250,.0); }
+          .k { color:#A78BFA; } .f { color:#5BC0EB; } .n2 { color:#F2B544; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:26px 34px; box-sizing:border-box; font:700 48px "Space Grotesk",sans-serif; color:#E8EDF6; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c vio" id="a_h" style="top:250px; font-size:100px;">TRAPPING<br/>RAIN WATER</div>
+          <div class="x c" id="a_q" style="top:470px; font-size:62px;">bina <span class="red">extra array</span>?</div>
+          <div class="ch" id="a_ch" style="top:520px;"></div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:80px;">kitna <span class="cyan">paani</span> rukega?</div>
+          <div class="x c" id="b_arr" style="top:380px; font-size:62px; font-family:'JetBrains Mono',monospace;">[<span id="b_v0">4</span>, <span id="b_v1">2</span>, <span id="b_v2">0</span>, <span id="b_v3">3</span>, <span id="b_v4">2</span>, <span id="b_v5">5</span>]</div>
+          <div class="ch" id="b_ch" style="top:470px;"></div>
+          <div class="chip" id="b_ans" style="left:290px; top:1060px; width:500px; background:#5BC0EB; color:#0B1220; font-size:52px;">answer: 9 units</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:72px;">ek bar ke upar <span class="cyan">kitna</span>?</div>
+          <div class="x c" id="c_f" style="top:250px; font-size:60px; font-family:'JetBrains Mono',monospace;">water = <span class="n2">min</span>(<span class="vio">Lmax</span>, <span class="cyan">Rmax</span>) &minus; h</div>
+          <div class="x c" id="c_n" style="top:350px; font-size:60px; font-family:'JetBrains Mono',monospace;">min(<span class="vio">4</span>, <span class="cyan">5</span>) &minus; 0 = <span class="n2">4</span></div>
+          <div class="ch" id="c_ch" style="top:470px;"></div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c red" id="d_t" style="top:250px; font-size:90px;">BRUTE FORCE</div>
+          <div class="ch" id="d_ch" style="top:330px;"></div>
+          <div class="x c" id="d_big" style="top:850px; font-size:58px;">10,000 bars &rarr; <span class="red">~100 million</span> steps</div>
+          <div class="x c red" id="d_o" style="top:940px; font-size:80px; font-family:'JetBrains Mono',monospace;">O(n&sup2;)</div>
+          <div class="x c" id="d_bn" style="top:1060px; font-size:56px;">wahi max <span class="red">baar-baar</span></div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:80px;">pehle se <span class="vio">rakh lo</span></div>
+          <div class="x" id="e_l" style="left:60px; top:430px; font-size:44px; color:#A78BFA; font-family:'JetBrains Mono',monospace;">left_max</div>
+          <div id="e_lr" style="position:absolute; left:0; top:500px; width:1080px; height:100px;"></div>
+          <div class="x" id="e_r" style="left:60px; top:650px; font-size:44px; color:#5BC0EB; font-family:'JetBrains Mono',monospace;">right_max</div>
+          <div id="e_rr" style="position:absolute; left:0; top:720px; width:1080px; height:100px;"></div>
+          <div class="chip" id="e_time" style="left:80px; top:900px; width:440px; background:#4CC38A; color:#0B1220; font-size:48px;">time O(n)</div>
+          <div class="chip" id="e_space" style="left:560px; top:900px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:48px;">space O(n)</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:80px;">sirf <span class="n2">chhoti</span> side</div>
+          <div class="chip" id="f_lm" style="left:60px; top:370px; width:440px; border:4px solid #A78BFA; color:#A78BFA; font-size:46px;">left max = 4</div>
+          <div class="chip" id="f_rm" style="left:580px; top:370px; width:440px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:46px;">right max &ge; 5</div>
+          <div class="ch" id="f_ch" style="top:470px;"></div>
+          <div class="chip" id="f_rule" style="left:60px; top:370px; width:960px; background:#F2B544; color:#0B1220; font-size:44px;">chhoti side: paani jodo, pointer andar</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_t" style="top:250px; font-size:80px;">DRY RUN</div>
+          <div class="x c" id="g_tot" style="top:360px; font-size:64px; font-family:'JetBrains Mono',monospace;">total = <span class="cyan" id="g_n">0</span></div>
+          <div class="ch" id="g_ch" style="top:470px;"></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="code" id="h_code" style="top:260px;">
+            <div class="ln" id="h_l0"><span class="k">def</span> <span class="f">trap</span>(height):</div>
+            <div class="ln" id="h_l1">    l, r = <span class="n2">0</span>, len(height) - <span class="n2">1</span></div>
+            <div class="ln" id="h_l2">    left_max = right_max = <span class="n2">0</span></div>
+            <div class="ln" id="h_l3">    water = <span class="n2">0</span></div>
+            <div class="ln" id="h_l4">    <span class="k">while</span> l &lt; r:</div>
+            <div class="ln" id="h_l5">        <span class="k">if</span> height[l] &lt; height[r]:</div>
+            <div class="ln" id="h_l6">            left_max = max(left_max, height[l])</div>
+            <div class="ln" id="h_l7">            water += left_max - height[l]</div>
+            <div class="ln" id="h_l8">            l += <span class="n2">1</span></div>
+            <div class="ln" id="h_l9">        <span class="k">else</span>:</div>
+            <div class="ln" id="h_l10">            right_max = max(right_max, height[r])</div>
+            <div class="ln" id="h_l11">            water += right_max - height[r]</div>
+            <div class="ln" id="h_l12">            r -= <span class="n2">1</span></div>
+            <div class="ln" id="h_l13">    <span class="k">return</span> water</div>
+          </div>
+          <div class="x" id="h_run" style="left:60px; top:1010px; font-size:40px; font-family:'JetBrains Mono',monospace; color:#4CC38A;">&gt;&gt;&gt; trap([4, 2, 0, 3, 2, 5])&nbsp;&nbsp;9</div>
+        </div>
+
+        <div class="beat" id="sI">
+          <div class="x c" id="i_t" style="top:300px; font-size:76px;">har step: <span class="vio">ek pointer</span> andar</div>
+          <div class="chip" id="i_time" style="left:140px; top:520px; width:800px; background:#4CC38A; color:#0B1220; font-size:64px;">time O(n)</div>
+          <div class="chip" id="i_space" style="left:140px; top:680px; width:800px; background:#4CC38A; color:#0B1220; font-size:64px;">extra space O(1)</div>
+        </div>
+
+        <div class="beat" id="sJ">
+          <div class="chip" id="j_chip" style="left:240px; top:250px; width:600px; background:#A78BFA; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="j_1" style="top:390px; font-family:'JetBrains Mono',monospace; font-size:44px;">water = min(Lmax, Rmax) &minus; h</div>
+          <div class="ans" id="j_2" style="top:560px;">chhoti side ka max hi <span class="cyan">paani tay</span> karta</div>
+          <div class="ans" id="j_3" style="top:730px;">har baar <span class="n2">chhoti side</span> aage badhao</div>
+        </div>
+
+        <div class="beat" id="sK">
+          <div class="x c" id="k_arr" style="top:280px; font-size:66px; font-family:'JetBrains Mono',monospace;">[5, 0, 0, 0, 1]</div>
+          <div class="ch" id="k_ch" style="top:380px;"></div>
+          <div class="x c" id="k_q" style="top:880px; font-size:76px;">kitna <span class="cyan">paani</span>?</div>
+          <div class="chip" id="k_c" style="left:290px; top:1010px; width:500px; background:#A78BFA; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
