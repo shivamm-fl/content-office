@@ -1,0 +1,9 @@
+Perplexity ke interview mein poocha gaya: pichhle ek ghante ki ghatna par sawal aaye, to index fresh kaise rakhoge?
+
+Index har raat ek baar banta hai, to match abhi khatam hua ho tab bhi jawab kal raat ki khabar se aayega.
+
+Teen fix. Ek: poora index roz dobara mat banao, naya ya badla document aate hi bas use jodo (incremental indexing). Elasticsearch jaise search engine mein naya document lagbhag 1 second mein searchable ho jata hai. Do: har document par publish time likho, aur "abhi", "aaj", "latest" wale sawalon mein naye documents upar rakho. Teen: live score, weather, share price jaise sawal seedhe live search ya API par bhejo. Keemat: zyada compute, aur taaza khabar kabhi galat bhi hoti hai, isliye jawab ke saath source aur time dikhao.
+
+Aaj Sensex kitne par band hua, ye index se doge ya live API se? Comment karo.
+
+Source: Elasticsearch docs, "Near real-time search".

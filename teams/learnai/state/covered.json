@@ -1544,6 +1544,108 @@
     "https://www.geeksforgeeks.org/interview-experiences/accenture-final-interview-experience-for-llm-operations-engineer-experienced-selected/",
     "https://www.anthropic.com/engineering/building-effective-agents"
    ]
+  },
+  {
+   "id": "q171",
+   "day": null,
+   "title": "Raw user query to the retriever: what is wrong (Anthropic)",
+   "track": "interview",
+   "status": "built",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "Anthropic",
+   "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+   "topic": "A raw follow-up query lacks the chat context and uses different words than the documents; rewrite it with the chat history into a standalone question before retrieval (rewrite-retrieve-read), log the rewrite and also search with the original.",
+   "sources": [
+    "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+    "https://arxiv.org/abs/2305.14283"
+   ]
+  },
+  {
+   "id": "q172",
+   "day": null,
+   "title": "The answer changed yesterday, the old one is in the training data (Meta)",
+   "track": "interview",
+   "status": "built",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "Meta",
+   "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+   "topic": "Changing facts come from fresh retrieval with a date; models accept clear conflicting evidence but show confirmation bias when old content is also in context, so expire old versions, tell the prompt the newest dated context wins, and test changed facts.",
+   "sources": [
+    "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+    "https://arxiv.org/abs/2305.13300"
+   ]
+  },
+  {
+   "id": "q173",
+   "day": null,
+   "title": "Keeping the index fresh for last-hour news (Perplexity)",
+   "track": "interview",
+   "status": "built",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "Perplexity",
+   "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+   "topic": "Incremental indexing instead of a nightly rebuild (Elasticsearch makes new documents searchable within about one second), timestamps with recency boosting, and live search or APIs for the freshest questions; show source and time.",
+   "sources": [
+    "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+    "https://www.elastic.co/guide/en/elasticsearch/reference/current/near-real-time.html"
+   ]
+  },
+  {
+   "id": "q175",
+   "day": null,
+   "title": "Did adding retrieval really improve the LLM product? (Meta)",
+   "track": "interview",
+   "status": "built",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "Meta",
+   "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+   "topic": "Offline: the same real questions with and without retrieval (correctness, groundedness, retrieval quality, latency, cost); online: an A/B test on whether the user's job got done; refresh the test set from production questions.",
+   "sources": [
+    "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported"
+   ]
+  },
+  {
+   "id": "q174",
+   "day": null,
+   "title": "Single-GPU inference batching with users waiting (Anthropic)",
+   "track": "interview",
+   "status": "planned",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "Anthropic",
+   "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+   "topic": "Dynamic batching with a max batch size and a max wait, request ids for routing responses, a queue limit, continuous batching for LLMs. Script approved 2026-11-20; voice waits for credits.",
+   "sources": [
+    "https://www.aced.io/questions/5780/inference-batching-system",
+    "https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/user_guide/batcher.html",
+    "https://www.anyscale.com/blog/continuous-batching-llm-inference"
+   ]
+  },
+  {
+   "id": "q176",
+   "day": null,
+   "title": "Same question, different answers: make RAG consistent (NVIDIA)",
+   "track": "interview",
+   "status": "planned",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "NVIDIA",
+   "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+   "topic": "Three sources of inconsistency: sampling, retrieval and model version; lower randomness where the setting exists, log retrieved chunk ids, pin a fixed model snapshot, cache approved answers for frequent questions. Script approved 2026-11-20; voice waits for credits.",
+   "sources": [
+    "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+    "https://platform.claude.com/docs/en/about-claude/models/overview"
+   ]
   }
  ]
 }

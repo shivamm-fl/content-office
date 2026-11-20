@@ -1,0 +1,88 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   0,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Anthropic के interview में पूछा गया: तुम्हारा RAG system user की query सीधी retriever को भेजता है। इसमें गलत क्या है?",
+   "B": "[thoughtful] एक chat सोचो। User पूछता है: MacBook{मैकबुक} Air{एयर} का battery backup कितना है? फिर लिखता है: और उसका price? ... अब retriever के पास सिर्फ़ और उसका price पहुँचा। उसका मतलब किसका, ये उसे पता ही नहीं।",
+   "C": "दूसरी दिक्कत: user जैसे बोलता है, documents वैसे नहीं लिखे होते। User लिखता है: पैसा कब वापस आएगा? Document में लिखा है: refund processing time। Words मिलते नहीं, तो सही chunk पीछे रह जाता है।",
+   "D": "Fix: retrieval से पहले एक rewrite step। एक छोटा LLM chat history पढ़कर query को पूरा, अपने आप में साफ़ सवाल बनाता है: MacBook{मैकबुक} Air{एयर} का price क्या है? फिर search होता है। इसे rewrite, retrieve, read कहते हैं।",
+   "E": "[curious] अब follow-up आएगा: rewrite गलत हो गया तो? इसलिए rewritten query log करो, और original query से भी search करके दोनों के results मिलाओ।",
+   "F": "[warm, conversational] Interview में बोलो: raw query में chat का context नहीं होता, और उसकी भाषा documents से अलग होती है। इसलिए retrieval से पहले query को chat history के साथ एक standalone सवाल में rewrite करो, और rewrite को log करो।",
+   "G": "[curious] अब बताओ: query rewrite हर message पर चलाओगे, या सिर्फ़ follow-up सवालों पर? Comment करो।"
+  }
+ },
+ "hook_type": "company_specific",
+ "company": "Anthropic",
+ "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+ "sources": [
+  "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+  "https://arxiv.org/abs/2305.14283"
+ ],
+ "approved": "owner 2026-11-20 (scripts reviewed in chat; 'ok abhi 4 bana de, baaki 2 baad mein')"
+}

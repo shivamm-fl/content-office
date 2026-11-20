@@ -1,0 +1,15 @@
+[warm, conversational] Meta के interview में पूछा गया: LLM product में retrieval जोड़ा, तो वो सच में बेहतर हुआ या नहीं, ये कैसे नापोगे?
+
+[thoughtful] दस-बीस सवाल पूछे, जवाब अच्छे लगे, तो वो अंदाज़ा है। नापने के लिए two tests चाहिए।
+
+पहला, offline: असली users के सवालों का एक set बनाओ, जिनके सही जवाब पता हों। वही सवाल दो बार चलाओ, एक बार retrieval के बिना, एक बार retrieval के साथ। Model और prompt same, बस retrieval का फ़र्क।
+
+इसमें चार चीज़ें नापो। जवाब सही है या नहीं। जवाब दिए गए documents पर टिका है, या model ने अपनी तरफ़ से जोड़ा, इसे groundedness कहते हैं। Retrieval ने सही chunk लाया या नहीं। और latency और cost, क्योंकि retrieval दोनों बढ़ाता है।
+
+दूसरा, online A/B test: आधे users को पुराना version, आधे को नया। फिर देखो, कितने users ने सवाल दोबारा पूछा, कितनों ने thumbs down दिया, कितनों का काम बिना human agent के पूरा हुआ।
+
+[curious] Follow-up: offline score बढ़ा, पर online कुछ नहीं बदला, तो? शायद test set असली users जैसा नहीं है। Production के सवालों से उसे refresh करो।
+
+[warm, conversational] Interview में बोलो: पहले same सवालों पर retrieval के साथ और बिना offline comparison, correctness, groundedness, latency और cost पर। फिर online A/B test, इस metric पर कि user का काम पूरा हुआ या नहीं।
+
+[curious] अब बताओ: retrieval से accuracy बढ़ी, पर latency दोगुनी हो गई। Ship करोगे? Comment करो।

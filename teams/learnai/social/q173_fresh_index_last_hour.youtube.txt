@@ -1,0 +1,9 @@
+Keeping a search index fresh for last-hour news (Perplexity AI interview)
+
+Nightly rebuild ki jagah incremental indexing, har document par timestamp, recency wale sawalon mein naye documents ko boost, aur sabse taaza sawalon ke liye live search ya API. Elasticsearch near real-time search mein naya document lagbhag 1 second mein searchable hota hai.
+
+Sources:
+https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported
+https://www.elastic.co/guide/en/elasticsearch/reference/current/near-real-time.html
+
+AI-assisted visuals and narration.

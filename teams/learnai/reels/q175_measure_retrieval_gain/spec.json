@@ -1,0 +1,96 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "H",
+   0,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Meta के interview में पूछा गया: LLM product में retrieval जोड़ा, तो वो सच में बेहतर हुआ या नहीं, ये कैसे नापोगे?",
+   "B": "[thoughtful] दस-बीस सवाल पूछे, जवाब अच्छे लगे, तो वो अंदाज़ा है। नापने के लिए two tests चाहिए।",
+   "C": "पहला, offline: असली users के सवालों का एक set बनाओ, जिनके सही जवाब पता हों। वही सवाल दो बार चलाओ, एक बार retrieval के बिना, एक बार retrieval के साथ। Model और prompt same, बस retrieval का फ़र्क।",
+   "D": "इसमें चार चीज़ें नापो। जवाब सही है या नहीं। जवाब दिए गए documents पर टिका है, या model ने अपनी तरफ़ से जोड़ा, इसे groundedness कहते हैं। Retrieval ने सही chunk लाया या नहीं। और latency और cost, क्योंकि retrieval दोनों बढ़ाता है।",
+   "E": "दूसरा, online A/B test: आधे users को पुराना version, आधे को नया। फिर देखो, कितने users ने सवाल दोबारा पूछा, कितनों ने thumbs down दिया, कितनों का काम बिना human agent के पूरा हुआ।",
+   "F": "[curious] Follow-up: offline score बढ़ा, पर online कुछ नहीं बदला, तो? शायद test set असली users जैसा नहीं है। Production के सवालों से उसे refresh करो।",
+   "G": "[warm, conversational] Interview में बोलो: पहले same सवालों पर retrieval के साथ और बिना offline comparison, correctness, groundedness, latency और cost पर। फिर online A/B test, इस metric पर कि user का काम पूरा हुआ या नहीं।",
+   "H": "[curious] अब बताओ: retrieval से accuracy बढ़ी, पर latency दोगुनी हो गई। Ship करोगे? Comment करो।"
+  }
+ },
+ "hook_type": "company_specific",
+ "company": "Meta",
+ "company_source": "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported",
+ "sources": [
+  "https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported"
+ ],
+ "approved": "owner 2026-11-20 (scripts reviewed in chat; 'ok abhi 4 bana de, baaki 2 baad mein')"
+}

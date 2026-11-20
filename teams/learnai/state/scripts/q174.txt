@@ -1,0 +1,15 @@
+[warm, conversational] Anthropic के interview में पूछा गया: एक GPU, एक batch में hundred inputs तक, और users जवाब का इंतज़ार कर रहे हैं। Batching system कैसे बनाओगे?
+
+[thoughtful] पहले समझो batching क्यों चाहिए। GPU एक साथ बहुत सारा काम कर सकता है। एक-एक request भेजोगे, तो वो पूरा इस्तेमाल ही नहीं होगा। कई requests एक batch में डालो, तो एक ही बार में सबका काम।
+
+अब tension। Batch भरने का इंतज़ार करो, तो पहला user बैठा रहेगा। तुरंत भेज दो, तो batch छोटा, और GPU कम इस्तेमाल होगा। Shared auto जैसा: driver पूरी सवारी का इंतज़ार करे, तो बैठे लोग परेशान, ख़ाली चल दे, तो कमाई कम।
+
+Fix: दो limits। Batch hundred का हो जाए, तो तुरंत भेजो। या पहली request को एक तय time हो जाए, जैसे twenty milliseconds, तो जितना भरा है, उतना भेज दो। Serving tools में इसे max queue delay कहते हैं।
+
+Users रुके हुए हैं, तो हर request को एक id दो, और batch का हर output उसी id से सही user तक लौटाओ। Queue बहुत लंबी हो जाए, तो नई requests को मना करो, वरना सबका इंतज़ार बढ़ता जाएगा।
+
+[curious] Follow-up: LLM में हर जवाब की लंबाई अलग है। एक जवाब ten tokens का, दूसरा five hundred tokens का। Fixed batch में छोटा जवाब ख़त्म होकर भी लंबे वाले का इंतज़ार करता है। इसलिए continuous batching: जो request ख़त्म, उसकी जगह तुरंत नई request।
+
+[warm, conversational] Interview में बोलो: max batch size और max wait time वाली dynamic batching, हर request की id से response वापस, queue पर limit, और LLM के लिए continuous batching।
+
+[curious] अब बताओ: max wait time बढ़ाओगे, तो throughput और latency पर क्या असर होगा? Comment करो।

@@ -1,0 +1,13 @@
+[warm, conversational] Meta के interview में पूछा गया: सही जवाब कल बदल गया, पर training data में पुराना जवाब भरा पड़ा है। सही जवाब कैसे दोगे?
+
+[thoughtful] Example लो: तुम्हारी company ने कल return window thirty days से घटाकर fifteen days कर दी। पुराने blogs, FAQs, हर जगह thirty लिखा है, और model ने वही पढ़ा है। पूछो, तो वो thirty ही बोलेगा।
+
+पहला कदम: बदलने वाली जानकारी model की memory से मत लो। नया policy page retrieve करो, और prompt में उसकी date के साथ दो।
+
+पर एक trap है। Research में दिखा कि model साफ़ evidence मान लेता है, भले वो उसकी memory से टकराए। पर context में कहीं पुरानी बात भी पड़ी हो, तो वो उसी को पकड़ता है जो पहले से मानता है। इसे confirmation bias कहते हैं।
+
+इसलिए index से पुराने versions हटाओ, या उन्हें expired mark करो। Prompt में लिखो: context और तुम्हारी जानकारी टकराएँ, तो सबसे नई date वाला context सही है। और test set में ऐसे सवाल रखो जिनका जवाब बदल चुका है।
+
+[warm, conversational] Interview में बोलो: बदलने वाले facts fresh retrieval से आते हैं। पुराने versions index से हटाओ, नई date वाले context को priority दो, और बदले हुए facts का अलग test रखो।
+
+[curious] अब बताओ: पुराना blog और नया policy page, दोनों retrieve हो गए। Model को कैसे पता चलेगा कि किसे मानना है? Comment करो।

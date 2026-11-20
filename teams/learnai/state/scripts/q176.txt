@@ -1,0 +1,15 @@
+[warm, conversational] NVIDIA के interview में पूछा गया: RAG system एक ही सवाल पर अलग-अलग जवाब देता है। Production में consistent कैसे बनाओगे?
+
+[thoughtful] पहले ढूँढो कि फ़र्क आ कहाँ से रहा है। Model शब्द कैसे चुनता है, कौन से chunks retrieve हुए, और कौन सा model version चला: तीनों जवाब बदल सकते हैं।
+
+पहला, sampling: model हर अगला शब्द probabilities में से चुनता है। Temperature ज़्यादा हो, तो कम probable शब्द भी चुने जाते हैं, और जवाब बदलता है। Facts वाले सवालों पर, जहाँ ये setting मिले, randomness कम रखो।
+
+दूसरा, retrieval: index में नए documents आए, या approximate search ने इस बार दूसरे chunks उठाए, तो model को context ही अलग मिला। हर जवाब के साथ retrieved chunk ids log करो, ताकि दो जवाबों की तुलना हो सके।
+
+तीसरा, model version: model का ऐसा नाम use करो जो एक fixed snapshot हो, और model बदलने से पहले eval चलाओ।
+
+और जो सवाल बार-बार आते हैं, जैसे refund policy, उनका approved जवाब cache कर लो। तब वो हर बार नए सिरे से generate ही नहीं होगा।
+
+[warm, conversational] Interview में बोलो: inconsistency के तीन source हैं: sampling, retrieval और model version। Randomness कम करो, retrieved chunks log करो, model version pin करो, और frequent सवालों का approved जवाब cache करो।
+
+[curious] अब बताओ: randomness कम करने के बाद भी जवाब बदल रहा है। सबसे पहले क्या check करोगे? Comment करो।

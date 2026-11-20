@@ -1,0 +1,80 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .col { position:absolute; top:520px; width:440px; height:380px; border-radius:28px; background:#111A2C; border:3px solid #26324B; }
+          .col .hd { position:absolute; left:0; width:100%; top:24px; text-align:center; font:700 44px "Space Grotesk",sans-serif; white-space:nowrap; }
+          .col .q { position:absolute; left:30px; font:600 38px "JetBrains Mono",monospace; color:#8592AD; white-space:nowrap; }
+          .met { position:absolute; left:80px; width:920px; height:120px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .met .n { position:absolute; left:26px; top:26px; width:66px; height:66px; border-radius:50%; background:#F2B544; color:#0B1220; font:700 44px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; }
+          .met .t { position:absolute; left:120px; top:30px; font:700 48px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .grp { position:absolute; width:440px; height:220px; border-radius:28px; background:#111A2C; border:3px solid #26324B; }
+          .dot { position:absolute; width:40px; height:40px; border-radius:50%; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:22px 34px; box-sizing:border-box; font:700 44px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .bar { position:absolute; width:120px; border-radius:16px 16px 0 0; transform-origin:50% 100%; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:90px;">retrieval jodne se<br/><span class="green">behtar</span> hua?</div>
+          <div class="shot" id="a_p" style="top:540px;"><img src="assets/sub_header.png"/></div>
+          <div class="x c" id="a_co" style="top:880px; font-size:66px;">Meta interview</div>
+          <div class="chip" id="a_n" style="left:240px; top:1000px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">kaise naapoge?</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_1" style="top:330px; font-size:70px;">10-20 sawal, <span class="gold">achchhe lage</span></div>
+          <div class="chip" id="b_an" style="left:290px; top:460px; width:500px; background:#E8596B; color:#0B1220; font-size:56px;">= andaza</div>
+          <div class="chip" id="b_off" style="left:80px; top:680px; width:440px; background:#5BC0EB; color:#0B1220; font-size:52px;">1. OFFLINE</div>
+          <div class="chip" id="b_on" style="left:560px; top:680px; width:440px; background:#4CC38A; color:#0B1220; font-size:52px;">2. ONLINE</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:76px;">1. <span class="cyan">offline</span> test</div>
+          <div class="chip" id="c_set" style="left:140px; top:380px; width:800px; border:4px solid #F2B544; color:#F2B544; font-size:44px;">asli user sawal + sahi jawab</div>
+          <div class="col" id="c_a" style="left:60px;"><div class="hd red">bina retrieval</div><div class="q" style="top:110px;">Q1 ...</div><div class="q" style="top:170px;">Q2 ...</div><div class="q" style="top:230px;">Q3 ...</div></div>
+          <div class="col" id="c_b" style="left:580px; border-color:#4CC38A;"><div class="hd green">retrieval ke saath</div><div class="q" style="top:110px;">Q1 ...</div><div class="q" style="top:170px;">Q2 ...</div><div class="q" style="top:230px;">Q3 ...</div></div>
+          <div class="chip" id="c_same" style="left:190px; top:940px; width:700px; background:#26324B; color:#E8EDF6; font-size:44px;">model, prompt same</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:76px;"><span class="gold">4</span> cheezen naapo</div>
+          <div class="met" id="d_1" style="top:380px;"><div class="n">1</div><div class="t">jawab <span class="green">sahi</span>?</div></div>
+          <div class="met" id="d_2" style="top:530px;"><div class="n">2</div><div class="t"><span class="cyan">groundedness</span>: docs par tika?</div></div>
+          <div class="met" id="d_3" style="top:680px;"><div class="n">3</div><div class="t">sahi <span class="gold">chunk</span> aaya?</div></div>
+          <div class="met" id="d_4" style="top:830px;"><div class="n">4</div><div class="t">latency + cost <span class="red">&uarr;</span></div></div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:76px;">2. <span class="green">A/B</span> test</div>
+          <div class="grp" id="e_a" style="left:60px; top:380px;"><div class="x c" style="left:0; width:440px; top:20px; font-size:44px; color:#8592AD;">50% users</div><div class="x c" style="left:0; width:440px; top:110px; font-size:56px;">purana</div></div>
+          <div class="grp" id="e_b" style="left:580px; top:380px; border-color:#4CC38A;"><div class="x c" style="left:0; width:440px; top:20px; font-size:44px; color:#8592AD;">50% users</div><div class="x c green" style="left:0; width:440px; top:110px; font-size:56px;">naya</div></div>
+          <div class="chip" id="e_1" style="left:140px; top:660px; width:800px; border:4px solid #8592AD; color:#E8EDF6; font-size:44px;">sawal dobara poocha?</div>
+          <div class="chip" id="e_2" style="left:140px; top:780px; width:800px; border:4px solid #8592AD; color:#E8EDF6; font-size:44px;">thumbs down?</div>
+          <div class="chip" id="e_3" style="left:140px; top:900px; width:800px; background:#4CC38A; color:#0B1220; font-size:44px;">kaam bina human agent?</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:72px;">offline <span class="green">&uarr;</span>, online <span class="red">same</span>?</div>
+          <div class="bar" id="f_b1" style="left:200px; top:480px; height:300px; background:#5BC0EB;"></div>
+          <div class="bar" id="f_b2" style="left:360px; top:380px; height:400px; background:#5BC0EB;"></div>
+          <div class="bar" id="f_b3" style="left:600px; top:560px; height:220px; background:#4CC38A;"></div>
+          <div class="bar" id="f_b4" style="left:760px; top:560px; height:220px; background:#4CC38A;"></div>
+          <div class="x" style="left:200px; top:800px; font-size:40px; color:#8592AD;">offline</div>
+          <div class="x" style="left:610px; top:800px; font-size:40px; color:#8592AD;">online</div>
+          <div class="chip" id="f_fix" style="left:90px; top:900px; width:900px; background:#F2B544; color:#0B1220; font-size:42px;">test set ko production sawalon se refresh</div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="g_1" style="top:380px;">same sawal: <span class="cyan">with vs without</span> retrieval</div>
+          <div class="ans" id="g_2" style="top:520px; font-size:40px;">correctness, groundedness, latency, cost</div>
+          <div class="ans" id="g_3" style="top:700px;">phir <span class="green">A/B test</span>: kaam poora hua?</div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_1" style="top:330px; font-size:76px;">accuracy <span class="green">&uarr;</span>, latency <span class="red">2x</span></div>
+          <div class="x c" id="h_2" style="top:450px; font-size:84px;"><span class="gold">ship</span> karoge?</div>
+          <div class="chip" id="h_c" style="left:290px; top:680px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

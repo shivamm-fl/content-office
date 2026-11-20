@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Fresh Index for Last-Hour News</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="79" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .src2 { position:absolute; left:60px; width:960px; text-align:right; font:500 32px "JetBrains Mono",monospace; color:#8592AD; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .doc { position:absolute; border-radius:22px; background:#111A2C; border:3px solid #26324B; padding:18px 26px; box-sizing:border-box; }
+          .doc .h { font:700 38px "Space Grotesk",sans-serif; color:#8592AD; white-space:nowrap; }
+          .doc .v { font:700 52px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .bub { position:absolute; padding:20px 28px; border-radius:28px; font:700 48px "Space Grotesk",sans-serif; white-space:nowrap; box-sizing:border-box; background:#1F3B5C; color:#E8EDF6; }
+          .row { position:absolute; left:120px; width:840px; height:96px; border-radius:20px; background:#111A2C; border:3px solid #26324B; }
+          .row .t { position:absolute; left:28px; top:22px; font:700 44px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .row .tm { position:absolute; right:28px; top:24px; font:600 40px "JetBrains Mono",monospace; color:#F2B544; white-space:nowrap; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:22px 34px; box-sizing:border-box; font:700 44px "Space Grotesk",sans-serif; color:#E8EDF6; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:92px;">pichhle <span class="gold">1 ghante</span><br/>ki khabar?</div>
+          <div class="shot" id="a_p" style="top:540px;"><img src="assets/sub_header.png"/></div>
+          <div class="x c" id="a_co" style="top:880px; font-size:66px;">Perplexity interview</div>
+          <div class="chip" id="a_f" style="left:240px; top:1000px; width:600px; background:#5BC0EB; color:#0B1220; font-size:50px;">index fresh kaise?</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="doc" id="b_m" style="left:190px; top:280px; width:700px; border-color:#4CC38A;"><div class="h">abhi khatam hua</div><div class="v">match: <span class="green">result aaya</span></div></div>
+          <div class="bub" id="b_u" style="right:80px; top:500px;">kaun jeeta?</div>
+          <div class="doc" id="b_i" style="left:190px; top:650px; width:700px;"><div class="h">index last build</div><div class="v red">kal raat</div></div>
+          <div class="chip" id="b_old" style="left:190px; top:900px; width:700px; background:#E8596B; color:#0B1220; font-size:48px;">jawab: purani khabar</div>
+          <div class="ill" style="right:80px; top:1110px;">example</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:72px;">1. <span class="green">incremental</span> indexing</div>
+          <div class="doc" id="c_rb" style="left:60px; top:380px; width:440px;"><div class="h">roz</div><div class="v">poora rebuild</div></div>
+          <div class="strike" id="c_x" style="left:80px; top:450px; width:400px;"></div>
+          <div class="doc" id="c_inc" style="left:580px; top:380px; width:440px; border-color:#4CC38A;"><div class="h">naya doc aate hi</div><div class="v green">bas use jodo</div></div>
+          <div class="doc" id="c_es" style="left:140px; top:640px; width:800px; border-color:#5BC0EB;"><div class="h">Elasticsearch</div><div class="v" style="font-size:42px;">naya doc &asymp; <span class="cyan">1 second</span> mein searchable</div></div>
+          <div class="src2" id="c_src" style="top:850px;">Source: elastic.co docs</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:72px;">2. har doc par <span class="gold">time</span></div>
+          <div class="row" id="d_1" style="top:390px;"><div class="t">match report</div><div class="tm">kal 9:10 PM</div></div>
+          <div class="row" id="d_2" style="top:510px;"><div class="t">preview article</div><div class="tm">kal 2:00 PM</div></div>
+          <div class="row" id="d_3" style="top:630px; border-color:#4CC38A;"><div class="t">final result</div><div class="tm">aaj 10:42 PM</div></div>
+          <div class="chip" id="d_q" style="left:190px; top:800px; width:700px; border:4px solid #F2B544; color:#F2B544; font-size:46px;">abhi / aaj / latest</div>
+          <div class="ill" style="right:80px; top:1110px;">example</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:72px;">3. seedha <span class="cyan">live</span></div>
+          <div class="chip" id="e_1" style="left:60px; top:400px; width:300px; border:4px solid #8592AD; color:#E8EDF6; font-size:42px;">live score</div>
+          <div class="chip" id="e_2" style="left:390px; top:400px; width:300px; border:4px solid #8592AD; color:#E8EDF6; font-size:42px;">weather</div>
+          <div class="chip" id="e_3" style="left:720px; top:400px; width:300px; border:4px solid #8592AD; color:#E8EDF6; font-size:42px;">share price</div>
+          <div class="x c" id="e_ar" style="top:520px; font-size:80px; color:#8592AD;">&darr;</div>
+          <div class="chip" id="e_live" style="left:190px; top:660px; width:700px; background:#5BC0EB; color:#0B1220; font-size:50px;">live search / API</div>
+          <div class="x c red" id="e_no" style="top:800px; font-size:52px;">index par bharosa nahi</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:76px;">iski <span class="red">keemat</span>?</div>
+          <div class="ans" id="f_1" style="top:390px;">baar-baar update: <span class="red">compute</span></div>
+          <div class="ans" id="f_2" style="top:530px;">taaza khabar: <span class="red">kabhi galat</span></div>
+          <div class="doc" id="f_s" style="left:140px; top:700px; width:800px; border-color:#4CC38A;"><div class="h">jawab ke saath</div><div class="v">source + <span class="gold">10 min pehle</span></div></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="g_1" style="top:380px;"><span class="green">incremental indexing</span>, nightly nahi</div>
+          <div class="ans" id="g_2" style="top:520px;">har doc par <span class="gold">timestamp</span></div>
+          <div class="ans" id="g_3" style="top:660px;">recency sawal: <span class="cyan">naye docs boost</span></div>
+          <div class="ans" id="g_4" style="top:800px;">sabse taaza: <span class="cyan">live search</span></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_1" style="top:330px; font-size:80px;">aaj <span class="gold">Sensex</span> close?</div>
+          <div class="x c" id="h_2" style="top:450px; font-size:76px;">index ya <span class="cyan">live API</span>?</div>
+          <div class="chip" id="h_c" style="left:290px; top:680px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="79" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="79" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="79" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H"], tag: "AI ENGINEER INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: the question on frame 0, the source post, the company
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_p", at("A", "perplexity") - 0.05, { s: 0.94 });
+      show("#a_co", at("A", "perplexity") + 0.3, { s: 1.05 });
+      show("#a_f", at("A", "index") - 0.1, { s: 1.1 });
+      // B: a nightly index answers from last night
+      show("#b_m", at("B", "match") - 0.1, { s: 0.94 });
+      show("#b_u", at("B", "kaun") - 0.15, { s: 0.9, y: 0 });
+      show("#b_i", at("B", "index") - 0.1, { s: 0.94 });
+      show("#b_old", at("B", "jawab") - 0.1, { s: 1.08 });
+      // C: incremental indexing, near real-time search
+      show("#c_t", at("C", "pahla") - 0.1, { s: 1.08 });
+      show("#c_rb", at("C", "poora") - 0.15, { s: 0.94 });
+      wipe("#c_x", at("C", "mat") - 0.05, 0.35);
+      show("#c_inc", at("C", "naya") - 0.1, { s: 0.94 });
+      show("#c_es", at("C", "elasticsearch") - 0.1, { s: 0.94 });
+      show("#c_src", at("C", "elasticsearch") + 0.2, { s: 1, y: 0 });
+      tl.fromTo("#c_es .cyan", { scale: 1 }, { scale: 1.2, duration: 0.2, yoyo: true, repeat: 1 }, at("C", "one") - 0.05);
+      // D: timestamps, and new documents rise for recency words
+      show("#d_t", at("D", "doosra") - 0.1, { s: 1.08 });
+      ["#d_1", "#d_2", "#d_3"].forEach((s, i) => show(s, at("D", "document") + i * 0.25, { s: 0.94 }));
+      show("#d_q", at("D", "abhi") - 0.1, { s: 1.05 });
+      tl.to("#d_3", { top: 390, duration: 0.5, ease: "power2.inOut" }, at("D", "ranking") - 0.1);
+      tl.to("#d_1", { top: 510, duration: 0.5, ease: "power2.inOut" }, at("D", "ranking") - 0.1);
+      tl.to("#d_2", { top: 630, duration: 0.5, ease: "power2.inOut" }, at("D", "ranking") - 0.1);
+      // E: the freshest questions go straight to live search
+      show("#e_t", at("E", "teesra") - 0.1, { s: 1.08 });
+      show("#e_no", at("E", "bharose") - 0.1, { s: 1.05 });
+      show("#e_1", at("E", "live") - 0.1, { s: 1.05 });
+      show("#e_2", at("E", "weather") - 0.15, { s: 1.05 });
+      show("#e_3", at("E", "share") - 0.1, { s: 1.05 });
+      show("#e_ar", at("E", "seedhe") - 0.2, { s: 1.2, y: -20 });
+      show("#e_live", at("E", "live", 1) - 0.1, { s: 1.08 });
+      // F: the cost
+      show("#f_t", at("F", "keemat") - 0.2, { s: 1.08 });
+      show("#f_1", at("F", "compute") - 0.3, { s: 0.94 });
+      show("#f_2", at("F", "taaza") - 0.1, { s: 0.94 });
+      show("#f_s", at("F", "source") - 0.15, { s: 0.94 });
+      // G: interview answer
+      show("#g_chip", at("G", "interview") - 0.05, { s: 0.85 });
+      show("#g_1", at("G", "nightly") - 0.1, { s: 0.94 });
+      show("#g_2", at("G", "timestamp") - 0.3, { s: 0.94 });
+      show("#g_3", at("G", "recency") - 0.1, { s: 0.94 });
+      show("#g_4", at("G", "sabse") - 0.1, { s: 0.94 });
+      // H: the question
+      show("#h_1", at("H", "sensex") - 0.2, { s: 1.08 });
+      show("#h_2", at("H", "index") - 0.1, { s: 1.08 });
+      show("#h_c", at("H", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { perplexity: "gold", fresh: "cyan", incremental: "good", indexing: "good", elasticsearch: "cyan", timestamp: "gold",
+                       latest: "gold", live: "cyan", keemat: "hot", galat: "hot", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

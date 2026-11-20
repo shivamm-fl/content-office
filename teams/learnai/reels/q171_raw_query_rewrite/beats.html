@@ -1,0 +1,74 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .bub { position:absolute; padding:20px 28px; border-radius:28px; font:600 44px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; box-sizing:border-box; }
+          .bub.u { background:#1F3B5C; }
+          .bub.r { background:#1B2538; border:3px solid #F2B544; color:#F2B544; }
+          .box2 { position:absolute; border-radius:26px; background:#111A2C; border:4px solid #26324B; display:flex; flex-direction:column; align-items:center; justify-content:center; box-sizing:border-box; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; text-align:center; }
+          .lbl { position:absolute; font:700 40px "Space Grotesk",sans-serif; color:#8592AD; white-space:nowrap; }
+          .arr { position:absolute; font:700 70px "Space Grotesk",sans-serif; color:#8592AD; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:24px 34px; box-sizing:border-box; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:96px;"><span class="gold">RAW QUERY</span><br/>seedha retriever ko?</div>
+          <div class="shot" id="a_p" style="top:540px;"><img src="assets/sub_header.png"/></div>
+          <div class="x c" id="a_co" style="top:880px; font-size:66px;">Anthropic interview</div>
+          <div class="chip" id="a_g" style="left:290px; top:1000px; width:500px; background:#E8596B; color:#0B1220; font-size:52px;">galat kya hai?</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:76px;">ek <span class="cyan">chat</span></div>
+          <div class="bub u" id="b_1" style="right:60px; top:390px;">MacBook Air ka battery backup?</div>
+          <div class="bub u" id="b_2" style="right:60px; top:520px;">aur uska price?</div>
+          <div class="arr" id="b_ar" style="left:500px; top:610px;">&darr;</div>
+          <div class="box2" id="b_r" style="left:240px; top:720px; width:600px; height:200px;">RETRIEVER<div style="font:600 42px 'Space Grotesk',sans-serif; color:#8592AD; margin-top:10px;">"aur uska price?"</div></div>
+          <div class="chip" id="b_q" style="left:240px; top:960px; width:600px; background:#E8596B; color:#0B1220; font-size:48px;">uska = kiska???</div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:76px;">bhaasha <span class="red">alag</span></div>
+          <div class="lbl" id="c_l1" style="left:80px; top:390px;">USER</div>
+          <div class="bub u" id="c_u" style="left:80px; top:450px;">paisa kab vaapas aaega?</div>
+          <div class="lbl" id="c_l2" style="left:80px; top:610px;">DOCUMENT</div>
+          <div class="bub r" id="c_d" style="left:80px; top:670px;">refund processing time</div>
+          <div class="x c red" id="c_ne" style="top:820px; font-size:64px;">words match nahi</div>
+          <div class="x c" id="c_rk" style="top:930px; font-size:56px;">sahi chunk: <span class="red">rank 9</span></div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:80px;">FIX: <span class="green">rewrite</span> pehle</div>
+          <div class="box2" id="d_in" style="left:60px; top:380px; width:440px; height:150px; font-size:40px;">chat history<br/>+ query</div>
+          <div class="arr" id="d_a1" style="left:520px; top:410px;">&rarr;</div>
+          <div class="box2" id="d_rw" style="left:600px; top:380px; width:420px; height:150px; border-color:#4CC38A; color:#4CC38A;">REWRITE<div style="font:600 34px 'Space Grotesk',sans-serif; color:#8592AD;">chhota LLM</div></div>
+          <div class="bub r" id="d_q" style="left:120px; top:580px; border-color:#4CC38A; color:#4CC38A;">MacBook Air ka price kya hai?</div>
+          <div class="chip" id="d_s1" style="left:60px; top:760px; width:300px; background:#4CC38A; color:#0B1220; font-size:46px;">rewrite</div>
+          <div class="chip" id="d_s2" style="left:390px; top:760px; width:300px; background:#5BC0EB; color:#0B1220; font-size:46px;">retrieve</div>
+          <div class="chip" id="d_s3" style="left:720px; top:760px; width:300px; background:#F2B544; color:#0B1220; font-size:46px;">read</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:76px;">rewrite <span class="red">galat</span> ho to?</div>
+          <div class="chip" id="e_log" style="left:290px; top:390px; width:500px; border:4px solid #F2B544; color:#F2B544; font-size:48px;">rewrite ko log karo</div>
+          <div class="box2" id="e_o" style="left:60px; top:540px; width:440px; height:150px; font-size:42px;">original query</div>
+          <div class="box2" id="e_r" style="left:580px; top:540px; width:440px; height:150px; font-size:42px; border-color:#4CC38A;">rewritten query</div>
+          <div class="arr" id="e_a" style="left:500px; top:700px;">&darr;</div>
+          <div class="box2" id="e_m" style="left:240px; top:810px; width:600px; height:140px; border-color:#5BC0EB; color:#5BC0EB;">results milao</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="f_1" style="top:390px;">raw query: <span class="red">context nahi, bhaasha alag</span></div>
+          <div class="ans" id="f_2" style="top:540px;">retrieval se pehle <span class="green">standalone rewrite</span></div>
+          <div class="ans" id="f_3" style="top:690px;">rewrite ko <span class="gold">log</span> karo</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_1" style="top:330px; font-size:80px;">rewrite: <span class="gold">har message</span>?</div>
+          <div class="x c" id="g_2" style="top:450px; font-size:80px;">ya sirf <span class="cyan">follow-up</span>?</div>
+          <div class="chip" id="g_c" style="left:290px; top:680px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

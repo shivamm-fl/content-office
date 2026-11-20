@@ -1,0 +1,9 @@
+Anthropic ke interview mein poocha gaya: tumhara RAG system user ki query seedhi retriever ko bhejta hai. Isme galat kya hai?
+
+Chat mein user poochta hai "MacBook Air ka battery backup kitna hai?", phir likhta hai "aur uska price?". Retriever ke paas sirf "aur uska price" pahunchta hai, aur use pata hi nahi "uska" matlab kiska. Doosri dikkat: user "paisa kab vaapas aaega?" likhta hai, document mein "refund processing time" likha hai. Words match nahi hote, to sahi chunk peeche reh jata hai.
+
+Fix: retrieval se pehle rewrite step. Ek chhota LLM chat history padhkar query ko poora, standalone sawal banata hai, phir search hota hai: rewrite, retrieve, read. Rewrite galat ho sakta hai, isliye use log karo aur original query ke results bhi milao.
+
+Query rewrite har message par chalaoge, ya sirf follow-up sawalon par? Comment karo.
+
+Source: "Query Rewriting for Retrieval-Augmented Large Language Models" (arXiv 2305.14283).

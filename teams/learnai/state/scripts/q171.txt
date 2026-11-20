@@ -1,0 +1,13 @@
+[warm, conversational] Anthropic के interview में पूछा गया: तुम्हारा RAG system user की query सीधी retriever को भेजता है। इसमें गलत क्या है?
+
+[thoughtful] एक chat सोचो। User पूछता है: MacBook Air का battery backup कितना है? फिर लिखता है: और उसका price? ... अब retriever के पास सिर्फ़ और उसका price पहुँचा। उसका मतलब किसका, ये उसे पता ही नहीं।
+
+दूसरी दिक्कत: user जैसे बोलता है, documents वैसे नहीं लिखे होते। User लिखता है: पैसा कब वापस आएगा? Document में लिखा है: refund processing time। Words मिलते नहीं, तो सही chunk पीछे रह जाता है।
+
+Fix: retrieval से पहले एक rewrite step। एक छोटा LLM chat history पढ़कर query को पूरा, अपने आप में साफ़ सवाल बनाता है: MacBook Air का price क्या है? फिर search होता है। इसे rewrite, retrieve, read कहते हैं।
+
+[curious] अब follow-up आएगा: rewrite गलत हो गया तो? इसलिए rewritten query log करो, और original query से भी search करके दोनों के results मिलाओ।
+
+[warm, conversational] Interview में बोलो: raw query में chat का context नहीं होता, और उसकी भाषा documents से अलग होती है। इसलिए retrieval से पहले query को chat history के साथ एक standalone सवाल में rewrite करो, और rewrite को log करो।
+
+[curious] अब बताओ: query rewrite हर message पर चलाओगे, या सिर्फ़ follow-up सवालों पर? Comment करो।

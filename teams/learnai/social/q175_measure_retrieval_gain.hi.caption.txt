@@ -1,0 +1,9 @@
+Meta ke interview mein poocha gaya: LLM product mein retrieval joda, to woh sach mein behtar hua ya nahi, ye kaise naapoge?
+
+10-20 sawal poochkar jawab achchhe lage, to woh andaza hai. Naapne ke liye do test chahiye.
+
+Offline: asli users ke sawalon ka set banao jinke sahi jawab pata hon, aur wahi sawal retrieval ke bina aur retrieval ke saath chalao. Model aur prompt same. Naapo: jawab sahi hai ya nahi, jawab diye gaye documents par tika hai ya nahi (groundedness), retrieval ne sahi chunk laaya ya nahi, aur latency aur cost.
+
+Online A/B test: aadhe users ko purana version, aadhe ko naya. Dekho kitne users ne sawal dobara poocha, kitnon ne thumbs down diya, aur kitnon ka kaam bina human agent ke poora hua. Offline score badha par online kuch nahi badla, to test set ko production ke sawalon se refresh karo.
+
+Retrieval se accuracy badhi, par latency doguni ho gayi. Ship karoge? Comment karo.

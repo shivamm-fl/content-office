@@ -1,0 +1,15 @@
+[warm, conversational] Perplexity के interview में पूछा गया: पिछले एक घंटे की घटना पर सवाल आए, तो index fresh कैसे रखोगे?
+
+[thoughtful] Example: match अभी ख़त्म हुआ, और user पूछता है, कौन जीता? अगर index हर रात एक बार बनता है, तो system के पास कल रात तक की ख़बर है। जवाब पुराना आएगा।
+
+पहला fix: पूरा index रोज़ दोबारा मत बनाओ। नया या बदला हुआ document आते ही बस उसे जोड़ो। इसे incremental indexing कहते हैं। Elasticsearch जैसे search engine में नया document लगभग one second में searchable हो जाता है।
+
+दूसरा: हर document पर लिखो कि वो कब publish हुआ। सवाल में अभी, आज या latest हो, तो ranking में नए documents ऊपर।
+
+तीसरा: कुछ सवाल index के भरोसे छोड़ो ही मत। Live score, आज का weather, share price: ऐसे सवाल पहचानो, और सीधे live search या API से जवाब लाओ।
+
+[curious] Follow-up: इसकी कीमत? बार-बार update में compute लगता है, और ताज़ा ख़बर कभी-कभी गलत निकलती है। इसलिए जवाब के साथ source और time दिखाओ।
+
+[warm, conversational] Interview में बोलो: nightly rebuild की जगह incremental indexing, हर document पर timestamp, recency वाले सवालों में नए documents को boost, और सबसे ताज़ा सवालों के लिए live search।
+
+[curious] अब बताओ: आज Sensex कितने पर बंद हुआ, ये index से दोगे या live API से? Comment करो।
