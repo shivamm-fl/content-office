@@ -1,0 +1,112 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .col { position:absolute; top:430px; width:460px; height:560px; border-radius:30px; background:#111A2C; border:3px solid #26324B; }
+          .col .hd { position:absolute; left:0; width:100%; top:28px; text-align:center; font:700 54px "Space Grotesk",sans-serif; }
+          .llm { position:absolute; width:200px; height:110px; border-radius:24px; background:#1B2538; border:4px solid #F2B544; color:#F2B544; font:700 56px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; }
+          .bub { position:absolute; padding:22px 30px; border-radius:30px; font:600 46px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .bub.u { background:#1F3B5C; border-bottom-right-radius:6px; }
+          .bub.a { background:#1B2538; border:3px solid #26324B; border-bottom-left-radius:6px; }
+          .ln { height:14px; border-radius:7px; background:#3A4866; margin:14px 0; }
+          .row { position:absolute; left:80px; width:920px; height:120px; border-radius:24px; background:#111A2C; border:3px solid #26324B; }
+          .row .t { position:absolute; left:120px; top:30px; font:700 52px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .row .ic { position:absolute; left:30px; top:24px; width:68px; height:68px; border-radius:50%; font:700 44px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; }
+          .who { position:absolute; right:30px; top:28px; padding:6px 22px; border-radius:999px; font:700 40px "Space Grotesk",sans-serif; }
+          .node { position:absolute; width:340px; height:110px; margin:-55px 0 0 -170px; border-radius:55px; background:#1B2538; border:4px solid #5BC0EB; color:#E8EDF6; font:700 46px "Space Grotesk",sans-serif; white-space:nowrap; display:flex; align-items:center; justify-content:center; }
+          .ring { position:absolute; left:290px; top:400px; width:500px; height:500px; border-radius:50%; border:8px dashed rgba(91,192,235,.45); }
+          .orbit { position:absolute; left:290px; top:400px; width:500px; height:500px; }
+          .orbit .dot { position:absolute; left:226px; top:-24px; width:48px; height:48px; border-radius:50%; background:#F2B544; }
+          .step { position:absolute; width:150px; height:110px; border-radius:20px; background:#1B2538; border:4px solid #26324B; color:#E8EDF6; font:700 46px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; }
+          .arr { position:absolute; font:700 64px "Space Grotesk",sans-serif; color:#8592AD; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:24px 34px; box-sizing:border-box; }
+          .ans .k { font:700 50px "Space Grotesk",sans-serif; }
+          .ans .v { font:600 44px "Space Grotesk",sans-serif; color:#E8EDF6; margin-top:8px; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:104px;"><span class="gold">GENERATIVE AI</span><br/>vs <span class="cyan">AGENTIC AI</span></div>
+          <div class="x c" id="a_q" style="top:500px; font-size:64px;">fark kya hai?</div>
+          <div class="shot" id="a_hdr" style="top:610px;"><img src="assets/gfg_header.png"/></div>
+          <div class="shot" id="a_qs" style="top:900px;"><img src="assets/gfg_question.png"/></div>
+          <div class="src" id="a_src" style="top:1120px;">Source: geeksforgeeks.org (candidate's post)</div>
+          <div class="col" id="a_l" style="left:60px; top:600px; height:420px;"><div class="hd gold">Generative AI</div><div class="llm" style="left:130px; top:200px;">LLM</div></div>
+          <div class="col" id="a_r" style="left:560px; top:600px; height:420px;"><div class="hd cyan">Agentic AI</div><div class="llm" style="left:130px; top:200px;">LLM</div></div>
+          <div class="x c" id="a_alag" style="top:1060px; font-size:70px;">kaam <span class="red">bilkul alag</span></div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:78px; white-space:nowrap;">flight <span class="red">cancel</span> &rarr; refund?</div>
+          <div class="x c gold" id="b_g" style="top:390px; font-size:64px;">Generative AI</div>
+          <div class="bub u" id="b_u" style="right:80px; top:480px;">refund request likh do</div>
+          <div class="bub a" id="b_a" style="left:80px; top:600px; width:640px;">Dear Airline, my flight was cancelled...<div class="ln" style="width:90%"></div><div class="ln" style="width:70%"></div></div>
+          <div class="row" id="b_1" style="top:620px;"><div class="ic" style="background:#26324B;">1</div><div class="t">airline site kholna</div><div class="who" style="background:#E8596B; color:#0B1220;">TUM</div></div>
+          <div class="row" id="b_2" style="top:760px;"><div class="ic" style="background:#26324B;">2</div><div class="t">form bharna</div><div class="who" style="background:#E8596B; color:#0B1220;">TUM</div></div>
+          <div class="row" id="b_3" style="top:900px;"><div class="ic" style="background:#26324B;">3</div><div class="t">status dekhna</div><div class="who" style="background:#E8596B; color:#0B1220;">TUM</div></div>
+          <div class="x c" id="b_end" style="top:1060px; font-size:62px;">AI: <span class="gold">content</span> &nbsp;|&nbsp; tum: <span class="red">kaam</span></div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c cyan" id="c_t" style="top:250px; font-size:96px;">Agentic AI</div>
+          <div class="chip" id="c_goal" style="left:290px; top:380px; width:500px; background:#5BC0EB; color:#0B1220; font-size:52px;">GOAL: refund</div>
+          <div class="row" id="c_1" style="top:500px;"><div class="ic" style="background:#4CC38A; color:#0B1220;">&#10003;</div><div class="t">booking kholi</div><div class="who" style="background:#5BC0EB; color:#0B1220;">AI</div></div>
+          <div class="row" id="c_2" style="top:640px;"><div class="ic" style="background:#4CC38A; color:#0B1220;">&#10003;</div><div class="t">refund policy padhi</div><div class="who" style="background:#5BC0EB; color:#0B1220;">AI</div></div>
+          <div class="row" id="c_3" style="top:780px;"><div class="ic" style="background:#4CC38A; color:#0B1220;">&#10003;</div><div class="t">form bhara</div><div class="who" style="background:#5BC0EB; color:#0B1220;">AI</div></div>
+          <div class="row" id="c_4" style="top:920px; border-color:#F2B544;"><div class="ic" style="background:#F2B544; color:#0B1220;">?</div><div class="t">agla step kya?</div><div class="who" style="background:#5BC0EB; color:#0B1220;">AI</div></div>
+          <div id="c_loop" style="position:absolute; left:0; top:0; width:1080px; height:1200px;">
+            <div class="x c" style="top:250px; font-size:84px;">LLM ka <span class="cyan">loop</span></div>
+            <div class="ring"></div>
+            <div class="orbit" id="c_orb"><div class="dot"></div></div>
+            <div class="node" id="c_n1" style="left:540px; top:400px;">socho</div>
+            <div class="node" id="c_n2" style="left:790px; top:650px;">tool chalao</div>
+            <div class="node" id="c_n3" style="left:540px; top:900px;">natija dekho</div>
+            <div class="node" id="c_n4" style="left:290px; top:650px;">phir socho</div>
+            <div class="chip" id="c_done" style="left:390px; top:610px; width:300px; background:#4CC38A; color:#0B1220; font-size:46px;">GOAL &#10003;</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:74px;">model <span class="gold">wahi</span>,<br/>fark <span class="cyan">setup</span> mein</div>
+          <div class="col" id="d_l" style="left:60px;"><div class="hd gold">Generative AI</div></div>
+          <div class="col" id="d_r" style="left:560px;"><div class="hd cyan">Agentic AI</div></div>
+          <div class="chip" id="d_l1" style="left:110px; top:560px; width:360px; border:4px solid #8592AD; color:#E8EDF6; font-size:44px;">1 prompt</div>
+          <div class="llm" id="d_l2" style="left:190px; top:660px;">LLM</div>
+          <div class="chip" id="d_l3" style="left:110px; top:800px; width:360px; border:4px solid #8592AD; color:#E8EDF6; font-size:44px;">1 output</div>
+          <div class="chip" id="d_l4" style="left:110px; top:900px; width:360px; background:#E8596B; color:#0B1220; font-size:44px;">faisla: insaan</div>
+          <div class="llm" id="d_r0" style="left:690px; top:620px;">LLM</div>
+          <div class="chip" id="d_r1" style="left:590px; top:540px; width:190px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:40px;">tools</div>
+          <div class="chip" id="d_r2" style="left:800px; top:540px; width:200px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:40px;">memory</div>
+          <div class="chip" id="d_r3" style="left:690px; top:760px; width:200px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:40px;">&#8635; loop</div>
+          <div class="chip" id="d_r4" style="left:600px; top:900px; width:380px; background:#5BC0EB; color:#0B1220; font-size:42px;">agla step: LLM</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:86px;">har app <span class="cyan">agent</span>?</div>
+          <div class="chip" id="e_1" style="left:75px; top:400px; width:290px; padding:14px 8px; border:4px solid #E8596B; color:#E8596B; font-size:42px;">mehnga</div>
+          <div class="chip" id="e_2" style="left:395px; top:400px; width:290px; padding:14px 8px; border:4px solid #E8596B; color:#E8596B; font-size:42px;">dheema</div>
+          <div class="chip" id="e_3" style="left:715px; top:400px; width:290px; padding:14px 8px; border:4px solid #E8596B; color:#E8596B; font-size:42px;">galti badhe</div>
+          <div class="step" id="e_s1" style="left:90px; top:560px;">1</div><div class="step" id="e_s2" style="left:290px; top:560px;">2</div><div class="step" id="e_s3" style="left:490px; top:560px;">3</div><div class="step" id="e_s4" style="left:690px; top:560px;">4</div><div class="step" id="e_s5" style="left:890px; top:560px; width:110px;">5</div>
+          <div class="x c" id="e_inv" style="top:740px; font-size:60px;">invoice &rarr; <span class="gold">3 fields</span></div>
+          <div id="e_wf" style="position:absolute; left:0; top:830px; width:1080px; height:200px;">
+            <div class="step" style="left:80px; top:0; width:250px; border-color:#4CC38A;">step 1</div><div class="arr" style="left:345px; top:15px;">&rarr;</div>
+            <div class="step" style="left:415px; top:0; width:250px; border-color:#4CC38A;">step 2</div><div class="arr" style="left:680px; top:15px;">&rarr;</div>
+            <div class="step" style="left:750px; top:0; width:250px; border-color:#4CC38A;">step 3</div>
+            <div class="x c green" style="top:130px; font-size:54px;">fixed workflow: code tay kare</div>
+          </div>
+          <div class="x c" id="e_ag" style="top:1060px; font-size:58px;">agla step <span class="cyan">pata hi nahi</span>? &rarr; agent</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="f_1" style="top:390px;"><div class="k gold">Generative AI</div><div class="v">prompt &rarr; content, action insaan ka</div></div>
+          <div class="ans" id="f_2" style="top:610px;"><div class="k cyan">Agentic AI</div><div class="v">LLM + tools, loop, khud agla step</div></div>
+          <div class="ans" id="f_3" style="top:830px;"><div class="k green">steps fixed?</div><div class="v">workflow, varna agent</div></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="card" id="g_1" style="left:80px; top:300px; width:920px; height:170px;"><div class="x" style="left:40px; top:50px; font-size:58px;">A: AI se email <span class="gold">likhvana</span></div></div>
+          <div class="card" id="g_2" style="left:80px; top:510px; width:920px; height:170px;"><div class="x" style="left:40px; top:50px; font-size:58px;">B: AI khud email <span class="cyan">bhej de</span></div></div>
+          <div class="x c" id="g_q" style="top:760px; font-size:80px;">agentic kaun? <span class="gold">kyun?</span></div>
+          <div class="chip" id="g_c" style="left:290px; top:940px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

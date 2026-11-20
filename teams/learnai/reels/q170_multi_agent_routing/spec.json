@@ -1,0 +1,95 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   1,
+   0
+  ],
+  [
+   "tick",
+   "H",
+   1,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Accenture के LLM interview में पूछा गया: multi-agent system में routing की ज़रूरत क्यों पड़ती है? जवाब एक bank के support bot से समझो।",
+   "B": "[thoughtful] इस bot के पास तीन तरह के सवाल आते हैं: card block करना है, loan की EMI पूछनी है, app में error आ रहा है। हर तरह के लिए अलग tools चाहिए, और अलग rules।",
+   "C": "सब कुछ एक ही agent को दे दो, तो उसका prompt हर case के rules से भर जाता है, और tools की लंबी list में से उसे सही tool चुनना पड़ता है। ऊपर से, card वाले जवाब सुधारने के लिए prompt बदलो, तो loan वाले जवाब बिगड़ सकते हैं।",
+   "D": "Routing पहले सिर्फ़ एक छोटा काम करती है: सवाल किस तरह का है, ये पहचानो, और उसी specialist agent को भेज दो। Card agent के पास सिर्फ़ card के tools और rules, loan agent के पास सिर्फ़ loan के। जैसे bank में token machine: पहले बताओ काम क्या है, फिर सीधा सही counter।",
+   "E": "इससे पैसे भी बचते हैं। आसान, आम सवाल छोटे और सस्ते model पर, और मुश्किल सवाल बड़े model पर।",
+   "F": "[curious] अब follow-up आएगा: router ने गलत agent को भेज दिया तो? इसलिए router का अपना test set बनाओ, और उसकी accuracy अलग से नापो। जिस सवाल पर router पक्का न हो, उसे general agent या इंसान के पास भेजो।",
+   "G": "[warm, conversational] Interview में बोलो: routing हर सवाल का type पहचानकर उसे सही specialist तक भेजती है। इससे हर agent का prompt छोटा और focused रहता है, एक type सुधारने से दूसरा नहीं बिगड़ता, और आसान सवाल सस्ते model पर चलते हैं।",
+   "H": "[curious] अब बताओ: food delivery app के support bot में तुम कौन से routes बनाओगे? Comment करो।"
+  }
+ },
+ "hook_type": "company_specific",
+ "sources": [
+  "https://www.geeksforgeeks.org/interview-experiences/accenture-final-interview-experience-for-llm-operations-engineer-experienced-selected/",
+  "https://www.anthropic.com/engineering/building-effective-agents"
+ ],
+ "approved": "owner 2026-11-20 (scripts reviewed in chat; 'ok chaaron bana de, voice laga')"
+}
