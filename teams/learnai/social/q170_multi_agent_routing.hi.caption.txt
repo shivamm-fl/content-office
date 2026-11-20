@@ -1,0 +1,11 @@
+Accenture ke LLM interview mein poocha gaya: multi-agent system mein routing ki zaroorat kyun padti hai?
+
+Bank ka support bot socho: card block, loan ki EMI, app mein error. Har tarah ke sawal ko alag tools aur alag rules chahiye. Sab ek hi agent ko de do, to prompt har case ke rules se bhar jata hai, tools ki lambi list mein se sahi tool chunna padta hai, aur card ke jawab sudharne ke liye prompt badlo to loan ke jawab bigad sakte hain.
+
+Routing pehle sawal ka type pehchanti hai aur use usi specialist agent ko bhejti hai, jaise bank ki token machine sahi counter par bhejti hai. Aasaan sawal chhote, saste model par, mushkil sawal bade model par.
+
+Follow-up: router galat bheje to? Router ka apna test set banao, uski accuracy alag se naapo, aur jis sawal par woh pakka na ho use general agent ya insaan ke paas bhejo.
+
+Food delivery app ke support bot mein tum kaun se routes banaoge? Comment karo.
+
+Source: candidate ka interview experience (GeeksforGeeks, Accenture LLM Operations Engineer, Dec 2025) aur Anthropic, "Building effective agents". Tool names illustration hain.

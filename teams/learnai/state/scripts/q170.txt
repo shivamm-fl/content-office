@@ -1,0 +1,15 @@
+[warm, conversational] Accenture के LLM interview में पूछा गया: multi-agent system में routing की ज़रूरत क्यों पड़ती है? जवाब एक bank के support bot से समझो।
+
+[thoughtful] इस bot के पास तीन तरह के सवाल आते हैं: card block करना है, loan की EMI पूछनी है, app में error आ रहा है। हर तरह के लिए अलग tools चाहिए, और अलग rules।
+
+सब कुछ एक ही agent को दे दो, तो उसका prompt हर case के rules से भर जाता है, और tools की लंबी list में से उसे सही tool चुनना पड़ता है। ऊपर से, card वाले जवाब सुधारने के लिए prompt बदलो, तो loan वाले जवाब बिगड़ सकते हैं।
+
+Routing पहले सिर्फ़ एक छोटा काम करती है: सवाल किस तरह का है, ये पहचानो, और उसी specialist agent को भेज दो। Card agent के पास सिर्फ़ card के tools और rules, loan agent के पास सिर्फ़ loan के। जैसे bank में token machine: पहले बताओ काम क्या है, फिर सीधा सही counter।
+
+इससे पैसे भी बचते हैं। आसान, आम सवाल छोटे और सस्ते model पर, और मुश्किल सवाल बड़े model पर।
+
+[curious] अब follow-up आएगा: router ने गलत agent को भेज दिया तो? इसलिए router का अपना test set बनाओ, और उसकी accuracy अलग से नापो। जिस सवाल पर router पक्का न हो, उसे general agent या इंसान के पास भेजो।
+
+[warm, conversational] Interview में बोलो: routing हर सवाल का type पहचानकर उसे सही specialist तक भेजती है। इससे हर agent का prompt छोटा और focused रहता है, एक type सुधारने से दूसरा नहीं बिगड़ता, और आसान सवाल सस्ते model पर चलते हैं।
+
+[curious] अब बताओ: food delivery app के support bot में तुम कौन से routes बनाओगे? Comment करो।

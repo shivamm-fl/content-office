@@ -1,0 +1,9 @@
+Cache-Aside: Read Path, Write Path, And Why You Delete Instead Of Update
+
+Cache-aside: the app checks the cache first; on a miss it reads the database and puts a copy in the cache. On a write, update the database first and then delete the cache key. Updating the cache can leave a stale value when two writes race; deletes are idempotent (Scaling Memcache at Facebook, NSDI 2013). Deleting before the database write lets a reader put the old value back. A TTL caps how long a stale value can live. The prices in the reel are an example.
+
+Sources:
+https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside
+https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf
+
+AI-assisted visuals and narration.

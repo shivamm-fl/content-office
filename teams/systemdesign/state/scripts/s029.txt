@@ -1,0 +1,15 @@
+[warm, conversational] Database में नया price, app में पुराना। क्यों?
+
+Cache यानी data की एक copy, fast memory में। Cache-aside में पढ़ना ऐसे होता है: app पहले cache में देखता है। मिल गया, तो cache hit, वहीं से जवाब। नहीं मिला, तो cache miss: app database से पढ़ता है, cache में रख देता है, फिर जवाब देता है। Cache और database आपस में बात नहीं करते, दोनों से app बात करता है। इसलिए नाम cache-aside: cache बगल में बैठा है।
+
+[thoughtful] अब price बदलना है। पहला idea: database update करो, और cache में भी नया price लिख दो। दिक्कत तब आती है जब दो updates एक साथ चलें। एक admin ने price पाँच सौ किया, दूसरे ने साढ़े चार सौ। Database में आख़िरी write साढ़े चार सौ का था। पर cache में पाँच सौ वाला write देर से पहुँचा। अब cache में पाँच सौ, database में साढ़े चार सौ, और app गलत price दिखाता रहेगा।
+
+इसलिए update पर cache में लिखो मत, key delete करो। अगली read पर miss होगा, और सही price database से आएगा। Delete दो बार हो जाए, या आगे पीछे, नतीजा एक: key गायब। इसे idempotent कहते हैं, यानी दोबारा करने से नतीजा नहीं बदलता। Facebook का memcache भी update पर यही करता है: database update, फिर key delete।
+
+अब order। पहले cache delete करो, फिर database update? उस छोटे से gap में कोई user आया, miss हुआ, database से पुराना price पढ़ा, और वापस cache में रख दिया। Cache फिर पुराना। इसलिए order पक्का: पहले database, फिर delete।
+
+फिर भी कभी delete fail हो सकता है। इसके लिए हर key पर TTL लगाओ, यानी expiry time, जैसे five minutes। कुछ भी छूटे, गलत price ज़्यादा से ज़्यादा TTL तक रहेगा।
+
+[warm, conversational] Interview में बोलो: cache-aside में read पर miss हो, तो database से पढ़कर cache भरो। Write पर पहले database update करो, फिर cache key delete करो, update नहीं। और हर key पर TTL।
+
+[curious] अब बताओ: database update के बाद, delete से पहले server crash हो गया, और TTL एक घंटा है। गलत price ज़्यादा से ज़्यादा कितनी देर दिख सकता है? Comment करो।

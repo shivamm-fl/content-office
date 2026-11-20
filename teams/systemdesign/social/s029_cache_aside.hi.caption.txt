@@ -1,0 +1,9 @@
+Day 29/150: Database mein naya price, app mein purana. Cache-aside mein update par cache delete karo, update nahi.
+
+Read: app pehle cache dekhta hai. Hit to wahin se jawab, miss to database se padho, cache mein copy rakho, phir jawab do. Cache aur database aapas mein baat nahi karte, dono se app baat karta hai.
+
+Write: cache mein naya price likhoge to do updates ki race mein cache galat value par atak sakta hai. Isliye pehle database update karo, phir cache ki key delete. Delete dobara ho jaye to bhi natija wahi (idempotent); Facebook ka memcache bhi yahi karta hai. Order ulta kiya to beech ke gap mein koi purana price wapas cache mein bhar dega. Har key par TTL safety net hai.
+
+Comment karke batao: delete se pehle server crash hua aur TTL 1 ghanta hai, to galat price zyada se zyada kitni der dikhega?
+
+#SystemDesign #Caching #Backend

@@ -1510,6 +1510,40 @@
    "production_date_ist": "2026-11-18",
    "owner_approved": false,
    "published": false
+  },
+  {
+   "id": "q169",
+   "day": null,
+   "title": "Generative AI vs Agentic AI (Accenture LLM interview)",
+   "track": "interview",
+   "status": "built",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "Accenture",
+   "company_source": "https://www.geeksforgeeks.org/interview-experiences/accenture-final-interview-experience-for-llm-operations-engineer-experienced-selected/",
+   "topic": "Generative AI makes content from a prompt and a person acts on it; agentic AI runs the LLM in a loop with tools and memory and picks the next step itself; fixed steps need a workflow, not an agent (cost, latency, compounding errors).",
+   "sources": [
+    "https://www.geeksforgeeks.org/interview-experiences/accenture-final-interview-experience-for-llm-operations-engineer-experienced-selected/",
+    "https://www.anthropic.com/engineering/building-effective-agents"
+   ]
+  },
+  {
+   "id": "q170",
+   "day": null,
+   "title": "Why Routing in a Multi-Agent System (Accenture LLM interview)",
+   "track": "interview",
+   "status": "built",
+   "production_date_ist": "2026-11-20",
+   "owner_approved": false,
+   "hook_type": "company_specific",
+   "company": "Accenture",
+   "company_source": "https://www.geeksforgeeks.org/interview-experiences/accenture-final-interview-experience-for-llm-operations-engineer-experienced-selected/",
+   "topic": "Routing classifies a request and sends it to a specialist agent with its own prompt and tools, so tuning one type does not hurt another; easy questions go to a small cheap model, hard ones to a big model; the router needs its own test set and a fallback.",
+   "sources": [
+    "https://www.geeksforgeeks.org/interview-experiences/accenture-final-interview-experience-for-llm-operations-engineer-experienced-selected/",
+    "https://www.anthropic.com/engineering/building-effective-agents"
+   ]
   }
  ]
 }

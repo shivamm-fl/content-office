@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Cache-Aside: Read, Write, Invalidate</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="119" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .acc { color:#4CC9F0; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .nd { position:absolute; border-radius:28px; background:#111A2C; border:4px solid #26324B; display:flex; flex-direction:column; align-items:center; justify-content:center; box-sizing:border-box; }
+          .nd .t { font:700 52px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .nd .t.green { color:#4CC38A; } .nd .t.red { color:#E8596B; } .nd .t.acc { color:#4CC9F0; }
+          .nd .s { font:600 36px "Space Grotesk",sans-serif; color:#8592AD; margin-top:6px; white-space:nowrap; }
+          .val { position:absolute; padding:10px 22px; border-radius:16px; font:700 48px "Space Grotesk",sans-serif; white-space:nowrap; box-sizing:border-box; }
+          .pk { position:absolute; width:40px; height:40px; margin:-20px 0 0 -20px; border-radius:50%; background:#F2B544; }
+          .wire { position:absolute; height:6px; border-radius:3px; background:#3A4866; transform-origin:0 50%; }
+          .tag2 { position:absolute; padding:10px 24px; border-radius:999px; font:700 46px "Space Grotesk",sans-serif; white-space:nowrap; box-sizing:border-box; }
+          .lane { position:absolute; left:60px; width:960px; height:150px; border-radius:24px; background:#0D1526; border:3px solid #26324B; }
+          .lane .ln { position:absolute; left:26px; top:50px; font:700 40px "Space Grotesk",sans-serif; color:#8592AD; }
+          .ev { position:absolute; top:34px; width:200px; height:80px; border-radius:18px; font:700 40px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; color:#0B1220; }
+          .quote { position:absolute; left:60px; width:960px; border-radius:24px; background:#F4F6FA; color:#1B2538; padding:30px 36px; box-sizing:border-box; font:500 42px Georgia,"Times New Roman",serif; line-height:1.3; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:24px 34px; box-sizing:border-box; }
+          .ans .k { font:700 50px "Space Grotesk",sans-serif; }
+          .ans .v { font:600 44px "Space Grotesk",sans-serif; color:#E8EDF6; margin-top:8px; }
+          .bar3 { position:absolute; height:40px; border-radius:20px; transform-origin:0 50%; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="nd" id="a_db" style="left:60px; top:300px; width:460px; height:300px;"><div class="t">DATABASE</div><div class="s">price</div><div class="t green" style="font-size:90px;">&#8377;450</div></div>
+          <div class="nd" id="a_app" style="left:560px; top:300px; width:460px; height:300px; border-color:#E8596B;"><div class="t">APP</div><div class="s">price</div><div class="t red" style="font-size:90px;">&#8377;500</div></div>
+          <div class="x c" id="a_q" style="top:680px; font-size:110px;"><span class="red">purana</span> kyun?</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c acc" id="b_t" style="top:250px; font-size:80px;">CACHE-ASIDE: read</div>
+          <div class="nd" id="b_app" style="left:340px; top:390px; width:400px; height:150px; border-color:#F2B544;"><div class="t">APP</div></div>
+          <div class="nd" id="b_c" style="left:60px; top:760px; width:420px; height:190px; border-color:#4CC9F0;"><div class="t acc">CACHE</div><div class="s">copy, fast memory</div></div>
+          <div class="nd" id="b_d" style="left:600px; top:760px; width:420px; height:190px;"><div class="t">DATABASE</div><div class="s">asli data</div></div>
+          <div class="wire" id="b_w1" style="left:420px; top:540px; width:290px; transform:rotate(116deg);"></div>
+          <div class="wire" id="b_w2" style="left:660px; top:540px; width:290px; transform:rotate(64deg);"></div>
+          <div class="pk" id="b_pk" style="left:540px; top:540px;"></div>
+          <div class="tag2" id="b_hit" style="left:150px; top:620px; background:#4CC38A; color:#0B1220;">HIT &#10003;</div>
+          <div class="tag2" id="b_miss" style="left:130px; top:620px; background:#E8596B; color:#0B1220;">MISS &#10007;</div>
+          <div class="val" id="b_copy" style="left:170px; top:970px; background:#4CC9F0; color:#0B1220;">copy rakhi</div>
+          <div class="x" id="b_no" style="left:515px; top:790px; font-size:90px; color:#E8596B;">&#10007;</div>
+          <div class="chip" id="b_aside" style="left:190px; top:1030px; width:700px; border:4px solid #4CC9F0; color:#4CC9F0; font-size:44px;">aside = cache bagal mein</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:76px;">idea: cache mein <span class="gold">bhi likho</span></div>
+          <div class="tag2" id="c_a" style="left:80px; top:380px; background:#F2B544; color:#0B1220;">admin A: &#8377;500</div>
+          <div class="tag2" id="c_b" style="left:560px; top:380px; background:#9A8CEB; color:#0B1220;">admin B: &#8377;450</div>
+          <div class="lane" id="c_ld" style="top:520px;"><div class="ln">DB</div>
+            <div class="ev" id="c_d1" style="left:190px; background:#F2B544;">&#8377;500</div><div class="ev" id="c_d2" style="left:430px; background:#9A8CEB;">&#8377;450</div>
+            <div class="val" id="c_dv" style="left:690px; top:36px; background:#4CC38A; color:#0B1220;">&#8377;450 &#10003;</div></div>
+          <div class="lane" id="c_lc" style="top:710px;"><div class="ln">CACHE</div>
+            <div class="ev" id="c_c1" style="left:190px; background:#9A8CEB;">&#8377;450</div><div class="ev" id="c_c2" style="left:430px; background:#F2B544;">&#8377;500</div>
+            <div class="val" id="c_cv" style="left:690px; top:36px; background:#E8596B; color:#0B1220;">&#8377;500 &#10007;</div></div>
+          <div class="x" id="c_late" style="left:480px; top:880px; font-size:44px; color:#F2B544;">der se pahuncha</div>
+          <div class="x c" id="c_app" style="top:990px; font-size:60px;">app: <span class="red">&#8377;500</span> (galat)</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:80px;">likho mat, <span class="acc">DELETE</span></div>
+          <div class="nd" id="d_c" style="left:60px; top:400px; width:440px; height:230px; border-color:#4CC9F0;"><div class="t acc">CACHE</div><div class="s" id="d_key">price &rarr; &#8377;500</div></div>
+          <div class="strike" id="d_x" style="left:110px; top:540px; width:340px;"></div>
+          <div class="nd" id="d_d" style="left:580px; top:400px; width:440px; height:230px;"><div class="t">DATABASE</div><div class="s">price &rarr; &#8377;450</div></div>
+          <div class="val" id="d_new" style="left:150px; top:660px; background:#4CC38A; color:#0B1220;">miss &rarr; &#8377;450 &#10003;</div>
+          <div class="x c" id="d_twice" style="top:780px; font-size:58px;">delete x2, kisi bhi order = <span class="acc">key gaayab</span></div>
+          <div class="x c gold" id="d_idem" style="top:870px; font-size:84px;">IDEMPOTENT</div>
+          <div class="quote" id="d_q" style="top:780px;">&ldquo;We choose to delete cached data instead of updating it because deletes are idempotent.&rdquo;<div style="font:600 32px 'JetBrains Mono',monospace; color:#5A6785; margin-top:16px;">Scaling Memcache at Facebook, NSDI 2013</div></div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:80px;">ab <span class="gold">ORDER</span></div>
+          <div class="tag2" id="e_1" style="left:60px; top:380px; background:#E8596B; color:#0B1220;">1. cache delete</div>
+          <div class="tag2" id="e_2" style="left:640px; top:380px; background:#26324B; color:#E8EDF6;">2. DB update</div>
+          <div class="bar3" id="e_gap" style="left:420px; top:395px; width:200px; background:rgba(242,181,68,.35);"></div>
+          <div class="x" id="e_gapl" style="left:455px; top:450px; font-size:40px; color:#F2B544;">gap</div>
+          <div class="nd" id="e_c" style="left:60px; top:560px; width:420px; height:200px; border-color:#4CC9F0;"><div class="t acc">CACHE</div><div class="s" id="e_cv">khaali</div></div>
+          <div class="nd" id="e_d" style="left:600px; top:560px; width:420px; height:200px;"><div class="t">DATABASE</div><div class="s">abhi &#8377;500</div></div>
+          <div class="tag2" id="e_u" style="left:390px; top:800px; background:#9A8CEB; color:#0B1220;">user</div>
+          <div class="val" id="e_old" style="left:120px; top:880px; background:#E8596B; color:#0B1220;">cache: &#8377;500 phir se</div>
+          <div class="chip" id="e_ok" style="left:90px; top:1030px; width:900px; background:#4CC38A; color:#0B1220; font-size:46px;">pehle DB update, phir delete</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:80px;">delete <span class="red">fail</span> ho gaya?</div>
+          <div class="nd" id="f_c" style="left:240px; top:400px; width:600px; height:200px; border-color:#4CC9F0;"><div class="t acc">price &rarr; &#8377;500</div><div class="s">TTL: 5 min</div></div>
+          <div class="x c gold" id="f_ttl" style="top:650px; font-size:70px;">TTL = expiry time</div>
+          <div class="bar3" id="f_bg" style="left:140px; top:780px; width:800px; background:#1B2538;"></div>
+          <div class="bar3" id="f_bar" style="left:140px; top:780px; width:800px; background:#F2B544;"></div>
+          <div class="x c" id="f_max" style="top:870px; font-size:58px;">galat price, max <span class="gold">TTL tak</span></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_chip" style="left:240px; top:250px; width:600px; background:#4CC9F0; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="g_1" style="top:390px;"><div class="k acc">READ</div><div class="v">miss &rarr; DB se padho, cache bharo</div></div>
+          <div class="ans" id="g_2" style="top:600px;"><div class="k gold">WRITE</div><div class="v">DB update &rarr; key delete (update nahi)</div></div>
+          <div class="ans" id="g_3" style="top:810px;"><div class="k green">TTL</div><div class="v">har key par</div></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="tag2" id="h_1" style="left:80px; top:330px; background:#4CC38A; color:#0B1220;">DB update &#10003;</div>
+          <div class="tag2" id="h_2" style="left:560px; top:330px; background:#E8596B; color:#0B1220;">CRASH &#10007;</div>
+          <div class="x c" id="h_3" style="top:480px; font-size:66px;">TTL = <span class="gold">1 ghanta</span></div>
+          <div class="x c" id="h_4" style="top:600px; font-size:72px;">galat price <span class="red">kitni der?</span></div>
+          <div class="chip" id="h_c" style="left:290px; top:780px; width:500px; background:#4CC9F0; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="119" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="119" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="119" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H"], tag: "SYSTEM DESIGN \u00b7 DAY 029 / 150" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // A: frame 0: database has the new price, the app shows the old one
+      tl.fromTo("#a_q", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo("#a_app", { x: 0 }, { x: 8, duration: 0.07, yoyo: true, repeat: 5 }, at("A", "purana") - 0.1);
+      // B: the read path: app checks the cache, on a miss reads the database and keeps a copy
+      const P = { app: [540, 470], c: [270, 855], d: [810, 855] };
+      const wire = (sel, a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1]; tl.set(sel, { left: a[0], top: a[1], width: Math.hypot(dx, dy), rotation: Math.atan2(dy, dx) * 180 / Math.PI }, 0); };
+      wire("#b_w1", [540, 540], [270, 760]); wire("#b_w2", [540, 540], [810, 760]);
+      show("#b_c", at("B", "cache") - 0.1, { s: 0.92 });
+      show("#b_d", at("B", "fast") - 0.1, { s: 0.92 });
+      show("#b_t", at("B", "cache-aside") - 0.1, { s: 1.1 });
+      show("#b_app", at("B", "app") - 0.1, { s: 0.92 });
+      tl.set(["#b_w1", "#b_w2"], { opacity: 0 }, 0); tl.to(["#b_w1", "#b_w2"], { opacity: 1, duration: 0.3 }, at("B", "app"));
+      tl.set("#b_pk", { left: P.app[0], top: P.app[1], opacity: 0 }, 0);
+      tl.to("#b_pk", { opacity: 1, duration: 0.1 }, at("B", "dekhta") - 0.3);
+      tl.to("#b_pk", { left: P.c[0], top: P.c[1] - 110, duration: 0.6, ease: "power1.inOut" }, at("B", "dekhta") - 0.2);
+      show("#b_hit", at("B", "hit") - 0.15, { s: 1.2 }); hide("#b_hit", at("B", "nahi") - 0.1);
+      show("#b_miss", at("B", "miss") - 0.15, { s: 1.2 });
+      tl.to("#b_pk", { left: P.app[0], top: P.app[1], duration: 0.4 }, at("B", "app", 1) - 0.2);
+      tl.to("#b_pk", { left: P.d[0], top: P.d[1] - 110, duration: 0.5 }, at("B", "database") - 0.1);
+      hide("#b_miss", at("B", "rakh") - 0.4);
+      tl.to("#b_pk", { left: P.app[0], top: P.app[1], duration: 0.35 }, at("B", "cache", 4) - 0.6);
+      tl.to("#b_pk", { left: P.c[0], top: P.c[1] - 110, duration: 0.35 }, at("B", "cache", 4) - 0.2);
+      show("#b_copy", at("B", "rakh") - 0.1, { s: 1.1 });
+      tl.to("#b_pk", { left: P.app[0], top: P.app[1], duration: 0.4 }, at("B", "jawab", 1) - 0.2);
+      tl.to("#b_pk", { opacity: 0, duration: 0.2 }, at("B", "jawab", 1) + 0.3);
+      show("#b_no", at("B", "aapas") - 0.2, { s: 1.4 });
+      tl.to(["#b_w1", "#b_w2"], { backgroundColor: "#F2B544", duration: 0.25 }, at("B", "donon") - 0.1);
+      show("#b_aside", at("B", "bagal") - 0.3, { s: 1.05 });
+      // C: write to both: two updates race and the cache keeps the wrong one
+      show("#c_t", at("C", "pahla") - 0.1, { s: 1.06 });
+      show("#c_ld", at("C", "dikkat") - 0.1, { s: 0.96 });
+      show("#c_lc", at("C", "dikkat") + 0.1, { s: 0.96 });
+      show("#c_a", at("C", "admin") - 0.1, { s: 1.08 });
+      show("#c_b", at("C", "doosre") - 0.1, { s: 1.08 });
+      show("#c_d1", at("C", "paanch") - 0.05, { s: 1.15 });
+      show("#c_d2", at("C", "saadhe") - 0.05, { s: 1.15 });
+      tl.to("#c_d2", { scale: 1.12, duration: 0.18, yoyo: true, repeat: 1 }, at("C", "aakhiri"));
+      show("#c_c1", at("C", "saadhe", 1) - 0.05, { s: 1.15 });
+      show("#c_c2", at("C", "paanch", 1) - 0.05, { s: 1.15 });
+      show("#c_late", at("C", "der") - 0.1, { s: 1 });
+      show("#c_dv", at("C", "database", 2) - 0.1, { s: 1.15 });
+      show("#c_cv", at("C", "paanch", 2) - 0.1, { s: 1.15 });
+      show("#c_app", at("C", "galat") - 0.15, { s: 1.08 });
+      // D: delete instead of write: next read misses and loads the right price; delete is idempotent
+      show("#d_t", at("D", "isliye") - 0.1, { s: 1.08 });
+      show("#d_c", at("D", "cache") - 0.1, { s: 0.94 });
+      show("#d_d", at("D", "cache") + 0.1, { s: 0.94 });
+      wipe("#d_x", at("D", "delete") - 0.05, 0.35);
+      tl.to("#d_key", { opacity: 0.3, duration: 0.2 }, at("D", "delete") + 0.3);
+      show("#d_new", at("D", "sahi") - 0.1, { s: 1.08 });
+      show("#d_twice", at("D", "delete", 1) - 0.1, { s: 1.04 });
+      show("#d_idem", at("D", "idempotent") - 0.1, { s: 1.25 });
+      ["#d_twice", "#d_idem"].forEach((s) => hide(s, at("D", "facebook") - 0.2));
+      show("#d_q", at("D", "facebook") - 0.05, { s: 0.96 });
+      // E: wrong order: delete first, a reader fills the cache with the old price in the gap
+      show("#e_t", at("E", "order") - 0.1, { s: 1.1 });
+      show("#e_1", at("E", "pehle") - 0.1, { s: 1.05 });
+      show("#e_2", at("E", "phir") - 0.1, { s: 1.05 });
+      show("#e_c", at("E", "us") - 0.1, { s: 0.94 }); show("#e_d", at("E", "us") + 0.1, { s: 0.94 });
+      wipe("#e_gap", at("E", "gap") - 0.1, 0.4); show("#e_gapl", at("E", "gap"), { s: 1 });
+      show("#e_u", at("E", "user") - 0.1, { s: 1.15 });
+      tl.to("#e_u", { left: 160, top: 770, duration: 0.4 }, at("E", "miss") - 0.1);
+      tl.to("#e_c", { borderColor: "#E8596B", duration: 0.2 }, at("E", "miss"));
+      tl.to("#e_u", { left: 700, top: 770, duration: 0.5 }, at("E", "database", 1) - 0.1);
+      tl.to("#e_u", { left: 160, top: 770, duration: 0.5 }, at("E", "vaapas") - 0.1);
+      show("#e_old", at("E", "rakh") - 0.1, { s: 1.1 });
+      hide("#e_u", at("E", "isliye") - 0.2);
+      show("#e_ok", at("E", "isliye") - 0.05, { s: 1.06 });
+      // F: TTL is the safety net: a wrong value lives at most until it expires
+      show("#f_t", at("F", "phir") - 0.1, { s: 1.08 });
+      show("#f_c", at("F", "har") - 0.15, { s: 0.94 });
+      show("#f_ttl", at("F", "yaani") - 0.1, { s: 1.05 });
+      tl.set(["#f_bg", "#f_bar"], { opacity: 0 }, 0); tl.to(["#f_bg", "#f_bar"], { opacity: 1, duration: 0.2 }, at("F", "five") - 0.3);
+      tl.fromTo("#f_bar", { scaleX: 1 }, { scaleX: 0, duration: at("F", "rahega") - at("F", "five"), ease: "none" }, at("F", "five"));
+      show("#f_max", at("F", "galat") - 0.1, { s: 1.05 });
+      // G: interview answer
+      show("#g_chip", at("G", "interview") - 0.05, { s: 0.85 });
+      show("#g_1", at("G", "read") - 0.1, { s: 0.94 });
+      show("#g_2", at("G", "write") - 0.1, { s: 0.94 });
+      show("#g_3", at("G", "har") - 0.1, { s: 0.94 });
+      // H: the question
+      show("#h_1", at("H", "database") - 0.1, { s: 1.08 });
+      show("#h_2", at("H", "server") - 0.1, { s: 1.15 });
+      show("#h_3", at("H", "ttl") - 0.1, { s: 1.08 });
+      show("#h_4", at("H", "galat") - 0.1, { s: 1.08 });
+      show("#h_c", at("H", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { cache: "#4CC9F0", "cache-aside": "#4CC9F0", database: "gold", hit: "good", miss: "hot", delete: "hot", idempotent: "gold",
+                       ttl: "gold", galat: "hot", purana: "hot", comment: "#4CC9F0" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

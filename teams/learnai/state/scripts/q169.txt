@@ -1,0 +1,13 @@
+[warm, conversational] Accenture के LLM interview में पूछा गया: Generative AI और Agentic AI में फ़र्क क्या है? दोनों के अंदर LLM ही है, फिर भी काम बिल्कुल अलग।
+
+[thoughtful] एक काम लो: flight cancel हुई, refund चाहिए। Generative AI से कहोगे, तो वो बढ़िया सा refund request लिखकर दे देगा। पर airline की site खोलना, form भरना, status देखना, ये सब तुम करोगे। उसने content बनाया, काम तुमने किया।
+
+Agentic AI को यही goal दो, तो वो खुद booking खोलेगा, refund policy पढ़ेगा, form भरेगा, और जवाब देखकर तय करेगा कि अगला step क्या हो। यानी LLM एक loop में चलता है: सोचो, tool चलाओ, नतीजा देखो, फिर सोचो, जब तक goal पूरा न हो।
+
+Model दोनों में वही हो सकता है। फ़र्क setup में है। Generative AI में एक prompt, एक output, और फ़ैसला इंसान का। Agentic AI में LLM के साथ tools, memory और loop, और अगला step LLM खुद चुनता है।
+
+[curious] अब follow-up आएगा: क्या हर app agent होना चाहिए? Agent महँगा है, धीमा है, और एक step की गलती आगे के steps में बढ़ती जाती है। अगर steps पहले से पता हैं, जैसे हर invoice से three fields निकालना, तो fixed workflow काफ़ी है, यानी code तय करता है कि LLM कब क्या करे। Agent तब, जब अगला step पहले से तय ही न हो सके।
+
+[warm, conversational] Interview में बोलो: Generative AI prompt से content बनाता है, और action इंसान लेता है। Agentic AI में LLM tools के साथ loop में चलता है, खुद अगला step चुनता है, और goal तक काम करता है। Steps fixed हों तो workflow, वरना agent।
+
+[curious] अब बताओ: AI से email लिखवाना, और AI का खुद तुम्हारे inbox से email भेज देना। इनमें agentic कौन सा है, और क्यों? Comment करो।

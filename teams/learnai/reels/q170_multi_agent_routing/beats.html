@@ -1,0 +1,108 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .ill { position:absolute; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .bot { position:absolute; border-radius:36px; background:#111A2C; border:4px solid #5BC0EB; }
+          .bot .eye { position:absolute; width:40px; height:40px; border-radius:50%; background:#5BC0EB; }
+          .bot .mouth { position:absolute; height:12px; border-radius:6px; background:#5BC0EB; }
+          .bub { position:absolute; padding:20px 28px; border-radius:28px; background:#1F3B5C; color:#E8EDF6; font:600 44px "Space Grotesk",sans-serif; white-space:nowrap; box-sizing:border-box; }
+          .tl { position:absolute; padding:14px 22px; border-radius:18px; border:3px solid #4CC38A; color:#4CC38A; font:600 38px "JetBrains Mono",monospace; white-space:nowrap; box-sizing:border-box; }
+          .big { position:absolute; border-radius:30px; background:#111A2C; border:3px solid #26324B; }
+          .doc { position:absolute; left:30px; top:90px; width:430px; }
+          .doc .r { height:44px; margin:0 0 12px; border-radius:10px; background:#1B2538; font:600 30px "Space Grotesk",sans-serif; color:#8592AD; padding:6px 14px; box-sizing:border-box; white-space:nowrap; }
+          .tg { position:absolute; width:200px; height:64px; border-radius:16px; background:#1B2538; border:3px solid #26324B; font:600 28px "JetBrains Mono",monospace; color:#8592AD; display:flex; align-items:center; justify-content:center; }
+          .lbl { position:absolute; font:700 44px "Space Grotesk",sans-serif; white-space:nowrap; }
+          .ag { position:absolute; top:690px; width:300px; height:240px; border-radius:28px; background:#111A2C; border:4px solid #26324B; }
+          .ag .n { position:absolute; left:0; width:100%; top:22px; text-align:center; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .ag .tl { left:24px; font-size:30px; padding:8px 14px; }
+          .rt { position:absolute; left:640px; top:380px; width:360px; height:120px; border-radius:28px; background:#5BC0EB; color:#0B1220; font:700 60px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; }
+          .trow { position:absolute; left:80px; width:920px; height:96px; border-radius:20px; background:#111A2C; border:3px solid #26324B; }
+          .trow .q { position:absolute; left:30px; top:22px; font:600 42px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .trow .a { position:absolute; right:30px; top:22px; font:700 42px "Space Grotesk",sans-serif; white-space:nowrap; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:26px 34px; box-sizing:border-box; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:96px;">multi-agent mein<br/><span class="gold">ROUTING</span> kyun?</div>
+          <div class="shot" id="a_hdr" style="top:520px;"><img src="assets/gfg_header.png"/></div>
+          <div class="shot" id="a_qs" style="top:790px;"><img src="assets/gfg_question.png"/></div>
+          <div class="src" id="a_src" style="top:960px;">Source: geeksforgeeks.org (candidate's post)</div>
+          <div class="bot" id="a_bot" style="left:340px; top:520px; width:400px; height:340px;"><div class="eye" style="left:110px; top:110px;"></div><div class="eye" style="left:250px; top:110px;"></div><div class="mouth" style="left:130px; top:220px; width:140px;"></div></div>
+          <div class="x c" id="a_bank" style="top:900px; font-size:66px;"><span class="cyan">bank</span> support bot</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:84px;"><span class="gold">3</span> tarah ke sawal</div>
+          <div class="bub" id="b_1" style="left:80px; top:400px;">card block karna hai</div>
+          <div class="bub" id="b_2" style="left:80px; top:540px;">loan ki EMI kitni?</div>
+          <div class="bub" id="b_3" style="left:80px; top:680px;">app mein error</div>
+          <div class="tl" id="b_t1" style="left:640px; top:410px; width:360px;">card tools</div>
+          <div class="tl" id="b_t2" style="left:640px; top:550px; width:360px;">loan tools</div>
+          <div class="tl" id="b_t3" style="left:640px; top:690px; width:360px;">app tools</div>
+          <div class="x c" id="b_r" style="top:850px; font-size:64px;">alag <span class="green">tools</span>, alag <span class="gold">rules</span></div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:80px;"><span class="red">EK</span> agent, sab kuch</div>
+          <div class="big" id="c_box" style="left:60px; top:380px; width:960px; height:620px;">
+            <div class="lbl gold" style="left:30px; top:24px;">PROMPT</div>
+            <div class="lbl green" style="left:520px; top:24px;">TOOLS</div>
+            <div class="doc" id="c_doc">
+              <div class="r" id="c_r1">card rules ...</div><div class="r">card rules ...</div><div class="r" id="c_r3">loan rules ...</div><div class="r">loan rules ...</div>
+              <div class="r">app rules ...</div><div class="r">app rules ...</div><div class="r">refund rules ...</div><div class="r">KYC rules ...</div>
+            </div>
+            <div class="tg" style="left:520px; top:100px;">block_card</div><div class="tg" style="left:740px; top:100px;">card_limit</div>
+            <div class="tg" style="left:520px; top:184px;">emi_calc</div><div class="tg" style="left:740px; top:184px;">loan_status</div>
+            <div class="tg" style="left:520px; top:268px;">app_logs</div><div class="tg" style="left:740px; top:268px;">reset_pin</div>
+            <div class="tg" style="left:520px; top:352px;">refund</div><div class="tg" style="left:740px; top:352px;">kyc_check</div>
+            <div class="tg" id="c_wrong" style="left:520px; top:436px;">card_status</div><div class="tg" style="left:740px; top:436px;">statement</div>
+            <div class="x" id="c_qm" style="left:880px; top:500px; font-size:90px; color:#F2B544;">?</div>
+          </div>
+          <div class="ill" style="right:80px; top:1110px;">illustration</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c cyan" id="d_t" style="top:250px; font-size:90px;">ROUTING</div>
+          <div class="bub" id="d_q" style="left:80px; top:385px; width:520px;">card block karna hai</div>
+          <div class="rt" id="d_rt">ROUTER</div>
+          <div class="chip" id="d_type" style="left:640px; top:525px; width:360px; background:#F2B544; color:#0B1220; font-size:44px;">type: CARD</div>
+          <div class="ag" id="d_a1" style="left:60px;"><div class="n">CARD</div><div class="tl" id="d_t1a" style="top:100px;">block_card</div><div class="tl" id="d_t1b" style="top:165px;">card_limit</div></div>
+          <div class="ag" id="d_a2" style="left:390px;"><div class="n">LOAN</div><div class="tl" id="d_t2a" style="top:100px;">emi_calc</div><div class="tl" id="d_t2b" style="top:165px;">loan_status</div></div>
+          <div class="ag" id="d_a3" style="left:720px;"><div class="n">APP</div><div class="tl" id="d_t3a" style="top:100px;">app_logs</div><div class="tl" id="d_t3b" style="top:165px;">reset_pin</div></div>
+          <div class="x" id="d_arr" style="left:180px; top:600px; font-size:80px; color:#F2B544;">&darr;</div>
+          <div class="x c" id="d_tok" style="top:975px; font-size:58px;">token machine &rarr; <span class="gold">sahi counter</span></div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:84px;">paise bhi <span class="green">bachte</span></div>
+          <div class="rt" id="e_rt" style="left:360px; top:390px;">ROUTER</div>
+          <div class="big" id="e_l" style="left:60px; top:600px; width:450px; height:360px;"><div class="lbl" style="left:30px; top:30px; color:#E8EDF6;">aasaan, aam</div><div class="chip" style="left:30px; top:150px; width:390px; background:#4CC38A; color:#0B1220; font-size:46px;">chhota model</div><div class="lbl green" style="left:30px; top:260px;">sasta</div></div>
+          <div class="big" id="e_r" style="left:570px; top:600px; width:450px; height:360px;"><div class="lbl" style="left:30px; top:30px; color:#E8EDF6;">mushkil</div><div class="chip" style="left:30px; top:150px; width:390px; background:#9A8CEB; color:#0B1220; font-size:46px;">bada model</div><div class="lbl" style="left:30px; top:260px; color:#9A8CEB;">mehnga</div></div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:80px;">router <span class="red">galat</span> bheje to?</div>
+          <div class="trow" id="f_w" style="top:390px; border-color:#E8596B;"><div class="q">EMI kitni? &rarr; CARD agent</div><div class="a red">&#10007;</div></div>
+          <div class="lbl gold" id="f_ts" style="left:80px; top:520px;">router ka test set</div>
+          <div class="trow" id="f_1" style="top:590px;"><div class="q">card block karo</div><div class="a green">CARD &#10003;</div></div>
+          <div class="trow" id="f_2" style="top:700px;"><div class="q">EMI kitni?</div><div class="a green">LOAN &#10003;</div></div>
+          <div class="trow" id="f_3" style="top:810px;"><div class="q">app crash</div><div class="a red">LOAN &#10007;</div></div>
+          <div class="chip" id="f_acc" style="left:240px; top:930px; width:600px; border:4px solid #F2B544; color:#F2B544; font-size:44px;">router accuracy alag se</div>
+          <div class="chip" id="f_h" style="left:140px; top:1050px; width:800px; background:#5BC0EB; color:#0B1220; font-size:42px;">pakka nahi? &rarr; general agent / insaan</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="g_1" style="top:380px;"><span class="cyan">type pahchano</span> &rarr; sahi specialist</div>
+          <div class="ans" id="g_2" style="top:530px;">har prompt <span class="gold">chhota, focused</span></div>
+          <div class="ans" id="g_3" style="top:680px;">ek type sudhre, <span class="green">doosra na bigde</span></div>
+          <div class="ans" id="g_4" style="top:830px;">aasaan sawal &rarr; <span class="green">sasta model</span></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_1" style="top:330px; font-size:80px;">food delivery bot</div>
+          <div class="x c" id="h_2" style="top:450px; font-size:80px;">kaun se <span class="gold">routes</span>?</div>
+          <div class="chip" id="h_c" style="left:290px; top:680px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

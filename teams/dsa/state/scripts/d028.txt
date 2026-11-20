@@ -1,0 +1,21 @@
+[warm, conversational] Trapping Rain Water, बिना extra array के कैसे करोगे?
+
+Problem: हर index पर एक bar है, array उसकी height बताता है। बारिश के बाद bars के बीच कितना पानी रुकेगा? Given array: four, two, zero, three, two, five। Answer है nine units।
+
+एक bar के ऊपर पानी कितना? Left की सबसे ऊँची bar देखो, और right की सबसे ऊँची। पानी इन दोनों में से छोटी तक भरेगा। तो water equals min of left max and right max, minus height। Index two पर height zero, left max four, right max five, तो four units पानी।
+
+Brute force हर bar के लिए दोनों तरफ़ पूरा array scan करता है। Ten thousand bars पर लगभग hundred million steps, यानी O of n squared। Bottleneck: वही max बार-बार नए सिरे से निकल रहा है।
+
+दो arrays में हर index का left max और right max पहले से रख लो, तो time O of n, पर extra space भी O of n।
+
+[thoughtful] अब trick। Formula में min है, तो सिर्फ़ छोटी side मायने रखती है। Left pointer पहली bar पर, right pointer आख़िरी पर: left पर four, right पर five। Left के हर bar का right max कम से कम five होगा, और left max अभी four है। तो left का पानी left max ही तय करेगा। इसलिए जिस side की height छोटी हो, उसी side का पानी जोड़ो, और वही pointer अंदर करो।
+
+Dry run, left max four। Index one, पानी two। Index two, पानी four, total six। Index three, पानी one, total seven। Index four, पानी two, total nine। Right pointer एक बार भी नहीं हिला।
+
+Code में बस यही: height of l छोटी है, तो left max update करो, left max minus height of l जोड़ो, और l plus equals one। वरना यही right side पर, और r minus equals one।
+
+हर step में एक pointer अंदर आता है, तो time O of n, और extra space O of one।
+
+[warm, conversational] Interview में बोलो: हर bar का पानी, min of left max and right max, minus height। Two pointers में छोटी side का max ही पानी तय करता है, इसलिए हर बार छोटी side को आगे बढ़ाओ।
+
+[curious] अब बताओ: array five, zero, zero, zero, one पर कितना पानी रुकेगा? Comment करो।
