@@ -1,7 +1,9 @@
       // A: the question on frame 0, the source post, the company
       tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
       show("#a_p", at("A", "meta") - 0.05, { s: 0.94 });
-      show("#a_co", at("A", "meta") + 0.3, { s: 1.05 });
+      hide("#a_p", at("A", "sahi") - 0.3);
+      show("#a_qs", at("A", "sahi") - 0.1, { s: 0.94 });
+      tl.fromTo("#a_qs", { scale: 1 }, { scale: 1.05, duration: 3.5, ease: "none" }, at("A", "sahi") + 0.3);
       // B: the policy changed yesterday, the old value is everywhere the model read
       show("#b_pol", at("B", "return") - 0.2, { s: 0.94 });
       tl.set("#b_new", { opacity: 0 }, 0); tl.to("#b_new", { opacity: 1, duration: 0.2 }, at("B", "fifteen") - 0.1);
