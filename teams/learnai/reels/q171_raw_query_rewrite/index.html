@@ -45,8 +45,8 @@
 
         <div class="beat" id="sA">
           <div class="x c" id="a_h" style="top:250px; font-size:96px;"><span class="gold">RAW QUERY</span><br/>seedha retriever ko?</div>
-          <div class="shot" id="a_p" style="top:540px;"><img src="assets/sub_header.png"/></div>
-          <div class="x c" id="a_co" style="top:880px; font-size:66px;">Anthropic interview</div>
+          <div class="shot" id="a_p" style="top:480px;"><img src="assets/sub_header.png"/></div>
+          <div class="shot" id="a_qs" style="top:480px;"><img src="assets/sub_q.png"/></div>
           <div class="chip" id="a_g" style="left:290px; top:1000px; width:500px; background:#E8596B; color:#0B1220; font-size:52px;">galat kya hai?</div>
         </div>
 
@@ -121,7 +121,9 @@
       // A: the question on frame 0, the source post, the company
       tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
       show("#a_p", at("A", "anthropic") - 0.1, { s: 0.94 });
-      show("#a_co", at("A", "anthropic") + 0.2, { s: 1.05 });
+      hide("#a_p", at("A", "tumhara") - 0.3);
+      show("#a_qs", at("A", "tumhara") - 0.1, { s: 0.94 });
+      tl.fromTo("#a_qs", { scale: 1 }, { scale: 1.05, duration: 3.5, ease: "none" }, at("A", "tumhara") + 0.3);
       show("#a_g", at("A", "galat") - 0.1, { s: 1.15 });
       // B: the follow-up message reaches the retriever without its context
       show("#b_t", at("B", "chat") - 0.1, { s: 1.1 });

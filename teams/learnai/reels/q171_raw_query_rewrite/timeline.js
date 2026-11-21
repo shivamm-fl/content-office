@@ -1,7 +1,9 @@
       // A: the question on frame 0, the source post, the company
       tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
       show("#a_p", at("A", "anthropic") - 0.1, { s: 0.94 });
-      show("#a_co", at("A", "anthropic") + 0.2, { s: 1.05 });
+      hide("#a_p", at("A", "tumhara") - 0.3);
+      show("#a_qs", at("A", "tumhara") - 0.1, { s: 0.94 });
+      tl.fromTo("#a_qs", { scale: 1 }, { scale: 1.05, duration: 3.5, ease: "none" }, at("A", "tumhara") + 0.3);
       show("#a_g", at("A", "galat") - 0.1, { s: 1.15 });
       // B: the follow-up message reaches the retriever without its context
       show("#b_t", at("B", "chat") - 0.1, { s: 1.1 });

@@ -1,7 +1,9 @@
       // A: the question on frame 0, the source post, the company
       tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
       show("#a_p", at("A", "meta") - 0.05, { s: 0.94 });
-      show("#a_co", at("A", "meta") + 0.3, { s: 1.05 });
+      hide("#a_p", at("A", "llm") - 0.3);
+      show("#a_qs", at("A", "llm") - 0.1, { s: 0.94 });
+      tl.fromTo("#a_qs", { scale: 1 }, { scale: 1.05, duration: 3.5, ease: "none" }, at("A", "llm") + 0.3);
       show("#a_n", at("A", "kaise") - 0.1, { s: 1.1 });
       // B: a feeling is not a measurement: two tests
       show("#b_1", at("B", "das-bees") - 0.1, { s: 1.05 });
