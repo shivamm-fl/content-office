@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Write-through vs Write-back</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="124.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .acc { color:#4CC9F0; }
+          .host { position:absolute; left:0; width:1080px; height:260px; }
+          .node { position:absolute; width:260px; height:210px; border-radius:28px; background:#111A2C; border:4px solid #26324B; box-sizing:border-box; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:18px; font:700 48px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .node .sub { font:500 26px "JetBrains Mono",monospace; color:#8592AD; margin-top:2px; }
+          .arr { position:absolute; height:6px; border-radius:3px; background:#8592AD; }
+          .arr.dash { background:none; border-top:6px dashed #8592AD; height:0; }
+          .head { position:absolute; width:0; height:0; border-top:14px solid transparent; border-bottom:14px solid transparent; border-left:22px solid #8592AD; }
+          .pk { position:absolute; width:110px; height:62px; border-radius:16px; background:#4CC9F0; color:#0B1220; font:700 32px "JetBrains Mono",monospace; display:flex; align-items:center; justify-content:center; }
+          .key { position:absolute; width:100px; height:64px; border-radius:14px; background:#1B2538; border:3px solid #26324B; font:600 28px "JetBrains Mono",monospace; color:#8592AD; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+          .lane { position:absolute; top:400px; width:470px; height:470px; border-radius:28px; background:#111A2C; border:3px solid #26324B; box-sizing:border-box; }
+          .lane .hd { position:absolute; left:0; width:100%; top:26px; text-align:center; font:700 44px "Space Grotesk",sans-serif; }
+          .lane .lb { position:absolute; left:0; width:100%; text-align:center; font:500 32px "JetBrains Mono",monospace; color:#8592AD; }
+          .lane .big { position:absolute; left:0; width:100%; text-align:center; font:700 76px "JetBrains Mono",monospace; color:#E8EDF6; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:22px 34px; box-sizing:border-box; font:700 44px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .ill { position:absolute; right:60px; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .item { position:absolute; width:400px; height:96px; border-radius:22px; font:700 48px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; color:#0B1220; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:84px;">database mein<br/><span class="acc">kab</span> likhoge?</div>
+          <div class="host" id="a_dg" style="top:500px;"></div>
+          <div class="chip" id="a_now" style="left:110px; top:800px; width:400px; background:#4CC9F0; color:#0B1220; font-size:56px;">ABHI</div>
+          <div class="chip" id="a_later" style="left:570px; top:800px; width:400px; background:#F2B544; color:#0B1220; font-size:56px;">BAAD MEIN</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:76px;">cache = <span class="acc">copy</span></div>
+          <div class="host" id="b_dg" style="top:420px;"></div>
+          <div class="chip" id="b_1" style="left:140px; top:800px; width:800px; border:4px solid #4CC9F0; color:#4CC9F0; font-size:52px;">1. WRITE-THROUGH</div>
+          <div class="chip" id="b_2" style="left:140px; top:930px; width:800px; border:4px solid #F2B544; color:#F2B544; font-size:52px;">2. WRITE-BACK</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c acc" id="c_t" style="top:250px; font-size:88px;">WRITE-THROUGH</div>
+          <div class="host" id="c_dg" style="top:390px;"></div>
+          <div class="chip" id="c_good" style="left:60px; top:715px; width:460px; background:#4CC38A; color:#0B1220; font-size:44px;">cache taaza</div>
+          <div class="chip" id="c_bad" style="left:560px; top:715px; width:460px; background:#E8596B; color:#0B1220; font-size:44px;">2 writes = slow</div>
+          <div class="host" id="c_keys" style="top:870px; height:120px;"></div>
+          <div class="chip" id="c_ttl" style="left:340px; top:1010px; width:400px; border:4px solid #F2B544; color:#F2B544; font-size:44px;">TTL = expiry</div>
+          <div class="src" id="c_src" style="top:1110px;">Source: AWS ElastiCache docs</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c gold" id="d_t" style="top:250px; font-size:88px;">WRITE-BACK</div>
+          <div class="x c mut" id="d_s" style="top:350px; font-size:44px;">(write-behind)</div>
+          <div class="host" id="d_dg" style="top:450px;"></div>
+          <div class="chip" id="d_later" style="left:640px; top:760px; width:380px; border:4px solid #F2B544; color:#F2B544; font-size:40px;">baad mein, batch</div>
+          <div class="src" id="d_src" style="top:1110px;">Source: Oracle Coherence docs</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="ill" id="e_ill" style="top:250px;">illustration</div>
+          <div class="x c" id="e_t" style="top:300px; font-size:64px;">5 sec, <span class="acc">2,000 likes</span></div>
+          <div class="lane" id="e_l" style="left:50px;">
+            <div class="hd acc">WRITE-THROUGH</div>
+            <div class="lb" style="top:150px;">database writes</div>
+            <div class="big" id="e_lw" style="top:210px;">0</div>
+          </div>
+          <div class="lane" id="e_r" style="left:560px;">
+            <div class="hd gold">WRITE-BACK</div>
+            <div class="lb" style="top:110px;">cache count</div>
+            <div class="big" id="e_rc" style="top:160px; font-size:64px;">0</div>
+            <div class="lb" style="top:280px;">database writes</div>
+            <div class="big" id="e_rw" style="top:330px;">0</div>
+          </div>
+          <div class="chip" id="e_co" style="left:90px; top:920px; width:900px; background:#F2B544; color:#0B1220; font-size:44px;">COALESCING: kai updates = 1 write</div>
+          <div class="x c" id="e_load" style="top:1040px; font-size:54px;">database load: <span class="green">bahut kam</span></div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:76px;">ab <span class="red">keemat</span></div>
+          <div class="host" id="f_dg" style="top:390px;"></div>
+          <div class="x c red" id="f_lost" style="top:630px; font-size:50px;">5 sec ke likes gaye</div>
+          <div class="chip" id="f_ok" style="left:60px; top:730px; width:460px; background:#4CC38A; color:#0B1220; font-size:44px;">likes: chalega</div>
+          <div class="chip" id="f_no" style="left:560px; top:730px; width:460px; background:#E8596B; color:#0B1220; font-size:44px;">payment: nahi</div>
+          <div class="host" id="f_svc" style="top:860px; height:200px;"></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_t" style="top:250px; font-size:72px;">data dekh kar <span class="acc">chuno</span></div>
+          <div class="chip" id="g_lh" style="left:60px; top:400px; width:440px; background:#4CC9F0; color:#0B1220; font-size:42px;">WRITE-THROUGH</div>
+          <div class="chip" id="g_rh" style="left:580px; top:400px; width:440px; background:#F2B544; color:#0B1220; font-size:42px;">WRITE-BACK</div>
+          <div class="item" id="g_l1" style="left:80px; top:540px; border:4px solid #4CC9F0; color:#4CC9F0;">paise</div>
+          <div class="item" id="g_l2" style="left:80px; top:670px; border:4px solid #4CC9F0; color:#4CC9F0;">orders</div>
+          <div class="item" id="g_r1" style="left:600px; top:540px; border:4px solid #F2B544; color:#F2B544;">likes</div>
+          <div class="item" id="g_r2" style="left:600px; top:670px; border:4px solid #F2B544; color:#F2B544;">views</div>
+          <div class="x" id="g_ln" style="left:80px; width:400px; text-align:center; top:810px; font-size:38px; color:#8592AD;">ek write bhi<br/>nahi khona</div>
+          <div class="x" id="g_rn" style="left:600px; width:400px; text-align:center; top:810px; font-size:38px; color:#8592AD;">writes bahut,<br/>thoda nuksan ok</div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="chip" id="h_chip" style="left:240px; top:250px; width:600px; background:#4CC9F0; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="h_1" style="top:390px;"><span class="acc">write-through</span>: dono mein, phir done</div>
+          <div class="ans" id="h_2" style="top:530px;">data <span class="green">taaza</span>, write <span class="red">dheema</span></div>
+          <div class="ans" id="h_3" style="top:670px;"><span class="gold">write-back</span>: cache, DB baad mein</div>
+          <div class="ans" id="h_4" style="top:810px;">write <span class="green">tez</span>, DB load <span class="green">kam</span></div>
+          <div class="ans" id="h_5" style="top:950px;"><span class="red">crash</span> = writes kho sakte</div>
+        </div>
+
+        <div class="beat" id="sI">
+          <div class="x c" id="i_t" style="top:270px; font-size:70px;"><span class="gold">write-back</span> delay</div>
+          <div class="x c" id="i_d" style="top:400px; font-size:88px; font-family:'JetBrains Mono',monospace;"><span id="i_a">5 sec</span> <span class="mut">&rarr;</span> <span class="acc" id="i_b">1 min</span></div>
+          <div class="chip" id="i_q1" style="left:80px; top:580px; width:440px; border:4px solid #4CC9F0; color:#4CC9F0; font-size:48px;">DB load?</div>
+          <div class="chip" id="i_q2" style="left:560px; top:580px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:48px;">crash loss?</div>
+          <div class="chip" id="i_c" style="left:290px; top:760px; width:500px; background:#4CC9F0; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="124.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="124.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="124.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I"], tag: "SYSTEM DESIGN \u00b7 DAY 030 / 150" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // APP -> CACHE -> DB diagrams built once (seek-safe); packets move along the arrows on the spoken words
+      const AC = "#4CC9F0", GOLD = "#F2B544", RED = "#E8596B", GRN = "#4CC38A", MUT = "#8592AD";
+      const el = (cls, host, css, txt) => { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css); if (txt !== undefined) d.textContent = txt; host.appendChild(d); return d; };
+      const hid = (e) => { tl.set(e, { opacity: 0 }, 0); return e; };
+      const NX = { app: 60, cache: 410, db: 760 };
+      const node = (host, x, name, sub) => { const n = el("node", host, { left: x + "px", top: "0px" }); n.innerHTML = name + '<div class="sub">' + sub + "</div>"; return n; };
+      const diagram = (sel, o = {}) => {
+        const host = q(sel), g = { host };
+        g.app = node(host, NX.app, "APP", "server"); g.cache = node(host, NX.cache, "CACHE", "fast memory"); g.db = node(host, NX.db, "DB", "disk");
+        g.a1 = el("arr", host, { left: "322px", width: "68px", top: "102px" }); g.h1 = el("head", host, { left: "386px", top: "91px" });
+        g.a2 = el(o.dash ? "arr dash" : "arr", host, { left: "672px", width: "68px", top: "102px" }); g.h2 = el("head", host, { left: "736px", top: "91px" });
+        return g;
+      };
+      const pk = (g, txt, at0, css = {}) => el("pk", g.host, { left: (NX[at0] + 75) + "px", top: "128px", ...css }, txt);
+      const go = (p, where, t, d) => tl.to(p, { left: NX[where] + 75, duration: d ?? 0.6, ease: "power2.inOut" }, t);
+      const done = (g, t) => { const c = hid(el("chip", g.host, { left: "60px", top: "226px", width: "260px", background: GRN, color: "#0B1220", fontSize: "40px", padding: "8px 0" }, "DONE")); show(c, t, { s: 1.2 }); return c; };
+      const fmt = (n) => Math.round(n).toLocaleString("en-US");
+
+      // A: frame 0 = the question and a new value landing in the cache; the DB waits: now or later?
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      const a = diagram("#a_dg");
+      a.cache.style.borderColor = AC;
+      const ap = pk(a, "new", "app"); go(ap, "cache", 0.5);
+      const aq = hid(el("x", a.host, { left: "760px", width: "260px", textAlign: "center", top: "-70px", fontSize: "60px", color: GOLD }, "?"));
+      show(aq, at("A", "database") - 0.1, { s: 1.4 }); tl.to(a.db, { borderColor: GOLD, duration: 0.2 }, at("A", "database") - 0.1);
+      show("#a_now", at("A", "abhi") - 0.1, { s: 1.1 }); show("#a_later", at("A", "baad") - 0.1, { s: 1.1 });
+
+      // B: the cache holds a copy of the database value in fast memory; the data changes: two ways to update both
+      show("#b_t", at("B", "cache") - 0.1, { s: 1.06 });
+      const b = diagram("#b_dg");
+      pk(b, "500", "db", { background: "#1B2538", color: "#E8EDF6", border: "3px solid #8592AD" });
+      const bc = hid(pk(b, "500", "db", { background: "#1B2538", color: AC, border: "3px solid " + AC }));
+      tl.to(bc, { opacity: 1, duration: 0.15 }, at("B", "copy") - 0.2); go(bc, "cache", at("B", "copy"), 0.8);
+      tl.to(b.cache, { borderColor: AC, duration: 0.25 }, at("B", "fast") - 0.1);
+      const bn = hid(pk(b, "450", "app", { background: GOLD })); show(bn, at("B", "badle") - 0.1, { s: 1.3 });
+      show("#b_1", at("B", "do") - 0.1, { s: 1.06 }); show("#b_2", at("B", "do") + 0.5, { s: 1.06 });
+
+      // C: write-through: app -> cache -> database, then done; fresh cache, slower write; unread keys fill memory, TTL expires them
+      show("#c_t", at("C", "pahla") - 0.1, { s: 1.1 });
+      const c = diagram("#c_dg");
+      const cp = hid(pk(c, "450", "app", { background: GOLD })); show(cp, at("C", "app") - 0.15, { s: 1.3 });
+      go(cp, "cache", at("C", "likhta") - 0.1);
+      const cp2 = hid(pk(c, "450", "cache", { background: GOLD }));
+      tl.to(cp2, { opacity: 1, duration: 0.1 }, at("C", "usi") - 0.1); go(cp2, "db", at("C", "usi"), 0.7);
+      tl.to([c.cache, c.db], { borderColor: GRN, duration: 0.2 }, at("C", "donon") - 0.1);
+      done(c, at("C", "done") - 0.1);
+      show("#c_good", at("C", "faayda") - 0.1, { s: 1.08 }); show("#c_bad", at("C", "keemat") - 0.1, { s: 1.08 });
+      const kh = q("#c_keys"), keys = [];
+      for (let i = 0; i < 8; i++) { const read = i === 1 || i === 4; const k = hid(el("key", kh, { left: (70 + i * 120) + "px", top: "20px", borderColor: read ? AC : "#26324B", color: read ? AC : MUT }, "k" + (i + 1))); keys.push(k); show(k, at("C", "jo") + i * 0.08, { s: 1.2, y: 0 }); }
+      keys.forEach((k, i) => { if (i !== 1 && i !== 4) tl.to(k, { borderColor: RED, duration: 0.2 }, at("C", "gherta") - 0.1); });
+      show("#c_ttl", at("C", "ttl") - 0.1, { s: 1.08 });
+      keys.forEach((k, i) => { if (i !== 1 && i !== 4) tl.to(k, { opacity: 0.15, duration: 0.4 }, at("C", "expiry") + i * 0.05); });
+
+      // D: write-back: app -> cache, done at once; the database gets a batch later
+      show("#d_t", at("D", "doosra") - 0.1, { s: 1.1 }); show("#d_s", at("D", "write-behind") - 0.1, { s: 1 });
+      const d = diagram("#d_dg", { dash: true });
+      d.a2.style.borderTopColor = GOLD; d.h2.style.borderLeftColor = GOLD;
+      const dp = hid(pk(d, "450", "app", { background: GOLD })); show(dp, at("D", "app") - 0.15, { s: 1.3 });
+      go(dp, "cache", at("D", "likhta") - 0.1);
+      done(d, at("D", "poora") - 0.1);
+      show("#d_later", at("D", "baad") - 0.1, { s: 1.06 });
+      const q2 = hid(pk(d, "120", "cache", { background: GOLD, top: "112px", left: (NX.cache + 55) + "px" })), q3 = hid(pk(d, "780", "cache", { background: GOLD, top: "144px", left: (NX.cache + 95) + "px" }));
+      show(q2, at("D", "kuch") - 0.1, { s: 1.3 }); show(q3, at("D", "kuch") + 0.2, { s: 1.3 });
+      [dp, q2, q3].forEach((p) => go(p, "db", at("D", "saath") - 0.1, 0.8));
+      tl.to(d.db, { borderColor: GOLD, duration: 0.2 }, at("D", "saath") + 0.6);
+
+      // E: illustration: 2,000 likes in 5 seconds; 2,000 database writes vs 1 (coalescing)
+      show("#e_t", at("E", "maan") - 0.1, { s: 1.06 });
+      show("#e_l", at("E", "write-through") - 0.2, { s: 1.04 }); count("#e_lw", 0, 2000, at("E", "write-through") + 0.3, 2.2, fmt);
+      show("#e_r", at("E", "write-back") - 0.2, { s: 1.04 }); count("#e_rc", 0, 2000, at("E", "badhata") - 0.3, 2.0, fmt);
+      count("#e_rw", 0, 1, at("E", "ek", 1) - 0.1, 0.3, fmt);
+      tl.fromTo("#e_rw", { scale: 1 }, { scale: 1.3, duration: 0.2, yoyo: true, repeat: 1 }, at("E", "ek", 1) + 0.2);
+      show("#e_co", at("E", "coalescing") - 0.1, { s: 1.06 });
+      show("#e_load", at("E", "load") - 0.1, { s: 1.06 });
+
+      // F: the price: unflushed likes live only in the cache; a crash loses them; another service reads an old count
+      show("#f_t", at("F", "ab") - 0.1, { s: 1.06 });
+      const f = diagram("#f_dg", { dash: true });
+      f.a2.style.borderTopColor = GOLD; f.h2.style.borderLeftColor = GOLD;
+      const fp = pk(f, "+2,000", "cache", { background: GOLD, width: "150px", left: (NX.cache + 55) + "px" });
+      pk(f, "old", "db", { background: "#1B2538", color: MUT, border: "3px solid #8592AD" });
+      tl.fromTo(fp, { scale: 1 }, { scale: 1.15, duration: 0.25, yoyo: true, repeat: 1 }, at("F", "sirf") - 0.1);
+      tl.to(f.cache, { borderColor: RED, backgroundColor: "#2A1620", duration: 0.25 }, at("F", "crash") - 0.1);
+      tl.to(fp, { y: 140, opacity: 0, duration: 0.6, ease: "power2.in" }, at("F", "gaye") - 0.3);
+      show("#f_lost", at("F", "gaye") - 0.1, { s: 1.1 });
+      show("#f_ok", at("F", "likes", 1) - 0.1, { s: 1.08 }); show("#f_no", at("F", "payment") - 0.1, { s: 1.08 });
+      ["#f_ok", "#f_no", "#f_lost"].forEach((s) => hide(s, at("F", "doosri") - 0.25));
+      const sh = q("#f_svc");
+      const svc = hid(node(sh, NX.db, "SERVICE", "reads DB")); show(svc, at("F", "doosri") - 0.1, { s: 1.06 });
+      const vl = hid(el("arr", sh, { left: (NX.db + 127) + "px", width: "6px", height: "250px", top: "-258px" })); tl.to(vl, { opacity: 1, duration: 0.2 }, at("F", "seedhe") - 0.1);
+      const old = hid(el("x", sh, { left: "80px", width: "640px", top: "60px", fontSize: "54px", textAlign: "right" }, "purana count"));
+      old.style.color = GOLD; show(old, at("F", "purana") - 0.1, { s: 1.1 });
+
+      // G: choose by the data
+      show("#g_t", at("G", "chunav") - 0.1, { s: 1.06 });
+      show("#g_l1", at("G", "paise") - 0.1, { s: 1.1 }); show("#g_l2", at("G", "orders") - 0.1, { s: 1.1 }); show("#g_ln", at("G", "khona") - 0.1, { s: 1 });
+      tl.fromTo("#g_lh", { scale: 1 }, { scale: 1.1, duration: 0.2, yoyo: true, repeat: 1 }, at("G", "write-through") - 0.05);
+      show("#g_r1", at("G", "likes") - 0.1, { s: 1.1 }); show("#g_r2", at("G", "views") - 0.1, { s: 1.1 }); show("#g_rn", at("G", "nuksan") - 0.1, { s: 1 });
+      tl.fromTo("#g_rh", { scale: 1 }, { scale: 1.1, duration: 0.2, yoyo: true, repeat: 1 }, at("G", "write-back") - 0.05);
+
+      // H: interview answer
+      show("#h_chip", at("H", "interview") - 0.05, { s: 0.85 });
+      show("#h_1", at("H", "write-through") - 0.1, { s: 0.94 });
+      show("#h_2", at("H", "taaza") - 0.1, { s: 0.94 });
+      show("#h_3", at("H", "write-back") - 0.1, { s: 0.94 });
+      show("#h_4", at("H", "tez") - 0.1, { s: 0.94 });
+      show("#h_5", at("H", "crash") - 0.1, { s: 0.94 });
+
+      // I: the question
+      show("#i_t", at("I", "write-back") - 0.1, { s: 1.06 });
+      show("#i_d", at("I", "delay") - 0.1, { s: 1.06 });
+      tl.fromTo("#i_b", { scale: 1 }, { scale: 1.25, duration: 0.25, yoyo: true, repeat: 1 }, at("I", "one") - 0.05);
+      show("#i_q1", at("I", "load") - 0.1, { s: 1.08 }); show("#i_q2", at("I", "crash") - 0.1, { s: 1.08 });
+      show("#i_c", at("I", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { cache: "#4CC9F0", "write-through": "#4CC9F0", "write-back": "gold", "write-behind": "gold", coalescing: "gold",
+                       ttl: "gold", crash: "hot", payment: "hot", database: "#4CC9F0", comment: "#4CC9F0" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

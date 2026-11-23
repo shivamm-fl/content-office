@@ -242,6 +242,21 @@
         "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside",
         "https://www.usenix.org/system/files/conference/nsdi13/nsdi13-final170_update.pdf"
       ]
+    },
+    {
+      "id": "s030",
+      "day": 30,
+      "title": "Write-through vs write-back: abhi database mein likho ya baad mein batch mein; crash par writes ka risk",
+      "track": "series",
+      "status": "built",
+      "production_date_ist": "2026-11-23",
+      "owner_approved": false,
+      "hook_type": "direct_question",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html",
+        "https://docs.oracle.com/en/middleware/fusion-middleware/coherence/14.1.2/develop-applications/caching-data-sources.html",
+        "https://en.wikipedia.org/wiki/Cache_(computing)"
+      ]
     }
   ]
 }

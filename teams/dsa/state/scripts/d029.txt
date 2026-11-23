@@ -1,0 +1,21 @@
+[warm, conversational] Move Zeroes और Remove Duplicates, बिना नया array बनाए कैसे करोगे?
+
+Problem one, Move Zeroes: array के सारे zeros आख़िर में भेजो, बाकी numbers का order वही रहे, और कोई नया array नहीं बनाना। Given: zero, one, zero, three, twelve। Answer: one, three, twelve, zero, zero।
+
+Brute force: zero मिला, तो उसके बाद का हर number एक जगह left खिसकाओ, और zero आख़िर में रख दो। Ten thousand numbers में पहले five thousand zeros हों, तो लगभग fifty million shifts, यानी O of n squared। Bottleneck: एक ही number बार-बार खिसक रहा है।
+
+[thoughtful] अब सोचो, हर non-zero number को आख़िर में किस index पर पहुँचना है? ... उससे पहले जितने non-zero आए, वही उसका नया index। तो बस एक counter चाहिए। इसे write pointer कहते हैं: अगला non-zero कहाँ रखना है। और read pointer हर number को एक बार पढ़ता है। Read को non-zero मिला, तो उसे write वाली जगह से swap करो, और write एक आगे।
+
+Dry run, write zero पर। Index zero पर zero, skip। Index one पर one, index zero से swap, write one। Index two पर zero, skip। Index three पर three, index one से swap, write two। Index four पर twelve, index two से swap। Array बना one, three, twelve, zero, zero। Zeros अपने आप पीछे पहुँच गए।
+
+Problem two, Remove Duplicates: sorted array में हर number एक ही बार रखो, उसी array में, और बताओ unique numbers कितने हैं। Given: zero, zero, one, one, one, two, two, three, three, four। Answer five: zero, one, two, three, four।
+
+वही दो pointers। Array sorted है, इसलिए एक जैसे numbers साथ-साथ बैठे हैं। तो कोई number नया तभी है, जब वो आख़िरी रखे number से अलग हो। पहला number हमेशा रहेगा, तो write one से शुरू। Read को नया number मिला, तो write वाली जगह लिखो, और write एक आगे।
+
+Dry run: दूसरा zero skip। One नया, index one पर, बाकी ones skip। Two index two पर, three index three पर, four index four पर। Write five, तो answer five।
+
+दोनों में read pointer हर number को एक ही बार छूता है, तो time O of n, और extra space O of one।
+
+[warm, conversational] Interview में बोलो: read pointer हर element पढ़ता है, write pointer बताता है कि अगला रखने लायक element कहाँ जाएगा। Move Zeroes में रखना है non-zero, Remove Duplicates में नया number।
+
+[curious] अब बताओ: array से हर three हटाना हो, तो write पर कब लिखोगे? Comment करो।

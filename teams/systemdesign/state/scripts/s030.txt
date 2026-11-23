@@ -1,0 +1,17 @@
+[warm, conversational] Cache में नया data लिखा। Database में अभी लिखोगे, या बाद में?
+
+Cache यानी data की एक copy, fast memory में। Data बदले, तो cache और database दोनों को update करने के दो तरीके हैं।
+
+पहला, write-through। App cache में लिखता है, cache उसी वक़्त database में लिखता है, और जब दोनों में लिख जाए, तभी app को done मिलता है। फ़ायदा: cache पुराना नहीं रहता, read पर ताज़ा data। कीमत: हर write दो जगह होता है, तो write धीमा। और जो data कोई पढ़ता ही नहीं, वो भी cache में जगह घेरता है, इसलिए keys पर TTL लगाते हैं, यानी expiry time।
+
+दूसरा, write-back, इसे write-behind भी कहते हैं। App सिर्फ़ cache में लिखता है, और write वहीं पूरा। Database में बाद में लिखा जाता है, कुछ seconds बाद, एक साथ।
+
+[thoughtful] फ़ायदा देखो। मान लो एक viral reel पर five seconds में two thousand likes आए। Write-through में database पर two thousand writes। Write-back में cache count बढ़ाता रहा, और five seconds बाद database में एक write, final count का। एक key के कई updates को database में एक बार लिखना, इसे coalescing कहते हैं। Database का load बहुत कम हो जाता है।
+
+अब कीमत। जब तक database में नहीं लिखा, ताज़ा data सिर्फ़ cache में है। उस बीच cache server crash हो गया, तो पिछले five seconds के likes गए। ... Likes में कुछ seconds का नुकसान चल जाता है, payment में नहीं। और कोई दूसरी service सीधे database पढ़े, तो उसे कुछ seconds पुराना count मिलेगा।
+
+तो चुनाव data देखकर होता है। पैसे और orders, जहाँ एक भी write खोना मंज़ूर नहीं, वहाँ write-through। Likes और views, जहाँ writes बहुत हैं और थोड़ा नुकसान चल जाता है, वहाँ write-back।
+
+[warm, conversational] Interview में बोलो: write-through में write, cache और database दोनों में लिखने के बाद पूरा होता है: data ताज़ा, पर write धीमा। Write-back में write सिर्फ़ cache में, और database में बाद में batch में: write तेज़, database पर load कम, पर database तक पहुँचने से पहले crash हुआ, तो writes खो सकते हैं।
+
+[curious] अब बताओ: write-back का delay five seconds से बढ़ाकर one minute कर दिया। Database के load पर क्या असर होगा, और crash पर नुकसान पर? Comment करो।

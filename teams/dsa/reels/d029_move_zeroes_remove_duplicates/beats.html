@@ -1,0 +1,119 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .vio { color:#A78BFA; }
+          .host { position:absolute; left:0; width:1080px; height:200px; }
+          .cell { position:absolute; border-radius:20px; background:#1B2538; border:4px solid #26324B; font:700 64px "JetBrains Mono",monospace; color:#E8EDF6; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+          .ix { position:absolute; text-align:center; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .ptr { position:absolute; width:76px; height:66px; border-radius:16px; font:700 44px "JetBrains Mono",monospace; display:flex; align-items:center; justify-content:center; color:#0B1220; }
+          .nx { position:absolute; text-align:center; font:700 44px "JetBrains Mono",monospace; color:#A78BFA; }
+          .grp { position:absolute; height:10px; border-radius:5px; background:#F2B544; }
+          .code { position:absolute; left:50px; width:980px; border-radius:24px; background:#0D1526; border:3px solid #26324B; padding:20px 0; box-sizing:border-box; }
+          .code .ln { position:relative; box-sizing:border-box; height:50px; padding-left:26px; font:500 33px "JetBrains Mono",monospace; color:#C9D3E6; white-space:pre; line-height:50px; }
+          .k { color:#A78BFA; } .f { color:#5BC0EB; } .n2 { color:#F2B544; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:24px 34px; box-sizing:border-box; font:700 46px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .lbl { position:absolute; font:600 34px "JetBrains Mono",monospace; color:#8592AD; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c vio" id="a_h1" style="top:250px; font-size:100px;">MOVE ZEROES</div>
+          <div class="x c vio" id="a_h2" style="top:370px; font-size:82px;">REMOVE DUPLICATES</div>
+          <div class="host" id="a_row" style="top:560px;"></div>
+          <div class="x c" id="a_q" style="top:820px; font-size:66px;">bina <span class="red">naya array</span>?</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="chip" id="b_p" style="left:80px; top:250px; width:300px; background:#A78BFA; color:#0B1220; font-size:44px;">PROBLEM 1</div>
+          <div class="x" id="b_t" style="left:410px; top:256px; font-size:68px;">Move Zeroes</div>
+          <div class="chip" id="b_r1" style="left:40px; top:380px; width:320px; border:4px solid #E8596B; color:#E8596B; font-size:38px;">zeros &rarr; end</div>
+          <div class="chip" id="b_r2" style="left:380px; top:380px; width:320px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:38px;">order same</div>
+          <div class="chip" id="b_r3" style="left:720px; top:380px; width:320px; border:4px solid #F2B544; color:#F2B544; font-size:38px;">no new array</div>
+          <div class="lbl" id="b_gl" style="left:84px; top:520px;">given</div>
+          <div class="host" id="b_g" style="top:570px;"></div>
+          <div class="lbl" id="b_al" style="left:84px; top:770px; color:#4CC38A;">answer</div>
+          <div class="host" id="b_a" style="top:820px;"></div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c red" id="c_t" style="top:250px; font-size:90px;">BRUTE FORCE</div>
+          <div class="host" id="c_row" style="top:460px;"></div>
+          <div class="x c" id="c_n" style="top:680px; font-size:52px;">10,000 numbers, pehle <span class="red">5,000 zeros</span></div>
+          <div class="x c" id="c_m" style="top:770px; font-size:62px;">&asymp; <span class="red">50 million</span> shifts</div>
+          <div class="x c red" id="c_o" style="top:865px; font-size:84px; font-family:'JetBrains Mono',monospace;">O(n&sup2;)</div>
+          <div class="chip" id="c_b" style="left:190px; top:1000px; width:700px; border:4px solid #E8596B; color:#E8596B; font-size:44px;">baar-baar khisakna</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_q" style="top:250px; font-size:68px;">non-zero kis <span class="vio">index</span> par?</div>
+          <div class="host" id="d_row" style="top:400px; height:320px;"></div>
+          <div class="x c" id="d_rule" style="top:730px; font-size:48px;">naya index = <span class="vio">pehle aaye non-zero</span></div>
+          <div class="chip" id="d_cnt" style="left:190px; top:840px; width:700px; background:#A78BFA; color:#0B1220; font-size:48px;">counter = write pointer</div>
+          <div class="code" id="d_code" style="top:300px;">
+            <div class="ln" id="d_l0"><span class="k">def</span> <span class="f">moveZeroes</span>(nums):</div>
+            <div class="ln" id="d_l1">    w = <span class="n2">0</span></div>
+            <div class="ln" id="d_l2">    <span class="k">for</span> r <span class="k">in</span> range(len(nums)):</div>
+            <div class="ln" id="d_l3">        <span class="k">if</span> nums[r] != <span class="n2">0</span>:</div>
+            <div class="ln" id="d_l4">            nums[w], nums[r] = nums[r], nums[w]</div>
+            <div class="ln" id="d_l5">            w += <span class="n2">1</span></div>
+          </div>
+          <div class="x" id="d_run" style="left:60px; top:700px; font-size:38px; font-family:'JetBrains Mono',monospace; color:#4CC38A;">&gt;&gt;&gt; moveZeroes([0, 1, 0, 3, 12])<br/>[1, 3, 12, 0, 0]</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:80px;">DRY RUN</div>
+          <div class="host" id="e_row" style="top:380px; height:420px;"></div>
+          <div class="chip" id="e_ok" style="left:240px; top:960px; width:600px; background:#4CC38A; color:#0B1220; font-size:48px;">zeros peechhe</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_p" style="left:80px; top:250px; width:300px; background:#A78BFA; color:#0B1220; font-size:44px;">PROBLEM 2</div>
+          <div class="x" id="f_t" style="left:410px; top:256px; font-size:58px;">Remove Duplicates</div>
+          <div class="chip" id="f_r1" style="left:40px; top:380px; width:320px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:38px;">sorted</div>
+          <div class="chip" id="f_r2" style="left:380px; top:380px; width:320px; border:4px solid #F2B544; color:#F2B544; font-size:38px;">har number 1x</div>
+          <div class="chip" id="f_r3" style="left:720px; top:380px; width:320px; border:4px solid #A78BFA; color:#A78BFA; font-size:38px;">return k</div>
+          <div class="lbl" id="f_gl" style="left:60px; top:520px;">given</div>
+          <div class="host" id="f_g" style="top:570px;"></div>
+          <div class="lbl" id="f_al" style="left:60px; top:740px; color:#4CC38A;">k = 5</div>
+          <div class="host" id="f_a" style="top:790px;"></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_t" style="top:250px; font-size:72px;">wahi <span class="vio">do pointers</span></div>
+          <div class="host" id="g_row" style="top:390px; height:240px;"></div>
+          <div class="chip" id="g_c" style="left:140px; top:660px; width:800px; border:4px solid #F2B544; color:#F2B544; font-size:44px;">naya = aakhiri rakhe se alag</div>
+          <div class="code" id="g_code" style="top:640px;">
+            <div class="ln" id="g_l0"><span class="k">def</span> <span class="f">removeDuplicates</span>(nums):</div>
+            <div class="ln" id="g_l1">    w = <span class="n2">1</span></div>
+            <div class="ln" id="g_l2">    <span class="k">for</span> r <span class="k">in</span> range(<span class="n2">1</span>, len(nums)):</div>
+            <div class="ln" id="g_l3">        <span class="k">if</span> nums[r] != nums[w - <span class="n2">1</span>]:</div>
+            <div class="ln" id="g_l4">            nums[w] = nums[r]</div>
+            <div class="ln" id="g_l5">            w += <span class="n2">1</span></div>
+            <div class="ln" id="g_l6">    <span class="k">return</span> w</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_t" style="top:250px; font-size:80px;">DRY RUN</div>
+          <div class="host" id="h_row" style="top:420px; height:300px;"></div>
+          <div class="chip" id="h_k" style="left:290px; top:900px; width:500px; background:#4CC38A; color:#0B1220; font-size:56px;">answer k = 5</div>
+        </div>
+
+        <div class="beat" id="sI">
+          <div class="x c" id="i_t" style="top:300px; font-size:72px;">har number: <span class="vio">ek baar</span></div>
+          <div class="chip" id="i_time" style="left:140px; top:520px; width:800px; background:#4CC38A; color:#0B1220; font-size:64px;">time O(n)</div>
+          <div class="chip" id="i_space" style="left:140px; top:680px; width:800px; background:#4CC38A; color:#0B1220; font-size:64px;">extra space O(1)</div>
+        </div>
+
+        <div class="beat" id="sJ">
+          <div class="chip" id="j_chip" style="left:240px; top:250px; width:600px; background:#A78BFA; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="j_1" style="top:390px;"><span class="cyan">R</span>: har element padhta</div>
+          <div class="ans" id="j_2" style="top:540px;"><span class="vio">W</span>: agla element kahan</div>
+          <div class="ans" id="j_3" style="top:690px;">Move Zeroes &rarr; <span class="gold">non-zero</span></div>
+          <div class="ans" id="j_4" style="top:840px;">Remove Dups &rarr; <span class="gold">naya number</span></div>
+        </div>
+
+        <div class="beat" id="sK">
+          <div class="x c" id="k_t" style="top:270px; font-size:76px;">har <span class="red">3</span> hatana</div>
+          <div class="host" id="k_row" style="top:420px;"></div>
+          <div class="x c" id="k_q" style="top:660px; font-size:66px;"><span class="vio">write</span> par kab likhoge?</div>
+          <div class="chip" id="k_c" style="left:290px; top:820px; width:500px; background:#A78BFA; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

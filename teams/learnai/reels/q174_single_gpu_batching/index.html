@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Single-GPU Batching</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="99.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .host { position:absolute; left:0; width:1080px; height:300px; }
+          .slot { position:absolute; width:42px; height:42px; border-radius:8px; background:#1B2538; border:2px solid #26324B; box-sizing:border-box; }
+          .gpu { position:absolute; left:250px; width:580px; height:580px; border-radius:30px; border:4px solid #26324B; background:#0D1526; box-sizing:border-box; }
+          .meter { position:absolute; left:140px; width:800px; height:56px; border-radius:28px; background:#1B2538; border:3px solid #26324B; overflow:hidden; box-sizing:border-box; }
+          .meter .fill { position:absolute; left:0; top:0; height:100%; width:100%; transform-origin:0 50%; }
+          .card2 { position:absolute; width:460px; height:420px; border-radius:28px; background:#111A2C; border:3px solid #26324B; box-sizing:border-box; }
+          .card2 .hd { position:absolute; left:0; width:100%; top:22px; text-align:center; font:700 42px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .dot { position:absolute; width:34px; height:34px; border-radius:50%; }
+          .seat { position:absolute; width:70px; height:70px; border-radius:50%; border:4px solid #8592AD; box-sizing:border-box; }
+          .auto { position:absolute; left:190px; width:700px; height:260px; border-radius:60px 60px 24px 24px; background:#2A2410; border:5px solid #F2B544; box-sizing:border-box; }
+          .lim { position:absolute; left:80px; width:920px; height:250px; border-radius:28px; background:#111A2C; border:3px solid #26324B; box-sizing:border-box; }
+          .lim .t { position:absolute; left:34px; top:24px; font:700 44px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .lim .bar { position:absolute; left:34px; top:110px; width:852px; height:60px; border-radius:30px; background:#1B2538; overflow:hidden; }
+          .lim .bar .fill { position:absolute; left:0; top:0; height:100%; width:100%; transform-origin:0 50%; }
+          .lim .v { position:absolute; right:34px; top:24px; font:700 44px "JetBrains Mono",monospace; }
+          .req { position:absolute; width:150px; height:70px; border-radius:16px; font:700 34px "JetBrains Mono",monospace; display:flex; align-items:center; justify-content:center; color:#0B1220; }
+          .usr { position:absolute; width:150px; height:70px; border-radius:16px; border:3px solid #8592AD; font:700 34px "JetBrains Mono",monospace; color:#E8EDF6; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+          .lane { position:absolute; left:60px; height:64px; border-radius:14px; }
+          .lbl { position:absolute; font:600 32px "JetBrains Mono",monospace; color:#8592AD; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:22px 34px; box-sizing:border-box; font:700 42px "Space Grotesk",sans-serif; color:#E8EDF6; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:84px;">1 GPU, 100 inputs:<br/><span class="gold">batching</span> kaise?</div>
+          <div class="shot" id="a_p" style="top:470px; left:90px; width:900px;"><img src="assets/aced_proof.png"/></div>
+          <div class="src" id="a_src" style="top:1110px;">Source: aced.io (Exponent)</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:72px;"><span class="gold">GPU</span>: ek saath bahut kaam</div>
+          <div class="gpu" id="b_gpu" style="top:360px;"></div>
+          <div class="lbl" id="b_l" style="left:140px; top:960px;">GPU use</div>
+          <div class="meter" id="b_m" style="top:1010px;"><div class="fill" id="b_lo" style="background:#E8596B;"></div><div class="fill" id="b_hi" style="background:#4CC38A;"></div></div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c" id="c_t" style="top:250px; font-size:76px;">ab <span class="red">tension</span></div>
+          <div class="card2" id="c_l" style="left:50px; top:380px;"><div class="hd">intzar karo</div></div>
+          <div class="card2" id="c_r" style="left:570px; top:380px;"><div class="hd">turant bhejo</div></div>
+          <div class="chip" id="c_lw" style="left:70px; top:830px; width:420px; background:#E8596B; color:#0B1220; font-size:40px;">user baitha hai</div>
+          <div class="chip" id="c_rw" style="left:590px; top:830px; width:420px; background:#E8596B; color:#0B1220; font-size:40px;">GPU kam use</div>
+          <div class="x c gold" id="c_at" style="top:360px; font-size:64px;">shared auto</div>
+          <div class="auto" id="c_auto" style="top:470px;"></div>
+          <div class="chip" id="c_p1" style="left:70px; top:800px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:42px;">log pareshan</div>
+          <div class="chip" id="c_p2" style="left:570px; top:800px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:42px;">kamai kam</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c" id="d_t" style="top:250px; font-size:76px;">fix: <span class="gold">do limits</span></div>
+          <div class="lim" id="d_1" style="top:380px;"><div class="t">max batch</div><div class="v gold" id="d_1v">0 / 100</div><div class="bar"><div class="fill" id="d_1f" style="background:#F2B544;"></div></div></div>
+          <div class="lim" id="d_2" style="top:670px;"><div class="t">max wait</div><div class="v" id="d_2v" style="color:#5BC0EB;">20 ms</div><div class="bar"><div class="fill" id="d_2f" style="background:#5BC0EB;"></div></div></div>
+          <div class="chip" id="d_s1" style="left:740px; top:540px; width:260px; background:#4CC38A; color:#0B1220; font-size:42px;">SEND</div>
+          <div class="chip" id="d_s2" style="left:540px; top:830px; width:460px; background:#4CC38A; color:#0B1220; font-size:40px;">SEND, jitna bhara</div>
+          <div class="chip" id="d_n" style="left:190px; top:980px; width:700px; border:4px solid #5BC0EB; color:#5BC0EB; font-size:44px;">"max queue delay"</div>
+          <div class="src" id="d_src" style="top:1110px;">Source: NVIDIA Triton docs</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c" id="e_t" style="top:250px; font-size:72px;">har request ki <span class="gold">id</span></div>
+          <div class="host" id="e_h" style="top:360px; height:420px;"></div>
+          <div class="host" id="e_q" style="top:820px; height:300px;"></div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_fu" style="left:340px; top:250px; width:400px; background:#5BC0EB; color:#0B1220; font-size:46px;">FOLLOW-UP</div>
+          <div class="x c" id="f_t" style="top:350px; font-size:60px;">har jawab ki <span class="gold">lambai</span> alag</div>
+          <div class="host" id="f_h" style="top:460px; height:600px;"></div>
+          <div class="src" id="f_src" style="top:1110px;">Source: Anyscale blog</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="g_1" style="top:380px;"><span class="gold">dynamic batching</span>: max size + max wait</div>
+          <div class="ans" id="g_2" style="top:520px;">request <span class="gold">id</span> se response vaapas</div>
+          <div class="ans" id="g_3" style="top:660px;">queue par <span class="red">limit</span></div>
+          <div class="ans" id="g_4" style="top:800px;">LLM: <span class="green">continuous batching</span></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_t" style="top:280px; font-size:76px;"><span class="gold">max wait</span> badhao</div>
+          <div class="chip" id="h_q1" style="left:80px; top:460px; width:440px; border:4px solid #4CC38A; color:#4CC38A; font-size:46px;">throughput?</div>
+          <div class="chip" id="h_q2" style="left:560px; top:460px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:46px;">latency?</div>
+          <div class="chip" id="h_c" style="left:290px; top:640px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="99.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="99.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="99.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H"], tag: "AI ENGINEER INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // pictures built once (seek-safe) and animated on the spoken words
+      const GOLD = "#F2B544", CY = "#5BC0EB", VIO = "#A78BFA", RED = "#E8596B", GRN = "#4CC38A", MUT = "#8592AD";
+      const el = (cls, host, css, txt) => { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css); if (txt !== undefined) d.textContent = txt; host.appendChild(d); return d; };
+      const hid = (e) => { tl.set(e, { opacity: 0 }, 0); return e; };
+      const grow = (e, t, d, to) => { tl.set(e, { scaleX: 0 }, 0); tl.to(e, { scaleX: to ?? 1, duration: d, ease: "none" }, t); };
+
+      // A: frame 0 = the question; the real page (title + Anthropic logo), then the full question highlighted
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_p", at("A", "anthropic") + 0.05, { s: 0.94 });
+      tl.fromTo("#a_p", { scale: 1 }, { scale: 1.04, duration: 6, ease: "none" }, at("A", "ek") - 0.2);
+
+      // B: a GPU has room for many requests at once: one request uses a sliver, a batch fills it
+      show("#b_t", at("B", "gpu") - 0.1, { s: 1.06 });
+      const gpu = q("#b_gpu"), slots = [];
+      for (let r = 0; r < 10; r++) for (let c = 0; c < 10; c++) slots.push(el("slot", gpu, { left: (26 + c * 54) + "px", top: (26 + r * 54) + "px" }));
+      tl.to(slots[0], { backgroundColor: GOLD, borderColor: GOLD, duration: 0.2 }, at("B", "ek-ek") - 0.1);
+      grow("#b_lo", at("B", "istemal") - 0.3, 0.4, 0.06); grow("#b_hi", at("B", "kai") + 0.2, 1.4, 0.96);
+      slots.forEach((s, i) => { if (i) tl.to(s, { backgroundColor: GOLD, borderColor: GOLD, duration: 0.15 }, at("B", "kai") + i * 0.012); });
+      hide("#b_lo", at("B", "kai") + 0.2, 0.1);
+
+      // C: wait for a full batch and the first user waits; send now and the GPU idles; the shared auto
+      show("#c_t", at("C", "tension") - 0.1, { s: 1.08 });
+      show("#c_l", at("C", "intzar") - 0.2, { s: 1.04 }); show("#c_r", at("C", "turant") - 0.2, { s: 1.04 });
+      const cl = q("#c_l"), cr = q("#c_r");
+      for (let i = 0; i < 12; i++) { const d = hid(el("dot", cl, { left: (60 + (i % 6) * 60) + "px", top: (130 + Math.floor(i / 6) * 60) + "px", background: GOLD })); tl.to(d, { opacity: 1, duration: 0.15 }, at("C", "intzar") + 0.2 + i * 0.25); }
+      const clock = hid(el("x", cl, { left: "0px", width: "460px", textAlign: "center", top: "290px", fontSize: "52px", color: RED, fontFamily: "JetBrains Mono, monospace" }, "wait..."));
+      tl.to(clock, { opacity: 1, duration: 0.2 }, at("C", "pahla") - 0.1);
+      show("#c_lw", at("C", "baitha") - 0.1, { s: 1.06 });
+      const rd = [0, 1, 2].map((i) => hid(el("dot", cr, { left: (60 + i * 60) + "px", top: "130px", background: GOLD })));
+      rd.forEach((d, i) => tl.to(d, { opacity: 1, duration: 0.15 }, at("C", "turant") + i * 0.12));
+      tl.to(rd, { x: 300, opacity: 0, duration: 0.6, ease: "power2.in" }, at("C", "bhej") + 0.2);
+      const rmeter = el("meter", cr, { left: "40px", width: "380px", top: "300px", height: "46px" }); const rf = el("fill", rmeter, { background: RED }); grow(rf, at("C", "chhota"), 0.4, 0.15);
+      show("#c_rw", at("C", "kam") - 0.1, { s: 1.06 });
+      ["#c_l", "#c_r", "#c_lw", "#c_rw", "#c_t"].forEach((s) => hide(s, at("C", "shared") - 0.25));
+      show("#c_at", at("C", "shared") - 0.1, { s: 1.06 }); show("#c_auto", at("C", "shared"), { s: 1.04 });
+      const auto = q("#c_auto"), seats = [];
+      for (let i = 0; i < 6; i++) seats.push(el("seat", auto, { left: (77 + i * 95) + "px", top: "95px" }));
+      seats.forEach((s, i) => tl.to(s, { backgroundColor: GOLD, borderColor: GOLD, duration: 0.2 }, at("C", "poori") + i * 0.35));
+      show("#c_p1", at("C", "pareshan") - 0.1, { s: 1.06 });
+      seats.forEach((s, i) => { if (i) tl.to(s, { backgroundColor: "rgba(0,0,0,0)", borderColor: MUT, duration: 0.2 }, at("C", "khaali") - 0.1); });
+      tl.to(auto, { x: 60, duration: 0.8, ease: "power2.inOut" }, at("C", "chal"));
+      show("#c_p2", at("C", "kamai") - 0.1, { s: 1.06 });
+
+      // D: two limits: batch full at 100 -> send; first request waited 20 ms -> send what is there
+      show("#d_t", at("D", "fix") - 0.1, { s: 1.08 });
+      show("#d_1", at("D", "batch") - 0.2, { s: 1.04 });
+      grow("#d_1f", at("D", "batch"), at("D", "hundred") + 0.3 - at("D", "batch"));
+      count("#d_1v", 0, 100, at("D", "batch"), at("D", "hundred") + 0.3 - at("D", "batch"), (v) => Math.round(v) + " / 100");
+      show("#d_s1", at("D", "turant") - 0.1, { s: 1.15 });
+      show("#d_2", at("D", "pahli") - 0.2, { s: 1.04 });
+      grow("#d_2f", at("D", "pahli"), at("D", "twenty") + 0.4 - at("D", "pahli"));
+      show("#d_s2", at("D", "jitna") - 0.1, { s: 1.1 });
+      show("#d_n", at("D", "max") - 0.1, { s: 1.06 });
+
+      // E: every request carries an id, every output goes back to the same user; a long queue rejects new requests
+      show("#e_t", at("E", "id") - 0.4, { s: 1.06 });
+      const eh = q("#e_h"), COL = [GOLD, CY, VIO], IDS = ["7", "8", "9"];
+      const batch = hid(el("box", eh, { left: "440px", top: "20px", width: "200px", height: "340px", border: "4px solid #26324B", background: "#0D1526", color: MUT, fontSize: "36px", justifyContent: "flex-start", paddingTop: "16px", boxSizing: "border-box" }, "BATCH"));
+      tl.to(batch, { opacity: 1, duration: 0.2 }, at("E", "users") - 0.1);
+      IDS.forEach((id, i) => {
+        const u = hid(el("usr", eh, { left: "40px", top: (20 + i * 120) + "px" }, "user " + id)); tl.to(u, { opacity: 1, duration: 0.2 }, at("E", "users") + i * 0.1);
+        const rq = hid(el("req", eh, { left: "210px", top: (20 + i * 120) + "px", background: COL[i] }, "id " + id)); show(rq, at("E", "id") - 0.1 + i * 0.12, { s: 1.2, y: 0 });
+        tl.to(rq, { left: 465, top: 90 + i * 85, duration: 0.6, ease: "power2.inOut" }, at("E", "batch") + i * 0.08);
+        const u2 = hid(el("usr", eh, { left: "890px", top: (20 + i * 120) + "px" }, "user " + id)); tl.to(u2, { opacity: 1, duration: 0.2 }, at("E", "output") - 0.2);
+        tl.to(rq, { left: 720, top: 20 + i * 120, duration: 0.6, ease: "power2.inOut" }, at("E", "output") + i * 0.1);
+        tl.to(u2, { borderColor: COL[i], duration: 0.2 }, at("E", "sahi") - 0.1 + i * 0.1);
+      });
+      const eq = q("#e_q");
+      const qlab = hid(el("lbl", eq, { left: "60px", top: "0px" }, "queue")); tl.to(qlab, { opacity: 1, duration: 0.2 }, at("E", "queue") - 0.1);
+      const lim = hid(el("arr", eq, { left: "760px", top: "40px", width: "6px", height: "110px", background: RED, position: "absolute", borderRadius: "3px" })); tl.to(lim, { opacity: 1, duration: 0.2 }, at("E", "lanbi"));
+      for (let i = 0; i < 10; i++) { const d = hid(el("dot", eq, { left: (60 + i * 66) + "px", top: "78px", background: MUT })); tl.to(d, { opacity: 1, duration: 0.1 }, at("E", "queue") + i * 0.1); }
+      const nw = [0, 1].map((i) => hid(el("dot", eq, { left: "980px", top: (60 + i * 50) + "px", background: RED })));
+      nw.forEach((d, i) => { tl.to(d, { opacity: 1, duration: 0.1 }, at("E", "nayi") - 0.1 + i * 0.15); tl.fromTo(d, { x: 0 }, { x: -170, duration: 0.3, yoyo: true, repeat: 1, ease: "power2.out" }, at("E", "nayi") + i * 0.15); });
+      const rej = hid(el("chip", eq, { left: "560px", top: "170px", width: "440px", background: RED, color: "#0B1220", fontSize: "40px" }, "reject: queue full")); show(rej, at("E", "mana") - 0.1, { s: 1.1 });
+
+      // F: fixed batch: the 10-token answer sits idle until the 500-token one ends; continuous batching fills the slot at once
+      show("#f_fu", at("F", "follow-up") - 0.1, { s: 0.9 }); show("#f_t", at("F", "llm") - 0.1, { s: 1.04 });
+      const fh = q("#f_h"), W = 900, x0 = 90;
+      const fx = hid(el("chip", fh, { left: "290px", top: "0px", width: "500px", border: "4px solid " + RED, color: RED, fontSize: "40px" }, "fixed batch"));
+      const cx = hid(el("chip", fh, { left: "240px", top: "0px", width: "600px", background: GRN, color: "#0B1220", fontSize: "40px" }, "continuous batching"));
+      const l1 = hid(el("lbl", fh, { left: x0 + "px", top: "100px" }, "jawab 1: 10 tokens")), l2 = hid(el("lbl", fh, { left: x0 + "px", top: "250px" }, "jawab 2: 500 tokens"));
+      const b1 = el("lane", fh, { left: x0 + "px", top: "145px", width: "30px", background: GOLD, transformOrigin: "0 50%" }), b2 = el("lane", fh, { left: x0 + "px", top: "295px", width: W + "px", background: CY, transformOrigin: "0 50%" });
+      const idle = el("lane", fh, { left: (x0 + 30) + "px", top: "145px", width: (W - 30) + "px", background: "#26324B", transformOrigin: "0 50%" });
+      const idl = hid(el("lbl", fh, { left: (x0 + 300) + "px", top: "160px", color: "#E8EDF6" }, "wait..."));
+      tl.to(l1, { opacity: 1, duration: 0.2 }, at("F", "ten") - 0.2); grow(b1, at("F", "ten"), 0.3);
+      tl.to(l2, { opacity: 1, duration: 0.2 }, at("F", "five") - 0.2); grow(b2, at("F", "five"), at("F", "continuous") - at("F", "five") - 0.3);
+      show(fx, at("F", "fixed") - 0.1, { s: 1.06 });
+      grow(idle, at("F", "khatam") - 0.1, at("F", "continuous") - at("F", "khatam") - 0.2); tl.to(idl, { opacity: 1, duration: 0.2 }, at("F", "intzar") - 0.1);
+      hide(fx, at("F", "continuous") - 0.2); show(cx, at("F", "continuous") - 0.05, { s: 1.06 });
+      tl.to([idle, idl], { opacity: 0, duration: 0.2 }, at("F", "continuous"));
+      [0, 1, 2].forEach((k) => { const nb = el("lane", fh, { left: (x0 + 34 + k * 290) + "px", top: "145px", width: "286px", background: GRN, transformOrigin: "0 50%" }); grow(nb, at("F", "turant") - 0.2 + k * 0.5, 0.45);
+        const t = hid(el("lbl", fh, { left: (x0 + 50 + k * 290) + "px", top: "160px", color: "#0B1220" }, "new")); tl.to(t, { opacity: 1, duration: 0.15 }, at("F", "turant") + 0.2 + k * 0.5); });
+
+      // G: interview answer
+      show("#g_chip", at("G", "interview") - 0.05, { s: 0.85 });
+      show("#g_1", at("G", "max") - 0.1, { s: 0.94 });
+      show("#g_2", at("G", "id") - 0.3, { s: 0.94 });
+      show("#g_3", at("G", "queue") - 0.1, { s: 0.94 });
+      show("#g_4", at("G", "llm") - 0.1, { s: 0.94 });
+
+      // H: the question
+      show("#h_t", at("H", "max") - 0.1, { s: 1.06 });
+      show("#h_q1", at("H", "throughput") - 0.1, { s: 1.08 }); show("#h_q2", at("H", "latency") - 0.1, { s: 1.08 });
+      show("#h_c", at("H", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { anthropic: "gold", batching: "gold", batch: "gold", gpu: "gold", id: "gold", queue: "cyan", continuous: "green",
+                       throughput: "green", latency: "hot", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

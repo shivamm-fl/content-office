@@ -1,0 +1,10 @@
+Write-Through vs Write-Back Cache: Which One And When
+
+Write-through: a write completes only after both the cache and the database have it, so the cache stays fresh but every write pays two trips; add a TTL so unread keys do not fill the cache. Write-back (write-behind): the write completes in the cache and reaches the database later in batches, so writes are fast and many updates to one key become one database write (coalescing), but writes not yet flushed are lost if the cache node fails, and other readers of the database see slightly old data. Use write-through for money and orders, write-back for counters like likes and views. The likes numbers in the video are an illustration.
+
+Sources:
+https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html
+https://docs.oracle.com/en/middleware/fusion-middleware/coherence/14.1.2/develop-applications/caching-data-sources.html
+https://en.wikipedia.org/wiki/Cache_(computing)
+
+AI-assisted visuals and narration.

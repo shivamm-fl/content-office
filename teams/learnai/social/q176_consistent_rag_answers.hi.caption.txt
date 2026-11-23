@@ -1,0 +1,11 @@
+NVIDIA ke interview mein poocha gaya: RAG system ek hi sawal par alag-alag jawab deta hai. Production mein consistent kaise banaoge?
+
+Pehle dhoondho ki fark kahan se aa raha hai. Teen jagah se aa sakta hai.
+
+Sampling: model har agla shabd probabilities mein se chunta hai. Temperature zyada ho to kam probable shabd bhi chune jaate hain aur jawab badalta hai. Facts wale sawalon par, jahan ye setting mile, randomness kam rakho.
+
+Retrieval: index mein naye documents aaye, ya approximate search ne is baar doosre chunks uthaye, to model ko context hi alag mila. Har jawab ke saath retrieved chunk ids log karo, taaki do jawabon ki tulna ho sake.
+
+Model version: aisa model naam use karo jo fixed snapshot ho, aur model badalne se pehle eval chalao. Aur jo sawal baar-baar aate hain, jaise refund policy, unka approved jawab cache kar lo.
+
+Randomness kam karne ke baad bhi jawab badal raha hai. Sabse pehle kya check karoge? Comment karo.

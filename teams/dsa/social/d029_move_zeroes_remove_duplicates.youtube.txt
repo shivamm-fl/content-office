@@ -1,0 +1,9 @@
+Move Zeroes And Remove Duplicates In Python: Read And Write Pointers, O(1) Space
+
+Move Zeroes (LeetCode 283) and Remove Duplicates from Sorted Array (LeetCode 26) use the same two-pointer pattern. A read pointer visits every element once; a write pointer marks where the next element worth keeping goes. Move Zeroes keeps non-zeros (swap with the write slot, move write on), so [0, 1, 0, 3, 12] becomes [1, 3, 12, 0, 0]. Remove Duplicates keeps a value only when it differs from the last kept one, so [0,0,1,1,1,2,2,3,3,4] gives k = 5. The shifting brute force is O(n^2); both pointer versions are O(n) time and O(1) extra space. In our own run the code matched a brute-force check on 2,000 random arrays.
+
+Sources:
+https://leetcode.com/problems/move-zeroes/
+https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+
+AI-assisted visuals and narration.

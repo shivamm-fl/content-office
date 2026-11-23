@@ -1,0 +1,9 @@
+Anthropic ke interview mein poocha gaya: ek GPU, ek batch mein 100 inputs tak, aur users jawab ka intzar kar rahe hain. Batching system kaise banaoge?
+
+GPU ek saath bahut kaam kar sakta hai. Ek-ek request bhejoge to woh poora use hi nahi hoga, isliye batching. Tension: batch bharne ka intzar karo to pehla user baitha rahega, turant bhej do to batch chhota aur GPU kam use. Shared auto jaisa.
+
+Fix: do limits. Batch 100 ka ho jaye to turant bhejo, ya pehli request ko tay time ho jaye (jaise 20 ms) to jitna bhara hai utna bhej do. Serving tools mein ise max queue delay kehte hain. Har request ko id do aur output usi id se sahi user tak lautao. Queue bahut lambi ho to nayi requests mana karo.
+
+Follow-up: LLM mein jawab alag lambai ke hote hain. Fixed batch mein 10 token wala jawab 500 token wale ka intzar karta hai. Continuous batching mein jo request khatam, uski jagah turant nayi request.
+
+Max wait time badhaoge to throughput aur latency par kya asar hoga? Comment karo.

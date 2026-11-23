@@ -1,0 +1,9 @@
+Same question, different RAG answers: how to make it consistent (NVIDIA AI interview)
+
+Inconsistency has three sources: sampling, retrieval and model version. Lower randomness where the setting exists, log the retrieved chunk ids for every answer, pin a fixed model snapshot and run evals before changing it, and cache the approved answer for frequent questions. The probability bars in the video are an illustration (temperature 1 vs 2, computed).
+
+Sources:
+https://aiengineeringinsider.substack.com/p/50-rag-interview-questions-reported
+https://platform.claude.com/docs/en/about-claude/models/overview
+
+AI-assisted visuals and narration.

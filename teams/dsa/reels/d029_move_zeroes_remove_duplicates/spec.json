@@ -1,0 +1,122 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J",
+  "K"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0,
+  "I": 2.0,
+  "J": 2.0,
+  "K": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "H",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "I",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "J",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "K",
+   0,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Move Zeroes और Remove Duplicates, बिना नया array बनाए कैसे करोगे?",
+   "B": "Problem one, Move Zeroes: array के सारे zeros आख़िर में भेजो, बाकी numbers का order वही रहे, और कोई नया array नहीं बनाना। Given: zero, one, zero, three, twelve। Answer: one, three, twelve, zero, zero।",
+   "C": "Brute force: zero मिला, तो उसके बाद का हर number एक जगह left खिसकाओ, और zero आख़िर में रख दो। Ten thousand numbers में पहले five thousand zeros हों, तो लगभग fifty million shifts, यानी O of n squared। Bottleneck: एक ही number बार-बार खिसक रहा है।",
+   "D": "[thoughtful] अब सोचो, हर non-zero number को आख़िर में किस index पर पहुँचना है? ... उससे पहले जितने non-zero आए, वही उसका नया index। तो बस एक counter चाहिए। इसे write pointer कहते हैं: अगला non-zero कहाँ रखना है। और read pointer हर number को एक बार पढ़ता है। Read को non-zero मिला, तो उसे write वाली जगह से swap करो, और write एक आगे।",
+   "E": "Dry run, write zero पर। Index zero पर zero, skip। Index one पर one, index zero से swap, write one। Index two पर zero, skip। Index three पर three, index one से swap, write two। Index four पर twelve, index two से swap। Array बना one, three, twelve, zero, zero। Zeros अपने आप पीछे पहुँच गए।",
+   "F": "Problem two, Remove Duplicates: sorted array में हर number एक ही बार रखो, उसी array में, और बताओ unique numbers कितने हैं। Given: zero, zero, one, one, one, two, two, three, three, four। Answer five: zero, one, two, three, four।",
+   "G": "वही दो pointers। Array sorted है, इसलिए एक जैसे numbers साथ-साथ बैठे हैं। तो कोई number नया तभी है, जब वो आख़िरी रखे number से अलग हो। पहला number हमेशा रहेगा, तो write one से शुरू। Read को नया number मिला, तो write वाली जगह लिखो, और write एक आगे।",
+   "H": "Dry run: दूसरा zero skip। One नया, index one पर, बाकी ones skip। Two index two पर, three index three पर, four index four पर। Write five, तो answer five।",
+   "I": "दोनों में read pointer हर number को एक ही बार छूता है, तो time O of n, और extra space O of one।",
+   "J": "[warm, conversational] Interview में बोलो: read pointer हर element पढ़ता है, write pointer बताता है कि अगला रखने लायक element कहाँ जाएगा। Move Zeroes में रखना है non-zero, Remove Duplicates में नया number।",
+   "K": "[curious] अब बताओ: array से हर three हटाना हो, तो write पर कब लिखोगे? Comment करो।"
+  }
+ },
+ "hook_type": "direct_question",
+ "sources": [
+  "https://leetcode.com/problems/move-zeroes/",
+  "https://leetcode.com/problems/remove-duplicates-from-sorted-array/"
+ ],
+ "approved": "owner 2026-11-23 (scripts reviewed in chat, then: 'liya maine subscription update, use kr')"
+}

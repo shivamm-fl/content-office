@@ -1,0 +1,10 @@
+Design an LLM inference batching system for one GPU (Anthropic AI interview)
+
+Dynamic batching with two limits: send when the batch reaches its max size (100) or when the first request has waited the max queue delay (e.g. 20 ms). Give every request an id and route each output back by that id, cap the queue and reject new requests when it is full, and for LLMs use continuous batching so a finished request's slot is refilled at once.
+
+Sources:
+https://www.aced.io/questions/5780/inference-batching-system
+https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/user_guide/batcher.html
+https://www.anyscale.com/blog/continuous-batching-llm-inference
+
+AI-assisted visuals and narration.

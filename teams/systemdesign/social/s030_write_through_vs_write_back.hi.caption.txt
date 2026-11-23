@@ -1,0 +1,11 @@
+Day 30/150: Cache mein naya data likha. Database mein abhi likhoge ya baad mein? Write-through vs write-back.
+
+Write-through: app cache mein likhta hai, cache usi waqt database mein likhta hai, aur dono mein likhne ke baad hi done. Cache taaza rehta hai, par har write do jagah hota hai, to write dheema. Jo data koi padhta nahi woh bhi cache bharta hai, isliye keys par TTL (expiry time).
+
+Write-back (write-behind): app sirf cache mein likhta hai aur write wahin poora. Database mein kuch seconds baad batch mein likha jaata hai. Example: 5 second mein 2,000 likes aaye to write-through mein 2,000 database writes, write-back mein ek write final count ka. Ek key ke kai updates ko ek baar likhna = coalescing.
+
+Keemat: database tak pahunchne se pehle cache server crash hua to woh writes gaye. Aur jo service seedhe database padhe, use thoda purana data milega. Isliye paise aur orders par write-through, likes aur views par write-back.
+
+Comment karke batao: write-back ka delay 5 second se 1 minute kar diya, to database load aur crash par nuksan par kya asar hoga?
+
+#SystemDesign #Caching #Backend
