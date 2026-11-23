@@ -1,0 +1,98 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "impact",
+   null,
+   null,
+   0.05
+  ],
+  [
+   "tick",
+   "B",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "C",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "D",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "E",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "F",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "G",
+   0,
+   0
+  ],
+  [
+   "tick",
+   "H",
+   0,
+   0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[warm, conversational] Anthropic के interview में पूछा गया: एक GPU, एक batch में hundred inputs तक, और users जवाब का इंतज़ार कर रहे हैं। Batching system कैसे बनाओगे?",
+   "B": "[thoughtful] पहले समझो batching क्यों चाहिए। GPU एक साथ बहुत सारा काम कर सकता है। एक-एक request भेजोगे, तो वो पूरा इस्तेमाल ही नहीं होगा। कई requests एक batch में डालो, तो एक ही बार में सबका काम।",
+   "C": "अब tension। Batch भरने का इंतज़ार करो, तो पहला user बैठा रहेगा। तुरंत भेज दो, तो batch छोटा, और GPU कम इस्तेमाल होगा। Shared auto जैसा: driver पूरी सवारी का इंतज़ार करे, तो बैठे लोग परेशान, ख़ाली चल दे, तो कमाई कम।",
+   "D": "Fix: दो limits। Batch hundred का हो जाए, तो तुरंत भेजो। या पहली request को एक तय time हो जाए, जैसे twenty milliseconds, तो जितना भरा है, उतना भेज दो। Serving tools में इसे max queue delay कहते हैं।",
+   "E": "Users रुके हुए हैं, तो हर request को एक id दो, और batch का हर output उसी id से सही user तक लौटाओ। Queue बहुत लंबी हो जाए, तो नई requests को मना करो, वरना सबका इंतज़ार बढ़ता जाएगा।",
+   "F": "[curious] Follow-up: LLM में हर जवाब की लंबाई अलग है। एक जवाब ten tokens का, दूसरा five hundred tokens का। Fixed batch में छोटा जवाब ख़त्म होकर भी लंबे वाले का इंतज़ार करता है। इसलिए continuous batching: जो request ख़त्म, उसकी जगह तुरंत नई request।",
+   "G": "[warm, conversational] Interview में बोलो: max batch size और max wait time वाली dynamic batching, हर request की id से response वापस, queue पर limit, और LLM के लिए continuous batching।",
+   "H": "[curious] अब बताओ: max wait time बढ़ाओगे, तो throughput और latency पर क्या असर होगा? Comment करो।"
+  }
+ },
+ "hook_type": "company_specific",
+ "company": "Anthropic",
+ "company_source": "https://www.aced.io/questions/5780/inference-batching-system",
+ "sources": [
+  "https://www.aced.io/questions/5780/inference-batching-system",
+  "https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/user_guide/batcher.html",
+  "https://www.anyscale.com/blog/continuous-batching-llm-inference"
+ ],
+ "approved": "owner 2026-11-20 (script), voiced 2026-11-23 after 'liya maine subscription update, use kr'"
+}

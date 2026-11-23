@@ -1,0 +1,86 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .src3 { position:absolute; left:80px; width:920px; height:150px; border-radius:26px; background:#111A2C; border:3px solid #26324B; box-sizing:border-box; }
+          .src3 .n { position:absolute; left:28px; top:36px; width:78px; height:78px; border-radius:50%; background:#F2B544; color:#0B1220; font:700 48px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; }
+          .src3 .t { position:absolute; left:136px; top:26px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .src3 .s { position:absolute; left:136px; top:90px; font:500 32px "JetBrains Mono",monospace; color:#8592AD; white-space:nowrap; }
+          .prow { position:absolute; left:80px; width:920px; height:96px; }
+          .prow .w { position:absolute; left:0; top:14px; width:120px; height:68px; border-radius:16px; background:#1B2538; border:3px solid #26324B; box-sizing:border-box; font:700 40px "JetBrains Mono",monospace; color:#E8EDF6; display:flex; align-items:center; justify-content:center; }
+          .prow .b { position:absolute; left:150px; top:22px; height:52px; width:640px; border-radius:14px; background:#F2B544; transform-origin:0 50%; }
+          .prow .p { position:absolute; right:0; top:20px; width:110px; text-align:right; font:700 40px "JetBrains Mono",monospace; color:#E8EDF6; }
+          .tile { position:absolute; width:96px; height:70px; border-radius:14px; background:#1B2538; border:3px solid #26324B; box-sizing:border-box; font:700 30px "JetBrains Mono",monospace; color:#C9D3E6; display:flex; align-items:center; justify-content:center; }
+          .panel { position:absolute; border-radius:26px; background:#0D1526; border:3px solid #26324B; box-sizing:border-box; }
+          .lbl { position:absolute; font:600 32px "JetBrains Mono",monospace; color:#8592AD; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:20px 34px; box-sizing:border-box; font:700 42px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .ill { position:absolute; right:60px; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:88px;">same sawal,<br/><span class="red">alag jawab</span></div>
+          <div class="shot" id="a_p" style="top:480px; left:90px; width:900px;"><img src="assets/sub_header.png"/></div>
+          <div class="shot" id="a_qs" style="top:490px;"><img src="assets/sub_q.png"/></div>
+          <div class="chip" id="a_n" style="left:240px; top:960px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">consistent kaise?</div>
+          <div class="src" id="a_src" style="top:1110px;">Source: AI Engineering Insider</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:76px;">fark <span class="gold">kahan</span> se?</div>
+          <div class="src3" id="b_1" style="top:390px;"><div class="n">1</div><div class="t">SAMPLING</div><div class="s">shabd kaise chuna</div></div>
+          <div class="src3" id="b_2" style="top:570px;"><div class="n">2</div><div class="t">RETRIEVAL</div><div class="s">kaun se chunks aaye</div></div>
+          <div class="src3" id="b_3" style="top:750px;"><div class="n">3</div><div class="t">MODEL VERSION</div><div class="s">kaun sa model chala</div></div>
+          <div class="chip" id="b_all" style="left:190px; top:950px; width:700px; border:4px solid #E8596B; color:#E8596B; font-size:46px;">teeno jawab badal sakte</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c gold" id="c_t" style="top:250px; font-size:76px;">1. SAMPLING</div>
+          <div class="ill" id="c_ill" style="top:250px;">illustration</div>
+          <div class="x c" id="c_pr" style="top:360px; font-size:56px; font-family:'JetBrains Mono',monospace;">refund <span class="gold">___</span> din mein</div>
+          <div class="prow" id="c_r0" style="top:470px;"><div class="w">7</div><div class="b" id="c_b0"></div><div class="p" id="c_p0">80%</div></div>
+          <div class="prow" id="c_r1" style="top:580px;"><div class="w">10</div><div class="b" id="c_b1"></div><div class="p" id="c_p1">15%</div></div>
+          <div class="prow" id="c_r2" style="top:690px;"><div class="w">30</div><div class="b" id="c_b2"></div><div class="p" id="c_p2">5%</div></div>
+          <div class="chip" id="c_hot" style="left:240px; top:820px; width:600px; background:#E8596B; color:#0B1220; font-size:44px;">temperature zyada</div>
+          <div class="chip" id="c_cold" style="left:140px; top:820px; width:800px; background:#4CC38A; color:#0B1220; font-size:44px;">facts: randomness kam</div>
+          <div class="x c" id="c_ab" style="top:940px; font-size:50px; font-family:'JetBrains Mono',monospace;">"7 din" <span class="mut">vs</span> <span class="red">"10 din"</span></div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c gold" id="d_t" style="top:250px; font-size:76px;">2. RETRIEVAL</div>
+          <div class="panel" id="d_ix" style="left:60px; top:370px; width:360px; height:330px;"></div>
+          <div class="lbl" id="d_il" style="left:80px; top:710px;">index</div>
+          <div class="panel" id="d_log" style="left:450px; top:370px; width:580px; height:330px;"></div>
+          <div class="chip" id="d_ctx" style="left:240px; top:790px; width:600px; border:4px solid #E8596B; color:#E8596B; font-size:44px;">context hi alag</div>
+          <div class="chip" id="d_lg" style="left:140px; top:910px; width:800px; background:#F2B544; color:#0B1220; font-size:42px;">log: har jawab ke chunk ids</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c gold" id="e_t" style="top:250px; font-size:72px;">3. MODEL VERSION</div>
+          <div class="panel" id="e_a" style="left:80px; top:380px; width:920px; height:190px;"></div>
+          <div class="panel" id="e_b" style="left:80px; top:610px; width:920px; height:190px;"></div>
+          <div class="chip" id="e_ev" style="left:190px; top:850px; width:700px; background:#5BC0EB; color:#0B1220; font-size:44px;">badalne se pehle: eval</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:72px;">baar-baar wale <span class="gold">sawal</span></div>
+          <div class="chip" id="f_q" style="left:60px; top:420px; width:420px; border:4px solid #E8EDF6; color:#E8EDF6; font-size:42px;">refund policy?</div>
+          <div class="box" id="f_c" style="left:600px; top:380px; width:420px; height:150px; background:#11261C; border:4px solid #4CC38A; color:#4CC38A; font-size:44px;">CACHE<div style="font:500 30px 'JetBrains Mono',monospace; color:#8592AD;">approved jawab</div></div>
+          <div class="box" id="f_llm" style="left:600px; top:640px; width:420px; height:150px; background:#111A2C; border:4px solid #26324B; color:#8592AD; font-size:44px;">LLM<div style="font:500 30px 'JetBrains Mono',monospace;">generate</div></div>
+          <div class="strike" id="f_x" style="left:600px; top:709px; width:420px;"></div>
+          <div class="chip" id="f_a" style="left:60px; top:880px; width:960px; background:#4CC38A; color:#0B1220; font-size:42px;">har baar wahi approved jawab</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="g_1" style="top:370px;">3 source: <span class="gold">sampling, retrieval, version</span></div>
+          <div class="ans" id="g_2" style="top:500px;">randomness <span class="green">kam</span></div>
+          <div class="ans" id="g_3" style="top:630px;">retrieved chunks <span class="gold">log</span></div>
+          <div class="ans" id="g_4" style="top:760px;">model version <span class="gold">pin</span></div>
+          <div class="ans" id="g_5" style="top:890px;">frequent sawal: approved jawab <span class="green">cache</span></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_t" style="top:280px; font-size:68px;">randomness kam,<br/>phir bhi <span class="red">alag jawab</span></div>
+          <div class="x c" id="h_q" style="top:520px; font-size:66px;">sabse pehle <span class="gold">kya check</span>?</div>
+          <div class="chip" id="h_c" style="left:290px; top:680px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>

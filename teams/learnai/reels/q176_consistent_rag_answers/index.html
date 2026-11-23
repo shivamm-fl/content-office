@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Same Question, Different RAG Answers</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="85.5" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .shot { position:absolute; left:40px; width:1000px; border-radius:22px; overflow:hidden; border:4px solid #26324B; background:#fff; }
+          .shot img { display:block; width:100%; }
+          .src3 { position:absolute; left:80px; width:920px; height:150px; border-radius:26px; background:#111A2C; border:3px solid #26324B; box-sizing:border-box; }
+          .src3 .n { position:absolute; left:28px; top:36px; width:78px; height:78px; border-radius:50%; background:#F2B544; color:#0B1220; font:700 48px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; }
+          .src3 .t { position:absolute; left:136px; top:26px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .src3 .s { position:absolute; left:136px; top:90px; font:500 32px "JetBrains Mono",monospace; color:#8592AD; white-space:nowrap; }
+          .prow { position:absolute; left:80px; width:920px; height:96px; }
+          .prow .w { position:absolute; left:0; top:14px; width:120px; height:68px; border-radius:16px; background:#1B2538; border:3px solid #26324B; box-sizing:border-box; font:700 40px "JetBrains Mono",monospace; color:#E8EDF6; display:flex; align-items:center; justify-content:center; }
+          .prow .b { position:absolute; left:150px; top:22px; height:52px; width:640px; border-radius:14px; background:#F2B544; transform-origin:0 50%; }
+          .prow .p { position:absolute; right:0; top:20px; width:110px; text-align:right; font:700 40px "JetBrains Mono",monospace; color:#E8EDF6; }
+          .tile { position:absolute; width:96px; height:70px; border-radius:14px; background:#1B2538; border:3px solid #26324B; box-sizing:border-box; font:700 30px "JetBrains Mono",monospace; color:#C9D3E6; display:flex; align-items:center; justify-content:center; }
+          .panel { position:absolute; border-radius:26px; background:#0D1526; border:3px solid #26324B; box-sizing:border-box; }
+          .lbl { position:absolute; font:600 32px "JetBrains Mono",monospace; color:#8592AD; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:20px 34px; box-sizing:border-box; font:700 42px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .ill { position:absolute; right:60px; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:88px;">same sawal,<br/><span class="red">alag jawab</span></div>
+          <div class="shot" id="a_p" style="top:480px; left:90px; width:900px;"><img src="assets/sub_header.png"/></div>
+          <div class="shot" id="a_qs" style="top:490px;"><img src="assets/sub_q.png"/></div>
+          <div class="chip" id="a_n" style="left:240px; top:960px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">consistent kaise?</div>
+          <div class="src" id="a_src" style="top:1110px;">Source: AI Engineering Insider</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:76px;">fark <span class="gold">kahan</span> se?</div>
+          <div class="src3" id="b_1" style="top:390px;"><div class="n">1</div><div class="t">SAMPLING</div><div class="s">shabd kaise chuna</div></div>
+          <div class="src3" id="b_2" style="top:570px;"><div class="n">2</div><div class="t">RETRIEVAL</div><div class="s">kaun se chunks aaye</div></div>
+          <div class="src3" id="b_3" style="top:750px;"><div class="n">3</div><div class="t">MODEL VERSION</div><div class="s">kaun sa model chala</div></div>
+          <div class="chip" id="b_all" style="left:190px; top:950px; width:700px; border:4px solid #E8596B; color:#E8596B; font-size:46px;">teeno jawab badal sakte</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c gold" id="c_t" style="top:250px; font-size:76px;">1. SAMPLING</div>
+          <div class="ill" id="c_ill" style="top:250px;">illustration</div>
+          <div class="x c" id="c_pr" style="top:360px; font-size:56px; font-family:'JetBrains Mono',monospace;">refund <span class="gold">___</span> din mein</div>
+          <div class="prow" id="c_r0" style="top:470px;"><div class="w">7</div><div class="b" id="c_b0"></div><div class="p" id="c_p0">80%</div></div>
+          <div class="prow" id="c_r1" style="top:580px;"><div class="w">10</div><div class="b" id="c_b1"></div><div class="p" id="c_p1">15%</div></div>
+          <div class="prow" id="c_r2" style="top:690px;"><div class="w">30</div><div class="b" id="c_b2"></div><div class="p" id="c_p2">5%</div></div>
+          <div class="chip" id="c_hot" style="left:240px; top:820px; width:600px; background:#E8596B; color:#0B1220; font-size:44px;">temperature zyada</div>
+          <div class="chip" id="c_cold" style="left:140px; top:820px; width:800px; background:#4CC38A; color:#0B1220; font-size:44px;">facts: randomness kam</div>
+          <div class="x c" id="c_ab" style="top:940px; font-size:50px; font-family:'JetBrains Mono',monospace;">"7 din" <span class="mut">vs</span> <span class="red">"10 din"</span></div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c gold" id="d_t" style="top:250px; font-size:76px;">2. RETRIEVAL</div>
+          <div class="panel" id="d_ix" style="left:60px; top:370px; width:360px; height:330px;"></div>
+          <div class="lbl" id="d_il" style="left:80px; top:710px;">index</div>
+          <div class="panel" id="d_log" style="left:450px; top:370px; width:580px; height:330px;"></div>
+          <div class="chip" id="d_ctx" style="left:240px; top:790px; width:600px; border:4px solid #E8596B; color:#E8596B; font-size:44px;">context hi alag</div>
+          <div class="chip" id="d_lg" style="left:140px; top:910px; width:800px; background:#F2B544; color:#0B1220; font-size:42px;">log: har jawab ke chunk ids</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="x c gold" id="e_t" style="top:250px; font-size:72px;">3. MODEL VERSION</div>
+          <div class="panel" id="e_a" style="left:80px; top:380px; width:920px; height:190px;"></div>
+          <div class="panel" id="e_b" style="left:80px; top:610px; width:920px; height:190px;"></div>
+          <div class="chip" id="e_ev" style="left:190px; top:850px; width:700px; background:#5BC0EB; color:#0B1220; font-size:44px;">badalne se pehle: eval</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:72px;">baar-baar wale <span class="gold">sawal</span></div>
+          <div class="chip" id="f_q" style="left:60px; top:420px; width:420px; border:4px solid #E8EDF6; color:#E8EDF6; font-size:42px;">refund policy?</div>
+          <div class="box" id="f_c" style="left:600px; top:380px; width:420px; height:150px; background:#11261C; border:4px solid #4CC38A; color:#4CC38A; font-size:44px;">CACHE<div style="font:500 30px 'JetBrains Mono',monospace; color:#8592AD;">approved jawab</div></div>
+          <div class="box" id="f_llm" style="left:600px; top:640px; width:420px; height:150px; background:#111A2C; border:4px solid #26324B; color:#8592AD; font-size:44px;">LLM<div style="font:500 30px 'JetBrains Mono',monospace;">generate</div></div>
+          <div class="strike" id="f_x" style="left:600px; top:709px; width:420px;"></div>
+          <div class="chip" id="f_a" style="left:60px; top:880px; width:960px; background:#4CC38A; color:#0B1220; font-size:42px;">har baar wahi approved jawab</div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="chip" id="g_chip" style="left:240px; top:250px; width:600px; background:#F2B544; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="g_1" style="top:370px;">3 source: <span class="gold">sampling, retrieval, version</span></div>
+          <div class="ans" id="g_2" style="top:500px;">randomness <span class="green">kam</span></div>
+          <div class="ans" id="g_3" style="top:630px;">retrieved chunks <span class="gold">log</span></div>
+          <div class="ans" id="g_4" style="top:760px;">model version <span class="gold">pin</span></div>
+          <div class="ans" id="g_5" style="top:890px;">frequent sawal: approved jawab <span class="green">cache</span></div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="x c" id="h_t" style="top:280px; font-size:68px;">randomness kam,<br/>phir bhi <span class="red">alag jawab</span></div>
+          <div class="x c" id="h_q" style="top:520px; font-size:66px;">sabse pehle <span class="gold">kya check</span>?</div>
+          <div class="chip" id="h_c" style="left:290px; top:680px; width:500px; background:#F2B544; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="85.5" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="85.5" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="85.5" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H"], tag: "AI ENGINEER INTERVIEW" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // pictures built once (seek-safe) and animated on the spoken words
+      const GOLD = "#F2B544", CY = "#5BC0EB", RED = "#E8596B", GRN = "#4CC38A", MUT = "#8592AD";
+      const el = (cls, host, css, txt) => { const d = document.createElement("div"); d.className = cls; Object.assign(d.style, css); if (txt !== undefined) d.textContent = txt; host.appendChild(d); return d; };
+      const hid = (e) => { tl.set(e, { opacity: 0 }, 0); return e; };
+
+      // A: frame 0 = the problem; the post, then the asked question with its NVIDIA label
+      tl.fromTo("#a_h", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      show("#a_p", at("A", "nvidia") + 0.05, { s: 0.94 });
+      hide("#a_p", at("A", "rag") - 0.3);
+      show("#a_qs", at("A", "rag") - 0.1, { s: 0.94 });
+      tl.fromTo("#a_qs", { scale: 1 }, { scale: 1.05, duration: 4, ease: "none" }, at("A", "rag") + 0.3);
+      show("#a_n", at("A", "consistent") - 0.1, { s: 1.1 });
+
+      // B: three places the difference can come from
+      show("#b_t", at("B", "dhoondho") - 0.1, { s: 1.06 });
+      show("#b_1", at("B", "shabd") - 0.15, { s: 1.04 }); show("#b_2", at("B", "chunks") - 0.15, { s: 1.04 }); show("#b_3", at("B", "version") - 0.15, { s: 1.04 });
+      show("#b_all", at("B", "teenon") - 0.1, { s: 1.06 });
+
+      // C: illustration: next-word probabilities at temperature 1 (80/15/5) and 2 (59/26/15, computed); high temperature can pick "10"
+      show("#c_t", at("C", "pahla") - 0.1, { s: 1.08 });
+      show("#c_pr", at("C", "agla") - 0.1, { s: 1.05 });
+      const LOW = [0.80, 0.15, 0.05], HIGH = [0.59, 0.26, 0.15];
+      [0, 1, 2].forEach((i) => {
+        show("#c_r" + i, at("C", "probabilities") - 0.1 + i * 0.15, { s: 1, y: 14 });
+        tl.set("#c_b" + i, { scaleX: 0 }, 0); tl.to("#c_b" + i, { scaleX: LOW[i], duration: 0.5, ease: "power2.out" }, at("C", "probabilities") + i * 0.15);
+        tl.to("#c_b" + i, { scaleX: HIGH[i], backgroundColor: RED, duration: 0.6, ease: "power2.inOut" }, at("C", "zyada"));
+        tl.to("#c_b" + i, { scaleX: LOW[i], backgroundColor: GOLD, duration: 0.6, ease: "power2.inOut" }, at("C", "randomness") - 0.2);
+        const hp = hid(el("p", q("#c_r" + i), {}, Math.round(HIGH[i] * 100) + "%")); hp.style.color = RED;
+        tl.to("#c_p" + i, { opacity: 0, duration: 0.2 }, at("C", "zyada") + 0.2); tl.to(hp, { opacity: 1, duration: 0.2 }, at("C", "zyada") + 0.2);
+        tl.to(hp, { opacity: 0, duration: 0.2 }, at("C", "randomness")); tl.to("#c_p" + i, { opacity: 1, duration: 0.2 }, at("C", "randomness"));
+      });
+      show("#c_hot", at("C", "temperature") - 0.1, { s: 1.06 });
+      tl.to("#c_r1 .w", { backgroundColor: RED, borderColor: RED, color: "#0B1220", duration: 0.2 }, at("C", "chune") - 0.1);
+      show("#c_ab", at("C", "badalta") - 0.2, { s: 1.06 });
+      ["#c_hot", "#c_ab"].forEach((s) => hide(s, at("C", "facts") - 0.2));
+      tl.to("#c_r1 .w", { backgroundColor: "#1B2538", borderColor: "#26324B", color: "#E8EDF6", duration: 0.2 }, at("C", "facts"));
+      tl.to("#c_r0 .w", { backgroundColor: GRN, borderColor: GRN, color: "#0B1220", duration: 0.2 }, at("C", "randomness"));
+      show("#c_cold", at("C", "randomness") - 0.1, { s: 1.06 });
+
+      // D: retrieval: a new document in the index, a different chunk set the next time; log the chunk ids per answer
+      show("#d_t", at("D", "doosra") - 0.1, { s: 1.08 });
+      show("#d_ix", at("D", "index") - 0.15, { s: 1.03 }); show("#d_il", at("D", "index") - 0.1, { s: 1 });
+      const ix = q("#d_ix"), IDS = ["c3", "c7", "c9", "c12", "c21", "c33", "c40", "c41", "c55"], T = {};
+      IDS.forEach((id, k) => { const t = el("tile", ix, { left: (24 + (k % 3) * 108) + "px", top: (24 + Math.floor(k / 3) * 98) + "px" }, id); T[id] = t; });
+      tl.set(T.c41, { opacity: 0 }, 0); show(T.c41, at("D", "naye") - 0.1, { s: 1.3, y: -40 }); tl.to(T.c41, { borderColor: GRN, duration: 0.2 }, at("D", "naye"));
+      show("#d_log", at("D", "approximate") - 0.2, { s: 1.03 });
+      const lg = q("#d_log"), rowT = (k, ids, t, bad) => {
+        const l = hid(el("lbl", lg, { left: "28px", top: (24 + k * 150) + "px" }, "jawab " + (k + 1) + ": retrieved")); tl.to(l, { opacity: 1, duration: 0.2 }, t);
+        return ids.map((id, j) => { const c = hid(el("tile", lg, { left: (28 + j * 112) + "px", top: (70 + k * 150) + "px", borderColor: id === bad ? RED : GOLD }, id)); show(c, t + 0.1 + j * 0.12, { s: 1.2, y: 0 }); return c; });
+      };
+      ["c12", "c40", "c7"].forEach((id) => tl.to(T[id], { borderColor: GOLD, duration: 0.2 }, at("D", "approximate")));
+      const r1 = rowT(0, ["c12", "c40", "c7"], at("D", "approximate"));
+      tl.to(T.c40, { borderColor: "#26324B", duration: 0.2 }, at("D", "doosre") - 0.1); tl.to(T.c41, { borderColor: RED, duration: 0.2 }, at("D", "doosre") - 0.1);
+      const r2 = rowT(1, ["c12", "c41", "c7"], at("D", "doosre") - 0.1, "c41");
+      show("#d_ctx", at("D", "context") - 0.1, { s: 1.06 });
+      tl.to(lg, { borderColor: GOLD, duration: 0.2 }, at("D", "log") - 0.1); show("#d_lg", at("D", "log") - 0.1, { s: 1.06 });
+      tl.to([r1[1], r2[1]], { scale: 1.2, duration: 0.2, yoyo: true, repeat: 1 }, at("D", "tulna") - 0.1);
+      tl.to(r1[1], { borderColor: RED, duration: 0.2 }, at("D", "tulna"));
+
+      // E: a moving name vs a fixed snapshot; eval before any change
+      show("#e_t", at("E", "teesra") - 0.1, { s: 1.06 });
+      const ea = q("#e_a"), eb = q("#e_b");
+      el("x", ea, { left: "34px", top: "34px", fontSize: "50px", fontFamily: "JetBrains Mono, monospace" }, 'model = "latest"');
+      const ear = el("x", ea, { left: "34px", top: "110px", fontSize: "40px", color: RED }, "aaj v1, kal v2: jawab badla");
+      el("x", eb, { left: "34px", top: "34px", fontSize: "50px", fontFamily: "JetBrains Mono, monospace" }, 'model = "v1" (fixed)');
+      const ebr = el("x", eb, { left: "34px", top: "110px", fontSize: "40px", color: GRN }, "hamesha wahi model");
+      show("#e_a", at("E", "model", 1) - 0.1, { s: 1.03 }); show("#e_b", at("E", "fixed") - 0.15, { s: 1.03 });
+      tl.to(ea, { opacity: 0.45, duration: 0.3 }, at("E", "fixed") + 0.2); tl.to(eb, { borderColor: GRN, duration: 0.2 }, at("E", "snapshot") - 0.1);
+      show("#e_ev", at("E", "eval") - 0.1, { s: 1.06 });
+
+      // F: frequent questions: the approved answer from the cache, no fresh generation
+      show("#f_t", at("F", "sawal") - 0.1, { s: 1.06 });
+      show("#f_q", at("F", "refund") - 0.1, { s: 1.08 });
+      const fa = hid(el("arr", q("#sF"), { position: "absolute", left: "490px", top: "450px", width: "100px", height: "6px", borderRadius: "3px", background: GRN }));
+      tl.to(fa, { opacity: 1, duration: 0.2 }, at("F", "approved") - 0.1);
+      show("#f_c", at("F", "approved") - 0.1, { s: 1.06 });
+      show("#f_llm", at("F", "naye") - 0.3, { s: 1.03 });
+      tl.set("#f_x", { opacity: 0 }, 0); tl.to("#f_x", { opacity: 1, duration: 0.05 }, at("F", "generate") - 0.1); wipe("#f_x", at("F", "generate") - 0.1, 0.4);
+      show("#f_a", at("F", "generate") + 0.5, { s: 1.04 });
+
+      // G: interview answer
+      show("#g_chip", at("G", "interview") - 0.05, { s: 0.85 });
+      show("#g_1", at("G", "teen") - 0.1, { s: 0.94 });
+      show("#g_2", at("G", "randomness") - 0.1, { s: 0.94 });
+      show("#g_3", at("G", "retrieved") - 0.1, { s: 0.94 });
+      show("#g_4", at("G", "pin") - 0.3, { s: 0.94 });
+      show("#g_5", at("G", "frequent") - 0.1, { s: 0.94 });
+
+      // H: the question
+      show("#h_t", at("H", "randomness") - 0.1, { s: 1.06 });
+      show("#h_q", at("H", "sabse") - 0.1, { s: 1.06 });
+      show("#h_c", at("H", "comment") - 0.1, { s: 0.85 });
+      M.finish({ kw: { nvidia: "gold", consistent: "green", sampling: "gold", retrieval: "gold", temperature: "hot", randomness: "gold",
+                       chunks: "gold", snapshot: "green", eval: "cyan", cache: "green", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
