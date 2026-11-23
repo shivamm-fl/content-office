@@ -1,0 +1,1 @@
+window.REEL={"hi": {"total": 8.23, "starts": {"A": 0.0, "B": 3.0, "end": 8.23}, "caps": [], "ph": {}, "mouth": []}};

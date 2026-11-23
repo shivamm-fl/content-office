@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Grout Bhar Denge (meme)</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      html, body { margin: 0; width: 1080px; height: 1920px; background: #0B1220; overflow: hidden; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: radial-gradient(circle at 50% 40%, rgba(232,89,107,.14) 0%, rgba(11,18,32,0) 55%), #0B1220; }
+      .scene { position: absolute; inset: 0; }
+      .win { position: absolute; left: 60px; width: 960px; border-radius: 30px; background: #1A0D14; border: 4px solid #E8596B; overflow: hidden; }
+      .wb { position: absolute; left: 0; right: 0; top: 0; height: 72px; background: #2A141C; }
+      .dot { position: absolute; top: 27px; width: 18px; height: 18px; border-radius: 50%; }
+      .fn { position: absolute; left: 130px; top: 16px; font: 600 34px "JetBrains Mono", monospace; color: #8592AD; }
+      .ln { position: absolute; left: 44px; font: 600 48px "JetBrains Mono", monospace; color: #E8596B; white-space: pre; }
+      .chip { position: absolute; padding: 12px 30px; border-radius: 999px; background: #D97757; color: #0B1220; font: 700 46px "Space Grotesk", sans-serif; white-space: nowrap; }
+      #handle { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font: 500 34px "JetBrains Mono", monospace; color: #8592AD; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="8.23" data-width="1080" data-height="1920">
+      <div class="scene" id="sA">
+        <div id="handle">@ai.learnvora</div>
+        <div class="win" id="con" style="top:420px; height:640px;">
+          <div class="wb"></div><div class="dot" style="left:30px; background:#E8596B;"></div><div class="dot" style="left:60px; background:#F2B544;"></div><div class="dot" style="left:90px; background:#4CC38A;"></div>
+          <div class="fn">terminal</div>
+          <div class="ln" style="top:118px; color:#8592AD;">$ pytest</div>
+          <div class="ln" style="top:198px;">FAILED test_gst.py::test_gst</div>
+          <div class="ln" style="top:278px;">AssertionError:</div>
+          <div class="ln" style="top:358px;">    assert 180 == 118</div>
+          <div class="ln" id="f1" style="top:470px; left:36px; color:#FFFFFF; background:#E8596B; padding:4px 18px; border-radius:10px;">1 failed in 0.03s</div>
+        </div>
+        <div id="prompt" style="position:absolute; left:60px; top:1105px; width:960px; height:140px; border-radius:28px; background:#18223A; border:4px solid #3A4766;">
+          <div id="ptxt" style="position:absolute; left:40px; top:36px; font:700 60px 'Space Grotesk',sans-serif; color:#E8EDF6; white-space:nowrap;"><span style="color:#F2B544;">User:</span> <span id="typed"></span><span id="caret" style="display:inline-block; width:5px; height:58px; margin-left:4px; background:#E8EDF6; vertical-align:-8px;"></span></div>
+        </div>
+        <div id="think" style="position:absolute; left:60px; top:1285px; width:960px; height:110px; opacity:0;">
+          <div class="chip" style="left:0; top:14px;">CLAUDE</div>
+          <div style="position:absolute; left:250px; top:28px; font:600 50px 'Space Grotesk',sans-serif; color:#8592AD;">thinking<span id="d1">.</span><span id="d2">.</span><span id="d3">.</span></div>
+        </div>
+      </div>
+      <div class="scene" id="sB" style="opacity:0;">
+        <video id="cuts" src="assets/meme_cuts.mp4" data-start="3" data-duration="5.23" data-track-index="5" muted playsinline style="position:absolute; left:0; top:0; width:1080px; height:1920px; object-fit:cover;"></video>
+        <div style="position:absolute; left:0; right:0; top:0; height:420px; background:linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 100%);"></div>
+        <div class="chip" id="cchip" style="left:60px; top:240px; font-size:52px;">CLAUDE</div>
+        <div id="credit" style="position:absolute; left:64px; top:338px; font:500 28px 'JetBrains Mono',monospace; color:rgba(255,255,255,.8); text-shadow:0 2px 6px rgba(0,0,0,.7);">Clip: @nasim_tiles_industry</div>
+      </div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="8.23" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="8.23" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="8.23" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const T = "why this test is failing?";
+      const typed = document.getElementById("typed");
+      T.split("").forEach((ch, i) => { const s = document.createElement("span"); s.textContent = ch; s.style.display = "none"; typed.appendChild(s); });
+      [...typed.children].forEach((s, i) => tl.set(s, { display: "inline" }, 0.75 + i * 0.048));
+      tl.fromTo("#con", { scale: 1.03 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo("#f1", { scale: 1 }, { scale: 1.08, transformOrigin: "0% 50%", duration: 0.14, yoyo: true, repeat: 1 }, 0.12);
+      tl.to("#caret", { opacity: 0, duration: 0.01, repeat: 9, yoyo: true, repeatDelay: 0.25 }, 0);
+      tl.to("#prompt", { borderColor: "#F2B544", duration: 0.2 }, 0.7);
+      tl.fromTo("#think", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ease: "back.out(1.7)" }, 2.15);
+      ["#d1", "#d2", "#d3"].forEach((el, i) => tl.fromTo(el, { opacity: 0.15 }, { opacity: 1, duration: 0.15, repeat: 1, yoyo: true }, 2.3 + i * 0.15));
+      tl.set("#sA", { opacity: 0 }, 3.0);
+      tl.set("#sB", { opacity: 1 }, 3.0);
+      tl.fromTo("#cchip", { scale: 1.25 }, { scale: 1, duration: 0.25, ease: "back.out(2)" }, 3.0);
+      tl.to({}, { duration: 0.01 }, 8.22);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
