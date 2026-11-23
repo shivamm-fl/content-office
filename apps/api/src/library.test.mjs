@@ -4,7 +4,8 @@ import { parseLibrary, loadLibrary, assetKey, libraryPreview, savedReels, mediaR
 import { buildCalendar } from './calendar.ts';
 const item={item:'b001',title:'Two Sum',track:'blind75',version:'a'.repeat(16),folder:'b001_two_sum',duration_s:78,caption:'caption',youtube:'youtube',video_sha256:'a'.repeat(64),cover_sha256:'b'.repeat(64),saved_at:'2026-11-02'};
 test('invalid imported metadata cannot select arbitrary paths or URLs',()=>{
-  assert.deepEqual(parseLibrary({items:[{...item,version:'../../private'},{...item,item:'../secret'},{...item,video_sha256:'bad'},{...item,duration_s:999}]}),[]);
+  assert.deepEqual(parseLibrary({items:[{...item,version:'../../private'},{...item,item:'../secret'},{...item,video_sha256:'bad'},{...item,duration_s:999},{...item,duration_s:2}]}),[]);
+  assert.equal(parseLibrary({items:[{...item,duration_s:8.2}]}).length,1);
   assert.equal(parseLibrary({items:[item,item]}).length,1);
   assert.deepEqual(parseLibrary(null),[]);
 });

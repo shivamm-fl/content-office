@@ -45,7 +45,7 @@ export function parseLibrary(raw:unknown): LibraryItem[] {
     return ID.test(a.item) && typeof a.title==='string' && a.title.length<=200 &&
       typeof a.track==='string' && /^[a-f0-9]{16}$/.test(a.version) &&
       typeof a.folder==='string' && /^[\w-]{1,100}$/.test(a.folder) &&
-      Number.isFinite(a.duration_s) && a.duration_s>=20 && a.duration_s<=180 &&
+      Number.isFinite(a.duration_s) && a.duration_s>=3 && a.duration_s<=180 &&   // owner 2026-11-23: short meme reels (x22, 8 s); Instagram and Facebook reels start at 3 s
       typeof a.caption==='string' && a.caption.length<=20000 &&
       typeof a.youtube==='string' && a.youtube.length<=20000 &&
       SHA.test(a.video_sha256) && SHA.test(a.cover_sha256) && typeof a.saved_at==='string';
