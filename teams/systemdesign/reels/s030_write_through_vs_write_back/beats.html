@@ -1,0 +1,108 @@
+        <style>
+          #cam .chip { box-sizing:border-box; }
+          .acc { color:#4CC9F0; }
+          .host { position:absolute; left:0; width:1080px; height:260px; }
+          .node { position:absolute; width:260px; height:210px; border-radius:28px; background:#111A2C; border:4px solid #26324B; box-sizing:border-box; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:18px; font:700 48px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .node .sub { font:500 26px "JetBrains Mono",monospace; color:#8592AD; margin-top:2px; }
+          .arr { position:absolute; height:6px; border-radius:3px; background:#8592AD; }
+          .arr.dash { background:none; border-top:6px dashed #8592AD; height:0; }
+          .head { position:absolute; width:0; height:0; border-top:14px solid transparent; border-bottom:14px solid transparent; border-left:22px solid #8592AD; }
+          .pk { position:absolute; width:110px; height:62px; border-radius:16px; background:#4CC9F0; color:#0B1220; font:700 32px "JetBrains Mono",monospace; display:flex; align-items:center; justify-content:center; }
+          .key { position:absolute; width:100px; height:64px; border-radius:14px; background:#1B2538; border:3px solid #26324B; font:600 28px "JetBrains Mono",monospace; color:#8592AD; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+          .lane { position:absolute; top:400px; width:470px; height:470px; border-radius:28px; background:#111A2C; border:3px solid #26324B; box-sizing:border-box; }
+          .lane .hd { position:absolute; left:0; width:100%; top:26px; text-align:center; font:700 44px "Space Grotesk",sans-serif; }
+          .lane .lb { position:absolute; left:0; width:100%; text-align:center; font:500 32px "JetBrains Mono",monospace; color:#8592AD; }
+          .lane .big { position:absolute; left:0; width:100%; text-align:center; font:700 76px "JetBrains Mono",monospace; color:#E8EDF6; }
+          .ans { position:absolute; left:80px; width:920px; border-radius:24px; background:#111A2C; border:3px solid #26324B; padding:22px 34px; box-sizing:border-box; font:700 44px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .ill { position:absolute; right:60px; font:500 30px "JetBrains Mono",monospace; color:#8592AD; }
+          .item { position:absolute; width:400px; height:96px; border-radius:22px; font:700 48px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; color:#0B1220; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="x c" id="a_h" style="top:250px; font-size:84px;">database mein<br/><span class="acc">kab</span> likhoge?</div>
+          <div class="host" id="a_dg" style="top:500px;"></div>
+          <div class="chip" id="a_now" style="left:110px; top:800px; width:400px; background:#4CC9F0; color:#0B1220; font-size:56px;">ABHI</div>
+          <div class="chip" id="a_later" style="left:570px; top:800px; width:400px; background:#F2B544; color:#0B1220; font-size:56px;">BAAD MEIN</div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="x c" id="b_t" style="top:250px; font-size:76px;">cache = <span class="acc">copy</span></div>
+          <div class="host" id="b_dg" style="top:420px;"></div>
+          <div class="chip" id="b_1" style="left:140px; top:800px; width:800px; border:4px solid #4CC9F0; color:#4CC9F0; font-size:52px;">1. WRITE-THROUGH</div>
+          <div class="chip" id="b_2" style="left:140px; top:930px; width:800px; border:4px solid #F2B544; color:#F2B544; font-size:52px;">2. WRITE-BACK</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="x c acc" id="c_t" style="top:250px; font-size:88px;">WRITE-THROUGH</div>
+          <div class="host" id="c_dg" style="top:390px;"></div>
+          <div class="chip" id="c_good" style="left:60px; top:715px; width:460px; background:#4CC38A; color:#0B1220; font-size:44px;">cache taaza</div>
+          <div class="chip" id="c_bad" style="left:560px; top:715px; width:460px; background:#E8596B; color:#0B1220; font-size:44px;">2 writes = slow</div>
+          <div class="host" id="c_keys" style="top:870px; height:120px;"></div>
+          <div class="chip" id="c_ttl" style="left:340px; top:1010px; width:400px; border:4px solid #F2B544; color:#F2B544; font-size:44px;">TTL = expiry</div>
+          <div class="src" id="c_src" style="top:1110px;">Source: AWS ElastiCache docs</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="x c gold" id="d_t" style="top:250px; font-size:88px;">WRITE-BACK</div>
+          <div class="x c mut" id="d_s" style="top:350px; font-size:44px;">(write-behind)</div>
+          <div class="host" id="d_dg" style="top:450px;"></div>
+          <div class="chip" id="d_later" style="left:640px; top:760px; width:380px; border:4px solid #F2B544; color:#F2B544; font-size:40px;">baad mein, batch</div>
+          <div class="src" id="d_src" style="top:1110px;">Source: Oracle Coherence docs</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="ill" id="e_ill" style="top:250px;">illustration</div>
+          <div class="x c" id="e_t" style="top:300px; font-size:64px;">5 sec, <span class="acc">2,000 likes</span></div>
+          <div class="lane" id="e_l" style="left:50px;">
+            <div class="hd acc">WRITE-THROUGH</div>
+            <div class="lb" style="top:150px;">database writes</div>
+            <div class="big" id="e_lw" style="top:210px;">0</div>
+          </div>
+          <div class="lane" id="e_r" style="left:560px;">
+            <div class="hd gold">WRITE-BACK</div>
+            <div class="lb" style="top:110px;">cache count</div>
+            <div class="big" id="e_rc" style="top:160px; font-size:64px;">0</div>
+            <div class="lb" style="top:280px;">database writes</div>
+            <div class="big" id="e_rw" style="top:330px;">0</div>
+          </div>
+          <div class="chip" id="e_co" style="left:90px; top:920px; width:900px; background:#F2B544; color:#0B1220; font-size:44px;">COALESCING: kai updates = 1 write</div>
+          <div class="x c" id="e_load" style="top:1040px; font-size:54px;">database load: <span class="green">bahut kam</span></div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="x c" id="f_t" style="top:250px; font-size:76px;">ab <span class="red">keemat</span></div>
+          <div class="host" id="f_dg" style="top:390px;"></div>
+          <div class="x c red" id="f_lost" style="top:630px; font-size:50px;">5 sec ke likes gaye</div>
+          <div class="chip" id="f_ok" style="left:60px; top:730px; width:460px; background:#4CC38A; color:#0B1220; font-size:44px;">likes: chalega</div>
+          <div class="chip" id="f_no" style="left:560px; top:730px; width:460px; background:#E8596B; color:#0B1220; font-size:44px;">payment: nahi</div>
+          <div class="host" id="f_svc" style="top:860px; height:200px;"></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c" id="g_t" style="top:250px; font-size:72px;">data dekh kar <span class="acc">chuno</span></div>
+          <div class="chip" id="g_lh" style="left:60px; top:400px; width:440px; background:#4CC9F0; color:#0B1220; font-size:42px;">WRITE-THROUGH</div>
+          <div class="chip" id="g_rh" style="left:580px; top:400px; width:440px; background:#F2B544; color:#0B1220; font-size:42px;">WRITE-BACK</div>
+          <div class="item" id="g_l1" style="left:80px; top:540px; border:4px solid #4CC9F0; color:#4CC9F0;">paise</div>
+          <div class="item" id="g_l2" style="left:80px; top:670px; border:4px solid #4CC9F0; color:#4CC9F0;">orders</div>
+          <div class="item" id="g_r1" style="left:600px; top:540px; border:4px solid #F2B544; color:#F2B544;">likes</div>
+          <div class="item" id="g_r2" style="left:600px; top:670px; border:4px solid #F2B544; color:#F2B544;">views</div>
+          <div class="x" id="g_ln" style="left:80px; width:400px; text-align:center; top:810px; font-size:38px; color:#8592AD;">ek write bhi<br/>nahi khona</div>
+          <div class="x" id="g_rn" style="left:600px; width:400px; text-align:center; top:810px; font-size:38px; color:#8592AD;">writes bahut,<br/>thoda nuksan ok</div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="chip" id="h_chip" style="left:240px; top:250px; width:600px; background:#4CC9F0; color:#0B1220; font-size:52px;">INTERVIEW ANSWER</div>
+          <div class="ans" id="h_1" style="top:390px;"><span class="acc">write-through</span>: dono mein, phir done</div>
+          <div class="ans" id="h_2" style="top:530px;">data <span class="green">taaza</span>, write <span class="red">dheema</span></div>
+          <div class="ans" id="h_3" style="top:670px;"><span class="gold">write-back</span>: cache, DB baad mein</div>
+          <div class="ans" id="h_4" style="top:810px;">write <span class="green">tez</span>, DB load <span class="green">kam</span></div>
+          <div class="ans" id="h_5" style="top:950px;"><span class="red">crash</span> = writes kho sakte</div>
+        </div>
+
+        <div class="beat" id="sI">
+          <div class="x c" id="i_t" style="top:270px; font-size:70px;"><span class="gold">write-back</span> delay</div>
+          <div class="x c" id="i_d" style="top:400px; font-size:88px; font-family:'JetBrains Mono',monospace;"><span id="i_a">5 sec</span> <span class="mut">&rarr;</span> <span class="acc" id="i_b">1 min</span></div>
+          <div class="chip" id="i_q1" style="left:80px; top:580px; width:440px; border:4px solid #4CC9F0; color:#4CC9F0; font-size:48px;">DB load?</div>
+          <div class="chip" id="i_q2" style="left:560px; top:580px; width:440px; border:4px solid #E8596B; color:#E8596B; font-size:48px;">crash loss?</div>
+          <div class="chip" id="i_c" style="left:290px; top:760px; width:500px; background:#4CC9F0; color:#0B1220; font-size:60px;">Comment karo</div>
+        </div>
