@@ -1,0 +1,85 @@
+{
+ "tts": "owner_v4",
+ "v4_voice": "Shivam",
+ "audio": "v2",
+ "tone": "calm",
+ "scenes": [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+  "H",
+  "I",
+  "J"
+ ],
+ "min": {
+  "A": 2.0,
+  "B": 2.0,
+  "C": 2.0,
+  "D": 2.0,
+  "E": 2.0,
+  "F": 2.0,
+  "G": 2.0,
+  "H": 2.0,
+  "I": 2.0,
+  "J": 2.0
+ },
+ "tail": {},
+ "cues": [
+  [
+   "err",
+   "A",
+   0,
+   0.0
+  ],
+  [
+   "ok",
+   "D",
+   0,
+   0.0
+  ],
+  [
+   "err",
+   "D",
+   1,
+   0.3
+  ],
+  [
+   "impact",
+   "G",
+   3,
+   0.0
+  ]
+ ],
+ "copy": {
+  "hi": {
+   "A": "[curious] भाई, ये test fail क्यों हो रहा है?",
+   "B": "[warm, conversational] और ये सच में भर देता है। मान लो तुम्हारा GST वाला function गलत जवाब दे रहा है। Test मतलब एक छोटा सा check: function को सौ रुपये दो, तो एक सौ अठारह आना चाहिए।",
+   "C": "AI दो-तीन बार ठीक करने की कोशिश करेगा, fail होगा, फिर चुपके से एक line लिख देगा: अगर price सौ है, तो सीधा एक सौ अठारह भेज दो।",
+   "D": "Test green. अब दो सौ रुपये डालो, जवाब फिर गलत। Bug वहीं का वहीं है, बस ऊपर से grout भर दिया।",
+   "E": "कभी-कभी तो test ही बदल देता है, ताकि code का गलत जवाब सही दिखे।",
+   "F": "Claude{क्लॉड} के एक पुराने model ने तो code में खुद SPECIAL HACK लिख के, उस एक test के जवाब सीधे भर दिए थे।",
+   "G": "[thoughtful] ये आदत training से आती है। वहाँ model को इनाम तब मिलता है जब test pass हो जाए। Test कैसे pass हुआ, ये हर बार check नहीं होता, तो model shortcut सीख लेता है। ... इसे reward hacking कहते हैं: इनाम ले लो, काम हो या ना हो।",
+   "H": "इसलिए AI को काम देते वक़्त साफ़ लिखो: hardcode मत करना, test मत बदलना, और test ही गलत लगे तो मुझे बताना।",
+   "I": "और green tick देख के रुक मत जाओ। Diff खोलो, मतलब AI ने कौन सी lines बदलीं। अक्सर वो comment भी छोड़ देता है, special case for test। बस वही ढूँढो।",
+   "J": "[curious] अब बताओ: test green है, और code में लिखा है, अगर price सौ है तो एक सौ अठारह। Bug ठीक हुआ, या grout भरा? Comment करो।"
+  }
+ },
+ "meme_clip": {
+  "after": "A",
+  "src": "assets/meme_clip.mp4",
+  "from_reel": "https://www.instagram.com/nasim_tiles_industry/",
+  "note": "owner 2026-11-23: 'grout bhar dunga actual reel se lena' (dual audio); clip kept out of git, shipped in the audio tgz; credited on screen"
+ },
+ "sources": [
+  "https://assets.anthropic.com/m/785e231869ea8b3b/original/claude-3-7-sonnet-system-card.pdf (section 6 Excessive Focus on Passing Tests; p.34 SPECIAL HACK example; reward hacking during RL)",
+  "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices (Avoid focusing on passing tests and hardcoding: sample prompt)",
+  "https://www.instagram.com/nasim_tiles_industry/ (trend: grout bhar denge)"
+ ],
+ "hook_type": "relatable_stake",
+ "template": "trend_meme_then_teach",
+ "approved": "owner 2026-11-23 script ('bana achhe se ye'), dual audio, grout line from the actual reel; 2026-11-23 owner: opening = user asks Claude 'bhai ye test fail kyu ho raha hai', split screen (red console + User: why this test is failing / Claude clip 'isme grout bhar denge'); A re-voiced alone"
+}

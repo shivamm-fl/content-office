@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="hi" data-composition-variables='[
+  {"id":"lang","type":"enum","label":"Language","default":"hi","options":[{"value":"hi","label":"Hindi (Hinglish)"}]},
+  {"id":"voiceSrc","type":"string","label":"Voice track","default":"audio/hi/voice.wav"},
+  {"id":"bedSrc","type":"string","label":"Music bed (ducked)","default":"audio/hi/bed.wav"},
+  {"id":"sfxSrc","type":"string","label":"SFX track","default":"audio/hi/sfx.wav"}
+]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>AI Mistri: Grout Bhar Denge</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" href="kit/motion.css" />
+    <link rel="stylesheet" href="kit/fx.css" />
+    <script src="kit/motion.js"></script>
+    <script src="kit/fx.js"></script>
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("fonts/SpaceGrotesk.ttf"); font-weight: 300 700; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+      @font-face { font-family: "Noto Sans Devanagari"; src: url("fonts/NotoSansDevanagari.ttf"); font-weight: 100 900; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="84" data-width="1080" data-height="1920">
+      <div id="bg" data-layout-allow-overflow>
+        <div class="orb" id="orb1" data-layout-allow-overflow></div><div class="orb" id="orb2" data-layout-allow-overflow></div><div class="orb" id="orb3" data-layout-allow-overflow></div>
+        <div id="floorwrap" data-layout-allow-overflow><div id="floor" data-layout-allow-overflow></div></div><div id="floorfade"></div>
+        <div id="dust" data-layout-allow-overflow></div><div id="scan"></div><div id="vig"></div>
+      </div>
+      <div id="cam">
+        <style>
+          /* narration recipe v4 safe area: captions y 1190-1450, x 80-1000; content y 250-1160 */
+          #caps { top:1190px !important; left:80px !important; width:920px !important; height:260px !important; }
+          .win { position:absolute; left:80px; width:920px; border-radius:28px; background:#0E1626; border:3px solid #2E3A55; overflow:hidden; }
+          .win .wb { position:absolute; left:0; right:0; top:0; height:64px; background:#1C2638; }
+          .win .dot { position:absolute; top:24px; width:16px; height:16px; border-radius:50%; }
+          .win .fn { position:absolute; left:120px; top:14px; font:600 32px "JetBrains Mono",monospace; color:#8592AD; }
+          .cl { position:absolute; left:40px; font:600 44px "JetBrains Mono",monospace; color:#E8EDF6; white-space:pre; }
+          .cl .k { color:#C792EA; } .cl .n { color:#F78C6C; } .cl .f { color:#5BC0EB; } .cl .cm { color:#8592AD; }
+          .hl { position:absolute; left:24px; right:24px; height:64px; border-radius:12px; background:rgba(242,181,68,.16); border:3px solid #F2B544; }
+          .res { position:absolute; left:80px; width:920px; height:104px; border-radius:22px; font:800 58px "Space Grotesk",sans-serif; display:flex; align-items:center; justify-content:center; gap:22px; }
+          .res.bad { background:#2A1220; border:3px solid #E8596B; color:#E8596B; }
+          .res.ok { background:#0F2A22; border:3px solid #4CC38A; color:#4CC38A; }
+          .val { position:absolute; height:150px; border-radius:26px; background:#111A2C; border:3px solid #26324B; display:flex; align-items:center; justify-content:center; font:800 64px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .arw { position:absolute; font:800 70px "Space Grotesk",sans-serif; color:#8592AD; }
+          .row { position:absolute; left:80px; width:920px; height:110px; border-radius:22px; background:#111A2C; border:3px solid #26324B; }
+          .row .t { position:absolute; left:40px; top:26px; font:700 50px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .row .k { position:absolute; right:40px; top:22px; font:800 56px "Space Grotesk",sans-serif; color:#E8596B; }
+          .shot { position:absolute; left:60px; width:960px; border-radius:18px; overflow:hidden; background:#F7F6F2; border:3px solid #3A4766; }
+          .shot img { display:block; width:960px; }
+          .mark { position:absolute; border-radius:6px; background:rgba(242,181,68,.38); border:3px solid #F2B544; transform-origin:0 50%; }
+          .node { position:absolute; width:260px; height:150px; border-radius:26px; background:#111A2C; border:3px solid #3A4766; display:flex; align-items:center; justify-content:center; font:800 54px "Space Grotesk",sans-serif; color:#E8EDF6; }
+          .pl { position:absolute; left:120px; width:840px; height:110px; border-radius:18px; background:#18223A; }
+          .pl .b { position:absolute; left:0; top:0; bottom:0; width:12px; background:#F2B544; border-radius:6px; }
+          .pl .t { position:absolute; left:44px; top:24px; font:700 54px "Space Grotesk",sans-serif; color:#E8EDF6; white-space:nowrap; }
+          .dl { position:absolute; left:0; right:0; height:62px; font:600 40px "JetBrains Mono",monospace; color:#E8EDF6; white-space:pre; padding-left:30px; line-height:62px; }
+          .dl.add { background:rgba(76,195,138,.16); color:#BFF0D8; }
+          .opt { position:absolute; top:760px; width:440px; height:170px; border-radius:30px; background:#111A2C; display:flex; align-items:center; justify-content:center; font:800 64px "Space Grotesk",sans-serif; }
+        </style>
+
+        <div class="beat" id="sA">
+          <div class="win" id="a_con" style="top:262px; height:330px; background:#1A0D14; border-color:#E8596B;">
+            <div class="wb" style="background:#2A141C;"></div><div class="dot" style="left:28px; background:#E8596B;"></div><div class="dot" style="left:56px; background:#F2B544;"></div><div class="dot" style="left:84px; background:#4CC38A;"></div>
+            <div class="fn">terminal</div>
+            <div class="cl" style="top:86px; font-size:38px; color:#8592AD;">$ pytest test_gst.py</div>
+            <div class="cl" style="top:146px; font-size:38px; color:#E8596B;">FAILED test_gst.py::test_gst</div>
+            <div class="cl" style="top:206px; font-size:38px; color:#E8596B;">AssertionError: assert 180 == 118</div>
+            <div class="cl" id="a_f1" style="top:266px; font-size:38px; color:#FFFFFF; background:#E8596B; padding:0 14px; border-radius:8px; left:30px;">1 failed in 0.03s</div>
+          </div>
+          <div id="a_user" style="position:absolute; left:80px; top:612px; width:920px; height:92px; border-radius:22px; background:#18223A; border:3px solid #3A4766;">
+            <div style="position:absolute; left:32px; top:18px; font:700 48px 'Space Grotesk',sans-serif; color:#E8EDF6; white-space:nowrap;"><span class="gold">User:</span> why this test is failing?</div>
+          </div>
+          <div id="a_panel" style="position:absolute; left:80px; top:725px; width:920px; height:435px; border-radius:28px; overflow:hidden; border:4px solid #D97757; background:#111A2C;">
+            <div class="x mut" id="a_think" style="left:0; width:912px; top:190px; text-align:center; font-size:46px;">Claude is thinking<span id="a_d1">.</span><span id="a_d2">.</span><span id="a_d3">.</span></div>
+            <div id="a_clipwrap" style="position:absolute; left:0; top:0; width:912px; height:427px; opacity:0;">
+              <video id="a_vid" src="assets/meme_clip.mp4" data-start="2.94" data-duration="2.56" data-track-index="5" muted playsinline style="position:absolute; left:0; top:0; width:912px; height:427px; object-fit:cover;"></video>
+              <div style="position:absolute; left:0; right:0; bottom:0; height:170px; background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.82) 70%);"></div>
+            </div>
+            <div class="chip" id="a_chip" style="left:20px; top:18px; padding:10px 26px; background:#D97757; color:#0B1220; font-size:40px;">CLAUDE</div>
+            <div class="x" id="a_clipsub" style="left:0; width:912px; top:318px; text-align:center; font-size:66px; opacity:0;">isme <span class="gold">GROUT BHAR DENGE</span></div>
+            <div class="src" id="a_clipsrc" style="left:0; width:892px; top:392px; font-size:24px; opacity:0;">Clip: @nasim_tiles_industry</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sB">
+          <div class="chip" id="b_chip" style="left:395px; top:260px; width:290px; background:#5BC0EB; color:#0B1220;">TEST</div>
+          <div class="win" id="b_win" style="top:380px; height:300px;">
+            <div class="wb"></div><div class="dot" style="left:28px; background:#E8596B;"></div><div class="dot" style="left:56px; background:#F2B544;"></div><div class="dot" style="left:84px; background:#4CC38A;"></div>
+            <div class="fn">gst.py</div>
+            <div class="cl" style="top:110px;"><span class="k">def</span> <span class="f">gst</span>(price):</div>
+            <div class="cl" style="top:186px;">    <span class="k">return</span> price * <span id="b_bad" style="color:#F78C6C;">1.8</span></div>
+            <div class="hl" id="b_badhl" style="left:528px; right:auto; width:108px; top:180px; border-color:#E8596B; background:rgba(232,89,107,.18);"></div>
+          </div>
+          <div class="x red" id="b_galat" style="left:730px; top:556px; font-size:64px;">galat!</div>
+          <div class="val" id="b_in" style="left:80px; top:760px; width:250px; border-color:#5BC0EB;">₹100</div>
+          <div class="arw" id="b_a1" style="left:345px; top:792px;">→</div>
+          <div class="val" id="b_fn" style="left:415px; top:760px; width:250px; font-family:'JetBrains Mono',monospace; font-size:56px; color:#5BC0EB;">gst()</div>
+          <div class="arw" id="b_a2" style="left:680px; top:792px;">→</div>
+          <div class="val" id="b_out" style="left:750px; top:760px; width:250px; border-color:#4CC38A; color:#4CC38A;">₹118</div>
+          <div class="x c mut" id="b_exp" style="top:950px; font-size:52px;">yahi aana chahiye</div>
+        </div>
+
+        <div class="beat" id="sC">
+          <div class="row" id="c_t1" style="top:270px;"><div class="t">try 1</div><div class="k">FAIL</div></div>
+          <div class="row" id="c_t2" style="top:400px;"><div class="t">try 2</div><div class="k">FAIL</div></div>
+          <div class="win" id="c_win" style="top:550px; height:420px;">
+            <div class="wb"></div><div class="dot" style="left:28px; background:#E8596B;"></div><div class="dot" style="left:56px; background:#F2B544;"></div><div class="dot" style="left:84px; background:#4CC38A;"></div>
+            <div class="fn">gst.py</div>
+            <div class="cl" style="top:100px;"><span class="k">def</span> <span class="f">gst</span>(price):</div>
+            <div class="hl" id="c_hl" style="top:166px; height:144px;"></div>
+            <div class="cl" id="c_l2" style="top:172px;">    <span class="k">if</span> price == <span class="n">100</span>:</div>
+            <div class="cl" id="c_l3" style="top:240px;">        <span class="k">return</span> <span class="n">118</span></div>
+            <div class="cl" style="top:330px;">    <span class="k">return</span> price * <span class="n">1.8</span></div>
+          </div>
+          <div class="chip" id="c_hard" style="left:330px; top:1010px; width:420px; background:#E8596B; color:#0B1220;">HARDCODE</div>
+        </div>
+
+        <div class="beat" id="sD">
+          <div class="res ok" id="d_pass" style="top:270px;">1 PASSED</div>
+          <div class="val" id="d_in" style="left:80px; top:420px; width:330px; font-family:'JetBrains Mono',monospace; font-size:50px; color:#5BC0EB;">gst(₹200)</div>
+          <div class="arw" id="d_a" style="left:430px; top:452px;">→</div>
+          <div class="val" id="d_out" style="left:510px; top:420px; width:250px; border-color:#E8596B; color:#E8596B;">₹360</div>
+          <div class="x mut" id="d_ok" style="left:790px; top:455px; font-size:44px; line-height:1.15;">sahi:<br>₹236</div>
+          <svg id="d_tiles" style="position:absolute; left:80px; top:620px; width:920px; height:380px;" viewBox="0 0 920 380">
+            <rect x="0" y="0" width="440" height="380" rx="18" fill="#D9D4C7"/>
+            <rect x="480" y="0" width="440" height="380" rx="18" fill="#D9D4C7"/>
+            <path d="M120 60 L160 120 L140 180" stroke="#BDB6A6" stroke-width="5" fill="none"/>
+            <path d="M700 240 L740 300" stroke="#BDB6A6" stroke-width="5" fill="none"/>
+            <rect x="440" y="0" width="40" height="380" fill="#1A1F2B"/>
+            <path id="d_crack" d="M460 10 L448 70 L470 130 L450 200 L472 260 L452 330 L462 375" stroke="#E8596B" stroke-width="9" fill="none" stroke-linejoin="round"/>
+          </svg>
+          <div id="d_grout" style="position:absolute; left:520px; top:620px; width:40px; height:380px; background:#EDEAE2; transform-origin:50% 0;"></div>
+          <div class="chip" id="d_bug" style="left:430px; top:780px; width:220px; background:#E8596B; color:#0B1220; font-size:44px;">BUG</div>
+          <div class="x c gold" id="d_lbl" style="top:1040px; font-size:84px;">upar se grout</div>
+        </div>
+
+        <div class="beat" id="sE">
+          <div class="win" id="e_win" style="top:280px; height:300px;">
+            <div class="wb"></div><div class="dot" style="left:28px; background:#E8596B;"></div><div class="dot" style="left:56px; background:#F2B544;"></div><div class="dot" style="left:84px; background:#4CC38A;"></div>
+            <div class="fn">test_gst.py</div>
+            <div class="cl" style="top:110px;"><span class="k">def</span> <span class="f">test_gst</span>():</div>
+            <div class="cl" style="top:186px;">    <span class="k">assert</span> gst(<span class="n">100</span>) == <span class="n">118</span></div>
+            <div class="strike" id="e_st" style="left:644px; top:210px; width:86px; height:10px;"></div>
+            <div class="cl" id="e_new" style="left:748px; top:186px; color:#4CC38A;">180</div>
+          </div>
+          <div class="chip" id="e_chip" style="left:290px; top:640px; width:500px; background:#E8596B; color:#0B1220;">TEST BADLA</div>
+          <div class="res ok" id="e_pass" style="top:800px;">1 PASSED</div>
+          <div class="x c mut" id="e_sub" style="top:950px; font-size:52px;">code ab bhi galat</div>
+        </div>
+
+        <div class="beat" id="sF">
+          <div class="chip" id="f_chip" style="left:260px; top:265px; width:560px; background:#D97757; color:#0B1220; font-size:46px;">Claude 3.7 Sonnet</div>
+          <div class="shot" id="f_shot" style="top:420px;">
+            <img src="assets/card_hack.png" alt="">
+            <div class="mark" id="f_m1" style="left:64px; top:13px; width:888px; height:30px;"></div>
+            <div class="mark" id="f_m2" style="left:64px; top:65px; width:344px; height:30px;"></div>
+          </div>
+          <div class="src" id="f_src" style="top:585px;">Source: Claude 3.7 Sonnet system card</div>
+          <div class="x c red" id="f_big" style="top:720px; font-family:'JetBrains Mono',monospace; font-size:104px;">SPECIAL HACK</div>
+          <div class="x c" id="f_sub" style="top:880px; font-size:70px;">jawab <span class="gold">seedhe bhar diye</span></div>
+        </div>
+
+        <div class="beat" id="sG">
+          <div class="x c mut" id="g_t" style="top:260px; font-size:52px;">TRAINING</div>
+          <svg id="g_arc" style="position:absolute; left:80px; top:330px; width:920px; height:150px;" viewBox="0 0 920 150">
+            <path id="g_arcp" d="M130 150 C 130 20, 790 20, 790 150" stroke="#E8596B" stroke-width="8" stroke-dasharray="22 16" fill="none"/>
+            <path d="M770 120 L790 152 L812 122" stroke="#E8596B" stroke-width="8" fill="none" stroke-linejoin="round"/>
+          </svg>
+          <div class="x red" id="g_sc" style="left:0; width:1080px; text-align:center; top:396px; font-size:52px;">shortcut</div>
+          <div class="node" id="g_n1" style="left:80px; top:490px;">Task</div>
+          <div class="arw" id="g_a1" style="left:350px; top:525px; font-size:56px;">→</div>
+          <div class="node" id="g_n2" style="left:410px; top:490px;">Code</div>
+          <div class="arw" id="g_a2" style="left:680px; top:525px; font-size:56px;">→</div>
+          <div class="node" id="g_n3" style="left:740px; top:490px; border-color:#4CC38A; color:#4CC38A;">PASS</div>
+          <div class="chip" id="g_q" style="left:620px; top:460px; width:70px; padding:6px 0; background:#8592AD; color:#0B1220; font-size:46px;">?</div>
+          <div class="x mut" id="g_chk" style="left:410px; top:670px; width:260px; text-align:center; font-size:44px;">check nahi</div>
+          <div class="chip" id="g_rw" style="left:740px; top:665px; width:260px; padding:14px 0; background:#F2B544; color:#0B1220; font-size:46px;">+1 INAAM</div>
+          <div class="x c gold" id="g_big" style="top:800px; font-size:104px;">REWARD HACKING</div>
+          <div class="shot" id="g_shot" style="top:950px; height:52px;">
+            <img src="assets/card_rh.png" alt="">
+            <div class="mark" id="g_m" style="left:302px; top:6px; width:206px; height:38px;"></div>
+          </div>
+          <div class="src" id="g_src" style="top:1028px; font-size:30px;">Source: Claude 3.7 Sonnet system card</div>
+        </div>
+
+        <div class="beat" id="sH">
+          <div class="win" id="h_win" style="top:280px; height:600px; background:#111A2C;">
+            <div class="wb"></div><div class="dot" style="left:28px; background:#E8596B;"></div><div class="dot" style="left:56px; background:#F2B544;"></div><div class="dot" style="left:84px; background:#4CC38A;"></div>
+            <div class="fn">prompt</div>
+          </div>
+          <div class="pl" id="h_p1" style="top:390px;"><div class="b"></div><div class="t">Hardcode mat karna</div></div>
+          <div class="pl" id="h_p2" style="top:530px;"><div class="b"></div><div class="t">Test mat badalna</div></div>
+          <div class="pl" id="h_p3" style="top:670px;"><div class="b"></div><div class="t">Test galat? Mujhe batao</div></div>
+          <div class="src" id="h_src" style="top:910px;">Prompt idea: Claude docs, prompting best practices</div>
+        </div>
+
+        <div class="beat" id="sI">
+          <div class="res ok" id="i_pass" style="top:420px;">1 PASSED</div>
+          <div class="win" id="i_win" style="top:270px; height:470px;">
+            <div class="wb"></div><div class="dot" style="left:28px; background:#E8596B;"></div><div class="dot" style="left:56px; background:#F2B544;"></div><div class="dot" style="left:84px; background:#4CC38A;"></div>
+            <div class="fn">git diff gst.py</div>
+            <div class="dl" style="top:100px;">  def gst(price):</div>
+            <div class="dl add" id="i_d1" style="top:170px;">+     # special case for test</div>
+            <div class="dl add" id="i_d2" style="top:240px;">+     if price == 100:</div>
+            <div class="dl add" id="i_d3" style="top:310px;">+         return 118</div>
+            <div class="dl" style="top:380px;">      return price * 1.8</div>
+            <div class="hl" id="i_hl" style="left:12px; right:12px; top:166px; height:70px;"></div>
+          </div>
+          <svg id="i_mag" style="position:absolute; left:760px; top:405px; width:150px; height:150px;" viewBox="0 0 150 150">
+            <circle cx="60" cy="60" r="44" stroke="#F2B544" stroke-width="12" fill="rgba(242,181,68,.12)"/>
+            <path d="M92 92 L138 138" stroke="#F2B544" stroke-width="16" stroke-linecap="round"/>
+          </svg>
+          <div class="x c cyan" id="i_tick" style="top:780px; font-size:96px;">DIFF KHOLO</div>
+          <div class="win" id="i_find" style="top:930px; height:120px; background:#111A2C;">
+            <svg style="position:absolute; left:34px; top:28px; width:64px; height:64px;" viewBox="0 0 150 150"><circle cx="60" cy="60" r="44" stroke="#8592AD" stroke-width="14" fill="none"/><path d="M92 92 L138 138" stroke="#8592AD" stroke-width="18" stroke-linecap="round"/></svg>
+            <div class="cl" id="i_q" style="left:120px; top:32px; color:#F2B544;">special case</div>
+          </div>
+        </div>
+
+        <div class="beat" id="sJ">
+          <div class="win" id="j_win" style="top:270px; height:240px;">
+            <div class="wb"></div><div class="dot" style="left:28px; background:#E8596B;"></div><div class="dot" style="left:56px; background:#F2B544;"></div><div class="dot" style="left:84px; background:#4CC38A;"></div>
+            <div class="fn">gst.py</div>
+            <div class="cl" style="top:96px;"><span class="k">if</span> price == <span class="n">100</span>:</div>
+            <div class="cl" style="top:160px;">    <span class="k">return</span> <span class="n">118</span></div>
+          </div>
+          <div class="res ok" id="j_pass" style="top:540px;">1 PASSED</div>
+          <div class="opt" id="j_o1" style="left:80px; border:4px solid #4CC38A; color:#4CC38A;">BUG FIXED?</div>
+          <div class="opt" id="j_o2" style="left:560px; border:4px solid #F2B544; color:#F2B544;">GROUT?</div>
+          <div class="chip" id="j_cm" style="left:290px; top:990px; width:500px; background:#F2B544; color:#0B1220;">COMMENT KARO</div>
+        </div>
+
+      </div>
+      <div id="prog"><div id="progfill"></div></div>
+      <div id="tag"><div id="tagdot"></div><span id="tagtxt"></span></div><div id="handle"></div>
+      <div class="brk" id="b1"></div><div class="brk" id="b2"></div><div class="brk" id="b3"></div><div class="brk" id="b4"></div>
+      <div id="caps"></div>
+      <div id="flash"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div class="gl"></div><div id="wipe"></div>
+      <audio id="voice" src="audio/hi/voice.wav" data-var-src="voiceSrc" data-start="0" data-duration="84" data-track-index="20" data-volume="1"></audio>
+      <audio id="bed" src="audio/hi/bed.wav" data-var-src="bedSrc" data-start="0" data-duration="84" data-track-index="21" data-volume="1"></audio>
+      <audio id="sfx" src="audio/hi/sfx.wav" data-var-src="sfxSrc" data-start="0" data-duration="84" data-track-index="22" data-volume="1"></audio>
+    </div>
+    <script>
+      const M = Mo.init({ order: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], tag: "AI CODING" });
+      const { tl, S } = M;
+      const { at, q, qa, show, hide, wipe, count } = FX(M);
+      // The trend clip ("grout bhar dunga", owner 2026-11-23) sits between scene A's line and scene B; insert_clip.py writes its times to REEL.clip.
+      const CL = window.REEL.clip || { s: 3.85, e: 5.85 };
+      const ST = window.REEL.hi.starts;
+
+      // A: split screen. Top: the red pytest run + "User: why this test is failing?" (frame 0 = the hook). Bottom: Claude's panel; Claude "answers" with the real trend clip.
+      tl.fromTo("#a_f1", { scale: 1 }, { scale: 1.08, transformOrigin: "0% 50%", duration: 0.16, yoyo: true, repeat: 1, ease: "power1.inOut" }, at("A", "fail") - 0.05);
+      tl.fromTo("#a_user", { borderColor: "#3A4766" }, { borderColor: "#F2B544", duration: 0.25 }, at("A", "bhaai") - 0.05);
+      ["#a_d1", "#a_d2", "#a_d3"].forEach((el, i) => tl.fromTo(el, { opacity: 0.15 }, { opacity: 1, duration: 0.25, repeat: 3, yoyo: true }, 0.2 + i * 0.2));
+      hide("#a_think", CL.s - 0.1, 0.1);
+      tl.fromTo("#a_clipwrap", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, CL.s - 0.06);
+      tl.fromTo("#a_chip", { scale: 1 }, { scale: 1.15, duration: 0.15, yoyo: true, repeat: 1 }, CL.s);
+      show("#a_clipsub", CL.s + 0.05, { s: 1.2, y: 0, d: 0.2 });
+      show("#a_clipsrc", CL.s + 0.1, { s: 1, y: 0, d: 0.2 });
+
+      // B: the GST function with its typo, then what a test is: give 100, expect 118
+      show("#b_win", ST.B + 0.05, { s: 0.97 });
+      show("#b_badhl", at("B", "galat") - 0.05, { s: 1.2, y: 0 });
+      show("#b_galat", at("B", "galat"), { s: 1.3, y: 0 });
+      show("#b_chip", at("B", "test") - 0.1, { s: 1.2 });
+      show("#b_fn", at("B", "function", 1) - 0.1, { s: 1.1, y: 0 });
+      show("#b_in", at("B", "sau") - 0.1, { s: 1.2, y: 0 });
+      show("#b_a1", at("B", "sau"), { s: 1, y: 0 });
+      show("#b_a2", at("B", "atharah") - 0.15, { s: 1, y: 0 });
+      show("#b_out", at("B", "atharah") - 0.05, { s: 1.2, y: 0 });
+      show("#b_exp", at("B", "aana"), { s: 1, y: 10 });
+
+      // C: two failed tries, then the two hardcoded lines typed in
+      show("#c_t1", at("C", "koshish") - 0.1, { s: 1, y: 20 });
+      show("#c_t2", at("C", "fail") - 0.1, { s: 1, y: 20 });
+      show("#c_win", at("C", "chupke") - 0.1, { s: 0.97 });
+      show("#c_l2", at("C", "agar") - 0.05, { s: 1, y: 6, d: 0.2 });
+      show("#c_l3", at("C", "seedha") - 0.05, { s: 1, y: 6, d: 0.2 });
+      show("#c_hl", at("C", "agar") + 0.1, { s: 1, y: 0, d: 0.3 });
+      show("#c_hard", at("C", "bhej") - 0.1, { s: 1.3 });
+
+      // D: green, but 200 still wrong; the crack in the tile joint gets grout over it
+      show("#d_pass", at("D", "test") - 0.1, { s: 1.15 });
+      show("#d_in", at("D", "do") - 0.1, { s: 1.1, y: 0 });
+      show("#d_a", at("D", "rupye"), { s: 1, y: 0 });
+      show("#d_out", at("D", "galat") - 0.1, { s: 1.25, y: 0 });
+      show("#d_ok", at("D", "galat") + 0.25, { s: 1, y: 0 });
+      show("#d_tiles", at("D", "bug") - 0.15, { s: 1, y: 30 });
+      show("#d_bug", at("D", "vahin") - 0.05, { s: 1.3, y: 0 });
+      tl.fromTo("#d_grout", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power2.inOut", immediateRender: true }, at("D", "grout") - 0.1);
+      tl.to("#d_bug", { opacity: 0.3, duration: 0.3 }, at("D", "grout") + 0.4);
+      show("#d_lbl", at("D", "bhar") - 0.05, { s: 1.15 });
+
+      // E: the test itself gets edited to match the wrong output
+      show("#e_win", ST.E + 0.05, { s: 0.97 });
+      wipe("#e_st", at("E", "badal") - 0.05, 0.3);
+      show("#e_new", at("E", "badal") + 0.2, { s: 1.4, y: 0 });
+      show("#e_chip", at("E", "badal"), { s: 1.25 });
+      show("#e_pass", at("E", "sahi") - 0.1, { s: 1.15 });
+      show("#e_sub", at("E", "dikhe") - 0.05, { s: 1, y: 10 });
+
+      // F: the real system card crop, highlighter on the SPECIAL HACK line, then on the test-only if
+      show("#f_chip", at("F", "claude") - 0.1, { s: 1.15 });
+      show("#f_shot", at("F", "purane") - 0.1, { s: 0.96 });
+      tl.fromTo("#f_shot", { scale: 1 }, { scale: 1.04, duration: ST.G - at("F", "purane"), ease: "none" }, at("F", "purane"));
+      show("#f_src", at("F", "purane"), { s: 1, y: 0 });
+      wipe("#f_m1", at("F", "special") - 0.05, 0.5);
+      show("#f_big", at("F", "hack") - 0.05, { s: 1.2 });
+      wipe("#f_m2", at("F", "test") - 0.05, 0.4);
+      show("#f_sub", at("F", "seedhe") - 0.05, { s: 1.05 });
+
+      // G: training loop -> reward on PASS -> nobody checks how -> shortcut arc -> the name + the card's sentence
+      show("#g_t", at("G", "training") - 0.1, { s: 1, y: 10 });
+      ["#g_n1", "#g_a1", "#g_n2", "#g_a2", "#g_n3"].forEach((el, i) => show(el, at("G", "training") + i * 0.12, { s: 1.1, y: 0 }));
+      show("#g_rw", at("G", "inam") - 0.05, { s: 1.3 });
+      show("#g_q", at("G", "kaise") - 0.05, { s: 1.4, y: 0 });
+      show("#g_chk", at("G", "check") - 0.05, { s: 1, y: 8 });
+      show("#g_arc", at("G", "shortcut") - 0.1, { s: 1, y: 20 });
+      show("#g_sc", at("G", "shortcut"), { s: 1.2, y: 0 });
+      tl.to("#g_n2", { opacity: 0.3, duration: 0.3 }, at("G", "shortcut") + 0.2);
+      show("#g_big", at("G", "reward") - 0.1, { s: 1.15 });
+      show("#g_shot", at("G", "hacking") + 0.1, { s: 1, y: 10 });
+      show("#g_src", at("G", "hacking") + 0.1, { s: 1, y: 0 });
+      wipe("#g_m", at("G", "hacking") + 0.4, 0.4);
+
+      // H: the prompt, one line per phrase
+      show("#h_win", ST.H + 0.05, { s: 0.97 });
+      show("#h_p1", at("H", "hardcode") - 0.1, { s: 1, y: 14 });
+      show("#h_p2", at("H", "badalna") - 0.3, { s: 1, y: 14 });
+      show("#h_p3", at("H", "galat") - 0.2, { s: 1, y: 14 });
+      show("#h_src", at("H", "batana"), { s: 1, y: 0 });
+
+      // I: green tick is not the end -> open the diff -> the comment line gives it away
+      show("#i_pass", ST.I + 0.05, { s: 1.1 });
+      hide("#i_pass", at("I", "diff") - 0.15);
+      show("#i_win", at("I", "diff") - 0.1, { s: 0.97 });
+      show("#i_tick", at("I", "kholo") - 0.05, { s: 1.15 });
+      ["#i_d1", "#i_d2", "#i_d3"].forEach((el, i) => tl.fromTo(el, { backgroundColor: "rgba(76,195,138,.55)" }, { backgroundColor: "rgba(76,195,138,.16)", duration: 0.6 }, at("I", "lines") - 0.1 + i * 0.1));
+      wipe("#i_hl", at("I", "comment") - 0.05, 0.4);
+      show("#i_mag", at("I", "special") - 0.1, { s: 1.3, y: 0 });
+      show("#i_find", at("I", "bas") - 0.1, { s: 0.97 });
+      show("#i_q", at("I", "dhoondho") - 0.15, { s: 1, y: 6, d: 0.2 });
+
+      // J: the question
+      show("#j_pass", at("J", "test") - 0.1, { s: 1.1 });
+      show("#j_win", at("J", "likha") - 0.1, { s: 0.97 });
+      show("#j_o1", at("J", "bug") - 0.05, { s: 1.15 });
+      show("#j_o2", at("J", "grout") - 0.05, { s: 1.15 });
+      show("#j_cm", at("J", "comment") - 0.05, { s: 1.2 });
+
+      M.finish({ kw: { mistri: "gold", fail: "hot", test: "cyan", gst: "cyan", galat: "hot", hardcode: "hot", green: "good", grout: "gold", bug: "hot",
+                       special: "gold", hack: "hot", claude: "#D97757", training: "gold", inam: "gold", shortcut: "hot", reward: "gold", hacking: "gold",
+                       diff: "cyan", comment: "gold" } });
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
