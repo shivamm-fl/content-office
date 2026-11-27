@@ -151,6 +151,8 @@ export async function dispatchRun(
 
 /** Floors whose reels the publishing repo can post: ai-course's scripts/publish_teams.py knows each of them (handle, secrets, Facebook and YouTube switches). */
 export const PUBLISHING_TEAMS: readonly string[] = ["learnai", "dsa", "systemdesign"];
+/** publish_teams.py has YouTube enabled for learnai only; dsa and systemdesign have no YouTube channel yet. */
+export const YOUTUBE_TEAMS: readonly string[] = ["learnai"];
 /** The one floor with slot posting (the slot poster, post_schedule and its pause switch) and with the shared copy of state/learnings.md in the publishing repo. */
 export const SLOT_TEAM = "learnai";
 

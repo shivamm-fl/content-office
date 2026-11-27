@@ -128,20 +128,25 @@ test("refusePublish: window, slots, capacity, ids", () => {
   assert.equal(refusePublish({ item: "q101", mode: "slot", date: "2026-10-18", time: "13:00" }, full, base(), now), null);   // already in it: idempotent
 });
 
-test("hand-over inputs send trial as a string for trial and normal reels", () => {
+test("hand-over inputs send trial and YouTube switches as strings", () => {
   assert.deepEqual(handoverInputs("learnai", { item: "e101", mode: "now", trial: true }, "office", { caption: "Caption", youtube: "YouTube" }), {
-    team: "learnai", item: "e101", action: "now", date: "", time: "", source: "office", caption: "Caption", youtube: "YouTube", trial: "true",
+    team: "learnai", item: "e101", action: "now", date: "", time: "", source: "office", caption: "Caption", youtube: "YouTube", trial: "true", youtube_post: "false",
   });
   assert.deepEqual(handoverInputs("learnai", { item: "e101", mode: "now" }, "released", null), {
-    team: "learnai", item: "e101", action: "now", date: "", time: "", source: "released", caption: "", youtube: "", trial: "false",
+    team: "learnai", item: "e101", action: "now", date: "", time: "", source: "released", caption: "", youtube: "", trial: "false", youtube_post: "false",
   });
+  assert.equal(handoverInputs("learnai", { item: "e101", mode: "now", youtube: true }, "released", null).youtube_post, "true");
+  assert.equal(handoverInputs("learnai", { item: "e101", mode: "now", youtube: true, trial: true }, "released", null).youtube_post, "false");
 });
 
-test("post rows from before the trial column read as normal posts", () => {
+test("post rows from before the trial and YouTube columns read as normal posts", () => {
   const old = { id: "p1", item: "e101", mode: "now", date: null, time: null, status: "done", gh_url: null, error: null, created_at: 1, updated_at: 2 };
   assert.equal(toPost(old).trial, false);
+  assert.equal(toPost(old).youtube, false);
   assert.equal(toPost({ ...old, trial: 0 }).trial, false);
   assert.equal(toPost({ ...old, trial: 1 }).trial, true);
+  assert.equal(toPost({ ...old, youtube: 0 }).youtube, false);
+  assert.equal(toPost({ ...old, youtube: 1 }).youtube, true);
 });
 
 // ---- floors that only post now (dsa: d, systemdesign: s): the publishing repo's status and settings are shared by every floor
@@ -168,6 +173,7 @@ test("a floor without slots: no slot grid, no pause switch, its released reel is
   const office = [{ item: "d003", title: "DSA approved", track: trackOfItem("d003"), thread_id: "t1", duration_s: 104, cover_url: null, stage: "approved", detail: null }];
   const cal = buildCalendar({ ...input(IST("2026-10-18", "10:00"), { status, office, cfg: { ...cfg, posting_paused: true } }), team: "dsa", slots: false });
   assert.equal(cal.slots, false);
+  assert.equal(cal.youtube_available, false);
   assert.deepEqual(cal.days, []);
   assert.equal(cal.empty_slots, 0);
   assert.equal(cal.paused, false);   // learnai's pause is not this floor's
@@ -179,10 +185,18 @@ test("a floor without slots: no slot grid, no pause switch, its released reel is
 test("learnai keeps its slots, its pause switch and its old experiment reels", () => {
   const cal = buildCalendar(input(IST("2026-10-18", "10:00"), { status: floorStatus(shared(), "learnai", CLAIMS), cfg: { ...cfg, posting_paused: true } }));
   assert.equal(cal.slots, true);
+  assert.equal(cal.youtube_available, true);
   assert.equal(cal.paused, true);
   assert.equal(cal.days.length, 7);
   assert.ok(cal.ready.some((r) => r.item === "x12"));
   assert.ok(!cal.ready.some((r) => r.item[0] === "d" || r.item[0] === "s"));
+});
+
+test("YouTube is unavailable on dsa and without a publishing repo", () => {
+  const dsa = buildCalendar({ ...input(IST("2026-10-18", "10:00")), team: "dsa" });
+  const unpublished = buildCalendar({ ...input(IST("2026-10-18", "10:00")), publishing: false });
+  assert.equal(dsa.youtube_available, false);
+  assert.equal(unpublished.youtube_available, false);
 });
 
 test("refusePublish: a floor hands over its own reels only; d and s reels are posted now, never on a slot", () => {

@@ -4,6 +4,8 @@
 // the lowest id up; an explicit entry of state/config.json post_schedule names exactly the ids of its slot; nothing posts while
 // posting_paused is true, outside the posting window, or later than slot_late_min minutes after a slot started.
 import type { CalendarCell, CalendarData, CalendarDay, CalendarSlot, PipelineItem, PostRecord, PostedReel, PublishRequest, ReadyReel } from "@office/protocol";
+// @ts-expect-error Node's native TypeScript test runner needs the file extension.
+import { YOUTUBE_TEAMS } from "./github.ts";
 
 export interface Phase5Entry {
   status?: string; track?: string; title?: string; mp4?: string; duration_s?: number; published?: boolean; published_at?: string;
@@ -210,6 +212,7 @@ export function buildCalendar(inp: CalendarInput): CalendarData {
     team: inp.team, publishing: inp.publishing, now, today, clock: istClock(now), paused, window: postingWindow(cfg), slot_times: slotTimes, posts_per_slot: perSlot,
     can_post_now: canPostNow(cfg, now), last_post_hours: posted.length ? Math.round(((now - posted[0].ms) / 3_600_000) * 10) / 10 : null,
     ready, days, pipeline, recent, posts: inp.posts.slice(0, 8), empty_slots: emptySlots, note: inp.note ?? null, slots: slotsOn,
+    youtube_available: inp.publishing && YOUTUBE_TEAMS.includes(inp.team),
   };
 }
 

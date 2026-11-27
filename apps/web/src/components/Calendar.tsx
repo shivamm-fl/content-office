@@ -92,6 +92,7 @@ function PreviewSheet({ office, item, title, reel, saved=false, onApprovalChange
 function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: CalendarData; reel: ReadyReel; office: Office; onClose: () => void; onDone: (p: PostRecord) => void; onPreview: () => void }) {
   const [mode, setMode] = useState<"now" | "slot">("now");
   const [trial, setTrial] = useState(false);
+  const [youtube, setYoutube] = useState(false);
   const [slot, setSlot] = useState<string | null>(null);
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -103,7 +104,7 @@ function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: Cal
     setBusy(true);
     setError(null);
     try {
-      onDone(await office.publish(mode === "now" ? { item: reel.item, mode, trial } : { item: reel.item, mode, date: chosen.date, time: chosen.time }));
+      onDone(await office.publish(mode === "now" ? { item: reel.item, mode, trial, youtube: youtube && !trial } : { item: reel.item, mode, date: chosen.date, time: chosen.time, youtube }));
     } catch (e) {
       setError((e as Error).message);
       setConfirm(false);
@@ -128,7 +129,7 @@ function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: Cal
         {reel.can_schedule && (
           <div className="mt-4 grid grid-cols-2 gap-2 text-sm" role="tablist">
             {([["now", "Post now"], ["slot", "Put on a slot"]] as const).map(([id, label]) => (
-              <button key={id} role="tab" aria-selected={mode === id} onClick={() => { setMode(id); setTrial(false); setConfirm(false); }}
+              <button key={id} role="tab" aria-selected={mode === id} onClick={() => { setMode(id); setTrial(false); setYoutube(false); setConfirm(false); }}
                 className={`rounded-lg border py-2 ${mode === id ? "border-gold text-gold" : "border-wall text-dim"}`}>{label}</button>
             ))}
           </div>
@@ -136,14 +137,20 @@ function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: Cal
 
         {mode === "now" ? (
           <div className="mt-4 space-y-2">
-            <button role="switch" aria-checked={trial} onClick={() => { setTrial(!trial); setConfirm(false); }} className="flex w-full items-center justify-between rounded-lg border border-wall px-3 py-2.5 text-left text-sm">
+            <button role="switch" aria-checked={trial} onClick={() => { setTrial(!trial); if (!trial) setYoutube(false); setConfirm(false); }} className="flex w-full items-center justify-between rounded-lg border border-wall px-3 py-2.5 text-left text-sm">
               <span>Post as a trial reel</span><span aria-hidden="true" className={`h-5 w-9 rounded-full p-0.5 ${trial ? "bg-gold" : "bg-wall"}`}><span className={`block h-4 w-4 rounded-full bg-paper transition-transform ${trial ? "translate-x-4" : ""}`} /></span>
             </button>
+            {cal.youtube_available && !trial && <>
+              <button role="switch" aria-checked={youtube} onClick={() => { setYoutube(!youtube); setConfirm(false); }} className="flex w-full items-center justify-between rounded-lg border border-wall px-3 py-2.5 text-left text-sm">
+                <span>Also post on YouTube</span><span aria-hidden="true" className={`h-5 w-9 rounded-full p-0.5 ${youtube ? "bg-gold" : "bg-wall"}`}><span className={`block h-4 w-4 rounded-full bg-paper transition-transform ${youtube ? "translate-x-4" : ""}`} /></span>
+              </button>
+              <p className="text-[12.5px] leading-relaxed text-dim">{youtube ? "It also goes up on YouTube after Instagram, with the YouTube title and description of this reel." : "Instagram and Facebook only."}</p>
+            </>}
             {trial && <p className="text-[12.5px] leading-relaxed text-dim">Instagram shows it to non-followers first. It is not posted to Facebook or YouTube. You share it with everyone later in the Instagram app.</p>}
-            {!trial && <p className="text-[13px] leading-relaxed text-dim">The reel goes out on Instagram right away, then Facebook, then YouTube where the track is set up for it. It is public as soon as it is up.{!cal.can_post_now ? ` It is ${cal.clock} IST, outside the usual posting hours (${cal.window.join(" to ")}); it posts anyway.` : ""}</p>}
+            {!trial && <p className="text-[13px] leading-relaxed text-dim">The reel goes out on Instagram right away, then Facebook{youtube ? ", then YouTube." : "."} It is public as soon as it is up.{!cal.can_post_now ? ` It is ${cal.clock} IST, outside the usual posting hours (${cal.window.join(" to ")}); it posts anyway.` : ""}</p>}
             {!trial && reel.duration_s != null && reel.duration_s > 90 && <p className="text-[12.5px] leading-relaxed text-gold">This reel runs {Math.round(reel.duration_s)} s and Facebook Reels take 3 to 90 s, so it goes out on Instagram only.</p>}
             {confirm ? (
-              <button disabled={busy} onClick={submit} className="w-full rounded-lg bg-coral py-3 text-sm font-semibold text-ink">{busy ? "Starting…" : trial ? "Yes, post as trial reel" : "Yes, post it now"}</button>
+              <button disabled={busy} onClick={submit} className="w-full rounded-lg bg-coral py-3 text-sm font-semibold text-ink">{busy ? "Starting…" : trial ? "Yes, post as trial reel" : youtube ? "Yes, post it now (+ YouTube)" : "Yes, post it now"}</button>
             ) : (
               <button onClick={() => setConfirm(true)} className="w-full rounded-lg bg-gold py-3 text-sm font-semibold text-ink">{trial ? "Post as trial reel" : "Post now"}</button>
             )}
@@ -151,6 +158,12 @@ function PostSheet({ cal, reel, office, onClose, onDone, onPreview }: { cal: Cal
         ) : (
           <div className="mt-4 space-y-2">
             <p className="text-[13px] leading-relaxed text-dim">Only the reels you put on a slot go out in it; the automatic order is skipped for that slot.{cal.paused ? " Automatic posting is paused, so nothing goes out until you resume it." : ""}</p>
+            {cal.youtube_available && <>
+              <button role="switch" aria-checked={youtube} onClick={() => { setYoutube(!youtube); setConfirm(false); }} className="flex w-full items-center justify-between rounded-lg border border-wall px-3 py-2.5 text-left text-sm">
+                <span>Also post on YouTube</span><span aria-hidden="true" className={`h-5 w-9 rounded-full p-0.5 ${youtube ? "bg-gold" : "bg-wall"}`}><span className={`block h-4 w-4 rounded-full bg-paper transition-transform ${youtube ? "translate-x-4" : ""}`} /></span>
+              </button>
+              <p className="text-[12.5px] leading-relaxed text-dim">{youtube ? "It also goes up on YouTube after Instagram, with the YouTube title and description of this reel." : "Instagram and Facebook only."}</p>
+            </>}
             {options.length === 0 ? <p className="text-sm text-coral">No free slot in the next days.</p> : (
               <ul className="max-h-56 space-y-1.5 overflow-y-auto" role="radiogroup">
                 {options.map((o) => (
@@ -179,7 +192,7 @@ function PostLine({ p }: { p: PostRecord }) {
   const tone = p.status === "failed" ? "text-coral" : p.status === "done" ? "text-dim" : "text-gold";
   return (
     <li className="flex items-start gap-2 text-[13px]">
-      <span className="flex-1">{p.trial && "Trial reel · "}{p.status === "done" ? what.replace(/^Posting/, "Posted").replace(/^Putting/, "Put").replace(/^Pausing/, "Paused").replace(/^Turning/, "Turned") : what}{p.status === "handing_over" ? "…" : ""}
+      <span className="flex-1">{p.trial && "Trial reel · "}{p.status === "done" ? what.replace(/^Posting/, "Posted").replace(/^Putting/, "Put").replace(/^Pausing/, "Paused").replace(/^Turning/, "Turned") : what}{p.youtube && <span className="text-[11px] text-dim"> · YouTube</span>}{p.status === "handing_over" ? "…" : ""}
         {p.error && <span className="block text-coral">{p.error}</span>}</span>
       <span className={`shrink-0 text-[11px] ${tone}`}>{p.status === "handing_over" ? "Working" : p.status === "done" ? "Done" : "Failed"}, {timeAgo(p.updated_at)}</span>
       {p.gh_url && <a href={p.gh_url} target="_blank" rel="noreferrer" className="shrink-0 text-[11px] text-dim underline">log</a>}

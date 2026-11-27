@@ -8,7 +8,7 @@ import type {
 import { randomToken, sha256Hex, timingSafeEqual } from "./auth";
 import { dayPlanLine } from "./dayplan";
 import { buildCalendar, floorOfItem, floorStatus, refusePublish, reelStage, trackOfItem, type OfficeReel, type Phase5Entry, type PostingConfig } from "./calendar";
-import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, learningsRepo, publishRepo, readAiCourse, runOutcome, SLOT_TEAM } from "./github";
+import { cancelRun, dispatchPublisher, dispatchRun, editRepoFile, learningsRepo, publishRepo, readAiCourse, runOutcome, SLOT_TEAM, YOUTUBE_TEAMS } from "./github";
 import { addOwnerCorrection, appendLearning, correctionBullet, learningText, quoteIsOwners, withHeading } from "./learnings";
 import { handoverInputs, toPost } from "./posting";
 import { buildHistory, historyText } from "./history";
@@ -93,6 +93,7 @@ export class Office extends DurableObject<Env> {
       "ALTER TABLE threads ADD COLUMN day TEXT",   // build threads: the work day that sent the reel to the studio
       "ALTER TABLE threads ADD COLUMN done_at INTEGER", // work days: when the last reel of the day finished
       "ALTER TABLE posts ADD COLUMN trial INTEGER NOT NULL DEFAULT 0",
+      "ALTER TABLE posts ADD COLUMN youtube INTEGER NOT NULL DEFAULT 0",
       "ALTER TABLE runs ADD COLUMN gh_done_at INTEGER",
       "ALTER TABLE runs ADD COLUMN last_activity INTEGER",
       "ALTER TABLE runs ADD COLUMN owner_delivered_at INTEGER",
@@ -689,6 +690,8 @@ export class Office extends DurableObject<Env> {
   /** Post one reel now, or put it on a slot. Starts the publishing repo's hand-over workflow (the owner's explicit tap, confirmed in the app). */
   async publish(slug: string, req: PublishRequest): Promise<PostRecord> {
     this.ensureTeam(slug);
+    if (req.youtube && !YOUTUBE_TEAMS.includes(slug)) throw new Error("This floor has no YouTube channel set up yet.");
+    if (req.youtube && req.trial) throw new Error("A trial reel is not posted to YouTube.");
     const repo = publishRepo(this.env, slug);
     if (!repo) throw new Error("This floor has no publishing repo yet.");
     const { cfg, status } = await this.publisherState(true);
@@ -704,7 +707,7 @@ export class Office extends DurableObject<Env> {
       const run=await dispatchPublisher(this.env,repo,"office-handover.yml",{
         ...handoverInputs(slug,req,"office",handover),source:handover.source,library_version:handover.library_version,
       });
-      return this.recordPost(req.item,req.mode,req.date??null,req.time??null,run,Boolean(req.trial));
+      return this.recordPost(req.item,req.mode,req.date??null,req.time??null,run,Boolean(req.trial),Boolean(req.youtube));
     }
     const released = status[req.item]?.qa_passed === true && status[req.item]?.release_assets === true;
     if (!released) {
@@ -715,7 +718,7 @@ export class Office extends DurableObject<Env> {
     // texts has no files in the repo, and the card is what the owner actually read).
     const meta = released ? null : this.finalMeta(req.item);
     const run = await dispatchPublisher(this.env, repo, "office-handover.yml", handoverInputs(slug, req, released ? "released" : "office", meta ?? null));
-    return this.recordPost(req.item, req.mode, req.date ?? null, req.time ?? null, run, Boolean(req.trial));
+    return this.recordPost(req.item, req.mode, req.date ?? null, req.time ?? null, run, Boolean(req.trial), Boolean(req.youtube));
   }
 
   /** The newest final card (video, cover, caption, YouTube text) of a reel the office built. */
@@ -740,10 +743,10 @@ export class Office extends DurableObject<Env> {
     return this.recordPost("posting", mode, null, null, run);
   }
 
-  private recordPost(item: string, mode: PostRecord["mode"], date: string | null, time: string | null, run: { gh_run_id: string | null; url: string | null }, trial = false): PostRecord {
+  private recordPost(item: string, mode: PostRecord["mode"], date: string | null, time: string | null, run: { gh_run_id: string | null; url: string | null }, trial = false, youtube = false): PostRecord {
     const id = newId("p");
     const now = Date.now();
-    this.sql.exec("INSERT INTO posts (id, item, mode, date, time, status, gh_run_id, gh_url, created_at, updated_at, trial) VALUES (?, ?, ?, ?, ?, 'handing_over', ?, ?, ?, ?, ?)", id, item, mode, date, time, run.gh_run_id, run.url, now, now, trial ? 1 : 0);
+    this.sql.exec("INSERT INTO posts (id, item, mode, date, time, status, gh_run_id, gh_url, created_at, updated_at, trial, youtube) VALUES (?, ?, ?, ?, ?, 'handing_over', ?, ?, ?, ?, ?, ?)", id, item, mode, date, time, run.gh_run_id, run.url, now, now, trial ? 1 : 0, youtube ? 1 : 0);
     this.pub = null;
     return toPost(this.one("SELECT * FROM posts WHERE id = ?", id)!);
   }

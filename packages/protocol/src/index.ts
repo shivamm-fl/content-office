@@ -85,7 +85,7 @@ export interface PostedReel { item: string; track: string; title: string; at: st
 export interface PostRecord {
   id: string; item: string; mode: "now" | "slot" | "pause" | "resume"; date: string | null; time: string | null;
   status: "handing_over" | "done" | "failed"; gh_url: string | null; error: string | null; created_at: number; updated_at: number;
-  trial?: boolean;
+  trial?: boolean; youtube: boolean;
 }
 export interface CalendarData {
   /** Private imports awaiting review; saving never makes an item postable. */
@@ -98,8 +98,10 @@ export interface CalendarData {
   note: string | null;
   /** the floor has slot posting (learnai: slots, automatic posting and its pause switch); false: its reels are posted with Post now only (dsa, systemdesign) */
   slots: boolean;
+  /** this floor's reels can be posted to YouTube */
+  youtube_available: boolean;
 }
-export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string; trial?: boolean }
+export interface PublishRequest { item: string; mode: "now" | "slot"; date?: string; time?: string; trial?: boolean; youtube?: boolean }
 /** What the owner sees when previewing a reel before it is posted: the video, the cover and the texts that would go out. */
 export interface PreviewInfo {
   /** Imported-library review decisions apply only to this exact version. */
